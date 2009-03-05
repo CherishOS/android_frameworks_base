@@ -58576,19 +58576,6 @@
  visibility="public"
 >
 </constructor>
-<method name="dismissSoftInput"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="flags" type="int">
-</parameter>
-</method>
 <method name="getCandidatesHiddenVisibility"
  return="int"
  abstract="false"
@@ -59221,6 +59208,19 @@
  visibility="public"
 >
 </method>
+<method name="requestHideSelf"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="flags" type="int">
+</parameter>
+</method>
 <method name="sendDefaultEditorAction"
  return="boolean"
  abstract="false"
@@ -59426,6 +59426,10 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<parameter name="flags" type="int">
+</parameter>
+<parameter name="resultReceiver" type="android.os.ResultReceiver">
+</parameter>
 </method>
 <method name="restartInput"
  return="void"
@@ -59453,6 +59457,8 @@
  visibility="public"
 >
 <parameter name="flags" type="int">
+</parameter>
+<parameter name="resultReceiver" type="android.os.ResultReceiver">
 </parameter>
 </method>
 <method name="startInput"
@@ -59536,6 +59542,21 @@
  deprecated="not deprecated"
  visibility="public"
 >
+</method>
+<method name="toggleSoftInput"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="showFlags" type="int">
+</parameter>
+<parameter name="hideFlags" type="int">
+</parameter>
 </method>
 <method name="updateCursor"
  return="void"
@@ -64817,19 +64838,6 @@
 <parameter name="loopCount" type="int">
 </parameter>
 </method>
-<method name="setMarkerReachedListener"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="listener" type="android.media.AudioTrack.OnMarkerReachedListener">
-</parameter>
-</method>
 <method name="setNotificationMarkerPosition"
  return="int"
  abstract="false"
@@ -64843,19 +64851,6 @@
 <parameter name="markerInFrames" type="int">
 </parameter>
 </method>
-<method name="setPeriodicNotificationListener"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="listener" type="android.media.AudioTrack.OnPeriodicNotificationListener">
-</parameter>
-</method>
 <method name="setPlaybackHeadPosition"
  return="int"
  abstract="false"
@@ -64867,6 +64862,34 @@
  visibility="public"
 >
 <parameter name="positionInFrames" type="int">
+</parameter>
+</method>
+<method name="setPlaybackPositionUpdateListener"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="listener" type="android.media.AudioTrack.OnPlaybackPositionUpdateListener">
+</parameter>
+</method>
+<method name="setPlaybackPositionUpdateListener"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="listener" type="android.media.AudioTrack.OnPlaybackPositionUpdateListener">
+</parameter>
+<parameter name="handler" type="android.os.Handler">
 </parameter>
 </method>
 <method name="setPlaybackRate"
@@ -65103,7 +65126,7 @@
 >
 </field>
 </class>
-<interface name="AudioTrack.OnMarkerReachedListener"
+<interface name="AudioTrack.OnPlaybackPositionUpdateListener"
  abstract="true"
  static="true"
  final="false"
@@ -65123,14 +65146,6 @@
 <parameter name="track" type="android.media.AudioTrack">
 </parameter>
 </method>
-</interface>
-<interface name="AudioTrack.OnPeriodicNotificationListener"
- abstract="true"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
 <method name="onPeriodicNotification"
  return="void"
  abstract="true"
@@ -81149,6 +81164,93 @@
  visibility="public"
 >
 </constructor>
+</class>
+<class name="ResultReceiver"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="android.os.Parcelable">
+</implements>
+<constructor name="ResultReceiver"
+ type="android.os.ResultReceiver"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="handler" type="android.os.Handler">
+</parameter>
+</constructor>
+<method name="describeContents"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="onReceiveResult"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="resultCode" type="int">
+</parameter>
+<parameter name="resultData" type="android.os.Bundle">
+</parameter>
+</method>
+<method name="send"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="resultCode" type="int">
+</parameter>
+<parameter name="resultData" type="android.os.Bundle">
+</parameter>
+</method>
+<method name="writeToParcel"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="out" type="android.os.Parcel">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+</method>
+<field name="CREATOR"
+ type="android.os.Parcelable.Creator"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 </class>
 <class name="StatFs"
  extends="java.lang.Object"
@@ -102489,6 +102591,17 @@
  visibility="public"
 >
 </field>
+<field name="TYPE_TEXT_VARIATION_FILTER"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="176"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="TYPE_TEXT_VARIATION_LONG_MESSAGE"
  type="int"
  transient="false"
@@ -102533,6 +102646,17 @@
  visibility="public"
 >
 </field>
+<field name="TYPE_TEXT_VARIATION_PHONETIC"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="192"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="TYPE_TEXT_VARIATION_POSTAL_ADDRESS"
  type="int"
  transient="false"
@@ -102566,11 +102690,22 @@
  visibility="public"
 >
 </field>
-<field name="TYPE_TEXT_VARIATION_WEB_EDIT_TEXT"
+<field name="TYPE_TEXT_VARIATION_VISIBLE_PASSWORD"
  type="int"
  transient="false"
  volatile="false"
  value="144"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="TYPE_TEXT_VARIATION_WEB_EDIT_TEXT"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="160"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -135050,6 +135185,17 @@
  visibility="public"
 >
 </field>
+<field name="IME_ACTION_DONE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="5"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="IME_ACTION_GO"
  type="int"
  transient="false"
@@ -135970,6 +136116,10 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<parameter name="flags" type="int">
+</parameter>
+<parameter name="resultReceiver" type="android.os.ResultReceiver">
+</parameter>
 </method>
 <method name="restartInput"
  return="void"
@@ -136025,6 +136175,8 @@
  visibility="public"
 >
 <parameter name="flags" type="int">
+</parameter>
+<parameter name="resultReceiver" type="android.os.ResultReceiver">
 </parameter>
 </method>
 <method name="startInput"
@@ -136366,7 +136518,7 @@
 </parameter>
 </method>
 <method name="hideSoftInputFromWindow"
- return="void"
+ return="boolean"
  abstract="false"
  native="false"
  synchronized="false"
@@ -136378,6 +136530,23 @@
 <parameter name="windowToken" type="android.os.IBinder">
 </parameter>
 <parameter name="flags" type="int">
+</parameter>
+</method>
+<method name="hideSoftInputFromWindow"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="windowToken" type="android.os.IBinder">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+<parameter name="resultReceiver" type="android.os.ResultReceiver">
 </parameter>
 </method>
 <method name="hideStatusIcon"
@@ -136509,7 +136678,7 @@
 >
 </method>
 <method name="showSoftInput"
- return="void"
+ return="boolean"
  abstract="false"
  native="false"
  synchronized="false"
@@ -136519,6 +136688,38 @@
  visibility="public"
 >
 <parameter name="view" type="android.view.View">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+</method>
+<method name="showSoftInput"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="view" type="android.view.View">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+<parameter name="resultReceiver" type="android.os.ResultReceiver">
+</parameter>
+</method>
+<method name="showSoftInputFromInputMethod"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="token" type="android.os.IBinder">
 </parameter>
 <parameter name="flags" type="int">
 </parameter>
@@ -136538,6 +136739,38 @@
 <parameter name="packageName" type="java.lang.String">
 </parameter>
 <parameter name="iconId" type="int">
+</parameter>
+</method>
+<method name="toggleSoftInput"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="showFlags" type="int">
+</parameter>
+<parameter name="hideFlags" type="int">
+</parameter>
+</method>
+<method name="toggleSoftInputFromWindow"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="windowToken" type="android.os.IBinder">
+</parameter>
+<parameter name="showFlags" type="int">
+</parameter>
+<parameter name="hideFlags" type="int">
 </parameter>
 </method>
 <method name="updateCursor"
@@ -136615,6 +136848,50 @@
  transient="false"
  volatile="false"
  value="2"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="RESULT_HIDDEN"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="3"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="RESULT_SHOWN"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="RESULT_UNCHANGED_HIDDEN"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="1"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="RESULT_UNCHANGED_SHOWN"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="0"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -136723,6 +137000,21 @@
  deprecated="not deprecated"
  visibility="public"
 >
+</method>
+<method name="toggleSoftInput"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="showFlags" type="int">
+</parameter>
+<parameter name="hideFlags" type="int">
+</parameter>
 </method>
 <method name="updateCursor"
  return="void"
@@ -138147,6 +138439,75 @@
 </parameter>
 </method>
 </interface>
+<class name="PluginData"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="PluginData"
+ type="android.webkit.PluginData"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="stream" type="java.io.InputStream">
+</parameter>
+<parameter name="length" type="long">
+</parameter>
+<parameter name="headers" type="java.util.Map&lt;java.lang.String, java.lang.String[]&gt;">
+</parameter>
+<parameter name="code" type="int">
+</parameter>
+</constructor>
+<method name="getContentLength"
+ return="long"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getHeaders"
+ return="java.util.Map&lt;java.lang.String, java.lang.String[]&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getInputStream"
+ return="java.io.InputStream"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getStatusCode"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
 <class name="PluginList"
  extends="java.lang.Object"
  abstract="false"
@@ -138500,6 +138861,21 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<method name="getPluginData"
+ return="android.webkit.PluginData"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="url" type="java.lang.String">
+</parameter>
+<parameter name="headers" type="java.util.Map&lt;java.lang.String, java.lang.String&gt;">
+</parameter>
+</method>
 <method name="service"
  return="android.webkit.CacheManager.CacheResult"
  abstract="true"
@@ -138507,7 +138883,7 @@
  synchronized="false"
  static="false"
  final="false"
- deprecated="not deprecated"
+ deprecated="deprecated"
  visibility="public"
 >
 <parameter name="url" type="java.lang.String">
@@ -138532,6 +138908,21 @@
  visibility="public"
 >
 </constructor>
+<method name="getPluginData"
+ return="android.webkit.PluginData"
+ abstract="false"
+ native="false"
+ synchronized="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="url" type="java.lang.String">
+</parameter>
+<parameter name="headers" type="java.util.Map&lt;java.lang.String, java.lang.String&gt;">
+</parameter>
+</method>
 <method name="getSurrogate"
  return="android.webkit.CacheManager.CacheResult"
  abstract="false"
@@ -138539,7 +138930,7 @@
  synchronized="true"
  static="true"
  final="false"
- deprecated="not deprecated"
+ deprecated="deprecated"
  visibility="public"
 >
 <parameter name="url" type="java.lang.String">
@@ -155451,6 +155842,17 @@
 <parameter name="depth" type="int">
 </parameter>
 </method>
+<method name="didTouchFocusSelectAll"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 <method name="endBatchEdit"
  return="void"
  abstract="false"
@@ -157232,17 +157634,6 @@
 >
 <parameter name="pixels" type="int">
 </parameter>
-</method>
-<method name="shouldAdvanceFocusOnEnter"
- return="boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
 </method>
 </class>
 <class name="TextView.BufferType"
