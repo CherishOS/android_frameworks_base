@@ -16,6 +16,6 @@
 
 package com.android.dumprendertree;
 
-public interface HTMLHostCallbackInterface {
-    public void waitForFinish();
+public interface TestShellCallback {
+    public void finished();
 }
