@@ -15,18 +15,17 @@
  */
 package android.accounts;
 
-/**
- * Object that wraps calls to an {@link IAccountManagerResponse} object.
- * TODO: this interface is still in flux
- */
-public class AccountManagerResponse {
-    private IAccountManagerResponse mResponse;
-
-    public AccountManagerResponse(IAccountManagerResponse accountManagerResponse) {
-        mResponse = accountManagerResponse;
+public class OperationCanceledException extends Exception {
+    public OperationCanceledException() {
+        super();
     }
-
-    public IAccountManagerResponse getIAccountManagerResponse() {
-        return mResponse;
+    public OperationCanceledException(String message) {
+        super(message);
+    }
+    public OperationCanceledException(String message, Throwable cause) {
+        super(message, cause);
+    }
+    public OperationCanceledException(Throwable cause) {
+        super(cause);
     }
 }

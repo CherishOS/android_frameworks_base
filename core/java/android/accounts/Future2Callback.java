@@ -13,14 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package android.accounts;
-import android.os.Bundle;
 
-/**
- * The interface used to return responses for asynchronous calls to the {@link IAccountManager}
- */
-oneway interface IAccountManagerResponse {
-    void onResult(in Bundle value);
-    void onError(int errorCode, String errorMessage);
+public interface Future2Callback {
+    void run(Future2 future);
 }
