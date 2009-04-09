@@ -15,12 +15,18 @@
  */
 
 package android.accounts;
-import android.os.Bundle;
 
-/**
- * The interface used to return responses for asynchronous calls to the {@link IAccountManager}
- */
-oneway interface IAccountManagerResponse {
-    void onResult(in Bundle value);
-    void onError(int errorCode, String errorMessage);
+public class AuthenticatorException extends Exception {
+    public AuthenticatorException() {
+        super();
+    }
+    public AuthenticatorException(String message) {
+        super(message);
+    }
+    public AuthenticatorException(String message, Throwable cause) {
+        super(message, cause);
+    }
+    public AuthenticatorException(Throwable cause) {
+        super(cause);
+    }
 }
