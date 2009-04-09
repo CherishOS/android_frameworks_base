@@ -13,14 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package android.accounts;
-import android.os.Bundle;
 
-/**
- * The interface used to return responses for asynchronous calls to the {@link IAccountManager}
- */
-oneway interface IAccountManagerResponse {
-    void onResult(in Bundle value);
-    void onError(int errorCode, String errorMessage);
+public class NetworkErrorException extends Exception {
+    public NetworkErrorException() {
+        super();
+    }
+    public NetworkErrorException(String message) {
+        super(message);
+    }
+    public NetworkErrorException(String message, Throwable cause) {
+        super(message, cause);
+    }
+    public NetworkErrorException(Throwable cause) {
+        super(cause);
+    }
 }
