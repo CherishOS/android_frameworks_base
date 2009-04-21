@@ -12569,6 +12569,8 @@
 </parameter>
 <parameter name="authTokenType" type="java.lang.String">
 </parameter>
+<parameter name="requiredFeatures" type="java.lang.String[]">
+</parameter>
 <parameter name="options" type="android.os.Bundle">
 </parameter>
 <exception name="NetworkErrorException" type="android.accounts.NetworkErrorException">
@@ -12654,6 +12656,25 @@
  deprecated="not deprecated"
  visibility="public"
 >
+</method>
+<method name="hasFeatures"
+ return="android.os.Bundle"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="response" type="android.accounts.AccountAuthenticatorResponse">
+</parameter>
+<parameter name="account" type="android.accounts.Account">
+</parameter>
+<parameter name="features" type="java.lang.String[]">
+</parameter>
+<exception name="NetworkErrorException" type="android.accounts.NetworkErrorException">
+</exception>
 </method>
 <method name="updateCredentials"
  return="android.os.Bundle"
@@ -13025,18 +13046,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="AccountManager"
- type="android.accounts.AccountManager"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="context" type="android.content.Context">
-</parameter>
-<parameter name="service" type="android.accounts.IAccountManager">
-</parameter>
-</constructor>
 <method name="addAccount"
  return="android.accounts.Future2"
  abstract="false"
@@ -13050,6 +13059,8 @@
 <parameter name="accountType" type="java.lang.String">
 </parameter>
 <parameter name="authTokenType" type="java.lang.String">
+</parameter>
+<parameter name="requiredFeatures" type="java.lang.String[]">
 </parameter>
 <parameter name="addAccountOptions" type="android.os.Bundle">
 </parameter>
@@ -13134,6 +13145,27 @@
 >
 <parameter name="accountType" type="java.lang.String">
 </parameter>
+</method>
+<method name="blockingGetAccountsWithTypeAndFeatures"
+ return="android.accounts.Account[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="type" type="java.lang.String">
+</parameter>
+<parameter name="features" type="java.lang.String[]">
+</parameter>
+<exception name="AuthenticatorException" type="android.accounts.AuthenticatorException">
+</exception>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+<exception name="OperationCanceledException" type="android.accounts.OperationCanceledException">
+</exception>
 </method>
 <method name="blockingGetAuthToken"
  return="java.lang.String"
@@ -13408,6 +13440,25 @@
 <parameter name="handler" type="android.os.Handler">
 </parameter>
 </method>
+<method name="getAccountsWithTypeAndFeatures"
+ return="android.accounts.Future2"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="type" type="java.lang.String">
+</parameter>
+<parameter name="features" type="java.lang.String[]">
+</parameter>
+<parameter name="callback" type="android.accounts.Future2Callback">
+</parameter>
+<parameter name="handler" type="android.os.Handler">
+</parameter>
+</method>
 <method name="getAuthToken"
  return="android.accounts.Future2"
  abstract="false"
@@ -13446,6 +13497,33 @@
 <parameter name="authTokenType" type="java.lang.String">
 </parameter>
 <parameter name="notifyAuthFailure" type="boolean">
+</parameter>
+<parameter name="callback" type="android.accounts.Future2Callback">
+</parameter>
+<parameter name="handler" type="android.os.Handler">
+</parameter>
+</method>
+<method name="getAuthTokenByFeatures"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="accountType" type="java.lang.String">
+</parameter>
+<parameter name="authTokenType" type="java.lang.String">
+</parameter>
+<parameter name="features" type="java.lang.String[]">
+</parameter>
+<parameter name="activityForPrompting" type="android.app.Activity">
+</parameter>
+<parameter name="addAccountOptions" type="android.os.Bundle">
+</parameter>
+<parameter name="loginOptions" type="android.os.Bundle">
 </parameter>
 <parameter name="callback" type="android.accounts.Future2Callback">
 </parameter>
@@ -13642,547 +13720,6 @@
 <parameter name="handler" type="android.os.Handler">
 </parameter>
 </method>
-</class>
-<class name="AccountManager.AMSTaskBoolean"
- extends="java.util.concurrent.FutureTask"
- abstract="true"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<implements name="android.accounts.Future1">
-</implements>
-<constructor name="AccountManager.AMSTaskBoolean"
- type="android.accounts.AccountManager.AMSTaskBoolean"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="handler" type="android.os.Handler">
-</parameter>
-<parameter name="callback" type="android.accounts.Future1Callback&lt;java.lang.Boolean&gt;">
-</parameter>
-</constructor>
-<method name="doWork"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="getResult"
- return="java.lang.Boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<exception name="OperationCanceledException" type="android.accounts.OperationCanceledException">
-</exception>
-</method>
-<method name="getResult"
- return="java.lang.Boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="timeout" type="long">
-</parameter>
-<parameter name="unit" type="java.util.concurrent.TimeUnit">
-</parameter>
-<exception name="OperationCanceledException" type="android.accounts.OperationCanceledException">
-</exception>
-</method>
-</class>
-<class name="AccountManager.AmsTask"
- extends="java.util.concurrent.FutureTask"
- abstract="true"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<implements name="android.accounts.Future2">
-</implements>
-<constructor name="AccountManager.AmsTask"
- type="android.accounts.AccountManager.AmsTask"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="activity" type="android.app.Activity">
-</parameter>
-<parameter name="handler" type="android.os.Handler">
-</parameter>
-<parameter name="callback" type="android.accounts.Future2Callback">
-</parameter>
-</constructor>
-<method name="doWork"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="getResult"
- return="android.os.Bundle"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<exception name="AuthenticatorException" type="android.accounts.AuthenticatorException">
-</exception>
-<exception name="IOException" type="java.io.IOException">
-</exception>
-<exception name="OperationCanceledException" type="android.accounts.OperationCanceledException">
-</exception>
-</method>
-<method name="getResult"
- return="android.os.Bundle"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="timeout" type="long">
-</parameter>
-<parameter name="unit" type="java.util.concurrent.TimeUnit">
-</parameter>
-<exception name="AuthenticatorException" type="android.accounts.AuthenticatorException">
-</exception>
-<exception name="IOException" type="java.io.IOException">
-</exception>
-<exception name="OperationCanceledException" type="android.accounts.OperationCanceledException">
-</exception>
-</method>
-</class>
-<class name="AccountManagerService"
- extends="android.accounts.IAccountManager.Stub"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="AccountManagerService"
- type="android.accounts.AccountManagerService"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="context" type="android.content.Context">
-</parameter>
-</constructor>
-<method name="addAccount"
- return="boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="password" type="java.lang.String">
-</parameter>
-<parameter name="extras" type="android.os.Bundle">
-</parameter>
-</method>
-<method name="addAcount"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="response" type="android.accounts.IAccountManagerResponse">
-</parameter>
-<parameter name="accountType" type="java.lang.String">
-</parameter>
-<parameter name="authTokenType" type="java.lang.String">
-</parameter>
-<parameter name="expectActivityLaunch" type="boolean">
-</parameter>
-<parameter name="options" type="android.os.Bundle">
-</parameter>
-</method>
-<method name="clearPassword"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-</method>
-<method name="confirmCredentials"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="response" type="android.accounts.IAccountManagerResponse">
-</parameter>
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="expectActivityLaunch" type="boolean">
-</parameter>
-</method>
-<method name="confirmPassword"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="response" type="android.accounts.IAccountManagerResponse">
-</parameter>
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="password" type="java.lang.String">
-</parameter>
-</method>
-<method name="editProperties"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="response" type="android.accounts.IAccountManagerResponse">
-</parameter>
-<parameter name="accountType" type="java.lang.String">
-</parameter>
-<parameter name="expectActivityLaunch" type="boolean">
-</parameter>
-</method>
-<method name="getAccounts"
- return="android.accounts.Account[]"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="getAccountsByType"
- return="android.accounts.Account[]"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="accountType" type="java.lang.String">
-</parameter>
-</method>
-<method name="getAuthToken"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="response" type="android.accounts.IAccountManagerResponse">
-</parameter>
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="authTokenType" type="java.lang.String">
-</parameter>
-<parameter name="notifyOnAuthFailure" type="boolean">
-</parameter>
-<parameter name="expectActivityLaunch" type="boolean">
-</parameter>
-<parameter name="loginOptions" type="android.os.Bundle">
-</parameter>
-</method>
-<method name="getAuthenticatorTypes"
- return="java.lang.String[]"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="getPassword"
- return="java.lang.String"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-</method>
-<method name="getUserData"
- return="java.lang.String"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="key" type="java.lang.String">
-</parameter>
-</method>
-<method name="invalidateAuthToken"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="accountType" type="java.lang.String">
-</parameter>
-<parameter name="authToken" type="java.lang.String">
-</parameter>
-</method>
-<method name="onBind"
- return="android.os.IBinder"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="intent" type="android.content.Intent">
-</parameter>
-</method>
-<method name="peekAuthToken"
- return="java.lang.String"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="authTokenType" type="java.lang.String">
-</parameter>
-</method>
-<method name="readAuthTokenFromDatabase"
- return="java.lang.String"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="authTokenType" type="java.lang.String">
-</parameter>
-</method>
-<method name="removeAccount"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-</method>
-<method name="setAuthToken"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="authTokenType" type="java.lang.String">
-</parameter>
-<parameter name="authToken" type="java.lang.String">
-</parameter>
-</method>
-<method name="setPassword"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="password" type="java.lang.String">
-</parameter>
-</method>
-<method name="setUserData"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="key" type="java.lang.String">
-</parameter>
-<parameter name="value" type="java.lang.String">
-</parameter>
-</method>
-<method name="updateCredentials"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="response" type="android.accounts.IAccountManagerResponse">
-</parameter>
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="authTokenType" type="java.lang.String">
-</parameter>
-<parameter name="expectActivityLaunch" type="boolean">
-</parameter>
-<parameter name="loginOptions" type="android.os.Bundle">
-</parameter>
-</method>
-<field name="mAuthTokenCache"
- type="java.util.HashMap"
- transient="false"
- volatile="false"
- static="false"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-</class>
-<class name="AccountManagerService.AuthTokenKey"
- extends="java.lang.Object"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="AccountManagerService.AuthTokenKey"
- type="android.accounts.AccountManagerService.AuthTokenKey"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="authTokenType" type="java.lang.String">
-</parameter>
-</constructor>
-<field name="mAccount"
- type="android.accounts.Account"
- transient="false"
- volatile="false"
- static="false"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="mAuthTokenType"
- type="java.lang.String"
- transient="false"
- volatile="false"
- static="false"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
 </class>
 <class name="AccountMonitor"
  extends="android.content.BroadcastReceiver"
@@ -14388,6 +13925,36 @@
 </parameter>
 </constructor>
 </class>
+<class name="ChooseAccountActivity"
+ extends="android.app.ListActivity"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="ChooseAccountActivity"
+ type="android.accounts.ChooseAccountActivity"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="onCreate"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="savedInstanceState" type="android.os.Bundle">
+</parameter>
+</method>
+</class>
 <class name="Constants"
  extends="java.lang.Object"
  abstract="false"
@@ -14412,6 +13979,17 @@
  transient="false"
  volatile="false"
  value="&quot;accountAuthenticatorResponse&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="ACCOUNT_MANAGER_RESPONSE_KEY"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;accountManagerResponse&quot;"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -14478,6 +14056,17 @@
  transient="false"
  volatile="false"
  value="&quot;booleanResult&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="ERROR_CODE_BAD_ARGUMENTS"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="7"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -14761,6 +14350,8 @@
 </parameter>
 <parameter name="authTokenType" type="java.lang.String">
 </parameter>
+<parameter name="requiredFeatures" type="java.lang.String[]">
+</parameter>
 <parameter name="options" type="android.os.Bundle">
 </parameter>
 <exception name="RemoteException" type="android.os.RemoteException">
@@ -14836,6 +14427,25 @@
 <parameter name="authTokenType" type="java.lang.String">
 </parameter>
 <parameter name="options" type="android.os.Bundle">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="hasFeatures"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="response" type="android.accounts.IAccountAuthenticatorResponse">
+</parameter>
+<parameter name="account" type="android.accounts.Account">
+</parameter>
+<parameter name="features" type="java.lang.String[]">
 </parameter>
 <exception name="RemoteException" type="android.os.RemoteException">
 </exception>
@@ -15012,525 +14622,6 @@
 </method>
 <method name="asInterface"
  return="android.accounts.IAccountAuthenticatorResponse"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="obj" type="android.os.IBinder">
-</parameter>
-</method>
-<method name="onTransact"
- return="boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="code" type="int">
-</parameter>
-<parameter name="data" type="android.os.Parcel">
-</parameter>
-<parameter name="reply" type="android.os.Parcel">
-</parameter>
-<parameter name="flags" type="int">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-</class>
-<interface name="IAccountManager"
- abstract="true"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<implements name="android.os.IInterface">
-</implements>
-<method name="addAccount"
- return="boolean"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="password" type="java.lang.String">
-</parameter>
-<parameter name="extras" type="android.os.Bundle">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="addAcount"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="response" type="android.accounts.IAccountManagerResponse">
-</parameter>
-<parameter name="accountType" type="java.lang.String">
-</parameter>
-<parameter name="authTokenType" type="java.lang.String">
-</parameter>
-<parameter name="expectActivityLaunch" type="boolean">
-</parameter>
-<parameter name="options" type="android.os.Bundle">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="clearPassword"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="confirmCredentials"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="response" type="android.accounts.IAccountManagerResponse">
-</parameter>
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="expectActivityLaunch" type="boolean">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="confirmPassword"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="response" type="android.accounts.IAccountManagerResponse">
-</parameter>
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="password" type="java.lang.String">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="editProperties"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="response" type="android.accounts.IAccountManagerResponse">
-</parameter>
-<parameter name="accountType" type="java.lang.String">
-</parameter>
-<parameter name="expectActivityLaunch" type="boolean">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="getAccounts"
- return="android.accounts.Account[]"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="getAccountsByType"
- return="android.accounts.Account[]"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="accountType" type="java.lang.String">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="getAuthToken"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="response" type="android.accounts.IAccountManagerResponse">
-</parameter>
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="authTokenType" type="java.lang.String">
-</parameter>
-<parameter name="notifyOnAuthFailure" type="boolean">
-</parameter>
-<parameter name="expectActivityLaunch" type="boolean">
-</parameter>
-<parameter name="options" type="android.os.Bundle">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="getAuthenticatorTypes"
- return="java.lang.String[]"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="getPassword"
- return="java.lang.String"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="getUserData"
- return="java.lang.String"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="key" type="java.lang.String">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="invalidateAuthToken"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="accountType" type="java.lang.String">
-</parameter>
-<parameter name="authToken" type="java.lang.String">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="peekAuthToken"
- return="java.lang.String"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="authTokenType" type="java.lang.String">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="removeAccount"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="setAuthToken"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="authTokenType" type="java.lang.String">
-</parameter>
-<parameter name="authToken" type="java.lang.String">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="setPassword"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="password" type="java.lang.String">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="setUserData"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="key" type="java.lang.String">
-</parameter>
-<parameter name="value" type="java.lang.String">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="updateCredentials"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="response" type="android.accounts.IAccountManagerResponse">
-</parameter>
-<parameter name="account" type="android.accounts.Account">
-</parameter>
-<parameter name="authTokenType" type="java.lang.String">
-</parameter>
-<parameter name="expectActivityLaunch" type="boolean">
-</parameter>
-<parameter name="options" type="android.os.Bundle">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-</interface>
-<class name="IAccountManager.Stub"
- extends="android.os.Binder"
- abstract="true"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<implements name="android.accounts.IAccountManager">
-</implements>
-<constructor name="IAccountManager.Stub"
- type="android.accounts.IAccountManager.Stub"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</constructor>
-<method name="asBinder"
- return="android.os.IBinder"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="asInterface"
- return="android.accounts.IAccountManager"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="obj" type="android.os.IBinder">
-</parameter>
-</method>
-<method name="onTransact"
- return="boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="code" type="int">
-</parameter>
-<parameter name="data" type="android.os.Parcel">
-</parameter>
-<parameter name="reply" type="android.os.Parcel">
-</parameter>
-<parameter name="flags" type="int">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-</class>
-<interface name="IAccountManagerResponse"
- abstract="true"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<implements name="android.os.IInterface">
-</implements>
-<method name="onError"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="errorCode" type="int">
-</parameter>
-<parameter name="errorMessage" type="java.lang.String">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="onResult"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="value" type="android.os.Bundle">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-</interface>
-<class name="IAccountManagerResponse.Stub"
- extends="android.os.Binder"
- abstract="true"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<implements name="android.accounts.IAccountManagerResponse">
-</implements>
-<constructor name="IAccountManagerResponse.Stub"
- type="android.accounts.IAccountManagerResponse.Stub"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</constructor>
-<method name="asBinder"
- return="android.os.IBinder"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="asInterface"
- return="android.accounts.IAccountManagerResponse"
  abstract="false"
  native="false"
  synchronized="false"
