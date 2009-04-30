@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.accounts;
+package android.content;
 
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -44,28 +44,32 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParser;
 
 /**
- * A cache of services that export the {@link IAccountAuthenticator} interface. This cache
- * is built by interrogating the {@link PackageManager} and is updated as packages are added,
- * removed and changed. The authenticators are referred to by their account type and
- * are made available via the {@link RegisteredServicesCache#getServiceInfo} method.
+ * A cache of services that export the {@link android.content.ISyncAdapter} interface.
  * @hide
  */
-/* package private */ class AccountAuthenticatorCache extends RegisteredServicesCache<String> {
+/* package private */ class SyncAdaptersCache extends RegisteredServicesCache<SyncAdapterType> {
     private static final String TAG = "Account";
 
-    private static final String SERVICE_INTERFACE = "android.accounts.AccountAuthenticator";
-    private static final String SERVICE_META_DATA = "android.accounts.AccountAuthenticator";
-    private static final String ATTRIBUTES_NAME = "account-authenticator";
+    private static final String SERVICE_INTERFACE = "android.content.SyncAdapter";
+    private static final String SERVICE_META_DATA = "android.content.SyncAdapter";
+    private static final String ATTRIBUTES_NAME = "sync-adapter";
 
-    public AccountAuthenticatorCache(Context context) {
+    SyncAdaptersCache(Context context) {
         super(context, SERVICE_INTERFACE, SERVICE_META_DATA, ATTRIBUTES_NAME);
     }
 
-    public String parseServiceAttributes(AttributeSet attrs) {
+    public SyncAdapterType parseServiceAttributes(AttributeSet attrs) {
         TypedArray sa = mContext.getResources().obtainAttributes(attrs,
-                com.android.internal.R.styleable.AccountAuthenticator);
+                com.android.internal.R.styleable.SyncAdapter);
         try {
-            return sa.getString(com.android.internal.R.styleable.AccountAuthenticator_accountType);
+            final String authority =
+                    sa.getString(com.android.internal.R.styleable.SyncAdapter_contentAuthority);
+            final String accountType =
+                    sa.getString(com.android.internal.R.styleable.SyncAdapter_accountType);
+            if (authority == null || accountType == null) {
+                return null;
+            }
+            return new SyncAdapterType(authority, accountType);
         } finally {
             sa.recycle();
         }
