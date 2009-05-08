@@ -24074,6 +24074,75 @@
 </package>
 <package name="android.content"
 >
+<class name="AbstractCursorEntityIterator"
+ extends="java.lang.Object"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="android.content.EntityIterator">
+</implements>
+<constructor name="AbstractCursorEntityIterator"
+ type="android.content.AbstractCursorEntityIterator"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="db" type="android.database.sqlite.SQLiteDatabase">
+</parameter>
+<parameter name="entityCursor" type="android.database.Cursor">
+</parameter>
+</constructor>
+<method name="close"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasNext"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="newEntityFromCursorLocked"
+ return="android.content.Entity"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="cursor" type="android.database.Cursor">
+</parameter>
+</method>
+<method name="next"
+ return="android.content.Entity"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
 <class name="ActivityNotFoundException"
  extends="java.lang.RuntimeException"
  abstract="false"
@@ -24933,6 +25002,36 @@
 <parameter name="values" type="android.content.ContentValues[]">
 </parameter>
 </method>
+<method name="bulkInsertEntities"
+ return="android.net.Uri[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entities" type="android.content.Entity[]">
+</parameter>
+</method>
+<method name="bulkUpdateEntities"
+ return="int[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entities" type="android.content.Entity[]">
+</parameter>
+</method>
 <method name="delete"
  return="int"
  abstract="true"
@@ -25009,6 +25108,21 @@
 <parameter name="uri" type="android.net.Uri">
 </parameter>
 <parameter name="values" type="android.content.ContentValues">
+</parameter>
+</method>
+<method name="insertEntity"
+ return="android.net.Uri"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entity" type="android.content.Entity">
 </parameter>
 </method>
 <method name="isTemporary"
@@ -25129,6 +25243,25 @@
 <parameter name="sortOrder" type="java.lang.String">
 </parameter>
 </method>
+<method name="queryEntities"
+ return="android.content.EntityIterator"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="selection" type="java.lang.String">
+</parameter>
+<parameter name="selectionArgs" type="java.lang.String[]">
+</parameter>
+<parameter name="sortOrder" type="java.lang.String">
+</parameter>
+</method>
 <method name="setReadPermission"
  return="void"
  abstract="false"
@@ -25174,6 +25307,21 @@
 <parameter name="selectionArgs" type="java.lang.String[]">
 </parameter>
 </method>
+<method name="updateEntity"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entity" type="android.content.Entity">
+</parameter>
+</method>
 </class>
 <class name="ContentProviderClient"
  extends="java.lang.Object"
@@ -25196,6 +25344,40 @@
 <parameter name="url" type="android.net.Uri">
 </parameter>
 <parameter name="initialValues" type="android.content.ContentValues[]">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="bulkInsertEntities"
+ return="android.net.Uri[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entities" type="android.content.Entity[]">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="bulkUpdateEntities"
+ return="int[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entities" type="android.content.Entity[]">
 </parameter>
 <exception name="RemoteException" type="android.os.RemoteException">
 </exception>
@@ -25262,6 +25444,23 @@
 <exception name="RemoteException" type="android.os.RemoteException">
 </exception>
 </method>
+<method name="insertEntity"
+ return="android.net.Uri"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entity" type="android.content.Entity">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
 <method name="openAssetFile"
  return="android.content.res.AssetFileDescriptor"
  abstract="false"
@@ -25323,6 +25522,27 @@
 <exception name="RemoteException" type="android.os.RemoteException">
 </exception>
 </method>
+<method name="queryEntities"
+ return="android.content.EntityIterator"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="selection" type="java.lang.String">
+</parameter>
+<parameter name="selectionArgs" type="java.lang.String[]">
+</parameter>
+<parameter name="sortOrder" type="java.lang.String">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
 <method name="release"
  return="boolean"
  abstract="false"
@@ -25351,6 +25571,23 @@
 <parameter name="selection" type="java.lang.String">
 </parameter>
 <parameter name="selectionArgs" type="java.lang.String[]">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="updateEntity"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entity" type="android.content.Entity">
 </parameter>
 <exception name="RemoteException" type="android.os.RemoteException">
 </exception>
@@ -25499,6 +25736,40 @@
 <parameter name="values" type="android.content.ContentValues[]">
 </parameter>
 </method>
+<method name="bulkInsertEntities"
+ return="android.net.Uri[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entities" type="android.content.Entity[]">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="bulkUpdateEntities"
+ return="int[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entities" type="android.content.Entity[]">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
 <method name="cancelSync"
  return="void"
  abstract="false"
@@ -25556,6 +25827,23 @@
 </parameter>
 <parameter name="values" type="android.content.ContentValues">
 </parameter>
+</method>
+<method name="insertEntity"
+ return="android.net.Uri"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entity" type="android.content.Entity">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
 </method>
 <method name="notifyChange"
  return="void"
@@ -25691,6 +25979,27 @@
 <parameter name="sortOrder" type="java.lang.String">
 </parameter>
 </method>
+<method name="queryEntity"
+ return="android.content.EntityIterator"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="selection" type="java.lang.String">
+</parameter>
+<parameter name="selectionArgs" type="java.lang.String[]">
+</parameter>
+<parameter name="sortOrder" type="java.lang.String">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
 <method name="registerContentObserver"
  return="void"
  abstract="false"
@@ -25754,6 +26063,23 @@
 </parameter>
 <parameter name="selectionArgs" type="java.lang.String[]">
 </parameter>
+</method>
+<method name="updateEntity"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entity" type="android.content.Entity">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
 </method>
 <method name="validateSyncExtrasBundle"
  return="void"
@@ -28906,6 +29232,183 @@
 </parameter>
 </method>
 </interface>
+<class name="Entity"
+ extends="java.lang.Object"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="android.os.Parcelable">
+</implements>
+<constructor name="Entity"
+ type="android.content.Entity"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+</class>
+<interface name="EntityIterator"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="close"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasNext"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="next"
+ return="android.content.Entity"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+</interface>
+<interface name="IEntityIterator"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="android.os.IInterface">
+</implements>
+<method name="close"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="hasNext"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="next"
+ return="android.content.Entity"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+</interface>
+<class name="IEntityIterator.Stub"
+ extends="android.os.Binder"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="android.content.IEntityIterator">
+</implements>
+<constructor name="IEntityIterator.Stub"
+ type="android.content.IEntityIterator.Stub"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="asBinder"
+ return="android.os.IBinder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="asInterface"
+ return="android.content.IEntityIterator"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="obj" type="android.os.IBinder">
+</parameter>
+</method>
+<method name="onTransact"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="code" type="int">
+</parameter>
+<parameter name="data" type="android.os.Parcel">
+</parameter>
+<parameter name="reply" type="android.os.Parcel">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+</class>
 <class name="Intent"
  extends="java.lang.Object"
  abstract="false"
