@@ -1013,6 +1013,17 @@
  visibility="public"
 >
 </field>
+<field name="SHUTDOWN"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;android.permission.SHUTDOWN&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="SIGNAL_PERSISTENT_PROCESSES"
  type="java.lang.String"
  transient="false"
@@ -1597,7 +1608,7 @@
  type="int"
  transient="false"
  volatile="false"
- value="16843376"
+ value="16843378"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -2554,7 +2565,7 @@
  type="int"
  transient="false"
  volatile="false"
- value="16843377"
+ value="16843379"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -5124,6 +5135,17 @@
  visibility="public"
 >
 </field>
+<field name="maxSdkVersion"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="16843377"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="maxWidth"
  type="int"
  transient="false"
@@ -7203,6 +7225,17 @@
  visibility="public"
 >
 </field>
+<field name="targetSdkVersion"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="16843376"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="taskAffinity"
  type="int"
  transient="false"
@@ -7307,6 +7340,17 @@
  transient="false"
  volatile="false"
  value="16843370"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="testOnly"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="16843380"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -23815,26 +23859,28 @@
 </field>
 </class>
 </package>
-<package name="android.backup"
+<package name="android.content"
 >
-<class name="BackupDataOutput"
+<class name="AbstractCursorEntityIterator"
  extends="java.lang.Object"
- abstract="false"
+ abstract="true"
  static="false"
  final="false"
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="BackupDataOutput"
- type="android.backup.BackupDataOutput"
+<implements name="android.content.EntityIterator">
+</implements>
+<constructor name="AbstractCursorEntityIterator"
+ type="android.content.AbstractCursorEntityIterator"
  static="false"
  final="false"
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="context" type="android.content.Context">
+<parameter name="db" type="android.database.sqlite.SQLiteDatabase">
 </parameter>
-<parameter name="fd" type="java.io.FileDescriptor">
+<parameter name="entityCursor" type="android.database.Cursor">
 </parameter>
 </constructor>
 <method name="close"
@@ -23848,188 +23894,42 @@
  visibility="public"
 >
 </method>
-<method name="flush"
- return="void"
- abstract="false"
- native="true"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="write"
- return="void"
- abstract="false"
- native="true"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="buffer" type="byte[]">
-</parameter>
-</method>
-<method name="write"
- return="void"
- abstract="false"
- native="true"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="oneByte" type="int">
-</parameter>
-</method>
-<method name="write"
- return="void"
- abstract="false"
- native="true"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="buffer" type="byte[]">
-</parameter>
-<parameter name="offset" type="int">
-</parameter>
-<parameter name="count" type="int">
-</parameter>
-</method>
-<method name="writeKey"
- return="void"
- abstract="false"
- native="true"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="key" type="java.lang.String">
-</parameter>
-</method>
-<method name="writeOperation"
- return="void"
- abstract="false"
- native="true"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="op" type="int">
-</parameter>
-</method>
-<field name="OP_DELETE"
- type="int"
- transient="false"
- volatile="false"
- value="2"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="OP_UPDATE"
- type="int"
- transient="false"
- volatile="false"
- value="1"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-</class>
-<class name="FileBackupHelper"
- extends="java.lang.Object"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="FileBackupHelper"
- type="android.backup.FileBackupHelper"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</constructor>
-<method name="performBackup"
- return="void"
+<method name="hasNext"
+ return="boolean"
  abstract="false"
  native="false"
  synchronized="false"
- static="true"
+ static="false"
  final="false"
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="context" type="android.content.Context">
-</parameter>
-<parameter name="oldSnapshot" type="android.os.ParcelFileDescriptor">
-</parameter>
-<parameter name="newSnapshot" type="android.os.ParcelFileDescriptor">
-</parameter>
-<parameter name="data" type="android.backup.BackupDataOutput">
-</parameter>
-<parameter name="files" type="java.lang.String[]">
+</method>
+<method name="newEntityFromCursorLocked"
+ return="android.content.Entity"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="cursor" type="android.database.Cursor">
 </parameter>
 </method>
-</class>
-<class name="SharedPreferencesBackupHelper"
- extends="java.lang.Object"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="SharedPreferencesBackupHelper"
- type="android.backup.SharedPreferencesBackupHelper"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</constructor>
-<method name="performBackup"
- return="void"
+<method name="next"
+ return="android.content.Entity"
  abstract="false"
  native="false"
  synchronized="false"
- static="true"
+ static="false"
  final="false"
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="context" type="android.content.Context">
-</parameter>
-<parameter name="oldSnapshot" type="android.os.ParcelFileDescriptor">
-</parameter>
-<parameter name="newSnapshot" type="android.os.ParcelFileDescriptor">
-</parameter>
-<parameter name="data" type="android.backup.BackupDataOutput">
-</parameter>
-<parameter name="prefGroups" type="java.lang.String[]">
-</parameter>
 </method>
 </class>
-</package>
-<package name="android.content"
->
 <class name="ActivityNotFoundException"
  extends="java.lang.RuntimeException"
  abstract="false"
@@ -24634,6 +24534,8 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<implements name="java.lang.Comparable">
+</implements>
 <implements name="android.os.Parcelable">
 </implements>
 <constructor name="ComponentName"
@@ -24682,6 +24584,19 @@
 <parameter name="in" type="android.os.Parcel">
 </parameter>
 </constructor>
+<method name="compareTo"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="that" type="android.content.ComponentName">
+</parameter>
+</method>
 <method name="describeContents"
  return="int"
  abstract="false"
@@ -24874,6 +24789,36 @@
 <parameter name="values" type="android.content.ContentValues[]">
 </parameter>
 </method>
+<method name="bulkInsertEntities"
+ return="android.net.Uri[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entities" type="android.content.Entity[]">
+</parameter>
+</method>
+<method name="bulkUpdateEntities"
+ return="int[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entities" type="android.content.Entity[]">
+</parameter>
+</method>
 <method name="delete"
  return="int"
  abstract="true"
@@ -24950,6 +24895,21 @@
 <parameter name="uri" type="android.net.Uri">
 </parameter>
 <parameter name="values" type="android.content.ContentValues">
+</parameter>
+</method>
+<method name="insertEntity"
+ return="android.net.Uri"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entity" type="android.content.Entity">
 </parameter>
 </method>
 <method name="isTemporary"
@@ -25070,6 +25030,25 @@
 <parameter name="sortOrder" type="java.lang.String">
 </parameter>
 </method>
+<method name="queryEntities"
+ return="android.content.EntityIterator"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="selection" type="java.lang.String">
+</parameter>
+<parameter name="selectionArgs" type="java.lang.String[]">
+</parameter>
+<parameter name="sortOrder" type="java.lang.String">
+</parameter>
+</method>
 <method name="setReadPermission"
  return="void"
  abstract="false"
@@ -25115,6 +25094,21 @@
 <parameter name="selectionArgs" type="java.lang.String[]">
 </parameter>
 </method>
+<method name="updateEntity"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entity" type="android.content.Entity">
+</parameter>
+</method>
 </class>
 <class name="ContentProviderClient"
  extends="java.lang.Object"
@@ -25137,6 +25131,40 @@
 <parameter name="url" type="android.net.Uri">
 </parameter>
 <parameter name="initialValues" type="android.content.ContentValues[]">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="bulkInsertEntities"
+ return="android.net.Uri[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entities" type="android.content.Entity[]">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="bulkUpdateEntities"
+ return="int[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entities" type="android.content.Entity[]">
 </parameter>
 <exception name="RemoteException" type="android.os.RemoteException">
 </exception>
@@ -25203,6 +25231,23 @@
 <exception name="RemoteException" type="android.os.RemoteException">
 </exception>
 </method>
+<method name="insertEntity"
+ return="android.net.Uri"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entity" type="android.content.Entity">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
 <method name="openAssetFile"
  return="android.content.res.AssetFileDescriptor"
  abstract="false"
@@ -25264,6 +25309,27 @@
 <exception name="RemoteException" type="android.os.RemoteException">
 </exception>
 </method>
+<method name="queryEntities"
+ return="android.content.EntityIterator"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="selection" type="java.lang.String">
+</parameter>
+<parameter name="selectionArgs" type="java.lang.String[]">
+</parameter>
+<parameter name="sortOrder" type="java.lang.String">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
 <method name="release"
  return="boolean"
  abstract="false"
@@ -25292,6 +25358,23 @@
 <parameter name="selection" type="java.lang.String">
 </parameter>
 <parameter name="selectionArgs" type="java.lang.String[]">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="updateEntity"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entity" type="android.content.Entity">
 </parameter>
 <exception name="RemoteException" type="android.os.RemoteException">
 </exception>
@@ -25440,6 +25523,40 @@
 <parameter name="values" type="android.content.ContentValues[]">
 </parameter>
 </method>
+<method name="bulkInsertEntities"
+ return="android.net.Uri[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entities" type="android.content.Entity[]">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="bulkUpdateEntities"
+ return="int[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entities" type="android.content.Entity[]">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
 <method name="cancelSync"
  return="void"
  abstract="false"
@@ -25497,6 +25614,23 @@
 </parameter>
 <parameter name="values" type="android.content.ContentValues">
 </parameter>
+</method>
+<method name="insertEntity"
+ return="android.net.Uri"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entity" type="android.content.Entity">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
 </method>
 <method name="notifyChange"
  return="void"
@@ -25632,6 +25766,27 @@
 <parameter name="sortOrder" type="java.lang.String">
 </parameter>
 </method>
+<method name="queryEntity"
+ return="android.content.EntityIterator"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="selection" type="java.lang.String">
+</parameter>
+<parameter name="selectionArgs" type="java.lang.String[]">
+</parameter>
+<parameter name="sortOrder" type="java.lang.String">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
 <method name="registerContentObserver"
  return="void"
  abstract="false"
@@ -25695,6 +25850,23 @@
 </parameter>
 <parameter name="selectionArgs" type="java.lang.String[]">
 </parameter>
+</method>
+<method name="updateEntity"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="entity" type="android.content.Entity">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
 </method>
 <method name="validateSyncExtrasBundle"
  return="void"
@@ -28847,6 +29019,183 @@
 </parameter>
 </method>
 </interface>
+<class name="Entity"
+ extends="java.lang.Object"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="android.os.Parcelable">
+</implements>
+<constructor name="Entity"
+ type="android.content.Entity"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+</class>
+<interface name="EntityIterator"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="close"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hasNext"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="next"
+ return="android.content.Entity"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+</interface>
+<interface name="IEntityIterator"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="android.os.IInterface">
+</implements>
+<method name="close"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="hasNext"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="next"
+ return="android.content.Entity"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+</interface>
+<class name="IEntityIterator.Stub"
+ extends="android.os.Binder"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="android.content.IEntityIterator">
+</implements>
+<constructor name="IEntityIterator.Stub"
+ type="android.content.IEntityIterator.Stub"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="asBinder"
+ return="android.os.IBinder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="asInterface"
+ return="android.content.IEntityIterator"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="obj" type="android.os.IBinder">
+</parameter>
+</method>
+<method name="onTransact"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="code" type="int">
+</parameter>
+<parameter name="data" type="android.os.Parcel">
+</parameter>
+<parameter name="reply" type="android.os.Parcel">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+</class>
 <class name="Intent"
  extends="java.lang.Object"
  abstract="false"
@@ -30940,6 +31289,17 @@
  visibility="public"
 >
 </field>
+<field name="ACTION_REMOTE_INTENT"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;android.intent.action.REMOTE_INTENT&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="ACTION_RUN"
  type="java.lang.String"
  transient="false"
@@ -31022,6 +31382,17 @@
  transient="false"
  volatile="false"
  value="&quot;android.intent.action.SET_WALLPAPER&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="ACTION_SHUTDOWN"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;android.intent.action.ACTION_SHUTDOWN&quot;"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -31461,6 +31832,17 @@
  transient="false"
  volatile="false"
  value="&quot;android.intent.extra.PHONE_NUMBER&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="EXTRA_REMOTE_INTENT_TOKEN"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;android.intent.extra.remote_intent_token&quot;"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -34109,6 +34491,39 @@
  visibility="public"
 >
 </field>
+<field name="FLAG_TARGETS_SDK"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="256"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="FLAG_TEST_ONLY"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="512"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="FLAG_UPDATED_SYSTEM_APP"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="128"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="className"
  type="java.lang.String"
  transient="false"
@@ -34512,97 +34927,6 @@
  visibility="public"
 >
 </field>
-</class>
-<interface name="IPackageInstallObserver"
- abstract="true"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<implements name="android.os.IInterface">
-</implements>
-<method name="packageInstalled"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="packageName" type="java.lang.String">
-</parameter>
-<parameter name="returnCode" type="int">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-</interface>
-<class name="IPackageInstallObserver.Stub"
- extends="android.os.Binder"
- abstract="true"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<implements name="android.content.pm.IPackageInstallObserver">
-</implements>
-<constructor name="IPackageInstallObserver.Stub"
- type="android.content.pm.IPackageInstallObserver.Stub"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</constructor>
-<method name="asBinder"
- return="android.os.IBinder"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="asInterface"
- return="android.content.pm.IPackageInstallObserver"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="obj" type="android.os.IBinder">
-</parameter>
-</method>
-<method name="onTransact"
- return="boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="code" type="int">
-</parameter>
-<parameter name="data" type="android.os.Parcel">
-</parameter>
-<parameter name="reply" type="android.os.Parcel">
-</parameter>
-<parameter name="flags" type="int">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
 </class>
 <class name="InstrumentationInfo"
  extends="android.content.pm.PackageItemInfo"
@@ -35460,6 +35784,19 @@
 <parameter name="flags" type="int">
 </parameter>
 </method>
+<method name="getInstallerPackageName"
+ return="java.lang.String"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="packageName" type="java.lang.String">
+</parameter>
+</method>
 <method name="getInstrumentationInfo"
  return="android.content.pm.InstrumentationInfo"
  abstract="true"
@@ -35753,36 +36090,6 @@
 <parameter name="appInfo" type="android.content.pm.ApplicationInfo">
 </parameter>
 </method>
-<method name="installPackage"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="packageURI" type="android.net.Uri">
-</parameter>
-<parameter name="observer" type="android.content.pm.IPackageInstallObserver">
-</parameter>
-<parameter name="flags" type="int">
-</parameter>
-</method>
-<method name="installPackage"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="packageURI" type="android.net.Uri">
-</parameter>
-</method>
 <method name="isSafeMode"
  return="boolean"
  abstract="true"
@@ -36056,17 +36363,6 @@
  visibility="public"
 >
 </field>
-<field name="FORWARD_LOCK_PACKAGE"
- type="int"
- transient="false"
- volatile="false"
- value="1"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
 <field name="GET_ACTIVITIES"
  type="int"
  transient="false"
@@ -36254,270 +36550,6 @@
  visibility="public"
 >
 </field>
-<field name="INSTALL_FAILED_ALREADY_EXISTS"
- type="int"
- transient="false"
- volatile="false"
- value="-1"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_FAILED_CONFLICTING_PROVIDER"
- type="int"
- transient="false"
- volatile="false"
- value="-13"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_FAILED_DEXOPT"
- type="int"
- transient="false"
- volatile="false"
- value="-11"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_FAILED_DUPLICATE_PACKAGE"
- type="int"
- transient="false"
- volatile="false"
- value="-5"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_FAILED_INSUFFICIENT_STORAGE"
- type="int"
- transient="false"
- volatile="false"
- value="-4"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_FAILED_INVALID_APK"
- type="int"
- transient="false"
- volatile="false"
- value="-2"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_FAILED_INVALID_URI"
- type="int"
- transient="false"
- volatile="false"
- value="-3"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_FAILED_MISSING_SHARED_LIBRARY"
- type="int"
- transient="false"
- volatile="false"
- value="-9"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_FAILED_NO_SHARED_USER"
- type="int"
- transient="false"
- volatile="false"
- value="-6"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_FAILED_OLDER_SDK"
- type="int"
- transient="false"
- volatile="false"
- value="-12"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_FAILED_REPLACE_COULDNT_DELETE"
- type="int"
- transient="false"
- volatile="false"
- value="-10"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_FAILED_SHARED_USER_INCOMPATIBLE"
- type="int"
- transient="false"
- volatile="false"
- value="-8"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_FAILED_UPDATE_INCOMPATIBLE"
- type="int"
- transient="false"
- volatile="false"
- value="-7"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_PARSE_FAILED_BAD_MANIFEST"
- type="int"
- transient="false"
- volatile="false"
- value="-101"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME"
- type="int"
- transient="false"
- volatile="false"
- value="-106"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_PARSE_FAILED_BAD_SHARED_USER_ID"
- type="int"
- transient="false"
- volatile="false"
- value="-107"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_PARSE_FAILED_CERTIFICATE_ENCODING"
- type="int"
- transient="false"
- volatile="false"
- value="-105"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES"
- type="int"
- transient="false"
- volatile="false"
- value="-104"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_PARSE_FAILED_MANIFEST_EMPTY"
- type="int"
- transient="false"
- volatile="false"
- value="-109"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_PARSE_FAILED_MANIFEST_MALFORMED"
- type="int"
- transient="false"
- volatile="false"
- value="-108"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_PARSE_FAILED_NOT_APK"
- type="int"
- transient="false"
- volatile="false"
- value="-100"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_PARSE_FAILED_NO_CERTIFICATES"
- type="int"
- transient="false"
- volatile="false"
- value="-103"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_PARSE_FAILED_UNEXPECTED_EXCEPTION"
- type="int"
- transient="false"
- volatile="false"
- value="-102"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="INSTALL_SUCCEEDED"
- type="int"
- transient="false"
- volatile="false"
- value="1"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
 <field name="MATCH_DEFAULT_ONLY"
  type="int"
  transient="false"
@@ -36567,17 +36599,6 @@
  transient="false"
  volatile="false"
  value="0"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="REPLACE_EXISTING_PACKAGE"
- type="int"
- transient="false"
- volatile="false"
- value="2"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -55517,6 +55538,32 @@
 >
 <parameter name="mgr" type="android.content.res.AssetManager">
 </parameter>
+<parameter name="path" type="java.lang.String">
+</parameter>
+</method>
+<method name="createFromFile"
+ return="android.graphics.Typeface"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="path" type="java.io.File">
+</parameter>
+</method>
+<method name="createFromFile"
+ return="android.graphics.Typeface"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
 <parameter name="path" type="java.lang.String">
 </parameter>
 </method>
@@ -88345,6 +88392,16 @@
  visibility="public"
 >
 </constructor>
+<field name="CODENAME"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="INCREMENTAL"
  type="java.lang.String"
  transient="false"
@@ -88369,6 +88426,66 @@
  type="java.lang.String"
  transient="false"
  volatile="false"
+ static="true"
+ final="true"
+ deprecated="deprecated"
+ visibility="public"
+>
+</field>
+<field name="SDK_INT"
+ type="int"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="Build.VERSION_CODES"
+ extends="java.lang.Object"
+ abstract="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Build.VERSION_CODES"
+ type="android.os.Build.VERSION_CODES"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<field name="BASE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="1"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="BASE_1_1"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="CUPCAKE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="3"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -114196,6 +114313,19 @@
 <parameter name="flags" type="int">
 </parameter>
 </method>
+<method name="getInstallerPackageName"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="packageName" type="java.lang.String">
+</parameter>
+</method>
 <method name="getInstrumentationInfo"
  return="android.content.pm.InstrumentationInfo"
  abstract="false"
@@ -114470,23 +114600,6 @@
 <parameter name="resid" type="int">
 </parameter>
 <parameter name="appInfo" type="android.content.pm.ApplicationInfo">
-</parameter>
-</method>
-<method name="installPackage"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="packageURI" type="android.net.Uri">
-</parameter>
-<parameter name="observer" type="android.content.pm.IPackageInstallObserver">
-</parameter>
-<parameter name="flags" type="int">
 </parameter>
 </method>
 <method name="isSafeMode"
@@ -141882,6 +141995,17 @@
 </implements>
 </class>
 <class name="ViewDebug.ExportedProperty"
+ extends="java.lang.Object"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="java.lang.annotation.Annotation">
+</implements>
+</class>
+<class name="ViewDebug.FlagToString"
  extends="java.lang.Object"
  abstract="true"
  static="true"
