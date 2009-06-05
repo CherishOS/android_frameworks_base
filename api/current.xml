@@ -1145,6 +1145,17 @@
  visibility="public"
 >
 </field>
+<field name="WRITE_EXTERNAL_STORAGE"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;android.permission.WRITE_EXTERNAL_STORAGE&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="WRITE_GSERVICES"
  type="java.lang.String"
  transient="false"
@@ -1161,17 +1172,6 @@
  transient="false"
  volatile="false"
  value="&quot;android.permission.WRITE_OWNER_DATA&quot;"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="WRITE_EXTERNAL_STORAGE"
- type="java.lang.String"
- transient="false"
- volatile="false"
- value="&quot;android.permission.WRITE_EXTERNAL_STORAGE&quot;"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -28029,7 +28029,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="operations" type="android.content.ContentProviderOperation[]">
+<parameter name="operations" type="java.util.ArrayList&lt;android.content.ContentProviderOperation&gt;">
 </parameter>
 <exception name="OperationApplicationException" type="android.content.OperationApplicationException">
 </exception>
@@ -28373,7 +28373,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="operations" type="android.content.ContentProviderOperation[]">
+<parameter name="operations" type="java.util.ArrayList&lt;android.content.ContentProviderOperation&gt;">
 </parameter>
 <exception name="OperationApplicationException" type="android.content.OperationApplicationException">
 </exception>
@@ -28808,19 +28808,6 @@
  visibility="public"
 >
 </method>
-<method name="withEntity"
- return="android.content.ContentProviderOperation.Builder"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="entity" type="android.content.Entity">
-</parameter>
-</method>
 <method name="withExpectedCount"
  return="android.content.ContentProviderOperation.Builder"
  abstract="false"
@@ -28849,7 +28836,7 @@
 <parameter name="selectionArgs" type="java.lang.String[]">
 </parameter>
 </method>
-<method name="withSelectionBackReferences"
+<method name="withSelectionBackReference"
  return="android.content.ContentProviderOperation.Builder"
  abstract="false"
  native="false"
@@ -28859,7 +28846,39 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="backReferences" type="java.util.Map&lt;java.lang.Integer, java.lang.Integer&gt;">
+<parameter name="selectionArgIndex" type="int">
+</parameter>
+<parameter name="previousResult" type="int">
+</parameter>
+</method>
+<method name="withValue"
+ return="android.content.ContentProviderOperation.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="key" type="java.lang.String">
+</parameter>
+<parameter name="value" type="java.lang.Object">
+</parameter>
+</method>
+<method name="withValueBackReference"
+ return="android.content.ContentProviderOperation.Builder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="key" type="java.lang.String">
+</parameter>
+<parameter name="previousResult" type="int">
 </parameter>
 </method>
 <method name="withValueBackReferences"
@@ -29126,7 +29145,7 @@
 >
 <parameter name="authority" type="java.lang.String">
 </parameter>
-<parameter name="operations" type="android.content.ContentProviderOperation[]">
+<parameter name="operations" type="java.util.ArrayList&lt;android.content.ContentProviderOperation&gt;">
 </parameter>
 <exception name="OperationApplicationException" type="android.content.OperationApplicationException">
 </exception>
@@ -29205,23 +29224,6 @@
 </parameter>
 <parameter name="values" type="android.content.ContentValues">
 </parameter>
-</method>
-<method name="insertEntity"
- return="android.net.Uri"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="uri" type="android.net.Uri">
-</parameter>
-<parameter name="entity" type="android.content.Entity">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
 </method>
 <method name="notifyChange"
  return="void"
@@ -29441,23 +29443,6 @@
 </parameter>
 <parameter name="selectionArgs" type="java.lang.String[]">
 </parameter>
-</method>
-<method name="updateEntity"
- return="int"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="uri" type="android.net.Uri">
-</parameter>
-<parameter name="entity" type="android.content.Entity">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
 </method>
 <method name="validateSyncExtrasBundle"
  return="void"
@@ -32623,9 +32608,9 @@
 </interface>
 <class name="Entity"
  extends="java.lang.Object"
- abstract="true"
+ abstract="false"
  static="false"
- final="false"
+ final="true"
  deprecated="not deprecated"
  visibility="public"
 >
@@ -32638,7 +32623,123 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<parameter name="values" type="android.content.ContentValues">
+</parameter>
 </constructor>
+<method name="addSubValue"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="values" type="android.content.ContentValues">
+</parameter>
+</method>
+<method name="describeContents"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getEntityValues"
+ return="android.content.ContentValues"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSubValues"
+ return="java.util.ArrayList&lt;android.content.Entity.NamedContentValues&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="writeToParcel"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="dest" type="android.os.Parcel">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+</method>
+<field name="CREATOR"
+ type="android.os.Parcelable.Creator"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="Entity.NamedContentValues"
+ extends="java.lang.Object"
+ abstract="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Entity.NamedContentValues"
+ type="android.content.Entity.NamedContentValues"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="values" type="android.content.ContentValues">
+</parameter>
+</constructor>
+<field name="uri"
+ type="android.net.Uri"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="values"
+ type="android.content.ContentValues"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 </class>
 <interface name="EntityIterator"
  abstract="true"
@@ -38091,6 +38192,16 @@
  visibility="public"
 >
 </field>
+<field name="expandable"
+ type="boolean"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="flags"
  type="int"
  transient="false"
@@ -39942,6 +40053,17 @@
  transient="false"
  volatile="false"
  value="512"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="GET_EXPANDABLE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="131072"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -44377,7 +44499,46 @@
 <parameter name="columnIndex" type="int">
 </parameter>
 </method>
+<method name="isFloat"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="columnIndex" type="int">
+</parameter>
+</method>
+<method name="isLong"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="columnIndex" type="int">
+</parameter>
+</method>
 <method name="isNull"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="columnIndex" type="int">
+</parameter>
+</method>
+<method name="isString"
  return="boolean"
  abstract="false"
  native="false"
@@ -45470,7 +45631,52 @@
 <parameter name="col" type="int">
 </parameter>
 </method>
+<method name="isFloat"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="row" type="int">
+</parameter>
+<parameter name="col" type="int">
+</parameter>
+</method>
+<method name="isLong"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="row" type="int">
+</parameter>
+<parameter name="col" type="int">
+</parameter>
+</method>
 <method name="isNull"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="row" type="int">
+</parameter>
+<parameter name="col" type="int">
+</parameter>
+</method>
+<method name="isString"
  return="boolean"
  abstract="false"
  native="false"
@@ -49914,6 +50120,19 @@
 <parameter name="listener" type="android.gesture.GestureOverlayView.OnGesturePerformedListener">
 </parameter>
 </method>
+<method name="addOnGesturingListener"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="listener" type="android.gesture.GestureOverlayView.OnGesturingListener">
+</parameter>
+</method>
 <method name="cancelClearAnimation"
  return="void"
  abstract="false"
@@ -50114,6 +50333,17 @@
  visibility="public"
 >
 </method>
+<method name="removeAllOnGesturingListeners"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 <method name="removeOnGestureListener"
  return="void"
  abstract="false"
@@ -50138,6 +50368,19 @@
  visibility="public"
 >
 <parameter name="listener" type="android.gesture.GestureOverlayView.OnGesturePerformedListener">
+</parameter>
+</method>
+<method name="removeOnGesturingListener"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="listener" type="android.gesture.GestureOverlayView.OnGesturingListener">
 </parameter>
 </method>
 <method name="setEventsInterceptionEnabled"
@@ -50416,6 +50659,40 @@
 <parameter name="overlay" type="android.gesture.GestureOverlayView">
 </parameter>
 <parameter name="gesture" type="android.gesture.Gesture">
+</parameter>
+</method>
+</interface>
+<interface name="GestureOverlayView.OnGesturingListener"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="onGesturingEnded"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="overlay" type="android.gesture.GestureOverlayView">
+</parameter>
+</method>
+<method name="onGesturingStarted"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="overlay" type="android.gesture.GestureOverlayView">
 </parameter>
 </method>
 </interface>
@@ -51855,6 +52132,16 @@
  visibility="public"
 >
 </field>
+<field name="inInputShareable"
+ type="boolean"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="inJustDecodeBounds"
  type="boolean"
  transient="false"
@@ -51867,6 +52154,16 @@
 </field>
 <field name="inPreferredConfig"
  type="android.graphics.Bitmap.Config"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="inPurgeable"
+ type="boolean"
  transient="false"
  volatile="false"
  static="false"
@@ -111429,6 +111726,17 @@
  transient="false"
  volatile="false"
  value="&quot;show_processes&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="SHOW_WEB_SUGGESTIONS"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;show_web_suggestions&quot;"
  static="true"
  final="true"
  deprecated="not deprecated"
