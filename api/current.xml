@@ -22948,6 +22948,17 @@
 <parameter name="flags" type="int">
 </parameter>
 </method>
+<method name="getIntentSender"
+ return="android.content.IntentSender"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 <method name="getService"
  return="android.app.PendingIntent"
  abstract="false"
@@ -29629,6 +29640,70 @@
 </parameter>
 </method>
 </interface>
+<interface name="IIntentReceiver"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="android.os.IInterface">
+</implements>
+<method name="performReceive"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="intent" type="android.content.Intent">
+</parameter>
+<parameter name="resultCode" type="int">
+</parameter>
+<parameter name="data" type="java.lang.String">
+</parameter>
+<parameter name="extras" type="android.os.Bundle">
+</parameter>
+<parameter name="ordered" type="boolean">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+</interface>
+<interface name="IIntentSender"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="android.os.IInterface">
+</implements>
+<method name="send"
+ return="int"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="code" type="int">
+</parameter>
+<parameter name="intent" type="android.content.Intent">
+</parameter>
+<parameter name="resolvedType" type="java.lang.String">
+</parameter>
+<parameter name="finishedReceiver" type="android.content.IIntentReceiver">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+</interface>
 <class name="Intent"
  extends="java.lang.Object"
  abstract="false"
@@ -33645,6 +33720,190 @@
  visibility="public"
 >
 <parameter name="name" type="java.lang.String">
+</parameter>
+</constructor>
+</class>
+<class name="IntentSender"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="android.os.Parcelable">
+</implements>
+<constructor name="IntentSender"
+ type="android.content.IntentSender"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="target" type="android.content.IIntentSender">
+</parameter>
+</constructor>
+<constructor name="IntentSender"
+ type="android.content.IntentSender"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="target" type="android.os.IBinder">
+</parameter>
+</constructor>
+<method name="describeContents"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="readIntentSenderOrNullFromParcel"
+ return="android.content.IntentSender"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="in" type="android.os.Parcel">
+</parameter>
+</method>
+<method name="sendIntent"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="code" type="int">
+</parameter>
+<parameter name="intent" type="android.content.Intent">
+</parameter>
+<parameter name="onFinished" type="android.content.IntentSender.OnFinished">
+</parameter>
+<parameter name="handler" type="android.os.Handler">
+</parameter>
+<exception name="IntentSender.SendIntentException" type="android.content.IntentSender.SendIntentException">
+</exception>
+</method>
+<method name="writeIntentSenderOrNullToParcel"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="sender" type="android.content.IntentSender">
+</parameter>
+<parameter name="out" type="android.os.Parcel">
+</parameter>
+</method>
+<method name="writeToParcel"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="out" type="android.os.Parcel">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+</method>
+<field name="CREATOR"
+ type="android.os.Parcelable.Creator"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<interface name="IntentSender.OnFinished"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="onSendFinished"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="IntentSender" type="android.content.IntentSender">
+</parameter>
+<parameter name="intent" type="android.content.Intent">
+</parameter>
+<parameter name="resultCode" type="int">
+</parameter>
+<parameter name="resultData" type="java.lang.String">
+</parameter>
+<parameter name="resultExtras" type="android.os.Bundle">
+</parameter>
+</method>
+</interface>
+<class name="IntentSender.SendIntentException"
+ extends="android.util.AndroidException"
+ abstract="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="IntentSender.SendIntentException"
+ type="android.content.IntentSender.SendIntentException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<constructor name="IntentSender.SendIntentException"
+ type="android.content.IntentSender.SendIntentException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+</constructor>
+<constructor name="IntentSender.SendIntentException"
+ type="android.content.IntentSender.SendIntentException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="cause" type="java.lang.Exception">
 </parameter>
 </constructor>
 </class>
