@@ -29249,6 +29249,21 @@
 <parameter name="name" type="java.lang.String">
 </parameter>
 </method>
+<method name="addStatusChangeListener"
+ return="java.lang.Object"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="mask" type="int">
+</parameter>
+<parameter name="callback" type="android.content.SyncStatusObserver">
+</parameter>
+</method>
 <method name="applyBatch"
  return="android.content.ContentProviderResult[]"
  abstract="false"
@@ -29290,10 +29305,25 @@
  synchronized="false"
  static="false"
  final="false"
- deprecated="not deprecated"
+ deprecated="deprecated"
  visibility="public"
 >
 <parameter name="uri" type="android.net.Uri">
+</parameter>
+</method>
+<method name="cancelSync"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="account" type="android.accounts.Account">
+</parameter>
+<parameter name="authority" type="java.lang.String">
 </parameter>
 </method>
 <method name="delete"
@@ -29311,6 +29341,43 @@
 <parameter name="where" type="java.lang.String">
 </parameter>
 <parameter name="selectionArgs" type="java.lang.String[]">
+</parameter>
+</method>
+<method name="getMasterSyncAutomatically"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSyncAdapterTypes"
+ return="android.content.SyncAdapterType[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSyncAutomatically"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="account" type="android.accounts.Account">
+</parameter>
+<parameter name="authority" type="java.lang.String">
 </parameter>
 </method>
 <method name="getType"
@@ -29339,6 +29406,36 @@
 <parameter name="url" type="android.net.Uri">
 </parameter>
 <parameter name="values" type="android.content.ContentValues">
+</parameter>
+</method>
+<method name="isSyncActive"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="account" type="android.accounts.Account">
+</parameter>
+<parameter name="authority" type="java.lang.String">
+</parameter>
+</method>
+<method name="isSyncPending"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="account" type="android.accounts.Account">
+</parameter>
+<parameter name="authority" type="java.lang.String">
 </parameter>
 </method>
 <method name="notifyChange"
@@ -29513,6 +29610,66 @@
 <parameter name="observer" type="android.database.ContentObserver">
 </parameter>
 </method>
+<method name="removeStatusChangeListener"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="handle" type="java.lang.Object">
+</parameter>
+</method>
+<method name="requestSync"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="account" type="android.accounts.Account">
+</parameter>
+<parameter name="authority" type="java.lang.String">
+</parameter>
+<parameter name="extras" type="android.os.Bundle">
+</parameter>
+</method>
+<method name="setMasterSyncAutomatically"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="sync" type="boolean">
+</parameter>
+</method>
+<method name="setSyncAutomatically"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="account" type="android.accounts.Account">
+</parameter>
+<parameter name="authority" type="java.lang.String">
+</parameter>
+<parameter name="sync" type="boolean">
+</parameter>
+</method>
 <method name="startSync"
  return="void"
  abstract="false"
@@ -29520,7 +29677,7 @@
  synchronized="false"
  static="false"
  final="false"
- deprecated="not deprecated"
+ deprecated="deprecated"
  visibility="public"
 >
 <parameter name="uri" type="android.net.Uri">
@@ -29635,7 +29792,7 @@
  value="&quot;account&quot;"
  static="true"
  final="true"
- deprecated="not deprecated"
+ deprecated="deprecated"
  visibility="public"
 >
 </field>
@@ -29662,6 +29819,17 @@
 >
 </field>
 <field name="SYNC_EXTRAS_FORCE"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;force&quot;"
+ static="true"
+ final="true"
+ deprecated="deprecated"
+ visibility="public"
+>
+</field>
+<field name="SYNC_EXTRAS_MANUAL"
  type="java.lang.String"
  transient="false"
  volatile="false"
@@ -37903,6 +38071,8 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<implements name="android.os.Parcelable">
+</implements>
 <constructor name="SyncAdapterType"
  type="android.content.SyncAdapterType"
  static="false"
@@ -37915,6 +38085,52 @@
 <parameter name="accountType" type="java.lang.String">
 </parameter>
 </constructor>
+<constructor name="SyncAdapterType"
+ type="android.content.SyncAdapterType"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="source" type="android.os.Parcel">
+</parameter>
+</constructor>
+<method name="describeContents"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="writeToParcel"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="dest" type="android.os.Parcel">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+</method>
+<field name="CREATOR"
+ type="android.os.Parcelable.Creator"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="accountType"
  type="java.lang.String"
  transient="false"
@@ -37936,6 +38152,27 @@
 >
 </field>
 </class>
+<interface name="SyncStatusObserver"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="onStatusChanged"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="which" type="int">
+</parameter>
+</method>
+</interface>
 <class name="UriMatcher"
  extends="java.lang.Object"
  abstract="false"
@@ -117418,7 +117655,7 @@
 >
 <parameter name="uri" type="android.net.Uri">
 </parameter>
-<parameter name="account" type="java.lang.String">
+<parameter name="accountName" type="java.lang.String">
 </parameter>
 <parameter name="authority" type="java.lang.String">
 </parameter>
