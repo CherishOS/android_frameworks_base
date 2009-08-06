@@ -17,10 +17,10 @@
 package android.app;
 
 import android.os.ParcelFileDescriptor;
-import android.app.IWallpaperServiceCallback;
+import android.app.IWallpaperManagerCallback;
 
 /** @hide */
-interface IWallpaperService {
+interface IWallpaperManager {
 
     /**
      * Set the wallpaper.
@@ -30,7 +30,7 @@ interface IWallpaperService {
     /**
      * Get the wallpaper.
      */
-    ParcelFileDescriptor getWallpaper(IWallpaperServiceCallback cb);
+    ParcelFileDescriptor getWallpaper(IWallpaperManagerCallback cb);
     
     /**
      * Clear the wallpaper.
