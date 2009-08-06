@@ -19,8 +19,8 @@ package com.android.server;
 import static android.os.FileObserver.*;
 import static android.os.ParcelFileDescriptor.*;
 
-import android.app.IWallpaperService;
-import android.app.IWallpaperServiceCallback;
+import android.app.IWallpaperManager;
+import android.app.IWallpaperManagerCallback;
 import android.backup.BackupManager;
 import android.content.Context;
 import android.content.Intent;
@@ -49,7 +49,7 @@ import org.xmlpull.v1.XmlSerializer;
 
 import com.android.internal.util.FastXmlSerializer;
 
-class WallpaperService extends IWallpaperService.Stub {
+class WallpaperManagerService extends IWallpaperManager.Stub {
     private static final String TAG = "WallpaperService";
 
     private Object mLock = new Object();
@@ -63,8 +63,8 @@ class WallpaperService extends IWallpaperService.Stub {
      * List of callbacks registered they should each be notified
      * when the wallpaper is changed.
      */
-    private final RemoteCallbackList<IWallpaperServiceCallback> mCallbacks
-            = new RemoteCallbackList<IWallpaperServiceCallback>();
+    private final RemoteCallbackList<IWallpaperManagerCallback> mCallbacks
+            = new RemoteCallbackList<IWallpaperManagerCallback>();
 
     /**
      * Observes the wallpaper for changes and notifies all IWallpaperServiceCallbacks
@@ -100,7 +100,7 @@ class WallpaperService extends IWallpaperService.Stub {
     private int mHeight = -1;
     private String mName = "";
 
-    public WallpaperService(Context context) {
+    public WallpaperManagerService(Context context) {
         if (Config.LOGD) Log.d(TAG, "WallpaperService startup");
         mContext = context;
         WALLPAPER_DIR.mkdirs();
@@ -151,7 +151,7 @@ class WallpaperService extends IWallpaperService.Stub {
         }
     }
 
-    public ParcelFileDescriptor getWallpaper(IWallpaperServiceCallback cb) {
+    public ParcelFileDescriptor getWallpaper(IWallpaperManagerCallback cb) {
         synchronized (mLock) {
             try {
                 mCallbacks.register(cb);
