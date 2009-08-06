@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (C) 2009 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-package android.app;
+package android.service.wallpaper;
 
 /**
- * Callback interface used by IWallpaperService to send asynchronous 
- * notifications back to its clients.  Note that this is a
- * one-way interface so the server does not block waiting for the client.
- *
  * @hide
  */
-oneway interface IWallpaperServiceCallback {
-    /**
-     * Called when the wallpaper has changed
-     */
-    void onWallpaperChanged();
+oneway interface IWallpaperService {
+    void onInterrupt();
 }
