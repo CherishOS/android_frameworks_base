@@ -16,12 +16,13 @@
 
 package android.service.wallpaper;
 
-import android.service.wallpaper.IWallpaperConnection;
+import android.os.ParcelFileDescriptor;
+import android.service.wallpaper.IWallpaperEngine;
 
 /**
  * @hide
  */
-oneway interface IWallpaperService {
-    void attach(IWallpaperConnection connection,
-    		IBinder windowToken, int reqWidth, int reqHeight);
+interface IWallpaperConnection {
+	void attachEngine(IWallpaperEngine engine);
+    ParcelFileDescriptor setWallpaper(String name);
 }

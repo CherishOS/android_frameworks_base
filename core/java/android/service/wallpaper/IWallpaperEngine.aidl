@@ -16,12 +16,9 @@
 
 package android.service.wallpaper;
 
-import android.service.wallpaper.IWallpaperConnection;
-
 /**
  * @hide
  */
-oneway interface IWallpaperService {
-    void attach(IWallpaperConnection connection,
-    		IBinder windowToken, int reqWidth, int reqHeight);
+oneway interface IWallpaperEngine {
+	void destroy();
 }
