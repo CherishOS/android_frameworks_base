@@ -15,6 +15,6 @@
  */
 package android.accounts;
 
-public interface Future2Callback {
-    void run(Future2 future);
+public interface AccountManagerCallback<V> {
+    void run(AccountManagerFuture<V> future);
 }
