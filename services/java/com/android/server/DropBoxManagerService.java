@@ -23,7 +23,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.DropBox;
+import android.os.DropBoxManager;
 import android.os.ParcelFileDescriptor;
 import android.os.StatFs;
 import android.os.SystemClock;
@@ -31,7 +31,7 @@ import android.provider.Settings;
 import android.text.format.DateFormat;
 import android.util.Log;
 
-import com.android.internal.os.IDropBoxService;
+import com.android.internal.os.IDropBoxManagerService;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -54,13 +54,13 @@ import java.util.TreeSet;
 import java.util.zip.GZIPOutputStream;
 
 /**
- * Implementation of {@link IDropBoxService} using the filesystem.
- * Clients use {@link DropBox} to access this service.
+ * Implementation of {@link IDropBoxManagerService} using the filesystem.
+ * Clients use {@link DropBoxManager} to access this service.
  *
  * {@hide}
  */
-public final class DropBoxService extends IDropBoxService.Stub {
-    private static final String TAG = "DropBoxService";
+public final class DropBoxManagerService extends IDropBoxManagerService.Stub {
+    private static final String TAG = "DropBoxManagerService";
     private static final int DEFAULT_RESERVE_PERCENT = 10;
     private static final int DEFAULT_QUOTA_PERCENT = 10;
     private static final int DEFAULT_QUOTA_KB = 5 * 1024;
@@ -113,7 +113,7 @@ public final class DropBoxService extends IDropBoxService.Stub {
      * @param context to use for receiving free space & gservices intents
      * @param path to store drop box entries in
      */
-    public DropBoxService(Context context, File path) {
+    public DropBoxManagerService(Context context, File path) {
         mDropBoxDir = path;
 
         // Set up intent receivers
@@ -131,13 +131,13 @@ public final class DropBoxService extends IDropBoxService.Stub {
         mContext.unregisterReceiver(mReceiver);
     }
 
-    public void add(DropBox.Entry entry) {
+    public void add(DropBoxManager.Entry entry) {
         File temp = null;
         OutputStream output = null;
         final String tag = entry.getTag();
         try {
             int flags = entry.getFlags();
-            if ((flags & DropBox.IS_EMPTY) != 0) throw new IllegalArgumentException();
+            if ((flags & DropBoxManager.IS_EMPTY) != 0) throw new IllegalArgumentException();
 
             init();
             if (!isTagEnabled(tag)) return;
@@ -162,9 +162,9 @@ public final class DropBoxService extends IDropBoxService.Stub {
 
             temp = new File(mDropBoxDir, "drop" + Thread.currentThread().getId() + ".tmp");
             output = new FileOutputStream(temp);
-            if (read == buffer.length && ((flags & DropBox.IS_GZIPPED) == 0)) {
+            if (read == buffer.length && ((flags & DropBoxManager.IS_GZIPPED) == 0)) {
                 output = new GZIPOutputStream(output);
-                flags = flags | DropBox.IS_GZIPPED;
+                flags = flags | DropBoxManager.IS_GZIPPED;
             }
 
             do {
@@ -209,7 +209,7 @@ public final class DropBoxService extends IDropBoxService.Stub {
                 mContentResolver, Settings.Gservices.DROPBOX_TAG_PREFIX + tag));
     }
 
-    public synchronized DropBox.Entry getNextEntry(String tag, long millis) {
+    public synchronized DropBoxManager.Entry getNextEntry(String tag, long millis) {
         if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.READ_LOGS)
                 != PackageManager.PERMISSION_GRANTED) {
             throw new SecurityException("READ_LOGS permission required");
@@ -227,11 +227,12 @@ public final class DropBoxService extends IDropBoxService.Stub {
 
         for (EntryFile entry : list.contents.tailSet(new EntryFile(millis + 1))) {
             if (entry.tag == null) continue;
-            if ((entry.flags & DropBox.IS_EMPTY) != 0) {
-                return new DropBox.Entry(entry.tag, entry.timestampMillis);
+            if ((entry.flags & DropBoxManager.IS_EMPTY) != 0) {
+                return new DropBoxManager.Entry(entry.tag, entry.timestampMillis);
             }
             try {
-                return new DropBox.Entry(entry.tag, entry.timestampMillis, entry.file, entry.flags);
+                return new DropBoxManager.Entry(
+                        entry.tag, entry.timestampMillis, entry.file, entry.flags);
             } catch (IOException e) {
                 Log.e(TAG, "Can't read: " + entry.file, e);
                 // Continue to next file
@@ -244,7 +245,7 @@ public final class DropBoxService extends IDropBoxService.Stub {
     public synchronized void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.DUMP)
                 != PackageManager.PERMISSION_GRANTED) {
-            pw.println("Permission Denial: Can't dump DropBoxService");
+            pw.println("Permission Denial: Can't dump DropBoxManagerService");
             return;
         }
 
@@ -298,25 +299,25 @@ public final class DropBoxService extends IDropBoxService.Stub {
             if (entry.file == null) {
                 pw.println(" (no file)");
                 continue;
-            } else if ((entry.flags & DropBox.IS_EMPTY) != 0) {
+            } else if ((entry.flags & DropBoxManager.IS_EMPTY) != 0) {
                 pw.println(" (contents lost)");
                 continue;
             } else {
-                pw.print((entry.flags & DropBox.IS_GZIPPED) != 0 ? " (comopressed " : " (");
-                pw.print((entry.flags & DropBox.IS_TEXT) != 0 ? "text" : "data");
+                pw.print((entry.flags & DropBoxManager.IS_GZIPPED) != 0 ? " (comopressed " : " (");
+                pw.print((entry.flags & DropBoxManager.IS_TEXT) != 0 ? "text" : "data");
                 pw.format(", %d bytes)", entry.file.length());
                 pw.println();
             }
 
-            if (doFile || (doPrint && (entry.flags & DropBox.IS_TEXT) == 0)) {
+            if (doFile || (doPrint && (entry.flags & DropBoxManager.IS_TEXT) == 0)) {
                 if (!doPrint) pw.print("    ");
                 pw.println(entry.file.getPath());
             }
 
-            if ((entry.flags & DropBox.IS_TEXT) != 0 && (doPrint || !doFile)) {
-                DropBox.Entry dbe = null;
+            if ((entry.flags & DropBoxManager.IS_TEXT) != 0 && (doPrint || !doFile)) {
+                DropBoxManager.Entry dbe = null;
                 try {
-                    dbe = new DropBox.Entry(
+                    dbe = new DropBoxManager.Entry(
                              entry.tag, entry.timestampMillis, entry.file, entry.flags);
 
                     if (doPrint) {
@@ -408,14 +409,14 @@ public final class DropBoxService extends IDropBoxService.Stub {
          */
         public EntryFile(File temp, File dir, String tag,long timestampMillis,
                          int flags, int blockSize) throws IOException {
-            if ((flags & DropBox.IS_EMPTY) != 0) throw new IllegalArgumentException();
+            if ((flags & DropBoxManager.IS_EMPTY) != 0) throw new IllegalArgumentException();
 
             this.tag = tag;
             this.timestampMillis = timestampMillis;
             this.flags = flags;
             this.file = new File(dir, Uri.encode(tag) + "@" + timestampMillis +
-                    ((flags & DropBox.IS_TEXT) != 0 ? ".txt" : ".dat") +
-                    ((flags & DropBox.IS_GZIPPED) != 0 ? ".gz" : ""));
+                    ((flags & DropBoxManager.IS_TEXT) != 0 ? ".txt" : ".dat") +
+                    ((flags & DropBoxManager.IS_GZIPPED) != 0 ? ".gz" : ""));
 
             if (!temp.renameTo(this.file)) {
                 throw new IOException("Can't rename " + temp + " to " + this.file);
@@ -433,7 +434,7 @@ public final class DropBoxService extends IDropBoxService.Stub {
         public EntryFile(File dir, String tag, long timestampMillis) throws IOException {
             this.tag = tag;
             this.timestampMillis = timestampMillis;
-            this.flags = DropBox.IS_EMPTY;
+            this.flags = DropBoxManager.IS_EMPTY;
             this.file = new File(dir, Uri.encode(tag) + "@" + timestampMillis + ".lost");
             this.blocks = 0;
             new FileOutputStream(this.file).close();
@@ -453,26 +454,26 @@ public final class DropBoxService extends IDropBoxService.Stub {
             if (at < 0) {
                 this.tag = null;
                 this.timestampMillis = 0;
-                this.flags = DropBox.IS_EMPTY;
+                this.flags = DropBoxManager.IS_EMPTY;
                 return;
             }
 
             int flags = 0;
             this.tag = Uri.decode(name.substring(0, at));
             if (name.endsWith(".gz")) {
-                flags |= DropBox.IS_GZIPPED;
+                flags |= DropBoxManager.IS_GZIPPED;
                 name = name.substring(0, name.length() - 3);
             }
             if (name.endsWith(".lost")) {
-                flags |= DropBox.IS_EMPTY;
+                flags |= DropBoxManager.IS_EMPTY;
                 name = name.substring(at + 1, name.length() - 5);
             } else if (name.endsWith(".txt")) {
-                flags |= DropBox.IS_TEXT;
+                flags |= DropBoxManager.IS_TEXT;
                 name = name.substring(at + 1, name.length() - 4);
             } else if (name.endsWith(".dat")) {
                 name = name.substring(at + 1, name.length() - 4);
             } else {
-                this.flags = DropBox.IS_EMPTY;
+                this.flags = DropBoxManager.IS_EMPTY;
                 this.timestampMillis = 0;
                 return;
             }
@@ -490,7 +491,7 @@ public final class DropBoxService extends IDropBoxService.Stub {
         public EntryFile(long millis) {
             this.tag = null;
             this.timestampMillis = millis;
-            this.flags = DropBox.IS_EMPTY;
+            this.flags = DropBoxManager.IS_EMPTY;
             this.file = null;
             this.blocks = 0;
         }
@@ -585,7 +586,7 @@ public final class DropBoxService extends IDropBoxService.Stub {
                 mAllFiles.blocks -= late.blocks;
                 FileList tagFiles = mFilesByTag.get(late.tag);
                 if (tagFiles.contents.remove(late)) tagFiles.blocks -= late.blocks;
-                if ((late.flags & DropBox.IS_EMPTY) == 0) {
+                if ((late.flags & DropBoxManager.IS_EMPTY) == 0) {
                     enrollEntry(new EntryFile(
                             late.file, mDropBoxDir, late.tag, t++, late.flags, mBlockSize));
                 } else {
