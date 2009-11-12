@@ -16,4 +16,4 @@
 
 package android.os;
 
-parcelable DropBox.Entry;
+parcelable DropBoxManager.Entry;
