@@ -16,27 +16,27 @@
 
 package com.android.internal.os;
 
-import android.os.DropBox;
+import android.os.DropBoxManager;
 import android.os.ParcelFileDescriptor;
 
 /**
- * "Backend" interface used by {@link android.os.DropBox} to talk to the
- * DropBoxService that actually implements the drop box functionality.
+ * "Backend" interface used by {@link android.os.DropBoxManager} to talk to the
+ * DropBoxManagerService that actually implements the drop box functionality.
  *
- * @see DropBox
+ * @see DropBoxManager
  * @hide
  */
-interface IDropBoxService {
+interface IDropBoxManagerService {
     /**
-     * @see DropBox#addText
-     * @see DropBox#addData
-     * @see DropBox#addFile
+     * @see DropBoxManager#addText
+     * @see DropBoxManager#addData
+     * @see DropBoxManager#addFile
      */
-    void add(in DropBox.Entry entry);
+    void add(in DropBoxManager.Entry entry);
 
-    /** @see DropBox#getNextEntry */
+    /** @see DropBoxManager#getNextEntry */
     boolean isTagEnabled(String tag);
 
-    /** @see DropBox#getNextEntry */
-    DropBox.Entry getNextEntry(String tag, long millis);
+    /** @see DropBoxManager#getNextEntry */
+    DropBoxManager.Entry getNextEntry(String tag, long millis);
 }
