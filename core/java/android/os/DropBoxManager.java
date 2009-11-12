@@ -18,7 +18,7 @@ package android.os;
 
 import android.util.Log;
 
-import com.android.internal.os.IDropBoxService;
+import com.android.internal.os.IDropBoxManagerService;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -37,14 +37,12 @@ import java.util.zip.GZIPInputStream;
  * {@link android.content.Context#getSystemService}
  * with {@link android.content.Context#DROPBOX_SERVICE}.
  *
- * <p>DropBox entries are not sent anywhere directly, but other system services
- * and debugging tools may scan and upload entries for processing.
- *
- * {@pending}
+ * <p>DropBoxManager entries are not sent anywhere directly, but other system
+ * services and debugging tools may scan and upload entries for processing.
  */
-public class DropBox {
-    private static final String TAG = "DropBox";
-    private final IDropBoxService mService;
+public class DropBoxManager {
+    private static final String TAG = "DropBoxManager";
+    private final IDropBoxManagerService mService;
 
     /** Flag value: Entry's content was deleted to save space. */
     public static final int IS_EMPTY = 1;
@@ -198,14 +196,14 @@ public class DropBox {
     }
 
     /** {@hide} */
-    public DropBox(IDropBoxService service) { mService = service; }
+    public DropBoxManager(IDropBoxManagerService service) { mService = service; }
 
     /**
      * Create a dummy instance for testing.  All methods will fail unless
      * overridden with an appropriate mock implementation.  To obtain a
      * functional instance, use {@link android.content.Context#getSystemService}.
      */
-    protected DropBox() { mService = null; }
+    protected DropBoxManager() { mService = null; }
 
     /**
      * Stores human-readable text.  The data may be discarded eventually (or even
