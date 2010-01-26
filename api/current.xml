@@ -40253,6 +40253,16 @@
  visibility="public"
 >
 </field>
+<field name="delayUntil"
+ type="long"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="fullSyncRequested"
  type="boolean"
  transient="false"
@@ -55199,6 +55209,88 @@
  visibility="public"
 >
 </field>
+</class>
+<class name="GestureUtilities"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="computeOrientedBoundingBox"
+ return="android.gesture.OrientedBoundingBox"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="originalPoints" type="java.util.ArrayList&lt;android.gesture.GesturePoint&gt;">
+</parameter>
+</method>
+<method name="computeOrientedBoundingBox"
+ return="android.gesture.OrientedBoundingBox"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="originalPoints" type="float[]">
+</parameter>
+</method>
+<method name="spatialSampling"
+ return="float[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="gesture" type="android.gesture.Gesture">
+</parameter>
+<parameter name="bitmapSize" type="int">
+</parameter>
+</method>
+<method name="spatialSampling"
+ return="float[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="gesture" type="android.gesture.Gesture">
+</parameter>
+<parameter name="bitmapSize" type="int">
+</parameter>
+<parameter name="keepAspectRatio" type="boolean">
+</parameter>
+</method>
+<method name="temporalSampling"
+ return="float[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="stroke" type="android.gesture.GestureStroke">
+</parameter>
+<parameter name="numPoints" type="int">
+</parameter>
+</method>
 </class>
 <class name="OrientedBoundingBox"
  extends="java.lang.Object"
@@ -130602,6 +130694,17 @@
  visibility="public"
 >
 </field>
+<field name="ACTION_DEVICE_INFO_SETTINGS"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;android.settings.DEVICE_INFO_SETTINGS&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="ACTION_DISPLAY_SETTINGS"
  type="java.lang.String"
  transient="false"
@@ -134065,6 +134168,320 @@
 </package>
 <package name="android.speech"
 >
+<interface name="RecognitionListener"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="onBeginningOfSpeech"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="onBufferReceived"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="buffer" type="byte[]">
+</parameter>
+</method>
+<method name="onEndOfSpeech"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="onError"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="error" type="int">
+</parameter>
+</method>
+<method name="onInit"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="onPartialResults"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="partialResults" type="android.os.Bundle">
+</parameter>
+</method>
+<method name="onReadyForSpeech"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="params" type="android.os.Bundle">
+</parameter>
+</method>
+<method name="onResults"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="results" type="android.os.Bundle">
+</parameter>
+</method>
+<method name="onRmsChanged"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="rmsdB" type="float">
+</parameter>
+</method>
+</interface>
+<class name="RecognitionManager"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="cancel"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="createRecognitionManager"
+ return="android.speech.RecognitionManager"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="listener" type="android.speech.RecognitionListener">
+</parameter>
+<parameter name="recognizerIntent" type="android.content.Intent">
+</parameter>
+</method>
+<method name="destroy"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="isRecognitionAvailable"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+</method>
+<method name="startListening"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="recognizerIntent" type="android.content.Intent">
+</parameter>
+</method>
+<method name="stopListening"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<field name="AUDIO_ERROR"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="3"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="CLIENT_ERROR"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="5"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="MANAGER_NOT_INITIALIZED_ERROR"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="9"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="NETWORK_ERROR"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="NETWORK_TIMEOUT_ERROR"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="1"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="NO_MATCH_ERROR"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="7"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="RECOGNITION_RESULTS_STRING_ARRAY"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;recognition_results_string_array&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="SERVER_BUSY_ERROR"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="8"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="SERVER_ERROR"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="4"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="SPEECH_TIMEOUT_ERROR"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="6"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
 <class name="RecognizerIntent"
  extends="java.lang.Object"
  abstract="false"
@@ -134078,6 +134495,17 @@
  transient="false"
  volatile="false"
  value="&quot;android.speech.action.RECOGNIZE_SPEECH&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="ACTION_VOICE_SEARCH_SETTINGS"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;android.speech.action.VOICE_SEARCH_SETTINGS&quot;"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -134166,6 +134594,39 @@
  transient="false"
  volatile="false"
  value="&quot;android.speech.extra.RESULTS_PENDINGINTENT_BUNDLE&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;android.speech.extras.SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;android.speech.extras.SPEECH_INPUT_MINIMUM_LENGTH_MILLIS&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;android.speech.extras.SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS&quot;"
  static="true"
  final="true"
  deprecated="not deprecated"
