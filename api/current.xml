@@ -17644,6 +17644,17 @@
 <exception name="SecurityException" type="java.lang.SecurityException">
 </exception>
 </method>
+<method name="isUserAMonkey"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 <method name="killBackgroundProcesses"
  return="void"
  abstract="false"
@@ -20457,7 +20468,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="mode" type="int">
+<parameter name="quality" type="int">
 </parameter>
 </method>
 <method name="getPasswordMinimumLength"
@@ -20473,7 +20484,7 @@
 <parameter name="admin" type="android.content.ComponentName">
 </parameter>
 </method>
-<method name="getPasswordMode"
+<method name="getPasswordQuality"
  return="int"
  abstract="false"
  native="false"
@@ -20592,7 +20603,7 @@
 <parameter name="length" type="int">
 </parameter>
 </method>
-<method name="setPasswordMode"
+<method name="setPasswordQuality"
  return="void"
  abstract="false"
  native="false"
@@ -20604,7 +20615,7 @@
 >
 <parameter name="admin" type="android.content.ComponentName">
 </parameter>
-<parameter name="mode" type="int">
+<parameter name="quality" type="int">
 </parameter>
 </method>
 <method name="wipeData"
@@ -20664,40 +20675,40 @@
  visibility="public"
 >
 </field>
-<field name="PASSWORD_MODE_ALPHANUMERIC"
+<field name="PASSWORD_QUALITY_ALPHANUMERIC"
  type="int"
  transient="false"
  volatile="false"
- value="3000"
+ value="196608"
  static="true"
  final="true"
  deprecated="not deprecated"
  visibility="public"
 >
 </field>
-<field name="PASSWORD_MODE_NUMERIC"
+<field name="PASSWORD_QUALITY_NUMERIC"
  type="int"
  transient="false"
  volatile="false"
- value="2000"
+ value="131072"
  static="true"
  final="true"
  deprecated="not deprecated"
  visibility="public"
 >
 </field>
-<field name="PASSWORD_MODE_SOMETHING"
+<field name="PASSWORD_QUALITY_SOMETHING"
  type="int"
  transient="false"
  volatile="false"
- value="1000"
+ value="65536"
  static="true"
  final="true"
  deprecated="not deprecated"
  visibility="public"
 >
 </field>
-<field name="PASSWORD_MODE_UNSPECIFIED"
+<field name="PASSWORD_QUALITY_UNSPECIFIED"
  type="int"
  transient="false"
  volatile="false"
@@ -52371,6 +52382,25 @@
 <exception name="SQLException" type="android.database.SQLException">
 </exception>
 </method>
+<method name="insertWithOnConflict"
+ return="long"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="table" type="java.lang.String">
+</parameter>
+<parameter name="nullColumnHack" type="java.lang.String">
+</parameter>
+<parameter name="initialValues" type="android.content.ContentValues">
+</parameter>
+<parameter name="conflictAlgorithm" type="int">
+</parameter>
+</method>
 <method name="isDbLockedByCurrentThread"
  return="boolean"
  abstract="false"
@@ -52806,6 +52836,27 @@
 <parameter name="whereArgs" type="java.lang.String[]">
 </parameter>
 </method>
+<method name="updateWithOnConflict"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="table" type="java.lang.String">
+</parameter>
+<parameter name="values" type="android.content.ContentValues">
+</parameter>
+<parameter name="whereClause" type="java.lang.String">
+</parameter>
+<parameter name="whereArgs" type="java.lang.String[]">
+</parameter>
+<parameter name="conflictAlgorithm" type="int">
+</parameter>
+</method>
 <method name="yieldIfContended"
  return="boolean"
  abstract="false"
@@ -52890,6 +52941,81 @@
  transient="false"
  volatile="false"
  value="50000"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="SQLiteDatabase.ConflictAlgorithm"
+ extends="java.lang.Object"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<field name="ABORT"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="FAIL"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="3"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="IGNORE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="4"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="NONE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="0"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="REPLACE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="5"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="ROLLBACK"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="1"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -70067,8 +70193,30 @@
  visibility="public"
 >
 </method>
+<method name="getFocalLength"
+ return="float"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 <method name="getFocusMode"
  return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getHorizontalViewAngle"
+ return="float"
  abstract="false"
  native="false"
  synchronized="false"
@@ -70234,6 +70382,17 @@
  visibility="public"
 >
 </method>
+<method name="getSupportedJpegThumbnailSizes"
+ return="java.util.List&lt;android.hardware.Camera.Size&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 <method name="getSupportedPictureFormats"
  return="java.util.List&lt;java.lang.Integer&gt;"
  abstract="false"
@@ -70302,6 +70461,17 @@
 </method>
 <method name="getSupportedWhiteBalance"
  return="java.util.List&lt;java.lang.String&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getVerticalViewAngle"
+ return="float"
  abstract="false"
  native="false"
  synchronized="false"
@@ -72158,7 +72328,7 @@
  type="float"
  transient="false"
  volatile="false"
- value="0.001f"
+ value="0.0010f"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -83659,6 +83829,122 @@
 <parameter name="soundID" type="int">
 </parameter>
 </method>
+</class>
+<class name="ThumbnailUtils"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="ThumbnailUtils"
+ type="android.media.ThumbnailUtils"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="createImageThumbnail"
+ return="android.graphics.Bitmap"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="cr" type="android.content.ContentResolver">
+</parameter>
+<parameter name="filePath" type="java.lang.String">
+</parameter>
+<parameter name="uri" type="android.net.Uri">
+</parameter>
+<parameter name="origId" type="long">
+</parameter>
+<parameter name="kind" type="int">
+</parameter>
+<parameter name="saveMini" type="boolean">
+</parameter>
+</method>
+<method name="createVideoThumbnail"
+ return="android.graphics.Bitmap"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="filePath" type="java.lang.String">
+</parameter>
+</method>
+<method name="extractMiniThumb"
+ return="android.graphics.Bitmap"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="source" type="android.graphics.Bitmap">
+</parameter>
+<parameter name="width" type="int">
+</parameter>
+<parameter name="height" type="int">
+</parameter>
+<parameter name="recycle" type="boolean">
+</parameter>
+</method>
+<field name="MINI_THUMB_TARGET_SIZE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="96"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="NO_RECYCLE_INPUT"
+ type="boolean"
+ transient="false"
+ volatile="false"
+ value="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="RECYCLE_INPUT"
+ type="boolean"
+ transient="false"
+ volatile="false"
+ value="true"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="THUMBNAIL_TARGET_SIZE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="320"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 </class>
 <class name="ToneGenerator"
  extends="java.lang.Object"
@@ -178437,6 +178723,17 @@
  visibility="public"
 >
 </field>
+<field name="FLAG_ALLOW_LOCK_WHILE_SCREEN_ON"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="1"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="FLAG_ALT_FOCUSABLE_IM"
  type="int"
  transient="false"
@@ -209680,7 +209977,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="t" type="T">
+<parameter name="arg0" type="T">
 </parameter>
 </method>
 </interface>
@@ -340575,7 +340872,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="f" type="java.io.File">
+<parameter name="uri" type="java.lang.String">
 </parameter>
 <exception name="IOException" type="java.io.IOException">
 </exception>
@@ -340592,7 +340889,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="uri" type="java.lang.String">
+<parameter name="f" type="java.io.File">
 </parameter>
 <exception name="IOException" type="java.io.IOException">
 </exception>
