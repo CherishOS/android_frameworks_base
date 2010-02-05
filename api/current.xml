@@ -135042,7 +135042,7 @@
 <parameter name="error" type="int">
 </parameter>
 </method>
-<method name="onInit"
+<method name="onEvent"
  return="void"
  abstract="true"
  native="false"
@@ -135052,6 +135052,10 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<parameter name="eventType" type="int">
+</parameter>
+<parameter name="params" type="android.os.Bundle">
+</parameter>
 </method>
 <method name="onPartialResults"
  return="void"
@@ -135137,10 +135141,6 @@
 >
 <parameter name="context" type="android.content.Context">
 </parameter>
-<parameter name="listener" type="android.speech.RecognitionListener">
-</parameter>
-<parameter name="recognizerIntent" type="android.content.Intent">
-</parameter>
 </method>
 <method name="destroy"
  return="void"
@@ -135164,6 +135164,19 @@
  visibility="public"
 >
 <parameter name="context" type="android.content.Context">
+</parameter>
+</method>
+<method name="setRecognitionListener"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="listener" type="android.speech.RecognitionListener">
 </parameter>
 </method>
 <method name="startListening"
@@ -135190,7 +135203,7 @@
  visibility="public"
 >
 </method>
-<field name="AUDIO_ERROR"
+<field name="ERROR_AUDIO"
  type="int"
  transient="false"
  volatile="false"
@@ -135201,7 +135214,7 @@
  visibility="public"
 >
 </field>
-<field name="CLIENT_ERROR"
+<field name="ERROR_CLIENT"
  type="int"
  transient="false"
  volatile="false"
@@ -135212,7 +135225,7 @@
  visibility="public"
 >
 </field>
-<field name="MANAGER_NOT_INITIALIZED_ERROR"
+<field name="ERROR_INSUFFICIENT_PERMISSIONS"
  type="int"
  transient="false"
  volatile="false"
@@ -135223,7 +135236,7 @@
  visibility="public"
 >
 </field>
-<field name="NETWORK_ERROR"
+<field name="ERROR_NETWORK"
  type="int"
  transient="false"
  volatile="false"
@@ -135234,7 +135247,7 @@
  visibility="public"
 >
 </field>
-<field name="NETWORK_TIMEOUT_ERROR"
+<field name="ERROR_NETWORK_TIMEOUT"
  type="int"
  transient="false"
  volatile="false"
@@ -135245,7 +135258,7 @@
  visibility="public"
 >
 </field>
-<field name="NO_MATCH_ERROR"
+<field name="ERROR_NO_MATCH"
  type="int"
  transient="false"
  volatile="false"
@@ -135256,18 +135269,7 @@
  visibility="public"
 >
 </field>
-<field name="RECOGNITION_RESULTS_STRING_ARRAY"
- type="java.lang.String"
- transient="false"
- volatile="false"
- value="&quot;recognition_results_string_array&quot;"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="SERVER_BUSY_ERROR"
+<field name="ERROR_RECOGNIZER_BUSY"
  type="int"
  transient="false"
  volatile="false"
@@ -135278,7 +135280,7 @@
  visibility="public"
 >
 </field>
-<field name="SERVER_ERROR"
+<field name="ERROR_SERVER"
  type="int"
  transient="false"
  volatile="false"
@@ -135289,7 +135291,7 @@
  visibility="public"
 >
 </field>
-<field name="SPEECH_TIMEOUT_ERROR"
+<field name="ERROR_SPEECH_TIMEOUT"
  type="int"
  transient="false"
  volatile="false"
@@ -135300,6 +135302,213 @@
  visibility="public"
 >
 </field>
+<field name="RESULTS_RECOGNITION"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;results_recognition&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="RecognitionService"
+ extends="android.app.Service"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="RecognitionService"
+ type="android.speech.RecognitionService"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="onBind"
+ return="android.os.IBinder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="intent" type="android.content.Intent">
+</parameter>
+</method>
+<method name="onCancel"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="listener" type="android.speech.RecognitionService.Callback">
+</parameter>
+</method>
+<method name="onStartListening"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="recognizerIntent" type="android.content.Intent">
+</parameter>
+<parameter name="listener" type="android.speech.RecognitionService.Callback">
+</parameter>
+</method>
+<method name="onStopListening"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="listener" type="android.speech.RecognitionService.Callback">
+</parameter>
+</method>
+</class>
+<class name="RecognitionService.Callback"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="beginningOfSpeech"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="bufferReceived"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="buffer" type="byte[]">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="endOfSpeech"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="error"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="error" type="int">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="partialResults"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="partialResults" type="android.os.Bundle">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="readyForSpeech"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="params" type="android.os.Bundle">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="results"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="results" type="android.os.Bundle">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
+<method name="rmsChanged"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="rmsdB" type="float">
+</parameter>
+<exception name="RemoteException" type="android.os.RemoteException">
+</exception>
+</method>
 </class>
 <class name="RecognizerIntent"
  extends="java.lang.Object"
