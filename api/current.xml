@@ -29824,6 +29824,8 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<implements name="java.lang.Cloneable">
+</implements>
 <implements name="java.lang.Comparable">
 </implements>
 <implements name="android.os.Parcelable">
@@ -29874,6 +29876,17 @@
 <parameter name="in" type="android.os.Parcel">
 </parameter>
 </constructor>
+<method name="clone"
+ return="android.content.ComponentName"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 <method name="compareTo"
  return="int"
  abstract="false"
@@ -31727,6 +31740,17 @@
  visibility="public"
 >
 </field>
+<field name="SYNC_EXTRAS_DO_NOT_RETRY"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;do_not_retry&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="SYNC_EXTRAS_EXPEDITED"
  type="java.lang.String"
  transient="false"
@@ -31746,6 +31770,28 @@
  static="true"
  final="true"
  deprecated="deprecated"
+ visibility="public"
+>
+</field>
+<field name="SYNC_EXTRAS_IGNORE_BACKOFF"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;ignore_backoff&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="SYNC_EXTRAS_IGNORE_SETTINGS"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;ignore_settings&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
  visibility="public"
 >
 </field>
@@ -53070,6 +53116,72 @@
 <parameter name="sleepAfterYieldDelay" type="long">
 </parameter>
 </method>
+<field name="CONFLICT_ABORT"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="CONFLICT_FAIL"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="3"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="CONFLICT_IGNORE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="4"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="CONFLICT_NONE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="0"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="CONFLICT_REPLACE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="5"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="CONFLICT_ROLLBACK"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="1"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="CREATE_IF_NECESSARY"
  type="int"
  transient="false"
@@ -53119,81 +53231,6 @@
  transient="false"
  volatile="false"
  value="50000"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-</class>
-<class name="SQLiteDatabase.ConflictAlgorithm"
- extends="java.lang.Object"
- abstract="false"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-<field name="ABORT"
- type="int"
- transient="false"
- volatile="false"
- value="2"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="FAIL"
- type="int"
- transient="false"
- volatile="false"
- value="3"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="IGNORE"
- type="int"
- transient="false"
- volatile="false"
- value="4"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="NONE"
- type="int"
- transient="false"
- volatile="false"
- value="0"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="REPLACE"
- type="int"
- transient="false"
- volatile="false"
- value="5"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="ROLLBACK"
- type="int"
- transient="false"
- volatile="false"
- value="1"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -77577,32 +77614,6 @@
 <parameter name="enabledOnly" type="boolean">
 </parameter>
 </method>
-<method name="installGeocodeProvider"
- return="boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="provider" type="android.location.LocationManager.GeocodeProvider">
-</parameter>
-</method>
-<method name="installLocationProvider"
- return="boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="provider" type="android.location.LocationProviderImpl">
-</parameter>
-</method>
 <method name="isProviderEnabled"
  return="boolean"
  abstract="false"
@@ -77692,19 +77703,6 @@
  visibility="public"
 >
 <parameter name="intent" type="android.app.PendingIntent">
-</parameter>
-</method>
-<method name="reportLocation"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="location" type="android.location.Location">
 </parameter>
 </method>
 <method name="requestLocationUpdates"
@@ -77899,62 +77897,6 @@
 >
 </field>
 </class>
-<interface name="LocationManager.GeocodeProvider"
- abstract="true"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<method name="getFromLocation"
- return="java.lang.String"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="latitude" type="double">
-</parameter>
-<parameter name="longitude" type="double">
-</parameter>
-<parameter name="maxResults" type="int">
-</parameter>
-<parameter name="params" type="android.location.GeocoderParams">
-</parameter>
-<parameter name="addrs" type="java.util.List&lt;android.location.Address&gt;">
-</parameter>
-</method>
-<method name="getFromLocationName"
- return="java.lang.String"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="locationName" type="java.lang.String">
-</parameter>
-<parameter name="lowerLeftLatitude" type="double">
-</parameter>
-<parameter name="lowerLeftLongitude" type="double">
-</parameter>
-<parameter name="upperRightLatitude" type="double">
-</parameter>
-<parameter name="upperRightLongitude" type="double">
-</parameter>
-<parameter name="maxResults" type="int">
-</parameter>
-<parameter name="params" type="android.location.GeocoderParams">
-</parameter>
-<parameter name="addrs" type="java.util.List&lt;android.location.Address&gt;">
-</parameter>
-</method>
-</interface>
 <class name="LocationProvider"
  extends="java.lang.Object"
  abstract="true"
@@ -78119,166 +78061,6 @@
  visibility="public"
 >
 </field>
-</class>
-<class name="LocationProviderImpl"
- extends="android.location.LocationProvider"
- abstract="true"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="LocationProviderImpl"
- type="android.location.LocationProviderImpl"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="name" type="java.lang.String">
-</parameter>
-</constructor>
-<method name="addListener"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="uid" type="int">
-</parameter>
-</method>
-<method name="disable"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="enable"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="enableLocationTracking"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="enable" type="boolean">
-</parameter>
-</method>
-<method name="getStatus"
- return="int"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="extras" type="android.os.Bundle">
-</parameter>
-</method>
-<method name="getStatusUpdateTime"
- return="long"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="removeListener"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="uid" type="int">
-</parameter>
-</method>
-<method name="sendExtraCommand"
- return="boolean"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="command" type="java.lang.String">
-</parameter>
-<parameter name="extras" type="android.os.Bundle">
-</parameter>
-</method>
-<method name="setMinTime"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="minTime" type="long">
-</parameter>
-</method>
-<method name="updateLocation"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="location" type="android.location.Location">
-</parameter>
-</method>
-<method name="updateNetworkState"
- return="void"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="state" type="int">
-</parameter>
-<parameter name="info" type="android.net.NetworkInfo">
-</parameter>
-</method>
 </class>
 </package>
 <package name="android.media"
