@@ -1222,6 +1222,17 @@
  visibility="public"
 >
 </field>
+<field name="WRITE_GEOLOCATION_PERMISSIONS"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;com.android.browser.permission.WRITE_GEOLOCATION_PERMISSIONS&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="WRITE_GSERVICES"
  type="java.lang.String"
  transient="false"
@@ -4585,6 +4596,17 @@
  visibility="public"
 >
 </field>
+<field name="installLocation"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="16843448"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="interpolator"
  type="int"
  transient="false"
@@ -6812,6 +6834,17 @@
  transient="false"
  volatile="false"
  value="16843058"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="safeMode"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="16843449"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -24886,6 +24919,17 @@
  visibility="public"
 >
 </field>
+<field name="INTENT_ACTION_SEARCH_SETTINGS"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;android.search.action.SEARCH_SETTINGS&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="INTENT_ACTION_SEARCH_SETTINGS_CHANGED"
  type="java.lang.String"
  transient="false"
@@ -25311,8 +25355,8 @@
  visibility="public"
 >
 </method>
-<method name="getSettingsDescription"
- return="java.lang.String"
+<method name="getSettingsDescriptionId"
+ return="int"
  abstract="false"
  native="false"
  synchronized="false"
@@ -41848,6 +41892,17 @@
  transient="false"
  volatile="false"
  value="128"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="FLAG_VM_SAFE_MODE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="16384"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -66274,6 +66329,10 @@
 </parameter>
 <parameter name="format" type="int">
 </parameter>
+<parameter name="width" type="int">
+</parameter>
+<parameter name="height" type="int">
+</parameter>
 <parameter name="strides" type="int[]">
 </parameter>
 </constructor>
@@ -66287,19 +66346,37 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="width" type="int">
-</parameter>
-<parameter name="height" type="int">
-</parameter>
-<parameter name="offsets" type="int[]">
+<parameter name="rectangle" type="android.graphics.Rect">
 </parameter>
 <parameter name="quality" type="int">
 </parameter>
 <parameter name="stream" type="java.io.OutputStream">
 </parameter>
 </method>
+<method name="getHeight"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 <method name="getStrides"
  return="int[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getWidth"
+ return="int"
  abstract="false"
  native="false"
  synchronized="false"
@@ -66330,25 +66407,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-</method>
-<method name="validate"
- return="boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
-<parameter name="format" type="int">
-</parameter>
-<parameter name="width" type="int">
-</parameter>
-<parameter name="height" type="int">
-</parameter>
-<parameter name="offsets" type="int[]">
-</parameter>
 </method>
 </class>
 </package>
@@ -83924,29 +83982,6 @@
  visibility="public"
 >
 </constructor>
-<method name="createImageThumbnail"
- return="android.graphics.Bitmap"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="cr" type="android.content.ContentResolver">
-</parameter>
-<parameter name="filePath" type="java.lang.String">
-</parameter>
-<parameter name="uri" type="android.net.Uri">
-</parameter>
-<parameter name="origId" type="long">
-</parameter>
-<parameter name="kind" type="int">
-</parameter>
-<parameter name="saveMini" type="boolean">
-</parameter>
-</method>
 <method name="createVideoThumbnail"
  return="android.graphics.Bitmap"
  abstract="false"
@@ -83960,7 +83995,7 @@
 <parameter name="filePath" type="java.lang.String">
 </parameter>
 </method>
-<method name="extractMiniThumb"
+<method name="extractThumbnail"
  return="android.graphics.Bitmap"
  abstract="false"
  native="false"
@@ -83976,10 +84011,38 @@
 </parameter>
 <parameter name="height" type="int">
 </parameter>
-<parameter name="recycle" type="boolean">
+</method>
+<method name="extractThumbnail"
+ return="android.graphics.Bitmap"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="source" type="android.graphics.Bitmap">
+</parameter>
+<parameter name="width" type="int">
+</parameter>
+<parameter name="height" type="int">
+</parameter>
+<parameter name="options" type="int">
 </parameter>
 </method>
-<field name="MINI_THUMB_TARGET_SIZE"
+<field name="OPTIONS_RECYCLE_INPUT"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="4"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="TARGET_SIZE_MICRO_THUMBNAIL"
  type="int"
  transient="false"
  volatile="false"
@@ -83990,29 +84053,7 @@
  visibility="public"
 >
 </field>
-<field name="NO_RECYCLE_INPUT"
- type="boolean"
- transient="false"
- volatile="false"
- value="false"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="RECYCLE_INPUT"
- type="boolean"
- transient="false"
- volatile="false"
- value="true"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="THUMBNAIL_TARGET_SIZE"
+<field name="TARGET_SIZE_NORMAL_THUMBNAIL"
  type="int"
  transient="false"
  volatile="false"
@@ -86645,15 +86686,11 @@
  type="android.net.SSLCertificateSocketFactory"
  static="false"
  final="false"
- deprecated="not deprecated"
+ deprecated="deprecated"
  visibility="public"
 >
-<parameter name="socketReadTimeoutForSslHandshake" type="int">
+<parameter name="handshakeTimeoutMillis" type="int">
 </parameter>
-<exception name="KeyManagementException" type="java.security.KeyManagementException">
-</exception>
-<exception name="NoSuchAlgorithmException" type="java.security.NoSuchAlgorithmException">
-</exception>
 </constructor>
 <method name="createSocket"
  return="java.net.Socket"
@@ -86665,34 +86702,13 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="socket" type="java.net.Socket">
+<parameter name="k" type="java.net.Socket">
 </parameter>
-<parameter name="s" type="java.lang.String">
+<parameter name="host" type="java.lang.String">
 </parameter>
-<parameter name="i" type="int">
+<parameter name="port" type="int">
 </parameter>
-<parameter name="flag" type="boolean">
-</parameter>
-<exception name="IOException" type="java.io.IOException">
-</exception>
-</method>
-<method name="createSocket"
- return="java.net.Socket"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="inaddr" type="java.net.InetAddress">
-</parameter>
-<parameter name="i" type="int">
-</parameter>
-<parameter name="inaddr2" type="java.net.InetAddress">
-</parameter>
-<parameter name="j" type="int">
+<parameter name="close" type="boolean">
 </parameter>
 <exception name="IOException" type="java.io.IOException">
 </exception>
@@ -86707,30 +86723,13 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="inaddr" type="java.net.InetAddress">
+<parameter name="addr" type="java.net.InetAddress">
 </parameter>
-<parameter name="i" type="int">
+<parameter name="port" type="int">
 </parameter>
-<exception name="IOException" type="java.io.IOException">
-</exception>
-</method>
-<method name="createSocket"
- return="java.net.Socket"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="s" type="java.lang.String">
+<parameter name="localAddr" type="java.net.InetAddress">
 </parameter>
-<parameter name="i" type="int">
-</parameter>
-<parameter name="inaddr" type="java.net.InetAddress">
-</parameter>
-<parameter name="j" type="int">
+<parameter name="localPort" type="int">
 </parameter>
 <exception name="IOException" type="java.io.IOException">
 </exception>
@@ -86745,9 +86744,47 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="s" type="java.lang.String">
+<parameter name="addr" type="java.net.InetAddress">
 </parameter>
-<parameter name="i" type="int">
+<parameter name="port" type="int">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="createSocket"
+ return="java.net.Socket"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="host" type="java.lang.String">
+</parameter>
+<parameter name="port" type="int">
+</parameter>
+<parameter name="localAddr" type="java.net.InetAddress">
+</parameter>
+<parameter name="localPort" type="int">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
+<method name="createSocket"
+ return="java.net.Socket"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="host" type="java.lang.String">
+</parameter>
+<parameter name="port" type="int">
 </parameter>
 <exception name="IOException" type="java.io.IOException">
 </exception>
@@ -86762,7 +86799,22 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="socketReadTimeoutForSslHandshake" type="int">
+<parameter name="handshakeTimeoutMillis" type="int">
+</parameter>
+</method>
+<method name="getDefault"
+ return="javax.net.SocketFactory"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="handshakeTimeoutMillis" type="int">
+</parameter>
+<parameter name="cache" type="android.net.SSLSessionCache">
 </parameter>
 </method>
 <method name="getDefaultCipherSuites"
@@ -86776,6 +86828,21 @@
  visibility="public"
 >
 </method>
+<method name="getHttpSocketFactory"
+ return="org.apache.http.conn.ssl.SSLSocketFactory"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="handshakeTimeoutMillis" type="int">
+</parameter>
+<parameter name="cache" type="android.net.SSLSessionCache">
+</parameter>
+</method>
 <method name="getSupportedCipherSuites"
  return="java.lang.String[]"
  abstract="false"
@@ -86787,6 +86854,37 @@
  visibility="public"
 >
 </method>
+</class>
+<class name="SSLSessionCache"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="SSLSessionCache"
+ type="android.net.SSLSessionCache"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="dir" type="java.io.File">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</constructor>
+<constructor name="SSLSessionCache"
+ type="android.net.SSLSessionCache"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+</constructor>
 </class>
 <class name="TrafficStats"
  extends="java.lang.Object"
@@ -120741,6 +120839,21 @@
 <parameter name="search" type="java.lang.String">
 </parameter>
 </method>
+<method name="allowGeolocation"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="cr" type="android.content.ContentResolver">
+</parameter>
+<parameter name="origin" type="java.lang.String">
+</parameter>
+</method>
 <method name="canClearHistory"
  return="boolean"
  abstract="false"
@@ -120752,6 +120865,21 @@
  visibility="public"
 >
 <parameter name="cr" type="android.content.ContentResolver">
+</parameter>
+</method>
+<method name="clearGeolocation"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="cr" type="android.content.ContentResolver">
+</parameter>
+<parameter name="origin" type="java.lang.String">
 </parameter>
 </method>
 <method name="clearHistory"
@@ -120947,6 +121075,16 @@
  transient="false"
  volatile="false"
  value="&quot;com.android.browser.headers&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="GEOLOCATION_URI"
+ type="android.net.Uri"
+ transient="false"
+ volatile="false"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -121218,6 +121356,34 @@
  transient="false"
  volatile="false"
  value="&quot;visits&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="Browser.GeolocationColumns"
+ extends="java.lang.Object"
+ abstract="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Browser.GeolocationColumns"
+ type="android.provider.Browser.GeolocationColumns"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<field name="ORIGIN"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;origin&quot;"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -210288,7 +210454,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="t" type="T">
+<parameter name="arg0" type="T">
 </parameter>
 </method>
 </interface>
@@ -214042,6 +214208,17 @@
  transient="false"
  volatile="false"
  value="1"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DEBUG_ENABLE_SAFEMODE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="8"
  static="true"
  final="true"
  deprecated="not deprecated"
