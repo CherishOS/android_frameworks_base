@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (C) 2009 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package com.android.internal.app;
+package android.os.storage;
 
-import android.net.Uri;
-import android.os.ParcelFileDescriptor;
-import android.content.pm.PackageInfoLite;
-
-interface IMediaContainerService {
-    String copyResourceToContainer(in Uri packageURI,
-                String containerId,
-                String key, String resFileName);
-    boolean copyResource(in Uri packageURI,
-                in ParcelFileDescriptor outStream);
-    PackageInfoLite getMinimalPackageInfo(in Uri fileUri);
+/**
+ * Callback class for receiving events related
+ * to shutdown.
+ *
+ * @hide - For internal consumption only.
+ */
+interface IMountShutdownObserver {
+    /**
+     * This method is called when the shutdown
+     * of MountService completed.
+     * @param statusCode indicates success or failure
+     * of the shutdown.
+     */
+    void onShutDownComplete(int statusCode);
 }
