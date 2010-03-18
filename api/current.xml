@@ -47612,6 +47612,32 @@
 <parameter name="interestingChanges" type="int">
 </parameter>
 </method>
+<method name="readFromParcel"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="source" type="android.os.Parcel">
+</parameter>
+</method>
+<method name="setTo"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="o" type="android.content.res.Configuration">
+</parameter>
+</method>
 <method name="setToDefaults"
  return="void"
  abstract="false"
@@ -121947,7 +121973,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="text" type="java.lang.String">
+<parameter name="message" type="java.lang.String">
 </parameter>
 </method>
 </class>
@@ -136063,6 +136089,17 @@
  transient="false"
  volatile="false"
  value="&quot;tts_default_variant&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="TTS_ENABLED_PLUGINS"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;tts_enabled_plugins&quot;"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -177246,6 +177283,8 @@
 <parameter name="maxOverscrollX" type="int">
 </parameter>
 <parameter name="maxOverscrollY" type="int">
+</parameter>
+<parameter name="isTouchEvent" type="boolean">
 </parameter>
 </method>
 <method name="performClick"
@@ -384004,7 +384043,17 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="x" type="org.json.JSONTokener">
+<parameter name="copyFrom" type="java.util.Collection">
+</parameter>
+</constructor>
+<constructor name="JSONArray"
+ type="org.json.JSONArray"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="readFrom" type="org.json.JSONTokener">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -384016,20 +384065,10 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="string" type="java.lang.String">
+<parameter name="json" type="java.lang.String">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
-</constructor>
-<constructor name="JSONArray"
- type="org.json.JSONArray"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="collection" type="java.util.Collection">
-</parameter>
 </constructor>
 <method name="get"
  return="java.lang.Object"
@@ -384228,7 +384267,7 @@
 >
 <parameter name="index" type="int">
 </parameter>
-<parameter name="defaultValue" type="boolean">
+<parameter name="fallback" type="boolean">
 </parameter>
 </method>
 <method name="optDouble"
@@ -384256,7 +384295,7 @@
 >
 <parameter name="index" type="int">
 </parameter>
-<parameter name="defaultValue" type="double">
+<parameter name="fallback" type="double">
 </parameter>
 </method>
 <method name="optInt"
@@ -384284,7 +384323,7 @@
 >
 <parameter name="index" type="int">
 </parameter>
-<parameter name="defaultValue" type="int">
+<parameter name="fallback" type="int">
 </parameter>
 </method>
 <method name="optJSONArray"
@@ -384338,7 +384377,7 @@
 >
 <parameter name="index" type="int">
 </parameter>
-<parameter name="defaultValue" type="long">
+<parameter name="fallback" type="long">
 </parameter>
 </method>
 <method name="optString"
@@ -384366,7 +384405,7 @@
 >
 <parameter name="index" type="int">
 </parameter>
-<parameter name="defaultValue" type="java.lang.String">
+<parameter name="fallback" type="java.lang.String">
 </parameter>
 </method>
 <method name="put"
@@ -384546,7 +384585,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="indentFactor" type="int">
+<parameter name="indentSpaces" type="int">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -384567,7 +384606,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="message" type="java.lang.String">
+<parameter name="s" type="java.lang.String">
 </parameter>
 </constructor>
 </class>
@@ -384594,9 +384633,17 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="jo" type="org.json.JSONObject">
+<parameter name="copyFrom" type="java.util.Map">
 </parameter>
-<parameter name="sa" type="java.lang.String[]">
+</constructor>
+<constructor name="JSONObject"
+ type="org.json.JSONObject"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="readFrom" type="org.json.JSONTokener">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -384608,7 +384655,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="x" type="org.json.JSONTokener">
+<parameter name="json" type="java.lang.String">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -384620,17 +384667,9 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="map" type="java.util.Map">
+<parameter name="copyFrom" type="org.json.JSONObject">
 </parameter>
-</constructor>
-<constructor name="JSONObject"
- type="org.json.JSONObject"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="string" type="java.lang.String">
+<parameter name="names" type="java.lang.String[]">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -384645,7 +384684,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 <parameter name="value" type="java.lang.Object">
 </parameter>
@@ -384662,7 +384701,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -384677,7 +384716,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -384692,7 +384731,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -384707,7 +384746,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -384722,7 +384761,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -384737,7 +384776,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -384752,7 +384791,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -384767,7 +384806,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -384782,7 +384821,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 </method>
 <method name="isNull"
@@ -384795,7 +384834,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 </method>
 <method name="keys"
@@ -384841,7 +384880,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="n" type="java.lang.Number">
+<parameter name="number" type="java.lang.Number">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -384856,7 +384895,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 </method>
 <method name="optBoolean"
@@ -384869,7 +384908,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 </method>
 <method name="optBoolean"
@@ -384882,22 +384921,9 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
-<parameter name="defaultValue" type="boolean">
-</parameter>
-</method>
-<method name="optDouble"
- return="double"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="key" type="java.lang.String">
+<parameter name="fallback" type="boolean">
 </parameter>
 </method>
 <method name="optDouble"
@@ -384910,9 +384936,22 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
-<parameter name="defaultValue" type="double">
+</method>
+<method name="optDouble"
+ return="double"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+<parameter name="fallback" type="double">
 </parameter>
 </method>
 <method name="optInt"
@@ -384925,7 +384964,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 </method>
 <method name="optInt"
@@ -384938,9 +384977,9 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
-<parameter name="defaultValue" type="int">
+<parameter name="fallback" type="int">
 </parameter>
 </method>
 <method name="optJSONArray"
@@ -384953,7 +384992,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 </method>
 <method name="optJSONObject"
@@ -384966,7 +385005,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 </method>
 <method name="optLong"
@@ -384979,7 +385018,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 </method>
 <method name="optLong"
@@ -384992,22 +385031,9 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
-<parameter name="defaultValue" type="long">
-</parameter>
-</method>
-<method name="optString"
- return="java.lang.String"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="key" type="java.lang.String">
+<parameter name="fallback" type="long">
 </parameter>
 </method>
 <method name="optString"
@@ -385020,9 +385046,22 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
-<parameter name="defaultValue" type="java.lang.String">
+</method>
+<method name="optString"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+<parameter name="fallback" type="java.lang.String">
 </parameter>
 </method>
 <method name="put"
@@ -385035,7 +385074,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 <parameter name="value" type="boolean">
 </parameter>
@@ -385052,7 +385091,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 <parameter name="value" type="double">
 </parameter>
@@ -385069,7 +385108,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 <parameter name="value" type="int">
 </parameter>
@@ -385086,7 +385125,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 <parameter name="value" type="long">
 </parameter>
@@ -385103,7 +385142,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 <parameter name="value" type="java.lang.Object">
 </parameter>
@@ -385120,7 +385159,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 <parameter name="value" type="java.lang.Object">
 </parameter>
@@ -385137,7 +385176,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="string" type="java.lang.String">
+<parameter name="data" type="java.lang.String">
 </parameter>
 </method>
 <method name="remove"
@@ -385150,7 +385189,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="key" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 </method>
 <method name="toJSONArray"
@@ -385178,7 +385217,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="indentFactor" type="int">
+<parameter name="indentSpaces" type="int">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -385259,7 +385298,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="s" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -385287,7 +385326,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="b" type="boolean">
+<parameter name="value" type="java.lang.Object">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -385302,7 +385341,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="d" type="double">
+<parameter name="value" type="boolean">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -385317,7 +385356,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="l" type="long">
+<parameter name="value" type="double">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -385332,7 +385371,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="o" type="java.lang.Object">
+<parameter name="value" type="long">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -385353,7 +385392,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="s" type="java.lang.String">
+<parameter name="in" type="java.lang.String">
 </parameter>
 </constructor>
 <method name="back"
@@ -385377,7 +385416,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="c" type="char">
+<parameter name="hex" type="char">
 </parameter>
 </method>
 <method name="more"
@@ -385427,7 +385466,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="n" type="int">
+<parameter name="length" type="int">
 </parameter>
 <exception name="JSONException" type="org.json.JSONException">
 </exception>
@@ -385470,7 +385509,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="d" type="char">
+<parameter name="excluded" type="java.lang.String">
 </parameter>
 </method>
 <method name="nextTo"
@@ -385483,7 +385522,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="delimiters" type="java.lang.String">
+<parameter name="excluded" type="char">
 </parameter>
 </method>
 <method name="nextValue"
@@ -385509,7 +385548,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="to" type="java.lang.String">
+<parameter name="thru" type="java.lang.String">
 </parameter>
 </method>
 <method name="skipTo"
