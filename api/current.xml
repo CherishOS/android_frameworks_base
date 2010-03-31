@@ -52162,6 +52162,27 @@
 >
 </method>
 </class>
+<interface name="DatabaseErrorHandler"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="onCorruption"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="dbObj" type="android.database.sqlite.SQLiteDatabase">
+</parameter>
+</method>
+</interface>
 <class name="DatabaseUtils"
  extends="java.lang.Object"
  abstract="false"
@@ -53046,6 +53067,38 @@
 >
 </field>
 </class>
+<class name="DefaultDatabaseErrorHandler"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="android.database.DatabaseErrorHandler">
+</implements>
+<constructor name="DefaultDatabaseErrorHandler"
+ type="android.database.DefaultDatabaseErrorHandler"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="onCorruption"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="dbObj" type="android.database.sqlite.SQLiteDatabase">
+</parameter>
+</method>
+</class>
 <class name="MatrixCursor"
  extends="android.database.AbstractCursor"
  abstract="false"
@@ -53914,6 +53967,17 @@
 <parameter name="tables" type="java.lang.String">
 </parameter>
 </method>
+<method name="getAttachedDbs"
+ return="java.util.ArrayList&lt;android.util.Pair&lt;java.lang.String, java.lang.String&gt;&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 <method name="getMaximumSize"
  return="long"
  abstract="false"
@@ -54035,6 +54099,17 @@
 <parameter name="conflictAlgorithm" type="int">
 </parameter>
 </method>
+<method name="isDatabaseIntegrityOk"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
 <method name="isDbLockedByCurrentThread"
  return="boolean"
  abstract="false"
@@ -54152,6 +54227,25 @@
 <parameter name="flags" type="int">
 </parameter>
 </method>
+<method name="openDatabase"
+ return="android.database.sqlite.SQLiteDatabase"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="path" type="java.lang.String">
+</parameter>
+<parameter name="factory" type="android.database.sqlite.SQLiteDatabase.CursorFactory">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+<parameter name="errorHandler" type="android.database.DatabaseErrorHandler">
+</parameter>
+</method>
 <method name="openOrCreateDatabase"
  return="android.database.sqlite.SQLiteDatabase"
  abstract="false"
@@ -54180,6 +54274,23 @@
 <parameter name="path" type="java.lang.String">
 </parameter>
 <parameter name="factory" type="android.database.sqlite.SQLiteDatabase.CursorFactory">
+</parameter>
+</method>
+<method name="openOrCreateDatabase"
+ return="android.database.sqlite.SQLiteDatabase"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="path" type="java.lang.String">
+</parameter>
+<parameter name="factory" type="android.database.sqlite.SQLiteDatabase.CursorFactory">
+</parameter>
+<parameter name="errorHandler" type="android.database.DatabaseErrorHandler">
 </parameter>
 </method>
 <method name="query"
