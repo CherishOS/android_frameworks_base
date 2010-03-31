@@ -26785,59 +26785,6 @@
 </package>
 <package name="android.app.backup"
 >
-<class name="AbsoluteFileBackupHelper"
- extends="android.app.backup.FileBackupHelperBase"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<implements name="android.app.backup.BackupHelper">
-</implements>
-<constructor name="AbsoluteFileBackupHelper"
- type="android.app.backup.AbsoluteFileBackupHelper"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="context" type="android.content.Context">
-</parameter>
-<parameter name="files" type="java.lang.String...">
-</parameter>
-</constructor>
-<method name="performBackup"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="oldState" type="android.os.ParcelFileDescriptor">
-</parameter>
-<parameter name="data" type="android.app.backup.BackupDataOutput">
-</parameter>
-<parameter name="newState" type="android.os.ParcelFileDescriptor">
-</parameter>
-</method>
-<method name="restoreEntity"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="data" type="android.app.backup.BackupDataInputStream">
-</parameter>
-</method>
-</class>
 <class name="BackupAgent"
  extends="android.content.ContextWrapper"
  abstract="true"
@@ -27381,6 +27328,47 @@
  visibility="public"
 >
 </constructor>
+<method name="onUpdate"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="nowBeingRestored" type="int">
+</parameter>
+<parameter name="currentPackage" type="java.lang.String">
+</parameter>
+</method>
+<method name="restoreFinished"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="error" type="int">
+</parameter>
+</method>
+<method name="restoreStarting"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="numPackages" type="int">
+</parameter>
+</method>
 </class>
 <class name="SharedPreferencesBackupHelper"
  extends="android.app.backup.FileBackupHelperBase"
@@ -30009,8 +29997,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="thread" type="java.lang.Thread">
-</parameter>
 </method>
 <field name="LOG_SYNC_DETAILS"
  type="int"
@@ -30023,48 +30009,6 @@
  visibility="public"
 >
 </field>
-</class>
-<class name="ActiveSyncInfo"
- extends="java.lang.Object"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<method name="getAccount"
- return="android.accounts.Account"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="getAuthority"
- return="java.lang.String"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="getStartTime"
- return="long"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
 </class>
 <class name="ActivityNotFoundException"
  extends="java.lang.RuntimeException"
@@ -32101,8 +32045,8 @@
 <parameter name="selectionArgs" type="java.lang.String[]">
 </parameter>
 </method>
-<method name="getActiveSync"
- return="android.content.ActiveSyncInfo"
+<method name="getCurrentSync"
+ return="android.content.SyncInfo"
  abstract="false"
  native="false"
  synchronized="false"
@@ -34687,17 +34631,6 @@
  visibility="public"
 >
 </field>
-<field name="STORAGE_SERVICE"
- type="java.lang.String"
- transient="false"
- volatile="false"
- value="&quot;storage&quot;"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
 <field name="TELEPHONY_SERVICE"
  type="java.lang.String"
  transient="false"
@@ -36154,6 +36087,8 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<implements name="java.util.Iterator">
+</implements>
 <method name="close"
  return="void"
  abstract="true"
@@ -36165,32 +36100,6 @@
  visibility="public"
 >
 </method>
-<method name="hasNext"
- return="boolean"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
-<method name="next"
- return="android.content.Entity"
- abstract="true"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</method>
 <method name="reset"
  return="void"
  abstract="true"
@@ -36201,8 +36110,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
 </method>
 </interface>
 <class name="Intent"
@@ -41635,6 +41542,45 @@
 </parameter>
 </method>
 </class>
+<class name="SyncInfo"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<field name="account"
+ type="android.accounts.Account"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="authority"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="startTime"
+ type="long"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
 <class name="SyncResult"
  extends="java.lang.Object"
  abstract="false"
@@ -44215,6 +44161,19 @@
 </parameter>
 </method>
 <method name="addPermission"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="info" type="android.content.pm.PermissionInfo">
+</parameter>
+</method>
+<method name="addPermissionAsync"
  return="boolean"
  abstract="true"
  native="false"
@@ -120580,240 +120539,6 @@
 </method>
 </class>
 </package>
-<package name="android.os.storage"
->
-<class name="StorageEventListener"
- extends="java.lang.Object"
- abstract="true"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="StorageEventListener"
- type="android.os.storage.StorageEventListener"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</constructor>
-<method name="onStorageStateChanged"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="path" type="java.lang.String">
-</parameter>
-<parameter name="oldState" type="java.lang.String">
-</parameter>
-<parameter name="newState" type="java.lang.String">
-</parameter>
-</method>
-<method name="onUsbMassStorageConnectionChanged"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="connected" type="boolean">
-</parameter>
-</method>
-</class>
-<class name="StorageManager"
- extends="java.lang.Object"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<method name="disableUsbMassStorage"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="enableUsbMassStorage"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="isUsbMassStorageConnected"
- return="boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="isUsbMassStorageEnabled"
- return="boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="registerListener"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="listener" type="android.os.storage.StorageEventListener">
-</parameter>
-</method>
-<method name="unregisterListener"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="listener" type="android.os.storage.StorageEventListener">
-</parameter>
-</method>
-</class>
-<class name="StorageResultCode"
- extends="java.lang.Object"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="StorageResultCode"
- type="android.os.storage.StorageResultCode"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</constructor>
-<field name="OperationFailedInternalError"
- type="int"
- transient="false"
- volatile="false"
- value="-1"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="OperationFailedMediaBlank"
- type="int"
- transient="false"
- volatile="false"
- value="-3"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="OperationFailedMediaCorrupt"
- type="int"
- transient="false"
- volatile="false"
- value="-4"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="OperationFailedNoMedia"
- type="int"
- transient="false"
- volatile="false"
- value="-2"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="OperationFailedStorageBusy"
- type="int"
- transient="false"
- volatile="false"
- value="-7"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="OperationFailedStorageMounted"
- type="int"
- transient="false"
- volatile="false"
- value="-6"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="OperationFailedStorageNotMounted"
- type="int"
- transient="false"
- volatile="false"
- value="-5"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="OperationSucceeded"
- type="int"
- transient="false"
- volatile="false"
- value="0"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-</class>
-</package>
 <package name="android.preference"
 >
 <class name="CheckBoxPreference"
@@ -138315,225 +138040,6 @@
 </parameter>
 </method>
 </interface>
-<class name="RecognitionManager"
- extends="java.lang.Object"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<method name="cancel"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="createRecognitionManager"
- return="android.speech.RecognitionManager"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="context" type="android.content.Context">
-</parameter>
-</method>
-<method name="createRecognitionManager"
- return="android.speech.RecognitionManager"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="context" type="android.content.Context">
-</parameter>
-<parameter name="serviceComponent" type="android.content.ComponentName">
-</parameter>
-</method>
-<method name="destroy"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="isRecognitionAvailable"
- return="boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="context" type="android.content.Context">
-</parameter>
-</method>
-<method name="setRecognitionListener"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="listener" type="android.speech.RecognitionListener">
-</parameter>
-</method>
-<method name="startListening"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="recognizerIntent" type="android.content.Intent">
-</parameter>
-</method>
-<method name="stopListening"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<field name="ERROR_AUDIO"
- type="int"
- transient="false"
- volatile="false"
- value="3"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="ERROR_CLIENT"
- type="int"
- transient="false"
- volatile="false"
- value="5"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="ERROR_INSUFFICIENT_PERMISSIONS"
- type="int"
- transient="false"
- volatile="false"
- value="9"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="ERROR_NETWORK"
- type="int"
- transient="false"
- volatile="false"
- value="2"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="ERROR_NETWORK_TIMEOUT"
- type="int"
- transient="false"
- volatile="false"
- value="1"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="ERROR_NO_MATCH"
- type="int"
- transient="false"
- volatile="false"
- value="7"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="ERROR_RECOGNIZER_BUSY"
- type="int"
- transient="false"
- volatile="false"
- value="8"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="ERROR_SERVER"
- type="int"
- transient="false"
- volatile="false"
- value="4"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="ERROR_SPEECH_TIMEOUT"
- type="int"
- transient="false"
- volatile="false"
- value="6"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="RESULTS_RECOGNITION"
- type="java.lang.String"
- transient="false"
- volatile="false"
- value="&quot;results_recognition&quot;"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-</class>
 <class name="RecognitionService"
  extends="android.app.Service"
  abstract="true"
@@ -139053,6 +138559,225 @@
  transient="false"
  volatile="false"
  value="3"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="SpeechRecognizer"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="cancel"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="createSpeechRecognizer"
+ return="android.speech.SpeechRecognizer"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+</method>
+<method name="createSpeechRecognizer"
+ return="android.speech.SpeechRecognizer"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="serviceComponent" type="android.content.ComponentName">
+</parameter>
+</method>
+<method name="destroy"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="isRecognitionAvailable"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+</method>
+<method name="setRecognitionListener"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="listener" type="android.speech.RecognitionListener">
+</parameter>
+</method>
+<method name="startListening"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="recognizerIntent" type="android.content.Intent">
+</parameter>
+</method>
+<method name="stopListening"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<field name="ERROR_AUDIO"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="3"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="ERROR_CLIENT"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="5"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="ERROR_INSUFFICIENT_PERMISSIONS"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="9"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="ERROR_NETWORK"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="ERROR_NETWORK_TIMEOUT"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="1"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="ERROR_NO_MATCH"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="7"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="ERROR_RECOGNIZER_BUSY"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="8"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="ERROR_SERVER"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="4"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="ERROR_SPEECH_TIMEOUT"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="6"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="RESULTS_RECOGNITION"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;results_recognition&quot;"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -148740,6 +148465,19 @@
 </parameter>
 </method>
 <method name="addPermission"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="info" type="android.content.pm.PermissionInfo">
+</parameter>
+</method>
+<method name="addPermissionAsync"
  return="boolean"
  abstract="false"
  native="false"
