@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package android.view;
+package com.android.internal.widget;
 
 import com.android.internal.R;
-import com.android.internal.view.menu.ActionMenu;
 import com.android.internal.view.menu.ActionMenuItem;
 import com.android.internal.view.menu.ActionMenuView;
 import com.android.internal.view.menu.MenuBuilder;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ActionBar.Callback;
+import android.app.ActionBar.NavigationCallback;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -34,7 +33,10 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.SparseArray;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -90,9 +92,7 @@ public class ActionBarView extends ViewGroup {
     
     private ActionMenuItem mLogoNavItem;
     
-    private SparseArray<ActionMenu> mContextMenus;
-    
-    private Callback mCallback;
+    private NavigationCallback mCallback;
 
     private final AdapterView.OnItemSelectedListener mNavItemSelectedListener =
             new AdapterView.OnItemSelectedListener() {
@@ -173,11 +173,9 @@ public class ActionBarView extends ViewGroup {
                 }
             };
         }
-        
-        mContextMenus = new SparseArray<ActionMenu>();
     }
     
-    public void setCallback(Callback callback) {
+    public void setCallback(NavigationCallback callback) {
         mCallback = callback;
     }
     
@@ -308,34 +306,6 @@ public class ActionBarView extends ViewGroup {
     
     public int getDisplayOptions() {
         return mDisplayOptions;
-    }
-    
-    public void setContextMode(int mode) {
-        Callback callback = mCallback;
-        if (callback == null) {
-            throw new IllegalStateException(
-                    "Attempted to set ActionBar context mode with no callback");
-        }
-        
-        ActionMenu menu = mContextMenus.get(mode);
-        if (menu == null) {
-            // Initialize the new mode
-            menu = new ActionMenu(getContext());
-
-            if (!callback.onCreateContextMode(mode, menu)) {
-                throw new IllegalArgumentException(
-                        "ActionBar callback does not know how to create context mode " + mode);
-            }
-            mContextMenus.put(mode, menu);
-        }
-        
-        if (callback.onPrepareContextMode(mode, menu)) {
-            // TODO Set mode, animate, etc.
-        }
-    }
-    
-    public void exitContextMode() {
-        // TODO Turn off context mode; go back to normal.
     }
     
     @Override
