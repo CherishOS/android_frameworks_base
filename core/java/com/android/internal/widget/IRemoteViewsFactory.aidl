@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package com.android.internal.appwidget;
+package com.android.internal.widget;
 
-import android.content.ComponentName;
-import android.appwidget.AppWidgetProviderInfo;
 import android.widget.RemoteViews;
 
 /** {@hide} */
-oneway interface IAppWidgetHost {
-    void updateAppWidget(int appWidgetId, in RemoteViews views);
-    void providerChanged(int appWidgetId, in AppWidgetProviderInfo info);
-    void viewDataChanged(int appWidgetId, in RemoteViews views, int viewId);
+interface IRemoteViewsFactory {
+    int getCount();
+    RemoteViews getViewAt(int position);
+    RemoteViews getLoadingView();
+    int getViewTypeCount();
+    long getItemId(int position);
+    boolean hasStableIds();
 }
 
