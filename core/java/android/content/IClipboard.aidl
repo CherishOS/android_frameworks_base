@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package android.text;
+package android.content;
+
+import android.content.ClippedData;
+import android.content.IOnPrimaryClipChangedListener;
 
 /**
  * Programming interface to the clipboard, which allows copying and pasting
@@ -22,21 +25,14 @@ package android.text;
  * {@hide}
  */
 interface IClipboard {
-    /**
-     * Returns the text on the clipboard.  It will eventually be possible
-     * to store types other than text too, in which case this will return
-     * null if the type cannot be coerced to text.
-     */
-    CharSequence getClipboardText();
-
-    /**
-     * Sets the contents of the clipboard to the specified text.
-     */
-    void setClipboardText(CharSequence text);
+    void setPrimaryClip(in ClippedData clip);
+    ClippedData getPrimaryClip();
+    boolean hasPrimaryClip();
+    void addPrimaryClipChangedListener(in IOnPrimaryClipChangedListener listener);
+    void removePrimaryClipChangedListener(in IOnPrimaryClipChangedListener listener);
 
     /**
      * Returns true if the clipboard contains text; false otherwise.
      */
     boolean hasClipboardText();
 }
-
