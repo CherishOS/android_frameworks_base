@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * This class is used to instantiate menu XML files into Animatable objects.
+ * This class is used to instantiate menu XML files into Animator objects.
  * <p>
  * For performance reasons, menu inflation relies heavily on pre-processing of
  * XML files that is done at build time. Therefore, it is not currently possible
@@ -38,10 +38,10 @@ import java.util.ArrayList;
  * it only works with an XmlPullParser returned from a compiled resource (R.
  * <em>something</em> file.)
  */
-public class AnimatableInflater {
+public class AnimatorInflater {
 
     /**
-     * These flags are used when parsing Sequencer objects
+     * These flags are used when parsing AnimatorSet objects
      */
     private static final int TOGETHER = 0;
     private static final int SEQUENTIALLY = 1;
@@ -56,20 +56,20 @@ public class AnimatableInflater {
     private static final int VALUE_TYPE_CUSTOM      = 4;
 
     /**
-     * Loads an {@link Animatable} object from a resource
+     * Loads an {@link Animator} object from a resource
      *
      * @param context Application context used to access resources
      * @param id The resource id of the animation to load
-     * @return The animatable object reference by the specified id
+     * @return The animator object reference by the specified id
      * @throws android.content.res.Resources.NotFoundException when the animation cannot be loaded
      */
-    public static Animatable loadAnimatable(Context context, int id)
+    public static Animator loadAnimator(Context context, int id)
             throws NotFoundException {
 
         XmlResourceParser parser = null;
         try {
             parser = context.getResources().getAnimation(id);
-            return createAnimatableFromXml(context, parser);
+            return createAnimatorFromXml(context, parser);
         } catch (XmlPullParserException ex) {
             Resources.NotFoundException rnf =
                     new Resources.NotFoundException("Can't load animation resource ID #0x" +
@@ -87,18 +87,18 @@ public class AnimatableInflater {
         }
     }
 
-    private static Animatable createAnimatableFromXml(Context c, XmlPullParser parser)
+    private static Animator createAnimatorFromXml(Context c, XmlPullParser parser)
             throws XmlPullParserException, IOException {
 
-        return createAnimatableFromXml(c, parser, Xml.asAttributeSet(parser), null, 0);
+        return createAnimatorFromXml(c, parser, Xml.asAttributeSet(parser), null, 0);
     }
 
-    private static Animatable createAnimatableFromXml(Context c, XmlPullParser parser,
-            AttributeSet attrs, Sequencer parent, int sequenceOrdering)
+    private static Animator createAnimatorFromXml(Context c, XmlPullParser parser,
+            AttributeSet attrs, AnimatorSet parent, int sequenceOrdering)
             throws XmlPullParserException, IOException {
 
-        Animatable anim = null;
-        ArrayList<Animatable> childAnims = null;
+        Animator anim = null;
+        ArrayList<Animator> childAnims = null;
 
         // Make sure we are on a start tag.
         int type;
@@ -113,17 +113,17 @@ public class AnimatableInflater {
 
             String  name = parser.getName();
 
-            if (name.equals("property")) {
-                anim = loadPropertyAnimator(c, attrs);
+            if (name.equals("objectAnimator")) {
+                anim = loadObjectAnimator(c, attrs);
             } else if (name.equals("animator")) {
                 anim = loadAnimator(c, attrs, null);
-            } else if (name.equals("sequencer")) {
-                anim = new Sequencer();
+            } else if (name.equals("set")) {
+                anim = new AnimatorSet();
                 TypedArray a = c.obtainStyledAttributes(attrs,
-                        com.android.internal.R.styleable.Sequencer);
-                int ordering = a.getInt(com.android.internal.R.styleable.Sequencer_ordering,
+                        com.android.internal.R.styleable.AnimatorSet);
+                int ordering = a.getInt(com.android.internal.R.styleable.AnimatorSet_ordering,
                         TOGETHER);
-                createAnimatableFromXml(c, parser, attrs, (Sequencer) anim,  ordering);
+                createAnimatorFromXml(c, parser, attrs, (AnimatorSet) anim,  ordering);
                 a.recycle();
             } else {
                 throw new RuntimeException("Unknown animator name: " + parser.getName());
@@ -131,15 +131,15 @@ public class AnimatableInflater {
 
             if (parent != null) {
                 if (childAnims == null) {
-                    childAnims = new ArrayList<Animatable>();
+                    childAnims = new ArrayList<Animator>();
                 }
                 childAnims.add(anim);
             }
         }
         if (parent != null && childAnims != null) {
-            Animatable[] animsArray = new Animatable[childAnims.size()];
+            Animator[] animsArray = new Animator[childAnims.size()];
             int index = 0;
-            for (Animatable a : childAnims) {
+            for (Animator a : childAnims) {
                 animsArray[index++] = a;
             }
             if (sequenceOrdering == TOGETHER) {
@@ -153,10 +153,10 @@ public class AnimatableInflater {
 
     }
 
-    private static PropertyAnimator loadPropertyAnimator(Context context, AttributeSet attrs)
+    private static ObjectAnimator loadObjectAnimator(Context context, AttributeSet attrs)
             throws NotFoundException {
 
-        PropertyAnimator anim = new PropertyAnimator();
+        ObjectAnimator anim = new ObjectAnimator();
 
         loadAnimator(context, attrs, anim);
 
@@ -179,7 +179,7 @@ public class AnimatableInflater {
      * @param context the application environment
      * @param attrs the set of attributes holding the animation parameters
      */
-    private static Animator loadAnimator(Context context, AttributeSet attrs, Animator anim)
+    private static ValueAnimator loadAnimator(Context context, AttributeSet attrs, ValueAnimator anim)
             throws NotFoundException {
 
         TypedArray a =
@@ -236,7 +236,7 @@ public class AnimatableInflater {
         }
 
         if (anim == null) {
-            anim = new Animator(duration, valueFrom, valueTo);
+            anim = new ValueAnimator(duration, valueFrom, valueTo);
         } else {
             anim.setDuration(duration);
             anim.setValues(valueFrom, valueTo);
@@ -251,7 +251,7 @@ public class AnimatableInflater {
         if (a.hasValue(com.android.internal.R.styleable.Animator_repeatMode)) {
             anim.setRepeatMode(
                     a.getInt(com.android.internal.R.styleable.Animator_repeatMode,
-                            Animator.RESTART));
+                            ValueAnimator.RESTART));
         }
         if (evaluator != null) {
             anim.setEvaluator(evaluator);

@@ -21,13 +21,13 @@ import android.util.Log;
 import java.lang.reflect.Method;
 
 /**
- * This subclass of {@link Animator} provides support for animating properties on target objects.
+ * This subclass of {@link ValueAnimator} provides support for animating properties on target objects.
  * The constructors of this class take parameters to define the target object that will be animated
  * as well as the name of the property that will be animated. Appropriate set/get functions
  * are then determined internally and the animation will call these functions as necessary to
  * animate the property.
  */
-public final class PropertyAnimator<T> extends Animator<T> {
+public final class ObjectAnimator<T> extends ValueAnimator<T> {
 
     // The target object on which the property exists, set in the constructor
     private Object mTarget;
@@ -47,7 +47,7 @@ public final class PropertyAnimator<T> extends Animator<T> {
      * <code>valueFrom</code> and <code>valueTo</code> properties, otherwise the call to
      * the setter function will fail.</p>
      *
-     * <p>If this PropertyAnimator has been set up to animate several properties together,
+     * <p>If this ObjectAnimator has been set up to animate several properties together,
      * using more than one PropertyValuesHolder objects, then setting the propertyName simply
      * sets the propertyName in the first of those PropertyValuesHolder objects.</p>
      *
@@ -101,18 +101,18 @@ public final class PropertyAnimator<T> extends Animator<T> {
         try {
             returnVal = mTarget.getClass().getMethod(setterName, args);
         } catch (NoSuchMethodException e) {
-            Log.e("PropertyAnimator",
+            Log.e("ObjectAnimator",
                     "Couldn't find setter/getter for property " + mPropertyName + ": " + e);
         }
         return returnVal;
     }
 
     /**
-     * Creates a new PropertyAnimator object. This default constructor is primarily for
+     * Creates a new ObjectAnimator object. This default constructor is primarily for
      * use internally; the other constructors which take parameters are more generally
      * useful.
      */
-    public PropertyAnimator() {
+    public ObjectAnimator() {
     }
 
     /**
@@ -128,7 +128,7 @@ public final class PropertyAnimator<T> extends Animator<T> {
      * is assumed to be the final value being animated to, and the initial value will be
      * derived on the fly.
      */
-    public PropertyAnimator(long duration, Object target, String propertyName, T...values) {
+    public ObjectAnimator(long duration, Object target, String propertyName, T...values) {
         super(duration, (T[]) values);
         mTarget = target;
         setPropertyName(propertyName);
@@ -136,7 +136,7 @@ public final class PropertyAnimator<T> extends Animator<T> {
 
     /**
      * A constructor that takes <code>PropertyValueHolder</code> values. This constructor should
-     * be used when animating several properties at once with the same PropertyAnimator, since
+     * be used when animating several properties at once with the same ObjectAnimator, since
      * PropertyValuesHolder allows you to associate a set of animation values with a property
      * name.
      *
@@ -148,7 +148,7 @@ public final class PropertyAnimator<T> extends Animator<T> {
      * @param values The PropertyValuesHolder objects which hold each the property name and values
      * to animate that property between.
      */
-    public PropertyAnimator(long duration, Object target, PropertyValuesHolder...values) {
+    public ObjectAnimator(long duration, Object target, PropertyValuesHolder...values) {
         super(duration);
         setValues(values);
         mTarget = target;
@@ -239,8 +239,8 @@ public final class PropertyAnimator<T> extends Animator<T> {
     }
 
     @Override
-    public PropertyAnimator clone() {
-        final PropertyAnimator anim = (PropertyAnimator) super.clone();
+    public ObjectAnimator clone() {
+        final ObjectAnimator anim = (ObjectAnimator) super.clone();
         return anim;
     }
 }
