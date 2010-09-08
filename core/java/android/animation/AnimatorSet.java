@@ -16,35 +16,31 @@
 
 package android.animation;
 
-import android.content.Context;
-import android.content.res.TypedArray;
-import android.util.AttributeSet;
-import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * This class plays a set of {@link Animatable} objects in the specified order. Animations
+ * This class plays a set of {@link Animator} objects in the specified order. Animations
  * can be set up to play together, in sequence, or after a specified delay.
  *
- * <p>There are two different approaches to adding animations to a <code>Sequencer</code>:
- * either the {@link Sequencer#playTogether(Animatable[]) playTogether()} or
- * {@link Sequencer#playSequentially(Animatable[]) playSequentially()} methods can be called to add
- * a set of animations all at once, or the {@link Sequencer#play(Animatable)} can be
- * used in conjunction with methods in the {@link android.animation.Sequencer.Builder Builder}
+ * <p>There are two different approaches to adding animations to a <code>AnimatorSet</code>:
+ * either the {@link AnimatorSet#playTogether(Animator[]) playTogether()} or
+ * {@link AnimatorSet#playSequentially(Animator[]) playSequentially()} methods can be called to add
+ * a set of animations all at once, or the {@link AnimatorSet#play(Animator)} can be
+ * used in conjunction with methods in the {@link AnimatorSet.Builder Builder}
  * class to add animations
  * one by one.</p>
  *
- * <p>It is possible to set up a <code>Sequencer</code> with circular dependencies between
+ * <p>It is possible to set up a <code>AnimatorSet</code> with circular dependencies between
  * its animations. For example, an animation a1 could be set up to start before animation a2, a2
  * before a3, and a3 before a1. The results of this configuration are undefined, but will typically
  * result in none of the affected animations being played. Because of this (and because
  * circular dependencies do not make logical sense anyway), circular dependencies
  * should be avoided, and the dependency flow of animations should only be in one direction.
  */
-public final class Sequencer extends Animatable {
+public final class AnimatorSet extends Animator {
 
     /**
      * Internal variables
@@ -55,21 +51,21 @@ public final class Sequencer extends Animatable {
 
     /**
      * Tracks animations currently being played, so that we know what to
-     * cancel or end when cancel() or end() is called on this Sequencer
+     * cancel or end when cancel() or end() is called on this AnimatorSet
      */
-    private ArrayList<Animatable> mPlayingSet = new ArrayList<Animatable>();
+    private ArrayList<Animator> mPlayingSet = new ArrayList<Animator>();
 
     /**
-     * Contains all nodes, mapped to their respective Animatables. When new
-     * dependency information is added for an Animatable, we want to add it
-     * to a single node representing that Animatable, not create a new Node
+     * Contains all nodes, mapped to their respective Animators. When new
+     * dependency information is added for an Animator, we want to add it
+     * to a single node representing that Animator, not create a new Node
      * if one already exists.
      */
-    private HashMap<Animatable, Node> mNodeMap = new HashMap<Animatable, Node>();
+    private HashMap<Animator, Node> mNodeMap = new HashMap<Animator, Node>();
 
     /**
-     * Set of all nodes created for this Sequencer. This list is used upon
-     * starting the sequencer, and the nodes are placed in sorted order into the
+     * Set of all nodes created for this AnimatorSet. This list is used upon
+     * starting the set, and the nodes are placed in sorted order into the
      * sortedNodes collection.
      */
     private ArrayList<Node> mNodes = new ArrayList<Node>();
@@ -88,12 +84,12 @@ public final class Sequencer extends Animatable {
      */
     private boolean mNeedsSort = true;
 
-    private SequencerAnimatableListener mSequenceListener = null;
+    private AnimatorSetListener mSetListener = null;
 
     /**
-     * Flag indicating that the Sequencer has been canceled (by calling cancel() or end()).
+     * Flag indicating that the AnimatorSet has been canceled (by calling cancel() or end()).
      * This flag is used to avoid starting other animations when currently-playing
-     * child animations of this Sequencer end.
+     * child animations of this AnimatorSet end.
      */
     boolean mCanceled = false;
 
@@ -102,55 +98,55 @@ public final class Sequencer extends Animatable {
 
 
     // How long the child animations should last in ms. The default value is negative, which
-    // simply means that there is no duration set on the Sequencer. When a real duration is
+    // simply means that there is no duration set on the AnimatorSet. When a real duration is
     // set, it is passed along to the child animations.
     private long mDuration = -1;
 
 
     /**
-     * Sets up this Sequencer to play all of the supplied animations at the same time.
+     * Sets up this AnimatorSet to play all of the supplied animations at the same time.
      *
-     * @param sequenceItems The animations that will be started simultaneously.
+     * @param items The animations that will be started simultaneously.
      */
-    public void playTogether(Animatable... sequenceItems) {
-        if (sequenceItems != null) {
+    public void playTogether(Animator... items) {
+        if (items != null) {
             mNeedsSort = true;
-            Builder builder = play(sequenceItems[0]);
-            for (int i = 1; i < sequenceItems.length; ++i) {
-                builder.with(sequenceItems[i]);
+            Builder builder = play(items[0]);
+            for (int i = 1; i < items.length; ++i) {
+                builder.with(items[i]);
             }
         }
     }
 
     /**
-     * Sets up this Sequencer to play each of the supplied animations when the
+     * Sets up this AnimatorSet to play each of the supplied animations when the
      * previous animation ends.
      *
-     * @param sequenceItems The aniamtions that will be started one after another.
+     * @param items The aniamtions that will be started one after another.
      */
-    public void playSequentially(Animatable... sequenceItems) {
-        if (sequenceItems != null) {
+    public void playSequentially(Animator... items) {
+        if (items != null) {
             mNeedsSort = true;
-            if (sequenceItems.length == 1) {
-                play(sequenceItems[0]);
+            if (items.length == 1) {
+                play(items[0]);
             } else {
-                for (int i = 0; i < sequenceItems.length - 1; ++i) {
-                    play(sequenceItems[i]).before(sequenceItems[i+1]);
+                for (int i = 0; i < items.length - 1; ++i) {
+                    play(items[i]).before(items[i+1]);
                 }
             }
         }
     }
 
     /**
-     * Returns the current list of child Animatable objects controlled by this
-     * Sequencer. This is a copy of the internal list; modifications to the returned list
-     * will not affect the Sequencer, although changes to the underlying Animatable objects
-     * will affect those objects being managed by the Sequencer.
+     * Returns the current list of child Animator objects controlled by this
+     * AnimatorSet. This is a copy of the internal list; modifications to the returned list
+     * will not affect the AnimatorSet, although changes to the underlying Animator objects
+     * will affect those objects being managed by the AnimatorSet.
      *
-     * @return ArrayList<Animatable> The list of child animations of this Sequencer.
+     * @return ArrayList<Animator> The list of child animations of this AnimatorSet.
      */
-    public ArrayList<Animatable> getChildAnimations() {
-        ArrayList<Animatable> childList = new ArrayList<Animatable>();
+    public ArrayList<Animator> getChildAnimations() {
+        ArrayList<Animator> childList = new ArrayList<Animator>();
         for (Node node : mNodes) {
             childList.add(node.animation);
         }
@@ -159,28 +155,28 @@ public final class Sequencer extends Animatable {
 
     /**
      * Sets the target object for all current {@link #getChildAnimations() child animations}
-     * of this Sequencer that take targets ({@link android.animation.PropertyAnimator} and
-     * Sequencer).
+     * of this AnimatorSet that take targets ({@link ObjectAnimator} and
+     * AnimatorSet).
      *
      * @param target The object being animated
      */
     @Override
     public void setTarget(Object target) {
         for (Node node : mNodes) {
-            Animatable animation = node.animation;
-            if (animation instanceof Sequencer) {
-                ((Sequencer)animation).setTarget(target);
-            } else if (animation instanceof PropertyAnimator) {
-                ((PropertyAnimator)animation).setTarget(target);
+            Animator animation = node.animation;
+            if (animation instanceof AnimatorSet) {
+                ((AnimatorSet)animation).setTarget(target);
+            } else if (animation instanceof ObjectAnimator) {
+                ((ObjectAnimator)animation).setTarget(target);
             }
         }
     }
 
     /**
      * Sets the Interpolator for all current {@link #getChildAnimations() child animations}
-     * of this Sequencer.
+     * of this AnimatorSet.
      *
-     * @param interpolator the interpolator to be used by each child animation of this Sequencer
+     * @param interpolator the interpolator to be used by each child animation of this AnimatorSet
      */
     @Override
     public void setInterpolator(Interpolator interpolator) {
@@ -194,11 +190,11 @@ public final class Sequencer extends Animatable {
      * set up playing constraints. This initial <code>play()</code> method
      * tells the <code>Builder</code> the animation that is the dependency for
      * the succeeding commands to the <code>Builder</code>. For example,
-     * calling <code>play(a1).with(a2)</code> sets up the Sequence to play
+     * calling <code>play(a1).with(a2)</code> sets up the AnimatorSet to play
      * <code>a1</code> and <code>a2</code> at the same time,
-     * <code>play(a1).before(a2)</code> sets up the Sequence to play
+     * <code>play(a1).before(a2)</code> sets up the AnimatorSet to play
      * <code>a1</code> first, followed by <code>a2</code>, and
-     * <code>play(a1).after(a2)</code> sets up the Sequence to play
+     * <code>play(a1).after(a2)</code> sets up the AnimatorSet to play
      * <code>a2</code> first, followed by <code>a1</code>.
      *
      * <p>Note that <code>play()</code> is the only way to tell the
@@ -213,11 +209,11 @@ public final class Sequencer extends Animatable {
      * @param anim The animation that is the dependency used in later calls to the
      * methods in the returned <code>Builder</code> object. A null parameter will result
      * in a null <code>Builder</code> return value.
-     * @return Builder The object that constructs the sequence based on the dependencies
+     * @return Builder The object that constructs the AnimatorSet based on the dependencies
      * outlined in the calls to <code>play</code> and the other methods in the
      * <code>Builder</code object.
      */
-    public Builder play(Animatable anim) {
+    public Builder play(Animator anim) {
         if (anim != null) {
             mNeedsSort = true;
             return new Builder(anim);
@@ -228,7 +224,7 @@ public final class Sequencer extends Animatable {
     /**
      * {@inheritDoc}
      *
-     * <p>Note that canceling a <code>Sequencer</code> also cancels all of the animations that it is
+     * <p>Note that canceling a <code>AnimatorSet</code> also cancels all of the animations that it is
      * responsible for.</p>
      */
     @SuppressWarnings("unchecked")
@@ -236,9 +232,9 @@ public final class Sequencer extends Animatable {
     public void cancel() {
         mCanceled = true;
         if (mListeners != null) {
-            ArrayList<AnimatableListener> tmpListeners =
-                    (ArrayList<AnimatableListener>) mListeners.clone();
-            for (AnimatableListener listener : tmpListeners) {
+            ArrayList<AnimatorListener> tmpListeners =
+                    (ArrayList<AnimatorListener>) mListeners.clone();
+            for (AnimatorListener listener : tmpListeners) {
                 listener.onAnimationCancel(this);
             }
         }
@@ -252,7 +248,7 @@ public final class Sequencer extends Animatable {
     /**
      * {@inheritDoc}
      *
-     * <p>Note that ending a <code>Sequencer</code> also ends all of the animations that it is
+     * <p>Note that ending a <code>AnimatorSet</code> also ends all of the animations that it is
      * responsible for.</p>
      */
     @Override
@@ -262,10 +258,10 @@ public final class Sequencer extends Animatable {
             // hasn't been started yet - sort the nodes now, then end them
             sortNodes();
             for (Node node : mSortedNodes) {
-                if (mSequenceListener == null) {
-                    mSequenceListener = new SequencerAnimatableListener(this);
+                if (mSetListener == null) {
+                    mSetListener = new AnimatorSetListener(this);
                 }
-                node.animation.addListener(mSequenceListener);
+                node.animation.addListener(mSetListener);
             }
         }
         if (mSortedNodes.size() > 0) {
@@ -276,9 +272,9 @@ public final class Sequencer extends Animatable {
     }
 
     /**
-     * Returns true if any of the child animations of this Sequencer have been started and have not
+     * Returns true if any of the child animations of this AnimatorSet have been started and have not
      * yet ended.
-     * @return Whether this Sequencer has been started and has not yet ended.
+     * @return Whether this AnimatorSet has been started and has not yet ended.
      */
     @Override
     public boolean isRunning() {
@@ -313,12 +309,12 @@ public final class Sequencer extends Animatable {
     }
 
     /**
-     * Gets the length of each of the child animations of this Sequencer. This value may
-     * be less than 0, which indicates that no duration has been set on this Sequencer
+     * Gets the length of each of the child animations of this AnimatorSet. This value may
+     * be less than 0, which indicates that no duration has been set on this AnimatorSet
      * and each of the child animations will use their own duration.
      *
      * @return The length of the animation, in milliseconds, of each of the child
-     * animations of this Sequencer.
+     * animations of this AnimatorSet.
      */
     @Override
     public long getDuration() {
@@ -326,12 +322,12 @@ public final class Sequencer extends Animatable {
     }
 
     /**
-     * Sets the length of each of the current child animations of this Sequencer. By default,
-     * each child animation will use its own duration. If the duration is set on the Sequencer,
+     * Sets the length of each of the current child animations of this AnimatorSet. By default,
+     * each child animation will use its own duration. If the duration is set on the AnimatorSet,
      * then each child animation inherits this duration.
      *
      * @param duration The length of the animation, in milliseconds, of each of the child
-     * animations of this Sequencer.
+     * animations of this AnimatorSet.
      */
     @Override
     public void setDuration(long duration) {
@@ -339,7 +335,7 @@ public final class Sequencer extends Animatable {
             throw new IllegalArgumentException("duration must be a value of zero or greater");
         }
         for (Node node : mNodes) {
-            // TODO: don't set the duration of the timing-only nodes created by Sequencer to
+            // TODO: don't set the duration of the timing-only nodes created by AnimatorSet to
             // insert "play-after" delays
             node.animation.setDuration(duration);
         }
@@ -349,7 +345,7 @@ public final class Sequencer extends Animatable {
     /**
      * {@inheritDoc}
      *
-     * <p>Starting this <code>Sequencer</code> will, in turn, start the animations for which
+     * <p>Starting this <code>AnimatorSet</code> will, in turn, start the animations for which
      * it is responsible. The details of when exactly those animations are started depends on
      * the dependency relationships that have been set up between the animations.
      */
@@ -368,8 +364,8 @@ public final class Sequencer extends Animatable {
         // when some other animation also wants to start when the first animation begins.
         final ArrayList<Node> nodesToStart = new ArrayList<Node>();
         for (Node node : mSortedNodes) {
-            if (mSequenceListener == null) {
-                mSequenceListener = new SequencerAnimatableListener(this);
+            if (mSetListener == null) {
+                mSetListener = new AnimatorSetListener(this);
             }
             if (node.dependencies == null || node.dependencies.size() == 0) {
                 nodesToStart.add(node);
@@ -380,7 +376,7 @@ public final class Sequencer extends Animatable {
                 }
                 node.tmpDependencies = (ArrayList<Dependency>) node.dependencies.clone();
             }
-            node.animation.addListener(mSequenceListener);
+            node.animation.addListener(mSetListener);
         }
         // Now that all dependencies are set up, start the animations that should be started.
         if (mStartDelay <= 0) {
@@ -390,9 +386,9 @@ public final class Sequencer extends Animatable {
             }
         } else {
             // TODO: Need to cancel out of the delay appropriately
-            Animator delayAnim = new Animator(mStartDelay, 0f, 1f);
-            delayAnim.addListener(new AnimatableListenerAdapter() {
-                public void onAnimationEnd(Animatable anim) {
+            ValueAnimator delayAnim = new ValueAnimator(mStartDelay, 0f, 1f);
+            delayAnim.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator anim) {
                     for (Node node : nodesToStart) {
                         node.animation.start();
                         mPlayingSet.add(node.animation);
@@ -401,20 +397,20 @@ public final class Sequencer extends Animatable {
             });
         }
         if (mListeners != null) {
-            ArrayList<AnimatableListener> tmpListeners =
-                    (ArrayList<AnimatableListener>) mListeners.clone();
-            for (AnimatableListener listener : tmpListeners) {
+            ArrayList<AnimatorListener> tmpListeners =
+                    (ArrayList<AnimatorListener>) mListeners.clone();
+            for (AnimatorListener listener : tmpListeners) {
                 listener.onAnimationStart(this);
             }
         }
     }
 
     @Override
-    public Sequencer clone() {
-        final Sequencer anim = (Sequencer) super.clone();
+    public AnimatorSet clone() {
+        final AnimatorSet anim = (AnimatorSet) super.clone();
         /*
          * The basic clone() operation copies all items. This doesn't work very well for
-         * Sequencer, because it will copy references that need to be recreated and state
+         * AnimatorSet, because it will copy references that need to be recreated and state
          * that may not apply. What we need to do now is put the clone in an uninitialized
          * state, with fresh, empty data structures. Then we will build up the nodes list
          * manually, as we clone each Node (and its animation). The clone will then be sorted,
@@ -422,13 +418,13 @@ public final class Sequencer extends Animatable {
          */
         anim.mNeedsSort = true;
         anim.mCanceled = false;
-        anim.mPlayingSet = new ArrayList<Animatable>();
-        anim.mNodeMap = new HashMap<Animatable, Node>();
+        anim.mPlayingSet = new ArrayList<Animator>();
+        anim.mNodeMap = new HashMap<Animator, Node>();
         anim.mNodes = new ArrayList<Node>();
         anim.mSortedNodes = new ArrayList<Node>();
 
         // Walk through the old nodes list, cloning each node and adding it to the new nodemap.
-        // One problem is that the old node dependencies point to nodes in the old sequencer.
+        // One problem is that the old node dependencies point to nodes in the old AnimatorSet.
         // We need to track the old/new nodes in order to reconstruct the dependencies in the clone.
         HashMap<Node, Node> nodeCloneMap = new HashMap<Node, Node>(); // <old, new>
         for (Node node : mNodes) {
@@ -441,21 +437,21 @@ public final class Sequencer extends Animatable {
             nodeClone.tmpDependencies = null;
             nodeClone.nodeDependents = null;
             nodeClone.nodeDependencies = null;
-            // clear out any listeners that were set up by the sequencer; these will
+            // clear out any listeners that were set up by the AnimatorSet; these will
             // be set up when the clone's nodes are sorted
-            ArrayList<AnimatableListener> cloneListeners = nodeClone.animation.getListeners();
+            ArrayList<AnimatorListener> cloneListeners = nodeClone.animation.getListeners();
             if (cloneListeners != null) {
-                ArrayList<AnimatableListener> listenersToRemove = null;
-                for (AnimatableListener listener : cloneListeners) {
-                    if (listener instanceof SequencerAnimatableListener) {
+                ArrayList<AnimatorListener> listenersToRemove = null;
+                for (AnimatorListener listener : cloneListeners) {
+                    if (listener instanceof AnimatorSetListener) {
                         if (listenersToRemove == null) {
-                            listenersToRemove = new ArrayList<AnimatableListener>();
+                            listenersToRemove = new ArrayList<AnimatorListener>();
                         }
                         listenersToRemove.add(listener);
                     }
                 }
                 if (listenersToRemove != null) {
-                    for (AnimatableListener listener : listenersToRemove) {
+                    for (AnimatorListener listener : listenersToRemove) {
                         cloneListeners.remove(listener);
                     }
                 }
@@ -483,9 +479,9 @@ public final class Sequencer extends Animatable {
      * animations. If an animation has multiple dependencies on other animations, then
      * all dependencies must be satisfied before the animation is started.
      */
-    private static class DependencyListener implements AnimatableListener {
+    private static class DependencyListener implements AnimatorListener {
 
-        private Sequencer mSequencer;
+        private AnimatorSet mAnimatorSet;
 
         // The node upon which the dependency is based.
         private Node mNode;
@@ -494,8 +490,8 @@ public final class Sequencer extends Animatable {
         // the node
         private int mRule;
 
-        public DependencyListener(Sequencer sequencer, Node node, int rule) {
-            this.mSequencer = sequencer;
+        public DependencyListener(AnimatorSet animatorSet, Node node, int rule) {
+            this.mAnimatorSet = animatorSet;
             this.mNode = node;
             this.mRule = rule;
         }
@@ -505,13 +501,13 @@ public final class Sequencer extends Animatable {
          * to prevent follow-on animations from running when some dependency
          * animation is canceled.
          */
-        public void onAnimationCancel(Animatable animation) {
+        public void onAnimationCancel(Animator animation) {
         }
 
         /**
          * An end event is received - see if this is an event we are listening for
          */
-        public void onAnimationEnd(Animatable animation) {
+        public void onAnimationEnd(Animator animation) {
             if (mRule == Dependency.AFTER) {
                 startIfReady(animation);
             }
@@ -520,13 +516,13 @@ public final class Sequencer extends Animatable {
         /**
          * Ignore repeat events for now
          */
-        public void onAnimationRepeat(Animatable animation) {
+        public void onAnimationRepeat(Animator animation) {
         }
 
         /**
          * A start event is received - see if this is an event we are listening for
          */
-        public void onAnimationStart(Animatable animation) {
+        public void onAnimationStart(Animator animation) {
             if (mRule == Dependency.WITH) {
                 startIfReady(animation);
             }
@@ -538,9 +534,9 @@ public final class Sequencer extends Animatable {
          * the animation.
          * @param dependencyAnimation the animation that sent the event.
          */
-        private void startIfReady(Animatable dependencyAnimation) {
-            if (mSequencer.mCanceled) {
-                // if the parent Sequencer was canceled, then don't start any dependent anims
+        private void startIfReady(Animator dependencyAnimation) {
+            if (mAnimatorSet.mCanceled) {
+                // if the parent AnimatorSet was canceled, then don't start any dependent anims
                 return;
             }
             Dependency dependencyToRemove = null;
@@ -558,37 +554,37 @@ public final class Sequencer extends Animatable {
             if (mNode.tmpDependencies.size() == 0) {
                 // all dependencies satisfied: start the animation
                 mNode.animation.start();
-                mSequencer.mPlayingSet.add(mNode.animation);
+                mAnimatorSet.mPlayingSet.add(mNode.animation);
             }
         }
 
     }
 
-    private class SequencerAnimatableListener implements AnimatableListener {
+    private class AnimatorSetListener implements AnimatorListener {
 
-        private Sequencer mSequencer;
+        private AnimatorSet mAnimatorSet;
 
-        SequencerAnimatableListener(Sequencer sequencer) {
-            mSequencer = sequencer;
+        AnimatorSetListener(AnimatorSet animatorSet) {
+            mAnimatorSet = animatorSet;
         }
 
-        public void onAnimationCancel(Animatable animation) {
+        public void onAnimationCancel(Animator animation) {
             if (mPlayingSet.size() == 0) {
                 if (mListeners != null) {
-                    for (AnimatableListener listener : mListeners) {
-                        listener.onAnimationCancel(mSequencer);
+                    for (AnimatorListener listener : mListeners) {
+                        listener.onAnimationCancel(mAnimatorSet);
                     }
                 }
             }
         }
 
         @SuppressWarnings("unchecked")
-        public void onAnimationEnd(Animatable animation) {
+        public void onAnimationEnd(Animator animation) {
             animation.removeListener(this);
             mPlayingSet.remove(animation);
-            Node animNode = mSequencer.mNodeMap.get(animation);
+            Node animNode = mAnimatorSet.mNodeMap.get(animation);
             animNode.done = true;
-            ArrayList<Node> sortedNodes = mSequencer.mSortedNodes;
+            ArrayList<Node> sortedNodes = mAnimatorSet.mSortedNodes;
             boolean allDone = true;
             for (Node node : sortedNodes) {
                 if (!node.done) {
@@ -598,23 +594,23 @@ public final class Sequencer extends Animatable {
             }
             if (allDone) {
                 // If this was the last child animation to end, then notify listeners that this
-                // sequencer has ended
+                // AnimatorSet has ended
                 if (mListeners != null) {
-                    ArrayList<AnimatableListener> tmpListeners =
-                            (ArrayList<AnimatableListener>) mListeners.clone();
-                    for (AnimatableListener listener : tmpListeners) {
-                        listener.onAnimationEnd(mSequencer);
+                    ArrayList<AnimatorListener> tmpListeners =
+                            (ArrayList<AnimatorListener>) mListeners.clone();
+                    for (AnimatorListener listener : tmpListeners) {
+                        listener.onAnimationEnd(mAnimatorSet);
                     }
                 }
             }
         }
 
         // Nothing to do
-        public void onAnimationRepeat(Animatable animation) {
+        public void onAnimationRepeat(Animator animation) {
         }
 
         // Nothing to do
-        public void onAnimationStart(Animatable animation) {
+        public void onAnimationStart(Animator animation) {
         }
 
     }
@@ -658,7 +654,7 @@ public final class Sequencer extends Animatable {
             mNeedsSort = false;
             if (mSortedNodes.size() != mNodes.size()) {
                 throw new IllegalStateException("Circular dependencies cannot exist"
-                        + " in Sequencer");
+                        + " in AnimatorSet");
             }
         } else {
             // Doesn't need sorting, but still need to add in the nodeDependencies list
@@ -702,13 +698,13 @@ public final class Sequencer extends Animatable {
     }
 
     /**
-     * A Node is an embodiment of both the Animatable that it wraps as well as
+     * A Node is an embodiment of both the Animator that it wraps as well as
      * any dependencies that are associated with that Animation. This includes
      * both dependencies upon other nodes (in the dependencies list) as
      * well as dependencies of other nodes upon this (in the nodeDependents list).
      */
     private static class Node implements Cloneable {
-        public Animatable animation;
+        public Animator animation;
 
         /**
          *  These are the dependencies that this node's animation has on other
@@ -723,8 +719,8 @@ public final class Sequencer extends Animatable {
          * But we also use the list to keep track of when multiple dependencies are satisfied,
          * but removing each dependency as it is satisfied. We do not want to remove
          * the dependency itself from the list, because we need to retain that information
-         * if the sequencer is launched in the future. So we create a copy of the dependency
-         * list when the sequencer starts and use this tmpDependencies list to track the
+         * if the AnimatorSet is launched in the future. So we create a copy of the dependency
+         * list when the AnimatorSet starts and use this tmpDependencies list to track the
          * list of satisfied dependencies.
          */
         public ArrayList<Dependency> tmpDependencies = null;
@@ -744,8 +740,8 @@ public final class Sequencer extends Animatable {
 
         /**
          * Flag indicating whether the animation in this node is finished. This flag
-         * is used by Sequencer to check, as each animation ends, whether all child animations
-         * are done and it's time to send out an end event for the entire Sequencer.
+         * is used by AnimatorSet to check, as each animation ends, whether all child animations
+         * are done and it's time to send out an end event for the entire AnimatorSet.
          */
         public boolean done = false;
 
@@ -756,7 +752,7 @@ public final class Sequencer extends Animatable {
          *
          * @param animation The animation that the Node encapsulates.
          */
-        public Node(Animatable animation) {
+        public Node(Animator animation) {
             this.animation = animation;
         }
 
@@ -785,7 +781,7 @@ public final class Sequencer extends Animatable {
         public Node clone() {
             try {
                 Node node = (Node) super.clone();
-                node.animation = (Animatable) animation.clone();
+                node.animation = (Animator) animation.clone();
                 return node;
             } catch (CloneNotSupportedException e) {
                throw new AssertionError();
@@ -795,45 +791,45 @@ public final class Sequencer extends Animatable {
 
     /**
      * The <code>Builder</code> object is a utility class to facilitate adding animations to a
-     * <code>Sequencer</code> along with the relationships between the various animations. The
+     * <code>AnimatorSet</code> along with the relationships between the various animations. The
      * intention of the <code>Builder</code> methods, along with the {@link
-     * Sequencer#play(Animatable) play()} method of <code>Sequencer</code> is to make it possible to
+     * AnimatorSet#play(Animator) play()} method of <code>AnimatorSet</code> is to make it possible to
      * express the dependency relationships of animations in a natural way. Developers can also use
-     * the {@link Sequencer#playTogether(Animatable[]) playTogether()} and {@link
-     * Sequencer#playSequentially(Animatable[]) playSequentially()} methods if these suit the need,
-     * but it might be easier in some situations to express the sequence of animations in pairs.
+     * the {@link AnimatorSet#playTogether(Animator[]) playTogether()} and {@link
+     * AnimatorSet#playSequentially(Animator[]) playSequentially()} methods if these suit the need,
+     * but it might be easier in some situations to express the AnimatorSet of animations in pairs.
      * <p/>
      * <p>The <code>Builder</code> object cannot be constructed directly, but is rather constructed
-     * internally via a call to {@link Sequencer#play(Animatable)}.</p>
+     * internally via a call to {@link AnimatorSet#play(Animator)}.</p>
      * <p/>
-     * <p>For example, this sets up a Sequencer to play anim1 and anim2 at the same time, anim3 to
+     * <p>For example, this sets up a AnimatorSet to play anim1 and anim2 at the same time, anim3 to
      * play when anim2 finishes, and anim4 to play when anim3 finishes:</p>
      * <pre>
-     *     Sequencer s = new Sequencer();
+     *     AnimatorSet s = new AnimatorSet();
      *     s.play(anim1).with(anim2);
      *     s.play(anim2).before(anim3);
      *     s.play(anim4).after(anim3);
      * </pre>
      * <p/>
-     * <p>Note in the example that both {@link Builder#before(Animatable)} and {@link
-     * Builder#after(Animatable)} are used. These are just different ways of expressing the same
+     * <p>Note in the example that both {@link Builder#before(Animator)} and {@link
+     * Builder#after(Animator)} are used. These are just different ways of expressing the same
      * relationship and are provided to make it easier to say things in a way that is more natural,
      * depending on the situation.</p>
      * <p/>
      * <p>It is possible to make several calls into the same <code>Builder</code> object to express
      * multiple relationships. However, note that it is only the animation passed into the initial
-     * {@link Sequencer#play(Animatable)} method that is the dependency in any of the successive
+     * {@link AnimatorSet#play(Animator)} method that is the dependency in any of the successive
      * calls to the <code>Builder</code> object. For example, the following code starts both anim2
      * and anim3 when anim1 ends; there is no direct dependency relationship between anim2 and
      * anim3:
      * <pre>
-     *   Sequencer s = new Sequencer();
+     *   AnimatorSet s = new AnimatorSet();
      *   s.play(anim1).before(anim2).before(anim3);
      * </pre>
      * If the desired result is to play anim1 then anim2 then anim3, this code expresses the
      * relationship correctly:</p>
      * <pre>
-     *   Sequencer s = new Sequencer();
+     *   AnimatorSet s = new AnimatorSet();
      *   s.play(anim1).before(anim2);
      *   s.play(anim2).before(anim3);
      * </pre>
@@ -841,26 +837,26 @@ public final class Sequencer extends Animatable {
      * <p>Note that it is possible to express relationships that cannot be resolved and will not
      * result in sensible results. For example, <code>play(anim1).after(anim1)</code> makes no
      * sense. In general, circular dependencies like this one (or more indirect ones where a depends
-     * on b, which depends on c, which depends on a) should be avoided. Only create sequences that
-     * can boil down to a simple, one-way relationship of animations starting with, before, and
+     * on b, which depends on c, which depends on a) should be avoided. Only create AnimatorSets
+     * that can boil down to a simple, one-way relationship of animations starting with, before, and
      * after other, different, animations.</p>
      */
     public class Builder {
 
         /**
          * This tracks the current node being processed. It is supplied to the play() method
-         * of Sequencer and passed into the constructor of Builder.
+         * of AnimatorSet and passed into the constructor of Builder.
          */
         private Node mCurrentNode;
 
         /**
-         * package-private constructor. Builders are only constructed by Sequencer, when the
+         * package-private constructor. Builders are only constructed by AnimatorSet, when the
          * play() method is called.
          *
          * @param anim The animation that is the dependency for the other animations passed into
          * the other methods of this Builder object.
          */
-        Builder(Animatable anim) {
+        Builder(Animator anim) {
             mCurrentNode = mNodeMap.get(anim);
             if (mCurrentNode == null) {
                 mCurrentNode = new Node(anim);
@@ -871,12 +867,12 @@ public final class Sequencer extends Animatable {
 
         /**
          * Sets up the given animation to play at the same time as the animation supplied in the
-         * {@link Sequencer#play(Animatable)} call that created this <code>Builder</code> object.
+         * {@link AnimatorSet#play(Animator)} call that created this <code>Builder</code> object.
          *
          * @param anim The animation that will play when the animation supplied to the
-         * {@link Sequencer#play(Animatable)} method starts.
+         * {@link AnimatorSet#play(Animator)} method starts.
          */
-        public void with(Animatable anim) {
+        public void with(Animator anim) {
             Node node = mNodeMap.get(anim);
             if (node == null) {
                 node = new Node(anim);
@@ -889,13 +885,13 @@ public final class Sequencer extends Animatable {
 
         /**
          * Sets up the given animation to play when the animation supplied in the
-         * {@link Sequencer#play(Animatable)} call that created this <code>Builder</code> object
+         * {@link AnimatorSet#play(Animator)} call that created this <code>Builder</code> object
          * ends.
          *
          * @param anim The animation that will play when the animation supplied to the
-         * {@link Sequencer#play(Animatable)} method ends.
+         * {@link AnimatorSet#play(Animator)} method ends.
          */
-        public void before(Animatable anim) {
+        public void before(Animator anim) {
             Node node = mNodeMap.get(anim);
             if (node == null) {
                 node = new Node(anim);
@@ -908,13 +904,13 @@ public final class Sequencer extends Animatable {
 
         /**
          * Sets up the given animation to play when the animation supplied in the
-         * {@link Sequencer#play(Animatable)} call that created this <code>Builder</code> object
+         * {@link AnimatorSet#play(Animator)} call that created this <code>Builder</code> object
          * to start when the animation supplied in this method call ends.
          *
          * @param anim The animation whose end will cause the animation supplied to the
-         * {@link Sequencer#play(Animatable)} method to play.
+         * {@link AnimatorSet#play(Animator)} method to play.
          */
-        public void after(Animatable anim) {
+        public void after(Animator anim) {
             Node node = mNodeMap.get(anim);
             if (node == null) {
                 node = new Node(anim);
@@ -927,15 +923,15 @@ public final class Sequencer extends Animatable {
 
         /**
          * Sets up the animation supplied in the
-         * {@link Sequencer#play(Animatable)} call that created this <code>Builder</code> object
+         * {@link AnimatorSet#play(Animator)} call that created this <code>Builder</code> object
          * to play when the given amount of time elapses.
          *
          * @param delay The number of milliseconds that should elapse before the
          * animation starts.
          */
         public void after(long delay) {
-            // setup dummy Animator just to run the clock
-            after(new Animator(delay, 0f, 1f));
+            // setup dummy ValueAnimator just to run the clock
+            after(new ValueAnimator(delay, 0f, 1f));
         }
 
     }
