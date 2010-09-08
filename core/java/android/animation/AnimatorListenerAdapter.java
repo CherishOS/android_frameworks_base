@@ -16,41 +16,39 @@
 
 package android.animation;
 
-import android.animation.Animatable.AnimatableListener;
-
 /**
- * This adapter class provides empty implementations of the methods from {@link AnimatableListener}.
+ * This adapter class provides empty implementations of the methods from {@link android.animation.Animator.AnimatorListener}.
  * Any custom listener that cares only about a subset of the methods of this listener can
  * simply subclass this adapter class instead of implementing the interface directly.
  */
-public abstract class AnimatableListenerAdapter implements AnimatableListener {
+public abstract class AnimatorListenerAdapter implements Animator.AnimatorListener {
 
     /**
      * {@inheritdoc}
      */
     @Override
-    public void onAnimationCancel(Animatable animation) {
+    public void onAnimationCancel(Animator animation) {
     }
 
     /**
      * {@inheritdoc}
      */
     @Override
-    public void onAnimationEnd(Animatable animation) {
+    public void onAnimationEnd(Animator animation) {
     }
 
     /**
      * {@inheritdoc}
      */
     @Override
-    public void onAnimationRepeat(Animatable animation) {
+    public void onAnimationRepeat(Animator animation) {
     }
 
     /**
      * {@inheritdoc}
      */
     @Override
-    public void onAnimationStart(Animatable animation) {
+    public void onAnimationStart(Animator animation) {
     }
 
 }
