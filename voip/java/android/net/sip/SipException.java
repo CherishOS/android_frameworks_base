@@ -14,21 +14,24 @@
  * limitations under the License.
  */
 
-#ifndef _ANDROID_SERVER_POWER_MANAGER_SERVICE_H
-#define _ANDROID_SERVER_POWER_MANAGER_SERVICE_H
+package android.net.sip;
 
-#include "JNIHelp.h"
-#include "jni.h"
+/**
+ * @hide
+ */
+public class SipException extends Exception {
+    public SipException() {
+    }
 
-#include <ui/PowerManager.h>
+    public SipException(String message) {
+        super(message);
+    }
 
-namespace android {
-
-extern bool android_server_PowerManagerService_isScreenOn();
-extern bool android_server_PowerManagerService_isScreenBright();
-extern void android_server_PowerManagerService_userActivity(nsecs_t eventTime, int32_t eventType);
-extern void android_server_PowerManagerService_goToSleep(nsecs_t eventTime);
-
-} // namespace android
-
-#endif // _ANDROID_SERVER_POWER_MANAGER_SERVICE_H
+    public SipException(String message, Throwable cause) {
+        // we want to eliminate the dependency on javax.sip.SipException
+        super(message, ((cause instanceof javax.sip.SipException)
+                && (cause.getCause() != null))
+                ? cause.getCause()
+                : cause);
+    }
+}
