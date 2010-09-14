@@ -65918,7 +65918,7 @@
  return="void"
  abstract="false"
  native="false"
- synchronized="true"
+ synchronized="false"
  static="false"
  final="false"
  deprecated="not deprecated"
@@ -65957,7 +65957,7 @@
  return="void"
  abstract="false"
  native="false"
- synchronized="true"
+ synchronized="false"
  static="false"
  final="false"
  deprecated="not deprecated"
@@ -93977,6 +93977,8 @@
 >
 <parameter name="uid" type="int">
 </parameter>
+<parameter name="ws" type="android.os.WorkSource">
+</parameter>
 </method>
 <method name="onDisable"
  return="void"
@@ -94106,6 +94108,8 @@
 >
 <parameter name="uid" type="int">
 </parameter>
+<parameter name="ws" type="android.os.WorkSource">
+</parameter>
 </method>
 <method name="onRequiresCell"
  return="boolean"
@@ -94166,6 +94170,8 @@
  visibility="public"
 >
 <parameter name="minTime" type="long">
+</parameter>
+<parameter name="ws" type="android.os.WorkSource">
 </parameter>
 </method>
 <method name="onSupportsAltitude"
@@ -111501,6 +111507,19 @@
  visibility="public"
 >
 <parameter name="refCounted" type="boolean">
+</parameter>
+</method>
+<method name="setWorkSource"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="ws" type="android.os.WorkSource">
 </parameter>
 </method>
 </class>
@@ -138355,6 +138374,19 @@
 <parameter name="value" type="boolean">
 </parameter>
 </method>
+<method name="setWorkSource"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="ws" type="android.os.WorkSource">
+</parameter>
+</method>
 </class>
 <class name="Process"
  extends="java.lang.Object"
@@ -139502,6 +139534,134 @@
 <parameter name="repeat" type="int">
 </parameter>
 </method>
+</class>
+<class name="WorkSource"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="android.os.Parcelable">
+</implements>
+<constructor name="WorkSource"
+ type="android.os.WorkSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<constructor name="WorkSource"
+ type="android.os.WorkSource"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="orig" type="android.os.WorkSource">
+</parameter>
+</constructor>
+<method name="add"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="other" type="android.os.WorkSource">
+</parameter>
+</method>
+<method name="clear"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="describeContents"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="diff"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="other" type="android.os.WorkSource">
+</parameter>
+</method>
+<method name="remove"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="other" type="android.os.WorkSource">
+</parameter>
+</method>
+<method name="set"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="other" type="android.os.WorkSource">
+</parameter>
+</method>
+<method name="writeToParcel"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="dest" type="android.os.Parcel">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+</method>
+<field name="CREATOR"
+ type="android.os.Parcelable.Creator"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 </class>
 </package>
 <package name="android.os.storage"
@@ -142069,6 +142229,19 @@
 <parameter name="args" type="android.os.Bundle">
 </parameter>
 </method>
+<method name="switchToHeader"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="header" type="android.preference.PreferenceActivity.Header">
+</parameter>
+</method>
 <field name="EXTRA_NO_HEADERS"
  type="java.lang.String"
  transient="false"
@@ -142102,15 +142275,28 @@
  visibility="public"
 >
 </field>
+<field name="HEADER_ID_UNDEFINED"
+ type="long"
+ transient="false"
+ volatile="false"
+ value="-1L"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 </class>
 <class name="PreferenceActivity.Header"
  extends="java.lang.Object"
  abstract="false"
  static="true"
- final="false"
+ final="true"
  deprecated="not deprecated"
  visibility="public"
 >
+<implements name="android.os.Parcelable">
+</implements>
 <constructor name="PreferenceActivity.Header"
  type="android.preference.PreferenceActivity.Header"
  static="false"
@@ -142119,6 +142305,65 @@
  visibility="public"
 >
 </constructor>
+<method name="describeContents"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="readFromParcel"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="in" type="android.os.Parcel">
+</parameter>
+</method>
+<method name="writeToParcel"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="dest" type="android.os.Parcel">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+</method>
+<field name="CREATOR"
+ type="android.os.Parcelable.Creator"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="extras"
+ type="android.os.Bundle"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="fragment"
  type="java.lang.String"
  transient="false"
@@ -142139,8 +142384,8 @@
  visibility="public"
 >
 </field>
-<field name="icon"
- type="android.graphics.drawable.Drawable"
+<field name="iconRes"
+ type="int"
  transient="false"
  volatile="false"
  static="false"
@@ -142149,8 +142394,8 @@
  visibility="public"
 >
 </field>
-<field name="iconRes"
- type="int"
+<field name="id"
+ type="long"
  transient="false"
  volatile="false"
  static="false"
