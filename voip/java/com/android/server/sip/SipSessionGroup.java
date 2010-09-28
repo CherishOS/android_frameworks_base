@@ -82,7 +82,6 @@ class SipSessionGroup implements SipListener {
     private static final boolean DEBUG = true;
     private static final boolean DEBUG_PING = DEBUG && false;
     private static final String ANONYMOUS = "anonymous";
-    private static final String SERVER_ERROR_PREFIX = "Response: ";
     private static final int EXPIRY_TIME = 3600; // in seconds
     private static final int CANCEL_CALL_TIMER = 3; // in seconds
 
@@ -620,13 +619,15 @@ class SipSessionGroup implements SipListener {
                         Response.CALL_OR_TRANSACTION_DOES_NOT_EXIST);
                 return true;
             } else if (evt instanceof TransactionTerminatedEvent) {
-                if (evt instanceof TimeoutEvent) {
-                    processTimeout((TimeoutEvent) evt);
-                } else {
-                    processTransactionTerminated(
-                            (TransactionTerminatedEvent) evt);
+                if (isCurrentTransaction((TransactionTerminatedEvent) evt)) {
+                    if (evt instanceof TimeoutEvent) {
+                        processTimeout((TimeoutEvent) evt);
+                    } else {
+                        processTransactionTerminated(
+                                (TransactionTerminatedEvent) evt);
+                    }
+                    return true;
                 }
-                return true;
             } else if (isRequestEvent(Request.OPTIONS, evt)) {
                 mSipHelper.sendResponse((RequestEvent) evt, Response.OK);
                 return true;
@@ -646,6 +647,37 @@ class SipSessionGroup implements SipListener {
             }
         }
 
+        private boolean isCurrentTransaction(TransactionTerminatedEvent event) {
+            Transaction current = event.isServerTransaction()
+                    ? mServerTransaction
+                    : mClientTransaction;
+            Transaction target = event.isServerTransaction()
+                    ? event.getServerTransaction()
+                    : event.getClientTransaction();
+
+            if ((current != target) && (mState != SipSession.State.PINGING)) {
+                Log.d(TAG, "not the current transaction; current="
+                        + toString(current) + ", target=" + toString(target));
+                return false;
+            } else if (current != null) {
+                Log.d(TAG, "transaction terminated: " + toString(current));
+                return true;
+            } else {
+                // no transaction; shouldn't be here; ignored
+                return true;
+            }
+        }
+
+        private String toString(Transaction transaction) {
+            if (transaction == null) return "null";
+            Request request = transaction.getRequest();
+            Dialog dialog = transaction.getDialog();
+            CSeqHeader cseq = (CSeqHeader) request.getHeader(CSeqHeader.NAME);
+            return String.format("req=%s,%s,s=%s,ds=%s,", request.getMethod(),
+                    cseq.getSeqNumber(), transaction.getState(),
+                    ((dialog == null) ? "-" : dialog.getState()));
+        }
+
         private void processTransactionTerminated(
                 TransactionTerminatedEvent event) {
             switch (mState) {
@@ -661,19 +693,7 @@ class SipSessionGroup implements SipListener {
         }
 
         private void processTimeout(TimeoutEvent event) {
-            Log.d(TAG, "processing Timeout..." + event);
-            Transaction current = event.isServerTransaction()
-                    ? mServerTransaction
-                    : mClientTransaction;
-            Transaction target = event.isServerTransaction()
-                    ? event.getServerTransaction()
-                    : event.getClientTransaction();
-
-            if ((current != target) && (mState != SipSession.State.PINGING)) {
-                Log.d(TAG, "not the current transaction; current=" + current
-                        + ", timed out=" + target);
-                return;
-            }
+            Log.d(TAG, "processing Timeout...");
             switch (mState) {
                 case SipSession.State.REGISTERING:
                 case SipSession.State.DEREGISTERING:
@@ -810,6 +830,12 @@ class SipSessionGroup implements SipListener {
             }
         }
 
+        private boolean crossDomainAuthenticationRequired(Response response) {
+            String realm = getRealmFromResponse(response);
+            if (realm == null) realm = "";
+            return !mLocalProfile.getSipDomain().trim().equals(realm.trim());
+        }
+
         private AccountManager getAccountManager() {
             return new AccountManager() {
                 public UserCredentials getCredentials(ClientTransaction
@@ -829,6 +855,15 @@ class SipSessionGroup implements SipListener {
                     };
                 }
             };
+        }
+
+        private String getRealmFromResponse(Response response) {
+            WWWAuthenticate wwwAuth = (WWWAuthenticate)response.getHeader(
+                    SIPHeaderNames.WWW_AUTHENTICATE);
+            if (wwwAuth != null) return wwwAuth.getRealm();
+            ProxyAuthenticate proxyAuth = (ProxyAuthenticate)response.getHeader(
+                    SIPHeaderNames.PROXY_AUTHENTICATE);
+            return (proxyAuth == null) ? null : proxyAuth.getRealm();
         }
 
         private String getNonceFromResponse(Response response) {
@@ -937,7 +972,10 @@ class SipSessionGroup implements SipListener {
                     return true;
                 case Response.UNAUTHORIZED:
                 case Response.PROXY_AUTHENTICATION_REQUIRED:
-                    if (handleAuthentication(event)) {
+                    if (crossDomainAuthenticationRequired(response)) {
+                        onError(SipErrorCode.CROSS_DOMAIN_AUTHENTICATION,
+                                getRealmFromResponse(response));
+                    } else if (handleAuthentication(event)) {
                         addSipSession(this);
                     } else if (mLastNonce == null) {
                         onError(SipErrorCode.SERVER_ERROR,
@@ -982,18 +1020,18 @@ class SipSessionGroup implements SipListener {
                 Response response = event.getResponse();
                 int statusCode = response.getStatusCode();
                 if (expectResponse(Request.CANCEL, evt)) {
+                    if (statusCode == Response.OK) {
+                        // do nothing; wait for REQUEST_TERMINATED
+                        return true;
+                    }
+                } else if (expectResponse(Request.INVITE, evt)) {
                     switch (statusCode) {
                         case Response.OK:
-                            // do nothing; wait for REQUEST_TERMINATED
+                            outgoingCall(evt); // abort Cancel
                             return true;
                         case Response.REQUEST_TERMINATED:
                             endCallNormally();
                             return true;
-                    }
-                } else if (expectResponse(Request.INVITE, evt)) {
-                    if (statusCode == Response.OK) {
-                        outgoingCall(evt); // abort Cancel
-                        return true;
                     }
                 } else {
                     return false;
@@ -1060,8 +1098,8 @@ class SipSessionGroup implements SipListener {
         }
 
         private String createErrorMessage(Response response) {
-            return String.format(SERVER_ERROR_PREFIX + "%s (%d)",
-                    response.getReasonPhrase(), response.getStatusCode());
+            return String.format("%s (%d)", response.getReasonPhrase(),
+                    response.getStatusCode());
         }
 
         private void establishCall() {
@@ -1165,8 +1203,6 @@ class SipSessionGroup implements SipListener {
                 return SipErrorCode.INVALID_REMOTE_URI;
             } else if (exception instanceof IOException) {
                 return SipErrorCode.SOCKET_ERROR;
-            } else if (message.startsWith(SERVER_ERROR_PREFIX)) {
-                return SipErrorCode.SERVER_ERROR;
             } else {
                 return SipErrorCode.CLIENT_ERROR;
             }
