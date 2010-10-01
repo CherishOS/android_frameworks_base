@@ -14,27 +14,17 @@
  * limitations under the License.
  */
 
-package com.android.rs.test;
+#ifndef _ANDROID_GRAPHICS_MATRIX_H
+#define _ANDROID_GRAPHICS_MATRIX_H
 
-import android.content.res.Resources;
-import android.renderscript.*;
+#include "jni.h"
+#include "SkMatrix.h"
 
-public class UT_fp_mad extends UnitTest {
-    private Resources mRes;
+namespace android {
 
-    protected UT_fp_mad(RSTestCore rstc, Resources res) {
-        super(rstc, "Fp_Mad");
-        mRes = res;
-    }
+/* Gets the underlying SkMatrix from a Matrix object. */
+extern SkMatrix* android_graphics_Matrix_getSkMatrix(JNIEnv* env, jobject matrixObj);
 
-    public void run() {
-        RenderScript pRS = RenderScript.create();
-        ScriptC_fp_mad s = new ScriptC_fp_mad(pRS, mRes, R.raw.fp_mad, true);
-        pRS.mMessageCallback = mRsMessage;
-        s.invoke_fp_mad_test(0, 0);
-        pRS.finish();
-        waitForMessage();
-        pRS.destroy();
-    }
-}
+} // namespace android
 
+#endif // _ANDROID_GRAPHICS_MATRIX_H
