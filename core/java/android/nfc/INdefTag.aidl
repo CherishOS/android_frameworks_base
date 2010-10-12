@@ -14,23 +14,15 @@
  * limitations under the License.
  */
 
-/**
- * File            : NativeNdefTag.java
- * Original-Author : Trusted Logic S.A. (Sylvain Fonteneau)
- * Created         : 18-02-2010
- */
+package android.nfc;
 
-package com.trustedlogic.trustednfc.android.internal;
+import android.nfc.NdefMessage;
 
 /**
- * Native interface to the NDEF tag functions
- *
  * @hide
  */
-public class NativeNdefTag {
-    private int mHandle;
-
-    public native byte[] doRead();
-
-    public native boolean doWrite(byte[] buf);
+interface INdefTag
+{
+    NdefMessage read(int nativeHandle);
+    boolean write(int nativeHandle, in NdefMessage msg);
 }
