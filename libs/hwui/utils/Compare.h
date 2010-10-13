@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010 The Android Open Source Project
+ * Copyright (C) 2010 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,27 @@
  * limitations under the License.
  */
 
-package android.service.urlrenderer;
+#ifndef ANDROID_UI_COMPARE_H
+#define ANDROID_UI_COMPARE_H
 
-import android.os.ParcelFileDescriptor;
+#include <cmath>
+
+#define EPSILON 0.00001f
+
+#define almost(u, v) (fabs((u) - (v)) < EPSILON)
 
 /**
- * {@hide}
+ * Compare floats.
  */
-oneway interface IUrlRendererCallback {
-    void complete(String url, in ParcelFileDescriptor result);
-}
+#define compare(a) \
+    if (a < rhs.a) return true; \
+    if (almost(a, rhs.a))
+
+/**
+ * Compare integers.
+ */
+#define compareI(a) \
+    if (a < rhs.a) return true; \
+    if (a == rhs.a)
+
+#endif // ANDROID_UI_COMPARE_H
