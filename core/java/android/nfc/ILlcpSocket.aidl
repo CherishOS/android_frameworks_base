@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-/**
- * File            : NativeNdefTag.java
- * Original-Author : Trusted Logic S.A. (Sylvain Fonteneau)
- * Created         : 18-02-2010
- */
-
-package com.trustedlogic.trustednfc.android.internal;
+package android.nfc;
 
 /**
- * Native interface to the NDEF tag functions
- *
  * @hide
  */
-public class NativeNdefTag {
-    private int mHandle;
-
-    public native byte[] doRead();
-
-    public native boolean doWrite(byte[] buf);
+interface ILlcpSocket
+{
+    int close(int nativeHandle);
+    int connect(int nativeHandle, int sap);
+    int connectByName(int nativeHandle, String sn);
+    int getConnectTimeout(int nativeHandle);
+    int getLocalSap(int nativeHandle);
+    int getLocalSocketMiu(int nativeHandle);
+    int getLocalSocketRw(int nativeHandle);
+    int getRemoteSocketMiu(int nativeHandle);
+    int getRemoteSocketRw(int nativeHandle);
+    int receive(int nativeHandle, out byte[] receiveBuffer);
+    int send(int nativeHandle, in byte[] data);
+    void setConnectTimeout(int nativeHandle, int timeout);
 }
