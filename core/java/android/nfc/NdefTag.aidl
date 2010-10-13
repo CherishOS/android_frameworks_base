@@ -14,19 +14,6 @@
  * limitations under the License.
  */
 
-package com.trustedlogic.trustednfc.android;
+package android.nfc;
 
-/**
- * TODO
- *
- * {@hide}
- */
-interface ILlcpServiceSocket
-{
-
-    int     accept(int nativeHandle);
-    void    close(int nativeHandle);
-    int     getAcceptTimeout(int nativeHandle);
-    void    setAcceptTimeout(int nativeHandle, int timeout);
-    
-}
+parcelable NdefTag;
