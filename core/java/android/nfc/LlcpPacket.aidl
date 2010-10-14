@@ -14,19 +14,9 @@
  * limitations under the License.
  */
 
-package com.trustedlogic.trustednfc.android;
+package android.nfc;
 
 /**
- * TODO
- *
- * {@hide}
+ * @hide
  */
-interface IP2pInitiator
-{
-
-    byte[]   getGeneralBytes(int nativeHandle);
-    int      getMode(int nativeHandle);
-    byte[]   receive(int nativeHandle);
-    boolean  send(int nativeHandle, in byte[] data);
-
-}
+parcelable LlcpPacket;

@@ -13,7 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-package com.trustedlogic.trustednfc.android;
 
-parcelable NdefMessage;
+package android.nfc;
+
+/**
+ * {@hide}
+ */
+interface ILlcpServiceSocket
+{
+    int accept(int nativeHandle);
+    void close(int nativeHandle);
+    int getAcceptTimeout(int nativeHandle);
+    void setAcceptTimeout(int nativeHandle, int timeout);
+}
