@@ -14,25 +14,6 @@
  * limitations under the License.
  */
 
-package com.trustedlogic.trustednfc.android;
+package android.nfc;
 
-import com.trustedlogic.trustednfc.android.NdefMessage;
-
-/**
- * TODO
- *
- * {@hide}
- */
-interface INfcTag
-{
-
-    int     close(int nativeHandle);
-    int     connect(int nativeHandle);
-    String  getType(int nativeHandle);
-    byte[]  getUid(int nativeHandle);
-    boolean isNdef(int nativeHandle);
-    byte[]  transceive(int nativeHandle, in byte[] data);
-    
-    NdefMessage read(int nativeHandle);
-    boolean     write(int nativeHandle, in NdefMessage msg);
-}
+parcelable Tag;
