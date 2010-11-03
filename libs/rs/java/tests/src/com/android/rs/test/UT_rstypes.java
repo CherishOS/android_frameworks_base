@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-#ifndef ANDROID_HWUI_COMPARE_H
-#define ANDROID_HWUI_COMPARE_H
+package com.android.rs.test;
 
-#include <cmath>
+import android.content.res.Resources;
+import android.renderscript.*;
 
-#define EPSILON 0.00001f
+public class UT_rstypes extends UnitTest {
+    private Resources mRes;
 
-#define ALMOST_EQUAL(u, v) (fabs((u) - (v)) < EPSILON)
+    protected UT_rstypes(RSTestCore rstc, Resources res) {
+        super(rstc, "rsTypes");
+        mRes = res;
+    }
 
-/**
- * Compare floats.
- */
-#define LTE_FLOAT(a) \
-    if (a < rhs.a) return true; \
-    if (ALMOST_EQUAL(a, rhs.a))
+    public void run() {
+        RenderScript pRS = RenderScript.create();
+        ScriptC_rstypes s = new ScriptC_rstypes(pRS, mRes, R.raw.rstypes, true);
+        pRS.mMessageCallback = mRsMessage;
+        s.invoke_test_rstypes(0, 0);
+        pRS.finish();
+        waitForMessage();
+        pRS.destroy();
+    }
+}
 
-/**
- * Compare integers.
- */
-#define LTE_INT(a) \
-    if (a < rhs.a) return true; \
-    if (a == rhs.a)
-
-#endif // ANDROID_HWUI_COMPARE_H
