@@ -2143,6 +2143,17 @@
  visibility="public"
 >
 </field>
+<field name="allowParallelSyncs"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="16843585"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="allowSingleTap"
  type="int"
  transient="false"
@@ -5382,6 +5393,17 @@
  transient="false"
  volatile="false"
  value="16843073"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="isAlwaysSyncable"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="16843586"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -42266,6 +42288,20 @@
 <parameter name="autoInitialize" type="boolean">
 </parameter>
 </constructor>
+<constructor name="AbstractThreadedSyncAdapter"
+ type="android.content.AbstractThreadedSyncAdapter"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+<parameter name="autoInitialize" type="boolean">
+</parameter>
+<parameter name="allowParallelSyncs" type="boolean">
+</parameter>
+</constructor>
 <method name="getContext"
  return="android.content.Context"
  abstract="false"
@@ -42319,6 +42355,19 @@
  deprecated="not deprecated"
  visibility="public"
 >
+</method>
+<method name="onSyncCanceled"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="thread" type="java.lang.Thread">
+</parameter>
 </method>
 <field name="LOG_SYNC_DETAILS"
  type="int"
@@ -55429,27 +55478,33 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="authority" type="java.lang.String">
-</parameter>
-<parameter name="accountType" type="java.lang.String">
-</parameter>
-<parameter name="userVisible" type="boolean">
-</parameter>
-<parameter name="supportsUploading" type="boolean">
+<parameter name="source" type="android.os.Parcel">
 </parameter>
 </constructor>
-<constructor name="SyncAdapterType"
- type="android.content.SyncAdapterType"
+<method name="allowParallelSyncs"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
  static="false"
  final="false"
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="source" type="android.os.Parcel">
-</parameter>
-</constructor>
+</method>
 <method name="describeContents"
  return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="isAlwaysSyncable"
+ return="boolean"
  abstract="false"
  native="false"
  synchronized="false"
@@ -250525,7 +250580,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="t" type="T">
+<parameter name="arg0" type="T">
 </parameter>
 </method>
 </interface>
@@ -264775,9 +264830,9 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="start" type="int">
+<parameter name="beginIndex" type="int">
 </parameter>
-<parameter name="end" type="int">
+<parameter name="endIndex" type="int">
 </parameter>
 </method>
 <method name="ensureCapacity"
@@ -267475,7 +267530,7 @@
  native="false"
  synchronized="false"
  static="true"
- final="false"
+ final="true"
  deprecated="not deprecated"
  visibility="public"
 >
@@ -273798,7 +273853,7 @@
 </exception>
 </method>
 <method name="getClass"
- return="java.lang.Class&lt;?&gt;"
+ return="java.lang.Class&lt;? extends java.lang.Object&gt;"
  abstract="false"
  native="true"
  synchronized="false"
@@ -276588,9 +276643,9 @@
 >
 <parameter name="data" type="byte[]">
 </parameter>
-<parameter name="offset" type="int">
+<parameter name="start" type="int">
 </parameter>
-<parameter name="byteCount" type="int">
+<parameter name="length" type="int">
 </parameter>
 </constructor>
 <constructor name="String"
@@ -276604,9 +276659,9 @@
 </parameter>
 <parameter name="high" type="int">
 </parameter>
-<parameter name="offset" type="int">
+<parameter name="start" type="int">
 </parameter>
-<parameter name="byteCount" type="int">
+<parameter name="length" type="int">
 </parameter>
 </constructor>
 <constructor name="String"
@@ -276618,9 +276673,9 @@
 >
 <parameter name="data" type="byte[]">
 </parameter>
-<parameter name="offset" type="int">
+<parameter name="start" type="int">
 </parameter>
-<parameter name="byteCount" type="int">
+<parameter name="length" type="int">
 </parameter>
 <parameter name="charsetName" type="java.lang.String">
 </parameter>
@@ -276650,9 +276705,9 @@
 >
 <parameter name="data" type="byte[]">
 </parameter>
-<parameter name="offset" type="int">
+<parameter name="start" type="int">
 </parameter>
-<parameter name="byteCount" type="int">
+<parameter name="length" type="int">
 </parameter>
 <parameter name="charset" type="java.nio.charset.Charset">
 </parameter>
@@ -276688,9 +276743,9 @@
 >
 <parameter name="data" type="char[]">
 </parameter>
-<parameter name="offset" type="int">
+<parameter name="start" type="int">
 </parameter>
-<parameter name="charCount" type="int">
+<parameter name="length" type="int">
 </parameter>
 </constructor>
 <constructor name="String"
@@ -276710,7 +276765,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="stringBuffer" type="java.lang.StringBuffer">
+<parameter name="stringbuffer" type="java.lang.StringBuffer">
 </parameter>
 </constructor>
 <constructor name="String"
@@ -276734,7 +276789,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="stringBuilder" type="java.lang.StringBuilder">
+<parameter name="sb" type="java.lang.StringBuilder">
 </parameter>
 </constructor>
 <method name="charAt"
@@ -276786,9 +276841,9 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="start" type="int">
+<parameter name="beginIndex" type="int">
 </parameter>
-<parameter name="end" type="int">
+<parameter name="endIndex" type="int">
 </parameter>
 </method>
 <method name="compareTo"
