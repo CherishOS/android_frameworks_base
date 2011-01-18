@@ -102822,7 +102822,7 @@
 <parameter name="activity" type="android.app.Activity">
 </parameter>
 </method>
-<method name="disableNdefPushDispatch"
+<method name="disableForegroundNdefPush"
  return="void"
  abstract="false"
  native="false"
@@ -103103,17 +103103,6 @@
 >
 <implements name="android.nfc.technology.TagTechnology">
 </implements>
-<method name="checkConnected"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
 <method name="close"
  return="void"
  abstract="false"
@@ -103184,21 +103173,6 @@
 <exception name="IOException" type="java.io.IOException">
 </exception>
 </method>
-<method name="transceive"
- return="byte[]"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="data" type="byte[]">
-</parameter>
-<exception name="IOException" type="java.io.IOException">
-</exception>
-</method>
 </class>
 <class name="IsoDep"
  extends="android.nfc.technology.BasicTagTechnology"
@@ -103208,22 +103182,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="IsoDep"
- type="android.nfc.technology.IsoDep"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="adapter" type="android.nfc.NfcAdapter">
-</parameter>
-<parameter name="tag" type="android.nfc.Tag">
-</parameter>
-<parameter name="extras" type="android.os.Bundle">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</constructor>
 <method name="getHiLayerResponse"
  return="byte[]"
  abstract="false"
@@ -103246,6 +103204,21 @@
  visibility="public"
 >
 </method>
+<method name="transceive"
+ return="byte[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="byte[]">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
 </class>
 <class name="MifareClassic"
  extends="android.nfc.technology.BasicTagTechnology"
@@ -103255,22 +103228,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="MifareClassic"
- type="android.nfc.technology.MifareClassic"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="adapter" type="android.nfc.NfcAdapter">
-</parameter>
-<parameter name="tag" type="android.nfc.Tag">
-</parameter>
-<parameter name="extras" type="android.os.Bundle">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</constructor>
 <method name="authenticateBlock"
  return="boolean"
  abstract="false"
@@ -103463,6 +103420,21 @@
 <exception name="IOException" type="java.io.IOException">
 </exception>
 </method>
+<method name="transceive"
+ return="byte[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="byte[]">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
 <method name="transfer"
  return="void"
  abstract="false"
@@ -103613,17 +103585,6 @@
  visibility="public"
 >
 </field>
-<field name="TYPE_DESFIRE"
- type="int"
- transient="false"
- volatile="false"
- value="3"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
 <field name="TYPE_PLUS"
  type="int"
  transient="false"
@@ -103640,17 +103601,6 @@
  transient="false"
  volatile="false"
  value="2"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="TYPE_ULTRALIGHT"
- type="int"
- transient="false"
- volatile="false"
- value="4"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -103677,22 +103627,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="MifareUltralight"
- type="android.nfc.technology.MifareUltralight"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="adapter" type="android.nfc.NfcAdapter">
-</parameter>
-<parameter name="tag" type="android.nfc.Tag">
-</parameter>
-<parameter name="extras" type="android.os.Bundle">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</constructor>
 <method name="getType"
  return="int"
  abstract="false"
@@ -103714,12 +103648,12 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="block" type="int">
+<parameter name="page" type="int">
 </parameter>
 <exception name="IOException" type="java.io.IOException">
 </exception>
 </method>
-<method name="readOTP"
+<method name="transceive"
  return="byte[]"
  abstract="false"
  native="false"
@@ -103729,21 +103663,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<exception name="IOException" type="java.io.IOException">
-</exception>
-</method>
-<method name="writeBlock"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="block" type="int">
-</parameter>
 <parameter name="data" type="byte[]">
 </parameter>
 <exception name="IOException" type="java.io.IOException">
@@ -103759,7 +103678,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="block" type="int">
+<parameter name="page" type="int">
 </parameter>
 <parameter name="data" type="byte[]">
 </parameter>
@@ -103830,21 +103749,6 @@
  visibility="public"
 >
 </method>
-<method name="getExtraNdefMessage"
- return="android.nfc.NdefMessage[]"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<exception name="FormatException" type="android.nfc.FormatException">
-</exception>
-<exception name="IOException" type="java.io.IOException">
-</exception>
-</method>
 <method name="getMaxSize"
  return="int"
  abstract="false"
@@ -103903,25 +103807,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<exception name="IOException" type="java.io.IOException">
-</exception>
-</method>
-<method name="writeExtraNdefMessage"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="i" type="int">
-</parameter>
-<parameter name="msg" type="android.nfc.NdefMessage">
-</parameter>
-<exception name="FormatException" type="android.nfc.FormatException">
-</exception>
 <exception name="IOException" type="java.io.IOException">
 </exception>
 </method>
@@ -104043,22 +103928,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="NfcA"
- type="android.nfc.technology.NfcA"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="adapter" type="android.nfc.NfcAdapter">
-</parameter>
-<parameter name="tag" type="android.nfc.Tag">
-</parameter>
-<parameter name="extras" type="android.os.Bundle">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</constructor>
 <method name="getAtqa"
  return="byte[]"
  abstract="false"
@@ -104081,6 +103950,21 @@
  visibility="public"
 >
 </method>
+<method name="transceive"
+ return="byte[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="byte[]">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
 </class>
 <class name="NfcB"
  extends="android.nfc.technology.BasicTagTechnology"
@@ -104090,22 +103974,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="NfcB"
- type="android.nfc.technology.NfcB"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="adapter" type="android.nfc.NfcAdapter">
-</parameter>
-<parameter name="tag" type="android.nfc.Tag">
-</parameter>
-<parameter name="extras" type="android.os.Bundle">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</constructor>
 <method name="getApplicationData"
  return="byte[]"
  abstract="false"
@@ -104128,6 +103996,21 @@
  visibility="public"
 >
 </method>
+<method name="transceive"
+ return="byte[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="byte[]">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
 </class>
 <class name="NfcF"
  extends="android.nfc.technology.BasicTagTechnology"
@@ -104137,22 +104020,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="NfcF"
- type="android.nfc.technology.NfcF"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="adapter" type="android.nfc.NfcAdapter">
-</parameter>
-<parameter name="tag" type="android.nfc.Tag">
-</parameter>
-<parameter name="extras" type="android.os.Bundle">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</constructor>
 <method name="getManufacturer"
  return="byte[]"
  abstract="false"
@@ -104175,6 +104042,21 @@
  visibility="public"
 >
 </method>
+<method name="transceive"
+ return="byte[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="byte[]">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
+</method>
 </class>
 <class name="NfcV"
  extends="android.nfc.technology.BasicTagTechnology"
@@ -104184,22 +104066,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="NfcV"
- type="android.nfc.technology.NfcV"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="adapter" type="android.nfc.NfcAdapter">
-</parameter>
-<parameter name="tag" type="android.nfc.Tag">
-</parameter>
-<parameter name="extras" type="android.os.Bundle">
-</parameter>
-<exception name="RemoteException" type="android.os.RemoteException">
-</exception>
-</constructor>
 <method name="getDsfId"
  return="byte"
  abstract="false"
@@ -104221,6 +104087,21 @@
  deprecated="not deprecated"
  visibility="public"
 >
+</method>
+<method name="transceive"
+ return="byte[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="byte[]">
+</parameter>
+<exception name="IOException" type="java.io.IOException">
+</exception>
 </method>
 </class>
 <interface name="TagTechnology"
