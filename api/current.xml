@@ -118781,7 +118781,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<method name="authenticateBlock"
+<method name="authenticateSectorWithKeyA"
  return="boolean"
  abstract="false"
  native="false"
@@ -118791,16 +118791,14 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="block" type="int">
+<parameter name="sectorIndex" type="int">
 </parameter>
 <parameter name="key" type="byte[]">
-</parameter>
-<parameter name="keyA" type="boolean">
 </parameter>
 <exception name="IOException" type="java.io.IOException">
 </exception>
 </method>
-<method name="authenticateSector"
+<method name="authenticateSectorWithKeyB"
  return="boolean"
  abstract="false"
  native="false"
@@ -118810,14 +118808,25 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="sector" type="int">
+<parameter name="sectorIndex" type="int">
 </parameter>
 <parameter name="key" type="byte[]">
 </parameter>
-<parameter name="keyA" type="boolean">
-</parameter>
 <exception name="IOException" type="java.io.IOException">
 </exception>
+</method>
+<method name="blockToSector"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="blockIndex" type="int">
+</parameter>
 </method>
 <method name="decrement"
  return="void"
@@ -118829,7 +118838,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="block" type="int">
+<parameter name="blockIndex" type="int">
 </parameter>
 <exception name="IOException" type="java.io.IOException">
 </exception>
@@ -118857,7 +118866,18 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="sector" type="int">
+</method>
+<method name="getBlockCountInSector"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="sectorIndex" type="int">
 </parameter>
 </method>
 <method name="getSectorCount"
@@ -118871,31 +118891,7 @@
  visibility="public"
 >
 </method>
-<method name="getSectorSize"
- return="int"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="sector" type="int">
-</parameter>
-</method>
 <method name="getSize"
- return="int"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="getTotalBlockCount"
  return="int"
  abstract="false"
  native="false"
@@ -118927,35 +118923,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="block" type="int">
-</parameter>
-<exception name="IOException" type="java.io.IOException">
-</exception>
-</method>
-<method name="isEmulated"
- return="boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="readBlock"
- return="byte[]"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="sector" type="int">
-</parameter>
-<parameter name="block" type="int">
+<parameter name="blockIndex" type="int">
 </parameter>
 <exception name="IOException" type="java.io.IOException">
 </exception>
@@ -118970,7 +118938,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="block" type="int">
+<parameter name="blockIndex" type="int">
 </parameter>
 <exception name="IOException" type="java.io.IOException">
 </exception>
@@ -118985,10 +118953,23 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="block" type="int">
+<parameter name="blockIndex" type="int">
 </parameter>
 <exception name="IOException" type="java.io.IOException">
 </exception>
+</method>
+<method name="sectorToBlock"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="sectorIndex" type="int">
+</parameter>
 </method>
 <method name="transceive"
  return="byte[]"
@@ -119015,7 +118996,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="block" type="int">
+<parameter name="blockIndex" type="int">
 </parameter>
 <exception name="IOException" type="java.io.IOException">
 </exception>
@@ -119030,32 +119011,24 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="block" type="int">
+<parameter name="blockIndex" type="int">
 </parameter>
 <parameter name="data" type="byte[]">
 </parameter>
 <exception name="IOException" type="java.io.IOException">
 </exception>
 </method>
-<method name="writeBlock"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
+<field name="BLOCK_SIZE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="16"
+ static="true"
+ final="true"
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="sector" type="int">
-</parameter>
-<parameter name="block" type="int">
-</parameter>
-<parameter name="data" type="byte[]">
-</parameter>
-<exception name="IOException" type="java.io.IOException">
-</exception>
-</method>
+</field>
 <field name="KEY_DEFAULT"
  type="byte[]"
  transient="false"
@@ -119133,7 +119106,7 @@
  visibility="public"
 >
 </field>
-<field name="SIZE_UNKNOWN"
+<field name="TYPE_CLASSIC"
  type="int"
  transient="false"
  volatile="false"
@@ -119144,11 +119117,11 @@
  visibility="public"
 >
 </field>
-<field name="TYPE_CLASSIC"
+<field name="TYPE_OTHER"
  type="int"
  transient="false"
  volatile="false"
- value="0"
+ value="-1"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -119171,17 +119144,6 @@
  transient="false"
  volatile="false"
  value="2"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="TYPE_UNKNOWN"
- type="int"
- transient="false"
- volatile="false"
- value="5"
  static="true"
  final="true"
  deprecated="not deprecated"
