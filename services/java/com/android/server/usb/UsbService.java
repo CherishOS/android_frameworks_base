@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.android.server;
+package com.android.server.usb;
 
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.hardware.IUsbManager;
 import android.hardware.UsbAccessory;
 import android.hardware.UsbConstants;
@@ -27,6 +28,7 @@ import android.hardware.UsbEndpoint;
 import android.hardware.UsbInterface;
 import android.hardware.UsbManager;
 import android.net.Uri;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -38,10 +40,13 @@ import android.util.Log;
 import android.util.Slog;
 
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * UsbService monitors for changes to USB state.
@@ -50,7 +55,7 @@ import java.util.HashMap;
  * Accessory mode is a special case of USB device mode, where the android device is
  * connected to a USB host that supports the android accessory protocol.
  */
-class UsbService extends IUsbManager.Stub {
+public class UsbService extends IUsbManager.Stub {
     private static final String TAG = UsbService.class.getSimpleName();
     private static final boolean LOG = false;
 
@@ -102,6 +107,7 @@ class UsbService extends IUsbManager.Stub {
 
     private final Context mContext;
     private final Object mLock = new Object();
+    private final UsbDeviceSettingsManager mDeviceManager;
 
     /*
      * Handles USB function enable/disable events (device mode)
@@ -139,11 +145,9 @@ class UsbService extends IUsbManager.Stub {
         if (enteringAccessoryMode) {
             String[] strings = nativeGetAccessoryStrings();
             if (strings != null) {
-                Log.d(TAG, "entering USB accessory mode");
                 mCurrentAccessory = new UsbAccessory(strings);
-                Intent intent = new Intent(UsbManager.ACTION_USB_ACCESSORY_ATTACHED);
-                intent.putExtra(UsbManager.EXTRA_ACCESSORY, mCurrentAccessory);
-                mContext.sendBroadcast(intent);
+                Log.d(TAG, "entering USB accessory mode: " + mCurrentAccessory);
+                mDeviceManager.accessoryAttached(mCurrentAccessory);
             } else {
                 Log.e(TAG, "nativeGetAccessoryStrings failed");
             }
@@ -170,7 +174,7 @@ class UsbService extends IUsbManager.Stub {
                             mConnected = intState;
                             // trigger an Intent broadcast
                             if (mSystemReady) {
-                                // debounce disconnects
+                                // debounce disconnects to avoid problems bringing up USB tethering
                                 update(mConnected == 0);
                             }
                         } else if ("usb_configuration".equals(name)) {
@@ -202,6 +206,8 @@ class UsbService extends IUsbManager.Stub {
 
     public UsbService(Context context) {
         mContext = context;
+        mDeviceManager = new UsbDeviceSettingsManager(context);
+
         mHostBlacklist = context.getResources().getStringArray(
                 com.android.internal.R.array.config_usbHostBlacklist);
 
@@ -345,11 +351,7 @@ class UsbService extends IUsbManager.Stub {
             UsbDevice device = new UsbDevice(deviceName, vendorID, productID,
                     deviceClass, deviceSubclass, deviceProtocol, interfaces);
             mDevices.put(deviceName, device);
-
-            Intent intent = new Intent(UsbManager.ACTION_USB_DEVICE_ATTACHED);
-            intent.putExtra(UsbManager.EXTRA_DEVICE, device);
-            Log.d(TAG, "usbDeviceAdded, sending " + intent);
-            mContext.sendBroadcast(intent);
+            mDeviceManager.deviceAttached(device);
         }
     }
 
@@ -358,10 +360,7 @@ class UsbService extends IUsbManager.Stub {
         synchronized (mLock) {
             UsbDevice device = mDevices.remove(deviceName);
             if (device != null) {
-                Intent intent = new Intent(UsbManager.ACTION_USB_DEVICE_DETACHED);
-                intent.putExtra(UsbManager.EXTRA_DEVICE, device);
-                Log.d(TAG, "usbDeviceRemoved, sending " + intent);
-                mContext.sendBroadcast(intent);
+                mDeviceManager.deviceDetached(device);
             }
         }
     }
@@ -377,7 +376,7 @@ class UsbService extends IUsbManager.Stub {
         new Thread(null, runnable, "UsbService host thread").start();
     }
 
-    void systemReady() {
+    public void systemReady() {
         synchronized (mLock) {
             if (mContext.getResources().getBoolean(
                     com.android.internal.R.bool.config_hasUsbHostSupport)) {
@@ -402,7 +401,6 @@ class UsbService extends IUsbManager.Stub {
 
     /* Returns a list of all currently attached USB devices (host mdoe) */
     public void getDeviceList(Bundle devices) {
-        mContext.enforceCallingOrSelfPermission(android.Manifest.permission.ACCESS_USB, null);
         synchronized (mLock) {
             for (String name : mDevices.keySet()) {
                 devices.putParcelable(name, mDevices.get(name));
@@ -412,28 +410,85 @@ class UsbService extends IUsbManager.Stub {
 
     /* Opens the specified USB device (host mode) */
     public ParcelFileDescriptor openDevice(String deviceName) {
-        if (isBlackListed(deviceName)) {
-            throw new SecurityException("USB device is on a restricted bus");
+        synchronized (mLock) {
+            if (isBlackListed(deviceName)) {
+                throw new SecurityException("USB device is on a restricted bus");
+            }
+            UsbDevice device = mDevices.get(deviceName);
+            if (device == null) {
+                // if it is not in mDevices, it either does not exist or is blacklisted
+                throw new IllegalArgumentException(
+                        "device " + deviceName + " does not exist or is restricted");
+            }
+            mDeviceManager.checkPermission(device);
+            return nativeOpenDevice(deviceName);
         }
-        mContext.enforceCallingOrSelfPermission(android.Manifest.permission.ACCESS_USB, null);
-        if (mDevices.get(deviceName) == null) {
-            // if it is not in mDevices, it either does not exist or is blacklisted
-            throw new IllegalArgumentException(
-                    "device " + deviceName + " does not exist or is restricted");
-        }
-        return nativeOpenDevice(deviceName);
     }
 
     /* returns the currently attached USB accessory (device mode) */
     public UsbAccessory getCurrentAccessory() {
-        mContext.enforceCallingOrSelfPermission(android.Manifest.permission.ACCESS_USB, null);
-        return mCurrentAccessory;
+        synchronized (mLock) {
+            mDeviceManager.checkPermission(mCurrentAccessory);
+            return mCurrentAccessory;
+        }
     }
 
     /* opens the currently attached USB accessory (device mode) */
-    public ParcelFileDescriptor openAccessory() {
-        mContext.enforceCallingOrSelfPermission(android.Manifest.permission.ACCESS_USB, null);
-        return nativeOpenAccessory();
+    public ParcelFileDescriptor openAccessory(UsbAccessory accessory) {
+        synchronized (mLock) {
+            if (mCurrentAccessory == null) {
+                throw new IllegalArgumentException("no accessory attached");
+            }
+            if (!mCurrentAccessory.equals(accessory)) {
+                Log.e(TAG, accessory.toString() + " does not match current accessory "
+                        + mCurrentAccessory);
+                throw new IllegalArgumentException("accessory not attached");
+            }
+            mDeviceManager.checkPermission(mCurrentAccessory);
+            return nativeOpenAccessory();
+        }
+    }
+
+    public void setDevicePackage(UsbDevice device, String packageName) {
+        synchronized (mLock) {
+            mContext.enforceCallingOrSelfPermission(android.Manifest.permission.MANAGE_USB, null);
+            mDeviceManager.setDevicePackage(device, packageName);
+        }
+    }
+
+    public void setAccessoryPackage(UsbAccessory accessory, String packageName) {
+        synchronized (mLock) {
+            mContext.enforceCallingOrSelfPermission(android.Manifest.permission.MANAGE_USB, null);
+            mDeviceManager.setAccessoryPackage(accessory, packageName);
+        }
+    }
+
+    public void grantDevicePermission(UsbDevice device, int uid) {
+        synchronized (mLock) {
+            mContext.enforceCallingOrSelfPermission(android.Manifest.permission.MANAGE_USB, null);
+            mDeviceManager.grantDevicePermission(device, uid);
+        }
+    }
+
+    public void grantAccessoryPermission(UsbAccessory accessory, int uid) {
+        synchronized (mLock) {
+            mContext.enforceCallingOrSelfPermission(android.Manifest.permission.MANAGE_USB, null);
+            mDeviceManager.grantAccessoryPermission(accessory, uid);
+        }
+    }
+
+    public boolean hasDefaults(String packageName, int uid) {
+        synchronized (mLock) {
+            mContext.enforceCallingOrSelfPermission(android.Manifest.permission.MANAGE_USB, null);
+            return mDeviceManager.hasDefaults(packageName, uid);
+        }
+    }
+
+    public void clearDefaults(String packageName, int uid) {
+        synchronized (mLock) {
+            mContext.enforceCallingOrSelfPermission(android.Manifest.permission.MANAGE_USB, null);
+            mDeviceManager.clearDefaults(packageName, uid);
+        }
     }
 
     /*
@@ -470,10 +525,7 @@ class UsbService extends IUsbManager.Stub {
                                     }
                                     mAccessoryRestoreFunctions.clear();
 
-                                    Intent intent = new Intent(
-                                            UsbManager.ACTION_USB_ACCESSORY_DETACHED);
-                                    intent.putExtra(UsbManager.EXTRA_ACCESSORY, mCurrentAccessory);
-                                    mContext.sendBroadcast(intent);
+                                    mDeviceManager.accessoryDetached(mCurrentAccessory);
                                     mCurrentAccessory = null;
 
                                     // this will cause an immediate reset of the USB bus,
@@ -512,6 +564,42 @@ class UsbService extends IUsbManager.Stub {
             }
         }
     };
+
+    @Override
+    public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+        if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.DUMP)
+                != PackageManager.PERMISSION_GRANTED) {
+            pw.println("Permission Denial: can't dump UsbManager from from pid="
+                    + Binder.getCallingPid()
+                    + ", uid=" + Binder.getCallingUid());
+            return;
+        }
+
+        synchronized (mLock) {
+            pw.println("USB Manager State:");
+
+            pw.println("  USB Device State:");
+            pw.print("    Enabled Functions: ");
+            for (int i = 0; i < mEnabledFunctions.size(); i++) {
+                pw.print(mEnabledFunctions.get(i) + " ");
+            }
+            pw.println("");
+            pw.print("    Disabled Functions: ");
+            for (int i = 0; i < mDisabledFunctions.size(); i++) {
+                pw.print(mDisabledFunctions.get(i) + " ");
+            }
+            pw.println("");
+            pw.println("    mConnected: " + mConnected + ", mConfiguration: " + mConfiguration);
+
+            pw.println("  USB Host State:");
+            for (String name : mDevices.keySet()) {
+                pw.println("    " + name + ": " + mDevices.get(name));
+            }
+            pw.println("  mCurrentAccessory: " + mCurrentAccessory);
+
+            mDeviceManager.dump(fd, pw);
+        }
+    }
 
     // host support
     private native void monitorUsbHostBus();
