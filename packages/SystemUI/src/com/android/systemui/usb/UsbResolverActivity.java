@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.server.usb;
+package com.android.systemui.usb;
 
 import com.android.internal.app.ResolverActivity;
 
@@ -50,7 +50,6 @@ public class UsbResolverActivity extends ResolverActivity {
         }
         Intent target = (Intent)targetParcelable;
         ArrayList<ResolveInfo> rList = intent.getParcelableArrayListExtra(EXTRA_RESOLVE_INFOS);
-        Log.d(TAG, "rList.size() " + rList.size());
         CharSequence title = getResources().getText(com.android.internal.R.string.chooseUsbActivity);
         super.onCreate(savedInstanceState, target, title, null, rList,
                 true, /* Set alwaysUseOption to true to enable "always use this app" checkbox. */
