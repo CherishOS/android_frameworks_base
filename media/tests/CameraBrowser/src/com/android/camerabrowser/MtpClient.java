@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.mtp;
+package com.android.camerabrowser;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -23,8 +23,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.usb.UsbConstants;
 import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
+import android.mtp.MtpDevice;
+import android.mtp.MtpDeviceInfo;
+import android.mtp.MtpObjectInfo;
+import android.mtp.MtpStorageInfo;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
@@ -168,10 +173,13 @@ public class MtpClient {
             if (!mUsbManager.hasPermission(usbDevice)) {
                 mUsbManager.requestPermission(usbDevice, mPermissionIntent);
             } else {
-                MtpDevice mtpDevice = new MtpDevice(usbDevice);
-                if (mtpDevice.open(mUsbManager)) {
-                    mDevices.put(usbDevice.getDeviceName(), mtpDevice);
-                    return mtpDevice;
+                UsbDeviceConnection connection = mUsbManager.openDevice(usbDevice);
+                if (connection != null) {
+                    MtpDevice mtpDevice = new MtpDevice(usbDevice);
+                    if (mtpDevice.open(connection)) {
+                        mDevices.put(usbDevice.getDeviceName(), mtpDevice);
+                        return mtpDevice;
+                    }
                 }
             }
         }
