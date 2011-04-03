@@ -267728,7 +267728,7 @@
  abstract="true"
  static="false"
  final="false"
- deprecated="not deprecated"
+ deprecated="deprecated"
  visibility="public"
 >
 <implements name="java.lang.annotation.Annotation">
@@ -267739,7 +267739,7 @@
  abstract="true"
  static="false"
  final="false"
- deprecated="not deprecated"
+ deprecated="deprecated"
  visibility="public"
 >
 <implements name="java.lang.annotation.Annotation">
@@ -270824,8 +270824,46 @@
 </package>
 <package name="dalvik.system"
 >
-<class name="DexClassLoader"
+<class name="BaseDexClassLoader"
  extends="java.lang.ClassLoader"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="BaseDexClassLoader"
+ type="dalvik.system.BaseDexClassLoader"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="dexPath" type="java.lang.String">
+</parameter>
+<parameter name="optimizedDirectory" type="java.io.File">
+</parameter>
+<parameter name="libraryPath" type="java.lang.String">
+</parameter>
+<parameter name="parent" type="java.lang.ClassLoader">
+</parameter>
+</constructor>
+<method name="findLibrary"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+</method>
+</class>
+<class name="DexClassLoader"
+ extends="dalvik.system.BaseDexClassLoader"
  abstract="false"
  static="false"
  final="false"
@@ -270841,9 +270879,9 @@
 >
 <parameter name="dexPath" type="java.lang.String">
 </parameter>
-<parameter name="dexOutputDir" type="java.lang.String">
+<parameter name="optimizedDirectory" type="java.lang.String">
 </parameter>
-<parameter name="libPath" type="java.lang.String">
+<parameter name="libraryPath" type="java.lang.String">
 </parameter>
 <parameter name="parent" type="java.lang.ClassLoader">
 </parameter>
@@ -270969,7 +271007,7 @@
 </method>
 </class>
 <class name="PathClassLoader"
- extends="java.lang.ClassLoader"
+ extends="dalvik.system.BaseDexClassLoader"
  abstract="false"
  static="false"
  final="false"
@@ -270983,7 +271021,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="path" type="java.lang.String">
+<parameter name="dexPath" type="java.lang.String">
 </parameter>
 <parameter name="parent" type="java.lang.ClassLoader">
 </parameter>
@@ -270995,26 +271033,13 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="path" type="java.lang.String">
+<parameter name="dexPath" type="java.lang.String">
 </parameter>
-<parameter name="libPath" type="java.lang.String">
+<parameter name="libraryPath" type="java.lang.String">
 </parameter>
 <parameter name="parent" type="java.lang.ClassLoader">
 </parameter>
 </constructor>
-<method name="findLibrary"
- return="java.lang.String"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="libname" type="java.lang.String">
-</parameter>
-</method>
 </class>
 </package>
 <package name="java.awt.font"
@@ -273568,21 +273593,6 @@
 >
 <parameter name="buffer" type="byte[]">
 </parameter>
-<exception name="IOException" type="java.io.IOException">
-</exception>
-</method>
-<method name="read"
- return="int"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="buffer" type="byte[]">
-</parameter>
 <parameter name="offset" type="int">
 </parameter>
 <parameter name="length" type="int">
@@ -275886,7 +275896,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="b" type="byte[]">
+<parameter name="buffer" type="byte[]">
 </parameter>
 <exception name="IOException" type="java.io.IOException">
 </exception>
@@ -276422,8 +276432,6 @@
 >
 <exception name="IOException" type="java.io.IOException">
 </exception>
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </constructor>
 <constructor name="ObjectInputStream"
  type="java.io.ObjectInputStream"
@@ -276468,8 +276476,6 @@
 >
 <parameter name="enable" type="boolean">
 </parameter>
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </method>
 <method name="read"
  return="int"
@@ -277212,8 +277218,6 @@
 >
 <exception name="IOException" type="java.io.IOException">
 </exception>
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </constructor>
 <constructor name="ObjectOutputStream"
  type="java.io.ObjectOutputStream"
@@ -277295,8 +277299,6 @@
 >
 <parameter name="enable" type="boolean">
 </parameter>
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </method>
 <method name="putFields"
  return="java.io.ObjectOutputStream.PutField"
@@ -279042,7 +279044,7 @@
 >
 <parameter name="out" type="java.io.OutputStream">
 </parameter>
-<parameter name="autoflush" type="boolean">
+<parameter name="autoFlush" type="boolean">
 </parameter>
 </constructor>
 <constructor name="PrintStream"
@@ -279054,7 +279056,7 @@
 >
 <parameter name="out" type="java.io.OutputStream">
 </parameter>
-<parameter name="autoflush" type="boolean">
+<parameter name="autoFlush" type="boolean">
 </parameter>
 <parameter name="enc" type="java.lang.String">
 </parameter>
@@ -279140,7 +279142,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="csq" type="java.lang.CharSequence">
+<parameter name="charSequence" type="java.lang.CharSequence">
 </parameter>
 </method>
 <method name="append"
@@ -279153,7 +279155,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="csq" type="java.lang.CharSequence">
+<parameter name="charSequence" type="java.lang.CharSequence">
 </parameter>
 <parameter name="start" type="int">
 </parameter>
@@ -279224,7 +279226,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="charArray" type="char[]">
+<parameter name="chars" type="char[]">
 </parameter>
 </method>
 <method name="print"
@@ -279237,7 +279239,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="ch" type="char">
+<parameter name="c" type="char">
 </parameter>
 </method>
 <method name="print"
@@ -279250,7 +279252,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="dnum" type="double">
+<parameter name="d" type="double">
 </parameter>
 </method>
 <method name="print"
@@ -279263,7 +279265,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="fnum" type="float">
+<parameter name="f" type="float">
 </parameter>
 </method>
 <method name="print"
@@ -279276,7 +279278,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="inum" type="int">
+<parameter name="i" type="int">
 </parameter>
 </method>
 <method name="print"
@@ -279289,7 +279291,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="lnum" type="long">
+<parameter name="l" type="long">
 </parameter>
 </method>
 <method name="print"
@@ -279302,7 +279304,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="obj" type="java.lang.Object">
+<parameter name="o" type="java.lang.Object">
 </parameter>
 </method>
 <method name="print"
@@ -279328,7 +279330,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="bool" type="boolean">
+<parameter name="b" type="boolean">
 </parameter>
 </method>
 <method name="printf"
@@ -279384,7 +279386,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="charArray" type="char[]">
+<parameter name="chars" type="char[]">
 </parameter>
 </method>
 <method name="println"
@@ -279397,7 +279399,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="ch" type="char">
+<parameter name="c" type="char">
 </parameter>
 </method>
 <method name="println"
@@ -279410,7 +279412,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="dnum" type="double">
+<parameter name="d" type="double">
 </parameter>
 </method>
 <method name="println"
@@ -279423,7 +279425,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="fnum" type="float">
+<parameter name="f" type="float">
 </parameter>
 </method>
 <method name="println"
@@ -279436,7 +279438,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="inum" type="int">
+<parameter name="i" type="int">
 </parameter>
 </method>
 <method name="println"
@@ -279449,7 +279451,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="lnum" type="long">
+<parameter name="l" type="long">
 </parameter>
 </method>
 <method name="println"
@@ -279462,7 +279464,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="obj" type="java.lang.Object">
+<parameter name="o" type="java.lang.Object">
 </parameter>
 </method>
 <method name="println"
@@ -279488,7 +279490,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="bool" type="boolean">
+<parameter name="b" type="boolean">
 </parameter>
 </method>
 <method name="setError"
@@ -279530,7 +279532,7 @@
 >
 <parameter name="out" type="java.io.OutputStream">
 </parameter>
-<parameter name="autoflush" type="boolean">
+<parameter name="autoFlush" type="boolean">
 </parameter>
 </constructor>
 <constructor name="PrintWriter"
@@ -279552,7 +279554,7 @@
 >
 <parameter name="wr" type="java.io.Writer">
 </parameter>
-<parameter name="autoflush" type="boolean">
+<parameter name="autoFlush" type="boolean">
 </parameter>
 </constructor>
 <constructor name="PrintWriter"
@@ -279857,7 +279859,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="charArray" type="char[]">
+<parameter name="chars" type="char[]">
 </parameter>
 </method>
 <method name="println"
@@ -279870,7 +279872,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="ch" type="char">
+<parameter name="c" type="char">
 </parameter>
 </method>
 <method name="println"
@@ -279883,7 +279885,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="dnum" type="double">
+<parameter name="d" type="double">
 </parameter>
 </method>
 <method name="println"
@@ -279896,7 +279898,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="fnum" type="float">
+<parameter name="f" type="float">
 </parameter>
 </method>
 <method name="println"
@@ -279909,7 +279911,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="inum" type="int">
+<parameter name="i" type="int">
 </parameter>
 </method>
 <method name="println"
@@ -279922,7 +279924,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="lnum" type="long">
+<parameter name="l" type="long">
 </parameter>
 </method>
 <method name="println"
@@ -279961,7 +279963,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="bool" type="boolean">
+<parameter name="b" type="boolean">
 </parameter>
 </method>
 <method name="setError"
@@ -280329,9 +280331,9 @@
 >
 <parameter name="buffer" type="byte[]">
 </parameter>
-<parameter name="offset" type="int">
+<parameter name="byteOffset" type="int">
 </parameter>
-<parameter name="count" type="int">
+<parameter name="byteCount" type="int">
 </parameter>
 <exception name="IOException" type="java.io.IOException">
 </exception>
@@ -280598,9 +280600,9 @@
 >
 <parameter name="buffer" type="byte[]">
 </parameter>
-<parameter name="offset" type="int">
+<parameter name="byteOffset" type="int">
 </parameter>
-<parameter name="count" type="int">
+<parameter name="byteCount" type="int">
 </parameter>
 <exception name="IOException" type="java.io.IOException">
 </exception>
@@ -286057,7 +286059,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="annotationClass" type="java.lang.Class&lt;A&gt;">
+<parameter name="annotationType" type="java.lang.Class&lt;A&gt;">
 </parameter>
 </method>
 <method name="getAnnotations"
@@ -286129,8 +286131,6 @@
 </parameter>
 <exception name="NoSuchMethodException" type="java.lang.NoSuchMethodException">
 </exception>
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </method>
 <method name="getConstructors"
  return="java.lang.reflect.Constructor&lt;?&gt;[]"
@@ -286142,8 +286142,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </method>
 <method name="getDeclaredAnnotations"
  return="java.lang.annotation.Annotation[]"
@@ -286166,8 +286164,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </method>
 <method name="getDeclaredConstructor"
  return="java.lang.reflect.Constructor&lt;T&gt;"
@@ -286183,8 +286179,6 @@
 </parameter>
 <exception name="NoSuchMethodException" type="java.lang.NoSuchMethodException">
 </exception>
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </method>
 <method name="getDeclaredConstructors"
  return="java.lang.reflect.Constructor&lt;?&gt;[]"
@@ -286196,8 +286190,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </method>
 <method name="getDeclaredField"
  return="java.lang.reflect.Field"
@@ -286213,8 +286205,6 @@
 </parameter>
 <exception name="NoSuchFieldException" type="java.lang.NoSuchFieldException">
 </exception>
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </method>
 <method name="getDeclaredFields"
  return="java.lang.reflect.Field[]"
@@ -286226,8 +286216,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </method>
 <method name="getDeclaredMethod"
  return="java.lang.reflect.Method"
@@ -286245,8 +286233,6 @@
 </parameter>
 <exception name="NoSuchMethodException" type="java.lang.NoSuchMethodException">
 </exception>
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </method>
 <method name="getDeclaredMethods"
  return="java.lang.reflect.Method[]"
@@ -286258,8 +286244,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </method>
 <method name="getDeclaringClass"
  return="java.lang.Class&lt;?&gt;"
@@ -286330,8 +286314,6 @@
 </parameter>
 <exception name="NoSuchFieldException" type="java.lang.NoSuchFieldException">
 </exception>
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </method>
 <method name="getFields"
  return="java.lang.reflect.Field[]"
@@ -286343,8 +286325,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </method>
 <method name="getGenericInterfaces"
  return="java.lang.reflect.Type[]"
@@ -286395,8 +286375,6 @@
 </parameter>
 <exception name="NoSuchMethodException" type="java.lang.NoSuchMethodException">
 </exception>
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </method>
 <method name="getMethods"
  return="java.lang.reflect.Method[]"
@@ -286408,8 +286386,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </method>
 <method name="getModifiers"
  return="int"
@@ -286546,7 +286522,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="annotationClass" type="java.lang.Class&lt;? extends java.lang.annotation.Annotation&gt;">
+<parameter name="annotationType" type="java.lang.Class&lt;? extends java.lang.annotation.Annotation&gt;">
 </parameter>
 </method>
 <method name="isAnonymousClass"
@@ -289892,7 +289868,7 @@
 <method name="abs"
  return="double"
  abstract="false"
- native="false"
+ native="true"
  synchronized="false"
  static="true"
  final="false"
@@ -289905,7 +289881,7 @@
 <method name="abs"
  return="float"
  abstract="false"
- native="false"
+ native="true"
  synchronized="false"
  static="true"
  final="false"
@@ -289918,7 +289894,7 @@
 <method name="abs"
  return="int"
  abstract="false"
- native="false"
+ native="true"
  synchronized="false"
  static="true"
  final="false"
@@ -289931,7 +289907,7 @@
 <method name="abs"
  return="long"
  abstract="false"
- native="false"
+ native="true"
  synchronized="false"
  static="true"
  final="false"
@@ -290229,7 +290205,7 @@
 <method name="max"
  return="int"
  abstract="false"
- native="false"
+ native="true"
  synchronized="false"
  static="true"
  final="false"
@@ -290289,7 +290265,7 @@
 <method name="min"
  return="int"
  abstract="false"
- native="false"
+ native="true"
  synchronized="false"
  static="true"
  final="false"
@@ -291615,7 +291591,7 @@
 <method name="availableProcessors"
  return="int"
  abstract="false"
- native="true"
+ native="false"
  synchronized="false"
  static="false"
  final="false"
@@ -293931,7 +293907,7 @@
 <method name="charAt"
  return="char"
  abstract="false"
- native="false"
+ native="true"
  synchronized="false"
  static="false"
  final="false"
@@ -293985,7 +293961,7 @@
 <method name="compareTo"
  return="int"
  abstract="false"
- native="false"
+ native="true"
  synchronized="false"
  static="false"
  final="false"
@@ -294295,7 +294271,7 @@
 <method name="isEmpty"
  return="boolean"
  abstract="false"
- native="false"
+ native="true"
  synchronized="false"
  static="false"
  final="false"
@@ -294362,7 +294338,7 @@
 <method name="length"
  return="int"
  abstract="false"
- native="false"
+ native="true"
  synchronized="false"
  static="false"
  final="false"
@@ -298258,8 +298234,6 @@
 </parameter>
 <parameter name="flag" type="boolean">
 </parameter>
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </method>
 <method name="setAccessible"
  return="void"
@@ -298273,8 +298247,6 @@
 >
 <parameter name="flag" type="boolean">
 </parameter>
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 </method>
 </class>
 <interface name="AnnotatedElement"
@@ -298759,6 +298731,19 @@
 </implements>
 <implements name="java.lang.reflect.Member">
 </implements>
+<method name="getAnnotation"
+ return="A"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="annotationType" type="java.lang.Class&lt;A&gt;">
+</parameter>
+</method>
 <method name="getDeclaringClass"
  return="java.lang.Class&lt;T&gt;"
  abstract="false"
@@ -298939,6 +298924,19 @@
 </exception>
 <exception name="IllegalArgumentException" type="java.lang.IllegalArgumentException">
 </exception>
+</method>
+<method name="getAnnotation"
+ return="A"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="annotationType" type="java.lang.Class&lt;A&gt;">
+</parameter>
 </method>
 <method name="getBoolean"
  return="boolean"
@@ -299573,6 +299571,19 @@
 </implements>
 <implements name="java.lang.reflect.Member">
 </implements>
+<method name="getAnnotation"
+ return="A"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="annotationType" type="java.lang.Class&lt;A&gt;">
+</parameter>
+</method>
 <method name="getDeclaringClass"
  return="java.lang.Class&lt;?&gt;"
  abstract="false"
@@ -302101,7 +302112,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="val" type="java.lang.String">
+<parameter name="s" type="java.lang.String">
 </parameter>
 </constructor>
 <method name="getPrecision"
@@ -310239,7 +310250,7 @@
 >
 <parameter name="s" type="java.lang.String">
 </parameter>
-<parameter name="enc" type="java.lang.String">
+<parameter name="charsetName" type="java.lang.String">
 </parameter>
 <exception name="UnsupportedEncodingException" type="java.io.UnsupportedEncodingException">
 </exception>
@@ -310271,9 +310282,9 @@
  deprecated="not deprecated"
  visibility="protected"
 >
-<parameter name="url1" type="java.net.URL">
+<parameter name="a" type="java.net.URL">
 </parameter>
-<parameter name="url2" type="java.net.URL">
+<parameter name="b" type="java.net.URL">
 </parameter>
 </method>
 <method name="getDefaultPort"
@@ -310389,9 +310400,9 @@
  deprecated="not deprecated"
  visibility="protected"
 >
-<parameter name="url1" type="java.net.URL">
+<parameter name="a" type="java.net.URL">
 </parameter>
-<parameter name="url2" type="java.net.URL">
+<parameter name="b" type="java.net.URL">
 </parameter>
 </method>
 <method name="setURL"
@@ -316814,7 +316825,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="newReplacement" type="java.lang.String">
+<parameter name="replacement" type="java.lang.String">
 </parameter>
 </method>
 <method name="replacement"
@@ -323442,7 +323453,7 @@
 >
 <parameter name="key" type="java.lang.String">
 </parameter>
-<parameter name="datnum" type="java.lang.String">
+<parameter name="value" type="java.lang.String">
 </parameter>
 </method>
 </class>
@@ -355502,7 +355513,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="nbits" type="int">
+<parameter name="bitCount" type="int">
 </parameter>
 </constructor>
 <method name="and"
@@ -355552,6 +355563,8 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<parameter name="index" type="int">
+</parameter>
 </method>
 <method name="clear"
  return="void"
@@ -355563,8 +355576,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="index" type="int">
-</parameter>
 </method>
 <method name="clear"
  return="void"
@@ -355747,7 +355758,7 @@
 >
 <parameter name="index" type="int">
 </parameter>
-<parameter name="val" type="boolean">
+<parameter name="state" type="boolean">
 </parameter>
 </method>
 <method name="set"
@@ -355764,6 +355775,8 @@
 </parameter>
 <parameter name="toIndex" type="int">
 </parameter>
+<parameter name="state" type="boolean">
+</parameter>
 </method>
 <method name="set"
  return="void"
@@ -355778,8 +355791,6 @@
 <parameter name="fromIndex" type="int">
 </parameter>
 <parameter name="toIndex" type="int">
-</parameter>
-<parameter name="val" type="boolean">
 </parameter>
 </method>
 <method name="size"
@@ -357939,9 +357950,9 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="object1" type="T">
+<parameter name="lhs" type="T">
 </parameter>
-<parameter name="object2" type="T">
+<parameter name="rhs" type="T">
 </parameter>
 </method>
 <method name="equals"
@@ -363481,7 +363492,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="writer" type="java.io.PrintWriter">
+<parameter name="out" type="java.io.PrintWriter">
 </parameter>
 </method>
 <method name="load"
@@ -379260,7 +379271,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="s" type="java.lang.String">
+<parameter name="name" type="java.lang.String">
 </parameter>
 </constructor>
 <field name="CLASS_PATH"
@@ -380761,8 +380772,6 @@
 >
 <parameter name="encoding" type="java.lang.String">
 </parameter>
-<exception name="SecurityException" type="java.lang.SecurityException">
-</exception>
 <exception name="UnsupportedEncodingException" type="java.io.UnsupportedEncodingException">
 </exception>
 </method>
