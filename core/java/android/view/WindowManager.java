@@ -2032,6 +2032,12 @@ public interface WindowManager extends ViewManager {
          */
         public static final int PRIVATE_FLAG_FIT_INSETS_CONTROLLED = 0x10000000;
 
+	/**
+         * Window flag: Overrides default power key behavior
+         * @hide
+         */
+        public static final int PRIVATE_FLAG_PREVENT_POWER_KEY = 0x20000000;
+
         /**
          * An internal annotation for flags that can be specified to {@link #softInputMode}.
          *
