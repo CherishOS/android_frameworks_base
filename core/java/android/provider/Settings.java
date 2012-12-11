@@ -6193,6 +6193,13 @@ public final class Settings {
         public static final String OMNI_CUSTOM_FP_ICON_ENABLED = "custom_fp_icon_enabled";
 
         /**
+         * boolean value. toggles using arrow key locations on nav bar
+         * as left and right dpad keys
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_MENU_ARROW_KEYS = "navigation_bar_menu_arrow_keys";
+
+        /**
          * Force show navigation bar setting.
          * @hide
          */
