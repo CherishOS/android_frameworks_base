@@ -1470,6 +1470,8 @@ package android {
     field public static final int vendor = 16843751; // 0x10103e7
     field public static final int version = 16844057; // 0x1010519
     field public static final int versionCode = 16843291; // 0x101021b
+    field public static final int versionCodeMajor = 16844150; // 0x1010576
+    field public static final int versionMajor = 16844151; // 0x1010577
     field public static final int versionName = 16843292; // 0x101021c
     field public static final int verticalCorrection = 16843322; // 0x101023a
     field public static final int verticalDivider = 16843054; // 0x101012e
@@ -6766,6 +6768,7 @@ package android.app.backup {
     method public void onFullBackup(android.app.backup.FullBackupDataOutput) throws java.io.IOException;
     method public void onQuotaExceeded(long, long);
     method public abstract void onRestore(android.app.backup.BackupDataInput, int, android.os.ParcelFileDescriptor) throws java.io.IOException;
+    method public void onRestore(android.app.backup.BackupDataInput, long, android.os.ParcelFileDescriptor) throws java.io.IOException;
     method public void onRestoreFile(android.os.ParcelFileDescriptor, long, java.io.File, int, long, long) throws java.io.IOException;
     method public void onRestoreFinished();
     field public static final int TYPE_DIRECTORY = 2; // 0x2
@@ -10584,6 +10587,8 @@ package android.content.pm {
   public class PackageInfo implements android.os.Parcelable {
     ctor public PackageInfo();
     method public int describeContents();
+    method public long getLongVersionCode();
+    method public void setLongVersionCode(long);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.PackageInfo> CREATOR;
     field public static final int INSTALL_LOCATION_AUTO = 0; // 0x0
@@ -10613,7 +10618,7 @@ package android.content.pm {
     field public android.content.pm.Signature[] signatures;
     field public java.lang.String[] splitNames;
     field public int[] splitRevisionCodes;
-    field public int versionCode;
+    field public deprecated int versionCode;
     field public java.lang.String versionName;
   }
 
@@ -11128,9 +11133,10 @@ package android.content.pm {
     method public int describeContents();
     method public android.content.pm.VersionedPackage getDeclaringPackage();
     method public java.util.List<android.content.pm.VersionedPackage> getDependentPackages();
+    method public long getLongVersion();
     method public java.lang.String getName();
     method public int getType();
-    method public int getVersion();
+    method public deprecated int getVersion();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.SharedLibraryInfo> CREATOR;
     field public static final int TYPE_BUILTIN = 0; // 0x0
@@ -11224,9 +11230,11 @@ package android.content.pm {
 
   public final class VersionedPackage implements android.os.Parcelable {
     ctor public VersionedPackage(java.lang.String, int);
+    ctor public VersionedPackage(java.lang.String, long);
     method public int describeContents();
+    method public long getLongVersionCode();
     method public java.lang.String getPackageName();
-    method public int getVersionCode();
+    method public deprecated int getVersionCode();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.VersionedPackage> CREATOR;
   }
