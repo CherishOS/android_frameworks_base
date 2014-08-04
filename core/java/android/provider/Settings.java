@@ -5678,6 +5678,13 @@ public final class Settings {
         public static final String FINGERPRINT_WAKE_UNLOCK = "fingerprint_wake_unlock";
 
         /**
+         * Whether to scramble a pin unlock layout
+         * @hide
+         */
+        public static final String LOCKSCREEN_PIN_SCRAMBLE_LAYOUT =
+                "lockscreen_scramble_pin_layout";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
