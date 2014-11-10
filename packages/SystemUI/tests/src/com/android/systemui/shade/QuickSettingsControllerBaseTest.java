@@ -107,6 +107,7 @@ import com.android.systemui.statusbar.policy.ResourcesSplitShadeStateController;
 import com.android.systemui.statusbar.policy.data.repository.FakeDeviceProvisioningRepository;
 import com.android.systemui.user.domain.interactor.SelectedUserInteractor;
 import com.android.systemui.user.domain.interactor.UserSwitcherInteractor;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.kotlin.JavaAdapter;
 
 import dagger.Lazy;
@@ -175,8 +176,8 @@ public class QuickSettingsControllerBaseTest extends SysuiTestCase {
     @Mock protected UiEventLogger mUiEventLogger;
     @Mock protected CastController mCastController;
     @Mock protected UserSwitcherInteractor mUserSwitcherInteractor;
-    @Mock protected SelectedUserInteractor mSelectedUserInteractor;
-
+    @Mock protected SelectedUserInteractor mSelectedUserInteractor;r;
+    @Mock protected TunerService mTunerService;
     protected FakeDisableFlagsRepository mDisableFlagsRepository =
             new FakeDisableFlagsRepository();
     protected FakeKeyguardRepository mKeyguardRepository = new FakeKeyguardRepository();
@@ -384,7 +385,8 @@ public class QuickSettingsControllerBaseTest extends SysuiTestCase {
                 mActiveNotificationsInteractor,
                 new JavaAdapter(mTestScope.getBackgroundScope()),
                 mCastController,
-                splitShadeStateController
+                splitShadeStateController,
+                mTunerService
         );
         mQsController.init();
 
