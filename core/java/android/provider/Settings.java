@@ -6123,6 +6123,12 @@ public final class Settings {
         public static final String CLICK_PARTIAL_SCREENSHOT = "click_partial_screenshot";
 
         /**
+         * Swap volume buttons on rotation
+         * @hide
+         */
+        public static final String SWAP_VOLUME_KEYS_ON_ROTATION = "swap_volume_keys_on_rotation";
+
+        /**
          * IMPORTANT: If you add a new public settings you also have to add it to
          * PUBLIC_SETTINGS below. If the new setting is hidden you have to add
          * it to PRIVATE_SETTINGS below. Also add a validator that can validate
@@ -6534,6 +6540,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(TOUCHSCREEN_GESTURE_HAPTIC_FEEDBACK);
             PRIVATE_SETTINGS.add(HIGH_TOUCH_SENSITIVITY_ENABLE);
             PRIVATE_SETTINGS.add(CLICK_PARTIAL_SCREENSHOT);
+            PRIVATE_SETTINGS.add(SWAP_VOLUME_KEYS_ON_ROTATION);
         }
 
         /**
