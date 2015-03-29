@@ -5755,6 +5755,12 @@ public final class Settings {
          * @hide
          */
         public static final String DOZE_TRIGGER_DOUBLETAP = "doze_trigger_doubletap";
+		
+		/**
+         * Allow disable of screenshot shutter sound
+         * @hide
+         */
+        public static final String SCREENSHOT_SHUTTER_SOUND = "screenshot_shutter_sound";
 
         /**
          * Whether or not gaming mode is enabled.
