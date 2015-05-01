@@ -909,6 +909,17 @@ public final class DreamManagerService extends SystemService {
             }
         }
 
+        @Override // Binder call
+        public boolean isDozing() {
+            checkPermission(android.Manifest.permission.READ_DREAM_STATE);
+
+            final long ident = Binder.clearCallingIdentity();
+            try {
+                return isDozingInternal();
+            } finally {
+                Binder.restoreCallingIdentity(ident);
+            }
+        }
 
         @Override // Binder call
         public void dream() {
@@ -1041,6 +1052,10 @@ public final class DreamManagerService extends SystemService {
         @Override
         public void requestDream() {
             requestDreamInternal();
+        }
+
+        public boolean isDozing() {
+            return isDozingInternal();
         }
 
         @Override
