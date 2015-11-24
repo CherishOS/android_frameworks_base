@@ -4889,7 +4889,7 @@ public class UserManagerService extends IUserManager.Stub {
                     userInfo.creationTime = getCreationTime();
                     userInfo.partial = true;
                     userInfo.preCreated = preCreate;
-                    userInfo.lastLoggedInFingerprint = PackagePartitions.FINGERPRINT;
+                    userInfo.lastLoggedInFingerprint = Build.VERSION.INCREMENTAL;
                     if (userTypeDetails.hasBadge() && parentId != UserHandle.USER_NULL) {
                         userInfo.profileBadge = getFreeProfileBadgeLU(parentId, userType);
                     }
@@ -6218,9 +6218,9 @@ public class UserManagerService extends IUserManager.Stub {
         TimingsTraceAndSlog t = new TimingsTraceAndSlog();
         t.traceBegin("onBeforeStartUser-" + userId);
         final int userSerial = userInfo.serialNumber;
-        // Migrate only if build fingerprints mismatch
-        boolean migrateAppsData = !PackagePartitions.FINGERPRINT.equals(
-                userInfo.lastLoggedInFingerprint);
+        // Migrate only if needed
+        boolean migrateAppsData =
+                !Build.VERSION.INCREMENTAL.equals(userInfo.lastLoggedInFingerprint);
         t.traceBegin("prepareUserData");
         mUserDataPreparer.prepareUserData(userId, userSerial, StorageManager.FLAG_STORAGE_DE);
         t.traceEnd();
@@ -6249,9 +6249,9 @@ public class UserManagerService extends IUserManager.Stub {
             return;
         }
         final int userSerial = userInfo.serialNumber;
-        // Migrate only if build fingerprints mismatch
-        boolean migrateAppsData = !PackagePartitions.FINGERPRINT.equals(
-                userInfo.lastLoggedInFingerprint);
+        // Migrate only if needed
+        boolean migrateAppsData =
+                !Build.VERSION.INCREMENTAL.equals(userInfo.lastLoggedInFingerprint);
 
         final TimingsTraceAndSlog t = new TimingsTraceAndSlog();
         t.traceBegin("prepareUserData-" + userId);
@@ -6295,7 +6295,7 @@ public class UserManagerService extends IUserManager.Stub {
         if (now > EPOCH_PLUS_30_YEARS) {
             userData.info.lastLoggedInTime = now;
         }
-        userData.info.lastLoggedInFingerprint = PackagePartitions.FINGERPRINT;
+        userData.info.lastLoggedInFingerprint = Build.VERSION.INCREMENTAL;
         scheduleWriteUser(userId);
     }
 
