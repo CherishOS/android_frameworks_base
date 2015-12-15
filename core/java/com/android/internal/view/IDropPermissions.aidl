@@ -20,7 +20,7 @@ package com.android.internal.view;
  * Interface to allow a drop receiver to request permissions for URIs passed along with ClipData
  * contained in DragEvent.
  */
-interface IDropPermissionHolder {
-    void grant();
-    void revoke();
+interface IDropPermissions {
+    void take();
+    void release();
 }
