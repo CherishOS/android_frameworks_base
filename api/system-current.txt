@@ -6223,10 +6223,33 @@ package android.app.backup {
     method public java.lang.String getCurrentTransport();
     method public boolean isBackupEnabled();
     method public java.lang.String[] listAllTransports();
+    method public int requestBackup(java.lang.String[], android.app.backup.BackupObserver);
     method public int requestRestore(android.app.backup.RestoreObserver);
     method public java.lang.String selectBackupTransport(java.lang.String);
     method public void setAutoRestore(boolean);
     method public void setBackupEnabled(boolean);
+    field public static final int ERROR_AGENT_FAILURE = -1003; // 0xfffffc15
+    field public static final int ERROR_BACKUP_NOT_ALLOWED = -2001; // 0xfffff82f
+    field public static final int ERROR_PACKAGE_NOT_FOUND = -2002; // 0xfffff82e
+    field public static final int ERROR_TRANSPORT_ABORTED = -1000; // 0xfffffc18
+    field public static final int ERROR_TRANSPORT_PACKAGE_REJECTED = -1002; // 0xfffffc16
+    field public static final int SUCCESS = 0; // 0x0
+  }
+
+  public abstract class BackupObserver {
+    ctor public BackupObserver();
+    method public void backupFinished(int);
+    method public void onResult(java.lang.String, int);
+    method public void onUpdate(java.lang.String, android.app.backup.BackupProgress);
+  }
+
+  public class BackupProgress implements android.os.Parcelable {
+    ctor public BackupProgress(long, long);
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.app.backup.BackupProgress> CREATOR;
+    field public final long bytesExpected;
+    field public final long bytesTransferred;
   }
 
   public class BackupTransport {
@@ -6249,7 +6272,9 @@ package android.app.backup {
     method public int initializeDevice();
     method public java.lang.String name();
     method public android.app.backup.RestoreDescription nextRestorePackage();
+    method public int performBackup(android.content.pm.PackageInfo, android.os.ParcelFileDescriptor, int);
     method public int performBackup(android.content.pm.PackageInfo, android.os.ParcelFileDescriptor);
+    method public int performFullBackup(android.content.pm.PackageInfo, android.os.ParcelFileDescriptor, int);
     method public int performFullBackup(android.content.pm.PackageInfo, android.os.ParcelFileDescriptor);
     method public long requestBackupTime();
     method public long requestFullBackupTime();
@@ -6258,6 +6283,7 @@ package android.app.backup {
     method public java.lang.String transportDirName();
     field public static final int AGENT_ERROR = -1003; // 0xfffffc15
     field public static final int AGENT_UNKNOWN = -1004; // 0xfffffc14
+    field public static final int FLAG_USER_INITIATED = 1; // 0x1
     field public static final int NO_MORE_DATA = -1; // 0xffffffff
     field public static final int TRANSPORT_ERROR = -1000; // 0xfffffc18
     field public static final int TRANSPORT_NOT_INITIALIZED = -1001; // 0xfffffc17
