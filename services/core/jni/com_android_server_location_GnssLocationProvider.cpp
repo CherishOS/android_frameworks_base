@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#define LOG_TAG "GpsLocationProvider"
+#define LOG_TAG "GnssLocationProvider"
 
 #define LOG_NDEBUG 0
 
@@ -67,8 +67,13 @@ static const GpsMeasurementInterface* sGpsMeasurementInterface = NULL;
 static const GpsNavigationMessageInterface* sGpsNavigationMessageInterface = NULL;
 static const GnssConfigurationInterface* sGnssConfigurationInterface = NULL;
 
+#define MAX_SATELLITE_COUNT 512
+
+#define PRN_SHIFT_WIDTH 3
+
 // temporary storage for GPS callbacks
-static GpsSvStatus  sGpsSvStatus;
+static GnssSvInfo sGnssSvList[MAX_SATELLITE_COUNT];
+static size_t sGnssSvListSize;
 static const char* sNmeaString;
 static int sNmeaStringLength;
 
@@ -105,7 +110,50 @@ static void status_callback(GpsStatus* status)
 static void sv_status_callback(GpsSvStatus* sv_status)
 {
     JNIEnv* env = AndroidRuntime::getJNIEnv();
-    memcpy(&sGpsSvStatus, sv_status, sizeof(sGpsSvStatus));
+    size_t status_size = sv_status->size;
+    // Some drive doesn't set the size field correctly. Assume GpsSvStatus_v1 if
+    // it doesn't provide a valid size.
+    if (status_size == 0) {
+        status_size = sizeof(GpsSvStatus_v1);
+    }
+    if (sv_status->size == sizeof(GpsSvStatus_v2)) {
+        sGnssSvListSize = sv_status->gnss_sv_list_size;
+        // Cramp the list size
+        if (sGnssSvListSize > MAX_SATELLITE_COUNT) {
+            sGnssSvListSize = MAX_SATELLITE_COUNT;
+        }
+        // Copy GNSS SV info into sGnssSvList, if any.
+        if (sGnssSvListSize > 0 && sv_status->gnss_sv_list) {
+            memcpy(sGnssSvList, sv_status->gnss_sv_list, sizeof(GnssSvInfo) * sGnssSvListSize);
+        }
+    } else if (status_size == sizeof(GpsSvStatus_v1)) {
+        sGnssSvListSize = sv_status->num_svs;
+        uint32_t ephemeris_mask = sv_status->ephemeris_mask;
+        uint32_t almanac_mask = sv_status->almanac_mask;
+        uint32_t used_in_fix_mask = sv_status->used_in_fix_mask;
+        for (size_t i = 0; i < sGnssSvListSize; i++) {
+            GnssSvInfo& info = sGnssSvList[i];
+            info.constellation = GNSS_CONSTELLATION_GPS;
+            info.prn = sv_status->sv_list[i].prn;
+            info.snr = sv_status->sv_list[i].snr;
+            info.elevation = sv_status->sv_list[i].elevation;
+            info.azimuth = sv_status->sv_list[i].azimuth;
+            info.flags = GNSS_SV_FLAGS_NONE;
+            if ((ephemeris_mask & (1 << (info.prn - 1))) != 0) {
+                info.flags |= GNSS_SV_FLAGS_HAS_EPHEMERIS_DATA;
+            }
+            if ((almanac_mask & (1 << (info.prn - 1))) != 0) {
+                info.flags |= GNSS_SV_FLAGS_HAS_ALMANAC_DATA;
+            }
+            if ((used_in_fix_mask & (1 << (info.prn - 1))) != 0) {
+                info.flags |= GNSS_SV_FLAGS_USED_IN_FIX;
+            }
+        }
+    } else {
+        sGnssSvListSize = 0;
+        ALOGE("Invalid size of GpsSvStatus found: %zd.", status_size);
+        return;
+    }
     env->CallVoidMethod(mCallbacksObj, method_reportSvStatus);
     checkAndClearExceptionFromCallback(env, __FUNCTION__);
 }
@@ -162,6 +210,7 @@ GpsCallbacks sGpsCallbacks = {
     release_wakelock_callback,
     create_thread_callback,
     request_utc_time_callback,
+    NULL,
 };
 
 static void xtra_download_request_callback()
@@ -439,7 +488,7 @@ GpsGeofenceCallbacks sGpsGeofenceCallbacks = {
     create_thread_callback,
 };
 
-static void android_location_GpsLocationProvider_class_init_native(JNIEnv* env, jclass clazz) {
+static void android_location_GnssLocationProvider_class_init_native(JNIEnv* env, jclass clazz) {
     int err;
     hw_module_t* module;
 
@@ -509,13 +558,13 @@ static void android_location_GpsLocationProvider_class_init_native(JNIEnv* env, 
     }
 }
 
-static jboolean android_location_GpsLocationProvider_is_supported(
+static jboolean android_location_GnssLocationProvider_is_supported(
         JNIEnv* /* env */, jclass /* clazz */)
 {
     return (sGpsInterface != NULL) ?  JNI_TRUE : JNI_FALSE;
 }
 
-static jboolean android_location_GpsLocationProvider_is_agps_ril_supported(
+static jboolean android_location_GnssLocationProvider_is_agps_ril_supported(
         JNIEnv* /* env */, jclass /* clazz */)
 {
     return (sAGpsRilInterface != NULL) ? JNI_TRUE : JNI_FALSE;
@@ -527,7 +576,7 @@ static jboolean android_location_gpsLocationProvider_is_gnss_configuration_suppo
     return (sGnssConfigurationInterface != NULL) ? JNI_TRUE : JNI_FALSE;
 }
 
-static jboolean android_location_GpsLocationProvider_init(JNIEnv* env, jobject obj)
+static jboolean android_location_GnssLocationProvider_init(JNIEnv* env, jobject obj)
 {
     // this must be set before calling into the HAL library
     if (!mCallbacksObj)
@@ -553,13 +602,13 @@ static jboolean android_location_GpsLocationProvider_init(JNIEnv* env, jobject o
     return JNI_TRUE;
 }
 
-static void android_location_GpsLocationProvider_cleanup(JNIEnv* /* env */, jobject /* obj */)
+static void android_location_GnssLocationProvider_cleanup(JNIEnv* /* env */, jobject /* obj */)
 {
     if (sGpsInterface)
         sGpsInterface->cleanup();
 }
 
-static jboolean android_location_GpsLocationProvider_set_position_mode(JNIEnv* /* env */,
+static jboolean android_location_GnssLocationProvider_set_position_mode(JNIEnv* /* env */,
         jobject /* obj */, jint mode, jint recurrence, jint min_interval, jint preferred_accuracy,
         jint preferred_time)
 {
@@ -575,7 +624,7 @@ static jboolean android_location_GpsLocationProvider_set_position_mode(JNIEnv* /
         return JNI_FALSE;
 }
 
-static jboolean android_location_GpsLocationProvider_start(JNIEnv* /* env */, jobject /* obj */)
+static jboolean android_location_GnssLocationProvider_start(JNIEnv* /* env */, jobject /* obj */)
 {
     if (sGpsInterface) {
         if (sGpsInterface->start() == 0) {
@@ -588,7 +637,7 @@ static jboolean android_location_GpsLocationProvider_start(JNIEnv* /* env */, jo
         return JNI_FALSE;
 }
 
-static jboolean android_location_GpsLocationProvider_stop(JNIEnv* /* env */, jobject /* obj */)
+static jboolean android_location_GnssLocationProvider_stop(JNIEnv* /* env */, jobject /* obj */)
 {
     if (sGpsInterface) {
         if (sGpsInterface->stop() == 0) {
@@ -601,7 +650,7 @@ static jboolean android_location_GpsLocationProvider_stop(JNIEnv* /* env */, job
         return JNI_FALSE;
 }
 
-static void android_location_GpsLocationProvider_delete_aiding_data(JNIEnv* /* env */,
+static void android_location_GnssLocationProvider_delete_aiding_data(JNIEnv* /* env */,
                                                                     jobject /* obj */,
                                                                     jint flags)
 {
@@ -609,38 +658,36 @@ static void android_location_GpsLocationProvider_delete_aiding_data(JNIEnv* /* e
         sGpsInterface->delete_aiding_data(flags);
 }
 
-static jint android_location_GpsLocationProvider_read_sv_status(JNIEnv* env, jobject /* obj */,
-        jintArray prnArray, jfloatArray snrArray, jfloatArray elevArray, jfloatArray azumArray,
-        jintArray maskArray)
+static jint android_location_GnssLocationProvider_read_sv_status(JNIEnv* env, jobject /* obj */,
+        jintArray prnWithFlagArray, jfloatArray snrArray, jfloatArray elevArray,
+        jfloatArray azumArray, jintArray constellationTypeArray)
 {
     // this should only be called from within a call to reportSvStatus
-
-    jint* prns = env->GetIntArrayElements(prnArray, 0);
+    jint* prnWithFlags = env->GetIntArrayElements(prnWithFlagArray, 0);
     jfloat* snrs = env->GetFloatArrayElements(snrArray, 0);
     jfloat* elev = env->GetFloatArrayElements(elevArray, 0);
     jfloat* azim = env->GetFloatArrayElements(azumArray, 0);
-    jint* mask = env->GetIntArrayElements(maskArray, 0);
+    jint* constellationTypes = env->GetIntArrayElements(constellationTypeArray, 0);
 
-    int num_svs = sGpsSvStatus.num_svs;
-    for (int i = 0; i < num_svs; i++) {
-        prns[i] = sGpsSvStatus.sv_list[i].prn;
-        snrs[i] = sGpsSvStatus.sv_list[i].snr;
-        elev[i] = sGpsSvStatus.sv_list[i].elevation;
-        azim[i] = sGpsSvStatus.sv_list[i].azimuth;
+    // GNSS SV info.
+    for (size_t i = 0; i < sGnssSvListSize; ++i) {
+        const GnssSvInfo& info = sGnssSvList[i];
+        constellationTypes[i] = info.constellation;
+        prnWithFlags[i] = (info.prn << PRN_SHIFT_WIDTH) | info.flags;
+        snrs[i] = info.snr;
+        elev[i] = info.elevation;
+        azim[i] = info.azimuth;
     }
-    mask[0] = sGpsSvStatus.ephemeris_mask;
-    mask[1] = sGpsSvStatus.almanac_mask;
-    mask[2] = sGpsSvStatus.used_in_fix_mask;
 
-    env->ReleaseIntArrayElements(prnArray, prns, 0);
+    env->ReleaseIntArrayElements(prnWithFlagArray, prnWithFlags, 0);
     env->ReleaseFloatArrayElements(snrArray, snrs, 0);
     env->ReleaseFloatArrayElements(elevArray, elev, 0);
     env->ReleaseFloatArrayElements(azumArray, azim, 0);
-    env->ReleaseIntArrayElements(maskArray, mask, 0);
-    return (jint) num_svs;
+    env->ReleaseIntArrayElements(constellationTypeArray, constellationTypes, 0);
+    return (jint) sGnssSvListSize;
 }
 
-static void android_location_GpsLocationProvider_agps_set_reference_location_cellid(
+static void android_location_GnssLocationProvider_agps_set_reference_location_cellid(
         JNIEnv* /* env */, jobject /* obj */, jint type, jint mcc, jint mnc, jint lac, jint cid)
 {
     AGpsRefLocation location;
@@ -667,7 +714,7 @@ static void android_location_GpsLocationProvider_agps_set_reference_location_cel
     sAGpsRilInterface->set_ref_location(&location, sizeof(location));
 }
 
-static void android_location_GpsLocationProvider_agps_send_ni_message(JNIEnv* env,
+static void android_location_GnssLocationProvider_agps_send_ni_message(JNIEnv* env,
         jobject /* obj */, jbyteArray ni_msg, jint size)
 {
     size_t sz;
@@ -684,7 +731,7 @@ static void android_location_GpsLocationProvider_agps_send_ni_message(JNIEnv* en
     env->ReleaseByteArrayElements(ni_msg,b,0);
 }
 
-static void android_location_GpsLocationProvider_agps_set_id(JNIEnv *env, jobject /* obj */,
+static void android_location_GnssLocationProvider_agps_set_id(JNIEnv *env, jobject /* obj */,
                                                              jint type, jstring  setid_string)
 {
     if (!sAGpsRilInterface) {
@@ -697,7 +744,7 @@ static void android_location_GpsLocationProvider_agps_set_id(JNIEnv *env, jobjec
     env->ReleaseStringUTFChars(setid_string, setid);
 }
 
-static jint android_location_GpsLocationProvider_read_nmea(JNIEnv* env, jobject /* obj */,
+static jint android_location_GnssLocationProvider_read_nmea(JNIEnv* env, jobject /* obj */,
                                             jbyteArray nmeaArray, jint buffer_size)
 {
     // this should only be called from within a call to reportNmea
@@ -710,27 +757,27 @@ static jint android_location_GpsLocationProvider_read_nmea(JNIEnv* env, jobject 
     return (jint) length;
 }
 
-static void android_location_GpsLocationProvider_inject_time(JNIEnv* /* env */, jobject /* obj */,
+static void android_location_GnssLocationProvider_inject_time(JNIEnv* /* env */, jobject /* obj */,
         jlong time, jlong timeReference, jint uncertainty)
 {
     if (sGpsInterface)
         sGpsInterface->inject_time(time, timeReference, uncertainty);
 }
 
-static void android_location_GpsLocationProvider_inject_location(JNIEnv* /* env */,
+static void android_location_GnssLocationProvider_inject_location(JNIEnv* /* env */,
         jobject /* obj */, jdouble latitude, jdouble longitude, jfloat accuracy)
 {
     if (sGpsInterface)
         sGpsInterface->inject_location(latitude, longitude, accuracy);
 }
 
-static jboolean android_location_GpsLocationProvider_supports_xtra(
+static jboolean android_location_GnssLocationProvider_supports_xtra(
         JNIEnv* /* env */, jobject /* obj */)
 {
     return (sGpsXtraInterface != NULL) ? JNI_TRUE : JNI_FALSE;
 }
 
-static void android_location_GpsLocationProvider_inject_xtra_data(JNIEnv* env, jobject /* obj */,
+static void android_location_GnssLocationProvider_inject_xtra_data(JNIEnv* env, jobject /* obj */,
         jbyteArray data, jint length)
 {
     if (!sGpsXtraInterface) {
@@ -743,7 +790,7 @@ static void android_location_GpsLocationProvider_inject_xtra_data(JNIEnv* env, j
     env->ReleasePrimitiveArrayCritical(data, bytes, JNI_ABORT);
 }
 
-static void android_location_GpsLocationProvider_agps_data_conn_open(
+static void android_location_GnssLocationProvider_agps_data_conn_open(
         JNIEnv* env, jobject /* obj */, jstring apn, jint apnIpType)
 {
     if (!sAGpsInterface) {
@@ -769,7 +816,7 @@ static void android_location_GpsLocationProvider_agps_data_conn_open(
     env->ReleaseStringUTFChars(apn, apnStr);
 }
 
-static void android_location_GpsLocationProvider_agps_data_conn_closed(JNIEnv* /* env */,
+static void android_location_GnssLocationProvider_agps_data_conn_closed(JNIEnv* /* env */,
                                                                        jobject /* obj */)
 {
     if (!sAGpsInterface) {
@@ -779,7 +826,7 @@ static void android_location_GpsLocationProvider_agps_data_conn_closed(JNIEnv* /
     sAGpsInterface->data_conn_closed();
 }
 
-static void android_location_GpsLocationProvider_agps_data_conn_failed(JNIEnv* /* env */,
+static void android_location_GnssLocationProvider_agps_data_conn_failed(JNIEnv* /* env */,
                                                                        jobject /* obj */)
 {
     if (!sAGpsInterface) {
@@ -789,7 +836,7 @@ static void android_location_GpsLocationProvider_agps_data_conn_failed(JNIEnv* /
     sAGpsInterface->data_conn_failed();
 }
 
-static void android_location_GpsLocationProvider_set_agps_server(JNIEnv* env, jobject /* obj */,
+static void android_location_GnssLocationProvider_set_agps_server(JNIEnv* env, jobject /* obj */,
         jint type, jstring hostname, jint port)
 {
     if (!sAGpsInterface) {
@@ -801,7 +848,7 @@ static void android_location_GpsLocationProvider_set_agps_server(JNIEnv* env, jo
     env->ReleaseStringUTFChars(hostname, c_hostname);
 }
 
-static void android_location_GpsLocationProvider_send_ni_response(JNIEnv* /* env */,
+static void android_location_GnssLocationProvider_send_ni_response(JNIEnv* /* env */,
       jobject /* obj */, jint notifId, jint response)
 {
     if (!sGpsNiInterface) {
@@ -812,7 +859,7 @@ static void android_location_GpsLocationProvider_send_ni_response(JNIEnv* /* env
     sGpsNiInterface->respond(notifId, response);
 }
 
-static jstring android_location_GpsLocationProvider_get_internal_state(JNIEnv* env,
+static jstring android_location_GnssLocationProvider_get_internal_state(JNIEnv* env,
                                                                        jobject /* obj */) {
     jstring result = NULL;
     if (sGpsDebugInterface) {
@@ -826,7 +873,7 @@ static jstring android_location_GpsLocationProvider_get_internal_state(JNIEnv* e
     return result;
 }
 
-static void android_location_GpsLocationProvider_update_network_state(JNIEnv* env, jobject /* obj */,
+static void android_location_GnssLocationProvider_update_network_state(JNIEnv* env, jobject /* obj */,
         jboolean connected, jint type, jboolean roaming, jboolean available, jstring extraInfo, jstring apn)
 {
 
@@ -849,13 +896,13 @@ static void android_location_GpsLocationProvider_update_network_state(JNIEnv* en
     }
 }
 
-static jboolean android_location_GpsLocationProvider_is_geofence_supported(
+static jboolean android_location_GnssLocationProvider_is_geofence_supported(
         JNIEnv* /* env */, jobject /* obj */)
 {
     return (sGpsGeofencingInterface != NULL) ? JNI_TRUE : JNI_FALSE;
 }
 
-static jboolean android_location_GpsLocationProvider_add_geofence(JNIEnv* /* env */,
+static jboolean android_location_GnssLocationProvider_add_geofence(JNIEnv* /* env */,
         jobject /* obj */, jint geofence_id, jdouble latitude, jdouble longitude, jdouble radius,
         jint last_transition, jint monitor_transition, jint notification_responsiveness,
         jint unknown_timer) {
@@ -870,7 +917,7 @@ static jboolean android_location_GpsLocationProvider_add_geofence(JNIEnv* /* env
     return JNI_FALSE;
 }
 
-static jboolean android_location_GpsLocationProvider_remove_geofence(JNIEnv* /* env */,
+static jboolean android_location_GnssLocationProvider_remove_geofence(JNIEnv* /* env */,
         jobject /* obj */, jint geofence_id) {
     if (sGpsGeofencingInterface != NULL) {
         sGpsGeofencingInterface->remove_geofence_area(geofence_id);
@@ -881,7 +928,7 @@ static jboolean android_location_GpsLocationProvider_remove_geofence(JNIEnv* /* 
     return JNI_FALSE;
 }
 
-static jboolean android_location_GpsLocationProvider_pause_geofence(JNIEnv* /* env */,
+static jboolean android_location_GnssLocationProvider_pause_geofence(JNIEnv* /* env */,
         jobject /* obj */, jint geofence_id) {
     if (sGpsGeofencingInterface != NULL) {
         sGpsGeofencingInterface->pause_geofence(geofence_id);
@@ -892,7 +939,7 @@ static jboolean android_location_GpsLocationProvider_pause_geofence(JNIEnv* /* e
     return JNI_FALSE;
 }
 
-static jboolean android_location_GpsLocationProvider_resume_geofence(JNIEnv* /* env */,
+static jboolean android_location_GnssLocationProvider_resume_geofence(JNIEnv* /* env */,
         jobject /* obj */, jint geofence_id, jint monitor_transition) {
     if (sGpsGeofencingInterface != NULL) {
         sGpsGeofencingInterface->resume_geofence(geofence_id, monitor_transition);
@@ -1272,7 +1319,7 @@ GpsMeasurementCallbacks sGpsMeasurementCallbacks = {
     measurement_callback,
 };
 
-static jboolean android_location_GpsLocationProvider_is_measurement_supported(
+static jboolean android_location_GnssLocationProvider_is_measurement_supported(
         JNIEnv* env,
         jclass clazz) {
     if (sGpsMeasurementInterface != NULL) {
@@ -1281,7 +1328,7 @@ static jboolean android_location_GpsLocationProvider_is_measurement_supported(
     return JNI_FALSE;
 }
 
-static jboolean android_location_GpsLocationProvider_start_measurement_collection(
+static jboolean android_location_GnssLocationProvider_start_measurement_collection(
         JNIEnv* env,
         jobject obj) {
     if (sGpsMeasurementInterface == NULL) {
@@ -1298,7 +1345,7 @@ static jboolean android_location_GpsLocationProvider_start_measurement_collectio
     return JNI_TRUE;
 }
 
-static jboolean android_location_GpsLocationProvider_stop_measurement_collection(
+static jboolean android_location_GnssLocationProvider_stop_measurement_collection(
         JNIEnv* env,
         jobject obj) {
     if (sGpsMeasurementInterface == NULL) {
@@ -1382,7 +1429,7 @@ GpsNavigationMessageCallbacks sGpsNavigationMessageCallbacks = {
     navigation_message_callback,
 };
 
-static jboolean android_location_GpsLocationProvider_is_navigation_message_supported(
+static jboolean android_location_GnssLocationProvider_is_navigation_message_supported(
         JNIEnv* env,
         jclass clazz) {
     if(sGpsNavigationMessageInterface != NULL) {
@@ -1391,7 +1438,7 @@ static jboolean android_location_GpsLocationProvider_is_navigation_message_suppo
     return JNI_FALSE;
 }
 
-static jboolean android_location_GpsLocationProvider_start_navigation_message_collection(
+static jboolean android_location_GnssLocationProvider_start_navigation_message_collection(
         JNIEnv* env,
         jobject obj) {
     if (sGpsNavigationMessageInterface == NULL) {
@@ -1408,7 +1455,7 @@ static jboolean android_location_GpsLocationProvider_start_navigation_message_co
     return JNI_TRUE;
 }
 
-static jboolean android_location_GpsLocationProvider_stop_navigation_message_collection(
+static jboolean android_location_GnssLocationProvider_stop_navigation_message_collection(
         JNIEnv* env,
         jobject obj) {
     if (sGpsNavigationMessageInterface == NULL) {
@@ -1420,7 +1467,7 @@ static jboolean android_location_GpsLocationProvider_stop_navigation_message_col
     return JNI_TRUE;
 }
 
-static void android_location_GpsLocationProvider_configuration_update(JNIEnv* env, jobject obj,
+static void android_location_GnssLocationProvider_configuration_update(JNIEnv* env, jobject obj,
         jstring config_content)
 {
     if (!sGnssConfigurationInterface) {
@@ -1436,105 +1483,105 @@ static void android_location_GpsLocationProvider_configuration_update(JNIEnv* en
 
 static const JNINativeMethod sMethods[] = {
      /* name, signature, funcPtr */
-    {"class_init_native", "()V", (void *)android_location_GpsLocationProvider_class_init_native},
-    {"native_is_supported", "()Z", (void*)android_location_GpsLocationProvider_is_supported},
+    {"class_init_native", "()V", (void *)android_location_GnssLocationProvider_class_init_native},
+    {"native_is_supported", "()Z", (void*)android_location_GnssLocationProvider_is_supported},
     {"native_is_agps_ril_supported", "()Z",
-            (void*)android_location_GpsLocationProvider_is_agps_ril_supported},
+            (void*)android_location_GnssLocationProvider_is_agps_ril_supported},
     {"native_is_gnss_configuration_supported", "()Z",
             (void*)android_location_gpsLocationProvider_is_gnss_configuration_supported},
-    {"native_init", "()Z", (void*)android_location_GpsLocationProvider_init},
-    {"native_cleanup", "()V", (void*)android_location_GpsLocationProvider_cleanup},
+    {"native_init", "()Z", (void*)android_location_GnssLocationProvider_init},
+    {"native_cleanup", "()V", (void*)android_location_GnssLocationProvider_cleanup},
     {"native_set_position_mode",
             "(IIIII)Z",
-            (void*)android_location_GpsLocationProvider_set_position_mode},
-    {"native_start", "()Z", (void*)android_location_GpsLocationProvider_start},
-    {"native_stop", "()Z", (void*)android_location_GpsLocationProvider_stop},
+            (void*)android_location_GnssLocationProvider_set_position_mode},
+    {"native_start", "()Z", (void*)android_location_GnssLocationProvider_start},
+    {"native_stop", "()Z", (void*)android_location_GnssLocationProvider_stop},
     {"native_delete_aiding_data",
             "(I)V",
-            (void*)android_location_GpsLocationProvider_delete_aiding_data},
+            (void*)android_location_GnssLocationProvider_delete_aiding_data},
     {"native_read_sv_status",
             "([I[F[F[F[I)I",
-            (void*)android_location_GpsLocationProvider_read_sv_status},
-    {"native_read_nmea", "([BI)I", (void*)android_location_GpsLocationProvider_read_nmea},
-    {"native_inject_time", "(JJI)V", (void*)android_location_GpsLocationProvider_inject_time},
+            (void*)android_location_GnssLocationProvider_read_sv_status},
+    {"native_read_nmea", "([BI)I", (void*)android_location_GnssLocationProvider_read_nmea},
+    {"native_inject_time", "(JJI)V", (void*)android_location_GnssLocationProvider_inject_time},
     {"native_inject_location",
             "(DDF)V",
-            (void*)android_location_GpsLocationProvider_inject_location},
-    {"native_supports_xtra", "()Z", (void*)android_location_GpsLocationProvider_supports_xtra},
+            (void*)android_location_GnssLocationProvider_inject_location},
+    {"native_supports_xtra", "()Z", (void*)android_location_GnssLocationProvider_supports_xtra},
     {"native_inject_xtra_data",
             "([BI)V",
-            (void*)android_location_GpsLocationProvider_inject_xtra_data},
+            (void*)android_location_GnssLocationProvider_inject_xtra_data},
     {"native_agps_data_conn_open",
             "(Ljava/lang/String;I)V",
-            (void*)android_location_GpsLocationProvider_agps_data_conn_open},
+            (void*)android_location_GnssLocationProvider_agps_data_conn_open},
     {"native_agps_data_conn_closed",
             "()V",
-            (void*)android_location_GpsLocationProvider_agps_data_conn_closed},
+            (void*)android_location_GnssLocationProvider_agps_data_conn_closed},
     {"native_agps_data_conn_failed",
             "()V",
-            (void*)android_location_GpsLocationProvider_agps_data_conn_failed},
+            (void*)android_location_GnssLocationProvider_agps_data_conn_failed},
     {"native_agps_set_id",
             "(ILjava/lang/String;)V",
-            (void*)android_location_GpsLocationProvider_agps_set_id},
+            (void*)android_location_GnssLocationProvider_agps_set_id},
     {"native_agps_set_ref_location_cellid",
             "(IIIII)V",
-            (void*)android_location_GpsLocationProvider_agps_set_reference_location_cellid},
+            (void*)android_location_GnssLocationProvider_agps_set_reference_location_cellid},
     {"native_set_agps_server",
             "(ILjava/lang/String;I)V",
-            (void*)android_location_GpsLocationProvider_set_agps_server},
+            (void*)android_location_GnssLocationProvider_set_agps_server},
     {"native_send_ni_response",
             "(II)V",
-            (void*)android_location_GpsLocationProvider_send_ni_response},
+            (void*)android_location_GnssLocationProvider_send_ni_response},
     {"native_agps_ni_message",
             "([BI)V",
-            (void *)android_location_GpsLocationProvider_agps_send_ni_message},
+            (void *)android_location_GnssLocationProvider_agps_send_ni_message},
     {"native_get_internal_state",
             "()Ljava/lang/String;",
-            (void*)android_location_GpsLocationProvider_get_internal_state},
+            (void*)android_location_GnssLocationProvider_get_internal_state},
     {"native_update_network_state",
             "(ZIZZLjava/lang/String;Ljava/lang/String;)V",
-            (void*)android_location_GpsLocationProvider_update_network_state },
+            (void*)android_location_GnssLocationProvider_update_network_state },
     {"native_is_geofence_supported",
             "()Z",
-            (void*) android_location_GpsLocationProvider_is_geofence_supported},
+            (void*) android_location_GnssLocationProvider_is_geofence_supported},
     {"native_add_geofence",
             "(IDDDIIII)Z",
-            (void *)android_location_GpsLocationProvider_add_geofence},
+            (void *)android_location_GnssLocationProvider_add_geofence},
     {"native_remove_geofence",
             "(I)Z",
-            (void *)android_location_GpsLocationProvider_remove_geofence},
-    {"native_pause_geofence", "(I)Z", (void *)android_location_GpsLocationProvider_pause_geofence},
+            (void *)android_location_GnssLocationProvider_remove_geofence},
+    {"native_pause_geofence", "(I)Z", (void *)android_location_GnssLocationProvider_pause_geofence},
     {"native_resume_geofence",
             "(II)Z",
-            (void *)android_location_GpsLocationProvider_resume_geofence},
+            (void *)android_location_GnssLocationProvider_resume_geofence},
     {"native_is_measurement_supported",
             "()Z",
-            (void*) android_location_GpsLocationProvider_is_measurement_supported},
+            (void*) android_location_GnssLocationProvider_is_measurement_supported},
     {"native_start_measurement_collection",
             "()Z",
-            (void*) android_location_GpsLocationProvider_start_measurement_collection},
+            (void*) android_location_GnssLocationProvider_start_measurement_collection},
     {"native_stop_measurement_collection",
             "()Z",
-            (void*) android_location_GpsLocationProvider_stop_measurement_collection},
+            (void*) android_location_GnssLocationProvider_stop_measurement_collection},
     {"native_is_navigation_message_supported",
             "()Z",
-            (void*) android_location_GpsLocationProvider_is_navigation_message_supported},
+            (void*) android_location_GnssLocationProvider_is_navigation_message_supported},
     {"native_start_navigation_message_collection",
             "()Z",
-            (void*) android_location_GpsLocationProvider_start_navigation_message_collection},
+            (void*) android_location_GnssLocationProvider_start_navigation_message_collection},
     {"native_stop_navigation_message_collection",
             "()Z",
-            (void*) android_location_GpsLocationProvider_stop_navigation_message_collection},
+            (void*) android_location_GnssLocationProvider_stop_navigation_message_collection},
     {"native_configuration_update",
             "(Ljava/lang/String;)V",
-            (void*)android_location_GpsLocationProvider_configuration_update},
+            (void*)android_location_GnssLocationProvider_configuration_update},
 };
 
-int register_android_server_location_GpsLocationProvider(JNIEnv* env)
+int register_android_server_location_GnssLocationProvider(JNIEnv* env)
 {
     return jniRegisterNativeMethods(
             env,
-            "com/android/server/location/GpsLocationProvider",
+            "com/android/server/location/GnssLocationProvider",
             sMethods,
             NELEM(sMethods));
 }
