@@ -6244,6 +6244,7 @@ package android.app.backup {
     method public void onCreate();
     method public void onDestroy();
     method public void onFullBackup(android.app.backup.FullBackupDataOutput) throws java.io.IOException;
+    method public void onQuotaExceeded(long, long);
     method public abstract void onRestore(android.app.backup.BackupDataInput, int, android.os.ParcelFileDescriptor) throws java.io.IOException;
     method public void onRestoreFile(android.os.ParcelFileDescriptor, long, java.io.File, int, long, long) throws java.io.IOException;
     method public void onRestoreFinished();
@@ -6306,6 +6307,7 @@ package android.app.backup {
     field public static final int ERROR_PACKAGE_NOT_FOUND = -2002; // 0xfffff82e
     field public static final int ERROR_TRANSPORT_ABORTED = -1000; // 0xfffffc18
     field public static final int ERROR_TRANSPORT_PACKAGE_REJECTED = -1002; // 0xfffffc16
+    field public static final int ERROR_TRANSPORT_QUOTA_EXCEEDED = -1005; // 0xfffffc13
     field public static final int SUCCESS = 0; // 0x0
   }
 
@@ -6338,6 +6340,7 @@ package android.app.backup {
     method public int finishBackup();
     method public void finishRestore();
     method public android.app.backup.RestoreSet[] getAvailableRestoreSets();
+    method public long getBackupQuota(java.lang.String, boolean);
     method public android.os.IBinder getBinder();
     method public long getCurrentRestoreSet();
     method public int getNextFullRestoreDataChunk(android.os.ParcelFileDescriptor);
@@ -6363,6 +6366,7 @@ package android.app.backup {
     field public static final int TRANSPORT_NOT_INITIALIZED = -1001; // 0xfffffc17
     field public static final int TRANSPORT_OK = 0; // 0x0
     field public static final int TRANSPORT_PACKAGE_REJECTED = -1002; // 0xfffffc16
+    field public static final int TRANSPORT_QUOTA_EXCEEDED = -1005; // 0xfffffc13
   }
 
   public class FileBackupHelper extends android.app.backup.FileBackupHelperBase implements android.app.backup.BackupHelper {
