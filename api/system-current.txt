@@ -37525,6 +37525,35 @@ package android.telecom {
     method public abstract void onVideoQualityChanged(int);
   }
 
+  public class ParcelableCallAnalytics implements android.os.Parcelable {
+    ctor public ParcelableCallAnalytics(long, long, int, boolean, boolean, int, int, boolean, java.lang.String, boolean);
+    ctor public ParcelableCallAnalytics(android.os.Parcel);
+    method public int describeContents();
+    method public long getCallDurationMillis();
+    method public int getCallTechnologies();
+    method public int getCallTerminationCode();
+    method public int getCallType();
+    method public java.lang.String getConnectionService();
+    method public long getStartTimeMillis();
+    method public boolean isAdditionalCall();
+    method public boolean isCreatedFromExistingConnection();
+    method public boolean isEmergencyCall();
+    method public boolean isInterrupted();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final int CALLTYPE_INCOMING = 1; // 0x1
+    field public static final int CALLTYPE_OUTGOING = 2; // 0x2
+    field public static final int CALLTYPE_UNKNOWN = 0; // 0x0
+    field public static final int CDMA_PHONE = 1; // 0x1
+    field public static final android.os.Parcelable.Creator<android.telecom.ParcelableCallAnalytics> CREATOR;
+    field public static final int GSM_PHONE = 2; // 0x2
+    field public static final int IMS_PHONE = 4; // 0x4
+    field public static final long MILLIS_IN_1_SECOND = 1000L; // 0x3e8L
+    field public static final long MILLIS_IN_5_MINUTES = 300000L; // 0x493e0L
+    field public static final int SIP_PHONE = 8; // 0x8
+    field public static final int STILL_CONNECTED = -1; // 0xffffffff
+    field public static final int THIRD_PARTY_PHONE = 16; // 0x10
+  }
+
   public final deprecated class Phone {
     method public final void addListener(android.telecom.Phone.Listener);
     method public final boolean canAddCall();
@@ -37742,6 +37771,7 @@ package android.telecom {
     method public void cancelMissedCallsNotification();
     method public deprecated void clearAccounts();
     method public void clearPhoneAccounts();
+    method public java.util.List<android.telecom.ParcelableCallAnalytics> dumpAnalytics();
     method public void enablePhoneAccount(android.telecom.PhoneAccountHandle, boolean);
     method public boolean endCall();
     method public android.net.Uri getAdnUriForPhoneAccount(android.telecom.PhoneAccountHandle);
