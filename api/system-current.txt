@@ -15055,6 +15055,66 @@ package android.hardware.input {
 
 package android.hardware.location {
 
+  public class ContextHubInfo {
+    ctor public ContextHubInfo();
+    method public int describeContents();
+    method public int getId();
+    method public android.hardware.location.MemoryRegion[] getMemoryRegions();
+    method public java.lang.String getName();
+    method public float getPeakMips();
+    method public float getPeakPowerDrawMw();
+    method public int getPlatformVersion();
+    method public float getSleepPowerDrawMw();
+    method public int getStaticSwVersion();
+    method public float getStoppedPowerDrawMw();
+    method public int[] getSupportedSensors();
+    method public java.lang.String getToolchain();
+    method public int getToolchainVersion();
+    method public java.lang.String getVendor();
+    method public void setId(int);
+    method public void setMemoryRegions(android.hardware.location.MemoryRegion[]);
+    method public void setName(java.lang.String);
+    method public void setPeakMips(float);
+    method public void setPeakPowerDrawMw(float);
+    method public void setPlatformVersion(int);
+    method public void setSleepPowerDrawMw(float);
+    method public void setStaticSwVersion(int);
+    method public void setStoppedPowerDrawMw(float);
+    method public void setSupportedSensors(int[]);
+    method public void setToolchain(java.lang.String);
+    method public void setToolchainVersion(int);
+    method public void setVendor(java.lang.String);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.hardware.location.ContextHubInfo> CREATOR;
+  }
+
+  public final class ContextHubManager {
+    method public java.lang.Integer[] findNanoAppOnHub(int, android.hardware.location.NanoAppFilter);
+    method public int[] getContexthubHandles();
+    method public android.hardware.location.ContextHubInfo getContexthubInfo(int);
+    method public android.hardware.location.NanoAppInstanceInfo getNanoAppInstanceInfo(int);
+    method public int loadNanoApp(int, android.hardware.location.NanoApp);
+    method public int sendMessage(int, int, android.hardware.location.ContextHubMessage);
+    method public int unloadNanoApp(int);
+    field public static final int ANY_HUB = -1; // 0xffffffff
+    field public static final int MSG_DATA_SEND = 3; // 0x3
+    field public static final int MSG_LOAD_NANO_APP = 1; // 0x1
+    field public static final int MSG_UNLOAD_NANO_APP = 2; // 0x2
+  }
+
+  public class ContextHubMessage {
+    ctor public ContextHubMessage(int, int, byte[]);
+    method public int describeContents();
+    method public byte[] getData();
+    method public int getMsgType();
+    method public int getVersion();
+    method public void setMsgData(byte[]);
+    method public void setMsgType(int);
+    method public void setVersion(int);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.hardware.location.ContextHubMessage> CREATOR;
+  }
+
   public final class GeofenceHardware {
     ctor public GeofenceHardware(android.hardware.location.IGeofenceHardware);
     method public boolean addGeofence(int, int, android.hardware.location.GeofenceHardwareRequest, android.hardware.location.GeofenceHardwareCallback);
@@ -15169,6 +15229,89 @@ package android.hardware.location {
 
   public abstract interface IGeofenceHardwareMonitorCallback implements android.os.IInterface {
     method public abstract void onMonitoringSystemChange(android.hardware.location.GeofenceHardwareMonitorEvent) throws android.os.RemoteException;
+  }
+
+  public class MemoryRegion implements android.os.Parcelable {
+    ctor public MemoryRegion(android.os.Parcel);
+    method public int describeContents();
+    method public int getCapacityBytes();
+    method public int getFreeCapacityBytes();
+    method public boolean isExecutable();
+    method public boolean isReadable();
+    method public boolean isWritable();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.hardware.location.MemoryRegion> CREATOR;
+  }
+
+  public class NanoApp {
+    ctor public NanoApp();
+    method public int describeContents();
+    method public byte[] getAppBinary();
+    method public int getAppId();
+    method public int getAppVersion();
+    method public java.lang.String getName();
+    method public int getNeededExecMemBytes();
+    method public int getNeededReadMemBytes();
+    method public int[] getNeededSensors();
+    method public int getNeededWriteMemBytes();
+    method public int[] getOutputEvents();
+    method public java.lang.String getPublisher();
+    method public void setAppBinary(byte[]);
+    method public void setAppId(int);
+    method public void setAppVersion(int);
+    method public void setName(java.lang.String);
+    method public void setNeededExecMemBytes(int);
+    method public void setNeededReadMemBytes(int);
+    method public void setNeededSensors(int[]);
+    method public void setNeededWriteMemBytes(int);
+    method public void setOutputEvents(int[]);
+    method public void setPublisher(java.lang.String);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.hardware.location.NanoApp> CREATOR;
+  }
+
+  public class NanoAppFilter {
+    ctor public NanoAppFilter(long, int, int, long);
+    method public int describeContents();
+    method public boolean testMatch(android.hardware.location.NanoAppInstanceInfo);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final int APP_ANY = -1; // 0xffffffff
+    field public static final android.os.Parcelable.Creator<android.hardware.location.NanoAppFilter> CREATOR;
+    field public static final int FLAGS_VERSION_ANY = -1; // 0xffffffff
+    field public static final int FLAGS_VERSION_GREAT_THAN = 2; // 0x2
+    field public static final int FLAGS_VERSION_LESS_THAN = 4; // 0x4
+    field public static final int FLAGS_VERSION_STRICTLY_EQUAL = 8; // 0x8
+    field public static final int HUB_ANY = -1; // 0xffffffff
+    field public static final int VENDOR_ANY = -1; // 0xffffffff
+  }
+
+  public class NanoAppInstanceInfo {
+    ctor public NanoAppInstanceInfo();
+    method public int describeContents();
+    method public int getAppId();
+    method public int getAppVersion();
+    method public int getContexthubId();
+    method public int getHandle();
+    method public java.lang.String getName();
+    method public int getNeededExecMemBytes();
+    method public int getNeededReadMemBytes();
+    method public int[] getNeededSensors();
+    method public int getNeededWriteMemBytes();
+    method public int[] getOutputEvents();
+    method public java.lang.String getPublisher();
+    method public void setAppId(int);
+    method public void setAppVersion(int);
+    method public void setContexthubId(int);
+    method public void setHandle(int);
+    method public void setName(java.lang.String);
+    method public void setNeededExecMemBytes(int);
+    method public void setNeededReadMemBytes(int);
+    method public void setNeededSensors(int[]);
+    method public void setNeededWriteMemBytes(int);
+    method public void setOutputEvents(int[]);
+    method public void setPublisher(java.lang.String);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.hardware.location.NanoAppInstanceInfo> CREATOR;
   }
 
 }
