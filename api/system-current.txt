@@ -24485,6 +24485,7 @@ package android.net {
     method public boolean isActiveNetworkMetered();
     method public boolean isDefaultNetworkActive();
     method public static deprecated boolean isNetworkTypeValid(int);
+    method public boolean isTetheringSupported();
     method public void registerNetworkCallback(android.net.NetworkRequest, android.net.ConnectivityManager.NetworkCallback);
     method public void registerNetworkCallback(android.net.NetworkRequest, android.app.PendingIntent);
     method public void releaseNetworkRequest(android.app.PendingIntent);
@@ -24497,7 +24498,10 @@ package android.net {
     method public deprecated boolean requestRouteToHost(int, int);
     method public deprecated void setNetworkPreference(int);
     method public static deprecated boolean setProcessDefaultNetwork(android.net.Network);
+    method public void startTethering(int, boolean, android.net.ConnectivityManager.OnStartTetheringCallback);
+    method public void startTethering(int, boolean, android.net.ConnectivityManager.OnStartTetheringCallback, android.os.Handler);
     method public deprecated int startUsingNetworkFeature(int, java.lang.String);
+    method public void stopTethering(int);
     method public deprecated int stopUsingNetworkFeature(int, java.lang.String);
     method public void unregisterNetworkCallback(android.net.ConnectivityManager.NetworkCallback);
     method public void unregisterNetworkCallback(android.app.PendingIntent);
@@ -24519,6 +24523,9 @@ package android.net {
     field public static final int RESTRICT_BACKGROUND_STATUS_DISABLED = 1; // 0x1
     field public static final int RESTRICT_BACKGROUND_STATUS_ENABLED = 3; // 0x3
     field public static final int RESTRICT_BACKGROUND_STATUS_WHITELISTED = 2; // 0x2
+    field public static final int TETHERING_BLUETOOTH = 2; // 0x2
+    field public static final int TETHERING_USB = 1; // 0x1
+    field public static final int TETHERING_WIFI = 0; // 0x0
     field public static final int TYPE_BLUETOOTH = 7; // 0x7
     field public static final int TYPE_DUMMY = 8; // 0x8
     field public static final int TYPE_ETHERNET = 9; // 0x9
@@ -24543,6 +24550,12 @@ package android.net {
 
   public static abstract interface ConnectivityManager.OnNetworkActiveListener {
     method public abstract void onNetworkActive();
+  }
+
+  public static abstract class ConnectivityManager.OnStartTetheringCallback {
+    ctor public ConnectivityManager.OnStartTetheringCallback();
+    method public void onTetheringFailed();
+    method public void onTetheringStarted();
   }
 
   public class Credentials {
