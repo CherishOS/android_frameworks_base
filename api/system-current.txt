@@ -13758,6 +13758,7 @@ package android.hardware {
     method public float getResolution();
     method public java.lang.String getStringType();
     method public int getType();
+    method public java.util.UUID getUuid();
     method public java.lang.String getVendor();
     method public int getVersion();
     method public boolean isDataInjectionSupported();
@@ -13768,6 +13769,7 @@ package android.hardware {
     field public static final int REPORTING_MODE_SPECIAL_TRIGGER = 3; // 0x3
     field public static final java.lang.String STRING_TYPE_ACCELEROMETER = "android.sensor.accelerometer";
     field public static final java.lang.String STRING_TYPE_AMBIENT_TEMPERATURE = "android.sensor.ambient_temperature";
+    field public static final java.lang.String STRING_TYPE_DYNAMIC_SENSOR_META = "android.sensor.dynamic_sensor_meta";
     field public static final java.lang.String STRING_TYPE_GAME_ROTATION_VECTOR = "android.sensor.game_rotation_vector";
     field public static final java.lang.String STRING_TYPE_GEOMAGNETIC_ROTATION_VECTOR = "android.sensor.geomagnetic_rotation_vector";
     field public static final java.lang.String STRING_TYPE_GRAVITY = "android.sensor.gravity";
@@ -13795,6 +13797,7 @@ package android.hardware {
     field public static final int TYPE_ACCELEROMETER = 1; // 0x1
     field public static final int TYPE_ALL = -1; // 0xffffffff
     field public static final int TYPE_AMBIENT_TEMPERATURE = 13; // 0xd
+    field public static final int TYPE_DYNAMIC_SENSOR_META = 32; // 0x20
     field public static final int TYPE_GAME_ROTATION_VECTOR = 15; // 0xf
     field public static final int TYPE_GEOMAGNETIC_ROTATION_VECTOR = 20; // 0x14
     field public static final int TYPE_GRAVITY = 9; // 0x9
@@ -13849,6 +13852,7 @@ package android.hardware {
     method public static void getAngleChange(float[], float[], float[]);
     method public android.hardware.Sensor getDefaultSensor(int);
     method public android.hardware.Sensor getDefaultSensor(int, boolean);
+    method public java.util.List<android.hardware.Sensor> getDynamicSensorList(int);
     method public static float getInclination(float[]);
     method public static float[] getOrientation(float[], float[]);
     method public static void getQuaternionFromVector(float[], float[]);
@@ -13858,6 +13862,8 @@ package android.hardware {
     method public deprecated int getSensors();
     method public boolean initDataInjection(boolean);
     method public boolean injectSensorData(android.hardware.Sensor, float[], int, long);
+    method public void registerDynamicSensorCallback(android.hardware.SensorManager.DynamicSensorConnectionCallback);
+    method public void registerDynamicSensorCallback(android.hardware.SensorManager.DynamicSensorConnectionCallback, android.os.Handler);
     method public deprecated boolean registerListener(android.hardware.SensorListener, int);
     method public deprecated boolean registerListener(android.hardware.SensorListener, int, int);
     method public boolean registerListener(android.hardware.SensorEventListener, android.hardware.Sensor, int);
@@ -13866,6 +13872,7 @@ package android.hardware {
     method public boolean registerListener(android.hardware.SensorEventListener, android.hardware.Sensor, int, int, android.os.Handler);
     method public static boolean remapCoordinateSystem(float[], int, int, float[]);
     method public boolean requestTriggerSensor(android.hardware.TriggerEventListener, android.hardware.Sensor);
+    method public void unregisterDynamicSensorCallback(android.hardware.SensorManager.DynamicSensorConnectionCallback);
     method public deprecated void unregisterListener(android.hardware.SensorListener);
     method public deprecated void unregisterListener(android.hardware.SensorListener, int);
     method public void unregisterListener(android.hardware.SensorEventListener, android.hardware.Sensor);
@@ -13928,6 +13935,12 @@ package android.hardware {
     field public static final deprecated int SENSOR_TEMPERATURE = 4; // 0x4
     field public static final deprecated int SENSOR_TRICORDER = 64; // 0x40
     field public static final float STANDARD_GRAVITY = 9.80665f;
+  }
+
+  public static abstract class SensorManager.DynamicSensorConnectionCallback {
+    ctor public SensorManager.DynamicSensorConnectionCallback();
+    method public void onDynamicSensorConnected(android.hardware.Sensor);
+    method public void onDynamicSensorDisconnected(android.hardware.Sensor);
   }
 
   public final class TriggerEvent {
