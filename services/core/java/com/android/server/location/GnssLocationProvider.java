@@ -35,11 +35,12 @@ import android.hardware.location.GeofenceHardware;
 import android.hardware.location.GeofenceHardwareImpl;
 import android.location.Criteria;
 import android.location.FusedBatchOptions;
+import android.location.GnssStatus;
+import android.location.IGnssStatusListener;
+import android.location.IGnssStatusProvider;
 import android.location.GpsMeasurementsEvent;
 import android.location.GpsNavigationMessageEvent;
 import android.location.IGpsGeofenceHardware;
-import android.location.IGpsStatusListener;
-import android.location.IGpsStatusProvider;
 import android.location.ILocationManager;
 import android.location.INetInitiatedListener;
 import android.location.Location;
@@ -100,9 +101,9 @@ import libcore.io.IoUtils;
  *
  * {@hide}
  */
-public class GpsLocationProvider implements LocationProviderInterface {
+public class GnssLocationProvider implements LocationProviderInterface {
 
-    private static final String TAG = "GpsLocationProvider";
+    private static final String TAG = "GnssLocationProvider";
 
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
     private static final boolean VERBOSE = Log.isLoggable(TAG, Log.VERBOSE);
@@ -366,7 +367,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
     private final ILocationManager mILocationManager;
     private Location mLocation = new Location(LocationManager.GPS_PROVIDER);
     private Bundle mLocationExtras = new Bundle();
-    private final GpsStatusListenerHelper mListenerHelper;
+    private final GnssStatusListenerHelper mListenerHelper;
     private final GpsMeasurementsProvider mGpsMeasurementsProvider;
     private final GpsNavigationMessageProvider mGpsNavigationMessageProvider;
 
@@ -382,7 +383,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
     private final GpsNetInitiatedHandler mNIHandler;
 
     // Wakelocks
-    private final static String WAKELOCK_KEY = "GpsLocationProvider";
+    private final static String WAKELOCK_KEY = "GnssLocationProvider";
     private final PowerManager.WakeLock mWakeLock;
 
     // Alarms
@@ -405,20 +406,22 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
     private GeofenceHardwareImpl mGeofenceHardwareImpl;
 
-    private final IGpsStatusProvider mGpsStatusProvider = new IGpsStatusProvider.Stub() {
+    private int mYearOfHardware = 0;
+
+    private final IGnssStatusProvider mGnssStatusProvider = new IGnssStatusProvider.Stub() {
         @Override
-        public void addGpsStatusListener(IGpsStatusListener listener) {
-            mListenerHelper.addListener(listener);
+        public void registerGnssStatusCallback(IGnssStatusListener callback) {
+            mListenerHelper.addListener(callback);
         }
 
         @Override
-        public void removeGpsStatusListener(IGpsStatusListener listener) {
-            mListenerHelper.removeListener(listener);
+        public void unregisterGnssStatusCallback(IGnssStatusListener callback) {
+            mListenerHelper.removeListener(callback);
         }
     };
 
-    public IGpsStatusProvider getGpsStatusProvider() {
-        return mGpsStatusProvider;
+    public IGnssStatusProvider getGnssStatusProvider() {
+        return mGnssStatusProvider;
     }
 
     public IGpsGeofenceHardware getGpsGeofenceProxy() {
@@ -655,7 +658,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
         return true;
     }
 
-    public GpsLocationProvider(Context context, ILocationManager ilocationManager,
+    public GnssLocationProvider(Context context, ILocationManager ilocationManager,
             Looper looper) {
         mContext = context;
         mNtpTime = NtpTrustedTime.getInstance(context);
@@ -698,7 +701,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
                                                 mNetInitiatedListener,
                                                 mSuplEsEnabled);
 
-        mListenerHelper = new GpsStatusListenerHelper(mHandler) {
+        mListenerHelper = new GnssStatusListenerHelper(mHandler) {
             @Override
             protected boolean isAvailableInPlatform() {
                 return isSupported();
@@ -1554,34 +1557,40 @@ public class GpsLocationProvider implements LocationProviderInterface {
      * called from native code to update SV info
      */
     private void reportSvStatus() {
-        int svCount = native_read_sv_status(mSvs, mSnrs, mSvElevations, mSvAzimuths, mSvMasks);
+        int svCount = native_read_sv_status(mPrnWithFlags, mSnrs, mSvElevations, mSvAzimuths,
+                mConstellationTypes);
         mListenerHelper.onSvStatusChanged(
                 svCount,
-                mSvs,
+                mPrnWithFlags,
                 mSnrs,
                 mSvElevations,
                 mSvAzimuths,
-                mSvMasks[EPHEMERIS_MASK],
-                mSvMasks[ALMANAC_MASK],
-                mSvMasks[USED_FOR_FIX_MASK]);
+                mConstellationTypes);
 
         if (VERBOSE) {
-            Log.v(TAG, "SV count: " + svCount +
-                    " ephemerisMask: " + Integer.toHexString(mSvMasks[EPHEMERIS_MASK]) +
-                    " almanacMask: " + Integer.toHexString(mSvMasks[ALMANAC_MASK]));
-            for (int i = 0; i < svCount; i++) {
-                Log.v(TAG, "sv: " + mSvs[i] +
+            Log.v(TAG, "SV count: " + svCount);
+        }
+        // Calculate number of sets used in fix.
+        int usedInFixCount = 0;
+        for (int i = 0; i < svCount; i++) {
+            if ((mPrnWithFlags[i] & GnssStatus.GNSS_SV_FLAGS_USED_IN_FIX) != 0) {
+                ++usedInFixCount;
+            }
+            if (VERBOSE) {
+                Log.v(TAG, "prn: " + (mPrnWithFlags[i] >> GnssStatus.PRN_SHIFT_WIDTH) +
                         " snr: " + mSnrs[i]/10 +
                         " elev: " + mSvElevations[i] +
                         " azimuth: " + mSvAzimuths[i] +
-                        ((mSvMasks[EPHEMERIS_MASK] & (1 << (mSvs[i] - 1))) == 0 ? "  " : " E") +
-                        ((mSvMasks[ALMANAC_MASK] & (1 << (mSvs[i] - 1))) == 0 ? "  " : " A") +
-                        ((mSvMasks[USED_FOR_FIX_MASK] & (1 << (mSvs[i] - 1))) == 0 ? "" : "U"));
+                        ((mPrnWithFlags[i] & GnssStatus.GNSS_SV_FLAGS_HAS_EPHEMERIS_DATA) == 0
+                                ? "  " : " E") +
+                        ((mPrnWithFlags[i] & GnssStatus.GNSS_SV_FLAGS_HAS_ALMANAC_DATA) == 0
+                                ? "  " : " A") +
+                        ((mPrnWithFlags[i] & GnssStatus.GNSS_SV_FLAGS_USED_IN_FIX) == 0
+                                ? "" : "U"));
             }
         }
-
         // return number of sets used in fix instead of total
-        updateStatus(mStatus, Integer.bitCount(mSvMasks[USED_FOR_FIX_MASK]));
+        updateStatus(mStatus, usedInFixCount);
 
         if (mNavigating && mStatus == LocationProvider.AVAILABLE && mLastFixTime > 0 &&
             System.currentTimeMillis() - mLastFixTime > RECENT_FIX_TIMEOUT) {
@@ -1672,6 +1681,33 @@ public class GpsLocationProvider implements LocationProviderInterface {
                 (capabilities & GPS_CAPABILITY_MEASUREMENTS) == GPS_CAPABILITY_MEASUREMENTS);
         mGpsNavigationMessageProvider.onCapabilitiesUpdated(
                 (capabilities & GPS_CAPABILITY_NAV_MESSAGES) == GPS_CAPABILITY_NAV_MESSAGES);
+    }
+
+    /**
+     * Called from native code to inform us the hardware information.
+     */
+    private void setGpsYearOfHardware(int yearOfHardware) {
+        if (DEBUG) Log.d(TAG, "setGpsYearOfHardware called with " + yearOfHardware);
+        mYearOfHardware = yearOfHardware;
+    }
+
+    public interface GpsSystemInfoProvider {
+        /**
+         * Returns the year of GPS hardware.
+         */
+        int getGpsYearOfHardware();
+    }
+
+    /**
+     * @hide
+     */
+    public GpsSystemInfoProvider getGpsSystemInfoProvider() {
+        return new GpsSystemInfoProvider() {
+            @Override
+            public int getGpsYearOfHardware() {
+                return mYearOfHardware;
+            }
+        };
     }
 
     /**
@@ -2067,7 +2103,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
         }
 
         /**
-         * This method is bound to {@link #GpsLocationProvider(Context, ILocationManager, Looper)}.
+         * This method is bound to {@link #GnssLocationProvider(Context, ILocationManager, Looper)}.
          * It is in charge of loading properties and registering for events that will be posted to
          * this handler.
          */
@@ -2362,17 +2398,14 @@ public class GpsLocationProvider implements LocationProviderInterface {
     }
 
     // for GPS SV statistics
-    private static final int MAX_SVS = 32;
-    private static final int EPHEMERIS_MASK = 0;
-    private static final int ALMANAC_MASK = 1;
-    private static final int USED_FOR_FIX_MASK = 2;
+    private static final int MAX_SVS = 512;
 
     // preallocated arrays, to avoid memory allocation in reportStatus()
-    private int mSvs[] = new int[MAX_SVS];
+    private int mPrnWithFlags[] = new int[MAX_SVS];
     private float mSnrs[] = new float[MAX_SVS];
     private float mSvElevations[] = new float[MAX_SVS];
     private float mSvAzimuths[] = new float[MAX_SVS];
-    private int mSvMasks[] = new int[3];
+    private int mConstellationTypes[] = new int[MAX_SVS];
     private int mSvCount;
     // preallocated to avoid memory allocation in reportNmea()
     private byte[] mNmeaBuffer = new byte[120];
@@ -2392,8 +2425,8 @@ public class GpsLocationProvider implements LocationProviderInterface {
     private native void native_delete_aiding_data(int flags);
     // returns number of SVs
     // mask[0] is ephemeris mask and mask[1] is almanac mask
-    private native int native_read_sv_status(int[] svs, float[] snrs,
-            float[] elevations, float[] azimuths, int[] masks);
+    private native int native_read_sv_status(int[] prnWithFlags, float[] snrs, float[] elevations,
+            float[] azimuths, int[] constellationTypes);
     private native int native_read_nmea(byte[] buffer, int bufferSize);
     private native void native_inject_location(double latitude, double longitude, float accuracy);
 
