@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (C) 2008, The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,14 +16,17 @@
 
 package android.location;
 
-import android.location.IGpsStatusListener;
+import android.location.Location;
 
 /**
- * An interface for location providers that provide GPS status information.
- *
  * {@hide}
  */
-interface IGpsStatusProvider {
-    void addGpsStatusListener(IGpsStatusListener listener);
-    void removeGpsStatusListener(IGpsStatusListener listener);
+oneway interface IGnssStatusListener
+{
+    void onGnssStarted();
+    void onGnssStopped();
+    void onFirstFix(int ttff);
+    void onSvStatusChanged(int svCount, in int[] prnWithFlags, in float[] snrs,
+            in float[] elevations, in float[] azimuths, in int[] constellationTypes);
+    void onNmeaReceived(long timestamp, String nmea);
 }

@@ -16,17 +16,17 @@
 
 package com.android.server.location;
 
-import android.location.IGpsStatusListener;
+import android.location.IGnssStatusListener;
 import android.os.Handler;
 import android.os.RemoteException;
 
 /**
- * Implementation of a handler for {@link IGpsStatusListener}.
+ * Implementation of a handler for {@link IGnssStatusListener}.
  */
-abstract class GpsStatusListenerHelper extends RemoteListenerHelper<IGpsStatusListener> {
-    protected GpsStatusListenerHelper(Handler handler) {
-        super(handler, "GpsStatusListenerHelper");
-        setSupported(GpsLocationProvider.isSupported());
+abstract class GnssStatusListenerHelper extends RemoteListenerHelper<IGnssStatusListener> {
+    protected GnssStatusListenerHelper(Handler handler) {
+        super(handler, "GnssStatusListenerHelper");
+        setSupported(GnssLocationProvider.isSupported());
     }
 
     @Override
@@ -38,7 +38,7 @@ abstract class GpsStatusListenerHelper extends RemoteListenerHelper<IGpsStatusLi
     protected void unregisterFromService() {}
 
     @Override
-    protected ListenerOperation<IGpsStatusListener> getHandlerOperation(int result) {
+    protected ListenerOperation<IGnssStatusListener> getHandlerOperation(int result) {
         return null;
     }
 
@@ -47,15 +47,15 @@ abstract class GpsStatusListenerHelper extends RemoteListenerHelper<IGpsStatusLi
         if (isNavigating) {
             operation = new Operation() {
                 @Override
-                public void execute(IGpsStatusListener listener) throws RemoteException {
-                    listener.onGpsStarted();
+                public void execute(IGnssStatusListener listener) throws RemoteException {
+                    listener.onGnssStarted();
                 }
             };
         } else {
             operation = new Operation() {
                 @Override
-                public void execute(IGpsStatusListener listener) throws RemoteException {
-                    listener.onGpsStopped();
+                public void execute(IGnssStatusListener listener) throws RemoteException {
+                    listener.onGnssStopped();
                 }
             };
         }
@@ -65,7 +65,7 @@ abstract class GpsStatusListenerHelper extends RemoteListenerHelper<IGpsStatusLi
     public void onFirstFix(final int timeToFirstFix) {
         Operation operation = new Operation() {
             @Override
-            public void execute(IGpsStatusListener listener) throws RemoteException {
+            public void execute(IGnssStatusListener listener) throws RemoteException {
                 listener.onFirstFix(timeToFirstFix);
             }
         };
@@ -74,25 +74,21 @@ abstract class GpsStatusListenerHelper extends RemoteListenerHelper<IGpsStatusLi
 
     public void onSvStatusChanged(
             final int svCount,
-            final int[] prns,
+            final int[] prnWithFlags,
             final float[] snrs,
             final float[] elevations,
             final float[] azimuths,
-            final int ephemerisMask,
-            final int almanacMask,
-            final int usedInFixMask) {
+            final int[] constellationTypes) {
         Operation operation = new Operation() {
             @Override
-            public void execute(IGpsStatusListener listener) throws RemoteException {
+            public void execute(IGnssStatusListener listener) throws RemoteException {
                 listener.onSvStatusChanged(
                         svCount,
-                        prns,
+                        prnWithFlags,
                         snrs,
                         elevations,
                         azimuths,
-                        ephemerisMask,
-                        almanacMask,
-                        usedInFixMask);
+                        constellationTypes);
             }
         };
         foreach(operation);
@@ -101,12 +97,12 @@ abstract class GpsStatusListenerHelper extends RemoteListenerHelper<IGpsStatusLi
     public void onNmeaReceived(final long timestamp, final String nmea) {
         Operation operation = new Operation() {
             @Override
-            public void execute(IGpsStatusListener listener) throws RemoteException {
+            public void execute(IGnssStatusListener listener) throws RemoteException {
                 listener.onNmeaReceived(timestamp, nmea);
             }
         };
         foreach(operation);
     }
 
-    private interface Operation extends ListenerOperation<IGpsStatusListener> {}
+    private interface Operation extends ListenerOperation<IGnssStatusListener> {}
 }
