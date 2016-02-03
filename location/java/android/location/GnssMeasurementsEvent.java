@@ -16,11 +16,13 @@
 
 package android.location;
 
+import android.annotation.IntDef;
 import android.annotation.NonNull;
-import android.annotation.SystemApi;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,12 +30,13 @@ import java.util.Collections;
 
 /**
  * A class implementing a container for data associated with a measurement event.
- * Events are delivered to registered instances of {@link Listener}.
- *
- * @hide
+ * Events are delivered to registered instances of {@link Callback}.
  */
-@SystemApi
-public class GpsMeasurementsEvent implements Parcelable {
+public final class GnssMeasurementsEvent implements Parcelable {
+    /** The status of GPS measurements event. */
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({STATUS_NOT_SUPPORTED, STATUS_READY, STATUS_GPS_LOCATION_DISABLED})
+    public @interface GnssMeasurementsStatus {}
 
     /**
      * The system does not support tracking of GPS Measurements. This status will not change in the
@@ -52,31 +55,29 @@ public class GpsMeasurementsEvent implements Parcelable {
      */
     public static final int STATUS_GPS_LOCATION_DISABLED = 2;
 
-    private final GpsClock mClock;
-    private final Collection<GpsMeasurement> mReadOnlyMeasurements;
+    private final GnssClock mClock;
+    private final Collection<GnssMeasurement> mReadOnlyMeasurements;
 
     /**
      * Used for receiving GPS satellite measurements from the GPS engine.
      * Each measurement contains raw and computed data identifying a satellite.
-     * You can implement this interface and call {@link LocationManager#addGpsMeasurementListener}.
-     *
-     * @hide
+     * You can implement this interface and call
+     * {@link LocationManager#registerGnssMeasurementCallback}.
      */
-    @SystemApi
-    public interface Listener {
+    public static abstract class Callback {
 
         /**
          * Returns the latest collected GPS Measurements.
          */
-        void onGpsMeasurementsReceived(GpsMeasurementsEvent eventArgs);
+        public void onGnssMeasurementsReceived(GnssMeasurementsEvent eventArgs) {}
 
         /**
          * Returns the latest status of the GPS Measurements sub-system.
          */
-        void onStatusChanged(int status);
+        public void onStatusChanged(@GnssMeasurementsStatus int status) {}
     }
 
-    public GpsMeasurementsEvent(GpsClock clock, GpsMeasurement[] measurements) {
+    public GnssMeasurementsEvent(GnssClock clock, GnssMeasurement[] measurements) {
         if (clock == null) {
             throw new InvalidParameterException("Parameter 'clock' must not be null.");
         }
@@ -86,12 +87,12 @@ public class GpsMeasurementsEvent implements Parcelable {
         }
 
         mClock = clock;
-        Collection<GpsMeasurement> measurementCollection = Arrays.asList(measurements);
+        Collection<GnssMeasurement> measurementCollection = Arrays.asList(measurements);
         mReadOnlyMeasurements = Collections.unmodifiableCollection(measurementCollection);
     }
 
     @NonNull
-    public GpsClock getClock() {
+    public GnssClock getClock() {
         return mClock;
     }
 
@@ -99,28 +100,28 @@ public class GpsMeasurementsEvent implements Parcelable {
      * Gets a read-only collection of measurements associated with the current event.
      */
     @NonNull
-    public Collection<GpsMeasurement> getMeasurements() {
+    public Collection<GnssMeasurement> getMeasurements() {
         return mReadOnlyMeasurements;
     }
 
-    public static final Creator<GpsMeasurementsEvent> CREATOR =
-            new Creator<GpsMeasurementsEvent>() {
+    public static final Creator<GnssMeasurementsEvent> CREATOR =
+            new Creator<GnssMeasurementsEvent>() {
         @Override
-        public GpsMeasurementsEvent createFromParcel(Parcel in) {
+        public GnssMeasurementsEvent createFromParcel(Parcel in) {
             ClassLoader classLoader = getClass().getClassLoader();
 
-            GpsClock clock = in.readParcelable(classLoader);
+            GnssClock clock = in.readParcelable(classLoader);
 
             int measurementsLength = in.readInt();
-            GpsMeasurement[] measurementsArray = new GpsMeasurement[measurementsLength];
-            in.readTypedArray(measurementsArray, GpsMeasurement.CREATOR);
+            GnssMeasurement[] measurementsArray = new GnssMeasurement[measurementsLength];
+            in.readTypedArray(measurementsArray, GnssMeasurement.CREATOR);
 
-            return new GpsMeasurementsEvent(clock, measurementsArray);
+            return new GnssMeasurementsEvent(clock, measurementsArray);
         }
 
         @Override
-        public GpsMeasurementsEvent[] newArray(int size) {
-            return new GpsMeasurementsEvent[size];
+        public GnssMeasurementsEvent[] newArray(int size) {
+            return new GnssMeasurementsEvent[size];
         }
     };
 
@@ -134,20 +135,20 @@ public class GpsMeasurementsEvent implements Parcelable {
         parcel.writeParcelable(mClock, flags);
 
         int measurementsCount = mReadOnlyMeasurements.size();
-        GpsMeasurement[] measurementsArray =
-                mReadOnlyMeasurements.toArray(new GpsMeasurement[measurementsCount]);
+        GnssMeasurement[] measurementsArray =
+                mReadOnlyMeasurements.toArray(new GnssMeasurement[measurementsCount]);
         parcel.writeInt(measurementsArray.length);
         parcel.writeTypedArray(measurementsArray, flags);
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("[ GpsMeasurementsEvent:\n\n");
+        StringBuilder builder = new StringBuilder("[ GnssMeasurementsEvent:\n\n");
 
         builder.append(mClock.toString());
         builder.append("\n");
 
-        for (GpsMeasurement measurement : mReadOnlyMeasurements) {
+        for (GnssMeasurement measurement : mReadOnlyMeasurements) {
             builder.append(measurement.toString());
             builder.append("\n");
         }
