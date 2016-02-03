@@ -16,17 +16,17 @@
 
 package android.location;
 
-import android.annotation.SystemApi;
+import android.annotation.IntDef;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * A class representing a GPS satellite measurement, containing raw and computed information.
- *
- * @hide
  */
-@SystemApi
-public class GpsMeasurement implements Parcelable {
+public final class GnssMeasurement implements Parcelable {
     private int mFlags;
     private byte mPrn;
     private double mTimeOffsetInNs;
@@ -59,6 +59,8 @@ public class GpsMeasurement implements Parcelable {
     private double mAzimuthInDeg;
     private double mAzimuthUncertaintyInDeg;
     private boolean mUsedInFix;
+    private double mPseudorangeRateCarrierInMetersPerSec;
+    private double mPseudorangeRateCarrierUncertaintyInMetersPerSec;
 
     // The following enumerations must be in sync with the values declared in gps.h
 
@@ -83,6 +85,11 @@ public class GpsMeasurement implements Parcelable {
     private static final int HAS_USED_IN_FIX = (1<<17);
     private static final int GPS_MEASUREMENT_HAS_UNCORRECTED_PSEUDORANGE_RATE = (1<<18);
 
+    /** The status of 'loss of lock'. */
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({LOSS_OF_LOCK_UNKNOWN, LOSS_OF_LOCK_OK, LOSS_OF_LOCK_CYCLE_SLIP})
+    public @interface LossOfLockStatus {}
+
     /**
      * The indicator is not available or it is unknown.
      */
@@ -97,6 +104,12 @@ public class GpsMeasurement implements Parcelable {
      * 'Loss of lock' detected between the previous and current observation: cycle slip possible.
      */
     public static final byte LOSS_OF_LOCK_CYCLE_SLIP = 2;
+
+    /** The status of multipath. */
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({MULTIPATH_INDICATOR_UNKNOWN, MULTIPATH_INDICATOR_DETECTED,
+        MULTIPATH_INDICATOR_NOT_USED})
+    public @interface MultipathIndicator {}
 
     /**
      * The indicator is not available or it is unknown.
@@ -176,14 +189,14 @@ public class GpsMeasurement implements Parcelable {
 
     // End enumerations in sync with gps.h
 
-    GpsMeasurement() {
+    GnssMeasurement() {
         initialize();
     }
 
     /**
      * Sets all contents to the values stored in the provided object.
      */
-    public void set(GpsMeasurement measurement) {
+    public void set(GnssMeasurement measurement) {
         mFlags = measurement.mFlags;
         mPrn = measurement.mPrn;
         mTimeOffsetInNs = measurement.mTimeOffsetInNs;
@@ -218,6 +231,10 @@ public class GpsMeasurement implements Parcelable {
         mAzimuthInDeg = measurement.mAzimuthInDeg;
         mAzimuthUncertaintyInDeg = measurement.mAzimuthUncertaintyInDeg;
         mUsedInFix = measurement.mUsedInFix;
+        mPseudorangeRateCarrierInMetersPerSec =
+                measurement.mPseudorangeRateCarrierInMetersPerSec;
+        mPseudorangeRateCarrierUncertaintyInMetersPerSec =
+                measurement.mPseudorangeRateCarrierUncertaintyInMetersPerSec;
     }
 
     /**
@@ -244,8 +261,8 @@ public class GpsMeasurement implements Parcelable {
 
     /**
      * Gets the time offset at which the measurement was taken in nanoseconds.
-     * The reference receiver's time is specified by {@link GpsClock#getTimeInNs()} and should be
-     * interpreted in the same way as indicated by {@link GpsClock#getType()}.
+     * The reference receiver's time is specified by {@link GnssClock#getTimeInNs()} and should be
+     * interpreted in the same way as indicated by {@link GnssClock#getType()}.
      *
      * The sign of this value is given by the following equation:
      *      measurement time = time_ns + time_offset_ns
@@ -776,6 +793,7 @@ public class GpsMeasurement implements Parcelable {
     /**
      * Gets a value indicating the 'loss of lock' state of the event.
      */
+    @LossOfLockStatus
     public byte getLossOfLock() {
         return mLossOfLock;
     }
@@ -783,7 +801,7 @@ public class GpsMeasurement implements Parcelable {
     /**
      * Sets the 'loss of lock' status.
      */
-    public void setLossOfLock(byte value) {
+    public void setLossOfLock(@LossOfLockStatus byte value) {
         mLossOfLock = value;
     }
 
@@ -941,6 +959,7 @@ public class GpsMeasurement implements Parcelable {
     /**
      * Gets a value indicating the 'multipath' state of the event.
      */
+    @MultipathIndicator
     public byte getMultipathIndicator() {
         return mMultipathIndicator;
     }
@@ -948,7 +967,7 @@ public class GpsMeasurement implements Parcelable {
     /**
      * Sets the 'multi-path' indicator.
      */
-    public void setMultipathIndicator(byte value) {
+    public void setMultipathIndicator(@MultipathIndicator byte value) {
         mMultipathIndicator = value;
     }
 
@@ -1157,50 +1176,80 @@ public class GpsMeasurement implements Parcelable {
         mUsedInFix = value;
     }
 
-    public static final Creator<GpsMeasurement> CREATOR = new Creator<GpsMeasurement>() {
+    /**
+     * Gets pseudorange rate (based on carrier phase changes) at the timestamp in m/s.
+     */
+    public double getPseudorangeRateCarrierInMetersPerSec() {
+        return mPseudorangeRateCarrierInMetersPerSec;
+    }
+
+    /**
+     * Sets pseudorange rate (based on carrier phase changes) at the timestamp in m/s.
+     */
+    public void setPseudorangeRateCarrierInMetersPerSec(double value) {
+        mPseudorangeRateCarrierInMetersPerSec = value;
+    }
+
+    /**
+     * Gets 1-Sigma uncertainty of the pseudorange rate carrier.
+     */
+    public double getPseudorangeRateCarrierUncertaintyInMetersPerSec() {
+        return mPseudorangeRateCarrierUncertaintyInMetersPerSec;
+    }
+
+    /**
+     * Sets 1-Sigma uncertainty of the pseudorange rate carrier.
+     */
+    public void setPseudorangeRateCarrierUncertaintyInMetersPerSec(double value) {
+        mPseudorangeRateCarrierUncertaintyInMetersPerSec = value;
+    }
+
+    public static final Creator<GnssMeasurement> CREATOR = new Creator<GnssMeasurement>() {
         @Override
-        public GpsMeasurement createFromParcel(Parcel parcel) {
-            GpsMeasurement gpsMeasurement = new GpsMeasurement();
+        public GnssMeasurement createFromParcel(Parcel parcel) {
+            GnssMeasurement gnssMeasurement = new GnssMeasurement();
 
-            gpsMeasurement.mFlags = parcel.readInt();
-            gpsMeasurement.mPrn = parcel.readByte();
-            gpsMeasurement.mTimeOffsetInNs = parcel.readDouble();
-            gpsMeasurement.mState = (short) parcel.readInt();
-            gpsMeasurement.mReceivedGpsTowInNs = parcel.readLong();
-            gpsMeasurement.mReceivedGpsTowUncertaintyInNs = parcel.readLong();
-            gpsMeasurement.mCn0InDbHz = parcel.readDouble();
-            gpsMeasurement.mPseudorangeRateInMetersPerSec = parcel.readDouble();
-            gpsMeasurement.mPseudorangeRateUncertaintyInMetersPerSec = parcel.readDouble();
-            gpsMeasurement.mAccumulatedDeltaRangeState = (short) parcel.readInt();
-            gpsMeasurement.mAccumulatedDeltaRangeInMeters = parcel.readDouble();
-            gpsMeasurement.mAccumulatedDeltaRangeUncertaintyInMeters = parcel.readDouble();
-            gpsMeasurement.mPseudorangeInMeters = parcel.readDouble();
-            gpsMeasurement.mPseudorangeUncertaintyInMeters = parcel.readDouble();
-            gpsMeasurement.mCodePhaseInChips = parcel.readDouble();
-            gpsMeasurement.mCodePhaseUncertaintyInChips = parcel.readDouble();
-            gpsMeasurement.mCarrierFrequencyInHz = parcel.readFloat();
-            gpsMeasurement.mCarrierCycles = parcel.readLong();
-            gpsMeasurement.mCarrierPhase = parcel.readDouble();
-            gpsMeasurement.mCarrierPhaseUncertainty = parcel.readDouble();
-            gpsMeasurement.mLossOfLock = parcel.readByte();
-            gpsMeasurement.mBitNumber = parcel.readInt();
-            gpsMeasurement.mTimeFromLastBitInMs = (short) parcel.readInt();
-            gpsMeasurement.mDopplerShiftInHz = parcel.readDouble();
-            gpsMeasurement.mDopplerShiftUncertaintyInHz = parcel.readDouble();
-            gpsMeasurement.mMultipathIndicator = parcel.readByte();
-            gpsMeasurement.mSnrInDb = parcel.readDouble();
-            gpsMeasurement.mElevationInDeg = parcel.readDouble();
-            gpsMeasurement.mElevationUncertaintyInDeg = parcel.readDouble();
-            gpsMeasurement.mAzimuthInDeg = parcel.readDouble();
-            gpsMeasurement.mAzimuthUncertaintyInDeg = parcel.readDouble();
-            gpsMeasurement.mUsedInFix = parcel.readInt() != 0;
+            gnssMeasurement.mFlags = parcel.readInt();
+            gnssMeasurement.mPrn = parcel.readByte();
+            gnssMeasurement.mTimeOffsetInNs = parcel.readDouble();
+            gnssMeasurement.mState = (short) parcel.readInt();
+            gnssMeasurement.mReceivedGpsTowInNs = parcel.readLong();
+            gnssMeasurement.mReceivedGpsTowUncertaintyInNs = parcel.readLong();
+            gnssMeasurement.mCn0InDbHz = parcel.readDouble();
+            gnssMeasurement.mPseudorangeRateInMetersPerSec = parcel.readDouble();
+            gnssMeasurement.mPseudorangeRateUncertaintyInMetersPerSec = parcel.readDouble();
+            gnssMeasurement.mAccumulatedDeltaRangeState = (short) parcel.readInt();
+            gnssMeasurement.mAccumulatedDeltaRangeInMeters = parcel.readDouble();
+            gnssMeasurement.mAccumulatedDeltaRangeUncertaintyInMeters = parcel.readDouble();
+            gnssMeasurement.mPseudorangeInMeters = parcel.readDouble();
+            gnssMeasurement.mPseudorangeUncertaintyInMeters = parcel.readDouble();
+            gnssMeasurement.mCodePhaseInChips = parcel.readDouble();
+            gnssMeasurement.mCodePhaseUncertaintyInChips = parcel.readDouble();
+            gnssMeasurement.mCarrierFrequencyInHz = parcel.readFloat();
+            gnssMeasurement.mCarrierCycles = parcel.readLong();
+            gnssMeasurement.mCarrierPhase = parcel.readDouble();
+            gnssMeasurement.mCarrierPhaseUncertainty = parcel.readDouble();
+            gnssMeasurement.mLossOfLock = parcel.readByte();
+            gnssMeasurement.mBitNumber = parcel.readInt();
+            gnssMeasurement.mTimeFromLastBitInMs = (short) parcel.readInt();
+            gnssMeasurement.mDopplerShiftInHz = parcel.readDouble();
+            gnssMeasurement.mDopplerShiftUncertaintyInHz = parcel.readDouble();
+            gnssMeasurement.mMultipathIndicator = parcel.readByte();
+            gnssMeasurement.mSnrInDb = parcel.readDouble();
+            gnssMeasurement.mElevationInDeg = parcel.readDouble();
+            gnssMeasurement.mElevationUncertaintyInDeg = parcel.readDouble();
+            gnssMeasurement.mAzimuthInDeg = parcel.readDouble();
+            gnssMeasurement.mAzimuthUncertaintyInDeg = parcel.readDouble();
+            gnssMeasurement.mUsedInFix = parcel.readInt() != 0;
+            gnssMeasurement.mPseudorangeRateCarrierInMetersPerSec = parcel.readDouble();
+            gnssMeasurement.mPseudorangeRateCarrierUncertaintyInMetersPerSec = parcel.readDouble();
 
-            return gpsMeasurement;
+            return gnssMeasurement;
         }
 
         @Override
-        public GpsMeasurement[] newArray(int i) {
-            return new GpsMeasurement[i];
+        public GnssMeasurement[] newArray(int i) {
+            return new GnssMeasurement[i];
         }
     };
 
@@ -1237,6 +1286,8 @@ public class GpsMeasurement implements Parcelable {
         parcel.writeDouble(mAzimuthInDeg);
         parcel.writeDouble(mAzimuthUncertaintyInDeg);
         parcel.writeInt(mUsedInFix ? 1 : 0);
+        parcel.writeDouble(mPseudorangeRateCarrierInMetersPerSec);
+        parcel.writeDouble(mPseudorangeRateCarrierUncertaintyInMetersPerSec);
     }
 
     @Override
@@ -1248,7 +1299,7 @@ public class GpsMeasurement implements Parcelable {
     public String toString() {
         final String format = "   %-29s = %s\n";
         final String formatWithUncertainty = "   %-29s = %-25s   %-40s = %s\n";
-        StringBuilder builder = new StringBuilder("GpsMeasurement:\n");
+        StringBuilder builder = new StringBuilder("GnssMeasurement:\n");
 
         builder.append(String.format(format, "Prn", mPrn));
 
@@ -1361,6 +1412,11 @@ public class GpsMeasurement implements Parcelable {
 
         builder.append(String.format(format, "UsedInFix", mUsedInFix));
 
+        builder.append(String.format(format, "PseudorangeRateCarrierInMetersPerSec",
+                    mPseudorangeRateCarrierInMetersPerSec));
+        builder.append(String.format(format, "PseudorangeRateCarrierUncertaintyInMetersPerSec",
+                    mPseudorangeRateCarrierUncertaintyInMetersPerSec));
+
         return builder.toString();
     }
 
@@ -1397,6 +1453,8 @@ public class GpsMeasurement implements Parcelable {
         resetAzimuthInDeg();
         resetAzimuthUncertaintyInDeg();
         setUsedInFix(false);
+        setPseudorangeRateCarrierInMetersPerSec(Double.MIN_VALUE);
+        setPseudorangeRateCarrierUncertaintyInMetersPerSec(Double.MIN_VALUE);
     }
 
     private void setFlag(int flag) {
