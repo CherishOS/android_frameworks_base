@@ -31497,6 +31497,51 @@ package android.os {
     ctor public TransactionTooLargeException(java.lang.String);
   }
 
+  public class UpdateEngine {
+    ctor public UpdateEngine();
+    method public void applyPayload(java.lang.String, long, long, java.lang.String[]) throws android.os.RemoteException;
+    method public boolean bind(android.os.UpdateEngineCallback, android.os.Handler) throws android.os.RemoteException;
+    method public boolean bind(android.os.UpdateEngineCallback) throws android.os.RemoteException;
+    method public void cancel() throws android.os.RemoteException;
+    method public void resume() throws android.os.RemoteException;
+    method public void suspend() throws android.os.RemoteException;
+  }
+
+  public static final class UpdateEngine.ErrorCodeConstants {
+    ctor public UpdateEngine.ErrorCodeConstants();
+    field public static final int DOWNLOAD_PAYLOAD_VERIFICATION_ERROR = 12; // 0xc
+    field public static final int DOWNLOAD_TRANSFER_ERROR = 9; // 0x9
+    field public static final int ERROR = 1; // 0x1
+    field public static final int FILESYSTEM_COPIER_ERROR = 4; // 0x4
+    field public static final int INSTALL_DEVICE_OPEN_ERROR = 7; // 0x7
+    field public static final int KERNEL_DEVICE_OPEN_ERROR = 8; // 0x8
+    field public static final int PAYLOAD_HASH_MISMATCH_ERROR = 10; // 0xa
+    field public static final int PAYLOAD_MISMATCHED_TYPE_ERROR = 6; // 0x6
+    field public static final int PAYLOAD_SIZE_MISMATCH_ERROR = 11; // 0xb
+    field public static final int POST_INSTALL_RUNNER_ERROR = 5; // 0x5
+    field public static final int SUCCESS = 0; // 0x0
+  }
+
+  public static final class UpdateEngine.UpdateStatusConstants {
+    ctor public UpdateEngine.UpdateStatusConstants();
+    field public static final int ATTEMPTING_ROLLBACK = 8; // 0x8
+    field public static final int CHECKING_FOR_UPDATE = 1; // 0x1
+    field public static final int DISABLED = 9; // 0x9
+    field public static final int DOWNLOADING = 3; // 0x3
+    field public static final int FINALIZING = 5; // 0x5
+    field public static final int IDLE = 0; // 0x0
+    field public static final int REPORTING_ERROR_EVENT = 7; // 0x7
+    field public static final int UPDATED_NEED_REBOOT = 6; // 0x6
+    field public static final int UPDATE_AVAILABLE = 2; // 0x2
+    field public static final int VERIFYING = 4; // 0x4
+  }
+
+  public abstract class UpdateEngineCallback {
+    ctor public UpdateEngineCallback();
+    method public abstract void onPayloadApplicationComplete(int);
+    method public abstract void onStatusUpdate(int, float);
+  }
+
   public final class UserHandle implements android.os.Parcelable {
     ctor public UserHandle(android.os.Parcel);
     method public int describeContents();
