@@ -23,9 +23,9 @@
 namespace android {
 namespace uirenderer {
 
-class FrameStatsObserver : public VirtualLightRefBase {
+class FrameMetricsObserver : public VirtualLightRefBase {
 public:
-    virtual void notify(BufferPool::Buffer* buffer);
+    virtual void notify(BufferPool::Buffer* buffer, int dropCount);
 };
 
 }; // namespace uirenderer
