@@ -21,7 +21,7 @@
 
 #include "BufferPool.h"
 #include "FrameInfo.h"
-#include "FrameStatsObserver.h"
+#include "FrameMetricsObserver.h"
 
 #include <string.h>
 #include <vector>
@@ -29,18 +29,18 @@
 namespace android {
 namespace uirenderer {
 
-class FrameStatsReporter {
+class FrameMetricsReporter {
 public:
-    FrameStatsReporter() {
+    FrameMetricsReporter() {
         mBufferPool = new BufferPool(kBufferSize, kBufferCount);
         LOG_ALWAYS_FATAL_IF(mBufferPool.get() == nullptr, "OOM: unable to allocate buffer pool");
     }
 
-    void addObserver(FrameStatsObserver* observer) {
+    void addObserver(FrameMetricsObserver* observer) {
         mObservers.push_back(observer);
     }
 
-    bool removeObserver(FrameStatsObserver* observer) {
+    bool removeObserver(FrameMetricsObserver* observer) {
         for (size_t i = 0; i < mObservers.size(); i++) {
             if (mObservers[i].get() == observer) {
                 mObservers.erase(mObservers.begin() + i);
@@ -54,7 +54,7 @@ public:
         return mObservers.size() > 0;
     }
 
-    void reportFrameStats(const int64_t* stats) {
+    void reportFrameMetrics(const int64_t* stats) {
         BufferPool::Buffer* statsBuffer = mBufferPool->acquire();
 
         if (statsBuffer != nullptr) {
@@ -63,11 +63,12 @@ public:
 
             // notify on requested threads
             for (size_t i = 0; i < mObservers.size(); i++) {
-                mObservers[i]->notify(statsBuffer);
+                mObservers[i]->notify(statsBuffer, mDroppedReports);
             }
 
             // drop our reference
             statsBuffer->release();
+            mDroppedReports = 0;
         } else {
             mDroppedReports++;
         }
@@ -79,7 +80,7 @@ private:
     static const size_t kBufferCount = 3;
     static const size_t kBufferSize = static_cast<size_t>(FrameInfoIndex::NumIndexes);
 
-    std::vector< sp<FrameStatsObserver> > mObservers;
+    std::vector< sp<FrameMetricsObserver> > mObservers;
 
     sp<BufferPool> mBufferPool;
 
