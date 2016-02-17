@@ -24282,17 +24282,24 @@ package android.media.session {
 package android.media.soundtrigger {
 
   public final class SoundTriggerDetector {
-    method public boolean startRecognition();
+    method public boolean startRecognition(int);
     method public boolean stopRecognition();
+    field public static final int RECOGNITION_FLAG_ALLOW_MULTIPLE_TRIGGERS = 2; // 0x2
+    field public static final int RECOGNITION_FLAG_CAPTURE_TRIGGER_AUDIO = 1; // 0x1
   }
 
-  public abstract class SoundTriggerDetector.Callback {
+  public static abstract class SoundTriggerDetector.Callback {
     ctor public SoundTriggerDetector.Callback();
     method public abstract void onAvailabilityChanged(int);
-    method public abstract void onDetected();
+    method public abstract void onDetected(android.media.soundtrigger.SoundTriggerDetector.EventPayload);
     method public abstract void onError();
     method public abstract void onRecognitionPaused();
     method public abstract void onRecognitionResumed();
+  }
+
+  public static class SoundTriggerDetector.EventPayload {
+    method public android.media.AudioFormat getCaptureAudioFormat();
+    method public byte[] getTriggerAudio();
   }
 
   public final class SoundTriggerManager {
