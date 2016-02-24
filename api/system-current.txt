@@ -9707,25 +9707,6 @@ package android.content.pm {
     field public int reqTouchScreen;
   }
 
-  public deprecated class ContainerEncryptionParams implements android.os.Parcelable {
-    ctor public ContainerEncryptionParams(java.lang.String, java.security.spec.AlgorithmParameterSpec, javax.crypto.SecretKey) throws java.security.InvalidAlgorithmParameterException;
-    ctor public ContainerEncryptionParams(java.lang.String, java.security.spec.AlgorithmParameterSpec, javax.crypto.SecretKey, java.lang.String, java.security.spec.AlgorithmParameterSpec, javax.crypto.SecretKey, byte[], long, long, long) throws java.security.InvalidAlgorithmParameterException;
-    method public int describeContents();
-    method public long getAuthenticatedDataStart();
-    method public long getDataEnd();
-    method public long getEncryptedDataStart();
-    method public java.lang.String getEncryptionAlgorithm();
-    method public javax.crypto.SecretKey getEncryptionKey();
-    method public java.security.spec.AlgorithmParameterSpec getEncryptionSpec();
-    method public java.lang.String getMacAlgorithm();
-    method public javax.crypto.SecretKey getMacKey();
-    method public java.security.spec.AlgorithmParameterSpec getMacSpec();
-    method public byte[] getMacTag();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.content.pm.ContainerEncryptionParams> CREATOR;
-    field protected static final java.lang.String TAG = "ContainerEncryptionParams";
-  }
-
   public final class EphemeralResolveInfo implements android.os.Parcelable {
     ctor public EphemeralResolveInfo(android.net.Uri, java.lang.String, java.util.List<android.content.IntentFilter>);
     method public int describeContents();
@@ -37031,6 +37012,7 @@ package android.service.notification {
   public abstract class NotificationAssistantService extends android.service.notification.NotificationListenerService {
     ctor public NotificationAssistantService();
     method public final void adjustImportance(java.lang.String, android.service.notification.NotificationAssistantService.Adjustment);
+    method public final android.os.IBinder onBind(android.content.Intent);
     method public void onNotificationActionClick(java.lang.String, long, int);
     method public void onNotificationClick(java.lang.String, long);
     method public abstract android.service.notification.NotificationAssistantService.Adjustment onNotificationEnqueued(android.service.notification.StatusBarNotification, int, boolean);
@@ -37083,7 +37065,7 @@ package android.service.notification {
     method public void registerAsSystemService(android.content.Context, android.content.ComponentName, int) throws android.os.RemoteException;
     method public final void requestInterruptionFilter(int);
     method public final void requestListenerHints(int);
-    method public static final void requestRebind(android.content.ComponentName) throws android.os.RemoteException;
+    method public static void requestRebind(android.content.ComponentName) throws android.os.RemoteException;
     method public final void requestUnbind() throws android.os.RemoteException;
     method public final void setNotificationsShown(java.lang.String[]);
     method public final void setOnNotificationPostedTrim(int);
