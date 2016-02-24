@@ -37147,6 +37147,7 @@ package android.service.persistentdata {
 
   public abstract interface IPersistentDataBlockService implements android.os.IInterface {
     method public abstract int getDataBlockSize() throws android.os.RemoteException;
+    method public abstract int getFlashLockState() throws android.os.RemoteException;
     method public abstract long getMaximumDataBlockSize() throws android.os.RemoteException;
     method public abstract boolean getOemUnlockEnabled() throws android.os.RemoteException;
     method public abstract byte[] read() throws android.os.RemoteException;
@@ -37158,12 +37159,19 @@ package android.service.persistentdata {
   public class PersistentDataBlockManager {
     ctor public PersistentDataBlockManager(android.service.persistentdata.IPersistentDataBlockService);
     method public int getDataBlockSize();
+    method public int getFlashLockState();
     method public long getMaximumDataBlockSize();
     method public boolean getOemUnlockEnabled();
     method public byte[] read();
     method public void setOemUnlockEnabled(boolean);
     method public void wipe();
     method public int write(byte[]);
+    field public static final int FLASH_LOCK_LOCKED = 1; // 0x1
+    field public static final int FLASH_LOCK_UNKNOWN = -1; // 0xffffffff
+    field public static final int FLASH_LOCK_UNLOCKED = 0; // 0x0
+  }
+
+  public static abstract class PersistentDataBlockManager.FlashLockState implements java.lang.annotation.Annotation {
   }
 
 }
