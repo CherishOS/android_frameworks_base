@@ -8409,6 +8409,7 @@ package android.content {
     field public static final java.lang.String CLIPBOARD_SERVICE = "clipboard";
     field public static final java.lang.String CONNECTIVITY_SERVICE = "connectivity";
     field public static final java.lang.String CONSUMER_IR_SERVICE = "consumer_ir";
+    field public static final java.lang.String CONTEXTHUB_SERVICE = "contexthub";
     field public static final int CONTEXT_IGNORE_SECURITY = 2; // 0x2
     field public static final int CONTEXT_INCLUDE_CODE = 1; // 0x1
     field public static final int CONTEXT_RESTRICTED = 4; // 0x4
@@ -15277,35 +15278,29 @@ package android.hardware.location {
     method public java.lang.String getToolchain();
     method public int getToolchainVersion();
     method public java.lang.String getVendor();
-    method public void setId(int);
-    method public void setMemoryRegions(android.hardware.location.MemoryRegion[]);
-    method public void setName(java.lang.String);
-    method public void setPeakMips(float);
-    method public void setPeakPowerDrawMw(float);
-    method public void setPlatformVersion(int);
-    method public void setSleepPowerDrawMw(float);
-    method public void setStaticSwVersion(int);
-    method public void setStoppedPowerDrawMw(float);
-    method public void setSupportedSensors(int[]);
-    method public void setToolchain(java.lang.String);
-    method public void setToolchainVersion(int);
-    method public void setVendor(java.lang.String);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.hardware.location.ContextHubInfo> CREATOR;
   }
 
   public final class ContextHubManager {
     method public java.lang.Integer[] findNanoAppOnHub(int, android.hardware.location.NanoAppFilter);
-    method public int[] getContexthubHandles();
-    method public android.hardware.location.ContextHubInfo getContexthubInfo(int);
+    method public int[] getContextHubHandles();
+    method public android.hardware.location.ContextHubInfo getContextHubInfo(int);
     method public android.hardware.location.NanoAppInstanceInfo getNanoAppInstanceInfo(int);
     method public int loadNanoApp(int, android.hardware.location.NanoApp);
+    method public int registerContextHubCallback(android.hardware.location.ContextHubManager.ContextHubCallback);
+    method public int registerContextHubCallback(android.hardware.location.ContextHubManager.ContextHubCallback, android.os.Handler);
     method public int sendMessage(int, int, android.hardware.location.ContextHubMessage);
     method public int unloadNanoApp(int);
+    method public int unregisterContextHubCallback(android.hardware.location.ContextHubManager.ContextHubCallback);
     field public static final int ANY_HUB = -1; // 0xffffffff
     field public static final int MSG_DATA_SEND = 3; // 0x3
     field public static final int MSG_LOAD_NANO_APP = 1; // 0x1
     field public static final int MSG_UNLOAD_NANO_APP = 2; // 0x2
+  }
+
+  public abstract class ContextHubManager.ContextHubCallback {
+    ctor public ContextHubManager.ContextHubCallback();
   }
 
   public class ContextHubMessage {
