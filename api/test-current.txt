@@ -443,6 +443,7 @@ package android {
     field public static final deprecated int dayOfWeekTextAppearance = 16843925; // 0x1010495
     field public static final int debuggable = 16842767; // 0x101000f
     field public static final int defaultHeight = 16844021; // 0x10104f5
+    field public static final int defaultToDeviceProtectedStorage = 16844037; // 0x1010505
     field public static final int defaultValue = 16843245; // 0x10101ed
     field public static final int defaultWidth = 16844020; // 0x10104f4
     field public static final int delay = 16843212; // 0x10101cc
@@ -462,6 +463,7 @@ package android {
     field public static final int dialogTheme = 16843528; // 0x1010308
     field public static final int dialogTitle = 16843250; // 0x10101f2
     field public static final int digits = 16843110; // 0x1010166
+    field public static final int directBootAware = 16844038; // 0x1010506
     field public static final int direction = 16843217; // 0x10101d1
     field public static final deprecated int directionDescriptions = 16843681; // 0x10103a1
     field public static final int directionPriority = 16843218; // 0x10101d2
@@ -510,7 +512,6 @@ package android {
     field public static final int ellipsize = 16842923; // 0x10100ab
     field public static final int ems = 16843096; // 0x1010158
     field public static final int enabled = 16842766; // 0x101000e
-    field public static final int encryptionAware = 16844038; // 0x1010506
     field public static final int end = 16843996; // 0x10104dc
     field public static final int endColor = 16843166; // 0x101019e
     field public static final int endX = 16844051; // 0x1010513
@@ -575,7 +576,6 @@ package android {
     field public static final int fontFamily = 16843692; // 0x10103ac
     field public static final int fontFeatureSettings = 16843959; // 0x10104b7
     field public static final int footerDividersEnabled = 16843311; // 0x101022f
-    field public static final int forceDeviceEncrypted = 16844037; // 0x1010505
     field public static final int foreground = 16843017; // 0x1010109
     field public static final int foregroundGravity = 16843264; // 0x1010200
     field public static final int foregroundTint = 16843885; // 0x101046d
@@ -7979,7 +7979,7 @@ package android.content {
     method public abstract int checkUriPermission(android.net.Uri, java.lang.String, java.lang.String, int, int, int);
     method public abstract deprecated void clearWallpaper() throws java.io.IOException;
     method public abstract android.content.Context createConfigurationContext(android.content.res.Configuration);
-    method public abstract android.content.Context createDeviceEncryptedStorageContext();
+    method public abstract android.content.Context createDeviceProtectedStorageContext();
     method public abstract android.content.Context createDisplayContext(android.view.Display);
     method public abstract android.content.Context createPackageContext(java.lang.String, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract java.lang.String[] databaseList();
@@ -8038,10 +8038,10 @@ package android.content {
     method public abstract deprecated int getWallpaperDesiredMinimumHeight();
     method public abstract deprecated int getWallpaperDesiredMinimumWidth();
     method public abstract void grantUriPermission(java.lang.String, android.net.Uri, int);
-    method public abstract boolean isDeviceEncryptedStorage();
+    method public abstract boolean isDeviceProtectedStorage();
     method public boolean isRestricted();
-    method public abstract boolean migrateDatabaseFrom(android.content.Context, java.lang.String);
-    method public abstract boolean migrateSharedPreferencesFrom(android.content.Context, java.lang.String);
+    method public abstract boolean moveDatabaseFrom(android.content.Context, java.lang.String);
+    method public abstract boolean moveSharedPreferencesFrom(android.content.Context, java.lang.String);
     method public final android.content.res.TypedArray obtainStyledAttributes(int[]);
     method public final android.content.res.TypedArray obtainStyledAttributes(int, int[]) throws android.content.res.Resources.NotFoundException;
     method public final android.content.res.TypedArray obtainStyledAttributes(android.util.AttributeSet, int[]);
@@ -8176,7 +8176,7 @@ package android.content {
     method public int checkUriPermission(android.net.Uri, java.lang.String, java.lang.String, int, int, int);
     method public deprecated void clearWallpaper() throws java.io.IOException;
     method public android.content.Context createConfigurationContext(android.content.res.Configuration);
-    method public android.content.Context createDeviceEncryptedStorageContext();
+    method public android.content.Context createDeviceProtectedStorageContext();
     method public android.content.Context createDisplayContext(android.view.Display);
     method public android.content.Context createPackageContext(java.lang.String, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public java.lang.String[] databaseList();
@@ -8229,9 +8229,9 @@ package android.content {
     method public deprecated int getWallpaperDesiredMinimumHeight();
     method public deprecated int getWallpaperDesiredMinimumWidth();
     method public void grantUriPermission(java.lang.String, android.net.Uri, int);
-    method public boolean isDeviceEncryptedStorage();
-    method public boolean migrateDatabaseFrom(android.content.Context, java.lang.String);
-    method public boolean migrateSharedPreferencesFrom(android.content.Context, java.lang.String);
+    method public boolean isDeviceProtectedStorage();
+    method public boolean moveDatabaseFrom(android.content.Context, java.lang.String);
+    method public boolean moveSharedPreferencesFrom(android.content.Context, java.lang.String);
     method public java.io.FileInputStream openFileInput(java.lang.String) throws java.io.FileNotFoundException;
     method public java.io.FileOutputStream openFileOutput(java.lang.String, int) throws java.io.FileNotFoundException;
     method public android.database.sqlite.SQLiteDatabase openOrCreateDatabase(java.lang.String, int, android.database.sqlite.SQLiteDatabase.CursorFactory);
@@ -9324,10 +9324,9 @@ package android.content.pm {
     field public java.lang.String backupAgentName;
     field public java.lang.String className;
     field public int compatibleWidthLimitDp;
-    field public java.lang.String credentialEncryptedDataDir;
     field public java.lang.String dataDir;
     field public int descriptionRes;
-    field public java.lang.String deviceEncryptedDataDir;
+    field public java.lang.String deviceProtectedDataDir;
     field public boolean enabled;
     field public int flags;
     field public int largestWidthLimitDp;
@@ -9364,8 +9363,8 @@ package android.content.pm {
     method public boolean isEnabled();
     field public android.content.pm.ApplicationInfo applicationInfo;
     field public int descriptionRes;
+    field public boolean directBootAware;
     field public boolean enabled;
-    field public boolean encryptionAware;
     field public boolean exported;
     field public java.lang.String processName;
   }
@@ -9837,11 +9836,10 @@ package android.content.pm {
     field public static final int GET_URI_PERMISSION_PATTERNS = 2048; // 0x800
     field public static final int MATCH_ALL = 131072; // 0x20000
     field public static final int MATCH_DEFAULT_ONLY = 65536; // 0x10000
+    field public static final int MATCH_DIRECT_BOOT_AWARE = 524288; // 0x80000
+    field public static final int MATCH_DIRECT_BOOT_UNAWARE = 262144; // 0x40000
     field public static final int MATCH_DISABLED_COMPONENTS = 512; // 0x200
     field public static final int MATCH_DISABLED_UNTIL_USED_COMPONENTS = 32768; // 0x8000
-    field public static final int MATCH_ENCRYPTION_AWARE = 524288; // 0x80000
-    field public static final int MATCH_ENCRYPTION_AWARE_AND_UNAWARE = 786432; // 0xc0000
-    field public static final int MATCH_ENCRYPTION_UNAWARE = 262144; // 0x40000
     field public static final int MATCH_SYSTEM_ONLY = 1048576; // 0x100000
     field public static final int MATCH_UNINSTALLED_PACKAGES = 8192; // 0x2000
     field public static final long MAXIMUM_VERIFICATION_TIMEOUT = 3600000L; // 0x36ee80L
@@ -29438,10 +29436,6 @@ package android.os {
     method public boolean isSystemUser();
     method public boolean isUserAGoat();
     method public boolean isUserRunning(android.os.UserHandle);
-    method public deprecated boolean isUserRunningAndLocked();
-    method public deprecated boolean isUserRunningAndLocked(android.os.UserHandle);
-    method public deprecated boolean isUserRunningAndUnlocked();
-    method public deprecated boolean isUserRunningAndUnlocked(android.os.UserHandle);
     method public boolean isUserRunningOrStopping(android.os.UserHandle);
     method public boolean isUserUnlocked();
     method public boolean isUserUnlocked(android.os.UserHandle);
@@ -30003,7 +29997,7 @@ package android.preference {
     method public void setSharedPreferencesMode(int);
     method public void setSharedPreferencesName(java.lang.String);
     method public void setStorageDefault();
-    method public void setStorageDeviceEncrypted();
+    method public void setStorageDeviceProtected();
     field public static final java.lang.String KEY_HAS_SET_DEFAULT_VALUES = "_has_set_default_values";
     field public static final java.lang.String METADATA_KEY_PREFERENCES = "android.preference";
   }
@@ -37985,7 +37979,7 @@ package android.test.mock {
     method public int checkUriPermission(android.net.Uri, java.lang.String, java.lang.String, int, int, int);
     method public void clearWallpaper();
     method public android.content.Context createConfigurationContext(android.content.res.Configuration);
-    method public android.content.Context createDeviceEncryptedStorageContext();
+    method public android.content.Context createDeviceProtectedStorageContext();
     method public android.content.Context createDisplayContext(android.view.Display);
     method public android.content.Context createPackageContext(java.lang.String, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public java.lang.String[] databaseList();
@@ -38037,9 +38031,9 @@ package android.test.mock {
     method public int getWallpaperDesiredMinimumHeight();
     method public int getWallpaperDesiredMinimumWidth();
     method public void grantUriPermission(java.lang.String, android.net.Uri, int);
-    method public boolean isDeviceEncryptedStorage();
-    method public boolean migrateDatabaseFrom(android.content.Context, java.lang.String);
-    method public boolean migrateSharedPreferencesFrom(android.content.Context, java.lang.String);
+    method public boolean isDeviceProtectedStorage();
+    method public boolean moveDatabaseFrom(android.content.Context, java.lang.String);
+    method public boolean moveSharedPreferencesFrom(android.content.Context, java.lang.String);
     method public java.io.FileInputStream openFileInput(java.lang.String) throws java.io.FileNotFoundException;
     method public java.io.FileOutputStream openFileOutput(java.lang.String, int) throws java.io.FileNotFoundException;
     method public android.database.sqlite.SQLiteDatabase openOrCreateDatabase(java.lang.String, int, android.database.sqlite.SQLiteDatabase.CursorFactory);
