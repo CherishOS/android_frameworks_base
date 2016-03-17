@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.auditing;
+package android.app.admin;
 
 import android.annotation.IntDef;
 import android.os.Parcel;
@@ -92,7 +92,7 @@ public class SecurityLog {
     public static final int TAG_KEYGUARD_SECURED = SecurityLogTags.SECURITY_KEYGUARD_SECURED;
 
     /**
-     * Returns if device logging is enabled. Log producers should only write new logs if this is
+     * Returns if security logging is enabled. Log producers should only write new logs if this is
      * true. Under the hood this is the logical AND of whether device owner exists and whether
      * it enables logging by setting the system property {@link #PROPERTY_LOGGING_ENABLED}.
      * @hide
