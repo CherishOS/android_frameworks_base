@@ -5990,7 +5990,6 @@ package android.app.admin {
     method public int getCurrentFailedPasswordAttempts();
     method public deprecated java.lang.String getDeviceInitializerApp();
     method public deprecated android.content.ComponentName getDeviceInitializerComponent();
-    method public boolean getDeviceLoggingEnabled(android.content.ComponentName);
     method public java.lang.String getDeviceOwner();
     method public java.lang.String getDeviceOwnerLockScreenInfo();
     method public java.lang.String getDeviceOwnerNameOnAnyUser();
@@ -6046,6 +6045,7 @@ package android.app.admin {
     method public boolean isMasterVolumeMuted(android.content.ComponentName);
     method public boolean isProfileOwnerApp(java.lang.String);
     method public boolean isProvisioningAllowed(java.lang.String);
+    method public boolean isSecurityLoggingEnabled(android.content.ComponentName);
     method public boolean isUninstallBlocked(android.content.ComponentName, java.lang.String);
     method public void lockNow();
     method public void notifyPendingSystemUpdate(long);
@@ -6056,8 +6056,8 @@ package android.app.admin {
     method public boolean removeUser(android.content.ComponentName, android.os.UserHandle);
     method public boolean requestBugreport(android.content.ComponentName);
     method public boolean resetPassword(java.lang.String, int);
-    method public java.util.List<android.auditing.SecurityLog.SecurityEvent> retrieveDeviceLogs(android.content.ComponentName);
-    method public java.util.List<android.auditing.SecurityLog.SecurityEvent> retrievePreviousDeviceLogs(android.content.ComponentName);
+    method public java.util.List<android.app.admin.SecurityLog.SecurityEvent> retrievePreRebootSecurityLogs(android.content.ComponentName);
+    method public java.util.List<android.app.admin.SecurityLog.SecurityEvent> retrieveSecurityLogs(android.content.ComponentName);
     method public void setAccountManagementDisabled(android.content.ComponentName, java.lang.String, boolean);
     method public deprecated boolean setActiveProfileOwner(android.content.ComponentName, java.lang.String) throws java.lang.IllegalArgumentException;
     method public boolean setAlwaysOnVpnPackage(android.content.ComponentName, java.lang.String);
@@ -6070,7 +6070,6 @@ package android.app.admin {
     method public void setCertInstallerPackage(android.content.ComponentName, java.lang.String) throws java.lang.SecurityException;
     method public void setCrossProfileCallerIdDisabled(android.content.ComponentName, boolean);
     method public void setCrossProfileContactsSearchDisabled(android.content.ComponentName, boolean);
-    method public void setDeviceLoggingEnabled(android.content.ComponentName, boolean);
     method public boolean setDeviceOwnerLockScreenInfo(android.content.ComponentName, java.lang.String);
     method public void setGlobalSetting(android.content.ComponentName, java.lang.String, java.lang.String);
     method public boolean setKeyguardDisabled(android.content.ComponentName, boolean);
@@ -6103,6 +6102,7 @@ package android.app.admin {
     method public void setRestrictionsProvider(android.content.ComponentName, android.content.ComponentName);
     method public void setScreenCaptureDisabled(android.content.ComponentName, boolean);
     method public void setSecureSetting(android.content.ComponentName, java.lang.String, java.lang.String);
+    method public void setSecurityLoggingEnabled(android.content.ComponentName, boolean);
     method public void setShortSupportMessage(android.content.ComponentName, java.lang.String);
     method public boolean setStatusBarDisabled(android.content.ComponentName, boolean);
     method public int setStorageEncryption(android.content.ComponentName, boolean);
@@ -6195,6 +6195,27 @@ package android.app.admin {
     field public static final int STATE_USER_UNMANAGED = 0; // 0x0
     field public static final int WIPE_EXTERNAL_STORAGE = 1; // 0x1
     field public static final int WIPE_RESET_PROTECTION_DATA = 2; // 0x2
+  }
+
+  public class SecurityLog {
+    ctor public SecurityLog();
+    field public static final int TAG_ADB_SHELL_CMD = 210002; // 0x33452
+    field public static final int TAG_ADB_SHELL_INTERACTIVE = 210001; // 0x33451
+    field public static final int TAG_APP_PROCESS_START = 210005; // 0x33455
+    field public static final int TAG_KEYGUARD_DISMISSED = 210006; // 0x33456
+    field public static final int TAG_KEYGUARD_DISMISS_AUTH_ATTEMPT = 210007; // 0x33457
+    field public static final int TAG_KEYGUARD_SECURED = 210008; // 0x33458
+    field public static final int TAG_SYNC_RECV_FILE = 210003; // 0x33453
+    field public static final int TAG_SYNC_SEND_FILE = 210004; // 0x33454
+  }
+
+  public static final class SecurityLog.SecurityEvent implements android.os.Parcelable {
+    method public int describeContents();
+    method public java.lang.Object getData();
+    method public int getTag();
+    method public long getTimeNanos();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.app.admin.SecurityLog.SecurityEvent> CREATOR;
   }
 
   public class SystemUpdatePolicy implements android.os.Parcelable {
@@ -6843,31 +6864,6 @@ package android.appwidget {
     field public int resizeMode;
     field public int updatePeriodMillis;
     field public int widgetCategory;
-  }
-
-}
-
-package android.auditing {
-
-  public class SecurityLog {
-    ctor public SecurityLog();
-    field public static final int TAG_ADB_SHELL_CMD = 210002; // 0x33452
-    field public static final int TAG_ADB_SHELL_INTERACTIVE = 210001; // 0x33451
-    field public static final int TAG_APP_PROCESS_START = 210005; // 0x33455
-    field public static final int TAG_KEYGUARD_DISMISSED = 210006; // 0x33456
-    field public static final int TAG_KEYGUARD_DISMISS_AUTH_ATTEMPT = 210007; // 0x33457
-    field public static final int TAG_KEYGUARD_SECURED = 210008; // 0x33458
-    field public static final int TAG_SYNC_RECV_FILE = 210003; // 0x33453
-    field public static final int TAG_SYNC_SEND_FILE = 210004; // 0x33454
-  }
-
-  public static final class SecurityLog.SecurityEvent implements android.os.Parcelable {
-    method public int describeContents();
-    method public java.lang.Object getData();
-    method public int getTag();
-    method public long getTimeNanos();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.auditing.SecurityLog.SecurityEvent> CREATOR;
   }
 
 }
