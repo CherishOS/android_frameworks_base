@@ -36222,6 +36222,7 @@ package android.telecom {
     method public final android.telecom.CallAudioState getCallAudioState();
     method public final java.util.List<android.telecom.Connection> getConferenceableConnections();
     method public final int getConnectionCapabilities();
+    method public final int getConnectionProperties();
     method public final long getConnectionTime();
     method public final java.util.List<android.telecom.Connection> getConnections();
     method public final android.telecom.DisconnectCause getDisconnectCause();
@@ -36249,6 +36250,7 @@ package android.telecom {
     method public final void setActive();
     method public final void setConferenceableConnections(java.util.List<android.telecom.Connection>);
     method public final void setConnectionCapabilities(int);
+    method public final void setConnectionProperties(int);
     method public final void setConnectionTime(long);
     method public final void setDialing();
     method public final void setDisconnected(android.telecom.DisconnectCause);
@@ -36278,6 +36280,7 @@ package android.telecom {
     method public final android.telecom.Conference getConference();
     method public final java.util.List<android.telecom.Conferenceable> getConferenceables();
     method public final int getConnectionCapabilities();
+    method public final int getConnectionProperties();
     method public final android.telecom.DisconnectCause getDisconnectCause();
     method public final android.os.Bundle getExtras();
     method public final int getState();
@@ -36303,6 +36306,7 @@ package android.telecom {
     method public void onUnhold();
     method public final void putExtras(android.os.Bundle);
     method public final void removeExtras(java.util.List<java.lang.String>);
+    method public static java.lang.String propertiesToString(int);
     method public void sendConnectionEvent(java.lang.String, android.os.Bundle);
     method public final void setActive();
     method public final void setAddress(android.net.Uri, int);
@@ -36311,6 +36315,7 @@ package android.telecom {
     method public final void setConferenceableConnections(java.util.List<android.telecom.Connection>);
     method public final void setConferenceables(java.util.List<android.telecom.Conferenceable>);
     method public final void setConnectionCapabilities(int);
+    method public final void setConnectionProperties(int);
     method public final void setDialing();
     method public final void setDisconnected(android.telecom.DisconnectCause);
     method public final deprecated void setExtras(android.os.Bundle);
@@ -36327,12 +36332,11 @@ package android.telecom {
     method public static java.lang.String stateToString(int);
     field public static final int CAPABILITY_CANNOT_DOWNGRADE_VIDEO_TO_AUDIO = 8388608; // 0x800000
     field public static final int CAPABILITY_CAN_PAUSE_VIDEO = 1048576; // 0x100000
-    field public static final int CAPABILITY_CAN_PULL_CALL = 33554432; // 0x2000000
     field public static final int CAPABILITY_CAN_SEND_RESPONSE_VIA_CONNECTION = 4194304; // 0x400000
+    field public static final int CAPABILITY_CAN_PULL_CALL = 16777216; // 0x1000000
     field public static final int CAPABILITY_CAN_UPGRADE_TO_VIDEO = 524288; // 0x80000
     field public static final int CAPABILITY_DISCONNECT_FROM_CONFERENCE = 8192; // 0x2000
     field public static final int CAPABILITY_HOLD = 1; // 0x1
-    field public static final int CAPABILITY_IS_EXTERNAL_CALL = 16777216; // 0x1000000
     field public static final int CAPABILITY_MANAGE_CONFERENCE = 128; // 0x80
     field public static final int CAPABILITY_MERGE_CONFERENCE = 4; // 0x4
     field public static final int CAPABILITY_MUTE = 64; // 0x40
@@ -36350,6 +36354,7 @@ package android.telecom {
     field public static final java.lang.String EXTRA_CALL_SUBJECT = "android.telecom.extra.CALL_SUBJECT";
     field public static final java.lang.String EXTRA_CHILD_ADDRESS = "android.telecom.extra.CHILD_ADDRESS";
     field public static final java.lang.String EXTRA_LAST_FORWARDED_NUMBER = "android.telecom.extra.LAST_FORWARDED_NUMBER";
+    field public static final int PROPERTY_IS_EXTERNAL_CALL = 16; // 0x10
     field public static final int STATE_ACTIVE = 4; // 0x4
     field public static final int STATE_DIALING = 3; // 0x3
     field public static final int STATE_DISCONNECTED = 6; // 0x6
@@ -36572,6 +36577,7 @@ package android.telecom {
     method public void disconnect();
     method public java.util.List<android.telecom.RemoteConnection> getConferenceableConnections();
     method public final int getConnectionCapabilities();
+    method public final int getConnectionProperties();
     method public final java.util.List<android.telecom.RemoteConnection> getConnections();
     method public android.telecom.DisconnectCause getDisconnectCause();
     method public final android.os.Bundle getExtras();
@@ -36594,6 +36600,7 @@ package android.telecom {
     method public void onConferenceableConnectionsChanged(android.telecom.RemoteConference, java.util.List<android.telecom.RemoteConnection>);
     method public void onConnectionAdded(android.telecom.RemoteConference, android.telecom.RemoteConnection);
     method public void onConnectionCapabilitiesChanged(android.telecom.RemoteConference, int);
+    method public void onConnectionPropertiesChanged(android.telecom.RemoteConference, int);
     method public void onConnectionRemoved(android.telecom.RemoteConference, android.telecom.RemoteConnection);
     method public void onDestroyed(android.telecom.RemoteConference);
     method public void onDisconnected(android.telecom.RemoteConference, android.telecom.DisconnectCause);
@@ -36612,6 +36619,7 @@ package android.telecom {
     method public android.telecom.RemoteConference getConference();
     method public java.util.List<android.telecom.RemoteConnection> getConferenceableConnections();
     method public int getConnectionCapabilities();
+    method public int getConnectionProperties();
     method public android.telecom.DisconnectCause getDisconnectCause();
     method public final android.os.Bundle getExtras();
     method public int getState();
@@ -36641,6 +36649,7 @@ package android.telecom {
     method public void onConferenceableConnectionsChanged(android.telecom.RemoteConnection, java.util.List<android.telecom.RemoteConnection>);
     method public void onConnectionCapabilitiesChanged(android.telecom.RemoteConnection, int);
     method public void onConnectionEvent(android.telecom.RemoteConnection, java.lang.String, android.os.Bundle);
+    method public void onConnectionPropertiesChanged(android.telecom.RemoteConnection, int);
     method public void onDestroyed(android.telecom.RemoteConnection);
     method public void onDisconnected(android.telecom.RemoteConnection, android.telecom.DisconnectCause);
     method public void onExtrasChanged(android.telecom.RemoteConnection, android.os.Bundle);
