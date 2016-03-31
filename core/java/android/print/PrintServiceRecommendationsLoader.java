@@ -21,42 +21,37 @@ import android.content.Context;
 import android.content.Loader;
 import android.os.Handler;
 import android.os.Message;
-import android.printservice.PrintServiceInfo;
+import android.printservice.recommendation.RecommendationInfo;
 import com.android.internal.util.Preconditions;
 
 import java.util.List;
 
 /**
- * Loader for the list of print services. Can be parametrized to select a subset.
+ * Loader for the list of print service recommendations.
  *
  * @hide
  */
-public class PrintServicesLoader extends Loader<List<PrintServiceInfo>> {
-    /** What type of services to load. */
-    private final int mSelectionFlags;
-
+public class PrintServiceRecommendationsLoader extends Loader<List<RecommendationInfo>> {
     /** The print manager to be used by this object */
     private final @NonNull PrintManager mPrintManager;
 
     /** Handler to sequentialize the delivery of the results to the main thread */
-    private Handler mHandler;
+    private final Handler mHandler;
 
     /** Listens for updates to the data from the platform */
-    private PrintManager.PrintServicesChangeListener mListener;
+    private PrintManager.PrintServiceRecommendationsChangeListener mListener;
 
     /**
      * Create a new PrintServicesLoader.
      *
-     * @param printManager   The print manager supplying the data
-     * @param context        Context of the using object
-     * @param selectionFlags What type of services to load.
+     * @param printManager The print manager supplying the data
+     * @param context      Context of the using object
      */
-    public PrintServicesLoader(@NonNull PrintManager printManager, @NonNull Context context,
-            int selectionFlags) {
+    public PrintServiceRecommendationsLoader(@NonNull PrintManager printManager,
+            @NonNull Context context) {
         super(Preconditions.checkNotNull(context));
+        mHandler = new MyHandler();
         mPrintManager = Preconditions.checkNotNull(printManager);
-        mSelectionFlags = Preconditions.checkFlagsArgument(selectionFlags,
-                PrintManager.ALL_SERVICES);
     }
 
     @Override
@@ -65,39 +60,38 @@ public class PrintServicesLoader extends Loader<List<PrintServiceInfo>> {
     }
 
     /**
-     * Read the print services and queue it to be delivered on the main thread.
+     * Read the print service recommendations and queue it to be delivered on the main thread.
      */
     private void queueNewResult() {
         Message m = mHandler.obtainMessage(0);
-        m.obj = mPrintManager.getPrintServices(mSelectionFlags);
+        m.obj = mPrintManager.getPrintServiceRecommendations();
         mHandler.sendMessage(m);
     }
 
     @Override
     protected void onStartLoading() {
-        mHandler = new MyHandler();
-        mListener = new PrintManager.PrintServicesChangeListener() {
-            @Override public void onPrintServicesChanged() {
+        mListener = new PrintManager.PrintServiceRecommendationsChangeListener() {
+            @Override
+            public void onPrintServiceRecommendationsChanged() {
                 queueNewResult();
             }
         };
 
-        mPrintManager.addPrintServicesChangeListener(mListener);
+        mPrintManager.addPrintServiceRecommendationsChangeListener(mListener);
 
         // Immediately deliver a result
-        deliverResult(mPrintManager.getPrintServices(mSelectionFlags));
+        deliverResult(mPrintManager.getPrintServiceRecommendations());
     }
 
     @Override
     protected void onStopLoading() {
         if (mListener != null) {
-            mPrintManager.removePrintServicesChangeListener(mListener);
+            mPrintManager.removePrintServiceRecommendationsChangeListener(mListener);
             mListener = null;
         }
 
         if (mHandler != null) {
             mHandler.removeMessages(0);
-            mHandler = null;
         }
     }
 
@@ -119,10 +113,8 @@ public class PrintServicesLoader extends Loader<List<PrintServiceInfo>> {
 
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
             if (isStarted()) {
-                deliverResult((List<PrintServiceInfo>) msg.obj);
+                deliverResult((List<RecommendationInfo>) msg.obj);
             }
         }
     }
