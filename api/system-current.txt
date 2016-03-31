@@ -42,6 +42,7 @@ package android {
     field public static final java.lang.String BIND_MIDI_DEVICE_SERVICE = "android.permission.BIND_MIDI_DEVICE_SERVICE";
     field public static final java.lang.String BIND_NFC_SERVICE = "android.permission.BIND_NFC_SERVICE";
     field public static final java.lang.String BIND_NOTIFICATION_LISTENER_SERVICE = "android.permission.BIND_NOTIFICATION_LISTENER_SERVICE";
+    field public static final java.lang.String BIND_PRINT_RECOMMENDATION_SERVICE = "android.permission.BIND_PRINT_RECOMMENDATION_SERVICE";
     field public static final java.lang.String BIND_PRINT_SERVICE = "android.permission.BIND_PRINT_SERVICE";
     field public static final java.lang.String BIND_QUICK_SETTINGS_TILE = "android.permission.BIND_QUICK_SETTINGS_TILE";
     field public static final java.lang.String BIND_REMOTEVIEWS = "android.permission.BIND_REMOTEVIEWS";
@@ -32703,6 +32704,30 @@ package android.printservice {
     method public abstract void onStopPrinterStateTracking(android.print.PrinterId);
     method public abstract void onValidatePrinters(java.util.List<android.print.PrinterId>);
     method public final void removePrinters(java.util.List<android.print.PrinterId>);
+  }
+
+}
+
+package android.printservice.recommendation {
+
+  public final class RecommendationInfo implements android.os.Parcelable {
+    ctor public RecommendationInfo(java.lang.CharSequence, java.lang.CharSequence, int, boolean);
+    method public int describeContents();
+    method public java.lang.CharSequence getName();
+    method public int getNumDiscoveredPrinters();
+    method public java.lang.CharSequence getPackageName();
+    method public boolean recommendsMultiVendorService();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.printservice.recommendation.RecommendationInfo> CREATOR;
+  }
+
+  public abstract class RecommendationService extends android.app.Service {
+    ctor public RecommendationService();
+    method public final android.os.IBinder onBind(android.content.Intent);
+    method public abstract void onConnected();
+    method public abstract void onDisconnected();
+    method public final boolean onUnbind(android.content.Intent);
+    method public final void updateRecommendations(java.util.List<android.printservice.recommendation.RecommendationInfo>);
   }
 
 }
