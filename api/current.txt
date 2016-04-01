@@ -13503,6 +13503,7 @@ package android.hardware {
   public final class Sensor {
     method public int getFifoMaxEventCount();
     method public int getFifoReservedEventCount();
+    method public int getId();
     method public int getMaxDelay();
     method public float getMaximumRange();
     method public int getMinDelay();
@@ -13512,9 +13513,10 @@ package android.hardware {
     method public float getResolution();
     method public java.lang.String getStringType();
     method public int getType();
-    method public java.util.UUID getUuid();
     method public java.lang.String getVendor();
     method public int getVersion();
+    method public boolean isAdditionalInfoSupported();
+    method public boolean isDynamicSensor();
     method public boolean isWakeUpSensor();
     field public static final int REPORTING_MODE_CONTINUOUS = 0; // 0x0
     field public static final int REPORTING_MODE_ONE_SHOT = 2; // 0x2
@@ -13633,8 +13635,9 @@ package android.hardware {
     method public static void getRotationMatrixFromVector(float[], float[]);
     method public java.util.List<android.hardware.Sensor> getSensorList(int);
     method public deprecated int getSensors();
-    method public void registerDynamicSensorCallback(android.hardware.SensorManager.DynamicSensorConnectionCallback);
-    method public void registerDynamicSensorCallback(android.hardware.SensorManager.DynamicSensorConnectionCallback, android.os.Handler);
+    method public boolean isDynamicSensorDiscoverySupported();
+    method public void registerDynamicSensorCallback(android.hardware.SensorManager.DynamicSensorCallback);
+    method public void registerDynamicSensorCallback(android.hardware.SensorManager.DynamicSensorCallback, android.os.Handler);
     method public deprecated boolean registerListener(android.hardware.SensorListener, int);
     method public deprecated boolean registerListener(android.hardware.SensorListener, int, int);
     method public boolean registerListener(android.hardware.SensorEventListener, android.hardware.Sensor, int);
@@ -13643,7 +13646,7 @@ package android.hardware {
     method public boolean registerListener(android.hardware.SensorEventListener, android.hardware.Sensor, int, int, android.os.Handler);
     method public static boolean remapCoordinateSystem(float[], int, int, float[]);
     method public boolean requestTriggerSensor(android.hardware.TriggerEventListener, android.hardware.Sensor);
-    method public void unregisterDynamicSensorCallback(android.hardware.SensorManager.DynamicSensorConnectionCallback);
+    method public void unregisterDynamicSensorCallback(android.hardware.SensorManager.DynamicSensorCallback);
     method public deprecated void unregisterListener(android.hardware.SensorListener);
     method public deprecated void unregisterListener(android.hardware.SensorListener, int);
     method public void unregisterListener(android.hardware.SensorEventListener, android.hardware.Sensor);
@@ -13708,8 +13711,8 @@ package android.hardware {
     field public static final float STANDARD_GRAVITY = 9.80665f;
   }
 
-  public static abstract class SensorManager.DynamicSensorConnectionCallback {
-    ctor public SensorManager.DynamicSensorConnectionCallback();
+  public static abstract class SensorManager.DynamicSensorCallback {
+    ctor public SensorManager.DynamicSensorCallback();
     method public void onDynamicSensorConnected(android.hardware.Sensor);
     method public void onDynamicSensorDisconnected(android.hardware.Sensor);
   }
