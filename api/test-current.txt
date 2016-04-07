@@ -19276,7 +19276,7 @@ package android.location {
     field public static final int ADR_STATE_VALID = 1; // 0x1
     field public static final android.os.Parcelable.Creator<android.location.GnssMeasurement> CREATOR;
     field public static final int MULTIPATH_INDICATOR_DETECTED = 1; // 0x1
-    field public static final int MULTIPATH_INDICATOR_NOT_USED = 2; // 0x2
+    field public static final int MULTIPATH_INDICATOR_NOT_DETECTED = 2; // 0x2
     field public static final int MULTIPATH_INDICATOR_UNKNOWN = 0; // 0x0
     field public static final int STATE_BDS_D2_BIT_SYNC = 256; // 0x100
     field public static final int STATE_BDS_D2_SUBFRAME_SYNC = 512; // 0x200
@@ -19302,15 +19302,15 @@ package android.location {
     method public java.util.Collection<android.location.GnssMeasurement> getMeasurements();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.location.GnssMeasurementsEvent> CREATOR;
-    field public static final int STATUS_GNSS_LOCATION_DISABLED = 2; // 0x2
-    field public static final int STATUS_NOT_SUPPORTED = 0; // 0x0
-    field public static final int STATUS_READY = 1; // 0x1
   }
 
   public static abstract class GnssMeasurementsEvent.Callback {
     ctor public GnssMeasurementsEvent.Callback();
     method public void onGnssMeasurementsReceived(android.location.GnssMeasurementsEvent);
     method public void onStatusChanged(int);
+    field public static final int STATUS_LOCATION_DISABLED = 2; // 0x2
+    field public static final int STATUS_NOT_SUPPORTED = 0; // 0x0
+    field public static final int STATUS_READY = 1; // 0x1
   }
 
   public final class GnssNavigationMessage implements android.os.Parcelable {
@@ -19347,25 +19347,13 @@ package android.location {
     field public static final int TYPE_UNKNOWN = 0; // 0x0
   }
 
-  public final class GnssNavigationMessageEvent implements android.os.Parcelable {
-    ctor public GnssNavigationMessageEvent(android.location.GnssNavigationMessage);
-    method public int describeContents();
-    method public android.location.GnssNavigationMessage getNavigationMessage();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.location.GnssNavigationMessageEvent> CREATOR;
-    field public static final int STATUS_GNSS_LOCATION_DISABLED = 2; // 0x2
+  public static abstract class GnssNavigationMessage.Callback {
+    ctor public GnssNavigationMessage.Callback();
+    method public void onGnssNavigationMessageReceived(android.location.GnssNavigationMessage);
+    method public void onStatusChanged(int);
+    field public static final int STATUS_LOCATION_DISABLED = 2; // 0x2
     field public static final int STATUS_NOT_SUPPORTED = 0; // 0x0
     field public static final int STATUS_READY = 1; // 0x1
-  }
-
-  public static abstract class GnssNavigationMessageEvent.Callback {
-    ctor public GnssNavigationMessageEvent.Callback();
-    method public void onGnssNavigationMessageReceived(android.location.GnssNavigationMessageEvent);
-    method public void onStatusChanged(int);
-  }
-
-  public abstract interface GnssNmeaListener {
-    method public abstract void onNmeaReceived(long, java.lang.String);
   }
 
   public final class GnssStatus {
@@ -19373,10 +19361,10 @@ package android.location {
     method public float getCn0DbHz(int);
     method public int getConstellationType(int);
     method public float getElevationDegrees(int);
-    method public int getNumSatellites();
+    method public int getSatelliteCount();
     method public int getSvid(int);
-    method public boolean hasAlmanac(int);
-    method public boolean hasEphemeris(int);
+    method public boolean hasAlmanacData(int);
+    method public boolean hasEphemerisData(int);
     method public boolean usedInFix(int);
     field public static final int CONSTELLATION_BEIDOU = 5; // 0x5
     field public static final int CONSTELLATION_GALILEO = 6; // 0x6
@@ -19387,15 +19375,15 @@ package android.location {
     field public static final int CONSTELLATION_UNKNOWN = 0; // 0x0
   }
 
-  public abstract class GnssStatusCallback {
-    ctor public GnssStatusCallback();
+  public static abstract class GnssStatus.Callback {
+    ctor public GnssStatus.Callback();
     method public void onFirstFix(int);
     method public void onSatelliteStatusChanged(android.location.GnssStatus);
     method public void onStarted();
     method public void onStopped();
   }
 
-  public final class GpsSatellite {
+  public final deprecated class GpsSatellite {
     method public float getAzimuth();
     method public float getElevation();
     method public int getPrn();
@@ -19405,7 +19393,7 @@ package android.location {
     method public boolean usedInFix();
   }
 
-  public final class GpsStatus {
+  public final deprecated class GpsStatus {
     method public int getMaxSatellites();
     method public java.lang.Iterable<android.location.GpsSatellite> getSatellites();
     method public int getTimeToFirstFix();
@@ -19415,11 +19403,11 @@ package android.location {
     field public static final int GPS_EVENT_STOPPED = 2; // 0x2
   }
 
-  public static abstract interface GpsStatus.Listener {
+  public static abstract deprecated interface GpsStatus.Listener {
     method public abstract void onGpsStatusChanged(int);
   }
 
-  public static abstract interface GpsStatus.NmeaListener {
+  public static abstract deprecated interface GpsStatus.NmeaListener {
     method public abstract void onNmeaReceived(long, java.lang.String);
   }
 
@@ -19481,8 +19469,8 @@ package android.location {
   public class LocationManager {
     method public deprecated boolean addGpsStatusListener(android.location.GpsStatus.Listener);
     method public deprecated boolean addNmeaListener(android.location.GpsStatus.NmeaListener);
-    method public boolean addNmeaListener(android.location.GnssNmeaListener);
-    method public boolean addNmeaListener(android.location.GnssNmeaListener, android.os.Handler);
+    method public boolean addNmeaListener(android.location.OnNmeaMessageListener);
+    method public boolean addNmeaListener(android.location.OnNmeaMessageListener, android.os.Handler);
     method public void addProximityAlert(double, double, float, long, android.app.PendingIntent);
     method public void addTestProvider(java.lang.String, boolean, boolean, boolean, boolean, boolean, boolean, boolean, int, int);
     method public void clearTestProviderEnabled(java.lang.String);
@@ -19499,13 +19487,13 @@ package android.location {
     method public boolean isProviderEnabled(java.lang.String);
     method public boolean registerGnssMeasurementsCallback(android.location.GnssMeasurementsEvent.Callback);
     method public boolean registerGnssMeasurementsCallback(android.location.GnssMeasurementsEvent.Callback, android.os.Handler);
-    method public boolean registerGnssNavigationMessageCallback(android.location.GnssNavigationMessageEvent.Callback);
-    method public boolean registerGnssNavigationMessageCallback(android.location.GnssNavigationMessageEvent.Callback, android.os.Handler);
-    method public boolean registerGnssStatusCallback(android.location.GnssStatusCallback);
-    method public boolean registerGnssStatusCallback(android.location.GnssStatusCallback, android.os.Handler);
+    method public boolean registerGnssNavigationMessageCallback(android.location.GnssNavigationMessage.Callback);
+    method public boolean registerGnssNavigationMessageCallback(android.location.GnssNavigationMessage.Callback, android.os.Handler);
+    method public boolean registerGnssStatusCallback(android.location.GnssStatus.Callback);
+    method public boolean registerGnssStatusCallback(android.location.GnssStatus.Callback, android.os.Handler);
     method public deprecated void removeGpsStatusListener(android.location.GpsStatus.Listener);
     method public deprecated void removeNmeaListener(android.location.GpsStatus.NmeaListener);
-    method public void removeNmeaListener(android.location.GnssNmeaListener);
+    method public void removeNmeaListener(android.location.OnNmeaMessageListener);
     method public void removeProximityAlert(android.app.PendingIntent);
     method public void removeTestProvider(java.lang.String);
     method public void removeUpdates(android.location.LocationListener);
@@ -19524,8 +19512,8 @@ package android.location {
     method public void setTestProviderLocation(java.lang.String, android.location.Location);
     method public void setTestProviderStatus(java.lang.String, int, android.os.Bundle, long);
     method public void unregisterGnssMeasurementsCallback(android.location.GnssMeasurementsEvent.Callback);
-    method public void unregisterGnssNavigationMessageCallback(android.location.GnssNavigationMessageEvent.Callback);
-    method public void unregisterGnssStatusCallback(android.location.GnssStatusCallback);
+    method public void unregisterGnssNavigationMessageCallback(android.location.GnssNavigationMessage.Callback);
+    method public void unregisterGnssStatusCallback(android.location.GnssStatus.Callback);
     field public static final java.lang.String GPS_PROVIDER = "gps";
     field public static final java.lang.String KEY_LOCATION_CHANGED = "location";
     field public static final java.lang.String KEY_PROVIDER_ENABLED = "providerEnabled";
@@ -19552,6 +19540,10 @@ package android.location {
     field public static final int AVAILABLE = 2; // 0x2
     field public static final int OUT_OF_SERVICE = 0; // 0x0
     field public static final int TEMPORARILY_UNAVAILABLE = 1; // 0x1
+  }
+
+  public abstract interface OnNmeaMessageListener {
+    method public abstract void onNmeaMessage(java.lang.String, long);
   }
 
   public abstract class SettingInjectorService extends android.app.Service {
