@@ -23,9 +23,12 @@ package android.location;
 * See <a href="http://en.wikipedia.org/wiki/NMEA_0183">NMEA 0183</a> for more details.
 * You can implement this interface and call {@link LocationManager#addNmeaListener}
 * to receive NMEA data from the GNSS engine.
-* @removed
 */
-public interface GnssNmeaListener {
-    /** Called when an NMEA message is received. */
-    void onNmeaReceived(long timestamp, String nmea);
+public interface OnNmeaMessageListener {
+    /**
+     * Called when an NMEA message is received.
+     * @param message NMEA message
+     * @param timestamp milliseconds since January 1, 1970.
+     */
+    void onNmeaMessage(String message, long timestamp);
 }
