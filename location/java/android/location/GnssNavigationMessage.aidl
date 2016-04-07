@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014, The Android Open Source Project
+ * Copyright (C) 2016, The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,4 @@
 
 package android.location;
 
-import android.location.GnssNavigationMessage;
-
-/**
- * {@hide}
- */
-oneway interface IGnssNavigationMessageListener {
-    void onGnssNavigationMessageReceived(in GnssNavigationMessage event);
-    void onStatusChanged(in int status);
-}
+parcelable GnssNavigationMessage;
