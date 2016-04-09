@@ -5076,6 +5076,7 @@ package android.app {
     field public static final java.lang.String EXTRA_THREAD_TITLE = "android.threadTitle";
     field public static final java.lang.String EXTRA_TITLE = "android.title";
     field public static final java.lang.String EXTRA_TITLE_BIG = "android.title.big";
+    field public static final int FLAG_AUTOGROUP_SUMMARY = 1024; // 0x400
     field public static final int FLAG_AUTO_CANCEL = 16; // 0x10
     field public static final int FLAG_FOREGROUND_SERVICE = 64; // 0x40
     field public static final int FLAG_GROUP_SUMMARY = 512; // 0x200
@@ -37119,6 +37120,22 @@ package android.service.media {
 
 package android.service.notification {
 
+  public final class Adjustment implements android.os.Parcelable {
+    ctor public Adjustment(java.lang.String, java.lang.String, int, android.os.Bundle, java.lang.CharSequence, android.net.Uri);
+    ctor protected Adjustment(android.os.Parcel);
+    method public int describeContents();
+    method public java.lang.CharSequence getExplanation();
+    method public int getImportance();
+    method public java.lang.String getKey();
+    method public java.lang.String getPackage();
+    method public android.net.Uri getReference();
+    method public android.os.Bundle getSignals();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.notification.Adjustment> CREATOR;
+    field public static final java.lang.String GROUP_KEY_OVERRIDE_KEY = "group_key_override";
+    field public static final java.lang.String NEEDS_AUTOGROUPING_KEY = "autogroup_needed";
+  }
+
   public class Condition implements android.os.Parcelable {
     ctor public Condition(android.net.Uri, java.lang.String, int);
     ctor public Condition(android.net.Uri, java.lang.String, java.lang.String, java.lang.String, int, int, int);
@@ -37212,6 +37229,7 @@ package android.service.notification {
     method public int getImportance();
     method public java.lang.CharSequence getImportanceExplanation();
     method public java.lang.String getKey();
+    method public java.lang.String getOverrideGroupKey();
     method public int getRank();
     method public int getSuppressedVisualEffects();
     method public boolean isAmbient();
@@ -37235,11 +37253,12 @@ package android.service.notification {
 
   public abstract class NotificationRankerService extends android.service.notification.NotificationListenerService {
     ctor public NotificationRankerService();
-    method public final void adjustImportance(java.lang.String, android.service.notification.NotificationRankerService.Adjustment);
+    method public final void adjustNotification(android.service.notification.Adjustment);
+    method public final void adjustNotifications(java.util.List<android.service.notification.Adjustment>);
     method public final android.os.IBinder onBind(android.content.Intent);
     method public void onNotificationActionClick(java.lang.String, long, int);
     method public void onNotificationClick(java.lang.String, long);
-    method public abstract android.service.notification.NotificationRankerService.Adjustment onNotificationEnqueued(android.service.notification.StatusBarNotification, int, boolean);
+    method public abstract android.service.notification.Adjustment onNotificationEnqueued(android.service.notification.StatusBarNotification, int, boolean);
     method public void onNotificationRemoved(java.lang.String, long, int);
     method public void onNotificationVisibilityChanged(java.lang.String, long, boolean);
     field public static final int REASON_APP_CANCEL = 8; // 0x8
@@ -37256,12 +37275,9 @@ package android.service.notification {
     field public static final int REASON_PACKAGE_CHANGED = 5; // 0x5
     field public static final int REASON_PACKAGE_SUSPENDED = 14; // 0xe
     field public static final int REASON_PROFILE_TURNED_OFF = 15; // 0xf
+    field public static final int REASON_UNAUTOBUNDLED = 16; // 0x10
     field public static final int REASON_USER_STOPPED = 6; // 0x6
     field public static final java.lang.String SERVICE_INTERFACE = "android.service.notification.NotificationRankerService";
-  }
-
-  public class NotificationRankerService.Adjustment {
-    ctor public NotificationRankerService.Adjustment(int, java.lang.CharSequence, android.net.Uri);
   }
 
   public class StatusBarNotification implements android.os.Parcelable {
@@ -37273,13 +37289,16 @@ package android.service.notification {
     method public int getId();
     method public java.lang.String getKey();
     method public android.app.Notification getNotification();
+    method public java.lang.String getOverrideGroupKey();
     method public java.lang.String getPackageName();
     method public long getPostTime();
     method public java.lang.String getTag();
     method public android.os.UserHandle getUser();
     method public deprecated int getUserId();
     method public boolean isClearable();
+    method public boolean isGroup();
     method public boolean isOngoing();
+    method public void setOverrideGroupKey(java.lang.String);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.notification.StatusBarNotification> CREATOR;
   }
