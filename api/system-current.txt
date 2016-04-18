@@ -26006,6 +26006,157 @@ package android.net.http {
 
 }
 
+package android.net.metrics {
+
+  public final class CaptivePortalCheckResultEvent extends android.net.metrics.IpConnectivityEvent implements android.os.Parcelable {
+    method public int describeContents();
+    method public static void logEvent(int, int);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.metrics.CaptivePortalCheckResultEvent> CREATOR;
+    field public final int netId;
+    field public final int result;
+  }
+
+  public final class CaptivePortalStateChangeEvent extends android.net.metrics.IpConnectivityEvent implements android.os.Parcelable {
+    ctor public CaptivePortalStateChangeEvent(int);
+    ctor public CaptivePortalStateChangeEvent(android.os.Parcel);
+    method public int describeContents();
+    method public static void logEvent(int);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.metrics.CaptivePortalStateChangeEvent> CREATOR;
+    field public static final int NETWORK_MONITOR_CONNECTED = 0; // 0x0
+    field public static final int NETWORK_MONITOR_DISCONNECTED = 1; // 0x1
+    field public static final int NETWORK_MONITOR_VALIDATED = 2; // 0x2
+    field public final int state;
+  }
+
+  public final class ConnectivityServiceChangeEvent extends android.net.metrics.IpConnectivityEvent implements android.os.Parcelable {
+    method public int describeContents();
+    method public static void logEvent(int, int[], int, boolean, boolean);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.metrics.ConnectivityServiceChangeEvent> CREATOR;
+    field public final int netId;
+    field public final boolean prevIPv4;
+    field public final boolean prevIPv6;
+    field public final int prevNetId;
+    field public final int[] transportTypes;
+  }
+
+  public final class DhcpClientEvent extends android.net.metrics.IpConnectivityEvent implements android.os.Parcelable {
+    method public int describeContents();
+    method public static void logStateEvent(java.lang.String, java.lang.String);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.metrics.DhcpClientEvent> CREATOR;
+    field public final java.lang.String ifName;
+    field public final java.lang.String msg;
+  }
+
+  public final class DhcpErrorEvent extends android.net.metrics.IpConnectivityEvent implements android.os.Parcelable {
+    method public int describeContents();
+    method public static int errorCodeWithOption(int, int);
+    method public static void logParseError(java.lang.String, int);
+    method public static void logReceiveError(java.lang.String);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final int BOOTP_TOO_SHORT;
+    field public static final int BUFFER_UNDERFLOW;
+    field public static final android.os.Parcelable.Creator<android.net.metrics.DhcpErrorEvent> CREATOR;
+    field public static final int DHCP_BAD_MAGIC_COOKIE;
+    field public static final int DHCP_ERROR = 4; // 0x4
+    field public static final int DHCP_INVALID_OPTION_LENGTH;
+    field public static final int DHCP_NO_MSG_TYPE;
+    field public static final int DHCP_UNKNOWN_MSG_TYPE;
+    field public static final int L2_ERROR = 1; // 0x1
+    field public static final int L2_TOO_SHORT;
+    field public static final int L2_WRONG_ETH_TYPE;
+    field public static final int L3_ERROR = 2; // 0x2
+    field public static final int L3_INVALID_IP;
+    field public static final int L3_NOT_IPV4;
+    field public static final int L3_TOO_SHORT;
+    field public static final int L4_ERROR = 3; // 0x3
+    field public static final int L4_NOT_UDP;
+    field public static final int L4_WRONG_PORT;
+    field public static final int MISC_ERROR = 5; // 0x5
+    field public static final int RECEIVE_ERROR;
+    field public final int errorCode;
+    field public final java.lang.String ifName;
+  }
+
+  public final class DnsEvent extends android.net.metrics.IpConnectivityEvent implements android.os.Parcelable {
+    method public int describeContents();
+    method public static void logEvent(int, byte[], byte[], int[]);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.metrics.DnsEvent> CREATOR;
+    field public final byte[] eventTypes;
+    field public final int[] latenciesMs;
+    field public final int netId;
+    field public final byte[] returnCodes;
+  }
+
+  public abstract class IpConnectivityEvent {
+    ctor public IpConnectivityEvent();
+    method public static void logEvent(int, T);
+    field public static final int IPCE_CONSRV_BASE = 3072; // 0xc00
+    field public static final int IPCE_CONSRV_DEFAULT_NET_CHANGE = 3072; // 0xc00
+    field public static final int IPCE_DHCP_BASE = 1024; // 0x400
+    field public static final int IPCE_DHCP_PARSE_ERROR = 1025; // 0x401
+    field public static final int IPCE_DHCP_RECV_ERROR = 1024; // 0x400
+    field public static final int IPCE_DHCP_STATE_CHANGE = 1027; // 0x403
+    field public static final int IPCE_DHCP_TIMEOUT = 1026; // 0x402
+    field public static final int IPCE_DNS_BASE = 5120; // 0x1400
+    field public static final int IPCE_DNS_LOOKUPS = 5120; // 0x1400
+    field public static final int IPCE_IPMGR_BASE = 4096; // 0x1000
+    field public static final int IPCE_IPMGR_COMPLETE_LIFECYCLE = 4098; // 0x1002
+    field public static final int IPCE_IPMGR_PROVISIONING_FAIL = 4097; // 0x1001
+    field public static final int IPCE_IPMGR_PROVISIONING_OK = 4096; // 0x1000
+    field public static final int IPCE_IPRM_BASE = 0; // 0x0
+    field public static final int IPCE_IPRM_MESSAGE_RECEIVED = 1; // 0x1
+    field public static final int IPCE_IPRM_PROBE_RESULT = 0; // 0x0
+    field public static final int IPCE_IPRM_REACHABILITY_LOST = 2; // 0x2
+    field public static final int IPCE_NETMON_BASE = 2048; // 0x800
+    field public static final int IPCE_NETMON_CHECK_RESULT = 2049; // 0x801
+    field public static final int IPCE_NETMON_STATE_CHANGE = 2048; // 0x800
+  }
+
+  public final class IpManagerEvent extends android.net.metrics.IpConnectivityEvent implements android.os.Parcelable {
+    method public int describeContents();
+    method public static void logEvent(int, java.lang.String, long);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.metrics.IpManagerEvent> CREATOR;
+    field public final long durationMs;
+    field public final java.lang.String ifName;
+  }
+
+  public final class IpReachabilityMonitorLostEvent extends android.net.metrics.IpConnectivityEvent implements android.os.Parcelable {
+    method public int describeContents();
+    method public static void logEvent(java.lang.String);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.metrics.IpReachabilityMonitorLostEvent> CREATOR;
+    field public final java.lang.String ifName;
+  }
+
+  public final class IpReachabilityMonitorMessageEvent extends android.net.metrics.IpConnectivityEvent implements android.os.Parcelable {
+    method public int describeContents();
+    method public static void logEvent(java.lang.String, java.lang.String, int, int);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.metrics.IpReachabilityMonitorMessageEvent> CREATOR;
+    field public final java.lang.String destination;
+    field public final java.lang.String ifName;
+    field public final int msgType;
+    field public final int nudState;
+  }
+
+  public final class IpReachabilityMonitorProbeEvent extends android.net.metrics.IpConnectivityEvent implements android.os.Parcelable {
+    method public int describeContents();
+    method public static void logEvent(java.lang.String, java.lang.String, boolean);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.metrics.IpReachabilityMonitorProbeEvent> CREATOR;
+    field public final java.lang.String destination;
+    field public final java.lang.String ifName;
+    field public final boolean success;
+  }
+
+}
+
 package android.net.nsd {
 
   public final class NsdManager {
