@@ -26021,15 +26021,16 @@ package android.net.metrics {
   }
 
   public final class CaptivePortalStateChangeEvent extends android.net.metrics.IpConnectivityEvent implements android.os.Parcelable {
-    ctor public CaptivePortalStateChangeEvent(int);
+    ctor public CaptivePortalStateChangeEvent(int, int);
     ctor public CaptivePortalStateChangeEvent(android.os.Parcel);
     method public int describeContents();
-    method public static void logEvent(int);
+    method public static void logEvent(int, int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.metrics.CaptivePortalStateChangeEvent> CREATOR;
     field public static final int NETWORK_MONITOR_CONNECTED = 0; // 0x0
     field public static final int NETWORK_MONITOR_DISCONNECTED = 1; // 0x1
     field public static final int NETWORK_MONITOR_VALIDATED = 2; // 0x2
+    field public final int netId;
     field public final int state;
   }
 
@@ -26116,8 +26117,11 @@ package android.net.metrics {
     field public static final int IPCE_IPRM_PROBE_STARTED = 0; // 0x0
     field public static final int IPCE_IPRM_PROVISIONING_LOST = 3; // 0x3
     field public static final int IPCE_NETMON_BASE = 2048; // 0x800
+    field public static final int IPCE_NETMON_CAPPORT_FOUND = 2052; // 0x804
     field public static final int IPCE_NETMON_CHECK_RESULT = 2049; // 0x801
+    field public static final int IPCE_NETMON_PORTAL_PROBE = 2051; // 0x803
     field public static final int IPCE_NETMON_STATE_CHANGE = 2048; // 0x800
+    field public static final int IPCE_NETMON_VALIDATED = 2050; // 0x802
   }
 
   public final class IpManagerEvent extends android.net.metrics.IpConnectivityEvent implements android.os.Parcelable {
@@ -26141,6 +26145,19 @@ package android.net.metrics {
     field public static final int PROVISIONING_LOST = 768; // 0x300
     field public final int eventType;
     field public final java.lang.String ifName;
+  }
+
+  public final class NetworkMonitorEvent extends android.net.metrics.IpConnectivityEvent implements android.os.Parcelable {
+    ctor public NetworkMonitorEvent(android.os.Parcel);
+    method public int describeContents();
+    method public static void logCaptivePortalFound(int, long);
+    method public static void logPortalProbeEvent(int, long, int);
+    method public static void logValidated(int, long);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.metrics.NetworkMonitorEvent> CREATOR;
+    field public final long durationMs;
+    field public final int netId;
+    field public final int returnCode;
   }
 
 }
