@@ -26111,9 +26111,10 @@ package android.net.metrics {
     field public static final int IPCE_IPMGR_PROVISIONING_FAIL = 4097; // 0x1001
     field public static final int IPCE_IPMGR_PROVISIONING_OK = 4096; // 0x1000
     field public static final int IPCE_IPRM_BASE = 0; // 0x0
-    field public static final int IPCE_IPRM_MESSAGE_RECEIVED = 1; // 0x1
-    field public static final int IPCE_IPRM_PROBE_RESULT = 0; // 0x0
-    field public static final int IPCE_IPRM_REACHABILITY_LOST = 2; // 0x2
+    field public static final int IPCE_IPRM_NUD_FAILED = 2; // 0x2
+    field public static final int IPCE_IPRM_PROBE_FAILURE = 1; // 0x1
+    field public static final int IPCE_IPRM_PROBE_STARTED = 0; // 0x0
+    field public static final int IPCE_IPRM_PROVISIONING_LOST = 3; // 0x3
     field public static final int IPCE_NETMON_BASE = 2048; // 0x800
     field public static final int IPCE_NETMON_CHECK_RESULT = 2049; // 0x801
     field public static final int IPCE_NETMON_STATE_CHANGE = 2048; // 0x800
@@ -26128,33 +26129,18 @@ package android.net.metrics {
     field public final java.lang.String ifName;
   }
 
-  public final class IpReachabilityMonitorLostEvent extends android.net.metrics.IpConnectivityEvent implements android.os.Parcelable {
+  public final class IpReachabilityEvent extends android.net.metrics.IpConnectivityEvent implements android.os.Parcelable {
     method public int describeContents();
-    method public static void logEvent(java.lang.String);
+    method public static void logNudFailed(java.lang.String);
+    method public static void logProbeEvent(java.lang.String, int);
+    method public static void logProvisioningLost(java.lang.String);
     method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.net.metrics.IpReachabilityMonitorLostEvent> CREATOR;
+    field public static final android.os.Parcelable.Creator<android.net.metrics.IpReachabilityEvent> CREATOR;
+    field public static final int NUD_FAILED = 512; // 0x200
+    field public static final int PROBE = 256; // 0x100
+    field public static final int PROVISIONING_LOST = 768; // 0x300
+    field public final int eventType;
     field public final java.lang.String ifName;
-  }
-
-  public final class IpReachabilityMonitorMessageEvent extends android.net.metrics.IpConnectivityEvent implements android.os.Parcelable {
-    method public int describeContents();
-    method public static void logEvent(java.lang.String, java.lang.String, int, int);
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.net.metrics.IpReachabilityMonitorMessageEvent> CREATOR;
-    field public final java.lang.String destination;
-    field public final java.lang.String ifName;
-    field public final int msgType;
-    field public final int nudState;
-  }
-
-  public final class IpReachabilityMonitorProbeEvent extends android.net.metrics.IpConnectivityEvent implements android.os.Parcelable {
-    method public int describeContents();
-    method public static void logEvent(java.lang.String, java.lang.String, boolean);
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.net.metrics.IpReachabilityMonitorProbeEvent> CREATOR;
-    field public final java.lang.String destination;
-    field public final java.lang.String ifName;
-    field public final boolean success;
   }
 
 }
