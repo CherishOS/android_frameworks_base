@@ -46,6 +46,7 @@ package android {
     field public static final java.lang.String BIND_PRINT_SERVICE = "android.permission.BIND_PRINT_SERVICE";
     field public static final java.lang.String BIND_QUICK_SETTINGS_TILE = "android.permission.BIND_QUICK_SETTINGS_TILE";
     field public static final java.lang.String BIND_REMOTEVIEWS = "android.permission.BIND_REMOTEVIEWS";
+    field public static final java.lang.String BIND_RUNTIME_PERMISSION_PRESENTER_SERVICE = "android.permission.BIND_RUNTIME_PERMISSION_PRESENTER_SERVICE";
     field public static final java.lang.String BIND_SCREENING_SERVICE = "android.permission.BIND_SCREENING_SERVICE";
     field public static final java.lang.String BIND_TELECOM_CONNECTION_SERVICE = "android.permission.BIND_TELECOM_CONNECTION_SERVICE";
     field public static final java.lang.String BIND_TEXT_SERVICE = "android.permission.BIND_TEXT_SERVICE";
@@ -109,6 +110,7 @@ package android {
     field public static final deprecated java.lang.String GET_TASKS = "android.permission.GET_TASKS";
     field public static final java.lang.String GET_TOP_ACTIVITY_INFO = "android.permission.GET_TOP_ACTIVITY_INFO";
     field public static final java.lang.String GLOBAL_SEARCH = "android.permission.GLOBAL_SEARCH";
+    field public static final java.lang.String GRANT_RUNTIME_PERMISSIONS = "android.permission.GRANT_RUNTIME_PERMISSIONS";
     field public static final java.lang.String HARDWARE_TEST = "android.permission.HARDWARE_TEST";
     field public static final java.lang.String HDMI_CEC = "android.permission.HDMI_CEC";
     field public static final java.lang.String INJECT_EVENTS = "android.permission.INJECT_EVENTS";
@@ -118,14 +120,17 @@ package android {
     field public static final java.lang.String INSTALL_SHORTCUT = "com.android.launcher.permission.INSTALL_SHORTCUT";
     field public static final java.lang.String INTENT_FILTER_VERIFICATION_AGENT = "android.permission.INTENT_FILTER_VERIFICATION_AGENT";
     field public static final java.lang.String INTERACT_ACROSS_USERS = "android.permission.INTERACT_ACROSS_USERS";
+    field public static final java.lang.String INTERACT_ACROSS_USERS_FULL = "android.permission.INTERACT_ACROSS_USERS_FULL";
     field public static final java.lang.String INTERNAL_SYSTEM_WINDOW = "android.permission.INTERNAL_SYSTEM_WINDOW";
     field public static final java.lang.String INTERNET = "android.permission.INTERNET";
     field public static final java.lang.String INVOKE_CARRIER_SETUP = "android.permission.INVOKE_CARRIER_SETUP";
     field public static final java.lang.String KILL_BACKGROUND_PROCESSES = "android.permission.KILL_BACKGROUND_PROCESSES";
+    field public static final java.lang.String KILL_UID = "android.permission.KILL_UID";
     field public static final java.lang.String LOCAL_MAC_ADDRESS = "android.permission.LOCAL_MAC_ADDRESS";
     field public static final java.lang.String LOCATION_HARDWARE = "android.permission.LOCATION_HARDWARE";
     field public static final java.lang.String LOOP_RADIO = "android.permission.LOOP_RADIO";
     field public static final java.lang.String MANAGE_ACTIVITY_STACKS = "android.permission.MANAGE_ACTIVITY_STACKS";
+    field public static final java.lang.String MANAGE_APP_OPS_RESTRICTIONS = "android.permission.MANAGE_APP_OPS_RESTRICTIONS";
     field public static final java.lang.String MANAGE_APP_TOKENS = "android.permission.MANAGE_APP_TOKENS";
     field public static final java.lang.String MANAGE_CA_CERTIFICATES = "android.permission.MANAGE_CA_CERTIFICATES";
     field public static final java.lang.String MANAGE_DEVICE_ADMINS = "android.permission.MANAGE_DEVICE_ADMINS";
@@ -3824,6 +3829,7 @@ package android.app {
     method public static boolean isRunningInTestHarness();
     method public static boolean isUserAMonkey();
     method public void killBackgroundProcesses(java.lang.String);
+    method public void killUid(int, java.lang.String);
     method public void moveTaskToFront(int, int);
     method public void moveTaskToFront(int, int, android.os.Bundle);
     method public deprecated void restartPackage(java.lang.String);
@@ -4130,6 +4136,7 @@ package android.app {
     method public int noteProxyOp(java.lang.String, java.lang.String);
     method public int noteProxyOpNoThrow(java.lang.String, java.lang.String);
     method public static java.lang.String permissionToOp(java.lang.String);
+    method public void setUidMode(java.lang.String, int, int);
     method public int startOp(java.lang.String, int, java.lang.String);
     method public int startOpNoThrow(java.lang.String, int, java.lang.String);
     method public void startWatchingMode(java.lang.String, java.lang.String, android.app.AppOpsManager.OnOpChangedListener);
@@ -8898,8 +8905,11 @@ package android.content {
     field public static final java.lang.String ACTION_MANAGED_PROFILE_REMOVED = "android.intent.action.MANAGED_PROFILE_REMOVED";
     field public static final java.lang.String ACTION_MANAGED_PROFILE_UNAVAILABLE = "android.intent.action.MANAGED_PROFILE_UNAVAILABLE";
     field public static final java.lang.String ACTION_MANAGED_PROFILE_UNLOCKED = "android.intent.action.MANAGED_PROFILE_UNLOCKED";
+    field public static final java.lang.String ACTION_MANAGE_APP_PERMISSIONS = "android.intent.action.MANAGE_APP_PERMISSIONS";
     field public static final java.lang.String ACTION_MANAGE_NETWORK_USAGE = "android.intent.action.MANAGE_NETWORK_USAGE";
     field public static final java.lang.String ACTION_MANAGE_PACKAGE_STORAGE = "android.intent.action.MANAGE_PACKAGE_STORAGE";
+    field public static final java.lang.String ACTION_MANAGE_PERMISSIONS = "android.intent.action.MANAGE_PERMISSIONS";
+    field public static final java.lang.String ACTION_MANAGE_PERMISSION_APPS = "android.intent.action.MANAGE_PERMISSION_APPS";
     field public static final java.lang.String ACTION_MEDIA_BAD_REMOVAL = "android.intent.action.MEDIA_BAD_REMOVAL";
     field public static final java.lang.String ACTION_MEDIA_BUTTON = "android.intent.action.MEDIA_BUTTON";
     field public static final java.lang.String ACTION_MEDIA_CHECKING = "android.intent.action.MEDIA_CHECKING";
@@ -8943,6 +8953,7 @@ package android.content {
     field public static final java.lang.String ACTION_QUICK_VIEW = "android.intent.action.QUICK_VIEW";
     field public static final java.lang.String ACTION_REBOOT = "android.intent.action.REBOOT";
     field public static final java.lang.String ACTION_RESOLVE_EPHEMERAL_PACKAGE = "android.intent.action.RESOLVE_EPHEMERAL_PACKAGE";
+    field public static final java.lang.String ACTION_REVIEW_PERMISSIONS = "android.intent.action.REVIEW_PERMISSIONS";
     field public static final java.lang.String ACTION_RUN = "android.intent.action.RUN";
     field public static final java.lang.String ACTION_SCREEN_OFF = "android.intent.action.SCREEN_OFF";
     field public static final java.lang.String ACTION_SCREEN_ON = "android.intent.action.SCREEN_ON";
@@ -9049,6 +9060,7 @@ package android.content {
     field public static final java.lang.String EXTRA_LOCAL_ONLY = "android.intent.extra.LOCAL_ONLY";
     field public static final java.lang.String EXTRA_MIME_TYPES = "android.intent.extra.MIME_TYPES";
     field public static final java.lang.String EXTRA_NOT_UNKNOWN_SOURCE = "android.intent.extra.NOT_UNKNOWN_SOURCE";
+    field public static final java.lang.String EXTRA_ORIGINATING_UID = "android.intent.extra.ORIGINATING_UID";
     field public static final java.lang.String EXTRA_ORIGINATING_URI = "android.intent.extra.ORIGINATING_URI";
     field public static final java.lang.String EXTRA_PACKAGES = "android.intent.extra.PACKAGES";
     field public static final java.lang.String EXTRA_PACKAGE_NAME = "android.intent.extra.PACKAGE_NAME";
@@ -9059,12 +9071,14 @@ package android.content {
     field public static final java.lang.String EXTRA_QUIET_MODE = "android.intent.extra.QUIET_MODE";
     field public static final java.lang.String EXTRA_REFERRER = "android.intent.extra.REFERRER";
     field public static final java.lang.String EXTRA_REFERRER_NAME = "android.intent.extra.REFERRER_NAME";
+    field public static final java.lang.String EXTRA_REMOTE_CALLBACK = "android.intent.extra.REMOTE_CALLBACK";
     field public static final java.lang.String EXTRA_REMOTE_INTENT_TOKEN = "android.intent.extra.remote_intent_token";
     field public static final java.lang.String EXTRA_REPLACEMENT_EXTRAS = "android.intent.extra.REPLACEMENT_EXTRAS";
     field public static final java.lang.String EXTRA_REPLACING = "android.intent.extra.REPLACING";
     field public static final java.lang.String EXTRA_RESTRICTIONS_BUNDLE = "android.intent.extra.restrictions_bundle";
     field public static final java.lang.String EXTRA_RESTRICTIONS_INTENT = "android.intent.extra.restrictions_intent";
     field public static final java.lang.String EXTRA_RESTRICTIONS_LIST = "android.intent.extra.restrictions_list";
+    field public static final java.lang.String EXTRA_RESULT_NEEDED = "android.intent.extra.RESULT_NEEDED";
     field public static final java.lang.String EXTRA_RESULT_RECEIVER = "android.intent.extra.RESULT_RECEIVER";
     field public static final java.lang.String EXTRA_RETURN_RESULT = "android.intent.extra.RETURN_RESULT";
     field public static final java.lang.String EXTRA_SHORTCUT_ICON = "android.intent.extra.shortcut.ICON";
@@ -10082,6 +10096,7 @@ package android.content.pm {
     method public abstract android.graphics.drawable.Drawable getDrawable(java.lang.String, int, android.content.pm.ApplicationInfo);
     method public abstract java.util.List<android.content.pm.ApplicationInfo> getInstalledApplications(int);
     method public abstract java.util.List<android.content.pm.PackageInfo> getInstalledPackages(int);
+    method public abstract java.util.List<android.content.pm.PackageInfo> getInstalledPackagesAsUser(int, int);
     method public abstract java.lang.String getInstallerPackageName(java.lang.String);
     method public abstract android.content.pm.InstrumentationInfo getInstrumentationInfo(android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract android.content.Intent getLaunchIntentForPackage(java.lang.String);
@@ -10233,6 +10248,13 @@ package android.content.pm {
     field public static final java.lang.String FEATURE_WEBVIEW = "android.software.webview";
     field public static final java.lang.String FEATURE_WIFI = "android.hardware.wifi";
     field public static final java.lang.String FEATURE_WIFI_DIRECT = "android.hardware.wifi.direct";
+    field public static final int FLAG_PERMISSION_GRANTED_BY_DEFAULT = 32; // 0x20
+    field public static final int FLAG_PERMISSION_POLICY_FIXED = 4; // 0x4
+    field public static final int FLAG_PERMISSION_REVIEW_REQUIRED = 64; // 0x40
+    field public static final int FLAG_PERMISSION_REVOKE_ON_UPGRADE = 8; // 0x8
+    field public static final int FLAG_PERMISSION_SYSTEM_FIXED = 16; // 0x10
+    field public static final int FLAG_PERMISSION_USER_FIXED = 2; // 0x2
+    field public static final int FLAG_PERMISSION_USER_SET = 1; // 0x1
     field public static final int GET_ACTIVITIES = 1; // 0x1
     field public static final int GET_CONFIGURATIONS = 16384; // 0x4000
     field public static final deprecated int GET_DISABLED_COMPONENTS = 512; // 0x200
@@ -10525,6 +10547,20 @@ package android.content.pm {
     method public java.lang.String toCharsString();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.Signature> CREATOR;
+  }
+
+}
+
+package android.content.pm.permission {
+
+  public final class RuntimePermissionPresentationInfo implements android.os.Parcelable {
+    ctor public RuntimePermissionPresentationInfo(java.lang.CharSequence, boolean, boolean);
+    method public int describeContents();
+    method public java.lang.CharSequence getLabel();
+    method public boolean isGranted();
+    method public boolean isStandard();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.content.pm.permission.RuntimePermissionPresentationInfo> CREATOR;
   }
 
 }
@@ -30773,6 +30809,7 @@ package android.os {
     field public static final java.lang.String ID;
     field public static final java.lang.String MANUFACTURER;
     field public static final java.lang.String MODEL;
+    field public static final boolean PERMISSIONS_REVIEW_REQUIRED;
     field public static final java.lang.String PRODUCT;
     field public static final deprecated java.lang.String RADIO;
     field public static final java.lang.String SERIAL;
@@ -31654,6 +31691,19 @@ package android.os {
     method public abstract void onProgress(int);
   }
 
+  public final class RemoteCallback implements android.os.Parcelable {
+    ctor public RemoteCallback(android.os.RemoteCallback.OnResultListener);
+    ctor public RemoteCallback(android.os.RemoteCallback.OnResultListener, android.os.Handler);
+    method public int describeContents();
+    method public void sendResult(android.os.Bundle);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.os.RemoteCallback> CREATOR;
+  }
+
+  public static abstract interface RemoteCallback.OnResultListener {
+    method public abstract void onResult(android.os.Bundle);
+  }
+
   public class RemoteCallbackList {
     ctor public RemoteCallbackList();
     method public int beginBroadcast();
@@ -32126,6 +32176,19 @@ package android.os.storage {
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.os.storage.StorageVolume> CREATOR;
     field public static final java.lang.String EXTRA_STORAGE_VOLUME = "android.os.storage.extra.STORAGE_VOLUME";
+  }
+
+}
+
+package android.permissionpresenterservice {
+
+  public abstract class RuntimePermissionPresenterService extends android.app.Service {
+    ctor public RuntimePermissionPresenterService();
+    method public final void attachBaseContext(android.content.Context);
+    method public final android.os.IBinder onBind(android.content.Intent);
+    method public abstract java.util.List<android.content.pm.permission.RuntimePermissionPresentationInfo> onGetAppPermissions(java.lang.String);
+    method public abstract java.util.List<android.content.pm.ApplicationInfo> onGetAppsUsingPermissions(boolean);
+    field public static final java.lang.String SERVICE_INTERFACE = "android.permissionpresenterservice.RuntimePermissionPresenterService";
   }
 
 }
@@ -41039,6 +41102,7 @@ package android.test.mock {
     method public android.graphics.drawable.Drawable getDrawable(java.lang.String, int, android.content.pm.ApplicationInfo);
     method public java.util.List<android.content.pm.ApplicationInfo> getInstalledApplications(int);
     method public java.util.List<android.content.pm.PackageInfo> getInstalledPackages(int);
+    method public java.util.List<android.content.pm.PackageInfo> getInstalledPackagesAsUser(int, int);
     method public java.lang.String getInstallerPackageName(java.lang.String);
     method public android.content.pm.InstrumentationInfo getInstrumentationInfo(android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public android.content.Intent getLaunchIntentForPackage(java.lang.String);
