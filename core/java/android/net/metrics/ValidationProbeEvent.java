@@ -24,26 +24,34 @@ import android.os.Parcelable;
  * {@hide}
  */
 @SystemApi
-public final class NetworkMonitorEvent extends IpConnectivityEvent implements Parcelable {
+public final class ValidationProbeEvent extends IpConnectivityEvent implements Parcelable {
+
+    public static final int PROBE_HTTP  = 0;
+    public static final int PROBE_HTTPS = 1;
+
     public final int netId;
     public final long durationMs;
+    public final int probeType;
     public final int returnCode;
 
-    private NetworkMonitorEvent(int netId, long durationMs, int returnCode) {
+    private ValidationProbeEvent(int netId, long durationMs, int probeType, int returnCode) {
         this.netId = netId;
         this.durationMs = durationMs;
+        this.probeType = probeType;
         this.returnCode = returnCode;
     }
 
-    public NetworkMonitorEvent(Parcel in) {
+    private ValidationProbeEvent(Parcel in) {
         netId = in.readInt();
         durationMs = in.readLong();
+        probeType = in.readInt();
         returnCode = in.readInt();
     }
 
     public void writeToParcel(Parcel out, int flags) {
         out.writeInt(netId);
         out.writeLong(durationMs);
+        out.writeInt(probeType);
         out.writeInt(returnCode);
     }
 
@@ -51,30 +59,19 @@ public final class NetworkMonitorEvent extends IpConnectivityEvent implements Pa
         return 0;
     }
 
-    public static final Parcelable.Creator<NetworkMonitorEvent> CREATOR
-        = new Parcelable.Creator<NetworkMonitorEvent>() {
-        public NetworkMonitorEvent createFromParcel(Parcel in) {
-            return new NetworkMonitorEvent(in);
+    public static final Parcelable.Creator<ValidationProbeEvent> CREATOR
+        = new Parcelable.Creator<ValidationProbeEvent>() {
+        public ValidationProbeEvent createFromParcel(Parcel in) {
+            return new ValidationProbeEvent(in);
         }
 
-        public NetworkMonitorEvent[] newArray(int size) {
-            return new NetworkMonitorEvent[size];
+        public ValidationProbeEvent[] newArray(int size) {
+            return new ValidationProbeEvent[size];
         }
     };
 
-    private static void logEvent(int eventType, int netId, long durationMs, int returnCode) {
-        logEvent(eventType, new NetworkMonitorEvent(netId, durationMs, returnCode));
-    }
-
-    public static void logValidated(int netId, long durationMs) {
-        logEvent(IPCE_NETMON_VALIDATED, netId, durationMs, 0);
-    }
-
-    public static void logPortalProbeEvent(int netId, long durationMs, int returnCode) {
-        logEvent(IPCE_NETMON_PORTAL_PROBE, netId, durationMs, returnCode);
-    }
-
-    public static void logCaptivePortalFound(int netId, long durationMs) {
-        logEvent(IPCE_NETMON_CAPPORT_FOUND, netId, durationMs, 0);
+    public static void logEvent(int netId, long durationMs, int probeType, int returnCode) {
+        logEvent(IPCE_NETMON_PORTAL_PROBE,
+                 new ValidationProbeEvent(netId, durationMs, probeType, returnCode));
     }
 };
