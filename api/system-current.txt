@@ -4502,6 +4502,8 @@ package android.app {
     method public android.app.DownloadManager.Request setDestinationUri(android.net.Uri);
     method public android.app.DownloadManager.Request setMimeType(java.lang.String);
     method public android.app.DownloadManager.Request setNotificationVisibility(int);
+    method public android.app.DownloadManager.Request setRequiresCharging(boolean);
+    method public android.app.DownloadManager.Request setRequiresDeviceIdle(boolean);
     method public deprecated android.app.DownloadManager.Request setShowRunningNotification(boolean);
     method public android.app.DownloadManager.Request setTitle(java.lang.CharSequence);
     method public android.app.DownloadManager.Request setVisibleInDownloadsUi(boolean);
@@ -6615,6 +6617,7 @@ package android.app.job {
     field public static final long MAX_BACKOFF_DELAY_MILLIS = 18000000L; // 0x112a880L
     field public static final int NETWORK_TYPE_ANY = 1; // 0x1
     field public static final int NETWORK_TYPE_NONE = 0; // 0x0
+    field public static final int NETWORK_TYPE_NOT_ROAMING = 3; // 0x3
     field public static final int NETWORK_TYPE_UNMETERED = 2; // 0x2
   }
 
@@ -6664,6 +6667,7 @@ package android.app.job {
     method public abstract void cancel(int);
     method public abstract void cancelAll();
     method public abstract java.util.List<android.app.job.JobInfo> getAllPendingJobs();
+    method public abstract android.app.job.JobInfo getPendingJob(int);
     method public abstract int schedule(android.app.job.JobInfo);
     field public static final int RESULT_FAILURE = 0; // 0x0
     field public static final int RESULT_SUCCESS = 1; // 0x1
@@ -25587,8 +25591,10 @@ package android.net {
     method public boolean isConnected();
     method public boolean isConnectedOrConnecting();
     method public boolean isFailover();
+    method public boolean isMetered();
     method public boolean isRoaming();
     method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.NetworkInfo> CREATOR;
   }
 
   public static final class NetworkInfo.DetailedState extends java.lang.Enum {
