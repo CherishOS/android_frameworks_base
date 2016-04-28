@@ -25082,6 +25082,7 @@ package android.nfc {
     method public deprecated void enableForegroundNdefPush(android.app.Activity, android.nfc.NdefMessage);
     method public void enableReaderMode(android.app.Activity, android.nfc.NfcAdapter.ReaderCallback, int, android.os.Bundle);
     method public static android.nfc.NfcAdapter getDefaultAdapter(android.content.Context);
+    method public boolean ignore(android.nfc.Tag, int, android.nfc.NfcAdapter.OnTagRemovedListener, android.os.Handler);
     method public boolean invokeBeam(android.app.Activity);
     method public boolean isEnabled();
     method public boolean isNdefPushEnabled();
@@ -25124,6 +25125,10 @@ package android.nfc {
     method public abstract void onNdefPushComplete(android.nfc.NfcEvent);
   }
 
+  public static abstract interface NfcAdapter.OnTagRemovedListener {
+    method public abstract void onTagRemoved();
+  }
+
   public static abstract interface NfcAdapter.ReaderCallback {
     method public abstract void onTagDiscovered(android.nfc.Tag);
   }
@@ -25140,7 +25145,6 @@ package android.nfc {
 
   public final class Tag implements android.os.Parcelable {
     method public int describeContents();
-    method public boolean done(int);
     method public byte[] getId();
     method public java.lang.String[] getTechList();
     method public void writeToParcel(android.os.Parcel, int);
