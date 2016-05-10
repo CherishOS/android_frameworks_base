@@ -6701,22 +6701,6 @@ package android.app.usage {
     field public static final android.os.Parcelable.Creator<android.app.usage.ConfigurationStats> CREATOR;
   }
 
-  public class DataUsagePolicy {
-    field public final int networkType;
-    field public final java.lang.String[] subscriberIds;
-    field public final long thresholdInBytes;
-    field public final int[] uids;
-  }
-
-  public static class DataUsagePolicy.Builder {
-    ctor public DataUsagePolicy.Builder();
-    method public android.app.usage.DataUsagePolicy.Builder addSubscriberId(java.lang.String);
-    method public android.app.usage.DataUsagePolicy.Builder addUid(int);
-    method public android.app.usage.DataUsagePolicy build();
-    method public android.app.usage.DataUsagePolicy.Builder setNetworkType(int);
-    method public android.app.usage.DataUsagePolicy.Builder setThreshold(long);
-  }
-
   public final class NetworkStats implements java.lang.AutoCloseable {
     method public void close();
     method public boolean getNextBucket(android.app.usage.NetworkStats.Bucket);
@@ -6741,8 +6725,7 @@ package android.app.usage {
     field public static final int STATE_ALL = -1; // 0xffffffff
     field public static final int STATE_DEFAULT = 1; // 0x1
     field public static final int STATE_FOREGROUND = 2; // 0x2
-    field public static final int TAG_ALL = 0; // 0x0
-    field public static final int TAG_ANY = -1; // 0xffffffff
+    field public static final int TAG_NONE = 0; // 0x0
     field public static final int UID_ALL = -1; // 0xffffffff
     field public static final int UID_REMOVED = -4; // 0xfffffffc
     field public static final int UID_TETHERING = -5; // 0xfffffffb
@@ -6751,20 +6734,18 @@ package android.app.usage {
   public class NetworkStatsManager {
     method public android.app.usage.NetworkStats queryDetails(int, java.lang.String, long, long) throws android.os.RemoteException, java.lang.SecurityException;
     method public android.app.usage.NetworkStats queryDetailsForUid(int, java.lang.String, long, long, int) throws android.os.RemoteException, java.lang.SecurityException;
-    method public android.app.usage.NetworkStats queryDetailsForUidTag(int, java.lang.String, long, long, int, int) throws android.os.RemoteException, java.lang.SecurityException;
+    method public android.app.usage.NetworkStats queryDetailsForUidTag(int, java.lang.String, long, long, int, int);
     method public android.app.usage.NetworkStats querySummary(int, java.lang.String, long, long) throws android.os.RemoteException, java.lang.SecurityException;
-    method public android.app.usage.NetworkStats querySummary(int, java.lang.String, long, long, boolean) throws android.os.RemoteException, java.lang.SecurityException;
     method public android.app.usage.NetworkStats.Bucket querySummaryForDevice(int, java.lang.String, long, long) throws android.os.RemoteException, java.lang.SecurityException;
     method public android.app.usage.NetworkStats.Bucket querySummaryForUser(int, java.lang.String, long, long) throws android.os.RemoteException, java.lang.SecurityException;
-    method public android.app.usage.NetworkStats.Bucket querySummaryForUser(int, java.lang.String, long, long, boolean) throws android.os.RemoteException, java.lang.SecurityException;
-    method public void registerDataUsageCallback(android.app.usage.DataUsagePolicy, android.app.usage.NetworkStatsManager.DataUsageCallback);
-    method public void registerDataUsageCallback(android.app.usage.DataUsagePolicy, android.app.usage.NetworkStatsManager.DataUsageCallback, android.os.Handler);
-    method public void unregisterDataUsageCallback(android.app.usage.NetworkStatsManager.DataUsageCallback);
+    method public void registerUsageCallback(int, java.lang.String, long, android.app.usage.NetworkStatsManager.UsageCallback);
+    method public void registerUsageCallback(int, java.lang.String, long, android.app.usage.NetworkStatsManager.UsageCallback, android.os.Handler);
+    method public void unregisterUsageCallback(android.app.usage.NetworkStatsManager.UsageCallback);
   }
 
-  public static class NetworkStatsManager.DataUsageCallback {
-    ctor public NetworkStatsManager.DataUsageCallback();
-    method public void onLimitReached();
+  public static abstract class NetworkStatsManager.UsageCallback {
+    ctor public NetworkStatsManager.UsageCallback();
+    method public abstract void onThresholdReached(int, java.lang.String);
   }
 
   public final class UsageEvents implements android.os.Parcelable {
@@ -25365,12 +25346,6 @@ package android.net {
     method public int getGid();
     method public int getPid();
     method public int getUid();
-  }
-
-  public final class DataUsageRequest implements android.os.Parcelable {
-    method public int describeContents();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.net.DataUsageRequest> CREATOR;
   }
 
   public class DhcpInfo implements android.os.Parcelable {
