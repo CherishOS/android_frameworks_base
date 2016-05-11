@@ -9859,6 +9859,8 @@ package android.content.pm {
 
   public class LauncherApps {
     method public java.util.List<android.content.pm.LauncherActivityInfo> getActivityList(java.lang.String, android.os.UserHandle);
+    method public android.graphics.drawable.Drawable getShortcutBadgedIconDrawable(int);
+    method public android.graphics.drawable.Drawable getShortcutIconDrawable(int);
     method public android.os.ParcelFileDescriptor getShortcutIconFd(android.content.pm.ShortcutInfo);
     method public android.os.ParcelFileDescriptor getShortcutIconFd(java.lang.String, java.lang.String, android.os.UserHandle);
     method public java.util.List<android.content.pm.ShortcutInfo> getShortcuts(android.content.pm.LauncherApps.ShortcutQuery, android.os.UserHandle);
@@ -10472,31 +10474,41 @@ package android.content.pm {
     method public int describeContents();
     method public android.content.ComponentName getActivityComponent();
     method public java.util.Set<java.lang.String> getCategories();
+    method public java.lang.String getDisabledMessage();
+    method public int getDisabledMessageResId();
     method public android.os.PersistableBundle getExtras();
     method public int getIconResourceId();
     method public java.lang.String getId();
     method public android.content.Intent getIntent();
     method public long getLastChangedTimestamp();
     method public java.lang.String getPackageName();
+    method public int getRank();
     method public java.lang.String getText();
+    method public int getTextResId();
     method public java.lang.String getTitle();
+    method public int getTitleResId();
     method public android.os.UserHandle getUserHandle();
-    method public int getWeight();
     method public boolean hasIconFile();
     method public boolean hasIconResource();
     method public boolean hasKeyFieldsOnly();
+    method public boolean hasStringResourcesResolved();
+    method public boolean isDisabled();
     method public boolean isDynamic();
+    method public boolean isFromManifest();
     method public boolean isPinned();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int CLONE_REMOVE_FOR_CREATOR = 1; // 0x1
     field public static final int CLONE_REMOVE_FOR_LAUNCHER = 3; // 0x3
     field public static final int CLONE_REMOVE_NON_KEY_INFO = 4; // 0x4
     field public static final android.os.Parcelable.Creator<android.content.pm.ShortcutInfo> CREATOR;
+    field public static final int FLAG_DISABLED = 64; // 0x40
     field public static final int FLAG_DYNAMIC = 1; // 0x1
+    field public static final int FLAG_FROM_MANIFEST = 32; // 0x20
     field public static final int FLAG_HAS_ICON_FILE = 8; // 0x8
     field public static final int FLAG_HAS_ICON_RES = 4; // 0x4
     field public static final int FLAG_KEY_FIELDS_ONLY = 16; // 0x10
     field public static final int FLAG_PINNED = 2; // 0x2
+    field public static final int FLAG_STRINGS_RESOLVED = 128; // 0x80
     field public static final java.lang.String SHORTCUT_CATEGORY_CONVERSATION = "android.shortcut.conversation";
   }
 
@@ -10505,17 +10517,24 @@ package android.content.pm {
     method public android.content.pm.ShortcutInfo build();
     method public android.content.pm.ShortcutInfo.Builder setActivityComponent(android.content.ComponentName);
     method public android.content.pm.ShortcutInfo.Builder setCategories(java.util.Set<java.lang.String>);
+    method public android.content.pm.ShortcutInfo.Builder setDisabledMessage(java.lang.String);
+    method public android.content.pm.ShortcutInfo.Builder setDisabledMessageResId(int);
     method public android.content.pm.ShortcutInfo.Builder setExtras(android.os.PersistableBundle);
     method public android.content.pm.ShortcutInfo.Builder setIcon(android.graphics.drawable.Icon);
     method public android.content.pm.ShortcutInfo.Builder setId(java.lang.String);
     method public android.content.pm.ShortcutInfo.Builder setIntent(android.content.Intent);
+    method public android.content.pm.ShortcutInfo.Builder setRank(int);
     method public android.content.pm.ShortcutInfo.Builder setText(java.lang.String);
+    method public android.content.pm.ShortcutInfo.Builder setTextResId(int);
     method public android.content.pm.ShortcutInfo.Builder setTitle(java.lang.String);
-    method public android.content.pm.ShortcutInfo.Builder setWeight(int);
+    method public android.content.pm.ShortcutInfo.Builder setTitleResId(int);
   }
 
   public class ShortcutManager {
     method public boolean addDynamicShortcuts(java.util.List<android.content.pm.ShortcutInfo>);
+    method public void disableShortcuts(java.util.List<java.lang.String>);
+    method public void disableShortcuts(java.util.List<java.lang.String>, int);
+    method public void disableShortcuts(java.util.List<java.lang.String>, java.lang.String);
     method public java.util.List<android.content.pm.ShortcutInfo> getDynamicShortcuts();
     method public int getIconMaxDimensions();
     method public int getMaxDynamicShortcutCount();
@@ -10524,6 +10543,7 @@ package android.content.pm {
     method public int getRemainingCallCount();
     method public void removeAllDynamicShortcuts();
     method public void removeDynamicShortcuts(java.util.List<java.lang.String>);
+    method public void reportShortcutUsed(java.lang.String);
     method public boolean setDynamicShortcuts(java.util.List<android.content.pm.ShortcutInfo>);
     method public boolean updateShortcuts(java.util.List<android.content.pm.ShortcutInfo>);
   }
