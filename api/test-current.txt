@@ -10129,14 +10129,14 @@ package android.content.res {
     method public int diff(android.content.res.Configuration);
     method public boolean equals(android.content.res.Configuration);
     method public int getLayoutDirection();
-    method public android.util.LocaleList getLocales();
+    method public android.os.LocaleList getLocales();
     method public boolean isLayoutSizeAtLeast(int);
     method public boolean isScreenRound();
     method public static boolean needNewResources(int, int);
     method public void readFromParcel(android.os.Parcel);
     method public void setLayoutDirection(java.util.Locale);
     method public void setLocale(java.util.Locale);
-    method public void setLocales(android.util.LocaleList);
+    method public void setLocales(android.os.LocaleList);
     method public void setTo(android.content.res.Configuration);
     method public void setToDefaults();
     method public int updateFrom(android.content.res.Configuration);
@@ -12048,7 +12048,7 @@ package android.graphics {
     method public void getTextBounds(java.lang.String, int, int, android.graphics.Rect);
     method public void getTextBounds(char[], int, int, android.graphics.Rect);
     method public java.util.Locale getTextLocale();
-    method public android.util.LocaleList getTextLocales();
+    method public android.os.LocaleList getTextLocales();
     method public void getTextPath(char[], int, int, float, float, android.graphics.Path);
     method public void getTextPath(java.lang.String, int, int, float, float, android.graphics.Path);
     method public float getTextScaleX();
@@ -12104,7 +12104,7 @@ package android.graphics {
     method public void setSubpixelText(boolean);
     method public void setTextAlign(android.graphics.Paint.Align);
     method public void setTextLocale(java.util.Locale);
-    method public void setTextLocales(android.util.LocaleList);
+    method public void setTextLocales(android.os.LocaleList);
     method public void setTextScaleX(float);
     method public void setTextSize(float);
     method public void setTextSkewX(float);
@@ -28744,6 +28744,24 @@ package android.os {
     method public abstract android.os.IBinder asBinder();
   }
 
+  public final class LocaleList implements android.os.Parcelable {
+    ctor public LocaleList(java.util.Locale...);
+    method public int describeContents();
+    method public static android.os.LocaleList forLanguageTags(java.lang.String);
+    method public java.util.Locale get(int);
+    method public static android.os.LocaleList getAdjustedDefault();
+    method public static android.os.LocaleList getDefault();
+    method public static android.os.LocaleList getEmptyLocaleList();
+    method public java.util.Locale getFirstMatch(java.lang.String[]);
+    method public int indexOf(java.util.Locale);
+    method public boolean isEmpty();
+    method public static void setDefault(android.os.LocaleList);
+    method public int size();
+    method public java.lang.String toLanguageTags();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.os.LocaleList> CREATOR;
+  }
+
   public final class Looper {
     method public void dump(android.util.Printer, java.lang.String);
     method public static android.os.Looper getMainLooper();
@@ -39294,11 +39312,11 @@ package android.text.style {
 
   public class LocaleSpan extends android.text.style.MetricAffectingSpan implements android.text.ParcelableSpan {
     ctor public LocaleSpan(java.util.Locale);
-    ctor public LocaleSpan(android.util.LocaleList);
+    ctor public LocaleSpan(android.os.LocaleList);
     ctor public LocaleSpan(android.os.Parcel);
     method public int describeContents();
     method public java.util.Locale getLocale();
-    method public android.util.LocaleList getLocales();
+    method public android.os.LocaleList getLocales();
     method public int getSpanTypeId();
     method public void updateDrawState(android.text.TextPaint);
     method public void updateMeasureState(android.text.TextPaint);
@@ -40315,24 +40333,6 @@ package android.util {
     field public static final int LOCALE = 3; // 0x3
     field public static final int LTR = 0; // 0x0
     field public static final int RTL = 1; // 0x1
-  }
-
-  public final class LocaleList implements android.os.Parcelable {
-    ctor public LocaleList(java.util.Locale...);
-    method public int describeContents();
-    method public static android.util.LocaleList forLanguageTags(java.lang.String);
-    method public java.util.Locale get(int);
-    method public static android.util.LocaleList getAdjustedDefault();
-    method public static android.util.LocaleList getDefault();
-    method public static android.util.LocaleList getEmptyLocaleList();
-    method public java.util.Locale getFirstMatch(java.lang.String[]);
-    method public int indexOf(java.util.Locale);
-    method public boolean isEmpty();
-    method public static void setDefault(android.util.LocaleList);
-    method public int size();
-    method public java.lang.String toLanguageTags();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.util.LocaleList> CREATOR;
   }
 
   public final class Log {
@@ -44734,7 +44734,7 @@ package android.view.inputmethod {
     field public android.os.Bundle extras;
     field public int fieldId;
     field public java.lang.String fieldName;
-    field public android.util.LocaleList hintLocales;
+    field public android.os.LocaleList hintLocales;
     field public java.lang.CharSequence hintText;
     field public int imeOptions;
     field public int initialCapsMode;
@@ -48021,7 +48021,7 @@ package android.widget {
     method public int getHyphenationFrequency();
     method public int getImeActionId();
     method public java.lang.CharSequence getImeActionLabel();
-    method public android.util.LocaleList getImeHintLocales();
+    method public android.os.LocaleList getImeHintLocales();
     method public int getImeOptions();
     method public boolean getIncludeFontPadding();
     method public android.os.Bundle getInputExtras(boolean);
@@ -48060,7 +48060,7 @@ package android.widget {
     method public java.lang.CharSequence getText();
     method public final android.content.res.ColorStateList getTextColors();
     method public java.util.Locale getTextLocale();
-    method public android.util.LocaleList getTextLocales();
+    method public android.os.LocaleList getTextLocales();
     method public float getTextScaleX();
     method public float getTextSize();
     method public int getTotalPaddingBottom();
@@ -48128,7 +48128,7 @@ package android.widget {
     method public void setHorizontallyScrolling(boolean);
     method public void setHyphenationFrequency(int);
     method public void setImeActionLabel(java.lang.CharSequence, int);
-    method public void setImeHintLocales(android.util.LocaleList);
+    method public void setImeHintLocales(android.os.LocaleList);
     method public void setImeOptions(int);
     method public void setIncludeFontPadding(boolean);
     method public void setInputExtras(int) throws java.io.IOException, org.xmlpull.v1.XmlPullParserException;
@@ -48174,7 +48174,7 @@ package android.widget {
     method public final void setTextKeepState(java.lang.CharSequence);
     method public final void setTextKeepState(java.lang.CharSequence, android.widget.TextView.BufferType);
     method public void setTextLocale(java.util.Locale);
-    method public void setTextLocales(android.util.LocaleList);
+    method public void setTextLocales(android.os.LocaleList);
     method public void setTextScaleX(float);
     method public void setTextSize(float);
     method public void setTextSize(int, float);
