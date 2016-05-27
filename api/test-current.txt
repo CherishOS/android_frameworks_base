@@ -1106,6 +1106,15 @@ package android {
     field public static final int shareInterpolator = 16843195; // 0x10101bb
     field public static final int sharedUserId = 16842763; // 0x101000b
     field public static final int sharedUserLabel = 16843361; // 0x1010261
+    field public static final int shortcutCategories = 16844078; // 0x101052e
+    field public static final int shortcutDisabledMessage = 16844077; // 0x101052d
+    field public static final int shortcutIcon = 16844074; // 0x101052a
+    field public static final int shortcutId = 16844072; // 0x1010528
+    field public static final int shortcutIntentAction = 16844079; // 0x101052f
+    field public static final int shortcutIntentData = 16844080; // 0x1010530
+    field public static final int shortcutRank = 16844073; // 0x1010529
+    field public static final int shortcutText = 16844076; // 0x101052c
+    field public static final int shortcutTitle = 16844075; // 0x101052b
     field public static final int shouldDisableView = 16843246; // 0x10101ee
     field public static final int showAsAction = 16843481; // 0x10102d9
     field public static final int showDefault = 16843258; // 0x10101fa
@@ -9546,13 +9555,14 @@ package android.content.pm {
 
   public static class LauncherApps.ShortcutQuery {
     ctor public LauncherApps.ShortcutQuery();
-    method public void setActivity(android.content.ComponentName);
-    method public void setChangedSince(long);
-    method public void setPackage(java.lang.String);
-    method public void setQueryFlags(int);
-    method public void setShortcutIds(java.util.List<java.lang.String>);
+    method public android.content.pm.LauncherApps.ShortcutQuery setActivity(android.content.ComponentName);
+    method public android.content.pm.LauncherApps.ShortcutQuery setChangedSince(long);
+    method public android.content.pm.LauncherApps.ShortcutQuery setPackage(java.lang.String);
+    method public android.content.pm.LauncherApps.ShortcutQuery setQueryFlags(int);
+    method public android.content.pm.LauncherApps.ShortcutQuery setShortcutIds(java.util.List<java.lang.String>);
     field public static final int FLAG_GET_DYNAMIC = 1; // 0x1
     field public static final int FLAG_GET_KEY_FIELDS_ONLY = 4; // 0x4
+    field public static final int FLAG_GET_MANIFEST = 8; // 0x8
     field public static final int FLAG_GET_PINNED = 2; // 0x2
   }
 
@@ -10057,29 +10067,30 @@ package android.content.pm {
 
   public final class ShortcutInfo implements android.os.Parcelable {
     method public int describeContents();
-    method public android.content.ComponentName getActivityComponent();
+    method public android.content.ComponentName getActivity();
     method public java.util.Set<java.lang.String> getCategories();
-    method public java.lang.String getDisabledMessage();
+    method public java.lang.CharSequence getDisabledMessage();
     method public int getDisabledMessageResId();
     method public android.os.PersistableBundle getExtras();
     method public int getIconResourceId();
     method public java.lang.String getId();
     method public android.content.Intent getIntent();
     method public long getLastChangedTimestamp();
-    method public java.lang.String getPackageName();
+    method public java.lang.String getPackage();
     method public int getRank();
-    method public java.lang.String getText();
+    method public java.lang.CharSequence getText();
     method public int getTextResId();
-    method public java.lang.String getTitle();
+    method public java.lang.CharSequence getTitle();
     method public int getTitleResId();
     method public android.os.UserHandle getUserHandle();
     method public boolean hasIconFile();
     method public boolean hasIconResource();
     method public boolean hasKeyFieldsOnly();
     method public boolean hasStringResourcesResolved();
-    method public boolean isDisabled();
     method public boolean isDynamic();
-    method public boolean isFromManifest();
+    method public boolean isEnabled();
+    method public boolean isImmutable();
+    method public boolean isManifestShortcut();
     method public boolean isPinned();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int CLONE_REMOVE_FOR_CREATOR = 1; // 0x1
@@ -10088,10 +10099,11 @@ package android.content.pm {
     field public static final android.os.Parcelable.Creator<android.content.pm.ShortcutInfo> CREATOR;
     field public static final int FLAG_DISABLED = 64; // 0x40
     field public static final int FLAG_DYNAMIC = 1; // 0x1
-    field public static final int FLAG_FROM_MANIFEST = 32; // 0x20
     field public static final int FLAG_HAS_ICON_FILE = 8; // 0x8
     field public static final int FLAG_HAS_ICON_RES = 4; // 0x4
+    field public static final int FLAG_IMMUTABLE = 256; // 0x100
     field public static final int FLAG_KEY_FIELDS_ONLY = 16; // 0x10
+    field public static final int FLAG_MANIFEST = 32; // 0x20
     field public static final int FLAG_PINNED = 2; // 0x2
     field public static final int FLAG_STRINGS_RESOLVED = 128; // 0x80
     field public static final java.lang.String SHORTCUT_CATEGORY_CONVERSATION = "android.shortcut.conversation";
@@ -10100,19 +10112,16 @@ package android.content.pm {
   public static class ShortcutInfo.Builder {
     ctor public ShortcutInfo.Builder(android.content.Context);
     method public android.content.pm.ShortcutInfo build();
-    method public android.content.pm.ShortcutInfo.Builder setActivityComponent(android.content.ComponentName);
+    method public android.content.pm.ShortcutInfo.Builder setActivity(android.content.ComponentName);
     method public android.content.pm.ShortcutInfo.Builder setCategories(java.util.Set<java.lang.String>);
     method public android.content.pm.ShortcutInfo.Builder setDisabledMessage(java.lang.String);
-    method public android.content.pm.ShortcutInfo.Builder setDisabledMessageResId(int);
     method public android.content.pm.ShortcutInfo.Builder setExtras(android.os.PersistableBundle);
     method public android.content.pm.ShortcutInfo.Builder setIcon(android.graphics.drawable.Icon);
     method public android.content.pm.ShortcutInfo.Builder setId(java.lang.String);
     method public android.content.pm.ShortcutInfo.Builder setIntent(android.content.Intent);
     method public android.content.pm.ShortcutInfo.Builder setRank(int);
     method public android.content.pm.ShortcutInfo.Builder setText(java.lang.String);
-    method public android.content.pm.ShortcutInfo.Builder setTextResId(int);
     method public android.content.pm.ShortcutInfo.Builder setTitle(java.lang.String);
-    method public android.content.pm.ShortcutInfo.Builder setTitleResId(int);
   }
 
   public class ShortcutManager {
@@ -10121,9 +10130,12 @@ package android.content.pm {
     method public void disableShortcuts(java.util.List<java.lang.String>);
     method public void disableShortcuts(java.util.List<java.lang.String>, int);
     method public void disableShortcuts(java.util.List<java.lang.String>, java.lang.String);
+    method public void enableShortcuts(java.util.List<java.lang.String>);
     method public java.util.List<android.content.pm.ShortcutInfo> getDynamicShortcuts();
-    method public int getIconMaxDimensions();
-    method public int getMaxDynamicShortcutCount();
+    method public int getIconMaxHeight();
+    method public int getIconMaxWidth();
+    method public java.util.List<android.content.pm.ShortcutInfo> getManifestShortcuts();
+    method public int getMaxShortcutCountForActivity();
     method public java.util.List<android.content.pm.ShortcutInfo> getPinnedShortcuts();
     method public long getRateLimitResetTime();
     method public int getRemainingCallCount();
