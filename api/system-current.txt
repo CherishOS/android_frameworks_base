@@ -39334,14 +39334,16 @@ package android.telecom {
   }
 
   public class ParcelableCallAnalytics implements android.os.Parcelable {
-    ctor public ParcelableCallAnalytics(long, long, int, boolean, boolean, int, int, boolean, java.lang.String, boolean);
+    ctor public ParcelableCallAnalytics(long, long, int, boolean, boolean, int, int, boolean, java.lang.String, boolean, java.util.List<android.telecom.ParcelableCallAnalytics.AnalyticsEvent>, java.util.List<android.telecom.ParcelableCallAnalytics.EventTiming>);
     ctor public ParcelableCallAnalytics(android.os.Parcel);
+    method public java.util.List<android.telecom.ParcelableCallAnalytics.AnalyticsEvent> analyticsEvents();
     method public int describeContents();
     method public long getCallDurationMillis();
     method public int getCallTechnologies();
     method public int getCallTerminationCode();
     method public int getCallType();
     method public java.lang.String getConnectionService();
+    method public java.util.List<android.telecom.ParcelableCallAnalytics.EventTiming> getEventTimings();
     method public long getStartTimeMillis();
     method public boolean isAdditionalCall();
     method public boolean isCreatedFromExistingConnection();
@@ -39360,6 +39362,73 @@ package android.telecom {
     field public static final int SIP_PHONE = 8; // 0x8
     field public static final int STILL_CONNECTED = -1; // 0xffffffff
     field public static final int THIRD_PARTY_PHONE = 16; // 0x10
+  }
+
+  public static final class ParcelableCallAnalytics.AnalyticsEvent implements android.os.Parcelable {
+    ctor public ParcelableCallAnalytics.AnalyticsEvent(int, long);
+    method public int describeContents();
+    method public int getEventName();
+    method public long getTimeSinceLastEvent();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final int AUDIO_ROUTE_BT = 204; // 0xcc
+    field public static final int AUDIO_ROUTE_EARPIECE = 205; // 0xcd
+    field public static final int AUDIO_ROUTE_HEADSET = 206; // 0xce
+    field public static final int AUDIO_ROUTE_SPEAKER = 207; // 0xcf
+    field public static final int BIND_CS = 5; // 0x5
+    field public static final int BLOCK_CHECK_FINISHED = 105; // 0x69
+    field public static final int BLOCK_CHECK_INITIATED = 104; // 0x68
+    field public static final int CONFERENCE_WITH = 300; // 0x12c
+    field public static final android.os.Parcelable.Creator<android.telecom.ParcelableCallAnalytics.AnalyticsEvent> CREATOR;
+    field public static final int CS_BOUND = 6; // 0x6
+    field public static final int DIRECT_TO_VM_FINISHED = 103; // 0x67
+    field public static final int DIRECT_TO_VM_INITIATED = 102; // 0x66
+    field public static final int FILTERING_COMPLETED = 107; // 0x6b
+    field public static final int FILTERING_INITIATED = 106; // 0x6a
+    field public static final int FILTERING_TIMED_OUT = 108; // 0x6c
+    field public static final int MUTE = 202; // 0xca
+    field public static final int REMOTELY_HELD = 402; // 0x192
+    field public static final int REMOTELY_UNHELD = 403; // 0x193
+    field public static final int REQUEST_ACCEPT = 7; // 0x7
+    field public static final int REQUEST_HOLD = 400; // 0x190
+    field public static final int REQUEST_PULL = 500; // 0x1f4
+    field public static final int REQUEST_REJECT = 8; // 0x8
+    field public static final int REQUEST_UNHOLD = 401; // 0x191
+    field public static final int SCREENING_COMPLETED = 101; // 0x65
+    field public static final int SCREENING_SENT = 100; // 0x64
+    field public static final int SET_ACTIVE = 1; // 0x1
+    field public static final int SET_DIALING = 4; // 0x4
+    field public static final int SET_DISCONNECTED = 2; // 0x2
+    field public static final int SET_HOLD = 404; // 0x194
+    field public static final int SET_PARENT = 302; // 0x12e
+    field public static final int SET_SELECT_PHONE_ACCOUNT = 0; // 0x0
+    field public static final int SILENCE = 201; // 0xc9
+    field public static final int SKIP_RINGING = 200; // 0xc8
+    field public static final int SPLIT_CONFERENCE = 301; // 0x12d
+    field public static final int START_CONNECTION = 3; // 0x3
+    field public static final int SWAP = 405; // 0x195
+    field public static final int UNMUTE = 203; // 0xcb
+  }
+
+  public static final class ParcelableCallAnalytics.EventTiming implements android.os.Parcelable {
+    ctor public ParcelableCallAnalytics.EventTiming(int, long);
+    method public int describeContents();
+    method public int getName();
+    method public long getTime();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final int ACCEPT_TIMING = 0; // 0x0
+    field public static final int BIND_CS_TIMING = 6; // 0x6
+    field public static final int BLOCK_CHECK_FINISHED_TIMING = 9; // 0x9
+    field public static final android.os.Parcelable.Creator<android.telecom.ParcelableCallAnalytics.EventTiming> CREATOR;
+    field public static final int DIRECT_TO_VM_FINISHED_TIMING = 8; // 0x8
+    field public static final int DISCONNECT_TIMING = 2; // 0x2
+    field public static final int FILTERING_COMPLETED_TIMING = 10; // 0xa
+    field public static final int FILTERING_TIMED_OUT_TIMING = 11; // 0xb
+    field public static final int HOLD_TIMING = 3; // 0x3
+    field public static final int INVALID = 999999; // 0xf423f
+    field public static final int OUTGOING_TIME_TO_DIALING_TIMING = 5; // 0x5
+    field public static final int REJECT_TIMING = 1; // 0x1
+    field public static final int SCREENING_COMPLETED_TIMING = 7; // 0x7
+    field public static final int UNHOLD_TIMING = 4; // 0x4
   }
 
   public final deprecated class Phone {
@@ -39578,6 +39647,41 @@ package android.telecom {
     field public static final android.os.Parcelable.Creator<android.telecom.StatusHints> CREATOR;
   }
 
+  public final class TelecomAnalytics implements android.os.Parcelable {
+    ctor public TelecomAnalytics(java.util.List<android.telecom.TelecomAnalytics.SessionTiming>, java.util.List<android.telecom.ParcelableCallAnalytics>);
+    method public int describeContents();
+    method public java.util.List<android.telecom.ParcelableCallAnalytics> getCallAnalytics();
+    method public java.util.List<android.telecom.TelecomAnalytics.SessionTiming> getSessionTimings();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telecom.TelecomAnalytics> CREATOR;
+  }
+
+  public static final class TelecomAnalytics.SessionTiming implements android.os.Parcelable {
+    ctor public TelecomAnalytics.SessionTiming(int, long);
+    method public int describeContents();
+    method public java.lang.Integer getKey();
+    method public long getTime();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telecom.TelecomAnalytics.SessionTiming> CREATOR;
+    field public static final int CSW_ADD_CONFERENCE_CALL = 108; // 0x6c
+    field public static final int CSW_HANDLE_CREATE_CONNECTION_COMPLETE = 100; // 0x64
+    field public static final int CSW_REMOVE_CALL = 106; // 0x6a
+    field public static final int CSW_SET_ACTIVE = 101; // 0x65
+    field public static final int CSW_SET_DIALING = 103; // 0x67
+    field public static final int CSW_SET_DISCONNECTED = 104; // 0x68
+    field public static final int CSW_SET_IS_CONFERENCED = 107; // 0x6b
+    field public static final int CSW_SET_ON_HOLD = 105; // 0x69
+    field public static final int CSW_SET_RINGING = 102; // 0x66
+    field public static final int ICA_ANSWER_CALL = 1; // 0x1
+    field public static final int ICA_CONFERENCE = 8; // 0x8
+    field public static final int ICA_DISCONNECT_CALL = 3; // 0x3
+    field public static final int ICA_HOLD_CALL = 4; // 0x4
+    field public static final int ICA_MUTE = 6; // 0x6
+    field public static final int ICA_REJECT_CALL = 2; // 0x2
+    field public static final int ICA_SET_AUDIO_ROUTE = 7; // 0x7
+    field public static final int ICA_UNHOLD_CALL = 5; // 0x5
+  }
+
   public class TelecomManager {
     method public void acceptRingingCall();
     method public void acceptRingingCall(int);
@@ -39587,7 +39691,7 @@ package android.telecom {
     method public deprecated void clearAccounts();
     method public void clearPhoneAccounts();
     method public android.content.Intent createManageBlockedNumbersIntent();
-    method public java.util.List<android.telecom.ParcelableCallAnalytics> dumpAnalytics();
+    method public android.telecom.TelecomAnalytics dumpAnalytics();
     method public void enablePhoneAccount(android.telecom.PhoneAccountHandle, boolean);
     method public boolean endCall();
     method public android.net.Uri getAdnUriForPhoneAccount(android.telecom.PhoneAccountHandle);
