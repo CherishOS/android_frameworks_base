@@ -19,4 +19,4 @@ package android.telecom;
 /**
  * {@hide}
  */
-parcelable ParcelableCallAnalytics;
+parcelable TelecomAnalytics;
