@@ -9523,8 +9523,6 @@ package android.content.pm {
     method public java.util.List<android.content.pm.LauncherActivityInfo> getActivityList(java.lang.String, android.os.UserHandle);
     method public android.graphics.drawable.Drawable getShortcutBadgedIconDrawable(android.content.pm.ShortcutInfo, int);
     method public android.graphics.drawable.Drawable getShortcutIconDrawable(android.content.pm.ShortcutInfo, int);
-    method public android.os.ParcelFileDescriptor getShortcutIconFd(android.content.pm.ShortcutInfo);
-    method public android.os.ParcelFileDescriptor getShortcutIconFd(java.lang.String, java.lang.String, android.os.UserHandle);
     method public java.util.List<android.content.pm.ShortcutInfo> getShortcuts(android.content.pm.LauncherApps.ShortcutQuery, android.os.UserHandle);
     method public boolean hasShortcutHostPermission();
     method public boolean isActivityEnabled(android.content.ComponentName, android.os.UserHandle);
@@ -9559,10 +9557,10 @@ package android.content.pm {
     method public android.content.pm.LauncherApps.ShortcutQuery setPackage(java.lang.String);
     method public android.content.pm.LauncherApps.ShortcutQuery setQueryFlags(int);
     method public android.content.pm.LauncherApps.ShortcutQuery setShortcutIds(java.util.List<java.lang.String>);
-    field public static final int FLAG_GET_DYNAMIC = 1; // 0x1
     field public static final int FLAG_GET_KEY_FIELDS_ONLY = 4; // 0x4
-    field public static final int FLAG_GET_MANIFEST = 8; // 0x8
-    field public static final int FLAG_GET_PINNED = 2; // 0x2
+    field public static final int FLAG_MATCH_DYNAMIC = 1; // 0x1
+    field public static final int FLAG_MATCH_MANIFEST = 8; // 0x8
+    field public static final int FLAG_MATCH_PINNED = 2; // 0x2
   }
 
   public class PackageInfo implements android.os.Parcelable {
@@ -10070,7 +10068,6 @@ package android.content.pm {
     method public java.lang.CharSequence getDisabledMessage();
     method public int getDisabledMessageResourceId();
     method public android.os.PersistableBundle getExtras();
-    method public int getIconResourceId();
     method public java.lang.String getId();
     method public android.content.Intent getIntent();
     method public long getLastChangedTimestamp();
@@ -10081,14 +10078,11 @@ package android.content.pm {
     method public java.lang.CharSequence getShortLabel();
     method public int getShortLabelResourceId();
     method public android.os.UserHandle getUserHandle();
-    method public boolean hasIconFile();
-    method public boolean hasIconResource();
     method public boolean hasKeyFieldsOnly();
-    method public boolean hasStringResourcesResolved();
+    method public boolean isDeclaredInManifest();
     method public boolean isDynamic();
     method public boolean isEnabled();
     method public boolean isImmutable();
-    method public boolean isManifestShortcut();
     method public boolean isPinned();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.ShortcutInfo> CREATOR;
@@ -10096,14 +10090,15 @@ package android.content.pm {
   }
 
   public static class ShortcutInfo.Builder {
-    ctor public ShortcutInfo.Builder(android.content.Context);
+    ctor public deprecated ShortcutInfo.Builder(android.content.Context);
+    ctor public ShortcutInfo.Builder(android.content.Context, java.lang.String);
     method public android.content.pm.ShortcutInfo build();
     method public android.content.pm.ShortcutInfo.Builder setActivity(android.content.ComponentName);
     method public android.content.pm.ShortcutInfo.Builder setCategories(java.util.Set<java.lang.String>);
     method public android.content.pm.ShortcutInfo.Builder setDisabledMessage(java.lang.CharSequence);
     method public android.content.pm.ShortcutInfo.Builder setExtras(android.os.PersistableBundle);
     method public android.content.pm.ShortcutInfo.Builder setIcon(android.graphics.drawable.Icon);
-    method public android.content.pm.ShortcutInfo.Builder setId(java.lang.String);
+    method public deprecated android.content.pm.ShortcutInfo.Builder setId(java.lang.String);
     method public android.content.pm.ShortcutInfo.Builder setIntent(android.content.Intent);
     method public android.content.pm.ShortcutInfo.Builder setLongLabel(java.lang.CharSequence);
     method public android.content.pm.ShortcutInfo.Builder setRank(int);
