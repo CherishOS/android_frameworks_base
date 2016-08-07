@@ -4029,6 +4029,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
         return am.isMusicActive();
     }
+	
+	private boolean isHwKeysDisabled() {
+        return mKeyHandler != null ? mKeyHandler.isHwKeysDisabled() : false;
+    }
 
     // TODO(b/117479243): handle it in InputPolicy
     /** {@inheritDoc} */
@@ -4165,7 +4169,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         boolean useHapticFeedback = down
                 && (policyFlags & WindowManagerPolicy.FLAG_VIRTUAL) != 0
                 && (!isNavBarVirtKey || mNavBarVirtualKeyHapticFeedbackEnabled)
-                && event.getRepeatCount() == 0;
+                && event.getRepeatCount() == 0
+                && !isHwKeysDisabled();
 
         // Specific device key handling
         if (dispatchKeyToKeyHandlers(event)) {
