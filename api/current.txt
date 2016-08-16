@@ -4923,6 +4923,7 @@ package android.app {
     method public int describeContents();
     method public java.lang.String getGroup();
     method public android.graphics.drawable.Icon getLargeIcon();
+    method public java.lang.String getNotificationChannel();
     method public android.graphics.drawable.Icon getSmallIcon();
     method public java.lang.String getSortKey();
     method public void writeToParcel(android.os.Parcel, int);
@@ -5111,6 +5112,7 @@ package android.app {
     method public android.app.Notification.Builder setActions(android.app.Notification.Action...);
     method public android.app.Notification.Builder setAutoCancel(boolean);
     method public android.app.Notification.Builder setCategory(java.lang.String);
+    method public android.app.Notification.Builder setChannel(java.lang.String);
     method public android.app.Notification.Builder setChronometerCountDown(boolean);
     method public android.app.Notification.Builder setColor(int);
     method public deprecated android.app.Notification.Builder setContent(android.widget.RemoteViews);
@@ -5306,17 +5308,40 @@ package android.app {
     field public static final int UNSET_ACTION_INDEX = -1; // 0xffffffff
   }
 
+  public final class NotificationChannel implements android.os.Parcelable {
+    ctor public NotificationChannel(java.lang.String, java.lang.CharSequence);
+    ctor protected NotificationChannel(android.os.Parcel);
+    method public boolean canBypassDnd();
+    method public int describeContents();
+    method public android.net.Uri getDefaultRingtone();
+    method public java.lang.String getId();
+    method public int getImportance();
+    method public java.lang.CharSequence getName();
+    method public void setDefaultRingtone(android.net.Uri);
+    method public void setLights(boolean);
+    method public void setVibration(boolean);
+    method public boolean shouldShowLights();
+    method public boolean shouldVibrate();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.app.NotificationChannel> CREATOR;
+    field public static final java.lang.String DEFAULT_CHANNEL_ID = "miscellaneous";
+  }
+
   public class NotificationManager {
     method public java.lang.String addAutomaticZenRule(android.app.AutomaticZenRule);
     method public boolean areNotificationsEnabled();
     method public void cancel(int);
     method public void cancel(java.lang.String, int);
     method public void cancelAll();
+    method public void createNotificationChannel(android.app.NotificationChannel);
+    method public void deleteNotificationChannel(java.lang.String);
     method public android.service.notification.StatusBarNotification[] getActiveNotifications();
     method public android.app.AutomaticZenRule getAutomaticZenRule(java.lang.String);
     method public java.util.Map<java.lang.String, android.app.AutomaticZenRule> getAutomaticZenRules();
     method public final int getCurrentInterruptionFilter();
     method public int getImportance();
+    method public android.app.NotificationChannel getNotificationChannel(java.lang.String);
+    method public java.util.List<android.app.NotificationChannel> getNotificationChannels();
     method public android.app.NotificationManager.Policy getNotificationPolicy();
     method public boolean isNotificationPolicyAccessGranted();
     method public void notify(int, android.app.Notification);
@@ -5325,6 +5350,7 @@ package android.app {
     method public final void setInterruptionFilter(int);
     method public void setNotificationPolicy(android.app.NotificationManager.Policy);
     method public boolean updateAutomaticZenRule(java.lang.String, android.app.AutomaticZenRule);
+    method public void updateNotificationChannel(android.app.NotificationChannel);
     field public static final java.lang.String ACTION_INTERRUPTION_FILTER_CHANGED = "android.app.action.INTERRUPTION_FILTER_CHANGED";
     field public static final java.lang.String ACTION_NOTIFICATION_POLICY_ACCESS_GRANTED_CHANGED = "android.app.action.NOTIFICATION_POLICY_ACCESS_GRANTED_CHANGED";
     field public static final java.lang.String ACTION_NOTIFICATION_POLICY_CHANGED = "android.app.action.NOTIFICATION_POLICY_CHANGED";
