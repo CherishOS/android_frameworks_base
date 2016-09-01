@@ -55337,6 +55337,12 @@ package java.security {
   }
 
   public static abstract interface KeyStore.Entry {
+    method public default java.util.Set<java.security.KeyStore.Entry.Attribute> getAttributes();
+  }
+
+  public static abstract interface KeyStore.Entry.Attribute {
+    method public abstract java.lang.String getName();
+    method public abstract java.lang.String getValue();
   }
 
   public static abstract interface KeyStore.LoadStoreParameter {
@@ -55345,11 +55351,15 @@ package java.security {
 
   public static class KeyStore.PasswordProtection implements javax.security.auth.Destroyable java.security.KeyStore.ProtectionParameter {
     ctor public KeyStore.PasswordProtection(char[]);
+    ctor public KeyStore.PasswordProtection(char[], java.lang.String, java.security.spec.AlgorithmParameterSpec);
     method public synchronized char[] getPassword();
+    method public java.lang.String getProtectionAlgorithm();
+    method public java.security.spec.AlgorithmParameterSpec getProtectionParameters();
   }
 
   public static final class KeyStore.PrivateKeyEntry implements java.security.KeyStore.Entry {
     ctor public KeyStore.PrivateKeyEntry(java.security.PrivateKey, java.security.cert.Certificate[]);
+    ctor public KeyStore.PrivateKeyEntry(java.security.PrivateKey, java.security.cert.Certificate[], java.util.Set<java.security.KeyStore.Entry.Attribute>);
     method public java.security.cert.Certificate getCertificate();
     method public java.security.cert.Certificate[] getCertificateChain();
     method public java.security.PrivateKey getPrivateKey();
@@ -55360,11 +55370,13 @@ package java.security {
 
   public static final class KeyStore.SecretKeyEntry implements java.security.KeyStore.Entry {
     ctor public KeyStore.SecretKeyEntry(javax.crypto.SecretKey);
+    ctor public KeyStore.SecretKeyEntry(javax.crypto.SecretKey, java.util.Set<java.security.KeyStore.Entry.Attribute>);
     method public javax.crypto.SecretKey getSecretKey();
   }
 
   public static final class KeyStore.TrustedCertificateEntry implements java.security.KeyStore.Entry {
     ctor public KeyStore.TrustedCertificateEntry(java.security.cert.Certificate);
+    ctor public KeyStore.TrustedCertificateEntry(java.security.cert.Certificate, java.util.Set<java.security.KeyStore.Entry.Attribute>);
     method public java.security.cert.Certificate getTrustedCertificate();
   }
 
