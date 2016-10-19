@@ -4545,7 +4545,9 @@ package android.app {
     ctor public EphemeralResolverService();
     method public final void attachBaseContext(android.content.Context);
     method public final android.os.IBinder onBind(android.content.Intent);
-    method public abstract java.util.List<android.content.pm.EphemeralResolveInfo> onEphemeralResolveInfoList(int[], int);
+    method public abstract deprecated java.util.List<android.content.pm.EphemeralResolveInfo> onEphemeralResolveInfoList(int[], int);
+    method public java.util.List<android.content.pm.EphemeralResolveInfo> onGetEphemeralIntentFilter(int[]);
+    method public java.util.List<android.content.pm.EphemeralResolveInfo> onGetEphemeralResolveInfo(int[]);
     field public static final java.lang.String EXTRA_RESOLVE_INFO = "android.app.extra.RESOLVE_INFO";
     field public static final java.lang.String EXTRA_SEQUENCE = "android.app.extra.SEQUENCE";
   }
@@ -9189,6 +9191,7 @@ package android.content {
     field public static final java.lang.String EXTRA_SHORTCUT_INTENT = "android.intent.extra.shortcut.INTENT";
     field public static final java.lang.String EXTRA_SHORTCUT_NAME = "android.intent.extra.shortcut.NAME";
     field public static final java.lang.String EXTRA_SHUTDOWN_USERSPACE_ONLY = "android.intent.extra.SHUTDOWN_USERSPACE_ONLY";
+    field public static final java.lang.String EXTRA_SPLIT_NAME = "android.intent.extra.SPLIT_NAME";
     field public static final java.lang.String EXTRA_STREAM = "android.intent.extra.STREAM";
     field public static final java.lang.String EXTRA_SUBJECT = "android.intent.extra.SUBJECT";
     field public static final java.lang.String EXTRA_TEMPLATE = "android.intent.extra.TEMPLATE";
@@ -9893,16 +9896,37 @@ package android.content.pm {
     field public int reqTouchScreen;
   }
 
+  public final class EphemeralIntentFilter implements android.os.Parcelable {
+    ctor public EphemeralIntentFilter(java.lang.String, java.util.List<android.content.IntentFilter>);
+    method public int describeContents();
+    method public java.util.List<android.content.IntentFilter> getFilters();
+    method public java.lang.String getSplitName();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.content.pm.EphemeralIntentFilter> CREATOR;
+  }
+
   public final class EphemeralResolveInfo implements android.os.Parcelable {
-    ctor public EphemeralResolveInfo(android.net.Uri, java.lang.String, java.util.List<android.content.IntentFilter>);
+    ctor public deprecated EphemeralResolveInfo(android.net.Uri, java.lang.String, java.util.List<android.content.IntentFilter>);
+    ctor public EphemeralResolveInfo(android.content.pm.EphemeralResolveInfo.EphemeralDigest, java.lang.String, java.util.List<android.content.pm.EphemeralIntentFilter>);
+    ctor public EphemeralResolveInfo(java.lang.String, java.lang.String, java.util.List<android.content.pm.EphemeralIntentFilter>);
     method public int describeContents();
     method public byte[] getDigestBytes();
     method public int getDigestPrefix();
-    method public java.util.List<android.content.IntentFilter> getFilters();
+    method public deprecated java.util.List<android.content.IntentFilter> getFilters();
+    method public java.util.List<android.content.pm.EphemeralIntentFilter> getIntentFilters();
     method public java.lang.String getPackageName();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.EphemeralResolveInfo> CREATOR;
     field public static final java.lang.String SHA_ALGORITHM = "SHA-256";
+  }
+
+  public static final class EphemeralResolveInfo.EphemeralDigest implements android.os.Parcelable {
+    ctor public EphemeralResolveInfo.EphemeralDigest(java.lang.String);
+    method public int describeContents();
+    method public byte[][] getDigestBytes();
+    method public int[] getDigestPrefix();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.content.pm.EphemeralResolveInfo.EphemeralDigest> CREATOR;
   }
 
   public final class FeatureGroupInfo implements android.os.Parcelable {
