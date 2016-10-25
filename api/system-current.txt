@@ -5461,22 +5461,23 @@ package android.app {
   }
 
   public final class NotificationChannel implements android.os.Parcelable {
-    ctor public NotificationChannel(java.lang.String, java.lang.CharSequence);
+    ctor public NotificationChannel(java.lang.String, java.lang.CharSequence, int);
     ctor protected NotificationChannel(android.os.Parcel);
     method public boolean canBypassDnd();
     method public int describeContents();
-    method public android.net.Uri getDefaultRingtone();
     method public java.lang.String getId();
     method public int getImportance();
     method public int getLockscreenVisibility();
     method public java.lang.CharSequence getName();
+    method public android.net.Uri getRingtone();
+    method public int getUserLockedFields();
+    method public void lockFields(int);
     method public void populateFromXml(org.xmlpull.v1.XmlPullParser);
     method public void setBypassDnd(boolean);
-    method public void setDefaultRingtone(android.net.Uri);
     method public void setImportance(int);
     method public void setLights(boolean);
     method public void setLockscreenVisibility(int);
-    method public void setName(java.lang.CharSequence);
+    method public void setRingtone(android.net.Uri);
     method public void setVibration(boolean);
     method public boolean shouldShowLights();
     method public boolean shouldVibrate();
@@ -5485,6 +5486,12 @@ package android.app {
     method public void writeXml(org.xmlpull.v1.XmlSerializer) throws java.io.IOException;
     field public static final android.os.Parcelable.Creator<android.app.NotificationChannel> CREATOR;
     field public static final java.lang.String DEFAULT_CHANNEL_ID = "miscellaneous";
+    field public static final int USER_LOCKED_IMPORTANCE = 4; // 0x4
+    field public static final int USER_LOCKED_LIGHTS = 8; // 0x8
+    field public static final int USER_LOCKED_PRIORITY = 1; // 0x1
+    field public static final int USER_LOCKED_RINGTONE = 32; // 0x20
+    field public static final int USER_LOCKED_VIBRATION = 16; // 0x10
+    field public static final int USER_LOCKED_VISIBILITY = 2; // 0x2
   }
 
   public class NotificationManager {
@@ -5510,7 +5517,6 @@ package android.app {
     method public final void setInterruptionFilter(int);
     method public void setNotificationPolicy(android.app.NotificationManager.Policy);
     method public boolean updateAutomaticZenRule(java.lang.String, android.app.AutomaticZenRule);
-    method public void updateNotificationChannel(android.app.NotificationChannel);
     field public static final java.lang.String ACTION_INTERRUPTION_FILTER_CHANGED = "android.app.action.INTERRUPTION_FILTER_CHANGED";
     field public static final java.lang.String ACTION_NOTIFICATION_POLICY_ACCESS_GRANTED_CHANGED = "android.app.action.NOTIFICATION_POLICY_ACCESS_GRANTED_CHANGED";
     field public static final java.lang.String ACTION_NOTIFICATION_POLICY_CHANGED = "android.app.action.NOTIFICATION_POLICY_CHANGED";
