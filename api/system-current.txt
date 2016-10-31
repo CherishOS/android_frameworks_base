@@ -34717,6 +34717,7 @@ package android.provider {
     method public static android.net.Uri copyDocument(android.content.ContentResolver, android.net.Uri, android.net.Uri);
     method public static android.net.Uri createDocument(android.content.ContentResolver, android.net.Uri, java.lang.String, java.lang.String);
     method public static boolean deleteDocument(android.content.ContentResolver, android.net.Uri);
+    method public static java.util.List<java.lang.String> findDocumentPath(android.content.ContentResolver, android.net.Uri);
     method public static java.lang.String getDocumentId(android.net.Uri);
     method public static android.graphics.Bitmap getDocumentThumbnail(android.content.ContentResolver, android.net.Uri, android.graphics.Point, android.os.CancellationSignal);
     method public static java.lang.String getRootId(android.net.Uri);
@@ -34759,6 +34760,15 @@ package android.provider {
     field public static final java.lang.String MIME_TYPE_DIR = "vnd.android.document/directory";
   }
 
+  public static final class DocumentsContract.Path implements android.os.Parcelable {
+    ctor public DocumentsContract.Path(java.lang.String, java.util.List<java.lang.String>);
+    method public int describeContents();
+    method public java.util.List<java.lang.String> getPath();
+    method public java.lang.String getRootId();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.provider.DocumentsContract.Path> CREATOR;
+  }
+
   public static final class DocumentsContract.Root {
     field public static final java.lang.String COLUMN_AVAILABLE_BYTES = "available_bytes";
     field public static final java.lang.String COLUMN_CAPACITY_BYTES = "capacity_bytes";
@@ -34782,6 +34792,7 @@ package android.provider {
     method public java.lang.String createDocument(java.lang.String, java.lang.String, java.lang.String) throws java.io.FileNotFoundException;
     method public final int delete(android.net.Uri, java.lang.String, java.lang.String[]);
     method public void deleteDocument(java.lang.String) throws java.io.FileNotFoundException;
+    method public android.provider.DocumentsContract.Path findDocumentPath(java.lang.String, java.lang.String) throws java.io.FileNotFoundException;
     method public java.lang.String[] getDocumentStreamTypes(java.lang.String, java.lang.String);
     method public java.lang.String getDocumentType(java.lang.String) throws java.io.FileNotFoundException;
     method public final java.lang.String getType(android.net.Uri);
