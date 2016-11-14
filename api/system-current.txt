@@ -6457,6 +6457,7 @@ package android.app.assist {
 
   public static class AssistStructure.ViewNode {
     method public float getAlpha();
+    method public int getAutoFillId();
     method public android.app.assist.AssistStructure.ViewNode getChildAt(int);
     method public int getChildCount();
     method public java.lang.String getClassName();
@@ -37435,11 +37436,24 @@ package android.service.autofill {
   public abstract class AutoFillService extends android.app.Service {
     ctor public AutoFillService();
     method public final android.os.IBinder onBind(android.content.Intent);
-    method public void onNewSession(java.lang.String, android.os.Bundle, int, android.app.assist.AssistStructure);
+    method public abstract void onFillRequest(android.app.assist.AssistStructure, android.os.CancellationSignal, android.service.autofill.FillCallback);
     method public void onReady();
-    method public void onSessionFinished(java.lang.String);
     method public void onShutdown();
     field public static final java.lang.String SERVICE_INTERFACE = "android.service.autofill.AutoFillService";
+  }
+
+  public final class FillCallback {
+    method public void onFailure(java.lang.CharSequence);
+    method public void onSuccess(android.service.autofill.FillCallback.FillData);
+  }
+
+  public static final class FillCallback.FillData {
+  }
+
+  public static class FillCallback.FillData.Builder {
+    ctor public FillCallback.FillData.Builder();
+    method public android.service.autofill.FillCallback.FillData build();
+    method public android.service.autofill.FillCallback.FillData.Builder setTextField(int, java.lang.String);
   }
 
 }
