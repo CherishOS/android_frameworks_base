@@ -16,23 +16,12 @@
 
 package android.service.autofill;
 
-import android.os.Bundle;
+import java.util.List;
 
 /**
- * Mediator between apps being auto-filled and auto-fill service implementations.
- *
- * {@hide}
+ * @hide
  */
-interface IAutoFillManagerService {
-
-    /**
-     * Request auto-fill on the top activity of a given user.
-     *
-     * @param userId user handle.
-     * @param activityToken optional token of activity that needs to be on top.
-     *
-     * @return whether the request succeeded  (for example, if the activity's
-     *         user does not have an auto-fill service associated with, it will return false).
-     */
-    boolean requestAutoFill(int userId, IBinder activityToken);
+interface IAutoFillCallback {
+    void autofill(in List values);
+    void showError(String message);
 }
