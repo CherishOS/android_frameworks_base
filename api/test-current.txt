@@ -3499,6 +3499,7 @@ package android.app {
     method public int getRequestedOrientation();
     method public final android.view.SearchEvent getSearchEvent();
     method public int getTaskId();
+    method public android.text.TextAssistant getTextAssistant();
     method public final java.lang.CharSequence getTitle();
     method public final int getTitleColor();
     method public android.app.VoiceInteractor getVoiceInteractor();
@@ -3648,6 +3649,7 @@ package android.app {
     method public final void setResult(int, android.content.Intent);
     method public final deprecated void setSecondaryProgress(int);
     method public void setTaskDescription(android.app.ActivityManager.TaskDescription);
+    method public void setTextAssistant(android.text.TextAssistant);
     method public void setTitle(java.lang.CharSequence);
     method public void setTitle(int);
     method public deprecated void setTitleColor(int);
@@ -39080,6 +39082,16 @@ package android.text {
     method public android.text.StaticLayout.Builder setTextDirection(android.text.TextDirectionHeuristic);
   }
 
+  public abstract interface TextAssistant {
+    method public abstract void addLinks(android.text.Spannable, int);
+    method public abstract android.text.TextSelection suggestSelection(java.lang.CharSequence, int, int);
+  }
+
+  public class TextClassification {
+    ctor public TextClassification();
+    method public java.util.Map<java.lang.String, java.lang.Float> getTypeConfidence();
+  }
+
   public abstract interface TextDirectionHeuristic {
     method public abstract boolean isRtl(char[], int, int);
     method public abstract boolean isRtl(java.lang.CharSequence, int, int);
@@ -39105,6 +39117,13 @@ package android.text {
     field public float density;
     field public int[] drawableState;
     field public int linkColor;
+  }
+
+  public class TextSelection {
+    ctor public TextSelection();
+    method public int getSelectionEndIndex();
+    method public int getSelectionStartIndex();
+    method public android.text.TextClassification getTextClassification();
   }
 
   public class TextUtils {
@@ -48745,6 +48764,7 @@ package android.widget {
     method public float getShadowRadius();
     method public final boolean getShowSoftInputOnFocus();
     method public java.lang.CharSequence getText();
+    method public android.text.TextAssistant getTextAssistant();
     method public final android.content.res.ColorStateList getTextColors();
     method public java.util.Locale getTextLocale();
     method public android.os.LocaleList getTextLocales();
@@ -48855,6 +48875,7 @@ package android.widget {
     method public final void setText(int, android.widget.TextView.BufferType);
     method public void setTextAppearance(int);
     method public deprecated void setTextAppearance(android.content.Context, int);
+    method public void setTextAssistant(android.text.TextAssistant);
     method public void setTextColor(int);
     method public void setTextColor(android.content.res.ColorStateList);
     method public void setTextIsSelectable(boolean);
