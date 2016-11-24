@@ -12459,6 +12459,118 @@ package android.graphics {
     ctor public ColorMatrixColorFilter(float[]);
   }
 
+  public abstract class ColorSpace {
+    method public static android.graphics.ColorSpace adapt(android.graphics.ColorSpace, float[]);
+    method public static android.graphics.ColorSpace adapt(android.graphics.ColorSpace, float[], android.graphics.ColorSpace.Adaptation);
+    method public static android.graphics.ColorSpace.Connector connect(android.graphics.ColorSpace, android.graphics.ColorSpace);
+    method public static android.graphics.ColorSpace.Connector connect(android.graphics.ColorSpace, android.graphics.ColorSpace, android.graphics.ColorSpace.RenderIntent);
+    method public static android.graphics.ColorSpace.Connector connect(android.graphics.ColorSpace);
+    method public static android.graphics.ColorSpace.Connector connect(android.graphics.ColorSpace, android.graphics.ColorSpace.RenderIntent);
+    method public float[] fromXyz(float, float, float);
+    method public abstract float[] fromXyz(float[]);
+    method public static android.graphics.ColorSpace get(android.graphics.ColorSpace.Named);
+    method public int getComponentCount();
+    method public int getId();
+    method public abstract float getMaxValue(int);
+    method public abstract float getMinValue(int);
+    method public android.graphics.ColorSpace.Model getModel();
+    method public java.lang.String getName();
+    method public boolean isSrgb();
+    method public abstract boolean isWideGamut();
+    method public float[] toXyz(float, float, float);
+    method public abstract float[] toXyz(float[]);
+    field public static final float[] ILLUMINANT_A;
+    field public static final float[] ILLUMINANT_B;
+    field public static final float[] ILLUMINANT_C;
+    field public static final float[] ILLUMINANT_D50;
+    field public static final float[] ILLUMINANT_D55;
+    field public static final float[] ILLUMINANT_D60;
+    field public static final float[] ILLUMINANT_D65;
+    field public static final float[] ILLUMINANT_D75;
+    field public static final float[] ILLUMINANT_E;
+    field public static final int MAX_ID = 64; // 0x40
+    field public static final int MIN_ID = -1; // 0xffffffff
+  }
+
+  public static final class ColorSpace.Adaptation extends java.lang.Enum {
+    method public static android.graphics.ColorSpace.Adaptation valueOf(java.lang.String);
+    method public static final android.graphics.ColorSpace.Adaptation[] values();
+    enum_constant public static final android.graphics.ColorSpace.Adaptation BRADFORD;
+    enum_constant public static final android.graphics.ColorSpace.Adaptation VON_KRIES;
+  }
+
+  public static class ColorSpace.Connector {
+    method public android.graphics.ColorSpace getDestination();
+    method public android.graphics.ColorSpace.RenderIntent getIntent();
+    method public android.graphics.ColorSpace getSource();
+    method public float[] transform(float, float, float);
+    method public float[] transform(float[]);
+  }
+
+  public static final class ColorSpace.Model extends java.lang.Enum {
+    method public int getComponentCount();
+    method public static android.graphics.ColorSpace.Model valueOf(java.lang.String);
+    method public static final android.graphics.ColorSpace.Model[] values();
+    enum_constant public static final android.graphics.ColorSpace.Model CMYK;
+    enum_constant public static final android.graphics.ColorSpace.Model LAB;
+    enum_constant public static final android.graphics.ColorSpace.Model RGB;
+    enum_constant public static final android.graphics.ColorSpace.Model XYZ;
+  }
+
+  public static final class ColorSpace.Named extends java.lang.Enum {
+    method public static android.graphics.ColorSpace.Named valueOf(java.lang.String);
+    method public static final android.graphics.ColorSpace.Named[] values();
+    enum_constant public static final android.graphics.ColorSpace.Named ACES;
+    enum_constant public static final android.graphics.ColorSpace.Named ACESCG;
+    enum_constant public static final android.graphics.ColorSpace.Named ADOBE_RGB;
+    enum_constant public static final android.graphics.ColorSpace.Named BT2020;
+    enum_constant public static final android.graphics.ColorSpace.Named BT709;
+    enum_constant public static final android.graphics.ColorSpace.Named CIE_LAB;
+    enum_constant public static final android.graphics.ColorSpace.Named CIE_XYZ;
+    enum_constant public static final android.graphics.ColorSpace.Named DCI_P3;
+    enum_constant public static final android.graphics.ColorSpace.Named DISPLAY_P3;
+    enum_constant public static final android.graphics.ColorSpace.Named EXTENDED_SRGB;
+    enum_constant public static final android.graphics.ColorSpace.Named LINEAR_EXTENDED_SRGB;
+    enum_constant public static final android.graphics.ColorSpace.Named LINEAR_SRGB;
+    enum_constant public static final android.graphics.ColorSpace.Named NTSC_1953;
+    enum_constant public static final android.graphics.ColorSpace.Named PRO_PHOTO_RGB;
+    enum_constant public static final android.graphics.ColorSpace.Named SMPTE_C;
+    enum_constant public static final android.graphics.ColorSpace.Named SRGB;
+  }
+
+  public static final class ColorSpace.RenderIntent extends java.lang.Enum {
+    method public static android.graphics.ColorSpace.RenderIntent valueOf(java.lang.String);
+    method public static final android.graphics.ColorSpace.RenderIntent[] values();
+    enum_constant public static final android.graphics.ColorSpace.RenderIntent ABSOLUTE;
+    enum_constant public static final android.graphics.ColorSpace.RenderIntent PERCEPTUAL;
+    enum_constant public static final android.graphics.ColorSpace.RenderIntent RELATIVE;
+    enum_constant public static final android.graphics.ColorSpace.RenderIntent SATURATION;
+  }
+
+  public static class ColorSpace.Rgb extends android.graphics.ColorSpace {
+    ctor public ColorSpace.Rgb(java.lang.String, float[], java.util.function.DoubleUnaryOperator, java.util.function.DoubleUnaryOperator);
+    ctor public ColorSpace.Rgb(java.lang.String, float[], float[], java.util.function.DoubleUnaryOperator, java.util.function.DoubleUnaryOperator, float, float);
+    method public float[] fromLinear(float, float, float);
+    method public float[] fromLinear(float[]);
+    method public float[] fromXyz(float[]);
+    method public java.util.function.DoubleUnaryOperator getEotf();
+    method public float[] getInverseTransform(float[]);
+    method public float[] getInverseTransform();
+    method public float getMaxValue(int);
+    method public float getMinValue(int);
+    method public java.util.function.DoubleUnaryOperator getOetf();
+    method public float[] getPrimaries(float[]);
+    method public float[] getPrimaries();
+    method public float[] getTransform(float[]);
+    method public float[] getTransform();
+    method public float[] getWhitePoint(float[]);
+    method public float[] getWhitePoint();
+    method public boolean isWideGamut();
+    method public float[] toLinear(float, float, float);
+    method public float[] toLinear(float[]);
+    method public float[] toXyz(float[]);
+  }
+
   public class ComposePathEffect extends android.graphics.PathEffect {
     ctor public ComposePathEffect(android.graphics.PathEffect, android.graphics.PathEffect);
   }
