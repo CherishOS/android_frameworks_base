@@ -37700,7 +37700,8 @@ package android.service.autofill {
     method public final android.os.IBinder onBind(android.content.Intent);
     method public void onConnected();
     method public void onDisconnected();
-    method public abstract void onFillRequest(android.app.assist.AssistStructure, android.os.CancellationSignal, android.service.autofill.FillCallback);
+    method public abstract void onFillRequest(android.app.assist.AssistStructure, android.os.Bundle, android.os.CancellationSignal, android.service.autofill.FillCallback);
+    method public abstract void onSaveRequest(android.app.assist.AssistStructure, android.os.Bundle, android.os.CancellationSignal, android.service.autofill.SaveCallback);
     field public static final java.lang.String SERVICE_INTERFACE = "android.service.autofill.AutoFillService";
   }
 
@@ -37716,6 +37717,11 @@ package android.service.autofill {
     ctor public FillCallback.FillData.Builder();
     method public android.service.autofill.FillCallback.FillData build();
     method public android.service.autofill.FillCallback.FillData.Builder setTextField(int, java.lang.String);
+  }
+
+  public final class SaveCallback {
+    method public void onFailure(java.lang.CharSequence);
+    method public void onSuccess(int[]);
   }
 
 }
@@ -46118,7 +46124,8 @@ package android.view {
     method public boolean dispatchNestedPreScroll(int, int, int[], int[]);
     method public boolean dispatchNestedScroll(int, int, int, int, int[]);
     method public boolean dispatchPopulateAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
-    method public void dispatchProvideStructure(android.view.ViewStructure);
+    method public deprecated void dispatchProvideStructure(android.view.ViewStructure);
+    method public void dispatchProvideStructure(android.view.ViewStructure, int);
     method protected void dispatchRestoreInstanceState(android.util.SparseArray<android.os.Parcelable>);
     method protected void dispatchSaveInstanceState(android.util.SparseArray<android.os.Parcelable>);
     method protected void dispatchSetActivated(boolean);
@@ -46384,8 +46391,10 @@ package android.view {
     method protected void onMeasure(int, int);
     method protected void onOverScrolled(int, int, boolean, boolean);
     method public void onPopulateAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
-    method public void onProvideStructure(android.view.ViewStructure);
-    method public void onProvideVirtualStructure(android.view.ViewStructure);
+    method public deprecated void onProvideStructure(android.view.ViewStructure);
+    method public void onProvideStructure(android.view.ViewStructure, int);
+    method public deprecated void onProvideVirtualStructure(android.view.ViewStructure);
+    method public void onProvideVirtualStructure(android.view.ViewStructure, int);
     method public android.view.PointerIcon onResolvePointerIcon(android.view.MotionEvent, int);
     method protected void onRestoreInstanceState(android.os.Parcelable);
     method public void onRtlPropertiesChanged(int);
@@ -46587,6 +46596,8 @@ package android.view {
     field public static final int ACCESSIBILITY_LIVE_REGION_NONE = 0; // 0x0
     field public static final int ACCESSIBILITY_LIVE_REGION_POLITE = 1; // 0x1
     field public static final android.util.Property<android.view.View, java.lang.Float> ALPHA;
+    field public static final int ASSIST_FLAG_NON_SANITIZED_TEXT = 2; // 0x2
+    field public static final int ASSIST_FLAG_SANITIZED_TEXT = 1; // 0x1
     field public static final int DRAG_FLAG_GLOBAL = 256; // 0x100
     field public static final int DRAG_FLAG_GLOBAL_PERSISTABLE_URI_PERMISSION = 64; // 0x40
     field public static final int DRAG_FLAG_GLOBAL_PREFIX_URI_PERMISSION = 128; // 0x80
@@ -49956,6 +49967,7 @@ package android.webkit {
     method public abstract void onMeasure(int, int);
     method public abstract void onOverScrolled(int, int, boolean, boolean);
     method public abstract void onProvideVirtualStructure(android.view.ViewStructure);
+    method public default void onProvideVirtualStructure(android.view.ViewStructure, int);
     method public abstract void onScrollChanged(int, int, int, int);
     method public abstract void onSizeChanged(int, int, int, int);
     method public abstract void onStartTemporaryDetach();
