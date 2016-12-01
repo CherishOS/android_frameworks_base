@@ -35188,18 +35188,19 @@ package android.service.media {
 package android.service.notification {
 
   public final class Adjustment implements android.os.Parcelable {
-    ctor public Adjustment(java.lang.String, java.lang.String, int, android.os.Bundle, java.lang.CharSequence, android.net.Uri, int);
+    ctor public Adjustment(java.lang.String, java.lang.String, android.os.Bundle, java.lang.CharSequence, int);
     ctor protected Adjustment(android.os.Parcel);
     method public int describeContents();
     method public java.lang.CharSequence getExplanation();
-    method public int getImportance();
     method public java.lang.String getKey();
     method public java.lang.String getPackage();
-    method public android.net.Uri getReference();
     method public android.os.Bundle getSignals();
     method public int getUser();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.notification.Adjustment> CREATOR;
+    field public static final java.lang.String KEY_CHANNEL_ID = "key_channel_id";
+    field public static final java.lang.String KEY_PEOPLE = "key_people";
+    field public static final java.lang.String KEY_SNOOZE_CRITERIA = "key_snooze_criteria";
   }
 
   public final class Condition implements android.os.Parcelable {
@@ -35321,11 +35322,14 @@ package android.service.notification {
 
   public static class NotificationListenerService.Ranking {
     ctor public NotificationListenerService.Ranking();
+    method public java.util.List<java.lang.String> getAdditionalPeople();
+    method public android.app.NotificationChannel getChannel();
     method public int getImportance();
     method public java.lang.CharSequence getImportanceExplanation();
     method public java.lang.String getKey();
     method public java.lang.String getOverrideGroupKey();
     method public int getRank();
+    method public java.util.List<android.service.notification.SnoozeCriterion> getSnoozeCriteria();
     method public int getSuppressedVisualEffects();
     method public boolean isAmbient();
     method public boolean matchesInterruptionFilter();
@@ -35337,6 +35341,17 @@ package android.service.notification {
     method public boolean getRanking(java.lang.String, android.service.notification.NotificationListenerService.Ranking);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.notification.NotificationListenerService.RankingMap> CREATOR;
+  }
+
+  public final class SnoozeCriterion implements android.os.Parcelable {
+    ctor public SnoozeCriterion(java.lang.String, java.lang.CharSequence, java.lang.CharSequence);
+    ctor protected SnoozeCriterion(android.os.Parcel);
+    method public int describeContents();
+    method public java.lang.CharSequence getConfirmation();
+    method public java.lang.CharSequence getExplanation();
+    method public java.lang.String getId();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.notification.SnoozeCriterion> CREATOR;
   }
 
   public class StatusBarNotification implements android.os.Parcelable {
