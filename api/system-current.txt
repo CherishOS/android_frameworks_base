@@ -15732,7 +15732,6 @@ package android.hardware.location {
   }
 
   public final class GeofenceHardware {
-    ctor public GeofenceHardware(android.hardware.location.IGeofenceHardware);
     method public boolean addGeofence(int, int, android.hardware.location.GeofenceHardwareRequest, android.hardware.location.GeofenceHardwareCallback);
     method public int[] getMonitoringTypes();
     method public int getStatusOfMonitoringType(int);
@@ -15805,46 +15804,6 @@ package android.hardware.location {
     method public void setNotificationResponsiveness(int);
     method public void setSourceTechnologies(int);
     method public void setUnknownTimer(int);
-  }
-
-  public final class GeofenceHardwareRequestParcelable implements android.os.Parcelable {
-    ctor public GeofenceHardwareRequestParcelable(int, android.hardware.location.GeofenceHardwareRequest);
-    method public int describeContents();
-    method public int getId();
-    method public int getLastTransition();
-    method public double getLatitude();
-    method public double getLongitude();
-    method public int getMonitorTransitions();
-    method public int getNotificationResponsiveness();
-    method public double getRadius();
-    method public int getUnknownTimer();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.hardware.location.GeofenceHardwareRequestParcelable> CREATOR;
-  }
-
-  public abstract interface IGeofenceHardware implements android.os.IInterface {
-    method public abstract boolean addCircularFence(int, android.hardware.location.GeofenceHardwareRequestParcelable, android.hardware.location.IGeofenceHardwareCallback) throws android.os.RemoteException;
-    method public abstract int[] getMonitoringTypes() throws android.os.RemoteException;
-    method public abstract int getStatusOfMonitoringType(int) throws android.os.RemoteException;
-    method public abstract boolean pauseGeofence(int, int) throws android.os.RemoteException;
-    method public abstract boolean registerForMonitorStateChangeCallback(int, android.hardware.location.IGeofenceHardwareMonitorCallback) throws android.os.RemoteException;
-    method public abstract boolean removeGeofence(int, int) throws android.os.RemoteException;
-    method public abstract boolean resumeGeofence(int, int, int) throws android.os.RemoteException;
-    method public abstract void setFusedGeofenceHardware(android.location.IFusedGeofenceHardware) throws android.os.RemoteException;
-    method public abstract void setGpsGeofenceHardware(android.location.IGpsGeofenceHardware) throws android.os.RemoteException;
-    method public abstract boolean unregisterForMonitorStateChangeCallback(int, android.hardware.location.IGeofenceHardwareMonitorCallback) throws android.os.RemoteException;
-  }
-
-  public abstract interface IGeofenceHardwareCallback implements android.os.IInterface {
-    method public abstract void onGeofenceAdd(int, int) throws android.os.RemoteException;
-    method public abstract void onGeofencePause(int, int) throws android.os.RemoteException;
-    method public abstract void onGeofenceRemove(int, int) throws android.os.RemoteException;
-    method public abstract void onGeofenceResume(int, int) throws android.os.RemoteException;
-    method public abstract void onGeofenceTransition(int, int, android.location.Location, long, int) throws android.os.RemoteException;
-  }
-
-  public abstract interface IGeofenceHardwareMonitorCallback implements android.os.IInterface {
-    method public abstract void onMonitoringSystemChange(android.hardware.location.GeofenceHardwareMonitorEvent) throws android.os.RemoteException;
   }
 
   public class MemoryRegion implements android.os.Parcelable {
@@ -21093,23 +21052,6 @@ package android.location {
 
   public static abstract deprecated interface GpsStatus.NmeaListener {
     method public abstract void onNmeaReceived(long, java.lang.String);
-  }
-
-  public abstract interface IFusedGeofenceHardware implements android.os.IInterface {
-    method public abstract void addGeofences(android.hardware.location.GeofenceHardwareRequestParcelable[]) throws android.os.RemoteException;
-    method public abstract boolean isSupported() throws android.os.RemoteException;
-    method public abstract void modifyGeofenceOptions(int, int, int, int, int, int) throws android.os.RemoteException;
-    method public abstract void pauseMonitoringGeofence(int) throws android.os.RemoteException;
-    method public abstract void removeGeofences(int[]) throws android.os.RemoteException;
-    method public abstract void resumeMonitoringGeofence(int, int) throws android.os.RemoteException;
-  }
-
-  public abstract interface IGpsGeofenceHardware implements android.os.IInterface {
-    method public abstract boolean addCircularHardwareGeofence(int, double, double, double, int, int, int, int) throws android.os.RemoteException;
-    method public abstract boolean isHardwareGeofenceSupported() throws android.os.RemoteException;
-    method public abstract boolean pauseHardwareGeofence(int) throws android.os.RemoteException;
-    method public abstract boolean removeHardwareGeofence(int) throws android.os.RemoteException;
-    method public abstract boolean resumeHardwareGeofence(int, int) throws android.os.RemoteException;
   }
 
   public class Location implements android.os.Parcelable {
