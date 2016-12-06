@@ -25493,6 +25493,14 @@ package android.net {
     field public final android.net.WifiKey wifiKey;
   }
 
+  public abstract class NetworkRecommendationProvider {
+    ctor public NetworkRecommendationProvider(android.os.Handler);
+    method public final android.os.IBinder getBinder();
+    method public abstract android.net.RecommendationResult onRequestRecommendation(android.net.RecommendationRequest);
+    field public static final java.lang.String EXTRA_RECOMMENDATION_RESULT = "android.net.extra.RECOMMENDATION_RESULT";
+    field public static final java.lang.String EXTRA_SEQUENCE = "android.net.extra.SEQUENCE";
+  }
+
   public class NetworkRequest implements android.os.Parcelable {
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
@@ -25513,10 +25521,12 @@ package android.net {
     method public boolean clearScores() throws java.lang.SecurityException;
     method public void disableScoring() throws java.lang.SecurityException;
     method public java.lang.String getActiveScorerPackage();
+    method public android.net.RecommendationResult requestRecommendation(android.net.RecommendationRequest) throws java.lang.SecurityException;
     method public boolean setActiveScorer(java.lang.String) throws java.lang.SecurityException;
     method public boolean updateScores(android.net.ScoredNetwork[]) throws java.lang.SecurityException;
     field public static final java.lang.String ACTION_CHANGE_ACTIVE = "android.net.scoring.CHANGE_ACTIVE";
     field public static final java.lang.String ACTION_CUSTOM_ENABLE = "android.net.scoring.CUSTOM_ENABLE";
+    field public static final java.lang.String ACTION_RECOMMEND_NETWORKS = "android.net.action.RECOMMEND_NETWORKS";
     field public static final java.lang.String ACTION_SCORER_CHANGED = "android.net.scoring.SCORER_CHANGED";
     field public static final java.lang.String ACTION_SCORE_NETWORKS = "android.net.scoring.SCORE_NETWORKS";
     field public static final java.lang.String EXTRA_NETWORKS_TO_SCORE = "networksToScore";
@@ -25562,6 +25572,24 @@ package android.net {
     field public static final int MAX_IDENTITY_HINT_LENGTH_BYTES = 128; // 0x80
     field public static final int MAX_IDENTITY_LENGTH_BYTES = 128; // 0x80
     field public static final int MAX_KEY_LENGTH_BYTES = 256; // 0x100
+  }
+
+  public final class RecommendationRequest implements android.os.Parcelable {
+    ctor protected RecommendationRequest(android.os.Parcel);
+    method public int describeContents();
+    method public android.net.wifi.WifiConfiguration getCurrentSelectedConfig();
+    method public android.net.NetworkCapabilities getRequiredCapabilities();
+    method public android.net.wifi.ScanResult[] getScanResults();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.RecommendationRequest> CREATOR;
+  }
+
+  public final class RecommendationResult implements android.os.Parcelable {
+    ctor public RecommendationResult(android.net.wifi.WifiConfiguration);
+    method public int describeContents();
+    method public android.net.wifi.WifiConfiguration getWifiConfiguration();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.RecommendationResult> CREATOR;
   }
 
   public final class RouteInfo implements android.os.Parcelable {
@@ -25617,9 +25645,12 @@ package android.net {
   public class ScoredNetwork implements android.os.Parcelable {
     ctor public ScoredNetwork(android.net.NetworkKey, android.net.RssiCurve);
     ctor public ScoredNetwork(android.net.NetworkKey, android.net.RssiCurve, boolean);
+    ctor public ScoredNetwork(android.net.NetworkKey, android.net.RssiCurve, boolean, android.os.Bundle);
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.ScoredNetwork> CREATOR;
+    field public static final java.lang.String EXTRA_HAS_CAPTIVE_PORTAL = "android.net.extra.HAS_CAPTIVE_PORTAL";
+    field public final android.os.Bundle attributes;
     field public final boolean meteredHint;
     field public final android.net.NetworkKey networkKey;
     field public final android.net.RssiCurve rssiCurve;
