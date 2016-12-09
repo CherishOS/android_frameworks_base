@@ -2807,11 +2807,25 @@ package android {
 
 package android.accessibilityservice {
 
+  public final class AccessibilityButtonController {
+    method public boolean isAccessibilityButtonAvailable();
+    method public void registerAccessibilityButtonCallback(android.accessibilityservice.AccessibilityButtonController.AccessibilityButtonCallback);
+    method public void registerAccessibilityButtonCallback(android.accessibilityservice.AccessibilityButtonController.AccessibilityButtonCallback, android.os.Handler);
+    method public void unregisterAccessibilityButtonCallback(android.accessibilityservice.AccessibilityButtonController.AccessibilityButtonCallback);
+  }
+
+  public static abstract class AccessibilityButtonController.AccessibilityButtonCallback {
+    ctor public AccessibilityButtonController.AccessibilityButtonCallback();
+    method public void onAvailabilityChanged(android.accessibilityservice.AccessibilityButtonController, boolean);
+    method public void onClicked(android.accessibilityservice.AccessibilityButtonController);
+  }
+
   public abstract class AccessibilityService extends android.app.Service {
     ctor public AccessibilityService();
     method public final void disableSelf();
     method public final boolean dispatchGesture(android.accessibilityservice.GestureDescription, android.accessibilityservice.AccessibilityService.GestureResultCallback, android.os.Handler);
     method public android.view.accessibility.AccessibilityNodeInfo findFocus(int);
+    method public final android.accessibilityservice.AccessibilityButtonController getAccessibilityButtonController();
     method public final android.accessibilityservice.FingerprintGestureController getFingerprintGestureController();
     method public final android.accessibilityservice.AccessibilityService.MagnificationController getMagnificationController();
     method public android.view.accessibility.AccessibilityNodeInfo getRootInActiveWindow();
@@ -2924,6 +2938,7 @@ package android.accessibilityservice {
     field public static final int FLAG_ENABLE_ACCESSIBILITY_VOLUME = 128; // 0x80
     field public static final int FLAG_INCLUDE_NOT_IMPORTANT_VIEWS = 2; // 0x2
     field public static final int FLAG_REPORT_VIEW_IDS = 16; // 0x10
+    field public static final int FLAG_REQUEST_ACCESSIBILITY_BUTTON = 256; // 0x100
     field public static final int FLAG_REQUEST_ENHANCED_WEB_ACCESSIBILITY = 8; // 0x8
     field public static final int FLAG_REQUEST_FILTER_KEY_EVENTS = 32; // 0x20
     field public static final int FLAG_REQUEST_TOUCH_EXPLORATION_MODE = 4; // 0x4
