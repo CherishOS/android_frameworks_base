@@ -16,17 +16,13 @@
 
 package android.service.autofill;
 
-import android.app.assist.AssistStructure;
-import android.os.Bundle;
-import android.service.autofill.IAutoFillServerCallback;
-import com.android.internal.os.IResultReceiver;
+import java.util.List;
+
+import android.view.autofill.Dataset;
 
 /**
  * @hide
  */
-oneway interface IAutoFillService {
-    void autoFill(in AssistStructure structure, in IAutoFillServerCallback callback,
-                  in Bundle extras, int flags);
-    void onConnected();
-    void onDisconnected();
+oneway interface IAutoFillAppCallback {
+    void autoFill(in Dataset dataset);
 }
