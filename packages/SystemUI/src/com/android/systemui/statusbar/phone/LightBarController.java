@@ -27,24 +27,33 @@ import static com.android.systemui.statusbar.phone.BarTransitions.MODE_TRANSPARE
 /**
  * Controls how light status bar flag applies to the icons.
  */
-public class LightStatusBarController implements BatteryController.BatteryStateChangeCallback {
+public class LightBarController implements BatteryController.BatteryStateChangeCallback {
 
-    private final StatusBarIconController mIconController;
+    private static final float NAV_BAR_INVERSION_SCRIM_ALPHA_THRESHOLD = 0.1f;
+
+    private final StatusBarIconController mStatusBarIconController;
     private final BatteryController mBatteryController;
     private FingerprintUnlockController mFingerprintUnlockController;
+    private final NavigationBarView mNavigationBarView;
 
+    private int mSystemUiVisibility;
     private int mFullscreenStackVisibility;
     private int mDockedStackVisibility;
     private boolean mFullscreenLight;
     private boolean mDockedLight;
     private int mLastStatusBarMode;
+    private int mLastNavigationBarMode;
+    private boolean mNavigationLight;
+    private float mScrimAlpha;
 
     private final Rect mLastFullscreenBounds = new Rect();
     private final Rect mLastDockedBounds = new Rect();
 
-    public LightStatusBarController(StatusBarIconController iconController,
+    public LightBarController(StatusBarIconController statusBarIconController,
+            NavigationBarView navigationBarView,
             BatteryController batteryController) {
-        mIconController = iconController;
+        mStatusBarIconController = statusBarIconController;
+        mNavigationBarView = navigationBarView;
         mBatteryController = batteryController;
         batteryController.addCallback(this);
     }
@@ -54,9 +63,9 @@ public class LightStatusBarController implements BatteryController.BatteryStateC
         mFingerprintUnlockController = fingerprintUnlockController;
     }
 
-    public void onSystemUiVisibilityChanged(int fullscreenStackVis, int dockedStackVis, int mask,
-            Rect fullscreenStackBounds, Rect dockedStackBounds, boolean sbModeChanged,
-            int statusBarMode) {
+    public void onSystemUiVisibilityChanged(int vis, int fullscreenStackVis, int dockedStackVis,
+            int mask, Rect fullscreenStackBounds, Rect dockedStackBounds, boolean sbModeChanged,
+            int statusBarMode, boolean nbModeChanged, int navigationBarMode) {
         int oldFullscreen = mFullscreenStackVisibility;
         int newFullscreen = (oldFullscreen & ~mask) | (fullscreenStackVis & mask);
         int diffFullscreen = newFullscreen ^ oldFullscreen;
@@ -69,22 +78,54 @@ public class LightStatusBarController implements BatteryController.BatteryStateC
                 || !mLastFullscreenBounds.equals(fullscreenStackBounds)
                 || !mLastDockedBounds.equals(dockedStackBounds)) {
 
-            mFullscreenLight = isLight(newFullscreen, statusBarMode);
-            mDockedLight = isLight(newDocked, statusBarMode);
-            update(fullscreenStackBounds, dockedStackBounds);
+            mFullscreenLight = isLight(newFullscreen, statusBarMode,
+                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            mDockedLight = isLight(newDocked, statusBarMode, View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            updateStatus(fullscreenStackBounds, dockedStackBounds);
+        }
+
+        int oldVis = mSystemUiVisibility;
+        int newVis = (oldVis & ~mask) | (vis & mask);
+        int diffVis = newVis ^ oldVis;
+        if ((diffVis & View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR) != 0
+                || nbModeChanged) {
+            boolean last = mNavigationLight;
+            mNavigationLight = isNavigationLight(newVis, navigationBarMode);
+            if (mNavigationLight != last) {
+                updateNavigation();
+            }
         }
         mFullscreenStackVisibility = newFullscreen;
         mDockedStackVisibility = newDocked;
+        mSystemUiVisibility = newVis;
         mLastStatusBarMode = statusBarMode;
+        mLastNavigationBarMode = navigationBarMode;
         mLastFullscreenBounds.set(fullscreenStackBounds);
         mLastDockedBounds.set(dockedStackBounds);
     }
 
-    private boolean isLight(int vis, int statusBarMode) {
-        boolean isTransparentBar = (statusBarMode == MODE_TRANSPARENT
-                || statusBarMode == MODE_LIGHTS_OUT_TRANSPARENT);
+    private void reevaluate() {
+        onSystemUiVisibilityChanged(mSystemUiVisibility, mFullscreenStackVisibility,
+                mDockedStackVisibility, 0 /* mask */, mLastFullscreenBounds, mLastDockedBounds,
+                true /* sbModeChange*/, mLastStatusBarMode, true /* nbModeChange*/,
+                mLastNavigationBarMode);
+    }
+
+    public void setScrimAlpha(float alpha) {
+        mScrimAlpha = alpha;
+        reevaluate();
+    }
+
+    private boolean isNavigationLight(int vis, int barMode) {
+        return isLight(vis, barMode, View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
+                && mScrimAlpha < NAV_BAR_INVERSION_SCRIM_ALPHA_THRESHOLD;
+    }
+
+    private boolean isLight(int vis, int barMode, int flag) {
+        boolean isTransparentBar = (barMode == MODE_TRANSPARENT
+                || barMode == MODE_LIGHTS_OUT_TRANSPARENT);
         boolean allowLight = isTransparentBar && !mBatteryController.isPowerSave();
-        boolean light = (vis & View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) != 0;
+        boolean light = (vis & flag) != 0;
         return allowLight && light;
     }
 
@@ -97,33 +138,40 @@ public class LightStatusBarController implements BatteryController.BatteryStateC
                 && unlockMode != FingerprintUnlockController.MODE_WAKE_AND_UNLOCK;
     }
 
-    private void update(Rect fullscreenStackBounds, Rect dockedStackBounds) {
+    private void updateStatus(Rect fullscreenStackBounds, Rect dockedStackBounds) {
         boolean hasDockedStack = !dockedStackBounds.isEmpty();
 
         // If both are light or fullscreen is light and there is no docked stack, all icons get
         // dark.
         if ((mFullscreenLight && mDockedLight) || (mFullscreenLight && !hasDockedStack)) {
-            mIconController.setIconsDarkArea(null);
-            mIconController.setIconsDark(true, animateChange());
+            mStatusBarIconController.setIconsDarkArea(null);
+            mStatusBarIconController.getTransitionsController().setIconsDark(true, animateChange());
 
         }
 
         // If no one is light or the fullscreen is not light and there is no docked stack,
         // all icons become white.
         else if ((!mFullscreenLight && !mDockedLight) || (!mFullscreenLight && !hasDockedStack)) {
-            mIconController.setIconsDark(false, animateChange());
-
+            mStatusBarIconController.getTransitionsController().setIconsDark(
+                    false, animateChange());
         }
 
         // Not the same for every stack, magic!
         else {
             Rect bounds = mFullscreenLight ? fullscreenStackBounds : dockedStackBounds;
             if (bounds.isEmpty()) {
-                mIconController.setIconsDarkArea(null);
+                mStatusBarIconController.setIconsDarkArea(null);
             } else {
-                mIconController.setIconsDarkArea(bounds);
+                mStatusBarIconController.setIconsDarkArea(bounds);
             }
-            mIconController.setIconsDark(true, animateChange());
+            mStatusBarIconController.getTransitionsController().setIconsDark(true, animateChange());
+        }
+    }
+
+    private void updateNavigation() {
+        if (mNavigationBarView != null) {
+            mNavigationBarView.getLightTransitionsController().setIconsDark(
+                    mNavigationLight, animateChange());
         }
     }
 
@@ -134,8 +182,6 @@ public class LightStatusBarController implements BatteryController.BatteryStateC
 
     @Override
     public void onPowerSaveChanged(boolean isPowerSave) {
-        onSystemUiVisibilityChanged(mFullscreenStackVisibility, mDockedStackVisibility,
-                0 /* mask */, mLastFullscreenBounds, mLastDockedBounds, true /* sbModeChange*/,
-                mLastStatusBarMode);
+        reevaluate();
     }
 }
