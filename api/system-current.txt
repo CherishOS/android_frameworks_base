@@ -5183,6 +5183,7 @@ package android.app {
     field public static final int DEFAULT_LIGHTS = 4; // 0x4
     field public static final int DEFAULT_SOUND = 1; // 0x1
     field public static final int DEFAULT_VIBRATE = 2; // 0x2
+    field public static final java.lang.String EXTRA_AUDIO_CONTENTS_URI = "android.audioContents";
     field public static final java.lang.String EXTRA_BACKGROUND_IMAGE_URI = "android.backgroundImageUri";
     field public static final java.lang.String EXTRA_BIG_TEXT = "android.bigText";
     field public static final java.lang.String EXTRA_CHRONOMETER_COUNT_DOWN = "android.chronometerCountDown";
@@ -5268,6 +5269,7 @@ package android.app {
     method public android.app.Notification.Action clone();
     method public int describeContents();
     method public boolean getAllowGeneratedReplies();
+    method public android.app.RemoteInput[] getDataOnlyRemoteInputs();
     method public android.os.Bundle getExtras();
     method public android.graphics.drawable.Icon getIcon();
     method public android.app.RemoteInput[] getRemoteInputs();
@@ -5758,14 +5760,18 @@ package android.app {
   }
 
   public final class RemoteInput implements android.os.Parcelable {
+    method public static void addDataResultToIntent(android.app.RemoteInput, android.content.Intent, java.util.Map<java.lang.String, android.net.Uri>);
     method public static void addResultsToIntent(android.app.RemoteInput[], android.content.Intent, android.os.Bundle);
     method public int describeContents();
     method public boolean getAllowFreeFormInput();
+    method public java.util.Set<java.lang.String> getAllowedDataTypes();
     method public java.lang.CharSequence[] getChoices();
+    method public static java.util.Map<java.lang.String, android.net.Uri> getDataResultsFromIntent(android.content.Intent, java.lang.String);
     method public android.os.Bundle getExtras();
     method public java.lang.CharSequence getLabel();
     method public java.lang.String getResultKey();
     method public static android.os.Bundle getResultsFromIntent(android.content.Intent);
+    method public boolean isDataOnly();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.RemoteInput> CREATOR;
     field public static final java.lang.String EXTRA_RESULTS_DATA = "android.remoteinput.resultsData";
@@ -5777,6 +5783,7 @@ package android.app {
     method public android.app.RemoteInput.Builder addExtras(android.os.Bundle);
     method public android.app.RemoteInput build();
     method public android.os.Bundle getExtras();
+    method public android.app.RemoteInput.Builder setAllowDataType(java.lang.String, boolean);
     method public android.app.RemoteInput.Builder setAllowFreeFormInput(boolean);
     method public android.app.RemoteInput.Builder setChoices(java.lang.CharSequence[]);
     method public android.app.RemoteInput.Builder setLabel(java.lang.CharSequence);
