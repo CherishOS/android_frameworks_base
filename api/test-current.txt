@@ -114,6 +114,7 @@ package android {
     field public static final java.lang.String RECEIVE_WAP_PUSH = "android.permission.RECEIVE_WAP_PUSH";
     field public static final java.lang.String RECORD_AUDIO = "android.permission.RECORD_AUDIO";
     field public static final java.lang.String REORDER_TASKS = "android.permission.REORDER_TASKS";
+    field public static final java.lang.String REQUEST_DELETE_PACKAGES = "android.permission.REQUEST_DELETE_PACKAGES";
     field public static final java.lang.String REQUEST_IGNORE_BATTERY_OPTIMIZATIONS = "android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS";
     field public static final java.lang.String REQUEST_INSTALL_PACKAGES = "android.permission.REQUEST_INSTALL_PACKAGES";
     field public static final deprecated java.lang.String RESTART_PACKAGES = "android.permission.RESTART_PACKAGES";
@@ -362,6 +363,7 @@ package android {
     field public static final int centerMedium = 16842959; // 0x10100cf
     field public static final int centerX = 16843170; // 0x10101a2
     field public static final int centerY = 16843171; // 0x10101a3
+    field public static final int certDigest = 16844106; // 0x101054a
     field public static final int checkBoxPreferenceStyle = 16842895; // 0x101008f
     field public static final int checkMark = 16843016; // 0x1010108
     field public static final int checkMarkTint = 16843943; // 0x10104a7
@@ -9963,6 +9965,7 @@ package android.content.pm {
     method public void registerSessionCallback(android.content.pm.PackageInstaller.SessionCallback);
     method public void registerSessionCallback(android.content.pm.PackageInstaller.SessionCallback, android.os.Handler);
     method public void uninstall(java.lang.String, android.content.IntentSender);
+    method public void uninstall(android.content.pm.VersionedPackage, android.content.IntentSender);
     method public void unregisterSessionCallback(android.content.pm.PackageInstaller.SessionCallback);
     method public void updateSessionAppIcon(int, android.graphics.Bitmap);
     method public void updateSessionAppLabel(int, java.lang.CharSequence);
@@ -10111,6 +10114,7 @@ package android.content.pm {
     method public abstract int[] getPackageGids(java.lang.String) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract int[] getPackageGids(java.lang.String, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract android.content.pm.PackageInfo getPackageInfo(java.lang.String, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public abstract android.content.pm.PackageInfo getPackageInfo(android.content.pm.VersionedPackage, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract android.content.pm.PackageInstaller getPackageInstaller();
     method public abstract int getPackageUid(java.lang.String, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract java.lang.String[] getPackagesForUid(int);
@@ -10125,6 +10129,7 @@ package android.content.pm {
     method public abstract android.content.res.Resources getResourcesForApplication(android.content.pm.ApplicationInfo) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract android.content.res.Resources getResourcesForApplication(java.lang.String) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract android.content.pm.ServiceInfo getServiceInfo(android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public abstract java.util.List<android.content.pm.SharedLibraryInfo> getSharedLibraries(int);
     method public abstract android.content.pm.FeatureInfo[] getSystemAvailableFeatures();
     method public abstract java.lang.String[] getSystemSharedLibraryNames();
     method public abstract java.lang.CharSequence getText(java.lang.String, int, android.content.pm.ApplicationInfo);
@@ -10283,6 +10288,7 @@ package android.content.pm {
     field public static final int SIGNATURE_UNKNOWN_PACKAGE = -4; // 0xfffffffc
     field public static final int VERIFICATION_ALLOW = 1; // 0x1
     field public static final int VERIFICATION_REJECT = -1; // 0xffffffff
+    field public static final int VERSION_CODE_HIGHEST = -1; // 0xffffffff
   }
 
   public static class PackageManager.NameNotFoundException extends android.util.AndroidException {
@@ -10423,6 +10429,20 @@ package android.content.pm {
     field public java.lang.String permission;
   }
 
+  public final class SharedLibraryInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.content.pm.VersionedPackage getDeclaringPackage();
+    method public java.util.List<android.content.pm.VersionedPackage> getDependentPackages();
+    method public java.lang.String getName();
+    method public int getVersion();
+    method public boolean isBuiltin();
+    method public boolean isDynamic();
+    method public boolean isStatic();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.content.pm.SharedLibraryInfo> CREATOR;
+    field public static final int VERSION_UNDEFINED = -1; // 0xffffffff
+  }
+
   public final class ShortcutInfo implements android.os.Parcelable {
     method public int describeContents();
     method public android.content.ComponentName getActivity();
@@ -10497,6 +10517,15 @@ package android.content.pm {
     method public java.lang.String toCharsString();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.Signature> CREATOR;
+  }
+
+  public final class VersionedPackage implements android.os.Parcelable {
+    ctor public VersionedPackage(java.lang.String, int);
+    method public int describeContents();
+    method public java.lang.String getPackageName();
+    method public long getVersionCode();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.content.pm.VersionedPackage> CREATOR;
   }
 
 }
@@ -39299,6 +39328,7 @@ package android.test.mock {
     method public int[] getPackageGids(java.lang.String) throws android.content.pm.PackageManager.NameNotFoundException;
     method public int[] getPackageGids(java.lang.String, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public android.content.pm.PackageInfo getPackageInfo(java.lang.String, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public android.content.pm.PackageInfo getPackageInfo(android.content.pm.VersionedPackage, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public android.content.pm.PackageInstaller getPackageInstaller();
     method public int getPackageUid(java.lang.String, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public java.lang.String[] getPackagesForUid(int);
@@ -39313,6 +39343,7 @@ package android.test.mock {
     method public android.content.res.Resources getResourcesForApplication(android.content.pm.ApplicationInfo);
     method public android.content.res.Resources getResourcesForApplication(java.lang.String) throws android.content.pm.PackageManager.NameNotFoundException;
     method public android.content.pm.ServiceInfo getServiceInfo(android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public java.util.List<android.content.pm.SharedLibraryInfo> getSharedLibraries(int);
     method public android.content.pm.FeatureInfo[] getSystemAvailableFeatures();
     method public java.lang.String[] getSystemSharedLibraryNames();
     method public java.lang.CharSequence getText(java.lang.String, int, android.content.pm.ApplicationInfo);
