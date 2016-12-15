@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The Android Open Source Project
+ * Copyright (C) 2017 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package android.service.autofill;
 
-import java.util.List;
+import java.io.PrintWriter;
 
-import android.view.autofill.Dataset;
+final class CallbackHelper {
 
-/**
- * Object running in the application process and responsible for auto-filling it.
- *
- * @hide
- */
-// TODO(b/33197203): rename methods to make them more consistent with a callback, or rename class
-// itself
-oneway interface IAutoFillAppCallback {
-    /**
-      * Auto-fills the activity with the contents of a dataset.
-      */
-    void autoFill(in Dataset dataset);
+    static interface Dumpable {
+        void dump(String prefix, PrintWriter pw);
+        void setFinalizer(Finalizer f);
+    }
+
+    static interface Finalizer {
+        void gone();
+    }
 }
