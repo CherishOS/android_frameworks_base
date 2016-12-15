@@ -9695,6 +9695,7 @@ package android.content.pm {
 
   public class LauncherApps {
     method public java.util.List<android.content.pm.LauncherActivityInfo> getActivityList(java.lang.String, android.os.UserHandle);
+    method public android.content.pm.LauncherApps.PinItemRequest getPinItemRequest(android.content.Intent);
     method public android.graphics.drawable.Drawable getShortcutBadgedIconDrawable(android.content.pm.ShortcutInfo, int);
     method public android.graphics.drawable.Drawable getShortcutIconDrawable(android.content.pm.ShortcutInfo, int);
     method public java.util.List<android.content.pm.ShortcutInfo> getShortcuts(android.content.pm.LauncherApps.ShortcutQuery, android.os.UserHandle);
@@ -9710,6 +9711,8 @@ package android.content.pm {
     method public void startShortcut(java.lang.String, java.lang.String, android.graphics.Rect, android.os.Bundle, android.os.UserHandle);
     method public void startShortcut(android.content.pm.ShortcutInfo, android.graphics.Rect, android.os.Bundle);
     method public void unregisterCallback(android.content.pm.LauncherApps.Callback);
+    field public static final java.lang.String ACTION_CONFIRM_PIN_ITEM = "android.content.pm.action.CONFIRM_PIN_ITEM";
+    field public static final java.lang.String EXTRA_PIN_ITEM_REQUEST = "android.content.pm.extra.PIN_ITEM_REQUEST";
   }
 
   public static abstract class LauncherApps.Callback {
@@ -9722,6 +9725,21 @@ package android.content.pm {
     method public abstract void onPackagesUnavailable(java.lang.String[], android.os.UserHandle, boolean);
     method public void onPackagesUnsuspended(java.lang.String[], android.os.UserHandle);
     method public void onShortcutsChanged(java.lang.String, java.util.List<android.content.pm.ShortcutInfo>, android.os.UserHandle);
+  }
+
+  public static final class LauncherApps.PinItemRequest implements android.os.Parcelable {
+    method public boolean accept(android.os.Bundle);
+    method public boolean accept();
+    method public int describeContents();
+    method public int getRequestType();
+    method public android.content.pm.ShortcutInfo getShortcutInfo();
+    method public boolean isValid();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.content.pm.LauncherApps.PinItemRequest> CREATOR;
+    field public static final int REQUEST_TYPE_SHORTCUT = 1; // 0x1
+  }
+
+  public static abstract class LauncherApps.PinItemRequest.RequestType implements java.lang.annotation.Annotation {
   }
 
   public static class LauncherApps.ShortcutQuery {
@@ -10288,9 +10306,11 @@ package android.content.pm {
     method public int getMaxShortcutCountPerActivity();
     method public java.util.List<android.content.pm.ShortcutInfo> getPinnedShortcuts();
     method public boolean isRateLimitingActive();
+    method public boolean isRequestPinShortcutSupported();
     method public void removeAllDynamicShortcuts();
     method public void removeDynamicShortcuts(java.util.List<java.lang.String>);
     method public void reportShortcutUsed(java.lang.String);
+    method public boolean requestPinShortcut(android.content.pm.ShortcutInfo, android.content.IntentSender);
     method public boolean setDynamicShortcuts(java.util.List<android.content.pm.ShortcutInfo>);
     method public boolean updateShortcuts(java.util.List<android.content.pm.ShortcutInfo>);
   }
