@@ -22696,6 +22696,7 @@ package android.media.browse {
     method public android.content.ComponentName getServiceComponent();
     method public android.media.session.MediaSession.Token getSessionToken();
     method public boolean isConnected();
+    method public void search(java.lang.String, android.os.Bundle, android.media.browse.MediaBrowser.SearchCallback);
     method public void subscribe(java.lang.String, android.media.browse.MediaBrowser.SubscriptionCallback);
     method public void subscribe(java.lang.String, android.os.Bundle, android.media.browse.MediaBrowser.SubscriptionCallback);
     method public void unsubscribe(java.lang.String);
@@ -22729,6 +22730,12 @@ package android.media.browse {
     field public static final android.os.Parcelable.Creator<android.media.browse.MediaBrowser.MediaItem> CREATOR;
     field public static final int FLAG_BROWSABLE = 1; // 0x1
     field public static final int FLAG_PLAYABLE = 2; // 0x2
+  }
+
+  public static abstract class MediaBrowser.SearchCallback {
+    ctor public MediaBrowser.SearchCallback();
+    method public void onError(java.lang.String, android.os.Bundle);
+    method public void onSearchResult(java.lang.String, android.os.Bundle, java.util.List<android.media.browse.MediaBrowser.MediaItem>);
   }
 
   public static abstract class MediaBrowser.SubscriptionCallback {
@@ -35174,6 +35181,7 @@ package android.service.media {
     method public abstract void onLoadChildren(java.lang.String, android.service.media.MediaBrowserService.Result<java.util.List<android.media.browse.MediaBrowser.MediaItem>>);
     method public void onLoadChildren(java.lang.String, android.service.media.MediaBrowserService.Result<java.util.List<android.media.browse.MediaBrowser.MediaItem>>, android.os.Bundle);
     method public void onLoadItem(java.lang.String, android.service.media.MediaBrowserService.Result<android.media.browse.MediaBrowser.MediaItem>);
+    method public void onSearch(java.lang.String, android.os.Bundle, android.service.media.MediaBrowserService.Result<java.util.List<android.media.browse.MediaBrowser.MediaItem>>);
     method public void setSessionToken(android.media.session.MediaSession.Token);
     field public static final java.lang.String SERVICE_INTERFACE = "android.media.browse.MediaBrowserService";
   }
