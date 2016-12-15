@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The Android Open Source Project
+ * Copyright (C) 2017 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.view.autofill;
+package com.android.server.autofill;
 
 import android.os.Bundle;
 
@@ -22,13 +22,12 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 
-/** @hide */
-public final class Helper {
+final class Helper {
 
     static final boolean DEBUG = true; // TODO(b/33197203): set to false when stable
     static final String REDACTED = "[REDACTED]";
 
-    static StringBuilder append(StringBuilder builder, Bundle bundle) {
+    static void append(StringBuilder builder, Bundle bundle) {
         if (bundle == null) {
             builder.append("N/A");
         } else if (!DEBUG) {
@@ -44,7 +43,12 @@ public final class Helper {
             }
             builder.append(']');
         }
-        return builder;
+    }
+
+    static String bundleToString(Bundle bundle) {
+        final StringBuilder builder = new StringBuilder();
+        append(builder, bundle);
+        return builder.toString();
     }
 
     private Helper() {
