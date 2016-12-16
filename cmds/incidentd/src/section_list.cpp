@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (C) 2016 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,16 @@
  * limitations under the License.
  */
 
-package android.os;
+#include "section_list.h"
 
-parcelable DropBoxManager.Entry cpp_header "android/os/DropBoxManager.h";
+//using namespace android::util;
+
+/**
+ * This is the mapping of section IDs to the commands that are run to get those commands.
+ */
+const Section* SECTION_LIST[] = {
+    new DumpsysSection(3000,
+            "fingerprint", "--proto", "--incident", NULL),
+    NULL
+};
+
