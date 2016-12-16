@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (C) 2016 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,31 @@
  * limitations under the License.
  */
 
-package android.os;
+#ifndef PRINTER_H
+#define PRINTER_H
 
-parcelable DropBoxManager.Entry cpp_header "android/os/DropBoxManager.h";
+#include <stdio.h>
+
+class Out
+{
+public:
+    Out(int fd);
+    ~Out();
+
+    void printf(const char* format, ...);
+
+    void indent();
+    void dedent();
+
+private:
+    FILE* mOut;
+    int mBufSize;
+    char* mBuf;
+    int mIndent;
+    bool mPendingIndent;
+
+    int reallocate(int size);
+    void print_indent();
+};
+
+#endif // PRINTER_H

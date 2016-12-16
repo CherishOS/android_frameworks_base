@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (C) 2016 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,16 @@
  * limitations under the License.
  */
 
-package android.os;
+#ifndef INCIDENT_SECTIONS_H
+#define INCIDENT_SECTIONS_H
 
-parcelable DropBoxManager.Entry cpp_header "android/os/DropBoxManager.h";
+struct IncidentSection
+{
+    int id;
+    char const* name;
+};
+
+extern IncidentSection const INCIDENT_SECTIONS[];
+extern const int INCIDENT_SECTION_COUNT;
+
+#endif // INCIDENT_SECTIONS_H

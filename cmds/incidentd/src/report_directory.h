@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (C) 2016 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,16 @@
  * limitations under the License.
  */
 
-package android.os;
+#ifndef DIRECTORY_CLEANER_H
+#define DIRECTORY_CLEANER_H
 
-parcelable DropBoxManager.Entry cpp_header "android/os/DropBoxManager.h";
+#include <utils/Errors.h>
+
+#include <sys/types.h>
+
+using namespace android;
+
+status_t create_directory(const char* directory);
+void clean_directory(const char* directory, off_t maxSize, size_t maxCount);
+
+#endif // DIRECTORY_CLEANER_H
