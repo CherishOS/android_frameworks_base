@@ -55,6 +55,7 @@ package android {
     field public static final java.lang.String BIND_TRUST_AGENT = "android.permission.BIND_TRUST_AGENT";
     field public static final java.lang.String BIND_TV_INPUT = "android.permission.BIND_TV_INPUT";
     field public static final java.lang.String BIND_TV_REMOTE_SERVICE = "android.permission.BIND_TV_REMOTE_SERVICE";
+    field public static final java.lang.String BIND_VISUAL_VOICEMAIL_SERVICE = "android.permission.BIND_VISUAL_VOICEMAIL_SERVICE";
     field public static final java.lang.String BIND_VOICE_INTERACTION = "android.permission.BIND_VOICE_INTERACTION";
     field public static final java.lang.String BIND_VPN_SERVICE = "android.permission.BIND_VPN_SERVICE";
     field public static final java.lang.String BIND_VR_LISTENER_SERVICE = "android.permission.BIND_VR_LISTENER_SERVICE";
@@ -41082,6 +41083,54 @@ package android.telephony {
     ctor public TelephonyManager.OnReceiveUssdResponseCallback();
     method public void onReceiveUssdResponse(java.lang.String, java.lang.CharSequence);
     method public void onReceiveUssdResponseFailed(java.lang.String, int);
+  }
+
+  public abstract class VisualVoicemailService extends android.app.Service {
+    ctor public VisualVoicemailService();
+    method public android.os.IBinder onBind(android.content.Intent);
+    method public abstract void onCellServiceConnected(android.telephony.VisualVoicemailService.VisualVoicemailTask, android.telecom.PhoneAccountHandle);
+    method public abstract void onSimRemoved(android.telephony.VisualVoicemailService.VisualVoicemailTask, android.telecom.PhoneAccountHandle);
+    method public abstract void onSmsReceived(android.telephony.VisualVoicemailService.VisualVoicemailTask, android.telephony.VisualVoicemailSms);
+    method public abstract void onStopped(android.telephony.VisualVoicemailService.VisualVoicemailTask);
+    method public static final void sendVisualVoicemailSms(android.content.Context, android.telecom.PhoneAccountHandle, java.lang.String, short, java.lang.String, android.app.PendingIntent);
+    method public static final void setSmsFilterSettings(android.content.Context, android.telecom.PhoneAccountHandle, android.telephony.VisualVoicemailSmsFilterSettings);
+    field public static final java.lang.String SERVICE_INTERFACE = "android.telephony.VisualVoicemailService";
+  }
+
+  public static class VisualVoicemailService.VisualVoicemailTask {
+    method public final void finish();
+  }
+
+  public final class VisualVoicemailSms implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.os.Bundle getFields();
+    method public java.lang.String getMessageBody();
+    method public android.telecom.PhoneAccountHandle getPhoneAccountHandle();
+    method public java.lang.String getPrefix();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.VisualVoicemailSms> CREATOR;
+  }
+
+  public final class VisualVoicemailSmsFilterSettings implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.VisualVoicemailSmsFilterSettings> CREATOR;
+    field public static final java.lang.String DEFAULT_CLIENT_PREFIX = "//VVM";
+    field public static final int DEFAULT_DESTINATION_PORT = -1; // 0xffffffff
+    field public static final java.util.List<java.lang.String> DEFAULT_ORIGINATING_NUMBERS;
+    field public static final int DESTINATION_PORT_ANY = -1; // 0xffffffff
+    field public static final int DESTINATION_PORT_DATA_SMS = -2; // 0xfffffffe
+    field public final java.lang.String clientPrefix;
+    field public final int destinationPort;
+    field public final java.util.List<java.lang.String> originatingNumbers;
+  }
+
+  public static class VisualVoicemailSmsFilterSettings.Builder {
+    ctor public VisualVoicemailSmsFilterSettings.Builder();
+    method public android.telephony.VisualVoicemailSmsFilterSettings build();
+    method public android.telephony.VisualVoicemailSmsFilterSettings.Builder setClientPrefix(java.lang.String);
+    method public android.telephony.VisualVoicemailSmsFilterSettings.Builder setDestinationPort(int);
+    method public android.telephony.VisualVoicemailSmsFilterSettings.Builder setOriginatingNumbers(java.util.List<java.lang.String>);
   }
 
 }
