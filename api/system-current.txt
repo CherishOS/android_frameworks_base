@@ -21601,6 +21601,7 @@ package android.media {
     method public void adjustVolume(int, int);
     method public void dispatchMediaKeyEvent(android.view.KeyEvent);
     method public int generateAudioSessionId();
+    method public java.util.List<android.media.AudioPlaybackConfiguration> getActivePlaybackConfigurations();
     method public java.util.List<android.media.AudioRecordingConfiguration> getActiveRecordingConfigurations();
     method public android.media.AudioDeviceInfo[] getDevices(int);
     method public int getMode();
@@ -21625,6 +21626,7 @@ package android.media {
     method public void playSoundEffect(int);
     method public void playSoundEffect(int, float);
     method public void registerAudioDeviceCallback(android.media.AudioDeviceCallback, android.os.Handler);
+    method public void registerAudioPlaybackCallback(android.media.AudioManager.AudioPlaybackCallback, android.os.Handler);
     method public int registerAudioPolicy(android.media.audiopolicy.AudioPolicy);
     method public void registerAudioRecordingCallback(android.media.AudioManager.AudioRecordingCallback, android.os.Handler);
     method public deprecated void registerMediaButtonEventReceiver(android.content.ComponentName);
@@ -21652,6 +21654,7 @@ package android.media {
     method public void stopBluetoothSco();
     method public void unloadSoundEffects();
     method public void unregisterAudioDeviceCallback(android.media.AudioDeviceCallback);
+    method public void unregisterAudioPlaybackCallback(android.media.AudioManager.AudioPlaybackCallback);
     method public void unregisterAudioPolicyAsync(android.media.audiopolicy.AudioPolicy);
     method public void unregisterAudioRecordingCallback(android.media.AudioManager.AudioRecordingCallback);
     method public deprecated void unregisterMediaButtonEventReceiver(android.content.ComponentName);
@@ -21754,6 +21757,11 @@ package android.media {
     field public static final deprecated int VIBRATE_TYPE_RINGER = 0; // 0x0
   }
 
+  public static abstract class AudioManager.AudioPlaybackCallback {
+    ctor public AudioManager.AudioPlaybackCallback();
+    method public void onPlaybackConfigChanged(java.util.List<android.media.AudioPlaybackConfiguration>);
+  }
+
   public static abstract class AudioManager.AudioRecordingCallback {
     ctor public AudioManager.AudioRecordingCallback();
     method public void onRecordingConfigChanged(java.util.List<android.media.AudioRecordingConfiguration>);
@@ -21761,6 +21769,28 @@ package android.media {
 
   public static abstract interface AudioManager.OnAudioFocusChangeListener {
     method public abstract void onAudioFocusChange(int);
+  }
+
+  public final class AudioPlaybackConfiguration implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.media.AudioAttributes getAudioAttributes();
+    method public int getClientPid();
+    method public int getClientUid();
+    method public int getPlayerState();
+    method public int getPlayerType();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.media.AudioPlaybackConfiguration> CREATOR;
+    field public static final int PLAYER_STATE_IDLE = 1; // 0x1
+    field public static final int PLAYER_STATE_PAUSED = 3; // 0x3
+    field public static final int PLAYER_STATE_RELEASED = 0; // 0x0
+    field public static final int PLAYER_STATE_STARTED = 2; // 0x2
+    field public static final int PLAYER_STATE_STOPPED = 4; // 0x4
+    field public static final int PLAYER_STATE_UNKNOWN = -1; // 0xffffffff
+    field public static final int PLAYER_TYPE_JAM_AUDIOTRACK = 1; // 0x1
+    field public static final int PLAYER_TYPE_JAM_MEDIAPLAYER = 2; // 0x2
+    field public static final int PLAYER_TYPE_JAM_SOUNDPOOL = 3; // 0x3
+    field public static final int PLAYER_TYPE_SLES_AUDIOPLAYER = 11; // 0xb
+    field public static final int PLAYER_TYPE_UNKNOWN = -1; // 0xffffffff
   }
 
   public class AudioRecord implements android.media.AudioRouting {
