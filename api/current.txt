@@ -1817,6 +1817,7 @@ package android {
     field public static final int tabs = 16908307; // 0x1020013
     field public static final int text1 = 16908308; // 0x1020014
     field public static final int text2 = 16908309; // 0x1020015
+    field public static final int textAssist = 16908353; // 0x1020041
     field public static final int title = 16908310; // 0x1020016
     field public static final int toggle = 16908311; // 0x1020017
     field public static final int undo = 16908338; // 0x1020032
@@ -3536,7 +3537,6 @@ package android.app {
     method public int getRequestedOrientation();
     method public final android.view.SearchEvent getSearchEvent();
     method public int getTaskId();
-    method public android.text.TextAssistant getTextAssistant();
     method public final java.lang.CharSequence getTitle();
     method public final int getTitleColor();
     method public android.app.VoiceInteractor getVoiceInteractor();
@@ -3686,7 +3686,6 @@ package android.app {
     method public final void setResult(int, android.content.Intent);
     method public final deprecated void setSecondaryProgress(int);
     method public void setTaskDescription(android.app.ActivityManager.TaskDescription);
-    method public void setTextAssistant(android.text.TextAssistant);
     method public void setTitle(java.lang.CharSequence);
     method public void setTitle(int);
     method public deprecated void setTitleColor(int);
@@ -39900,22 +39899,6 @@ package android.text {
     method public android.text.StaticLayout.Builder setTextDirection(android.text.TextDirectionHeuristic);
   }
 
-  public abstract interface TextAssistant {
-    method public abstract void addLinks(android.text.Spannable, int);
-    method public abstract android.text.TextSelection suggestSelection(java.lang.CharSequence, int, int);
-  }
-
-  public class TextClassification {
-    ctor public TextClassification();
-    method public java.util.Map<java.lang.String, java.lang.Float> getTypeConfidence();
-  }
-
-  public final class TextClassificationManager implements android.text.TextAssistant {
-    method public void addLinks(android.text.Spannable, int);
-    method public java.util.List<android.text.TextLanguage> detectLanguages(java.lang.CharSequence);
-    method public android.text.TextSelection suggestSelection(java.lang.CharSequence, int, int);
-  }
-
   public abstract interface TextDirectionHeuristic {
     method public abstract boolean isRtl(char[], int, int);
     method public abstract boolean isRtl(java.lang.CharSequence, int, int);
@@ -39931,13 +39914,6 @@ package android.text {
     field public static final android.text.TextDirectionHeuristic RTL;
   }
 
-  public final class TextLanguage {
-    ctor public TextLanguage(int, int, java.util.Map<java.lang.String, java.lang.Float>);
-    method public int getEndIndex();
-    method public java.util.Map<java.lang.String, java.lang.Float> getLanguageConfidence();
-    method public int getStartIndex();
-  }
-
   public class TextPaint extends android.graphics.Paint {
     ctor public TextPaint();
     ctor public TextPaint(int);
@@ -39948,13 +39924,6 @@ package android.text {
     field public float density;
     field public int[] drawableState;
     field public int linkColor;
-  }
-
-  public class TextSelection {
-    ctor public TextSelection();
-    method public int getSelectionEndIndex();
-    method public int getSelectionStartIndex();
-    method public android.text.TextClassification getTextClassification();
   }
 
   public class TextUtils {
@@ -46472,6 +46441,83 @@ package android.view.inputmethod {
 
 }
 
+package android.view.textclassifier {
+
+  public abstract interface LinksInfo {
+    method public abstract boolean apply(java.lang.CharSequence);
+  }
+
+  public final class TextClassificationManager {
+    method public java.util.List<android.view.textclassifier.TextLanguage> detectLanguages(java.lang.CharSequence);
+    method public android.view.textclassifier.TextClassifier getDefaultTextClassifier();
+  }
+
+  public final class TextClassificationResult {
+    method public float getConfidenceScore(java.lang.String);
+    method public java.lang.String getEntity(int);
+    method public int getEntityCount();
+    method public android.graphics.drawable.Drawable getIcon();
+    method public android.content.Intent getIntent();
+    method public java.lang.CharSequence getLabel();
+    method public android.view.View.OnClickListener getOnClickListener();
+    method public java.lang.String getText();
+  }
+
+  public static final class TextClassificationResult.Builder {
+    ctor public TextClassificationResult.Builder();
+    method public android.view.textclassifier.TextClassificationResult build();
+    method public android.view.textclassifier.TextClassificationResult.Builder setEntityType(java.lang.String, float);
+    method public android.view.textclassifier.TextClassificationResult.Builder setIcon(android.graphics.drawable.Drawable);
+    method public android.view.textclassifier.TextClassificationResult.Builder setIntent(android.content.Intent);
+    method public android.view.textclassifier.TextClassificationResult.Builder setLabel(java.lang.String);
+    method public android.view.textclassifier.TextClassificationResult.Builder setOnClickListener(android.view.View.OnClickListener);
+    method public android.view.textclassifier.TextClassificationResult.Builder setText(java.lang.String);
+  }
+
+  public abstract interface TextClassifier {
+    method public abstract android.view.textclassifier.LinksInfo getLinks(java.lang.CharSequence, int);
+    method public abstract android.view.textclassifier.TextClassificationResult getTextClassificationResult(java.lang.CharSequence, int, int);
+    method public abstract android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int);
+    field public static final android.view.textclassifier.TextClassifier NO_OP;
+    field public static final java.lang.String TYPE_ADDRESS = "address";
+    field public static final java.lang.String TYPE_EMAIL = "email";
+    field public static final java.lang.String TYPE_OTHER = "other";
+    field public static final java.lang.String TYPE_PHONE = "phone";
+  }
+
+  public static abstract class TextClassifier.EntityType implements java.lang.annotation.Annotation {
+  }
+
+  public final class TextLanguage {
+    method public float getConfidenceScore(java.util.Locale);
+    method public int getEndIndex();
+    method public java.util.Locale getLanguage(int);
+    method public int getLanguageCount();
+    method public int getStartIndex();
+  }
+
+  public static final class TextLanguage.Builder {
+    ctor public TextLanguage.Builder(int, int);
+    method public android.view.textclassifier.TextLanguage build();
+    method public android.view.textclassifier.TextLanguage.Builder setLanguage(java.util.Locale, float);
+  }
+
+  public final class TextSelection {
+    method public float getConfidenceScore(java.lang.String);
+    method public java.lang.String getEntity(int);
+    method public int getEntityCount();
+    method public int getSelectionEndIndex();
+    method public int getSelectionStartIndex();
+  }
+
+  public static final class TextSelection.Builder {
+    ctor public TextSelection.Builder(int, int);
+    method public android.view.textclassifier.TextSelection build();
+    method public android.view.textclassifier.TextSelection.Builder setEntityType(java.lang.String, float);
+  }
+
+}
+
 package android.view.textservice {
 
   public final class SentenceSuggestionsInfo implements android.os.Parcelable {
@@ -49561,7 +49607,7 @@ package android.widget {
     method public float getShadowRadius();
     method public final boolean getShowSoftInputOnFocus();
     method public java.lang.CharSequence getText();
-    method public android.text.TextAssistant getTextAssistant();
+    method public android.view.textclassifier.TextClassifier getTextClassifier();
     method public final android.content.res.ColorStateList getTextColors();
     method public java.util.Locale getTextLocale();
     method public android.os.LocaleList getTextLocales();
@@ -49677,7 +49723,7 @@ package android.widget {
     method public final void setText(int, android.widget.TextView.BufferType);
     method public void setTextAppearance(int);
     method public deprecated void setTextAppearance(android.content.Context, int);
-    method public void setTextAssistant(android.text.TextAssistant);
+    method public void setTextClassifier(android.view.textclassifier.TextClassifier);
     method public void setTextColor(int);
     method public void setTextColor(android.content.res.ColorStateList);
     method public void setTextIsSelectable(boolean);
