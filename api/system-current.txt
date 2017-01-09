@@ -135,6 +135,7 @@ package android {
     field public static final java.lang.String MANAGE_CA_CERTIFICATES = "android.permission.MANAGE_CA_CERTIFICATES";
     field public static final java.lang.String MANAGE_DEVICE_ADMINS = "android.permission.MANAGE_DEVICE_ADMINS";
     field public static final java.lang.String MANAGE_DOCUMENTS = "android.permission.MANAGE_DOCUMENTS";
+    field public static final java.lang.String MANAGE_OWN_CALLS = "android.permission.MANAGE_OWN_CALLS";
     field public static final java.lang.String MANAGE_USB = "android.permission.MANAGE_USB";
     field public static final java.lang.String MANAGE_USERS = "android.permission.MANAGE_USERS";
     field public static final java.lang.String MASTER_CLEAR = "android.permission.MASTER_CLEAR";
@@ -39288,6 +39289,7 @@ package android.telecom {
     method public void onReject();
     method public void onReject(java.lang.String);
     method public void onSeparate();
+    method public void onShowIncomingCallUi();
     method public void onStateChanged(int);
     method public void onStopDtmfTone();
     method public void onUnhold();
@@ -39299,6 +39301,7 @@ package android.telecom {
     method public final void setActive();
     method public final void setAddress(android.net.Uri, int);
     method public final void setAudioModeIsVoip(boolean);
+    method public final void setAudioRoute(int);
     method public final void setCallerDisplayName(java.lang.String, int);
     method public final void setConferenceableConnections(java.util.List<android.telecom.Connection>);
     method public final void setConferenceables(java.util.List<android.telecom.Conferenceable>);
@@ -39347,6 +39350,7 @@ package android.telecom {
     field public static final java.lang.String EXTRA_LAST_FORWARDED_NUMBER = "android.telecom.extra.LAST_FORWARDED_NUMBER";
     field public static final int PROPERTY_HAS_CDMA_VOICE_PRIVACY = 32; // 0x20
     field public static final int PROPERTY_IS_EXTERNAL_CALL = 16; // 0x10
+    field public static final int PROPERTY_SELF_MANAGED = 128; // 0x80
     field public static final int STATE_ACTIVE = 4; // 0x4
     field public static final int STATE_DIALING = 3; // 0x3
     field public static final int STATE_DISCONNECTED = 6; // 0x6
@@ -39413,7 +39417,9 @@ package android.telecom {
     method public final android.os.IBinder onBind(android.content.Intent);
     method public void onConference(android.telecom.Connection, android.telecom.Connection);
     method public android.telecom.Connection onCreateIncomingConnection(android.telecom.PhoneAccountHandle, android.telecom.ConnectionRequest);
+    method public void onCreateIncomingConnectionFailed(android.telecom.ConnectionRequest);
     method public android.telecom.Connection onCreateOutgoingConnection(android.telecom.PhoneAccountHandle, android.telecom.ConnectionRequest);
+    method public void onCreateOutgoingConnectionFailed(android.telecom.ConnectionRequest);
     method public void onRemoteConferenceAdded(android.telecom.RemoteConference);
     method public void onRemoteExistingConnectionAdded(android.telecom.RemoteConnection);
     field public static final java.lang.String SERVICE_INTERFACE = "android.telecom.ConnectionService";
@@ -39650,6 +39656,7 @@ package android.telecom {
     field public static final int CAPABILITY_CONNECTION_MANAGER = 1; // 0x1
     field public static final int CAPABILITY_MULTI_USER = 32; // 0x20
     field public static final int CAPABILITY_PLACE_EMERGENCY_CALLS = 16; // 0x10
+    field public static final int CAPABILITY_SELF_MANAGED = 2048; // 0x800
     field public static final int CAPABILITY_SIM_SUBSCRIPTION = 4; // 0x4
     field public static final int CAPABILITY_SUPPORTS_VIDEO_CALLING = 1024; // 0x400
     field public static final int CAPABILITY_VIDEO_CALLING = 8; // 0x8
@@ -39888,6 +39895,8 @@ package android.telecom {
     method public boolean handleMmi(java.lang.String);
     method public boolean handleMmi(java.lang.String, android.telecom.PhoneAccountHandle);
     method public boolean isInCall();
+    method public boolean isIncomingCallPermitted(android.telecom.PhoneAccountHandle);
+    method public boolean isOutgoingCallPermitted(android.telecom.PhoneAccountHandle);
     method public boolean isRinging();
     method public boolean isTtySupported();
     method public boolean isVoiceMailNumber(android.telecom.PhoneAccountHandle, java.lang.String);
