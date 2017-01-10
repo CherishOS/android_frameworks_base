@@ -6627,6 +6627,16 @@ package android.app.usage {
     field public static final android.os.Parcelable.Creator<android.app.usage.ConfigurationStats> CREATOR;
   }
 
+  public final class ExternalStorageStats implements android.os.Parcelable {
+    method public int describeContents();
+    method public long getAudioBytes();
+    method public long getImageBytes();
+    method public long getTotalBytes();
+    method public long getVideoBytes();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.app.usage.ExternalStorageStats> CREATOR;
+  }
+
   public final class NetworkStats implements java.lang.AutoCloseable {
     method public void close();
     method public boolean getNextBucket(android.app.usage.NetworkStats.Bucket);
@@ -6681,31 +6691,18 @@ package android.app.usage {
   public final class StorageStats implements android.os.Parcelable {
     method public int describeContents();
     method public long getCacheBytes();
-    method public long getCacheQuotaBytes();
     method public long getCodeBytes();
     method public long getDataBytes();
-    method public int getUid();
-    method public java.lang.String getVolumeUuid();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.usage.StorageStats> CREATOR;
   }
 
   public class StorageStatsManager {
+    method public long getFreeBytes(java.lang.String);
+    method public long getTotalBytes(java.lang.String);
+    method public android.app.usage.ExternalStorageStats queryExternalStatsForUser(java.lang.String, android.os.UserHandle);
     method public android.app.usage.StorageStats queryStatsForUid(java.lang.String, int);
-    method public android.app.usage.StorageSummary querySummary(java.lang.String);
-  }
-
-  public final class StorageSummary implements android.os.Parcelable {
-    method public int describeContents();
-    method public long getFreeBytes();
-    method public long getSharedAudioBytes();
-    method public long getSharedImagesBytes();
-    method public long getSharedTotalBytes();
-    method public long getSharedVideoBytes();
-    method public long getTotalBytes();
-    method public java.lang.String getVolumeUuid();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.app.usage.StorageSummary> CREATOR;
+    method public android.app.usage.StorageStats queryStatsForUser(java.lang.String, android.os.UserHandle);
   }
 
   public final class UsageEvents implements android.os.Parcelable {

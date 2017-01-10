@@ -16,4 +16,4 @@
 
 package android.app.usage;
 
-parcelable StorageSummary;
+parcelable ExternalStorageStats;
