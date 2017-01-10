@@ -8847,6 +8847,7 @@ package android.content {
     field public static final java.lang.String DOWNLOAD_SERVICE = "download";
     field public static final java.lang.String DROPBOX_SERVICE = "dropbox";
     field public static final java.lang.String FINGERPRINT_SERVICE = "fingerprint";
+    field public static final java.lang.String FONT_SERVICE = "font";
     field public static final java.lang.String HARDWARE_PROPERTIES_SERVICE = "hardware_properties";
     field public static final java.lang.String HDMI_CONTROL_SERVICE = "hdmi_control";
     field public static final java.lang.String INPUT_METHOD_SERVICE = "input_method";
@@ -42722,6 +42723,65 @@ package android.text {
     ctor public Editable.Factory();
     method public static android.text.Editable.Factory getInstance();
     method public android.text.Editable newEditable(java.lang.CharSequence);
+  }
+
+  public final class FontConfig implements android.os.Parcelable {
+    ctor public FontConfig();
+    ctor public FontConfig(android.text.FontConfig);
+    method public int describeContents();
+    method public java.util.List<android.text.FontConfig.Alias> getAliases();
+    method public java.util.List<android.text.FontConfig.Family> getFamilies();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.text.FontConfig> CREATOR;
+  }
+
+  public static final class FontConfig.Alias implements android.os.Parcelable {
+    ctor public FontConfig.Alias(java.lang.String, java.lang.String, int);
+    method public int describeContents();
+    method public java.lang.String getName();
+    method public java.lang.String getToName();
+    method public int getWeight();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.text.FontConfig.Alias> CREATOR;
+  }
+
+  public static final class FontConfig.Axis implements android.os.Parcelable {
+    ctor public FontConfig.Axis(int, float);
+    method public int describeContents();
+    method public float getStyleValue();
+    method public int getTag();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.text.FontConfig.Axis> CREATOR;
+  }
+
+  public static final class FontConfig.Family implements android.os.Parcelable {
+    ctor public FontConfig.Family(java.lang.String, java.util.List<android.text.FontConfig.Font>, java.lang.String, java.lang.String);
+    ctor public FontConfig.Family(android.text.FontConfig.Family);
+    method public int describeContents();
+    method public java.util.List<android.text.FontConfig.Font> getFonts();
+    method public java.lang.String getLanguage();
+    method public java.lang.String getName();
+    method public java.lang.String getVariant();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.text.FontConfig.Family> CREATOR;
+  }
+
+  public static final class FontConfig.Font implements android.os.Parcelable {
+    ctor public FontConfig.Font(java.lang.String, int, java.util.List<android.text.FontConfig.Axis>, int, boolean);
+    ctor public FontConfig.Font(android.text.FontConfig.Font);
+    method public int describeContents();
+    method public java.util.List<android.text.FontConfig.Axis> getAxes();
+    method public android.os.ParcelFileDescriptor getFd();
+    method public java.lang.String getFontName();
+    method public int getTtcIndex();
+    method public int getWeight();
+    method public boolean isItalic();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.text.FontConfig.Font> CREATOR;
+  }
+
+  public final class FontManager {
+    method public android.text.FontConfig getSystemFonts();
   }
 
   public abstract interface GetChars implements java.lang.CharSequence {
