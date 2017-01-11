@@ -8233,6 +8233,7 @@ package android.content {
     field public static final java.lang.String USER_SERVICE = "user";
     field public static final java.lang.String VIBRATOR_SERVICE = "vibrator";
     field public static final java.lang.String WALLPAPER_SERVICE = "wallpaper";
+    field public static final java.lang.String WIFI_AWARE_SERVICE = "wifiaware";
     field public static final java.lang.String WIFI_P2P_SERVICE = "wifip2p";
     field public static final java.lang.String WIFI_SERVICE = "wifi";
     field public static final java.lang.String WINDOW_SERVICE = "window";
@@ -9898,6 +9899,7 @@ package android.content.pm {
     field public static final java.lang.String FEATURE_WATCH = "android.hardware.type.watch";
     field public static final java.lang.String FEATURE_WEBVIEW = "android.software.webview";
     field public static final java.lang.String FEATURE_WIFI = "android.hardware.wifi";
+    field public static final java.lang.String FEATURE_WIFI_AWARE = "android.hardware.wifi.aware";
     field public static final java.lang.String FEATURE_WIFI_DIRECT = "android.hardware.wifi.direct";
     field public static final int GET_ACTIVITIES = 1; // 0x1
     field public static final int GET_CONFIGURATIONS = 16384; // 0x4000
@@ -23840,6 +23842,7 @@ package android.net {
     field public static final int TRANSPORT_ETHERNET = 3; // 0x3
     field public static final int TRANSPORT_VPN = 4; // 0x4
     field public static final int TRANSPORT_WIFI = 1; // 0x1
+    field public static final int TRANSPORT_WIFI_AWARE = 5; // 0x5
   }
 
   public class NetworkInfo implements android.os.Parcelable {
@@ -24842,6 +24845,122 @@ package android.net.wifi {
     field public static final int PBC = 0; // 0x0
     field public java.lang.String pin;
     field public int setup;
+  }
+
+}
+
+package android.net.wifi.aware {
+
+  public class AttachCallback {
+    ctor public AttachCallback();
+    method public void onAttachFailed();
+    method public void onAttached(android.net.wifi.aware.WifiAwareSession);
+  }
+
+  public final class Characteristics implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getMaxMatchFilterLength();
+    method public int getMaxServiceNameLength();
+    method public int getMaxServiceSpecificInfoLength();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.wifi.aware.Characteristics> CREATOR;
+  }
+
+  public class DiscoverySession {
+    method public java.lang.String createNetworkSpecifier(android.net.wifi.aware.PeerHandle, byte[]);
+    method public void destroy();
+    method public static int getMaxSendRetryCount();
+    method public void sendMessage(android.net.wifi.aware.PeerHandle, int, byte[], int);
+    method public void sendMessage(android.net.wifi.aware.PeerHandle, int, byte[]);
+  }
+
+  public class DiscoverySessionCallback {
+    ctor public DiscoverySessionCallback();
+    method public void onMessageReceived(android.net.wifi.aware.PeerHandle, byte[]);
+    method public void onMessageSendFailed(int);
+    method public void onMessageSendSucceeded(int);
+    method public void onPublishStarted(android.net.wifi.aware.PublishDiscoverySession);
+    method public void onServiceDiscovered(android.net.wifi.aware.PeerHandle, byte[], java.util.List<byte[]>);
+    method public void onSessionConfigFailed();
+    method public void onSessionConfigUpdated();
+    method public void onSessionTerminated();
+    method public void onSubscribeStarted(android.net.wifi.aware.SubscribeDiscoverySession);
+  }
+
+  public class IdentityChangedListener {
+    ctor public IdentityChangedListener();
+    method public void onIdentityChanged(byte[]);
+  }
+
+  public class PeerHandle {
+  }
+
+  public final class PublishConfig implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.wifi.aware.PublishConfig> CREATOR;
+    field public static final int PUBLISH_TYPE_SOLICITED = 1; // 0x1
+    field public static final int PUBLISH_TYPE_UNSOLICITED = 0; // 0x0
+  }
+
+  public static final class PublishConfig.Builder {
+    ctor public PublishConfig.Builder();
+    method public android.net.wifi.aware.PublishConfig build();
+    method public android.net.wifi.aware.PublishConfig.Builder setMatchFilter(java.util.List<byte[]>);
+    method public android.net.wifi.aware.PublishConfig.Builder setPublishCount(int);
+    method public android.net.wifi.aware.PublishConfig.Builder setPublishType(int);
+    method public android.net.wifi.aware.PublishConfig.Builder setServiceName(java.lang.String);
+    method public android.net.wifi.aware.PublishConfig.Builder setServiceSpecificInfo(byte[]);
+    method public android.net.wifi.aware.PublishConfig.Builder setTerminateNotificationEnabled(boolean);
+    method public android.net.wifi.aware.PublishConfig.Builder setTtlSec(int);
+  }
+
+  public class PublishDiscoverySession extends android.net.wifi.aware.DiscoverySession {
+    method public void updatePublish(android.net.wifi.aware.PublishConfig);
+  }
+
+  public final class SubscribeConfig implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.wifi.aware.SubscribeConfig> CREATOR;
+    field public static final int MATCH_STYLE_ALL = 1; // 0x1
+    field public static final int MATCH_STYLE_FIRST_ONLY = 0; // 0x0
+    field public static final int SUBSCRIBE_TYPE_ACTIVE = 1; // 0x1
+    field public static final int SUBSCRIBE_TYPE_PASSIVE = 0; // 0x0
+  }
+
+  public static final class SubscribeConfig.Builder {
+    ctor public SubscribeConfig.Builder();
+    method public android.net.wifi.aware.SubscribeConfig build();
+    method public android.net.wifi.aware.SubscribeConfig.Builder setMatchFilter(java.util.List<byte[]>);
+    method public android.net.wifi.aware.SubscribeConfig.Builder setMatchStyle(int);
+    method public android.net.wifi.aware.SubscribeConfig.Builder setServiceName(java.lang.String);
+    method public android.net.wifi.aware.SubscribeConfig.Builder setServiceSpecificInfo(byte[]);
+    method public android.net.wifi.aware.SubscribeConfig.Builder setSubscribeCount(int);
+    method public android.net.wifi.aware.SubscribeConfig.Builder setSubscribeType(int);
+    method public android.net.wifi.aware.SubscribeConfig.Builder setTerminateNotificationEnabled(boolean);
+    method public android.net.wifi.aware.SubscribeConfig.Builder setTtlSec(int);
+  }
+
+  public class SubscribeDiscoverySession extends android.net.wifi.aware.DiscoverySession {
+    method public void updateSubscribe(android.net.wifi.aware.SubscribeConfig);
+  }
+
+  public class WifiAwareManager {
+    method public void attach(android.net.wifi.aware.AttachCallback, android.os.Handler);
+    method public void attach(android.net.wifi.aware.AttachCallback, android.net.wifi.aware.IdentityChangedListener, android.os.Handler);
+    method public android.net.wifi.aware.Characteristics getCharacteristics();
+    method public boolean isAvailable();
+    field public static final java.lang.String ACTION_WIFI_AWARE_STATE_CHANGED = "android.net.wifi.aware.action.WIFI_AWARE_STATE_CHANGED";
+    field public static final int WIFI_AWARE_DATA_PATH_ROLE_INITIATOR = 0; // 0x0
+    field public static final int WIFI_AWARE_DATA_PATH_ROLE_RESPONDER = 1; // 0x1
+  }
+
+  public class WifiAwareSession {
+    method public java.lang.String createNetworkSpecifier(int, byte[], byte[]);
+    method public void destroy();
+    method public void publish(android.net.wifi.aware.PublishConfig, android.net.wifi.aware.DiscoverySessionCallback, android.os.Handler);
+    method public void subscribe(android.net.wifi.aware.SubscribeConfig, android.net.wifi.aware.DiscoverySessionCallback, android.os.Handler);
   }
 
 }
