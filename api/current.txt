@@ -6368,7 +6368,8 @@ package android.app.assist {
 
   public static class AssistStructure.ViewNode {
     method public float getAlpha();
-    method public int getAutoFillId();
+    method public android.view.autofill.AutoFillId getAutoFillId();
+    method public android.view.autofill.AutoFillType getAutoFillType();
     method public android.app.assist.AssistStructure.ViewNode getChildAt(int);
     method public int getChildCount();
     method public java.lang.String getClassName();
@@ -35040,26 +35041,19 @@ package android.service.autofill {
     method public void onDisconnected();
     method public abstract void onFillRequest(android.app.assist.AssistStructure, android.os.Bundle, android.os.CancellationSignal, android.service.autofill.FillCallback);
     method public abstract void onSaveRequest(android.app.assist.AssistStructure, android.os.Bundle, android.os.CancellationSignal, android.service.autofill.SaveCallback);
+    field public static final java.lang.String EXTRA_DATASET_EXTRAS = "android.service.autofill.extra.DATASET_EXTRAS";
+    field public static final java.lang.String EXTRA_RESPONSE_EXTRAS = "android.service.autofill.extra.RESPONSE_EXTRAS";
     field public static final java.lang.String SERVICE_INTERFACE = "android.service.autofill.AutoFillService";
   }
 
   public final class FillCallback {
     method public void onFailure(java.lang.CharSequence);
-    method public void onSuccess(android.service.autofill.FillCallback.FillData);
-  }
-
-  public static final class FillCallback.FillData {
-  }
-
-  public static class FillCallback.FillData.Builder {
-    ctor public FillCallback.FillData.Builder();
-    method public android.service.autofill.FillCallback.FillData build();
-    method public android.service.autofill.FillCallback.FillData.Builder setTextField(int, java.lang.String);
+    method public void onSuccess(android.view.autofill.FillResponse);
   }
 
   public final class SaveCallback {
     method public void onFailure(java.lang.CharSequence);
-    method public void onSuccess(int[]);
+    method public void onSuccess(android.view.autofill.AutoFillId[]);
   }
 
 }
@@ -43147,6 +43141,7 @@ package android.view {
     method public void addTouchables(java.util.ArrayList<android.view.View>);
     method public android.view.ViewPropertyAnimator animate();
     method public void announceForAccessibility(java.lang.CharSequence);
+    method public void autoFill(android.view.autofill.AutoFillValue);
     method protected boolean awakenScrollBars();
     method protected boolean awakenScrollBars(int);
     method protected boolean awakenScrollBars(int, boolean);
@@ -43198,8 +43193,8 @@ package android.view {
     method public boolean dispatchNestedPreScroll(int, int, int[], int[]);
     method public boolean dispatchNestedScroll(int, int, int, int, int[]);
     method public boolean dispatchPopulateAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
-    method public deprecated void dispatchProvideStructure(android.view.ViewStructure);
-    method public void dispatchProvideStructure(android.view.ViewStructure, int);
+    method public void dispatchProvideAutoFillStructure(android.view.ViewStructure, int);
+    method public void dispatchProvideStructure(android.view.ViewStructure);
     method protected void dispatchRestoreInstanceState(android.util.SparseArray<android.os.Parcelable>);
     method protected void dispatchSaveInstanceState(android.util.SparseArray<android.os.Parcelable>);
     method protected void dispatchSetActivated(boolean);
@@ -43234,6 +43229,8 @@ package android.view {
     method public float getAlpha();
     method public android.view.animation.Animation getAnimation();
     method public android.os.IBinder getApplicationWindowToken();
+    method public android.view.autofill.AutoFillType getAutoFillType();
+    method public android.view.autofill.VirtualViewDelegate getAutoFillVirtualViewDelegate(android.view.autofill.VirtualViewDelegate.Callback);
     method public android.graphics.drawable.Drawable getBackground();
     method public android.content.res.ColorStateList getBackgroundTintList();
     method public android.graphics.PorterDuff.Mode getBackgroundTintMode();
@@ -43470,10 +43467,10 @@ package android.view {
     method protected void onMeasure(int, int);
     method protected void onOverScrolled(int, int, boolean, boolean);
     method public void onPopulateAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
-    method public deprecated void onProvideStructure(android.view.ViewStructure);
-    method public void onProvideStructure(android.view.ViewStructure, int);
-    method public deprecated void onProvideVirtualStructure(android.view.ViewStructure);
-    method public void onProvideVirtualStructure(android.view.ViewStructure, int);
+    method public void onProvideAutoFillStructure(android.view.ViewStructure, int);
+    method public void onProvideAutoFillVirtualStructure(android.view.ViewStructure, int);
+    method public void onProvideStructure(android.view.ViewStructure);
+    method public void onProvideVirtualStructure(android.view.ViewStructure);
     method public android.view.PointerIcon onResolvePointerIcon(android.view.MotionEvent, int);
     method protected void onRestoreInstanceState(android.os.Parcelable);
     method public void onRtlPropertiesChanged(int);
@@ -43680,8 +43677,8 @@ package android.view {
     field public static final int ACCESSIBILITY_LIVE_REGION_NONE = 0; // 0x0
     field public static final int ACCESSIBILITY_LIVE_REGION_POLITE = 1; // 0x1
     field public static final android.util.Property<android.view.View, java.lang.Float> ALPHA;
-    field public static final int ASSIST_FLAG_NON_SANITIZED_TEXT = 2; // 0x2
-    field public static final int ASSIST_FLAG_SANITIZED_TEXT = 1; // 0x1
+    field public static final int AUTO_FILL_FLAG_TYPE_FILL = 1; // 0x1
+    field public static final int AUTO_FILL_FLAG_TYPE_SAVE = 2; // 0x2
     field public static final int DRAG_FLAG_GLOBAL = 256; // 0x100
     field public static final int DRAG_FLAG_GLOBAL_PERSISTABLE_URI_PERMISSION = 64; // 0x40
     field public static final int DRAG_FLAG_GLOBAL_PREFIX_URI_PERMISSION = 128; // 0x80
@@ -44311,6 +44308,7 @@ package android.view {
     method public abstract int addChildCount(int);
     method public abstract void asyncCommit();
     method public abstract android.view.ViewStructure asyncNewChild(int);
+    method public abstract android.view.ViewStructure asyncNewChild(int, int);
     method public abstract int getChildCount();
     method public abstract android.os.Bundle getExtras();
     method public abstract java.lang.CharSequence getHint();
@@ -44319,9 +44317,11 @@ package android.view {
     method public abstract int getTextSelectionStart();
     method public abstract boolean hasExtras();
     method public abstract android.view.ViewStructure newChild(int);
+    method public abstract android.view.ViewStructure newChild(int, int);
     method public abstract void setAccessibilityFocused(boolean);
     method public abstract void setActivated(boolean);
     method public abstract void setAlpha(float);
+    method public abstract void setAutoFillType(android.view.autofill.AutoFillType);
     method public abstract void setCheckable(boolean);
     method public abstract void setChecked(boolean);
     method public abstract void setChildCount(int);
@@ -45538,6 +45538,80 @@ package android.view.animation {
     ctor public TranslateAnimation(android.content.Context, android.util.AttributeSet);
     ctor public TranslateAnimation(float, float, float, float);
     ctor public TranslateAnimation(int, float, int, float, int, float, int, float);
+  }
+
+}
+
+package android.view.autofill {
+
+  public final class AutoFillId implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.autofill.AutoFillId> CREATOR;
+  }
+
+  public final class AutoFillType implements android.os.Parcelable {
+    method public int describeContents();
+    method public static android.view.autofill.AutoFillType forList();
+    method public static android.view.autofill.AutoFillType forText(int);
+    method public static android.view.autofill.AutoFillType forToggle();
+    method public int getSubType();
+    method public boolean isList();
+    method public boolean isText();
+    method public boolean isToggle();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.autofill.AutoFillType> CREATOR;
+  }
+
+  public final class AutoFillValue implements android.os.Parcelable {
+    method public int describeContents();
+    method public static android.view.autofill.AutoFillValue forList(int);
+    method public static android.view.autofill.AutoFillValue forText(java.lang.CharSequence);
+    method public static android.view.autofill.AutoFillValue forToggle(boolean);
+    method public int getListValue();
+    method public java.lang.CharSequence getTextValue();
+    method public boolean getToggleValue();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.autofill.AutoFillValue> CREATOR;
+  }
+
+  public final class Dataset implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.autofill.Dataset> CREATOR;
+  }
+
+  public static final class Dataset.Builder {
+    ctor public Dataset.Builder(java.lang.CharSequence);
+    method public android.view.autofill.Dataset build();
+    method public android.view.autofill.Dataset.Builder setExtras(android.os.Bundle);
+    method public android.view.autofill.Dataset.Builder setValue(android.view.autofill.AutoFillId, android.view.autofill.AutoFillValue);
+  }
+
+  public final class FillResponse implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.autofill.FillResponse> CREATOR;
+  }
+
+  public static final class FillResponse.Builder {
+    ctor public FillResponse.Builder();
+    method public android.view.autofill.FillResponse.Builder addDataset(android.view.autofill.Dataset);
+    method public android.view.autofill.FillResponse.Builder addSavableFields(android.view.autofill.AutoFillId...);
+    method public android.view.autofill.FillResponse build();
+    method public android.view.autofill.FillResponse.Builder setExtras(android.os.Bundle);
+  }
+
+  public abstract class VirtualViewDelegate {
+    ctor public VirtualViewDelegate();
+    method public abstract void autoFill(int, android.view.autofill.AutoFillValue);
+  }
+
+  public static abstract class VirtualViewDelegate.Callback {
+    ctor public VirtualViewDelegate.Callback();
+    method public void onFocusChanged(int, boolean);
+    method public void onNodeRemoved(int...);
+    method public void onValueChanged(int);
   }
 
 }
