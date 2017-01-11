@@ -284,6 +284,7 @@ package android {
     field public static final int anyDensity = 16843372; // 0x101026c
     field public static final int apduServiceBanner = 16843757; // 0x10103ed
     field public static final int apiKey = 16843281; // 0x1010211
+    field public static final int appCategory = 16844101; // 0x1010545
     field public static final int author = 16843444; // 0x10102b4
     field public static final int authorities = 16842776; // 0x1010018
     field public static final int autoAdvanceViewId = 16843535; // 0x101030f
@@ -9617,9 +9618,19 @@ package android.content.pm {
     ctor public ApplicationInfo(android.content.pm.ApplicationInfo);
     method public int describeContents();
     method public void dump(android.util.Printer, java.lang.String);
+    method public static java.lang.CharSequence getCategoryTitle(android.content.Context, int);
     method public boolean isPrivilegedApp();
     method public boolean isSystemApp();
     method public java.lang.CharSequence loadDescription(android.content.pm.PackageManager);
+    field public static final int CATEGORY_AUDIO = 1; // 0x1
+    field public static final int CATEGORY_GAME = 0; // 0x0
+    field public static final int CATEGORY_IMAGE = 3; // 0x3
+    field public static final int CATEGORY_MAPS = 6; // 0x6
+    field public static final int CATEGORY_NEWS = 5; // 0x5
+    field public static final int CATEGORY_PRODUCTIVITY = 7; // 0x7
+    field public static final int CATEGORY_SOCIAL = 4; // 0x4
+    field public static final int CATEGORY_UNDEFINED = -1; // 0xffffffff
+    field public static final int CATEGORY_VIDEO = 2; // 0x2
     field public static final android.os.Parcelable.Creator<android.content.pm.ApplicationInfo> CREATOR;
     field public static final int FLAG_ALLOW_BACKUP = 32768; // 0x8000
     field public static final int FLAG_ALLOW_CLEAR_USER_DATA = 64; // 0x40
@@ -9633,7 +9644,7 @@ package android.content.pm {
     field public static final int FLAG_HAS_CODE = 4; // 0x4
     field public static final int FLAG_INSTALLED = 8388608; // 0x800000
     field public static final int FLAG_IS_DATA_ONLY = 16777216; // 0x1000000
-    field public static final int FLAG_IS_GAME = 33554432; // 0x2000000
+    field public static final deprecated int FLAG_IS_GAME = 33554432; // 0x2000000
     field public static final int FLAG_KILL_AFTER_RESTORE = 65536; // 0x10000
     field public static final int FLAG_LARGE_HEAP = 1048576; // 0x100000
     field public static final int FLAG_MULTIARCH = -2147483648; // 0x80000000
@@ -9654,6 +9665,7 @@ package android.content.pm {
     field public static final int FLAG_USES_CLEARTEXT_TRAFFIC = 134217728; // 0x8000000
     field public static final int FLAG_VM_SAFE_MODE = 16384; // 0x4000
     field public java.lang.String backupAgentName;
+    field public int category;
     field public java.lang.String className;
     field public int compatibleWidthLimitDp;
     field public java.lang.String dataDir;
@@ -10075,6 +10087,7 @@ package android.content.pm {
     method public abstract android.content.pm.ResolveInfo resolveActivity(android.content.Intent, int);
     method public abstract android.content.pm.ProviderInfo resolveContentProvider(java.lang.String, int);
     method public abstract android.content.pm.ResolveInfo resolveService(android.content.Intent, int);
+    method public abstract void setApplicationCategoryHint(java.lang.String, int);
     method public abstract void setApplicationEnabledSetting(java.lang.String, int, int);
     method public abstract void setComponentEnabledSetting(android.content.ComponentName, int, int);
     method public abstract void setInstallerPackageName(java.lang.String, java.lang.String);
@@ -39139,6 +39152,7 @@ package android.test.mock {
     method public android.content.pm.ResolveInfo resolveActivity(android.content.Intent, int);
     method public android.content.pm.ProviderInfo resolveContentProvider(java.lang.String, int);
     method public android.content.pm.ResolveInfo resolveService(android.content.Intent, int);
+    method public void setApplicationCategoryHint(java.lang.String, int);
     method public void setApplicationEnabledSetting(java.lang.String, int, int);
     method public void setComponentEnabledSetting(android.content.ComponentName, int, int);
     method public void setInstallerPackageName(java.lang.String, java.lang.String);
