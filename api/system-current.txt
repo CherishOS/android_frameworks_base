@@ -18229,6 +18229,15 @@ package android.icu.text {
     method public boolean isTransitionalDifferent();
   }
 
+  public final class ListFormatter {
+    method public java.lang.String format(java.lang.Object...);
+    method public java.lang.String format(java.util.Collection<?>);
+    method public static android.icu.text.ListFormatter getInstance(android.icu.util.ULocale);
+    method public static android.icu.text.ListFormatter getInstance(java.util.Locale);
+    method public static android.icu.text.ListFormatter getInstance();
+    method public java.lang.String getPatternForNumItems(int);
+  }
+
   public abstract class LocaleDisplayNames {
     method public abstract android.icu.text.DisplayContext getContext(android.icu.text.DisplayContext.Type);
     method public abstract android.icu.text.LocaleDisplayNames.DialectHandling getDialectHandling();
@@ -18238,6 +18247,8 @@ package android.icu.text {
     method public static android.icu.text.LocaleDisplayNames getInstance(android.icu.util.ULocale, android.icu.text.DisplayContext...);
     method public static android.icu.text.LocaleDisplayNames getInstance(java.util.Locale, android.icu.text.DisplayContext...);
     method public abstract android.icu.util.ULocale getLocale();
+    method public java.util.List<android.icu.text.LocaleDisplayNames.UiListItem> getUiList(java.util.Set<android.icu.util.ULocale>, boolean, java.util.Comparator<java.lang.Object>);
+    method public abstract java.util.List<android.icu.text.LocaleDisplayNames.UiListItem> getUiListCompareWholeItems(java.util.Set<android.icu.util.ULocale>, java.util.Comparator<android.icu.text.LocaleDisplayNames.UiListItem>);
     method public abstract java.lang.String keyDisplayName(java.lang.String);
     method public abstract java.lang.String keyValueDisplayName(java.lang.String, java.lang.String);
     method public abstract java.lang.String languageDisplayName(java.lang.String);
@@ -18257,9 +18268,19 @@ package android.icu.text {
     enum_constant public static final android.icu.text.LocaleDisplayNames.DialectHandling STANDARD_NAMES;
   }
 
+  public static class LocaleDisplayNames.UiListItem {
+    ctor public LocaleDisplayNames.UiListItem(android.icu.util.ULocale, android.icu.util.ULocale, java.lang.String, java.lang.String);
+    method public static java.util.Comparator<android.icu.text.LocaleDisplayNames.UiListItem> getComparator(java.util.Comparator<java.lang.Object>, boolean);
+    field public final android.icu.util.ULocale minimized;
+    field public final android.icu.util.ULocale modified;
+    field public final java.lang.String nameInDisplayLocale;
+    field public final java.lang.String nameInSelf;
+  }
+
   public class MeasureFormat extends android.icu.text.UFormat {
     method public final boolean equals(java.lang.Object);
     method public java.lang.StringBuffer format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition);
+    method public java.lang.StringBuilder formatMeasurePerUnit(android.icu.util.Measure, android.icu.util.MeasureUnit, java.lang.StringBuilder, java.text.FieldPosition);
     method public final java.lang.String formatMeasures(android.icu.util.Measure...);
     method public java.lang.StringBuilder formatMeasures(java.lang.StringBuilder, java.text.FieldPosition, android.icu.util.Measure...);
     method public static android.icu.text.MeasureFormat getCurrencyFormat(android.icu.util.ULocale);
@@ -18726,6 +18747,14 @@ package android.icu.text {
     method public void setNumericCollationDefault();
     method public void setStrengthDefault();
     method public void setUpperCaseFirst(boolean);
+  }
+
+  public final class ScientificNumberFormatter {
+    method public java.lang.String format(java.lang.Object);
+    method public static android.icu.text.ScientificNumberFormatter getMarkupInstance(android.icu.util.ULocale, java.lang.String, java.lang.String);
+    method public static android.icu.text.ScientificNumberFormatter getMarkupInstance(android.icu.text.DecimalFormat, java.lang.String, java.lang.String);
+    method public static android.icu.text.ScientificNumberFormatter getSuperscriptInstance(android.icu.util.ULocale);
+    method public static android.icu.text.ScientificNumberFormatter getSuperscriptInstance(android.icu.text.DecimalFormat);
   }
 
   public abstract class SearchIterator {
@@ -19503,6 +19532,34 @@ package android.icu.util {
     method public long getToDate();
   }
 
+  public final class EthiopicCalendar extends android.icu.util.CECalendar {
+    ctor public EthiopicCalendar();
+    ctor public EthiopicCalendar(android.icu.util.TimeZone);
+    ctor public EthiopicCalendar(java.util.Locale);
+    ctor public EthiopicCalendar(android.icu.util.ULocale);
+    ctor public EthiopicCalendar(android.icu.util.TimeZone, java.util.Locale);
+    ctor public EthiopicCalendar(android.icu.util.TimeZone, android.icu.util.ULocale);
+    ctor public EthiopicCalendar(int, int, int);
+    ctor public EthiopicCalendar(java.util.Date);
+    ctor public EthiopicCalendar(int, int, int, int, int, int);
+    method protected deprecated int handleGetExtendedYear();
+    method public boolean isAmeteAlemEra();
+    method public void setAmeteAlemEra(boolean);
+    field public static final int GENBOT = 8; // 0x8
+    field public static final int HAMLE = 10; // 0xa
+    field public static final int HEDAR = 2; // 0x2
+    field public static final int MEGABIT = 6; // 0x6
+    field public static final int MESKEREM = 0; // 0x0
+    field public static final int MIAZIA = 7; // 0x7
+    field public static final int NEHASSE = 11; // 0xb
+    field public static final int PAGUMEN = 12; // 0xc
+    field public static final int SENE = 9; // 0x9
+    field public static final int TAHSAS = 3; // 0x3
+    field public static final int TEKEMT = 1; // 0x1
+    field public static final int TER = 4; // 0x4
+    field public static final int YEKATIT = 5; // 0x5
+  }
+
   public abstract interface Freezable<T> implements java.lang.Cloneable {
     method public abstract T cloneAsThawed();
     method public abstract T freeze();
@@ -20029,6 +20086,35 @@ package android.icu.util {
     method public static final android.icu.util.ULocale.Category[] values();
     enum_constant public static final android.icu.util.ULocale.Category DISPLAY;
     enum_constant public static final android.icu.util.ULocale.Category FORMAT;
+  }
+
+  public final class UniversalTimeScale {
+    method public static android.icu.math.BigDecimal bigDecimalFrom(double, int);
+    method public static android.icu.math.BigDecimal bigDecimalFrom(long, int);
+    method public static android.icu.math.BigDecimal bigDecimalFrom(android.icu.math.BigDecimal, int);
+    method public static long from(long, int);
+    method public static long getTimeScaleValue(int, int);
+    method public static android.icu.math.BigDecimal toBigDecimal(long, int);
+    method public static android.icu.math.BigDecimal toBigDecimal(android.icu.math.BigDecimal, int);
+    method public static long toLong(long, int);
+    field public static final int DB2_TIME = 8; // 0x8
+    field public static final int DOTNET_DATE_TIME = 4; // 0x4
+    field public static final int EPOCH_OFFSET_PLUS_1_VALUE = 6; // 0x6
+    field public static final int EPOCH_OFFSET_VALUE = 1; // 0x1
+    field public static final int EXCEL_TIME = 7; // 0x7
+    field public static final int FROM_MAX_VALUE = 3; // 0x3
+    field public static final int FROM_MIN_VALUE = 2; // 0x2
+    field public static final int ICU4C_TIME = 2; // 0x2
+    field public static final int JAVA_TIME = 0; // 0x0
+    field public static final int MAC_OLD_TIME = 5; // 0x5
+    field public static final int MAC_TIME = 6; // 0x6
+    field public static final int MAX_SCALE = 10; // 0xa
+    field public static final int TO_MAX_VALUE = 5; // 0x5
+    field public static final int TO_MIN_VALUE = 4; // 0x4
+    field public static final int UNITS_VALUE = 0; // 0x0
+    field public static final int UNIX_MICROSECONDS_TIME = 9; // 0x9
+    field public static final int UNIX_TIME = 1; // 0x1
+    field public static final int WINDOWS_FILE_TIME = 3; // 0x3
   }
 
   public abstract interface ValueIterator {
