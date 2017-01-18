@@ -53472,6 +53472,133 @@ package java.lang.annotation {
 
 }
 
+package java.lang.invoke {
+
+  public class LambdaConversionException extends java.lang.Exception {
+    ctor public LambdaConversionException();
+    ctor public LambdaConversionException(java.lang.String);
+    ctor public LambdaConversionException(java.lang.String, java.lang.Throwable);
+    ctor public LambdaConversionException(java.lang.Throwable);
+    ctor public LambdaConversionException(java.lang.String, java.lang.Throwable, boolean, boolean);
+  }
+
+  public abstract class MethodHandle {
+    method public java.lang.invoke.MethodHandle asFixedArity();
+    method public java.lang.invoke.MethodHandle asType(java.lang.invoke.MethodType);
+    method public java.lang.invoke.MethodHandle asVarargsCollector(java.lang.Class<?>);
+    method public java.lang.invoke.MethodHandle bindTo(java.lang.Object);
+    method public final java.lang.Object invoke(java.lang.Object...) throws java.lang.Throwable;
+    method public final java.lang.Object invokeExact(java.lang.Object...) throws java.lang.Throwable;
+    method public java.lang.Object invokeWithArguments(java.util.List<?>) throws java.lang.Throwable;
+    method public boolean isVarargsCollector();
+    method public java.lang.invoke.MethodType type();
+  }
+
+  public abstract interface MethodHandleInfo {
+    method public abstract java.lang.Class<?> getDeclaringClass();
+    method public abstract java.lang.invoke.MethodType getMethodType();
+    method public abstract int getModifiers();
+    method public abstract java.lang.String getName();
+    method public abstract int getReferenceKind();
+    method public default boolean isVarArgs();
+    method public static boolean refKindIsField(int);
+    method public static boolean refKindIsValid(int);
+    method public static java.lang.String refKindName(int);
+    method public static java.lang.String referenceKindToString(int);
+    method public abstract <T extends java.lang.reflect.Member> T reflectAs(java.lang.Class<T>, java.lang.invoke.MethodHandles.Lookup);
+    method public static java.lang.String toString(int, java.lang.Class<?>, java.lang.String, java.lang.invoke.MethodType);
+    field public static final int REF_getField = 1; // 0x1
+    field public static final int REF_getStatic = 2; // 0x2
+    field public static final int REF_invokeInterface = 9; // 0x9
+    field public static final int REF_invokeSpecial = 7; // 0x7
+    field public static final int REF_invokeStatic = 6; // 0x6
+    field public static final int REF_invokeVirtual = 5; // 0x5
+    field public static final int REF_newInvokeSpecial = 8; // 0x8
+    field public static final int REF_putField = 3; // 0x3
+    field public static final int REF_putStatic = 4; // 0x4
+  }
+
+  public class MethodHandles {
+    method public static java.lang.invoke.MethodHandle arrayElementGetter(java.lang.Class<?>) throws java.lang.IllegalArgumentException;
+    method public static java.lang.invoke.MethodHandle arrayElementSetter(java.lang.Class<?>) throws java.lang.IllegalArgumentException;
+    method public static java.lang.invoke.MethodHandle catchException(java.lang.invoke.MethodHandle, java.lang.Class<? extends java.lang.Throwable>, java.lang.invoke.MethodHandle);
+    method public static java.lang.invoke.MethodHandle constant(java.lang.Class<?>, java.lang.Object);
+    method public static java.lang.invoke.MethodHandle dropArguments(java.lang.invoke.MethodHandle, int, java.util.List<java.lang.Class<?>>);
+    method public static java.lang.invoke.MethodHandle dropArguments(java.lang.invoke.MethodHandle, int, java.lang.Class<?>...);
+    method public static java.lang.invoke.MethodHandle exactInvoker(java.lang.invoke.MethodType);
+    method public static java.lang.invoke.MethodHandle filterReturnValue(java.lang.invoke.MethodHandle, java.lang.invoke.MethodHandle);
+    method public static java.lang.invoke.MethodHandle guardWithTest(java.lang.invoke.MethodHandle, java.lang.invoke.MethodHandle, java.lang.invoke.MethodHandle);
+    method public static java.lang.invoke.MethodHandle identity(java.lang.Class<?>);
+    method public static java.lang.invoke.MethodHandle invoker(java.lang.invoke.MethodType);
+    method public static java.lang.invoke.MethodHandles.Lookup lookup();
+    method public static java.lang.invoke.MethodHandle permuteArguments(java.lang.invoke.MethodHandle, java.lang.invoke.MethodType, int...);
+    method public static java.lang.invoke.MethodHandles.Lookup publicLookup();
+    method public static java.lang.invoke.MethodHandle throwException(java.lang.Class<?>, java.lang.Class<? extends java.lang.Throwable>);
+  }
+
+  public static final class MethodHandles.Lookup {
+    method public java.lang.invoke.MethodHandle bind(java.lang.Object, java.lang.String, java.lang.invoke.MethodType) throws java.lang.IllegalAccessException, java.lang.NoSuchMethodException;
+    method public java.lang.invoke.MethodHandle findConstructor(java.lang.Class<?>, java.lang.invoke.MethodType) throws java.lang.IllegalAccessException, java.lang.NoSuchMethodException;
+    method public java.lang.invoke.MethodHandle findGetter(java.lang.Class<?>, java.lang.String, java.lang.Class<?>) throws java.lang.IllegalAccessException, java.lang.NoSuchFieldException;
+    method public java.lang.invoke.MethodHandle findSetter(java.lang.Class<?>, java.lang.String, java.lang.Class<?>) throws java.lang.IllegalAccessException, java.lang.NoSuchFieldException;
+    method public java.lang.invoke.MethodHandle findSpecial(java.lang.Class<?>, java.lang.String, java.lang.invoke.MethodType, java.lang.Class<?>) throws java.lang.IllegalAccessException, java.lang.NoSuchMethodException;
+    method public java.lang.invoke.MethodHandle findStatic(java.lang.Class<?>, java.lang.String, java.lang.invoke.MethodType) throws java.lang.IllegalAccessException, java.lang.NoSuchMethodException;
+    method public java.lang.invoke.MethodHandle findStaticGetter(java.lang.Class<?>, java.lang.String, java.lang.Class<?>) throws java.lang.IllegalAccessException, java.lang.NoSuchFieldException;
+    method public java.lang.invoke.MethodHandle findStaticSetter(java.lang.Class<?>, java.lang.String, java.lang.Class<?>) throws java.lang.IllegalAccessException, java.lang.NoSuchFieldException;
+    method public java.lang.invoke.MethodHandle findVirtual(java.lang.Class<?>, java.lang.String, java.lang.invoke.MethodType) throws java.lang.IllegalAccessException, java.lang.NoSuchMethodException;
+    method public java.lang.invoke.MethodHandles.Lookup in(java.lang.Class<?>);
+    method public java.lang.Class<?> lookupClass();
+    method public int lookupModes();
+    method public void throwMakeAccessException(java.lang.String, java.lang.Object) throws java.lang.IllegalAccessException;
+    method public java.lang.invoke.MethodHandle unreflect(java.lang.reflect.Method) throws java.lang.IllegalAccessException;
+    method public java.lang.invoke.MethodHandle unreflectConstructor(java.lang.reflect.Constructor<?>) throws java.lang.IllegalAccessException;
+    method public java.lang.invoke.MethodHandle unreflectGetter(java.lang.reflect.Field) throws java.lang.IllegalAccessException;
+    method public java.lang.invoke.MethodHandle unreflectSetter(java.lang.reflect.Field) throws java.lang.IllegalAccessException;
+    method public java.lang.invoke.MethodHandle unreflectSpecial(java.lang.reflect.Method, java.lang.Class<?>) throws java.lang.IllegalAccessException;
+    field public static final int PACKAGE = 8; // 0x8
+    field public static final int PRIVATE = 2; // 0x2
+    field public static final int PROTECTED = 4; // 0x4
+    field public static final int PUBLIC = 1; // 0x1
+  }
+
+  public final class MethodType implements java.io.Serializable {
+    method public java.lang.invoke.MethodType appendParameterTypes(java.lang.Class<?>...);
+    method public java.lang.invoke.MethodType appendParameterTypes(java.util.List<java.lang.Class<?>>);
+    method public java.lang.invoke.MethodType changeParameterType(int, java.lang.Class<?>);
+    method public java.lang.invoke.MethodType changeReturnType(java.lang.Class<?>);
+    method public java.lang.invoke.MethodType dropParameterTypes(int, int);
+    method public java.lang.invoke.MethodType erase();
+    method public static java.lang.invoke.MethodType fromMethodDescriptorString(java.lang.String, java.lang.ClassLoader) throws java.lang.IllegalArgumentException, java.lang.TypeNotPresentException;
+    method public java.lang.invoke.MethodType generic();
+    method public static java.lang.invoke.MethodType genericMethodType(int, boolean);
+    method public static java.lang.invoke.MethodType genericMethodType(int);
+    method public boolean hasPrimitives();
+    method public boolean hasWrappers();
+    method public java.lang.invoke.MethodType insertParameterTypes(int, java.lang.Class<?>...);
+    method public java.lang.invoke.MethodType insertParameterTypes(int, java.util.List<java.lang.Class<?>>);
+    method public static java.lang.invoke.MethodType methodType(java.lang.Class<?>, java.lang.Class<?>[]);
+    method public static java.lang.invoke.MethodType methodType(java.lang.Class<?>, java.util.List<java.lang.Class<?>>);
+    method public static java.lang.invoke.MethodType methodType(java.lang.Class<?>, java.lang.Class<?>, java.lang.Class<?>...);
+    method public static java.lang.invoke.MethodType methodType(java.lang.Class<?>);
+    method public static java.lang.invoke.MethodType methodType(java.lang.Class<?>, java.lang.Class<?>);
+    method public static java.lang.invoke.MethodType methodType(java.lang.Class<?>, java.lang.invoke.MethodType);
+    method public java.lang.Class<?>[] parameterArray();
+    method public int parameterCount();
+    method public java.util.List<java.lang.Class<?>> parameterList();
+    method public java.lang.Class<?> parameterType(int);
+    method public java.lang.Class<?> returnType();
+    method public java.lang.String toMethodDescriptorString();
+    method public java.lang.invoke.MethodType unwrap();
+    method public java.lang.invoke.MethodType wrap();
+  }
+
+  public class WrongMethodTypeException extends java.lang.RuntimeException {
+    ctor public WrongMethodTypeException();
+    ctor public WrongMethodTypeException(java.lang.String);
+  }
+
+}
+
 package java.lang.ref {
 
   public class PhantomReference<T> extends java.lang.ref.Reference {
