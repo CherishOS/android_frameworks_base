@@ -19800,6 +19800,7 @@ package android.location {
     method public double getAccumulatedDeltaRangeMeters();
     method public int getAccumulatedDeltaRangeState();
     method public double getAccumulatedDeltaRangeUncertaintyMeters();
+    method public double getAutomaticGainControlLevelInDb();
     method public long getCarrierCycles();
     method public float getCarrierFrequencyHz();
     method public double getCarrierPhase();
@@ -19815,12 +19816,14 @@ package android.location {
     method public int getState();
     method public int getSvid();
     method public double getTimeOffsetNanos();
+    method public boolean hasAutomaticGainControlLevelInDb();
     method public boolean hasCarrierCycles();
     method public boolean hasCarrierFrequencyHz();
     method public boolean hasCarrierPhase();
     method public boolean hasCarrierPhaseUncertainty();
     method public boolean hasSnrInDb();
     method public void reset();
+    method public void resetAutomaticGainControlLevel();
     method public void resetCarrierCycles();
     method public void resetCarrierFrequencyHz();
     method public void resetCarrierPhase();
@@ -19830,6 +19833,7 @@ package android.location {
     method public void setAccumulatedDeltaRangeMeters(double);
     method public void setAccumulatedDeltaRangeState(int);
     method public void setAccumulatedDeltaRangeUncertaintyMeters(double);
+    method public void setAutomaticGainControlLevelInDb(double);
     method public void setCarrierCycles(long);
     method public void setCarrierFrequencyHz(float);
     method public void setCarrierPhase(double);
@@ -19863,11 +19867,13 @@ package android.location {
     field public static final int STATE_GAL_E1C_2ND_CODE_LOCK = 2048; // 0x800
     field public static final int STATE_GLO_STRING_SYNC = 64; // 0x40
     field public static final int STATE_GLO_TOD_DECODED = 128; // 0x80
+    field public static final int STATE_GLO_TOD_KNOWN = 32768; // 0x8000
     field public static final int STATE_MSEC_AMBIGUOUS = 16; // 0x10
     field public static final int STATE_SBAS_SYNC = 8192; // 0x2000
     field public static final int STATE_SUBFRAME_SYNC = 4; // 0x4
     field public static final int STATE_SYMBOL_SYNC = 32; // 0x20
     field public static final int STATE_TOW_DECODED = 8; // 0x8
+    field public static final int STATE_TOW_KNOWN = 16384; // 0x4000
     field public static final int STATE_UNKNOWN = 0; // 0x0
   }
 
@@ -19934,12 +19940,14 @@ package android.location {
 
   public final class GnssStatus {
     method public float getAzimuthDegrees(int);
+    method public float getCarrierFrequencyHz(int);
     method public float getCn0DbHz(int);
     method public int getConstellationType(int);
     method public float getElevationDegrees(int);
     method public int getSatelliteCount();
     method public int getSvid(int);
     method public boolean hasAlmanacData(int);
+    method public boolean hasCarrierFrequency(int);
     method public boolean hasEphemerisData(int);
     method public boolean usedInFix(int);
     field public static final int CONSTELLATION_BEIDOU = 5; // 0x5
@@ -20000,34 +20008,46 @@ package android.location {
     method public float getAccuracy();
     method public double getAltitude();
     method public float getBearing();
+    method public float getBearingAccuracyDegrees();
     method public long getElapsedRealtimeNanos();
     method public android.os.Bundle getExtras();
     method public double getLatitude();
     method public double getLongitude();
     method public java.lang.String getProvider();
     method public float getSpeed();
+    method public float getSpeedAccuracyMetersPerSecond();
     method public long getTime();
+    method public float getVerticalAccuracyMeters();
     method public boolean hasAccuracy();
     method public boolean hasAltitude();
     method public boolean hasBearing();
+    method public boolean hasBearingAccuracy();
     method public boolean hasSpeed();
+    method public boolean hasSpeedAccuracy();
+    method public boolean hasVerticalAccuracy();
     method public boolean isFromMockProvider();
     method public void removeAccuracy();
     method public void removeAltitude();
     method public void removeBearing();
+    method public void removeBearingAccuracy();
     method public void removeSpeed();
+    method public void removeSpeedAccuracy();
+    method public void removeVerticalAccuracy();
     method public void reset();
     method public void set(android.location.Location);
     method public void setAccuracy(float);
     method public void setAltitude(double);
     method public void setBearing(float);
+    method public void setBearingAccuracyDegrees(float);
     method public void setElapsedRealtimeNanos(long);
     method public void setExtras(android.os.Bundle);
     method public void setLatitude(double);
     method public void setLongitude(double);
     method public void setProvider(java.lang.String);
     method public void setSpeed(float);
+    method public void setSpeedAccuracyMetersPerSecond(float);
     method public void setTime(long);
+    method public void setVerticalAccuracyMeters(float);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.location.Location> CREATOR;
     field public static final int FORMAT_DEGREES = 0; // 0x0
