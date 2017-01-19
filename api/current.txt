@@ -29900,6 +29900,15 @@ package android.os {
     field public static final int THREAD_PRIORITY_URGENT_DISPLAY = -8; // 0xfffffff8
   }
 
+  public abstract class ProxyFileDescriptorCallback {
+    ctor public ProxyFileDescriptorCallback();
+    method public void onFsync() throws android.system.ErrnoException;
+    method public long onGetSize() throws android.system.ErrnoException;
+    method public int onRead(long, int, byte[]) throws android.system.ErrnoException;
+    method public abstract void onRelease();
+    method public int onWrite(long, int, byte[]) throws android.system.ErrnoException;
+  }
+
   public class RecoverySystem {
     method public static void installPackage(android.content.Context, java.io.File) throws java.io.IOException;
     method public static void rebootWipeCache(android.content.Context) throws java.io.IOException;
@@ -30317,6 +30326,7 @@ package android.os.storage {
     method public boolean isEncrypted(java.io.File);
     method public boolean isObbMounted(java.lang.String);
     method public boolean mountObb(java.lang.String, java.lang.String, android.os.storage.OnObbStateChangeListener);
+    method public android.os.ParcelFileDescriptor openProxyFileDescriptor(int, android.os.ProxyFileDescriptorCallback) throws java.io.IOException;
     method public boolean unmountObb(java.lang.String, boolean, android.os.storage.OnObbStateChangeListener);
     field public static final java.lang.String ACTION_MANAGE_STORAGE = "android.os.storage.action.MANAGE_STORAGE";
   }
