@@ -67698,14 +67698,14 @@ package java.util.logging {
     method public java.util.logging.ErrorManager getErrorManager();
     method public java.util.logging.Filter getFilter();
     method public java.util.logging.Formatter getFormatter();
-    method public synchronized java.util.logging.Level getLevel();
+    method public java.util.logging.Level getLevel();
     method public boolean isLoggable(java.util.logging.LogRecord);
     method public abstract void publish(java.util.logging.LogRecord);
     method protected void reportError(java.lang.String, java.lang.Exception, int);
-    method public void setEncoding(java.lang.String) throws java.lang.SecurityException, java.io.UnsupportedEncodingException;
-    method public void setErrorManager(java.util.logging.ErrorManager);
-    method public void setFilter(java.util.logging.Filter) throws java.lang.SecurityException;
-    method public void setFormatter(java.util.logging.Formatter) throws java.lang.SecurityException;
+    method public synchronized void setEncoding(java.lang.String) throws java.lang.SecurityException, java.io.UnsupportedEncodingException;
+    method public synchronized void setErrorManager(java.util.logging.ErrorManager);
+    method public synchronized void setFilter(java.util.logging.Filter) throws java.lang.SecurityException;
+    method public synchronized void setFormatter(java.util.logging.Formatter) throws java.lang.SecurityException;
     method public synchronized void setLevel(java.util.logging.Level) throws java.lang.SecurityException;
   }
 
@@ -67732,7 +67732,7 @@ package java.util.logging {
   public class LogManager {
     ctor protected LogManager();
     method public boolean addLogger(java.util.logging.Logger);
-    method public void addPropertyChangeListener(java.beans.PropertyChangeListener) throws java.lang.SecurityException;
+    method public deprecated void addPropertyChangeListener(java.beans.PropertyChangeListener) throws java.lang.SecurityException;
     method public void checkAccess() throws java.lang.SecurityException;
     method public static java.util.logging.LogManager getLogManager();
     method public java.util.logging.Logger getLogger(java.lang.String);
@@ -67741,7 +67741,7 @@ package java.util.logging {
     method public java.lang.String getProperty(java.lang.String);
     method public void readConfiguration() throws java.io.IOException, java.lang.SecurityException;
     method public void readConfiguration(java.io.InputStream) throws java.io.IOException, java.lang.SecurityException;
-    method public void removePropertyChangeListener(java.beans.PropertyChangeListener) throws java.lang.SecurityException;
+    method public deprecated void removePropertyChangeListener(java.beans.PropertyChangeListener) throws java.lang.SecurityException;
     method public void reset() throws java.lang.SecurityException;
     field public static final java.lang.String LOGGING_MXBEAN_NAME = "java.util.logging:type=Logging";
   }
@@ -67778,14 +67778,18 @@ package java.util.logging {
     ctor protected Logger(java.lang.String, java.lang.String);
     method public void addHandler(java.util.logging.Handler) throws java.lang.SecurityException;
     method public void config(java.lang.String);
+    method public void config(java.util.function.Supplier<java.lang.String>);
     method public void entering(java.lang.String, java.lang.String);
     method public void entering(java.lang.String, java.lang.String, java.lang.Object);
     method public void entering(java.lang.String, java.lang.String, java.lang.Object[]);
     method public void exiting(java.lang.String, java.lang.String);
     method public void exiting(java.lang.String, java.lang.String, java.lang.Object);
     method public void fine(java.lang.String);
+    method public void fine(java.util.function.Supplier<java.lang.String>);
     method public void finer(java.lang.String);
+    method public void finer(java.util.function.Supplier<java.lang.String>);
     method public void finest(java.lang.String);
+    method public void finest(java.util.function.Supplier<java.lang.String>);
     method public static java.util.logging.Logger getAnonymousLogger();
     method public static java.util.logging.Logger getAnonymousLogger(java.lang.String);
     method public java.util.logging.Filter getFilter();
@@ -67800,28 +67804,38 @@ package java.util.logging {
     method public java.lang.String getResourceBundleName();
     method public boolean getUseParentHandlers();
     method public void info(java.lang.String);
+    method public void info(java.util.function.Supplier<java.lang.String>);
     method public boolean isLoggable(java.util.logging.Level);
     method public void log(java.util.logging.LogRecord);
     method public void log(java.util.logging.Level, java.lang.String);
+    method public void log(java.util.logging.Level, java.util.function.Supplier<java.lang.String>);
     method public void log(java.util.logging.Level, java.lang.String, java.lang.Object);
     method public void log(java.util.logging.Level, java.lang.String, java.lang.Object[]);
     method public void log(java.util.logging.Level, java.lang.String, java.lang.Throwable);
+    method public void log(java.util.logging.Level, java.lang.Throwable, java.util.function.Supplier<java.lang.String>);
     method public void logp(java.util.logging.Level, java.lang.String, java.lang.String, java.lang.String);
+    method public void logp(java.util.logging.Level, java.lang.String, java.lang.String, java.util.function.Supplier<java.lang.String>);
     method public void logp(java.util.logging.Level, java.lang.String, java.lang.String, java.lang.String, java.lang.Object);
     method public void logp(java.util.logging.Level, java.lang.String, java.lang.String, java.lang.String, java.lang.Object[]);
     method public void logp(java.util.logging.Level, java.lang.String, java.lang.String, java.lang.String, java.lang.Throwable);
-    method public void logrb(java.util.logging.Level, java.lang.String, java.lang.String, java.lang.String, java.lang.String);
-    method public void logrb(java.util.logging.Level, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Object);
-    method public void logrb(java.util.logging.Level, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Object[]);
-    method public void logrb(java.util.logging.Level, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Throwable);
+    method public void logp(java.util.logging.Level, java.lang.String, java.lang.String, java.lang.Throwable, java.util.function.Supplier<java.lang.String>);
+    method public deprecated void logrb(java.util.logging.Level, java.lang.String, java.lang.String, java.lang.String, java.lang.String);
+    method public deprecated void logrb(java.util.logging.Level, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Object);
+    method public deprecated void logrb(java.util.logging.Level, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Object[]);
+    method public void logrb(java.util.logging.Level, java.lang.String, java.lang.String, java.util.ResourceBundle, java.lang.String, java.lang.Object...);
+    method public deprecated void logrb(java.util.logging.Level, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Throwable);
+    method public void logrb(java.util.logging.Level, java.lang.String, java.lang.String, java.util.ResourceBundle, java.lang.String, java.lang.Throwable);
     method public void removeHandler(java.util.logging.Handler) throws java.lang.SecurityException;
     method public void setFilter(java.util.logging.Filter) throws java.lang.SecurityException;
     method public void setLevel(java.util.logging.Level) throws java.lang.SecurityException;
     method public void setParent(java.util.logging.Logger);
+    method public void setResourceBundle(java.util.ResourceBundle);
     method public void setUseParentHandlers(boolean);
     method public void severe(java.lang.String);
+    method public void severe(java.util.function.Supplier<java.lang.String>);
     method public void throwing(java.lang.String, java.lang.String, java.lang.Throwable);
     method public void warning(java.lang.String);
+    method public void warning(java.util.function.Supplier<java.lang.String>);
     field public static final java.lang.String GLOBAL_LOGGER_NAME = "global";
     field public static final deprecated java.util.logging.Logger global;
   }
@@ -67842,10 +67856,10 @@ package java.util.logging {
     ctor public MemoryHandler(java.util.logging.Handler, int, java.util.logging.Level);
     method public void close() throws java.lang.SecurityException;
     method public void flush();
-    method public synchronized java.util.logging.Level getPushLevel();
+    method public java.util.logging.Level getPushLevel();
     method public synchronized void publish(java.util.logging.LogRecord);
     method public synchronized void push();
-    method public void setPushLevel(java.util.logging.Level) throws java.lang.SecurityException;
+    method public synchronized void setPushLevel(java.util.logging.Level) throws java.lang.SecurityException;
   }
 
   public class SimpleFormatter extends java.util.logging.Formatter {
