@@ -10165,6 +10165,15 @@ package android.content.pm {
     field public java.lang.String targetPackage;
   }
 
+  public final class IntentFilterVerificationInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method public java.util.Set<java.lang.String> getDomains();
+    method public java.lang.String getPackageName();
+    method public int getStatus();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.content.pm.IntentFilterVerificationInfo> CREATOR;
+  }
+
   public class LabeledIntent extends android.content.Intent {
     ctor public LabeledIntent(android.content.Intent, java.lang.String, int, int);
     ctor public LabeledIntent(android.content.Intent, java.lang.String, java.lang.CharSequence, int);
@@ -10425,6 +10434,7 @@ package android.content.pm {
     method public abstract android.content.pm.ActivityInfo getActivityInfo(android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract android.graphics.drawable.Drawable getActivityLogo(android.content.ComponentName) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract android.graphics.drawable.Drawable getActivityLogo(android.content.Intent) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public abstract java.util.List<android.content.IntentFilter> getAllIntentFilters(java.lang.String);
     method public abstract java.util.List<android.content.pm.PermissionGroupInfo> getAllPermissionGroups(int);
     method public abstract android.graphics.drawable.Drawable getApplicationBanner(android.content.pm.ApplicationInfo);
     method public abstract android.graphics.drawable.Drawable getApplicationBanner(java.lang.String) throws android.content.pm.PackageManager.NameNotFoundException;
@@ -10437,12 +10447,15 @@ package android.content.pm {
     method public abstract android.graphics.drawable.Drawable getApplicationLogo(java.lang.String) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract int getComponentEnabledSetting(android.content.ComponentName);
     method public abstract android.graphics.drawable.Drawable getDefaultActivityIcon();
+    method public abstract java.lang.String getDefaultBrowserPackageNameAsUser(int);
     method public abstract android.graphics.drawable.Drawable getDrawable(java.lang.String, int, android.content.pm.ApplicationInfo);
     method public abstract java.util.List<android.content.pm.ApplicationInfo> getInstalledApplications(int);
     method public abstract java.util.List<android.content.pm.PackageInfo> getInstalledPackages(int);
     method public abstract java.util.List<android.content.pm.PackageInfo> getInstalledPackagesAsUser(int, int);
     method public abstract java.lang.String getInstallerPackageName(java.lang.String);
     method public abstract android.content.pm.InstrumentationInfo getInstrumentationInfo(android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public abstract java.util.List<android.content.pm.IntentFilterVerificationInfo> getIntentFilterVerifications(java.lang.String);
+    method public abstract int getIntentVerificationStatusAsUser(java.lang.String, int);
     method public abstract android.content.Intent getLaunchIntentForPackage(java.lang.String);
     method public abstract android.content.Intent getLeanbackLaunchIntentForPackage(java.lang.String);
     method public abstract java.lang.String getNameForUid(int);
@@ -10496,7 +10509,9 @@ package android.content.pm {
     method public abstract void setApplicationCategoryHint(java.lang.String, int);
     method public abstract void setApplicationEnabledSetting(java.lang.String, int, int);
     method public abstract void setComponentEnabledSetting(android.content.ComponentName, int, int);
+    method public abstract boolean setDefaultBrowserPackageNameAsUser(java.lang.String, int);
     method public abstract void setInstallerPackageName(java.lang.String, java.lang.String);
+    method public abstract boolean updateIntentVerificationStatusAsUser(java.lang.String, int, int);
     method public abstract void updatePermissionFlags(java.lang.String, java.lang.String, int, int, android.os.UserHandle);
     method public abstract void verifyIntentFilter(int, int, java.util.List<java.lang.String>);
     method public abstract void verifyPendingInstall(int, int);
@@ -10654,6 +10669,11 @@ package android.content.pm {
     field public static final int INSTALL_PARSE_FAILED_NO_CERTIFICATES = -103; // 0xffffff99
     field public static final int INSTALL_PARSE_FAILED_UNEXPECTED_EXCEPTION = -102; // 0xffffff9a
     field public static final int INSTALL_SUCCEEDED = 1; // 0x1
+    field public static final int INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_ALWAYS = 2; // 0x2
+    field public static final int INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_ALWAYS_ASK = 4; // 0x4
+    field public static final int INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_ASK = 1; // 0x1
+    field public static final int INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_NEVER = 3; // 0x3
+    field public static final int INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_UNDEFINED = 0; // 0x0
     field public static final int INTENT_FILTER_VERIFICATION_FAILURE = -1; // 0xffffffff
     field public static final int INTENT_FILTER_VERIFICATION_SUCCESS = 1; // 0x1
     field public static final int MASK_PERMISSION_FLAGS = 255; // 0xff
@@ -42220,12 +42240,15 @@ package android.test.mock {
     method public android.graphics.drawable.Drawable getApplicationLogo(java.lang.String) throws android.content.pm.PackageManager.NameNotFoundException;
     method public int getComponentEnabledSetting(android.content.ComponentName);
     method public android.graphics.drawable.Drawable getDefaultActivityIcon();
+    method public java.lang.String getDefaultBrowserPackageNameAsUser(int);
     method public android.graphics.drawable.Drawable getDrawable(java.lang.String, int, android.content.pm.ApplicationInfo);
     method public java.util.List<android.content.pm.ApplicationInfo> getInstalledApplications(int);
     method public java.util.List<android.content.pm.PackageInfo> getInstalledPackages(int);
     method public java.util.List<android.content.pm.PackageInfo> getInstalledPackagesAsUser(int, int);
     method public java.lang.String getInstallerPackageName(java.lang.String);
     method public android.content.pm.InstrumentationInfo getInstrumentationInfo(android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public java.util.List<android.content.pm.IntentFilterVerificationInfo> getIntentFilterVerifications(java.lang.String);
+    method public int getIntentVerificationStatusAsUser(java.lang.String, int);
     method public android.content.Intent getLaunchIntentForPackage(java.lang.String);
     method public android.content.Intent getLeanbackLaunchIntentForPackage(java.lang.String);
     method public java.lang.String getNameForUid(int);
@@ -42277,7 +42300,9 @@ package android.test.mock {
     method public void setApplicationCategoryHint(java.lang.String, int);
     method public void setApplicationEnabledSetting(java.lang.String, int, int);
     method public void setComponentEnabledSetting(android.content.ComponentName, int, int);
+    method public boolean setDefaultBrowserPackageNameAsUser(java.lang.String, int);
     method public void setInstallerPackageName(java.lang.String, java.lang.String);
+    method public boolean updateIntentVerificationStatusAsUser(java.lang.String, int, int);
     method public void updatePermissionFlags(java.lang.String, java.lang.String, int, int, android.os.UserHandle);
     method public void verifyIntentFilter(int, int, java.util.List<java.lang.String>);
     method public void verifyPendingInstall(int, int);
