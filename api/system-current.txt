@@ -461,6 +461,7 @@ package android {
     field public static final int calendarTextColor = 16843931; // 0x101049b
     field public static final int calendarViewShown = 16843596; // 0x101034c
     field public static final int calendarViewStyle = 16843613; // 0x101035d
+    field public static final int canCaptureFingerprintGestures = 16844111; // 0x101054f
     field public static final int canControlMagnification = 16844039; // 0x1010507
     field public static final int canPerformGestures = 16844045; // 0x101050d
     field public static final int canRecord = 16844060; // 0x101051c
@@ -2811,6 +2812,7 @@ package android.accessibilityservice {
     method public final void disableSelf();
     method public final boolean dispatchGesture(android.accessibilityservice.GestureDescription, android.accessibilityservice.AccessibilityService.GestureResultCallback, android.os.Handler);
     method public android.view.accessibility.AccessibilityNodeInfo findFocus(int);
+    method public final android.accessibilityservice.FingerprintGestureController getFingerprintGestureController();
     method public final android.accessibilityservice.AccessibilityService.MagnificationController getMagnificationController();
     method public android.view.accessibility.AccessibilityNodeInfo getRootInActiveWindow();
     method public final android.accessibilityservice.AccessibilityServiceInfo getServiceInfo();
@@ -2902,6 +2904,7 @@ package android.accessibilityservice {
     method public java.lang.String getSettingsActivityName();
     method public java.lang.String loadDescription(android.content.pm.PackageManager);
     method public void writeToParcel(android.os.Parcel, int);
+    field public static final int CAPABILITY_CAN_CAPTURE_FINGERPRINT_GESTURES = 64; // 0x40
     field public static final int CAPABILITY_CAN_CONTROL_MAGNIFICATION = 16; // 0x10
     field public static final int CAPABILITY_CAN_PERFORM_GESTURES = 32; // 0x20
     field public static final int CAPABILITY_CAN_REQUEST_ENHANCED_WEB_ACCESSIBILITY = 4; // 0x4
@@ -2917,6 +2920,7 @@ package android.accessibilityservice {
     field public static final int FEEDBACK_HAPTIC = 2; // 0x2
     field public static final int FEEDBACK_SPOKEN = 1; // 0x1
     field public static final int FEEDBACK_VISUAL = 8; // 0x8
+    field public static final int FLAG_CAPTURE_FINGERPRINT_GESTURES = 512; // 0x200
     field public static final int FLAG_ENABLE_ACCESSIBILITY_VOLUME = 128; // 0x80
     field public static final int FLAG_INCLUDE_NOT_IMPORTANT_VIEWS = 2; // 0x2
     field public static final int FLAG_REPORT_VIEW_IDS = 16; // 0x10
@@ -2929,6 +2933,22 @@ package android.accessibilityservice {
     field public int flags;
     field public long notificationTimeout;
     field public java.lang.String[] packageNames;
+  }
+
+  public final class FingerprintGestureController {
+    method public boolean isGestureDetectionAvailable();
+    method public void registerFingerprintGestureCallback(android.accessibilityservice.FingerprintGestureController.FingerprintGestureCallback, android.os.Handler);
+    method public void unregisterFingerprintGestureCallback(android.accessibilityservice.FingerprintGestureController.FingerprintGestureCallback);
+    field public static final int FINGERPRINT_GESTURE_SWIPE_DOWN = 8; // 0x8
+    field public static final int FINGERPRINT_GESTURE_SWIPE_LEFT = 2; // 0x2
+    field public static final int FINGERPRINT_GESTURE_SWIPE_RIGHT = 1; // 0x1
+    field public static final int FINGERPRINT_GESTURE_SWIPE_UP = 4; // 0x4
+  }
+
+  public static abstract class FingerprintGestureController.FingerprintGestureCallback {
+    ctor public FingerprintGestureController.FingerprintGestureCallback();
+    method public void onGesture(int);
+    method public void onGestureDetectionAvailabilityChanged(boolean);
   }
 
   public final class GestureDescription {
@@ -15825,11 +15845,11 @@ package android.hardware.display {
     method public void unregisterDisplayListener(android.hardware.display.DisplayManager.DisplayListener);
     field public static final java.lang.String DISPLAY_CATEGORY_PRESENTATION = "android.hardware.display.category.PRESENTATION";
     field public static final int VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR = 16; // 0x10
+    field public static final int VIRTUAL_DISPLAY_FLAG_CAN_SHOW_WITH_INSECURE_KEYGUARD = 32; // 0x20
     field public static final int VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY = 8; // 0x8
     field public static final int VIRTUAL_DISPLAY_FLAG_PRESENTATION = 2; // 0x2
     field public static final int VIRTUAL_DISPLAY_FLAG_PUBLIC = 1; // 0x1
     field public static final int VIRTUAL_DISPLAY_FLAG_SECURE = 4; // 0x4
-    field public static final int VIRTUAL_DISPLAY_FLAG_CAN_SHOW_WITH_INSECURE_KEYGUARD = 32; // 0x20
   }
 
   public static abstract interface DisplayManager.DisplayListener {
@@ -46022,11 +46042,11 @@ package android.view {
     method public boolean isValid();
     method public boolean isWideColorGamut();
     field public static final int DEFAULT_DISPLAY = 0; // 0x0
+    field public static final int FLAG_CAN_SHOW_WITH_INSECURE_KEYGUARD = 32; // 0x20
     field public static final int FLAG_PRESENTATION = 8; // 0x8
     field public static final int FLAG_PRIVATE = 4; // 0x4
     field public static final int FLAG_ROUND = 16; // 0x10
     field public static final int FLAG_SECURE = 2; // 0x2
-    field public static final int FLAG_CAN_SHOW_WITH_INSECURE_KEYGUARD = 32; // 0x20
     field public static final int FLAG_SUPPORTS_PROTECTED_BUFFERS = 1; // 0x1
     field public static final int INVALID_DISPLAY = -1; // 0xffffffff
     field public static final int STATE_DOZE = 3; // 0x3
