@@ -7950,6 +7950,65 @@ package android.bluetooth.le {
 
 }
 
+package android.companion {
+
+  public final class AssociationRequest<F extends android.companion.DeviceFilter> implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.companion.AssociationRequest> CREATOR;
+  }
+
+  public static final class AssociationRequest.Builder<F extends android.companion.DeviceFilter> {
+    method public android.companion.AssociationRequest<F> build();
+    method public static android.companion.AssociationRequest.Builder<android.companion.BluetoothDeviceFilter> createForBluetoothDevice();
+    method public static android.companion.AssociationRequest.Builder<android.companion.BluetoothLEDeviceFilter> createForBluetoothLEDevice();
+    method public android.companion.AssociationRequest.Builder<F> setDeviceFilter(F);
+    method public android.companion.AssociationRequest.Builder<F> setSingleDevice(boolean);
+  }
+
+  public final class BluetoothDeviceFilter implements android.companion.DeviceFilter {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.companion.BluetoothDeviceFilter> CREATOR;
+  }
+
+  public static final class BluetoothDeviceFilter.Builder {
+    ctor public BluetoothDeviceFilter.Builder();
+    method public android.companion.BluetoothDeviceFilter.Builder addServiceUuid(android.os.ParcelUuid, android.os.ParcelUuid);
+    method public android.companion.BluetoothDeviceFilter build();
+    method public android.companion.BluetoothDeviceFilter.Builder setAddress(java.lang.String);
+    method public android.companion.BluetoothDeviceFilter.Builder setNamePattern(java.util.regex.Pattern);
+  }
+
+  public final class BluetoothLEDeviceFilter implements android.companion.DeviceFilter {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.companion.BluetoothLEDeviceFilter> CREATOR;
+  }
+
+  public static final class BluetoothLEDeviceFilter.Builder {
+    ctor public BluetoothLEDeviceFilter.Builder();
+    method public android.companion.BluetoothLEDeviceFilter build();
+    method public android.companion.BluetoothLEDeviceFilter.Builder setNamePattern(java.util.regex.Pattern);
+    method public android.companion.BluetoothLEDeviceFilter.Builder setScanFilter(android.bluetooth.le.ScanFilter);
+  }
+
+  public final class CompanionDeviceManager {
+    method public void associate(android.companion.AssociationRequest<?>, android.companion.CompanionDeviceManager.Callback, android.os.Handler);
+    field public static final java.lang.String EXTRA_DEVICE = "android.companion.extra.DEVICE";
+  }
+
+  public static abstract class CompanionDeviceManager.Callback {
+    ctor public CompanionDeviceManager.Callback();
+    method public abstract void onDeviceFound(android.content.IntentSender);
+    method public abstract void onFailure(java.lang.CharSequence);
+  }
+
+  public abstract interface DeviceFilter<D extends android.os.Parcelable> implements android.os.Parcelable {
+  }
+
+}
+
 package android.content {
 
   public abstract class AbstractThreadedSyncAdapter {
@@ -8562,6 +8621,7 @@ package android.content {
     field public static final java.lang.String CAPTIONING_SERVICE = "captioning";
     field public static final java.lang.String CARRIER_CONFIG_SERVICE = "carrier_config";
     field public static final java.lang.String CLIPBOARD_SERVICE = "clipboard";
+    field public static final java.lang.String COMPANION_DEVICE_SERVICE = "companion_device";
     field public static final java.lang.String CONNECTIVITY_SERVICE = "connectivity";
     field public static final java.lang.String CONSUMER_IR_SERVICE = "consumer_ir";
     field public static final int CONTEXT_IGNORE_SECURITY = 2; // 0x2
