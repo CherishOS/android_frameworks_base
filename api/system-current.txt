@@ -7178,6 +7178,35 @@ package android.app.job {
 
 package android.app.usage {
 
+  public final class CacheQuotaHint implements android.os.Parcelable {
+    ctor public CacheQuotaHint(android.app.usage.CacheQuotaHint.Builder);
+    method public int describeContents();
+    method public long getQuota();
+    method public int getUid();
+    method public android.app.usage.UsageStats getUsageStats();
+    method public java.lang.String getVolumeUuid();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.app.usage.CacheQuotaHint> CREATOR;
+    field public static final long QUOTA_NOT_SET = -1L; // 0xffffffffffffffffL
+  }
+
+  public static final class CacheQuotaHint.Builder {
+    ctor public CacheQuotaHint.Builder();
+    ctor public CacheQuotaHint.Builder(android.app.usage.CacheQuotaHint);
+    method public android.app.usage.CacheQuotaHint build();
+    method public android.app.usage.CacheQuotaHint.Builder setQuota(long);
+    method public android.app.usage.CacheQuotaHint.Builder setUid(int);
+    method public android.app.usage.CacheQuotaHint.Builder setUsageStats(android.app.usage.UsageStats);
+    method public android.app.usage.CacheQuotaHint.Builder setVolumeUuid(java.lang.String);
+  }
+
+  public abstract class CacheQuotaService extends android.app.Service {
+    ctor public CacheQuotaService();
+    method public android.os.IBinder onBind(android.content.Intent);
+    method public abstract java.util.List<android.app.usage.CacheQuotaHint> onComputeCacheQuotaHints(java.util.List<android.app.usage.CacheQuotaHint>);
+    field public static final java.lang.String SERVICE_INTERFACE = "android.app.usage.CacheQuotaService";
+  }
+
   public final class ConfigurationStats implements android.os.Parcelable {
     ctor public ConfigurationStats(android.app.usage.ConfigurationStats);
     method public int describeContents();
