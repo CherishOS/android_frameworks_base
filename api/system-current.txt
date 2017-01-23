@@ -23749,7 +23749,10 @@ package android.media {
     method public android.media.BufferingParams getBufferingParams();
     method public int getCurrentPosition();
     method public android.media.BufferingParams getDefaultBufferingParams();
+    method public android.media.MediaPlayer.DrmInfo getDrmInfo();
+    method public java.lang.String getDrmPropertyString(java.lang.String) throws android.media.MediaPlayer.NoDrmSchemeException;
     method public int getDuration();
+    method public android.media.MediaDrm.KeyRequest getKeyRequest(byte[], java.lang.String, int, java.util.Map<java.lang.String, java.lang.String>) throws android.media.MediaPlayer.NoDrmSchemeException;
     method public android.os.Bundle getMetrics();
     method public android.media.PlaybackParams getPlaybackParams();
     method public int getSelectedTrack(int) throws java.lang.IllegalStateException;
@@ -23763,8 +23766,12 @@ package android.media {
     method public void pause() throws java.lang.IllegalStateException;
     method public void prepare() throws java.io.IOException, java.lang.IllegalStateException;
     method public void prepareAsync() throws java.lang.IllegalStateException;
+    method public void prepareDrm(java.util.UUID, android.media.MediaPlayer.OnDrmConfigCallback) throws android.media.MediaPlayer.ProvisioningErrorException, android.media.ResourceBusyException, android.media.UnsupportedSchemeException;
+    method public byte[] provideKeyResponse(byte[], byte[]) throws android.media.DeniedByServerException, android.media.MediaPlayer.NoDrmSchemeException;
     method public void release();
+    method public void releaseDrm() throws android.media.MediaPlayer.NoDrmSchemeException;
     method public void reset();
+    method public void restoreKeys(byte[]) throws android.media.MediaPlayer.NoDrmSchemeException;
     method public void seekTo(int, int) throws java.lang.IllegalStateException;
     method public void seekTo(int) throws java.lang.IllegalStateException;
     method public void selectTrack(int) throws java.lang.IllegalStateException;
@@ -23781,10 +23788,15 @@ package android.media {
     method public void setDataSource(java.io.FileDescriptor, long, long) throws java.io.IOException, java.lang.IllegalArgumentException, java.lang.IllegalStateException;
     method public void setDataSource(android.media.MediaDataSource) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException;
     method public void setDisplay(android.view.SurfaceHolder);
+    method public void setDrmPropertyString(java.lang.String, java.lang.String) throws android.media.MediaPlayer.NoDrmSchemeException;
     method public void setLooping(boolean);
     method public void setNextMediaPlayer(android.media.MediaPlayer);
     method public void setOnBufferingUpdateListener(android.media.MediaPlayer.OnBufferingUpdateListener);
     method public void setOnCompletionListener(android.media.MediaPlayer.OnCompletionListener);
+    method public void setOnDrmInfoListener(android.media.MediaPlayer.OnDrmInfoListener);
+    method public void setOnDrmInfoListener(android.media.MediaPlayer.OnDrmInfoListener, android.os.Handler);
+    method public void setOnDrmPreparedListener(android.media.MediaPlayer.OnDrmPreparedListener);
+    method public void setOnDrmPreparedListener(android.media.MediaPlayer.OnDrmPreparedListener, android.os.Handler);
     method public void setOnErrorListener(android.media.MediaPlayer.OnErrorListener);
     method public void setOnInfoListener(android.media.MediaPlayer.OnInfoListener);
     method public void setOnPreparedListener(android.media.MediaPlayer.OnPreparedListener);
@@ -23827,12 +23839,35 @@ package android.media {
     field public static final int VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING = 2; // 0x2
   }
 
+  public static final class MediaPlayer.DrmInfo {
+    method public java.lang.String[] getMimes();
+    method public java.util.Map<java.util.UUID, byte[]> getPssh();
+    method public java.util.UUID[] getSupportedSchemes();
+  }
+
+  public static final class MediaPlayer.NoDrmSchemeException extends android.media.MediaDrmException {
+    ctor public MediaPlayer.NoDrmSchemeException(java.lang.String);
+  }
+
   public static abstract interface MediaPlayer.OnBufferingUpdateListener {
     method public abstract void onBufferingUpdate(android.media.MediaPlayer, int);
   }
 
   public static abstract interface MediaPlayer.OnCompletionListener {
     method public abstract void onCompletion(android.media.MediaPlayer);
+  }
+
+  public static abstract class MediaPlayer.OnDrmConfigCallback {
+    ctor public MediaPlayer.OnDrmConfigCallback();
+    method public void onDrmConfig(android.media.MediaPlayer);
+  }
+
+  public static abstract interface MediaPlayer.OnDrmInfoListener {
+    method public abstract void onDrmInfo(android.media.MediaPlayer, android.media.MediaPlayer.DrmInfo);
+  }
+
+  public static abstract interface MediaPlayer.OnDrmPreparedListener {
+    method public abstract void onDrmPrepared(android.media.MediaPlayer, boolean);
   }
 
   public static abstract interface MediaPlayer.OnErrorListener {
@@ -23861,6 +23896,10 @@ package android.media {
 
   public static abstract interface MediaPlayer.OnVideoSizeChangedListener {
     method public abstract void onVideoSizeChanged(android.media.MediaPlayer, int, int);
+  }
+
+  public static final class MediaPlayer.ProvisioningErrorException extends android.media.MediaDrmException {
+    ctor public MediaPlayer.ProvisioningErrorException(java.lang.String);
   }
 
   public static class MediaPlayer.TrackInfo implements android.os.Parcelable {
