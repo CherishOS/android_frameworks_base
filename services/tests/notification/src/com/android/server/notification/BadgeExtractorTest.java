@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The Android Open Source Project
+ * Copyright (C) 2017 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,19 @@
  */
 package com.android.server.notification;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
 
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.Notification.Builder;
-import android.app.NotificationManager;
 import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.os.UserHandle;
 import android.service.notification.StatusBarNotification;
@@ -31,30 +35,24 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.SmallTest;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
-
-import static org.junit.Assert.assertEquals;
 
 @SmallTest
 @RunWith(AndroidJUnit4.class)
-public class ImportanceExtractorTest {
+public class BadgeExtractorTest {
 
     @Mock RankingConfig mConfig;
 
     private String mPkg = "com.android.server.notification";
     private int mId = 1001;
-    private int mOtherId = 1002;
     private String mTag = null;
     private int mUid = 1000;
     private int mPid = 2000;
-    private int mScore = 10;
-    private android.os.UserHandle mUser = UserHandle.of(ActivityManager.getCurrentUser());
+    private UserHandle mUser = UserHandle.of(ActivityManager.getCurrentUser());
 
     @Before
     public void setUp() {
@@ -84,36 +82,70 @@ public class ImportanceExtractorTest {
     //
 
     @Test
-    public void testAppPreferenceChannelNone() throws Exception {
-        ImportanceExtractor extractor = new ImportanceExtractor();
+    public void testAppYesChannelNo() throws Exception {
+        BadgeExtractor extractor = new BadgeExtractor();
         extractor.setConfig(mConfig);
 
-        when(mConfig.getImportance(anyString(), anyInt())).thenReturn(
-          NotificationManager.IMPORTANCE_MIN);
+        when(mConfig.canShowBadge(mPkg, mUid)).thenReturn(true);
         NotificationChannel channel =
                 new NotificationChannel("a", "a", NotificationManager.IMPORTANCE_UNSPECIFIED);
+        channel.setShowBadge(false);
 
         NotificationRecord r = getNotificationRecord(channel);
 
         extractor.process(r);
 
-        assertEquals(r.getUserImportance(), NotificationManager.IMPORTANCE_UNSPECIFIED);
+        assertFalse(r.canShowBadge());
     }
 
     @Test
-    public void testAppPreferenceChannelPreference() throws Exception {
-        ImportanceExtractor extractor = new ImportanceExtractor();
+    public void testAppNoChannelYes() throws Exception {
+        BadgeExtractor extractor = new BadgeExtractor();
         extractor.setConfig(mConfig);
 
-        when(mConfig.getImportance(anyString(), anyInt())).thenReturn(
-          NotificationManager.IMPORTANCE_MIN);
+        when(mConfig.canShowBadge(mPkg, mUid)).thenReturn(false);
         NotificationChannel channel =
                 new NotificationChannel("a", "a", NotificationManager.IMPORTANCE_HIGH);
+        channel.setShowBadge(true);
 
         NotificationRecord r = getNotificationRecord(channel);
 
         extractor.process(r);
 
-        assertEquals(r.getUserImportance(), NotificationManager.IMPORTANCE_HIGH);
+        assertFalse(r.canShowBadge());
+    }
+
+    @Test
+    public void testAppYesChannelYes() throws Exception {
+        BadgeExtractor extractor = new BadgeExtractor();
+        extractor.setConfig(mConfig);
+
+        when(mConfig.canShowBadge(mPkg, mUid)).thenReturn(true);
+        NotificationChannel channel =
+                new NotificationChannel("a", "a", NotificationManager.IMPORTANCE_UNSPECIFIED);
+        channel.setShowBadge(true);
+
+        NotificationRecord r = getNotificationRecord(channel);
+
+        extractor.process(r);
+
+        assertTrue(r.canShowBadge());
+    }
+
+    @Test
+    public void testAppNoChannelNo() throws Exception {
+        BadgeExtractor extractor = new BadgeExtractor();
+        extractor.setConfig(mConfig);
+
+        when(mConfig.canShowBadge(mPkg, mUid)).thenReturn(false);
+        NotificationChannel channel =
+                new NotificationChannel("a", "a", NotificationManager.IMPORTANCE_UNSPECIFIED);
+        channel.setShowBadge(false);
+
+        NotificationRecord r = getNotificationRecord(channel);
+
+        extractor.process(r);
+
+        assertFalse(r.canShowBadge());
     }
 }
