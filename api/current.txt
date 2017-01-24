@@ -13227,6 +13227,7 @@ package android.graphics {
   }
 
   public class Typeface {
+    method public static void create(android.graphics.fonts.FontRequest, android.graphics.Typeface.FontRequestCallback);
     method public static android.graphics.Typeface create(java.lang.String, int);
     method public static android.graphics.Typeface create(android.graphics.Typeface, int);
     method public static android.graphics.Typeface createFromAsset(android.content.res.AssetManager, java.lang.String);
@@ -13245,6 +13246,14 @@ package android.graphics {
     field public static final int NORMAL = 0; // 0x0
     field public static final android.graphics.Typeface SANS_SERIF;
     field public static final android.graphics.Typeface SERIF;
+  }
+
+  public static abstract interface Typeface.FontRequestCallback {
+    method public abstract void onTypefaceRequestFailed(int);
+    method public abstract void onTypefaceRetrieved(android.graphics.Typeface);
+    field public static final int FAIL_REASON_FONT_LOAD_ERROR = 1; // 0x1
+    field public static final int FAIL_REASON_FONT_NOT_FOUND = 2; // 0x2
+    field public static final int FAIL_REASON_PROVIDER_NOT_FOUND = 0; // 0x0
   }
 
   public class Xfermode {
@@ -13797,6 +13806,19 @@ package android.graphics.drawable.shapes {
     method public boolean hasAlpha();
     method protected void onResize(float, float);
     method public final void resize(float, float);
+  }
+
+}
+
+package android.graphics.fonts {
+
+  public final class FontRequest implements android.os.Parcelable {
+    ctor public FontRequest(java.lang.String, java.lang.String);
+    method public int describeContents();
+    method public java.lang.String getProviderAuthority();
+    method public java.lang.String getQuery();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.graphics.fonts.FontRequest> CREATOR;
   }
 
 }
@@ -33044,6 +33066,16 @@ package android.provider {
     method public java.lang.String renameDocument(java.lang.String, java.lang.String) throws java.io.FileNotFoundException;
     method public final void revokeDocumentPermission(java.lang.String);
     method public final int update(android.net.Uri, android.content.ContentValues, java.lang.String, java.lang.String[]);
+  }
+
+  public class FontsContract {
+  }
+
+  public static final class FontsContract.Columns implements android.provider.BaseColumns {
+    ctor public FontsContract.Columns();
+    field public static final java.lang.String STYLE = "font_style";
+    field public static final java.lang.String TTC_INDEX = "font_ttc_index";
+    field public static final java.lang.String VARIATION_SETTINGS = "font_variation_settings";
   }
 
   public final deprecated class LiveFolders implements android.provider.BaseColumns {
