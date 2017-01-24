@@ -6787,15 +6787,18 @@ package android.app.backup {
     method public int requestBackup(java.lang.String[], android.app.backup.BackupObserver);
     method public int requestBackup(java.lang.String[], android.app.backup.BackupObserver, int);
     method public int requestRestore(android.app.backup.RestoreObserver);
-    method public java.lang.String selectBackupTransport(java.lang.String);
+    method public deprecated java.lang.String selectBackupTransport(java.lang.String);
+    method public void selectBackupTransport(android.content.ComponentName, android.app.backup.SelectBackupTransportCallback);
     method public void setAutoRestore(boolean);
     method public void setBackupEnabled(boolean);
     field public static final int ERROR_AGENT_FAILURE = -1003; // 0xfffffc15
     field public static final int ERROR_BACKUP_NOT_ALLOWED = -2001; // 0xfffff82f
     field public static final int ERROR_PACKAGE_NOT_FOUND = -2002; // 0xfffff82e
     field public static final int ERROR_TRANSPORT_ABORTED = -1000; // 0xfffffc18
+    field public static final int ERROR_TRANSPORT_INVALID = -2; // 0xfffffffe
     field public static final int ERROR_TRANSPORT_PACKAGE_REJECTED = -1002; // 0xfffffc16
     field public static final int ERROR_TRANSPORT_QUOTA_EXCEEDED = -1005; // 0xfffffc13
+    field public static final int ERROR_TRANSPORT_UNAVAILABLE = -1; // 0xffffffff
     field public static final int FLAG_NON_INCREMENTAL_BACKUP = 1; // 0x1
     field public static final java.lang.String PACKAGE_MANAGER_SENTINEL = "@pm@";
     field public static final int SUCCESS = 0; // 0x0
@@ -6908,6 +6911,12 @@ package android.app.backup {
     field public java.lang.String device;
     field public java.lang.String name;
     field public long token;
+  }
+
+  public abstract class SelectBackupTransportCallback {
+    ctor public SelectBackupTransportCallback();
+    method public void onFailure(int);
+    method public void onSuccess(java.lang.String);
   }
 
   public class SharedPreferencesBackupHelper extends android.app.backup.FileBackupHelperBase implements android.app.backup.BackupHelper {
