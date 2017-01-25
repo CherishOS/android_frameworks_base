@@ -5419,6 +5419,7 @@ package android.app {
     method public boolean canShowBadge();
     method public int describeContents();
     method public void enableVibration(boolean);
+    method public java.lang.String getGroup();
     method public java.lang.String getId();
     method public int getImportance();
     method public int getLockscreenVisibility();
@@ -5426,6 +5427,7 @@ package android.app {
     method public android.net.Uri getSound();
     method public long[] getVibrationPattern();
     method public void setBypassDnd(boolean);
+    method public void setGroup(java.lang.String);
     method public void setImportance(int);
     method public void setLights(boolean);
     method public void setLockscreenVisibility(int);
@@ -5439,6 +5441,17 @@ package android.app {
     field public static final java.lang.String DEFAULT_CHANNEL_ID = "miscellaneous";
   }
 
+  public final class NotificationChannelGroup implements android.os.Parcelable {
+    ctor public NotificationChannelGroup(java.lang.String, java.lang.CharSequence);
+    ctor protected NotificationChannelGroup(android.os.Parcel);
+    method public int describeContents();
+    method public java.util.List<android.app.NotificationChannel> getChannels();
+    method public java.lang.String getId();
+    method public java.lang.CharSequence getName();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.app.NotificationChannelGroup> CREATOR;
+  }
+
   public class NotificationManager {
     method public java.lang.String addAutomaticZenRule(android.app.AutomaticZenRule);
     method public boolean areNotificationsEnabled();
@@ -5446,6 +5459,8 @@ package android.app {
     method public void cancel(java.lang.String, int);
     method public void cancelAll();
     method public void createNotificationChannel(android.app.NotificationChannel);
+    method public void createNotificationChannelGroup(android.app.NotificationChannelGroup);
+    method public void createNotificationChannelGroups(java.util.List<android.app.NotificationChannelGroup>);
     method public void createNotificationChannels(java.util.List<android.app.NotificationChannel>);
     method public void deleteNotificationChannel(java.lang.String);
     method public android.service.notification.StatusBarNotification[] getActiveNotifications();
