@@ -42758,6 +42758,7 @@ package android.view {
     field public static final int SOURCE_JOYSTICK = 16777232; // 0x1000010
     field public static final int SOURCE_KEYBOARD = 257; // 0x101
     field public static final int SOURCE_MOUSE = 8194; // 0x2002
+    field public static final int SOURCE_MOUSE_RELATIVE = 131076; // 0x20004
     field public static final int SOURCE_STYLUS = 16386; // 0x4002
     field public static final int SOURCE_TOUCHPAD = 1048584; // 0x100008
     field public static final int SOURCE_TOUCHSCREEN = 4098; // 0x1002
@@ -43912,6 +43913,7 @@ package android.view {
     method public void createContextMenu(android.view.ContextMenu);
     method public void destroyDrawingCache();
     method public android.view.WindowInsets dispatchApplyWindowInsets(android.view.WindowInsets);
+    method public boolean dispatchCapturedPointerEvent(android.view.MotionEvent);
     method public void dispatchConfigurationChanged(android.content.res.Configuration);
     method public void dispatchDisplayHint(int);
     method public boolean dispatchDragEvent(android.view.DragEvent);
@@ -43930,6 +43932,7 @@ package android.view {
     method public boolean dispatchNestedPrePerformAccessibilityAction(int, android.os.Bundle);
     method public boolean dispatchNestedPreScroll(int, int, int[], int[]);
     method public boolean dispatchNestedScroll(int, int, int, int, int[]);
+    method public void dispatchPointerCaptureChanged(boolean);
     method public boolean dispatchPopulateAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
     method public void dispatchProvideAutoFillStructure(android.view.ViewStructure, int);
     method public void dispatchProvideStructure(android.view.ViewStructure);
@@ -44112,6 +44115,7 @@ package android.view {
     method public boolean hasNestedScrollingParent();
     method public boolean hasOnClickListeners();
     method public boolean hasOverlappingRendering();
+    method public boolean hasPointerCapture();
     method public boolean hasTransientState();
     method public boolean hasWindowFocus();
     method public static android.view.View inflate(android.content.Context, int, android.view.ViewGroup);
@@ -44176,6 +44180,7 @@ package android.view {
     method public android.view.WindowInsets onApplyWindowInsets(android.view.WindowInsets);
     method protected void onAttachedToWindow();
     method public void onCancelPendingInputEvents();
+    method public boolean onCapturedPointerEvent(android.view.MotionEvent);
     method public boolean onCheckIsTextEditor();
     method protected void onConfigurationChanged(android.content.res.Configuration);
     method protected void onCreateContextMenu(android.view.ContextMenu);
@@ -44205,6 +44210,7 @@ package android.view {
     method protected void onLayout(boolean, int, int, int, int);
     method protected void onMeasure(int, int);
     method protected void onOverScrolled(int, int, boolean, boolean);
+    method public void onPointerCaptureChange(boolean);
     method public void onPopulateAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
     method public void onProvideAutoFillStructure(android.view.ViewStructure, int);
     method public void onProvideAutoFillVirtualStructure(android.view.ViewStructure, int);
@@ -44247,6 +44253,7 @@ package android.view {
     method public void postOnAnimation(java.lang.Runnable);
     method public void postOnAnimationDelayed(java.lang.Runnable, long);
     method public void refreshDrawableState();
+    method public void releasePointerCapture();
     method public boolean removeCallbacks(java.lang.Runnable);
     method public void removeOnAttachStateChangeListener(android.view.View.OnAttachStateChangeListener);
     method public void removeOnLayoutChangeListener(android.view.View.OnLayoutChangeListener);
@@ -44257,6 +44264,7 @@ package android.view {
     method public boolean requestFocus(int, android.graphics.Rect);
     method public final boolean requestFocusFromTouch();
     method public void requestLayout();
+    method public void requestPointerCapture();
     method public boolean requestRectangleOnScreen(android.graphics.Rect);
     method public boolean requestRectangleOnScreen(android.graphics.Rect, boolean);
     method public final void requestUnbufferedDispatch(android.view.MotionEvent);
@@ -44334,6 +44342,7 @@ package android.view {
     method public void setNextFocusRightId(int);
     method public void setNextFocusUpId(int);
     method public void setOnApplyWindowInsetsListener(android.view.View.OnApplyWindowInsetsListener);
+    method public void setOnCapturedPointerListener(android.view.View.OnCapturedPointerListener);
     method public void setOnClickListener(android.view.View.OnClickListener);
     method public void setOnContextClickListener(android.view.View.OnContextClickListener);
     method public void setOnCreateContextMenuListener(android.view.View.OnCreateContextMenuListener);
@@ -44605,6 +44614,10 @@ package android.view {
   public static abstract interface View.OnAttachStateChangeListener {
     method public abstract void onViewAttachedToWindow(android.view.View);
     method public abstract void onViewDetachedFromWindow(android.view.View);
+  }
+
+  public static abstract interface View.OnCapturedPointerListener {
+    method public abstract boolean onCapturedPointer(android.view.View, android.view.MotionEvent);
   }
 
   public static abstract interface View.OnClickListener {
@@ -45339,6 +45352,7 @@ package android.view {
     method public abstract boolean onMenuItemSelected(int, android.view.MenuItem);
     method public abstract boolean onMenuOpened(int, android.view.Menu);
     method public abstract void onPanelClosed(int, android.view.Menu);
+    method public default void onPointerCaptureChanged(boolean);
     method public abstract boolean onPreparePanel(int, android.view.View, android.view.Menu);
     method public default void onProvideKeyboardShortcuts(java.util.List<android.view.KeyboardShortcutGroup>, android.view.Menu, int);
     method public abstract boolean onSearchRequested();
