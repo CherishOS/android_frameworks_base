@@ -35805,17 +35805,25 @@ package android.service.autofill {
     ctor public AutoFillService();
     method public final android.os.IBinder onBind(android.content.Intent);
     method public void onConnected();
+    method public void onDatasetAuthenticationRequest(android.os.Bundle, int);
     method public void onDisconnected();
     method public abstract void onFillRequest(android.app.assist.AssistStructure, android.os.Bundle, android.os.CancellationSignal, android.service.autofill.FillCallback);
+    method public void onFillResponseAuthenticationRequest(android.os.Bundle, int);
     method public abstract void onSaveRequest(android.app.assist.AssistStructure, android.os.Bundle, android.os.CancellationSignal, android.service.autofill.SaveCallback);
     field public static final java.lang.String EXTRA_DATASET_EXTRAS = "android.service.autofill.extra.DATASET_EXTRAS";
     field public static final java.lang.String EXTRA_RESPONSE_EXTRAS = "android.service.autofill.extra.RESPONSE_EXTRAS";
+    field public static final int FLAG_AUTHENTICATION_ERROR = 4; // 0x4
+    field public static final int FLAG_AUTHENTICATION_REQUESTED = 1; // 0x1
+    field public static final int FLAG_AUTHENTICATION_SUCCESS = 2; // 0x2
+    field public static final int FLAG_FINGERPRINT_AUTHENTICATION_NOT_AVAILABLE = 8; // 0x8
     field public static final java.lang.String SERVICE_INTERFACE = "android.service.autofill.AutoFillService";
     field public static final java.lang.String SERVICE_META_DATA = "android.autofill";
   }
 
   public final class FillCallback {
+    method public void onDatasetAuthentication(android.view.autofill.Dataset, int);
     method public void onFailure(java.lang.CharSequence);
+    method public void onFillResponseAuthentication(int);
     method public void onSuccess(android.view.autofill.FillResponse);
   }
 
@@ -46609,6 +46617,8 @@ package android.view.autofill {
   public static final class Dataset.Builder {
     ctor public Dataset.Builder(java.lang.CharSequence);
     method public android.view.autofill.Dataset build();
+    method public android.view.autofill.Dataset.Builder requiresCustomAuthentication(android.os.Bundle, int);
+    method public android.view.autofill.Dataset.Builder requiresFingerprintAuthentication(android.hardware.fingerprint.FingerprintManager.CryptoObject, android.os.Bundle, int);
     method public android.view.autofill.Dataset.Builder setExtras(android.os.Bundle);
     method public android.view.autofill.Dataset.Builder setValue(android.view.autofill.AutoFillId, android.view.autofill.AutoFillValue);
   }
@@ -46624,6 +46634,8 @@ package android.view.autofill {
     method public android.view.autofill.FillResponse.Builder addDataset(android.view.autofill.Dataset);
     method public android.view.autofill.FillResponse.Builder addSavableFields(android.view.autofill.AutoFillId...);
     method public android.view.autofill.FillResponse build();
+    method public android.view.autofill.FillResponse.Builder requiresCustomAuthentication(android.os.Bundle, int);
+    method public android.view.autofill.FillResponse.Builder requiresFingerprintAuthentication(android.hardware.fingerprint.FingerprintManager.CryptoObject, android.os.Bundle, int);
     method public android.view.autofill.FillResponse.Builder setExtras(android.os.Bundle);
   }
 
