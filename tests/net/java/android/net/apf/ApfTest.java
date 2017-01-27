@@ -16,10 +16,6 @@
 
 package android.net.apf;
 
-import static android.system.OsConstants.*;
-
-import com.android.frameworks.servicestests.R;
-
 import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.NetworkUtils;
@@ -36,7 +32,11 @@ import android.os.Parcelable;
 import android.system.ErrnoException;
 import android.system.Os;
 import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.LargeTest;
+import android.test.suitebuilder.annotation.SmallTest;
+import static android.system.OsConstants.*;
+
+import com.android.frameworks.tests.net.R;
+import com.android.internal.util.HexDump;
 
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -54,6 +54,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.Random;
 
 import libcore.io.IoUtils;
 import libcore.io.Streams;
@@ -74,7 +75,7 @@ public class ApfTest extends AndroidTestCase {
         super.setUp();
         MockitoAnnotations.initMocks(this);
         // Load up native shared library containing APF interpreter exposed via JNI.
-        System.loadLibrary("servicestestsjni");
+        System.loadLibrary("frameworksnettestsjni");
     }
 
     // Expected return codes from APF interpreter.
@@ -153,7 +154,7 @@ public class ApfTest extends AndroidTestCase {
      * generating bytecode for that program and running it through the
      * interpreter to verify it functions correctly.
      */
-    @LargeTest
+    @SmallTest
     public void testApfInstructions() throws IllegalInstructionException {
         // Empty program should pass because having the program counter reach the
         // location immediately after the program indicates the packet should be
@@ -561,7 +562,7 @@ public class ApfTest extends AndroidTestCase {
      * Generate some BPF programs, translate them to APF, then run APF and BPF programs
      * over packet traces and verify both programs filter out the same packets.
      */
-    @LargeTest
+    @SmallTest
     public void testApfAgainstBpf() throws Exception {
         String[] tcpdump_filters = new String[]{ "udp", "tcp", "icmp", "icmp6", "udp port 53",
                 "arp", "dst 239.255.255.250", "arp or tcp or udp port 53", "net 192.168.1.0/24",
@@ -660,9 +661,13 @@ public class ApfTest extends AndroidTestCase {
     // The IPv6 all nodes address ff02::1
     private static final byte[] IPV6_ALL_NODES_ADDRESS =
             { (byte) 0xff, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 };
+    private static final byte[] IPV6_ALL_ROUTERS_ADDRESS =
+            { (byte) 0xff, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2 };
 
     private static final int ICMP6_TYPE_OFFSET = ETH_HEADER_LEN + IPV6_HEADER_LEN;
+    private static final int ICMP6_ROUTER_SOLICITATION = 133;
     private static final int ICMP6_ROUTER_ADVERTISEMENT = 134;
+    private static final int ICMP6_NEIGHBOR_SOLICITATION = 135;
     private static final int ICMP6_NEIGHBOR_ANNOUNCEMENT = 136;
 
     private static final int ICMP6_RA_HEADER_LEN = 16;
@@ -719,7 +724,7 @@ public class ApfTest extends AndroidTestCase {
     private static final byte[] ANOTHER_IPV4_ADDR        = {10, 0, 0, 2};
     private static final byte[] IPV4_ANY_HOST_ADDR       = {0, 0, 0, 0};
 
-    @LargeTest
+    @SmallTest
     public void testApfFilterIPv4() throws Exception {
         MockIpManagerCallback ipManagerCallback = new MockIpManagerCallback();
         LinkAddress link = new LinkAddress(InetAddress.getByAddress(MOCK_IPV4_ADDR), 19);
@@ -774,7 +779,7 @@ public class ApfTest extends AndroidTestCase {
         apfFilter.shutdown();
     }
 
-    @LargeTest
+    @SmallTest
     public void testApfFilterIPv6() throws Exception {
         MockIpManagerCallback ipManagerCallback = new MockIpManagerCallback();
         ApfFilter apfFilter = new TestApfFilter(ipManagerCallback, ALLOW_MULTICAST, mLog);
@@ -797,10 +802,16 @@ public class ApfTest extends AndroidTestCase {
         put(packet, IPV6_DEST_ADDR_OFFSET, IPV6_ALL_NODES_ADDRESS);
         assertDrop(program, packet.array());
 
+        // Verify ICMPv6 RS to any is dropped
+        packet.put(ICMP6_TYPE_OFFSET, (byte)ICMP6_ROUTER_SOLICITATION);
+        assertDrop(program, packet.array());
+        put(packet, IPV6_DEST_ADDR_OFFSET, IPV6_ALL_ROUTERS_ADDRESS);
+        assertDrop(program, packet.array());
+
         apfFilter.shutdown();
     }
 
-    @LargeTest
+    @SmallTest
     public void testApfFilterMulticast() throws Exception {
         final byte[] unicastIpv4Addr   = {(byte)192,0,2,63};
         final byte[] broadcastIpv4Addr = {(byte)192,0,2,(byte)255};
@@ -910,7 +921,7 @@ public class ApfTest extends AndroidTestCase {
         assertDrop(program, garpReply());
     }
 
-    @LargeTest
+    @SmallTest
     public void testApfFilterArp() throws Exception {
         MockIpManagerCallback ipManagerCallback = new MockIpManagerCallback();
         ApfFilter apfFilter = new TestApfFilter(ipManagerCallback, ALLOW_MULTICAST, mLog);
@@ -1029,7 +1040,7 @@ public class ApfTest extends AndroidTestCase {
         ipManagerCallback.assertNoProgramUpdate();
     }
 
-    @LargeTest
+    @SmallTest
     public void testApfFilterRa() throws Exception {
         MockIpManagerCallback ipManagerCallback = new MockIpManagerCallback();
         TestApfFilter apfFilter = new TestApfFilter(ipManagerCallback, DROP_MULTICAST, mLog);
@@ -1146,6 +1157,41 @@ public class ApfTest extends AndroidTestCase {
         buffer.position(original);
     }
 
+    @SmallTest
+    public void testRaParsing() throws Exception {
+        final int maxRandomPacketSize = 512;
+        final Random r = new Random();
+        MockIpManagerCallback cb = new MockIpManagerCallback();
+        TestApfFilter apfFilter = new TestApfFilter(cb, DROP_MULTICAST, mLog);
+        for (int i = 0; i < 1000; i++) {
+            byte[] packet = new byte[r.nextInt(maxRandomPacketSize + 1)];
+            r.nextBytes(packet);
+            try {
+                apfFilter.new Ra(packet, packet.length);
+            } catch (ApfFilter.InvalidRaException e) {
+            } catch (Exception e) {
+                throw new Exception("bad packet: " + HexDump.toHexString(packet), e);
+            }
+        }
+    }
+
+    @SmallTest
+    public void testRaProcessing() throws Exception {
+        final int maxRandomPacketSize = 512;
+        final Random r = new Random();
+        MockIpManagerCallback cb = new MockIpManagerCallback();
+        TestApfFilter apfFilter = new TestApfFilter(cb, DROP_MULTICAST, mLog);
+        for (int i = 0; i < 1000; i++) {
+            byte[] packet = new byte[r.nextInt(maxRandomPacketSize + 1)];
+            r.nextBytes(packet);
+            try {
+                apfFilter.processRa(packet, packet.length);
+            } catch (Exception e) {
+                throw new Exception("bad packet: " + HexDump.toHexString(packet), e);
+            }
+        }
+    }
+
     /**
      * Call the APF interpreter the run {@code program} on {@code packet} pretending the
      * filter was installed {@code filter_age} seconds ago.
@@ -1167,6 +1213,7 @@ public class ApfTest extends AndroidTestCase {
     private native static boolean compareBpfApf(String filter, String pcap_filename,
             byte[] apf_program);
 
+    @SmallTest
     public void testBytesToInt() {
         assertEquals(0x00000000, ApfFilter.bytesToInt(IPV4_ANY_HOST_ADDR));
         assertEquals(0xffffffff, ApfFilter.bytesToInt(IPV4_BROADCAST_ADDRESS));
