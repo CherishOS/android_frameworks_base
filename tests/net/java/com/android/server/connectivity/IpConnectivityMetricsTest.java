@@ -57,7 +57,7 @@ public class IpConnectivityMetricsTest extends TestCase {
 
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        mService = new IpConnectivityMetrics(mCtx);
+        mService = new IpConnectivityMetrics(mCtx, (ctx) -> 2000);
     }
 
     public void testLoggingEvents() throws Exception {
@@ -204,7 +204,8 @@ public class IpConnectivityMetricsTest extends TestCase {
                 "    router_lifetime: 2000",
                 "  >",
                 "  time_ms: 700",
-                ">");
+                ">",
+                "version: 2");
 
         verifySerialization(want, getdump("flush"));
     }
