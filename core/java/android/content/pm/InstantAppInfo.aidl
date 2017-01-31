@@ -16,4 +16,4 @@
 
 package android.content.pm;
 
-parcelable EphemeralApplicationInfo;
+parcelable InstantAppInfo;
