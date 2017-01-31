@@ -31779,13 +31779,25 @@ package android.os {
     field public static final int USER_CREATION_FAILED_NO_MORE_USERS = 2; // 0x2
   }
 
+  public abstract class VibrationEffect implements android.os.Parcelable {
+    method public static android.os.VibrationEffect createOneShot(long, int);
+    method public static android.os.VibrationEffect createWaveform(long[], int);
+    method public static android.os.VibrationEffect createWaveform(long[], int[], int);
+    method public int describeContents();
+    field public static final android.os.Parcelable.Creator<android.os.VibrationEffect> CREATOR;
+    field public static final int DEFAULT_AMPLITUDE = -1; // 0xffffffff
+  }
+
   public abstract class Vibrator {
     method public abstract void cancel();
+    method public abstract boolean hasAmplitudeControl();
     method public abstract boolean hasVibrator();
-    method public void vibrate(long);
-    method public void vibrate(long, android.media.AudioAttributes);
-    method public void vibrate(long[], int);
-    method public void vibrate(long[], int, android.media.AudioAttributes);
+    method public deprecated void vibrate(long);
+    method public deprecated void vibrate(long, android.media.AudioAttributes);
+    method public deprecated void vibrate(long[], int);
+    method public deprecated void vibrate(long[], int, android.media.AudioAttributes);
+    method public void vibrate(android.os.VibrationEffect);
+    method public void vibrate(android.os.VibrationEffect, android.media.AudioAttributes);
   }
 
   public class WorkSource implements android.os.Parcelable {
