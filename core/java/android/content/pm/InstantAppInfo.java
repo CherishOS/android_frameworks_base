@@ -23,11 +23,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * This class represents the state of an ephemeral app.
+ * This class represents the state of an instant app. Instant apps can
+ * be installed or uninstalled. If the app is installed you can call
+ * {@link #getApplicationInfo()} to get the app info, otherwise this
+ * class provides APIs to get basic app info for showing it in the UI,
+ * such as permissions, label, package name.
  *
  * @hide
  */
-public final class EphemeralApplicationInfo implements Parcelable {
+public final class InstantAppInfo implements Parcelable {
     private final ApplicationInfo mApplicationInfo;
 
     private final String mPackageName;
@@ -36,7 +40,7 @@ public final class EphemeralApplicationInfo implements Parcelable {
     private final String[] mRequestedPermissions;
     private final String[] mGrantedPermissions;
 
-    public EphemeralApplicationInfo(ApplicationInfo appInfo,
+    public InstantAppInfo(ApplicationInfo appInfo,
             String[] requestedPermissions, String[] grantedPermissions) {
         mApplicationInfo = appInfo;
         mPackageName = null;
@@ -45,7 +49,7 @@ public final class EphemeralApplicationInfo implements Parcelable {
         mGrantedPermissions = grantedPermissions;
     }
 
-    public EphemeralApplicationInfo(String packageName, CharSequence label,
+    public InstantAppInfo(String packageName, CharSequence label,
             String[] requestedPermissions, String[] grantedPermissions) {
         mApplicationInfo = null;
         mPackageName = packageName;
@@ -54,7 +58,7 @@ public final class EphemeralApplicationInfo implements Parcelable {
         mGrantedPermissions = grantedPermissions;
     }
 
-    private EphemeralApplicationInfo(Parcel parcel) {
+    private InstantAppInfo(Parcel parcel) {
         mPackageName = parcel.readString();
         mLabelText = parcel.readCharSequence();
         mRequestedPermissions = parcel.readStringArray();
@@ -62,6 +66,17 @@ public final class EphemeralApplicationInfo implements Parcelable {
         mApplicationInfo = parcel.readParcelable(null);
     }
 
+    /**
+     * @return The application info if the app is installed,
+     *     <code>null</code> otherwise,
+     */
+    public @Nullable ApplicationInfo getApplicationInfo() {
+        return mApplicationInfo;
+    }
+
+    /**
+     * @return The pakcage name.
+     */
     public @NonNull String getPackageName() {
         if (mApplicationInfo != null) {
             return mApplicationInfo.packageName;
@@ -69,6 +84,10 @@ public final class EphemeralApplicationInfo implements Parcelable {
         return mPackageName;
     }
 
+    /**
+     * @param packageManager Package manager for loading resources.
+     * @return Loads the label if the app is installed or returns the cached one otherwise.
+     */
     public @NonNull CharSequence loadLabel(@NonNull PackageManager packageManager) {
         if (mApplicationInfo != null) {
             return mApplicationInfo.loadLabel(packageManager);
@@ -76,17 +95,27 @@ public final class EphemeralApplicationInfo implements Parcelable {
         return mLabelText;
     }
 
+    /**
+     * @param packageManager Package manager for loading resources.
+     * @return Loads the icon if the app is installed or returns the cached one otherwise.
+     */
     public @NonNull Drawable loadIcon(@NonNull PackageManager packageManager) {
         if (mApplicationInfo != null) {
             return mApplicationInfo.loadIcon(packageManager);
         }
-        return packageManager.getEphemeralApplicationIcon(mPackageName);
+        return packageManager.getInstantAppIcon(mPackageName);
     }
 
+    /**
+     * @return The requested permissions.
+     */
     public @Nullable String[] getRequestedPermissions() {
         return mRequestedPermissions;
     }
 
+    /**
+     * @return The granted permissions.
+     */
     public @Nullable String[] getGrantedPermissions() {
         return mGrantedPermissions;
     }
@@ -105,16 +134,16 @@ public final class EphemeralApplicationInfo implements Parcelable {
         parcel.writeParcelable(mApplicationInfo, flags);
     }
 
-    public static final Creator<EphemeralApplicationInfo> CREATOR =
-            new Creator<EphemeralApplicationInfo>() {
+    public static final Creator<InstantAppInfo> CREATOR =
+            new Creator<InstantAppInfo>() {
         @Override
-        public EphemeralApplicationInfo createFromParcel(Parcel parcel) {
-            return new EphemeralApplicationInfo(parcel);
+        public InstantAppInfo createFromParcel(Parcel parcel) {
+            return new InstantAppInfo(parcel);
         }
 
         @Override
-        public EphemeralApplicationInfo[] newArray(int size) {
-            return new EphemeralApplicationInfo[0];
+        public InstantAppInfo[] newArray(int size) {
+            return new InstantAppInfo[0];
         }
     };
 }
