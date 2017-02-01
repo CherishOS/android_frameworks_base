@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The Android Open Source Project
+ * Copyright (C) 2017 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package android.media;
+package com.android.server.audio;
 
+public interface PlayerFocusEnforcer {
 
-/**
- * @hide
- */
-interface IPlayer {
-    oneway void start();
-    oneway void pause();
-    oneway void stop();
-    oneway void setVolume(float vol);
-    oneway void setPan(float pan);
-    oneway void setStartDelayMs(int delayMs);
+    /**
+     * Ducks the players associated with the "loser" focus owner (i.e. same UID). Returns true if
+     * at least one active player was found and ducked, false otherwise.
+     * @param winner
+     * @param loser
+     * @return
+     */
+    public boolean duckPlayers(FocusRequester winner, FocusRequester loser);
+
+    public void unduckPlayers(FocusRequester winner);
 }
