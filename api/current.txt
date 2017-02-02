@@ -6509,6 +6509,7 @@ package android.app.assist {
     method public float getAlpha();
     method public android.view.autofill.AutoFillId getAutoFillId();
     method public android.view.autofill.AutoFillType getAutoFillType();
+    method public android.view.autofill.AutoFillValue getAutoFillValue();
     method public android.app.assist.AssistStructure.ViewNode getChildAt(int);
     method public int getChildCount();
     method public java.lang.String getClassName();
@@ -35877,7 +35878,7 @@ package android.service.autofill {
 
   public final class SaveCallback {
     method public void onFailure(java.lang.CharSequence);
-    method public void onSuccess(android.view.autofill.AutoFillId[]);
+    method public void onSuccess();
   }
 
 }
@@ -44577,8 +44578,6 @@ package android.view {
     field public static final int ACCESSIBILITY_LIVE_REGION_NONE = 0; // 0x0
     field public static final int ACCESSIBILITY_LIVE_REGION_POLITE = 1; // 0x1
     field public static final android.util.Property<android.view.View, java.lang.Float> ALPHA;
-    field public static final int AUTO_FILL_FLAG_TYPE_FILL = 268435456; // 0x10000000
-    field public static final int AUTO_FILL_FLAG_TYPE_SAVE = 536870912; // 0x20000000
     field public static final int DRAG_FLAG_GLOBAL = 256; // 0x100
     field public static final int DRAG_FLAG_GLOBAL_PERSISTABLE_URI_PERMISSION = 64; // 0x40
     field public static final int DRAG_FLAG_GLOBAL_PREFIX_URI_PERMISSION = 128; // 0x80
@@ -45214,7 +45213,7 @@ package android.view {
     method public abstract int addChildCount(int);
     method public abstract void asyncCommit();
     method public abstract android.view.ViewStructure asyncNewChild(int);
-    method public abstract android.view.ViewStructure asyncNewChild(int, int);
+    method public abstract android.view.ViewStructure asyncNewChild(int, int, int);
     method public abstract int getChildCount();
     method public abstract android.os.Bundle getExtras();
     method public abstract java.lang.CharSequence getHint();
@@ -45223,11 +45222,12 @@ package android.view {
     method public abstract int getTextSelectionStart();
     method public abstract boolean hasExtras();
     method public abstract android.view.ViewStructure newChild(int);
-    method public abstract android.view.ViewStructure newChild(int, int);
+    method public abstract android.view.ViewStructure newChild(int, int, int);
     method public abstract void setAccessibilityFocused(boolean);
     method public abstract void setActivated(boolean);
     method public abstract void setAlpha(float);
     method public abstract void setAutoFillType(android.view.autofill.AutoFillType);
+    method public abstract void setAutoFillValue(android.view.autofill.AutoFillValue);
     method public abstract void setCheckable(boolean);
     method public abstract void setChecked(boolean);
     method public abstract void setChildCount(int);
@@ -45250,6 +45250,7 @@ package android.view {
     method public abstract void setTextStyle(float, int, int, int);
     method public abstract void setTransformation(android.graphics.Matrix);
     method public abstract void setVisibility(int);
+    field public static final int AUTO_FILL_FLAG_SANITIZED = 1; // 0x1
   }
 
   public final class ViewStub extends android.view.View {
@@ -46472,6 +46473,7 @@ package android.view.autofill {
   }
 
   public final class AutoFillManager {
+    method public void onValueChanged(android.view.View, android.view.autofill.AutoFillValue);
     method public void updateAutoFillInput(android.view.View, int);
     method public void updateAutoFillInput(android.view.View, int, android.graphics.Rect, int);
     field public static final int FLAG_UPDATE_UI_HIDE = 2; // 0x2
