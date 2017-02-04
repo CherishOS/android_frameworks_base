@@ -44391,7 +44391,8 @@ package android.view {
     method public android.view.animation.Animation getAnimation();
     method public android.os.IBinder getApplicationWindowToken();
     method public android.view.autofill.AutoFillType getAutoFillType();
-    method public android.view.autofill.VirtualViewDelegate getAutoFillVirtualViewDelegate(android.view.autofill.VirtualViewDelegate.Callback);
+    method public android.view.autofill.AutoFillValue getAutoFillValue();
+    method public android.view.autofill.VirtualViewDelegate getAutoFillVirtualViewDelegate();
     method public android.graphics.drawable.Drawable getBackground();
     method public android.content.res.ColorStateList getBackgroundTintList();
     method public android.graphics.PorterDuff.Mode getBackgroundTintMode();
@@ -46740,11 +46741,11 @@ package android.view.autofill {
   }
 
   public final class AutoFillManager {
-    method public void onValueChanged(android.view.View, android.view.autofill.AutoFillValue);
-    method public void updateAutoFillInput(android.view.View, int);
-    method public void updateAutoFillInput(android.view.View, int, android.graphics.Rect, int);
-    field public static final int FLAG_UPDATE_UI_HIDE = 2; // 0x2
-    field public static final int FLAG_UPDATE_UI_SHOW = 1; // 0x1
+    method public void focusChanged(android.view.View, boolean);
+    method public void reset();
+    method public void valueChanged(android.view.View);
+    method public void virtualFocusChanged(android.view.View, int, android.graphics.Rect, android.view.autofill.AutoFillValue, boolean);
+    method public void virtualValueChanged(android.view.View, int, android.view.autofill.AutoFillValue);
   }
 
   public final class AutoFillType implements android.os.Parcelable {
@@ -46804,13 +46805,6 @@ package android.view.autofill {
   public abstract class VirtualViewDelegate {
     ctor public VirtualViewDelegate();
     method public abstract void autoFill(int, android.view.autofill.AutoFillValue);
-  }
-
-  public static abstract class VirtualViewDelegate.Callback {
-    ctor public VirtualViewDelegate.Callback();
-    method public void onAutoFillInputUpdated(int, android.graphics.Rect, int);
-    method public void onNodeRemoved(int...);
-    method public void onValueChanged(int);
   }
 
 }
