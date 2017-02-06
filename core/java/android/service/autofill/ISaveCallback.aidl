@@ -13,18 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package android.service.autofill;
 
-import java.io.PrintWriter;
-
-final class CallbackHelper {
-
-    static interface Dumpable {
-        void dump(String prefix, PrintWriter pw);
-        void setFinalizer(Finalizer f);
-    }
-
-    static interface Finalizer {
-        void gone();
-    }
+/**
+ * Interface to receive the result of a save request.
+ *
+ * @hide
+ */
+interface ISaveCallback {
+    void onSuccess();
+    void onFailure(CharSequence message);
 }
