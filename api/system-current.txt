@@ -21413,6 +21413,11 @@ package android.location {
     field public static final android.os.Parcelable.Creator<android.location.Address> CREATOR;
   }
 
+  public abstract class BatchedLocationCallback {
+    ctor public BatchedLocationCallback();
+    method public void onLocationBatch(java.util.List<android.location.Location>);
+  }
+
   public class Criteria implements android.os.Parcelable {
     ctor public Criteria();
     ctor public Criteria(android.location.Criteria);
@@ -21951,14 +21956,17 @@ package android.location {
     method public void clearTestProviderEnabled(java.lang.String);
     method public void clearTestProviderLocation(java.lang.String);
     method public void clearTestProviderStatus(java.lang.String);
+    method public void flushGnssBatch();
     method public java.util.List<java.lang.String> getAllProviders();
     method public java.lang.String getBestProvider(android.location.Criteria, boolean);
+    method public int getGnssBatchSize();
     method public deprecated android.location.GpsStatus getGpsStatus(android.location.GpsStatus);
     method public android.location.Location getLastKnownLocation(java.lang.String);
     method public android.location.LocationProvider getProvider(java.lang.String);
     method public java.util.List<java.lang.String> getProviders(boolean);
     method public java.util.List<java.lang.String> getProviders(android.location.Criteria, boolean);
     method public boolean isProviderEnabled(java.lang.String);
+    method public boolean registerGnssBatchedLocationCallback(long, boolean, android.location.BatchedLocationCallback, android.os.Handler);
     method public boolean registerGnssMeasurementsCallback(android.location.GnssMeasurementsEvent.Callback);
     method public boolean registerGnssMeasurementsCallback(android.location.GnssMeasurementsEvent.Callback, android.os.Handler);
     method public boolean registerGnssNavigationMessageCallback(android.location.GnssNavigationMessage.Callback);
@@ -21989,6 +21997,7 @@ package android.location {
     method public void setTestProviderEnabled(java.lang.String, boolean);
     method public void setTestProviderLocation(java.lang.String, android.location.Location);
     method public void setTestProviderStatus(java.lang.String, int, android.os.Bundle, long);
+    method public boolean unregisterGnssBatchedLocationCallback(android.location.BatchedLocationCallback);
     method public void unregisterGnssMeasurementsCallback(android.location.GnssMeasurementsEvent.Callback);
     method public void unregisterGnssNavigationMessageCallback(android.location.GnssNavigationMessage.Callback);
     method public void unregisterGnssStatusCallback(android.location.GnssStatus.Callback);
