@@ -10373,6 +10373,15 @@ package android.content.pm {
     method public final int compare(android.content.pm.ApplicationInfo, android.content.pm.ApplicationInfo);
   }
 
+  public final class ChangedPackages implements android.os.Parcelable {
+    ctor public ChangedPackages(int, java.util.List<java.lang.String>);
+    method public int describeContents();
+    method public java.util.List<java.lang.String> getPackageNames();
+    method public int getSequenceNumber();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.content.pm.ChangedPackages> CREATOR;
+  }
+
   public class ComponentInfo extends android.content.pm.PackageItemInfo {
     ctor public ComponentInfo();
     ctor public ComponentInfo(android.content.pm.ComponentInfo);
@@ -10770,6 +10779,7 @@ package android.content.pm {
     method public abstract java.lang.CharSequence getApplicationLabel(android.content.pm.ApplicationInfo);
     method public abstract android.graphics.drawable.Drawable getApplicationLogo(android.content.pm.ApplicationInfo);
     method public abstract android.graphics.drawable.Drawable getApplicationLogo(java.lang.String) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public abstract android.content.pm.ChangedPackages getChangedPackages(int);
     method public abstract int getComponentEnabledSetting(android.content.ComponentName);
     method public abstract android.graphics.drawable.Drawable getDefaultActivityIcon();
     method public abstract java.lang.String getDefaultBrowserPackageNameAsUser(int);
@@ -43490,6 +43500,7 @@ package android.test.mock {
     method public java.lang.CharSequence getApplicationLabel(android.content.pm.ApplicationInfo);
     method public android.graphics.drawable.Drawable getApplicationLogo(android.content.pm.ApplicationInfo);
     method public android.graphics.drawable.Drawable getApplicationLogo(java.lang.String) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public android.content.pm.ChangedPackages getChangedPackages(int);
     method public int getComponentEnabledSetting(android.content.ComponentName);
     method public android.graphics.drawable.Drawable getDefaultActivityIcon();
     method public java.lang.String getDefaultBrowserPackageNameAsUser(int);
@@ -50759,7 +50770,7 @@ package android.view.textclassifier {
 
   public final class TextClassificationManager {
     method public java.util.List<android.view.textclassifier.TextLanguage> detectLanguages(java.lang.CharSequence);
-    method public android.view.textclassifier.TextClassifier getDefaultTextClassifier();
+    method public synchronized android.view.textclassifier.TextClassifier getDefaultTextClassifier();
   }
 
   public final class TextClassificationResult {
