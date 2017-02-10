@@ -6899,6 +6899,7 @@ package android.app.backup {
     method public int requestBackup(java.lang.String[], android.app.backup.BackupObserver);
     method public int requestBackup(java.lang.String[], android.app.backup.BackupObserver, android.app.backup.BackupManagerMonitor, int);
     method public int requestRestore(android.app.backup.RestoreObserver);
+    method public int requestRestore(android.app.backup.RestoreObserver, android.app.backup.BackupManagerMonitor);
     method public deprecated java.lang.String selectBackupTransport(java.lang.String);
     method public void selectBackupTransport(android.content.ComponentName, android.app.backup.SelectBackupTransportCallback);
     method public void setAutoRestore(boolean);
@@ -6927,7 +6928,9 @@ package android.app.backup {
     field public static final int LOG_EVENT_CATEGORY_BACKUP_MANAGER_POLICY = 3; // 0x3
     field public static final int LOG_EVENT_CATEGORY_TRANSPORT = 1; // 0x1
     field public static final int LOG_EVENT_ID_FULL_BACKUP_TIMEOUT = 4; // 0x4
+    field public static final int LOG_EVENT_ID_FULL_RESTORE_TIMEOUT = 45; // 0x2d
     field public static final int LOG_EVENT_ID_KEY_VALUE_BACKUP_TIMEOUT = 21; // 0x15
+    field public static final int LOG_EVENT_ID_KEY_VALUE_RESTORE_TIMEOUT = 31; // 0x1f
     field public static final int LOG_EVENT_ID_NO_PACKAGES = 49; // 0x31
   }
 
@@ -7024,8 +7027,11 @@ package android.app.backup {
 
   public class RestoreSession {
     method public void endRestoreSession();
+    method public int getAvailableRestoreSets(android.app.backup.RestoreObserver, android.app.backup.BackupManagerMonitor);
     method public int getAvailableRestoreSets(android.app.backup.RestoreObserver);
+    method public int restoreAll(long, android.app.backup.RestoreObserver, android.app.backup.BackupManagerMonitor);
     method public int restoreAll(long, android.app.backup.RestoreObserver);
+    method public int restorePackage(java.lang.String, android.app.backup.RestoreObserver, android.app.backup.BackupManagerMonitor);
     method public int restorePackage(java.lang.String, android.app.backup.RestoreObserver);
   }
 
