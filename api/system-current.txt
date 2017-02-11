@@ -9619,10 +9619,6 @@ package android.content {
     field public static final java.lang.String EXTRA_ASSIST_INPUT_HINT_KEYBOARD = "android.intent.extra.ASSIST_INPUT_HINT_KEYBOARD";
     field public static final java.lang.String EXTRA_ASSIST_PACKAGE = "android.intent.extra.ASSIST_PACKAGE";
     field public static final java.lang.String EXTRA_ASSIST_UID = "android.intent.extra.ASSIST_UID";
-    field public static final java.lang.String EXTRA_AUTO_FILL_ASSIST_STRUCTURE = "android.intent.extra.AUTO_FILL_ASSIST_STRUCTURE";
-    field public static final java.lang.String EXTRA_AUTO_FILL_CALLBACK = "android.intent.extra.AUTO_FILL_CALLBACK";
-    field public static final java.lang.String EXTRA_AUTO_FILL_EXTRAS = "android.intent.extra.AUTO_FILL_EXTRAS";
-    field public static final java.lang.String EXTRA_AUTO_FILL_ITEM_ID = "android.intent.extra.AUTO_FILL_ITEM_ID";
     field public static final java.lang.String EXTRA_BCC = "android.intent.extra.BCC";
     field public static final java.lang.String EXTRA_BUG_REPORT = "android.intent.extra.BUG_REPORT";
     field public static final java.lang.String EXTRA_CC = "android.intent.extra.CC";
@@ -39265,12 +39261,37 @@ package android.service.autofill {
     field public static final java.lang.String SERVICE_META_DATA = "android.autofill";
   }
 
-  public final class FillCallback implements android.os.Parcelable {
+  public final class Dataset implements android.os.Parcelable {
     method public int describeContents();
-    method public void onFailure(java.lang.CharSequence);
-    method public void onSuccess(android.view.autofill.FillResponse);
     method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.service.autofill.FillCallback> CREATOR;
+    field public static final android.os.Parcelable.Creator<android.service.autofill.Dataset> CREATOR;
+  }
+
+  public static final class Dataset.Builder {
+    ctor public Dataset.Builder(java.lang.CharSequence);
+    method public android.service.autofill.Dataset build();
+    method public android.service.autofill.Dataset.Builder setAuthentication(android.content.IntentSender);
+    method public android.service.autofill.Dataset.Builder setValue(android.view.autofill.AutoFillId, android.view.autofill.AutoFillValue);
+  }
+
+  public final class FillCallback {
+    method public void onFailure(java.lang.CharSequence);
+    method public void onSuccess(android.service.autofill.FillResponse);
+  }
+
+  public final class FillResponse implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.FillResponse> CREATOR;
+  }
+
+  public static final class FillResponse.Builder {
+    ctor public FillResponse.Builder();
+    method public android.service.autofill.FillResponse.Builder addDataset(android.service.autofill.Dataset);
+    method public android.service.autofill.FillResponse.Builder addSavableFields(android.view.autofill.AutoFillId...);
+    method public android.service.autofill.FillResponse build();
+    method public android.service.autofill.FillResponse.Builder setAuthentication(android.content.IntentSender);
+    method public android.service.autofill.FillResponse.Builder setExtras(android.os.Bundle);
   }
 
   public final class SaveCallback {
@@ -50277,6 +50298,8 @@ package android.view.autofill {
     method public void valueChanged(android.view.View);
     method public void virtualFocusChanged(android.view.View, int, android.graphics.Rect, boolean);
     method public void virtualValueChanged(android.view.View, int, android.view.autofill.AutoFillValue);
+    field public static final java.lang.String EXTRA_ASSIST_STRUCTURE = "android.view.autofill.extra.ASSIST_STRUCTURE";
+    field public static final java.lang.String EXTRA_AUTHENTICATION_RESULT = "android.view.autofill.extra.AUTHENTICATION_RESULT";
   }
 
   public final class AutoFillType implements android.os.Parcelable {
@@ -50302,35 +50325,6 @@ package android.view.autofill {
     method public boolean getToggleValue();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.autofill.AutoFillValue> CREATOR;
-  }
-
-  public final class Dataset implements android.os.Parcelable {
-    method public int describeContents();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.view.autofill.Dataset> CREATOR;
-  }
-
-  public static final class Dataset.Builder {
-    ctor public Dataset.Builder(java.lang.String, java.lang.CharSequence);
-    method public android.view.autofill.Dataset build();
-    method public android.view.autofill.Dataset.Builder setAuthentication(android.content.IntentSender);
-    method public android.view.autofill.Dataset.Builder setExtras(android.os.Bundle);
-    method public android.view.autofill.Dataset.Builder setValue(android.view.autofill.AutoFillId, android.view.autofill.AutoFillValue);
-  }
-
-  public final class FillResponse implements android.os.Parcelable {
-    method public int describeContents();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.view.autofill.FillResponse> CREATOR;
-  }
-
-  public static final class FillResponse.Builder {
-    ctor public FillResponse.Builder(java.lang.String);
-    method public android.view.autofill.FillResponse.Builder addDataset(android.view.autofill.Dataset);
-    method public android.view.autofill.FillResponse.Builder addSavableFields(android.view.autofill.AutoFillId...);
-    method public android.view.autofill.FillResponse build();
-    method public android.view.autofill.FillResponse.Builder setAuthentication(android.content.IntentSender);
-    method public android.view.autofill.FillResponse.Builder setExtras(android.os.Bundle);
   }
 
 }
