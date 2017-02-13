@@ -141,12 +141,14 @@ package android {
     field public static final java.lang.String MANAGE_APP_OPS_RESTRICTIONS = "android.permission.MANAGE_APP_OPS_RESTRICTIONS";
     field public static final java.lang.String MANAGE_APP_TOKENS = "android.permission.MANAGE_APP_TOKENS";
     field public static final java.lang.String MANAGE_AUTO_FILL = "android.permission.MANAGE_AUTO_FILL";
+    field public static final java.lang.String MANAGE_CARRIER_OEM_UNLOCK_STATE = "android.permission.MANAGE_CARRIER_OEM_UNLOCK_STATE";
     field public static final java.lang.String MANAGE_CA_CERTIFICATES = "android.permission.MANAGE_CA_CERTIFICATES";
     field public static final java.lang.String MANAGE_DEVICE_ADMINS = "android.permission.MANAGE_DEVICE_ADMINS";
     field public static final java.lang.String MANAGE_DOCUMENTS = "android.permission.MANAGE_DOCUMENTS";
     field public static final java.lang.String MANAGE_OWN_CALLS = "android.permission.MANAGE_OWN_CALLS";
     field public static final java.lang.String MANAGE_USB = "android.permission.MANAGE_USB";
     field public static final java.lang.String MANAGE_USERS = "android.permission.MANAGE_USERS";
+    field public static final java.lang.String MANAGE_USER_OEM_UNLOCK_STATE = "android.permission.MANAGE_USER_OEM_UNLOCK_STATE";
     field public static final java.lang.String MASTER_CLEAR = "android.permission.MASTER_CLEAR";
     field public static final java.lang.String MEDIA_CONTENT_CONTROL = "android.permission.MEDIA_CONTENT_CONTROL";
     field public static final java.lang.String MODIFY_APPWIDGET_BIND_PERMISSIONS = "android.permission.MODIFY_APPWIDGET_BIND_PERMISSIONS";
@@ -9401,6 +9403,7 @@ package android.content {
     field public static final java.lang.String NFC_SERVICE = "nfc";
     field public static final java.lang.String NOTIFICATION_SERVICE = "notification";
     field public static final java.lang.String NSD_SERVICE = "servicediscovery";
+    field public static final java.lang.String OEM_LOCK_SERVICE = "oem_lock";
     field public static final java.lang.String PERSISTENT_DATA_BLOCK_SERVICE = "persistent_data_block";
     field public static final java.lang.String POWER_SERVICE = "power";
     field public static final java.lang.String PRINT_SERVICE = "print";
@@ -34483,7 +34486,7 @@ package android.os {
     field public static final java.lang.String DISALLOW_MODIFY_ACCOUNTS = "no_modify_accounts";
     field public static final java.lang.String DISALLOW_MOUNT_PHYSICAL_MEDIA = "no_physical_media";
     field public static final java.lang.String DISALLOW_NETWORK_RESET = "no_network_reset";
-    field public static final java.lang.String DISALLOW_OEM_UNLOCK = "no_oem_unlock";
+    field public static final deprecated java.lang.String DISALLOW_OEM_UNLOCK = "no_oem_unlock";
     field public static final java.lang.String DISALLOW_OUTGOING_BEAM = "no_outgoing_beam";
     field public static final java.lang.String DISALLOW_OUTGOING_CALLS = "no_outgoing_calls";
     field public static final java.lang.String DISALLOW_REMOVE_MANAGED_PROFILE = "no_remove_managed_profile";
@@ -40376,15 +40379,26 @@ package android.service.notification {
 
 }
 
+package android.service.oemlock {
+
+  public class OemLockManager {
+    method public boolean isOemUnlockAllowedByCarrier();
+    method public boolean isOemUnlockAllowedByUser();
+    method public void setOemUnlockAllowedByCarrier(boolean, byte[]);
+    method public void setOemUnlockAllowedByUser(boolean);
+  }
+
+}
+
 package android.service.persistentdata {
 
   public class PersistentDataBlockManager {
     method public int getDataBlockSize();
     method public int getFlashLockState();
     method public long getMaximumDataBlockSize();
-    method public boolean getOemUnlockEnabled();
+    method public deprecated boolean getOemUnlockEnabled();
     method public byte[] read();
-    method public void setOemUnlockEnabled(boolean);
+    method public deprecated void setOemUnlockEnabled(boolean);
     method public void wipe();
     method public int write(byte[]);
     field public static final int FLASH_LOCK_LOCKED = 1; // 0x1
