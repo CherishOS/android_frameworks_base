@@ -50768,6 +50768,13 @@ package java.lang {
     field public static final java.lang.Class<java.lang.Boolean> TYPE;
   }
 
+  public class BootstrapMethodError extends java.lang.LinkageError {
+    ctor public BootstrapMethodError();
+    ctor public BootstrapMethodError(java.lang.String);
+    ctor public BootstrapMethodError(java.lang.String, java.lang.Throwable);
+    ctor public BootstrapMethodError(java.lang.Throwable);
+  }
+
   public final class Byte extends java.lang.Number implements java.lang.Comparable {
     ctor public Byte(byte);
     ctor public Byte(java.lang.String) throws java.lang.NumberFormatException;
@@ -52654,6 +52661,21 @@ package java.lang.annotation {
 
 package java.lang.invoke {
 
+  public abstract class CallSite {
+    method public abstract java.lang.invoke.MethodHandle dynamicInvoker();
+    method public abstract java.lang.invoke.MethodHandle getTarget();
+    method public abstract void setTarget(java.lang.invoke.MethodHandle);
+    method public java.lang.invoke.MethodType type();
+  }
+
+  public class ConstantCallSite extends java.lang.invoke.CallSite {
+    ctor public ConstantCallSite(java.lang.invoke.MethodHandle);
+    ctor protected ConstantCallSite(java.lang.invoke.MethodType, java.lang.invoke.MethodHandle) throws java.lang.Throwable;
+    method public final java.lang.invoke.MethodHandle dynamicInvoker();
+    method public final java.lang.invoke.MethodHandle getTarget();
+    method public final void setTarget(java.lang.invoke.MethodHandle);
+  }
+
   public class LambdaConversionException extends java.lang.Exception {
     ctor public LambdaConversionException();
     ctor public LambdaConversionException(java.lang.String);
@@ -52780,6 +52802,22 @@ package java.lang.invoke {
     method public java.lang.String toMethodDescriptorString();
     method public java.lang.invoke.MethodType unwrap();
     method public java.lang.invoke.MethodType wrap();
+  }
+
+  public class MutableCallSite extends java.lang.invoke.CallSite {
+    ctor public MutableCallSite(java.lang.invoke.MethodType);
+    ctor public MutableCallSite(java.lang.invoke.MethodHandle);
+    method public final java.lang.invoke.MethodHandle dynamicInvoker();
+    method public final java.lang.invoke.MethodHandle getTarget();
+    method public void setTarget(java.lang.invoke.MethodHandle);
+  }
+
+  public class VolatileCallSite extends java.lang.invoke.CallSite {
+    ctor public VolatileCallSite(java.lang.invoke.MethodType);
+    ctor public VolatileCallSite(java.lang.invoke.MethodHandle);
+    method public final java.lang.invoke.MethodHandle dynamicInvoker();
+    method public final java.lang.invoke.MethodHandle getTarget();
+    method public void setTarget(java.lang.invoke.MethodHandle);
   }
 
   public class WrongMethodTypeException extends java.lang.RuntimeException {
