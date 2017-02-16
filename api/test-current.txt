@@ -22413,7 +22413,7 @@ package android.media {
     method public void pause() throws java.lang.IllegalStateException;
     method public void prepare() throws java.io.IOException, java.lang.IllegalStateException;
     method public void prepareAsync() throws java.lang.IllegalStateException;
-    method public void prepareDrm(java.util.UUID, android.media.MediaPlayer.OnDrmConfigCallback) throws android.media.MediaPlayer.ProvisioningErrorException, android.media.ResourceBusyException, android.media.UnsupportedSchemeException;
+    method public void prepareDrm(java.util.UUID) throws android.media.MediaPlayer.ProvisioningErrorException, android.media.ResourceBusyException, android.media.UnsupportedSchemeException;
     method public byte[] provideKeyResponse(byte[], byte[]) throws android.media.DeniedByServerException, android.media.MediaPlayer.NoDrmSchemeException;
     method public void release();
     method public void releaseDrm() throws android.media.MediaPlayer.NoDrmSchemeException;
@@ -22441,6 +22441,7 @@ package android.media {
     method public void setNextMediaPlayer(android.media.MediaPlayer);
     method public void setOnBufferingUpdateListener(android.media.MediaPlayer.OnBufferingUpdateListener);
     method public void setOnCompletionListener(android.media.MediaPlayer.OnCompletionListener);
+    method public void setOnDrmConfigListener(android.media.MediaPlayer.OnDrmConfigListener);
     method public void setOnDrmInfoListener(android.media.MediaPlayer.OnDrmInfoListener);
     method public void setOnDrmInfoListener(android.media.MediaPlayer.OnDrmInfoListener, android.os.Handler);
     method public void setOnDrmPreparedListener(android.media.MediaPlayer.OnDrmPreparedListener);
@@ -22505,9 +22506,8 @@ package android.media {
     method public abstract void onCompletion(android.media.MediaPlayer);
   }
 
-  public static abstract class MediaPlayer.OnDrmConfigCallback {
-    ctor public MediaPlayer.OnDrmConfigCallback();
-    method public void onDrmConfig(android.media.MediaPlayer);
+  public static abstract interface MediaPlayer.OnDrmConfigListener {
+    method public abstract void onDrmConfig(android.media.MediaPlayer);
   }
 
   public static abstract interface MediaPlayer.OnDrmInfoListener {
