@@ -30,7 +30,6 @@ package android {
     field public static final java.lang.String BIND_INPUT_METHOD = "android.permission.BIND_INPUT_METHOD";
     field public static final java.lang.String BIND_MIDI_DEVICE_SERVICE = "android.permission.BIND_MIDI_DEVICE_SERVICE";
     field public static final java.lang.String BIND_NFC_SERVICE = "android.permission.BIND_NFC_SERVICE";
-    field public static final java.lang.String BIND_NOTIFICATION_ASSISTANT_SERVICE = "android.permission.BIND_NOTIFICATION_ASSISTANT_SERVICE";
     field public static final java.lang.String BIND_NOTIFICATION_LISTENER_SERVICE = "android.permission.BIND_NOTIFICATION_LISTENER_SERVICE";
     field public static final java.lang.String BIND_PRINT_SERVICE = "android.permission.BIND_PRINT_SERVICE";
     field public static final java.lang.String BIND_QUICK_SETTINGS_TILE = "android.permission.BIND_QUICK_SETTINGS_TILE";
@@ -36481,22 +36480,6 @@ package android.service.media {
 
 package android.service.notification {
 
-  public final class Adjustment implements android.os.Parcelable {
-    ctor public Adjustment(java.lang.String, java.lang.String, android.os.Bundle, java.lang.CharSequence, int);
-    ctor protected Adjustment(android.os.Parcel);
-    method public int describeContents();
-    method public java.lang.CharSequence getExplanation();
-    method public java.lang.String getKey();
-    method public java.lang.String getPackage();
-    method public android.os.Bundle getSignals();
-    method public int getUser();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.service.notification.Adjustment> CREATOR;
-    field public static final java.lang.String KEY_CHANNEL_ID = "key_channel_id";
-    field public static final java.lang.String KEY_PEOPLE = "key_people";
-    field public static final java.lang.String KEY_SNOOZE_CRITERIA = "key_snooze_criteria";
-  }
-
   public final class Condition implements android.os.Parcelable {
     ctor public Condition(android.net.Uri, java.lang.String, int);
     ctor public Condition(android.net.Uri, java.lang.String, java.lang.String, java.lang.String, int, int, int);
@@ -36543,21 +36526,6 @@ package android.service.notification {
     field public static final java.lang.String SERVICE_INTERFACE = "android.service.notification.ConditionProviderService";
   }
 
-  public abstract class NotificationAssistantService extends android.service.notification.NotificationListenerService {
-    ctor public NotificationAssistantService();
-    method public final void adjustNotification(android.service.notification.Adjustment);
-    method public final void adjustNotifications(java.util.List<android.service.notification.Adjustment>);
-    method public void createNotificationChannel(java.lang.String, android.app.NotificationChannel);
-    method public void deleteNotificationChannel(java.lang.String, java.lang.String);
-    method public java.util.List<android.app.NotificationChannel> getNotificationChannels(java.lang.String);
-    method public final android.os.IBinder onBind(android.content.Intent);
-    method public abstract android.service.notification.Adjustment onNotificationEnqueued(android.service.notification.StatusBarNotification);
-    method public abstract void onNotificationSnoozedUntilContext(android.service.notification.StatusBarNotification, java.lang.String);
-    method public final void unsnoozeNotification(java.lang.String);
-    method public void updateNotificationChannel(java.lang.String, android.app.NotificationChannel);
-    field public static final java.lang.String SERVICE_INTERFACE = "android.service.notification.NotificationAssistantService";
-  }
-
   public abstract class NotificationListenerService extends android.app.Service {
     ctor public NotificationListenerService();
     method public final void cancelAllNotifications();
@@ -36586,7 +36554,6 @@ package android.service.notification {
     method public static void requestRebind(android.content.ComponentName);
     method public final void requestUnbind();
     method public final void setNotificationsShown(java.lang.String[]);
-    method public final void snoozeNotification(java.lang.String, java.lang.String);
     method public final void snoozeNotification(java.lang.String, long);
     field public static final int HINT_HOST_DISABLE_CALL_EFFECTS = 4; // 0x4
     field public static final int HINT_HOST_DISABLE_EFFECTS = 1; // 0x1
@@ -36623,14 +36590,12 @@ package android.service.notification {
   public static class NotificationListenerService.Ranking {
     ctor public NotificationListenerService.Ranking();
     method public boolean canShowBadge();
-    method public java.util.List<java.lang.String> getAdditionalPeople();
     method public android.app.NotificationChannel getChannel();
     method public int getImportance();
     method public java.lang.CharSequence getImportanceExplanation();
     method public java.lang.String getKey();
     method public java.lang.String getOverrideGroupKey();
     method public int getRank();
-    method public java.util.List<android.service.notification.SnoozeCriterion> getSnoozeCriteria();
     method public int getSuppressedVisualEffects();
     method public boolean isAmbient();
     method public boolean matchesInterruptionFilter();
@@ -36642,17 +36607,6 @@ package android.service.notification {
     method public boolean getRanking(java.lang.String, android.service.notification.NotificationListenerService.Ranking);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.notification.NotificationListenerService.RankingMap> CREATOR;
-  }
-
-  public final class SnoozeCriterion implements android.os.Parcelable {
-    ctor public SnoozeCriterion(java.lang.String, java.lang.CharSequence, java.lang.CharSequence);
-    ctor protected SnoozeCriterion(android.os.Parcel);
-    method public int describeContents();
-    method public java.lang.CharSequence getConfirmation();
-    method public java.lang.CharSequence getExplanation();
-    method public java.lang.String getId();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.service.notification.SnoozeCriterion> CREATOR;
   }
 
   public class StatusBarNotification implements android.os.Parcelable {
