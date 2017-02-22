@@ -37877,9 +37877,11 @@ package android.telecom {
     method public android.telecom.Call.Details getDetails();
     method public android.telecom.Call getParent();
     method public java.lang.String getRemainingPostDialSequence();
+    method public android.telecom.Call.RttCall getRttCall();
     method public int getState();
     method public android.telecom.InCallService.VideoCall getVideoCall();
     method public void hold();
+    method public boolean isRttActive();
     method public void mergeConference();
     method public void phoneAccountSelected(android.telecom.PhoneAccountHandle, boolean);
     method public void playDtmfTone(char);
@@ -37891,9 +37893,12 @@ package android.telecom {
     method public void reject(boolean, java.lang.String);
     method public final void removeExtras(java.util.List<java.lang.String>);
     method public final void removeExtras(java.lang.String...);
+    method public void respondToRttRequest(int, boolean);
     method public void sendCallEvent(java.lang.String, android.os.Bundle);
+    method public void sendRttRequest();
     method public void splitFromConference();
     method public void stopDtmfTone();
+    method public void stopRtt();
     method public void swapConference();
     method public void unhold();
     method public void unregisterCallback(android.telecom.Call.Callback);
@@ -37921,6 +37926,9 @@ package android.telecom {
     method public void onDetailsChanged(android.telecom.Call, android.telecom.Call.Details);
     method public void onParentChanged(android.telecom.Call, android.telecom.Call);
     method public void onPostDialWait(android.telecom.Call, java.lang.String);
+    method public void onRttModeChanged(android.telecom.Call, int);
+    method public void onRttRequest(android.telecom.Call, int);
+    method public void onRttStatusChanged(android.telecom.Call, boolean, android.telecom.Call.RttCall);
     method public void onStateChanged(android.telecom.Call, int);
     method public void onVideoCallChanged(android.telecom.Call, android.telecom.InCallService.VideoCall);
   }
@@ -37972,6 +37980,19 @@ package android.telecom {
     field public static final int PROPERTY_HIGH_DEF_AUDIO = 16; // 0x10
     field public static final int PROPERTY_IS_EXTERNAL_CALL = 64; // 0x40
     field public static final int PROPERTY_WIFI = 8; // 0x8
+  }
+
+  public static final class Call.RttCall {
+    method public int getRttAudioMode();
+    method public java.lang.String read();
+    method public void setRttMode(int);
+    method public void write(java.lang.String) throws java.io.IOException;
+    field public static final int RTT_MODE_FULL = 1; // 0x1
+    field public static final int RTT_MODE_HCO = 2; // 0x2
+    field public static final int RTT_MODE_VCO = 3; // 0x3
+  }
+
+  public static abstract class Call.RttCall.RttAudioMode implements java.lang.annotation.Annotation {
   }
 
   public final class CallAudioState implements android.os.Parcelable {
@@ -38345,6 +38366,7 @@ package android.telecom {
     field public static final int CAPABILITY_CALL_SUBJECT = 64; // 0x40
     field public static final int CAPABILITY_CONNECTION_MANAGER = 1; // 0x1
     field public static final int CAPABILITY_PLACE_EMERGENCY_CALLS = 16; // 0x10
+    field public static final int CAPABILITY_RTT = 4096; // 0x1000
     field public static final int CAPABILITY_SELF_MANAGED = 2048; // 0x800
     field public static final int CAPABILITY_SIM_SUBSCRIPTION = 4; // 0x4
     field public static final int CAPABILITY_SUPPORTS_VIDEO_CALLING = 1024; // 0x400
@@ -38557,6 +38579,7 @@ package android.telecom {
     field public static final java.lang.String EXTRA_NOTIFICATION_PHONE_NUMBER = "android.telecom.extra.NOTIFICATION_PHONE_NUMBER";
     field public static final java.lang.String EXTRA_OUTGOING_CALL_EXTRAS = "android.telecom.extra.OUTGOING_CALL_EXTRAS";
     field public static final java.lang.String EXTRA_PHONE_ACCOUNT_HANDLE = "android.telecom.extra.PHONE_ACCOUNT_HANDLE";
+    field public static final java.lang.String EXTRA_START_CALL_WITH_RTT = "android.telecom.extra.START_CALL_WITH_RTT";
     field public static final java.lang.String EXTRA_START_CALL_WITH_SPEAKERPHONE = "android.telecom.extra.START_CALL_WITH_SPEAKERPHONE";
     field public static final java.lang.String EXTRA_START_CALL_WITH_VIDEO_STATE = "android.telecom.extra.START_CALL_WITH_VIDEO_STATE";
     field public static final java.lang.String GATEWAY_ORIGINAL_ADDRESS = "android.telecom.extra.GATEWAY_ORIGINAL_ADDRESS";
