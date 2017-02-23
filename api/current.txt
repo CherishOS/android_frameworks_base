@@ -21471,8 +21471,42 @@ package android.media {
     field public static final int STOP_VIDEO_RECORDING = 3; // 0x3
   }
 
+  public final class MediaCas {
+    ctor public MediaCas(int) throws android.media.UnsupportedCasException;
+    method public void closeSession(byte[]);
+    method public static android.media.MediaCas.PluginDescriptor[] enumeratePlugins();
+    method public static boolean isSystemIdSupported(int);
+    method public byte[] openSession(int);
+    method public byte[] openSession(int, int);
+    method public void processEcm(byte[], byte[], int, int);
+    method public void processEcm(byte[], byte[]);
+    method public void processEmm(byte[], int, int);
+    method public void processEmm(byte[]);
+    method public void provision(java.lang.String);
+    method public void refreshEntitlements(int, byte[]);
+    method public void release();
+    method public void sendEvent(int, int, byte[]);
+    method public void setEventListener(android.media.MediaCas.EventListener, android.os.Handler);
+    method public void setPrivateData(byte[]);
+    method public void setSessionPrivateData(byte[], byte[]);
+  }
+
+  public static abstract interface MediaCas.EventListener {
+    method public abstract void onEvent(android.media.MediaCas, int, int, byte[]);
+  }
+
+  public static class MediaCas.PluginDescriptor {
+    method public java.lang.String getName();
+    method public int getSystemId();
+  }
+
+  public class MediaCasException extends java.lang.Exception {
+    ctor public MediaCasException(java.lang.String);
+  }
+
   public final class MediaCodec {
     method public void configure(android.media.MediaFormat, android.view.Surface, android.media.MediaCrypto, int);
+    method public void configure(android.media.MediaFormat, android.view.Surface, int, android.media.MediaDescrambler);
     method public static android.media.MediaCodec createByCodecName(java.lang.String) throws java.io.IOException;
     method public static android.media.MediaCodec createDecoderByType(java.lang.String) throws java.io.IOException;
     method public static android.media.MediaCodec createEncoderByType(java.lang.String) throws java.io.IOException;
@@ -21512,6 +21546,7 @@ package android.media {
     field public static final int BUFFER_FLAG_CODEC_CONFIG = 2; // 0x2
     field public static final int BUFFER_FLAG_END_OF_STREAM = 4; // 0x4
     field public static final int BUFFER_FLAG_KEY_FRAME = 1; // 0x1
+    field public static final int BUFFER_FLAG_PARTIAL_FRAME = 8; // 0x8
     field public static final deprecated int BUFFER_FLAG_SYNC_FRAME = 1; // 0x1
     field public static final int CONFIGURE_FLAG_ENCODE = 1; // 0x1
     field public static final int CRYPTO_MODE_AES_CBC = 2; // 0x2
@@ -21668,6 +21703,7 @@ package android.media {
     field public static final deprecated int COLOR_TI_FormatYUV420PackedSemiPlanar = 2130706688; // 0x7f000100
     field public static final java.lang.String FEATURE_AdaptivePlayback = "adaptive-playback";
     field public static final java.lang.String FEATURE_IntraRefresh = "intra-refresh";
+    field public static final java.lang.String FEATURE_PartialFrame = "partial-frame";
     field public static final java.lang.String FEATURE_SecurePlayback = "secure-playback";
     field public static final java.lang.String FEATURE_TunneledPlayback = "tunneled-playback";
     field public int[] colorFormats;
@@ -21892,6 +21928,14 @@ package android.media {
     method public abstract int readAt(long, byte[], int, int) throws java.io.IOException;
   }
 
+  public final class MediaDescrambler {
+    ctor public MediaDescrambler(int) throws android.media.UnsupportedCasException;
+    method public final int descramble(java.nio.ByteBuffer, int, java.nio.ByteBuffer, int, android.media.MediaCodec.CryptoInfo);
+    method public final void release();
+    method public final boolean requiresSecureDecoderComponent(java.lang.String);
+    method public final void setMediaCasSession(byte[]);
+  }
+
   public class MediaDescription implements android.os.Parcelable {
     method public int describeContents();
     method public java.lang.CharSequence getDescription();
@@ -22048,8 +22092,10 @@ package android.media {
     method public final void setDataSource(android.content.res.AssetFileDescriptor) throws java.io.IOException, java.lang.IllegalArgumentException, java.lang.IllegalStateException;
     method public final void setDataSource(java.io.FileDescriptor) throws java.io.IOException;
     method public final void setDataSource(java.io.FileDescriptor, long, long) throws java.io.IOException;
+    method public final void setMediaCas(android.media.MediaCas);
     method public void unselectTrack(int);
     field public static final int SAMPLE_FLAG_ENCRYPTED = 2; // 0x2
+    field public static final int SAMPLE_FLAG_PARTIAL_FRAME = 4; // 0x4
     field public static final int SAMPLE_FLAG_SYNC = 1; // 0x1
     field public static final int SEEK_TO_CLOSEST_SYNC = 2; // 0x2
     field public static final int SEEK_TO_NEXT_SYNC = 1; // 0x1
@@ -22146,6 +22192,7 @@ package android.media {
     field public static final java.lang.String MIMETYPE_AUDIO_OPUS = "audio/opus";
     field public static final java.lang.String MIMETYPE_AUDIO_QCELP = "audio/qcelp";
     field public static final java.lang.String MIMETYPE_AUDIO_RAW = "audio/raw";
+    field public static final java.lang.String MIMETYPE_AUDIO_SCRAMBLED = "audio/scrambled";
     field public static final java.lang.String MIMETYPE_AUDIO_VORBIS = "audio/vorbis";
     field public static final java.lang.String MIMETYPE_TEXT_CEA_608 = "text/cea-608";
     field public static final java.lang.String MIMETYPE_TEXT_VTT = "text/vtt";
@@ -22156,6 +22203,7 @@ package android.media {
     field public static final java.lang.String MIMETYPE_VIDEO_MPEG2 = "video/mpeg2";
     field public static final java.lang.String MIMETYPE_VIDEO_MPEG4 = "video/mp4v-es";
     field public static final java.lang.String MIMETYPE_VIDEO_RAW = "video/raw";
+    field public static final java.lang.String MIMETYPE_VIDEO_SCRAMBLED = "video/scrambled";
     field public static final java.lang.String MIMETYPE_VIDEO_VP8 = "video/x-vnd.on2.vp8";
     field public static final java.lang.String MIMETYPE_VIDEO_VP9 = "video/x-vnd.on2.vp9";
   }
@@ -23125,6 +23173,10 @@ package android.media {
     field public static final int TONE_SUP_RADIO_ACK = 19; // 0x13
     field public static final int TONE_SUP_RADIO_NOTAVAIL = 20; // 0x14
     field public static final int TONE_SUP_RINGTONE = 23; // 0x17
+  }
+
+  public final class UnsupportedCasException extends android.media.MediaCasException {
+    ctor public UnsupportedCasException(java.lang.String);
   }
 
   public final class UnsupportedSchemeException extends android.media.MediaDrmException {
