@@ -22305,6 +22305,26 @@ package android.media {
     field public static final android.os.Parcelable.Creator<android.media.AudioFocusInfo> CREATOR;
   }
 
+  public final class AudioFocusRequest {
+    method public boolean acceptsDelayedFocusGain();
+    method public android.media.AudioAttributes getAudioAttributes();
+    method public int getFocusGain();
+    method public android.media.AudioManager.OnAudioFocusChangeListener getOnAudioFocusChangeListener();
+    method public android.os.Handler getOnAudioFocusChangeListenerHandler();
+    method public boolean willPauseWhenDucked();
+  }
+
+  public static final class AudioFocusRequest.Builder {
+    ctor public AudioFocusRequest.Builder(int);
+    ctor public AudioFocusRequest.Builder(android.media.AudioFocusRequest);
+    method public android.media.AudioFocusRequest build();
+    method public android.media.AudioFocusRequest.Builder setAcceptsDelayedFocusGain(boolean);
+    method public android.media.AudioFocusRequest.Builder setAudioAttributes(android.media.AudioAttributes);
+    method public android.media.AudioFocusRequest.Builder setFocusGain(int);
+    method public android.media.AudioFocusRequest.Builder setOnAudioFocusChangeListener(android.media.AudioManager.OnAudioFocusChangeListener, android.os.Handler);
+    method public android.media.AudioFocusRequest.Builder setWillPauseWhenDucked(boolean);
+  }
+
   public final class AudioFormat implements android.os.Parcelable {
     method public int describeContents();
     method public int getChannelCount();
@@ -22382,6 +22402,7 @@ package android.media {
   public class AudioManager {
     method public int abandonAudioFocus(android.media.AudioManager.OnAudioFocusChangeListener);
     method public int abandonAudioFocus(android.media.AudioManager.OnAudioFocusChangeListener, android.media.AudioAttributes);
+    method public int abandonAudioFocusRequest(android.media.AudioFocusRequest);
     method public void adjustStreamVolume(int, int, int);
     method public void adjustSuggestedStreamVolume(int, int, int);
     method public void adjustVolume(int, int);
@@ -22420,6 +22441,7 @@ package android.media {
     method public deprecated void registerRemoteControlClient(android.media.RemoteControlClient);
     method public deprecated boolean registerRemoteController(android.media.RemoteController);
     method public int requestAudioFocus(android.media.AudioManager.OnAudioFocusChangeListener, int, int);
+    method public int requestAudioFocus(android.media.AudioFocusRequest);
     method public int requestAudioFocus(android.media.AudioManager.OnAudioFocusChangeListener, android.media.AudioAttributes, int, int) throws java.lang.IllegalArgumentException;
     method public int requestAudioFocus(android.media.AudioManager.OnAudioFocusChangeListener, android.media.AudioAttributes, int, int, android.media.audiopolicy.AudioPolicy) throws java.lang.IllegalArgumentException;
     method public deprecated void setBluetoothA2dpOn(boolean);
@@ -22469,6 +22491,7 @@ package android.media {
     field public static final int AUDIOFOCUS_LOSS_TRANSIENT = -2; // 0xfffffffe
     field public static final int AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK = -3; // 0xfffffffd
     field public static final int AUDIOFOCUS_NONE = 0; // 0x0
+    field public static final int AUDIOFOCUS_REQUEST_DELAYED = 2; // 0x2
     field public static final int AUDIOFOCUS_REQUEST_FAILED = 0; // 0x0
     field public static final int AUDIOFOCUS_REQUEST_GRANTED = 1; // 0x1
     field public static final int AUDIO_SESSION_ID_GENERATE = 0; // 0x0
