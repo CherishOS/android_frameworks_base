@@ -24192,17 +24192,79 @@ package android.media.tv {
     method public static final android.net.Uri buildProgramsUriForChannel(long, long, long);
     method public static final android.net.Uri buildProgramsUriForChannel(android.net.Uri, long, long);
     method public static final android.net.Uri buildRecordedProgramUri(long);
+    method public static final android.net.Uri buildWatchNextProgramUri(long);
     method public static final boolean isChannelUri(android.net.Uri);
     method public static final boolean isChannelUriForPassthroughInput(android.net.Uri);
     method public static final boolean isChannelUriForTunerInput(android.net.Uri);
     method public static final boolean isProgramUri(android.net.Uri);
+    field public static final java.lang.String ACTION_MAKE_CHANNEL_BROWSABLE = "android.media.tv.action.MAKE_CHANNEL_BROWSABLE";
+    field public static final java.lang.String ACTION_PREVIEW_PROGRAM_ADDED_TO_WATCH_NEXT = "android.media.tv.action.PREVIEW_PROGRAM_ADDED_TO_WATCH_NEXT";
+    field public static final java.lang.String ACTION_PREVIEW_PROGRAM_BROWSABLE_DISABLED = "android.media.tv.action.PREVIEW_PROGRAM_BROWSABLE_DISABLED";
+    field public static final java.lang.String ACTION_WATCH_NEXT_PROGRAM_BROWSABLE_DISABLED = "android.media.tv.action.WATCH_NEXT_PROGRAM_BROWSABLE_DISABLED";
     field public static final java.lang.String AUTHORITY = "android.media.tv";
+    field public static final java.lang.String EXTRA_CHANNEL_ID = "android.media.tv.extra.CHANNEL_ID";
+    field public static final java.lang.String EXTRA_PACKAGE_NAME = "android.media.tv.extra.PACKAGE_NAME";
+    field public static final java.lang.String EXTRA_PREVIEW_PROGRAM_ID = "android.media.tv.extra.PREVIEW_PROGRAM_ID";
+    field public static final java.lang.String EXTRA_WATCH_NEXT_PROGRAM_ID = "android.media.tv.extra.WATCH_NEXT_PROGRAM_ID";
+  }
+
+  public static abstract interface TvContract.BasePreviewProgramColumns implements android.media.tv.TvContract.BaseProgramColumns {
+    field public static final java.lang.String ASPECT_RATIO_16_9 = "ASPECT_RATIO_16_9";
+    field public static final java.lang.String ASPECT_RATIO_1_1 = "ASPECT_RATIO_1_1";
+    field public static final java.lang.String ASPECT_RATIO_2_3 = "ASPECT_RATIO_2_3";
+    field public static final java.lang.String ASPECT_RATIO_3_2 = "ASPECT_RATIO_3_2";
+    field public static final java.lang.String AVAILABILITY_AVAILABLE = "AVAILABILITY_AVAILABLE";
+    field public static final java.lang.String AVAILABILITY_FREE_WITH_SUBSCRIPTION = "AVAILABILITY_FREE_WITH_SUBSCRIPTION";
+    field public static final java.lang.String AVAILABILITY_PAID_CONTENT = "AVAILABILITY_PAID_CONTENT";
+    field public static final java.lang.String COLUMN_APP_LINK_INTENT_URI = "app_link_intent_uri";
+    field public static final java.lang.String COLUMN_AUTHOR = "author";
+    field public static final java.lang.String COLUMN_AVAILABILITY = "availability";
+    field public static final java.lang.String COLUMN_BROWSABLE = "browsable";
+    field public static final java.lang.String COLUMN_CONTENT_ID = "content_id";
+    field public static final java.lang.String COLUMN_DURATION_MILLIS = "duration_millis";
+    field public static final java.lang.String COLUMN_INTERACTION_COUNT = "interaction_count";
+    field public static final java.lang.String COLUMN_INTERACTION_TYPE = "interaction_type";
+    field public static final java.lang.String COLUMN_INTERNAL_PROVIDER_ID = "internal_provider_id";
+    field public static final java.lang.String COLUMN_ITEM_COUNT = "item_count";
+    field public static final java.lang.String COLUMN_LAST_PLAYBACK_POSITION_MILLIS = "last_playback_position_millis";
+    field public static final java.lang.String COLUMN_LIVE = "live";
+    field public static final java.lang.String COLUMN_LOGO_URI = "logo_uri";
+    field public static final java.lang.String COLUMN_OFFER_PRICE = "offer_price";
+    field public static final java.lang.String COLUMN_POSTER_ART_ASPECT_RATIO = "poster_art_aspect_ratio";
+    field public static final java.lang.String COLUMN_PREVIEW_VIDEO_URI = "preview_video_uri";
+    field public static final java.lang.String COLUMN_RELEASE_DATE = "release_date";
+    field public static final java.lang.String COLUMN_REVIEW_RATING = "review_rating";
+    field public static final java.lang.String COLUMN_REVIEW_RATING_STYLE = "review_rating_style";
+    field public static final java.lang.String COLUMN_STARTING_PRICE = "starting_price";
+    field public static final java.lang.String COLUMN_THUMBNAIL_ASPECT_RATIO = "poster_thumbnail_aspect_ratio";
+    field public static final java.lang.String COLUMN_TYPE = "type";
+    field public static final java.lang.String INTERACTION_TYPE_FANS = "INTERACTION_TYPE_FANS";
+    field public static final java.lang.String INTERACTION_TYPE_FOLLOWERS = "INTERACTION_TYPE_FOLLOWERS";
+    field public static final java.lang.String INTERACTION_TYPE_LIKES = "INTERACTION_TYPE_LIKES";
+    field public static final java.lang.String INTERACTION_TYPE_LISTENS = "INTERACTION_TYPE_LISTENS";
+    field public static final java.lang.String INTERACTION_TYPE_THUMBS = "INTERACTION_TYPE_THUMBS";
+    field public static final java.lang.String INTERACTION_TYPE_VIEWERS = "INTERACTION_TYPE_VIEWERS";
+    field public static final java.lang.String INTERACTION_TYPE_VIEWS = "INTERACTION_TYPE_VIEWS";
+    field public static final java.lang.String REVIEW_RATING_STYLE_PERCENTAGE = "REVIEW_RATING_STYLE_PERCENTAGE";
+    field public static final java.lang.String REVIEW_RATING_STYLE_STARS = "REVIEW_RATING_STYLE_STARS";
+    field public static final java.lang.String REVIEW_RATING_STYLE_THUMBS_UP_DOWN = "REVIEW_RATING_STYLE_THUMBS_UP_DOWN";
+    field public static final java.lang.String TYPE_ALBUM = "TYPE_ALBUM";
+    field public static final java.lang.String TYPE_ARTIST = "TYPE_ARTIST";
+    field public static final java.lang.String TYPE_CHANNEL = "TYPE_CHANNEL";
+    field public static final java.lang.String TYPE_CLIP = "TYPE_CLIP";
+    field public static final java.lang.String TYPE_EVENT = "TYPE_EVENT";
+    field public static final java.lang.String TYPE_MOVIE = "TYPE_MOVIE";
+    field public static final java.lang.String TYPE_PLAYLIST = "TYPE_PLAYLIST";
+    field public static final java.lang.String TYPE_STATION = "TYPE_STATION";
+    field public static final java.lang.String TYPE_TRACK = "TYPE_TRACK";
+    field public static final java.lang.String TYPE_TV_EPISODE = "TYPE_TV_EPISODE";
+    field public static final java.lang.String TYPE_TV_SEASON = "TYPE_TV_SEASON";
+    field public static final java.lang.String TYPE_TV_SERIES = "TYPE_TV_SERIES";
   }
 
   public static abstract interface TvContract.BaseProgramColumns implements android.media.tv.TvContract.BaseTvColumns {
     field public static final java.lang.String COLUMN_AUDIO_LANGUAGE = "audio_language";
     field public static final java.lang.String COLUMN_CANONICAL_GENRE = "canonical_genre";
-    field public static final java.lang.String COLUMN_CHANNEL_ID = "channel_id";
     field public static final java.lang.String COLUMN_CONTENT_RATING = "content_rating";
     field public static final java.lang.String COLUMN_EPISODE_DISPLAY_NUMBER = "episode_display_number";
     field public static final java.lang.String COLUMN_EPISODE_TITLE = "episode_title";
@@ -24308,69 +24370,17 @@ package android.media.tv {
     field public static final java.lang.String CONTENT_DIRECTORY = "logo";
   }
 
-  public static final class TvContract.PreviewPrograms implements android.media.tv.TvContract.BaseProgramColumns {
-    field public static final java.lang.String ASPECT_RATIO_16_9 = "ASPECT_RATIO_16_9";
-    field public static final java.lang.String ASPECT_RATIO_1_1 = "ASPECT_RATIO_1_1";
-    field public static final java.lang.String ASPECT_RATIO_2_3 = "ASPECT_RATIO_2_3";
-    field public static final java.lang.String ASPECT_RATIO_3_2 = "ASPECT_RATIO_3_2";
-    field public static final java.lang.String AVAILABILITY_AVAILABLE = "AVAILABILITY_AVAILABLE";
-    field public static final java.lang.String AVAILABILITY_FREE_WITH_SUBSCRIPTION = "AVAILABILITY_FREE_WITH_SUBSCRIPTION";
-    field public static final java.lang.String AVAILABILITY_PAID_CONTENT = "AVAILABILITY_PAID_CONTENT";
-    field public static final java.lang.String COLUMN_APP_LINK_INTENT_URI = "app_link_intent_uri";
-    field public static final java.lang.String COLUMN_AUTHOR = "author";
-    field public static final java.lang.String COLUMN_AVAILABILITY = "availability";
-    field public static final java.lang.String COLUMN_BROWSABLE = "browsable";
-    field public static final java.lang.String COLUMN_DURATION_MILLIS = "duration_millis";
-    field public static final java.lang.String COLUMN_INTERACTION_COUNT = "interaction_count";
-    field public static final java.lang.String COLUMN_INTERACTION_TYPE = "interaction_type";
-    field public static final java.lang.String COLUMN_INTERNAL_PROVIDER_ID = "internal_provider_id";
-    field public static final java.lang.String COLUMN_ITEM_COUNT = "item_count";
-    field public static final java.lang.String COLUMN_LAST_PLAYBACK_POSITION_MILLIS = "last_playback_position_millis";
-    field public static final java.lang.String COLUMN_LIVE = "live";
-    field public static final java.lang.String COLUMN_LOGO_URI = "logo_uri";
-    field public static final java.lang.String COLUMN_OFFER_PRICE = "offer_price";
-    field public static final java.lang.String COLUMN_POSTER_ART_ASPECT_RATIO = "poster_art_aspect_ratio";
-    field public static final java.lang.String COLUMN_PREVIEW_VIDEO_URI = "preview_video_uri";
-    field public static final java.lang.String COLUMN_RELEASE_DATE = "release_date";
-    field public static final java.lang.String COLUMN_REVIEW_RATING = "review_rating";
-    field public static final java.lang.String COLUMN_REVIEW_RATING_STYLE = "review_rating_style";
-    field public static final java.lang.String COLUMN_STARTING_PRICE = "starting_price";
-    field public static final java.lang.String COLUMN_THUMBNAIL_ASPECT_RATIO = "poster_thumbnail_aspect_ratio";
-    field public static final java.lang.String COLUMN_TYPE = "type";
-    field public static final java.lang.String COLUMN_WATCH_NEXT_TYPE = "watch_next_type";
+  public static final class TvContract.PreviewPrograms implements android.media.tv.TvContract.BasePreviewProgramColumns {
+    field public static final java.lang.String COLUMN_CHANNEL_ID = "channel_id";
     field public static final java.lang.String COLUMN_WEIGHT = "weight";
     field public static final java.lang.String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/preview_program";
     field public static final java.lang.String CONTENT_TYPE = "vnd.android.cursor.dir/preview_program";
     field public static final android.net.Uri CONTENT_URI;
-    field public static final java.lang.String INTERACTION_TYPE_FANS = "INTERACTION_TYPE_FANS";
-    field public static final java.lang.String INTERACTION_TYPE_FOLLOWERS = "INTERACTION_TYPE_FOLLOWERS";
-    field public static final java.lang.String INTERACTION_TYPE_LIKES = "INTERACTION_TYPE_LIKES";
-    field public static final java.lang.String INTERACTION_TYPE_LISTENS = "INTERACTION_TYPE_LISTENS";
-    field public static final java.lang.String INTERACTION_TYPE_THUMBS = "INTERACTION_TYPE_THUMBS";
-    field public static final java.lang.String INTERACTION_TYPE_VIEWERS = "INTERACTION_TYPE_VIEWERS";
-    field public static final java.lang.String INTERACTION_TYPE_VIEWS = "INTERACTION_TYPE_VIEWS";
-    field public static final java.lang.String REVIEW_RATING_STYLE_PERCENTAGE = "REVIEW_RATING_STYLE_PERCENTAGE";
-    field public static final java.lang.String REVIEW_RATING_STYLE_STARS = "REVIEW_RATING_STYLE_STARS";
-    field public static final java.lang.String REVIEW_RATING_STYLE_THUMBS_UP_DOWN = "REVIEW_RATING_STYLE_THUMBS_UP_DOWN";
-    field public static final java.lang.String TYPE_ALBUM = "TYPE_ALBUM";
-    field public static final java.lang.String TYPE_ARTIST = "TYPE_ARTIST";
-    field public static final java.lang.String TYPE_CHANNEL = "TYPE_CHANNEL";
-    field public static final java.lang.String TYPE_CLIP = "TYPE_CLIP";
-    field public static final java.lang.String TYPE_EVENT = "TYPE_EVENT";
-    field public static final java.lang.String TYPE_MOVIE = "TYPE_MOVIE";
-    field public static final java.lang.String TYPE_PLAYLIST = "TYPE_PLAYLIST";
-    field public static final java.lang.String TYPE_STATION = "TYPE_STATION";
-    field public static final java.lang.String TYPE_TRACK = "TYPE_TRACK";
-    field public static final java.lang.String TYPE_TV_EPISODE = "TYPE_TV_EPISODE";
-    field public static final java.lang.String TYPE_TV_SEASON = "TYPE_TV_SEASON";
-    field public static final java.lang.String TYPE_TV_SERIES = "TYPE_TV_SERIES";
-    field public static final java.lang.String WATCH_NEXT_TYPE_CONTINUE = "WATCH_NEXT_TYPE_CONTINUE";
-    field public static final java.lang.String WATCH_NEXT_TYPE_NEW = "WATCH_NEXT_TYPE_NEW";
-    field public static final java.lang.String WATCH_NEXT_TYPE_NEXT = "WATCH_NEXT_TYPE_NEXT";
   }
 
   public static final class TvContract.Programs implements android.media.tv.TvContract.BaseProgramColumns {
     field public static final java.lang.String COLUMN_BROADCAST_GENRE = "broadcast_genre";
+    field public static final java.lang.String COLUMN_CHANNEL_ID = "channel_id";
     field public static final java.lang.String COLUMN_END_TIME_UTC_MILLIS = "end_time_utc_millis";
     field public static final deprecated java.lang.String COLUMN_EPISODE_NUMBER = "episode_number";
     field public static final java.lang.String COLUMN_RECORDING_PROHIBITED = "recording_prohibited";
@@ -24406,6 +24416,7 @@ package android.media.tv {
 
   public static final class TvContract.RecordedPrograms implements android.media.tv.TvContract.BaseProgramColumns {
     field public static final java.lang.String COLUMN_BROADCAST_GENRE = "broadcast_genre";
+    field public static final java.lang.String COLUMN_CHANNEL_ID = "channel_id";
     field public static final java.lang.String COLUMN_END_TIME_UTC_MILLIS = "end_time_utc_millis";
     field public static final java.lang.String COLUMN_INPUT_ID = "input_id";
     field public static final java.lang.String COLUMN_RECORDING_DATA_BYTES = "recording_data_bytes";
@@ -24416,6 +24427,19 @@ package android.media.tv {
     field public static final java.lang.String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/recorded_program";
     field public static final java.lang.String CONTENT_TYPE = "vnd.android.cursor.dir/recorded_program";
     field public static final android.net.Uri CONTENT_URI;
+  }
+
+  public static final class TvContract.WatchNextPrograms implements android.media.tv.TvContract.BasePreviewProgramColumns {
+    ctor public TvContract.WatchNextPrograms();
+    field public static final java.lang.String COLUMN_LAST_ENGAGEMENT_TIME_UTC_MILLIS = "last_engagement_time_utc_millis";
+    field public static final java.lang.String COLUMN_WATCH_NEXT_TYPE = "watch_next_type";
+    field public static final java.lang.String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/watch_next_program";
+    field public static final java.lang.String CONTENT_TYPE = "vnd.android.cursor.dir/watch_next_program";
+    field public static final android.net.Uri CONTENT_URI;
+    field public static final java.lang.String WATCH_NEXT_TYPE_CONTINUE = "WATCH_NEXT_TYPE_CONTINUE";
+    field public static final java.lang.String WATCH_NEXT_TYPE_NEW = "WATCH_NEXT_TYPE_NEW";
+    field public static final java.lang.String WATCH_NEXT_TYPE_NEXT = "WATCH_NEXT_TYPE_NEXT";
+    field public static final java.lang.String WATCH_NEXT_TYPE_WATCHLIST = "WATCH_NEXT_TYPE_WATCHLIST";
   }
 
   public final class TvInputInfo implements android.os.Parcelable {
@@ -24467,15 +24491,10 @@ package android.media.tv {
     method public void unregisterCallback(android.media.tv.TvInputManager.TvInputCallback);
     method public void updateTvInputInfo(android.media.tv.TvInputInfo);
     field public static final java.lang.String ACTION_BLOCKED_RATINGS_CHANGED = "android.media.tv.action.BLOCKED_RATINGS_CHANGED";
-    field public static final java.lang.String ACTION_MAKE_CHANNEL_BROWSABLE = "android.media.tv.action.MAKE_CHANNEL_BROWSABLE";
     field public static final java.lang.String ACTION_PARENTAL_CONTROLS_ENABLED_CHANGED = "android.media.tv.action.PARENTAL_CONTROLS_ENABLED_CHANGED";
-    field public static final java.lang.String ACTION_PROGRAM_BROWSABLE_DISABLED = "android.media.tv.action.PROGRAM_BROWSABLE_DISABLED";
     field public static final java.lang.String ACTION_QUERY_CONTENT_RATING_SYSTEMS = "android.media.tv.action.QUERY_CONTENT_RATING_SYSTEMS";
     field public static final java.lang.String ACTION_SETUP_INPUTS = "android.media.tv.action.SETUP_INPUTS";
     field public static final java.lang.String ACTION_VIEW_RECORDING_SCHEDULES = "android.media.tv.action.VIEW_RECORDING_SCHEDULES";
-    field public static final java.lang.String EXTRA_CHANNEL_ID = "android.media.tv.extra.CHANNEL_ID";
-    field public static final java.lang.String EXTRA_PACKAGE_NAME = "android.media.tv.extra.PACKAGE_NAME";
-    field public static final java.lang.String EXTRA_PROGRAM_ID = "android.media.tv.extra.PROGRAM_ID";
     field public static final int INPUT_STATE_CONNECTED = 0; // 0x0
     field public static final int INPUT_STATE_CONNECTED_STANDBY = 1; // 0x1
     field public static final int INPUT_STATE_DISCONNECTED = 2; // 0x2
