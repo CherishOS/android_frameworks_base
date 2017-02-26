@@ -21095,13 +21095,14 @@ package android.media {
     field public long nanoTime;
   }
 
-  public class AudioTrack implements android.media.AudioRouting {
+  public class AudioTrack implements android.media.AudioRouting android.media.VolumeAutomation {
     ctor public deprecated AudioTrack(int, int, int, int, int, int) throws java.lang.IllegalArgumentException;
     ctor public deprecated AudioTrack(int, int, int, int, int, int, int) throws java.lang.IllegalArgumentException;
     ctor public AudioTrack(android.media.AudioAttributes, android.media.AudioFormat, int, int, int) throws java.lang.IllegalArgumentException;
     method public void addOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener, android.os.Handler);
     method public deprecated void addOnRoutingChangedListener(android.media.AudioTrack.OnRoutingChangedListener, android.os.Handler);
     method public int attachAuxEffect(int);
+    method public android.media.VolumeShaper createVolumeShaper(android.media.VolumeShaper.Configuration);
     method public void flush();
     method public int getAudioFormat();
     method public int getAudioSessionId();
@@ -22442,7 +22443,7 @@ package android.media {
     field public static final int MUXER_OUTPUT_WEBM = 1; // 0x1
   }
 
-  public class MediaPlayer {
+  public class MediaPlayer implements android.media.VolumeAutomation {
     ctor public MediaPlayer();
     method public void addTimedTextSource(java.lang.String, java.lang.String) throws java.io.IOException, java.lang.IllegalArgumentException, java.lang.IllegalStateException;
     method public void addTimedTextSource(android.content.Context, android.net.Uri, java.lang.String) throws java.io.IOException, java.lang.IllegalArgumentException, java.lang.IllegalStateException;
@@ -22454,6 +22455,7 @@ package android.media {
     method public static android.media.MediaPlayer create(android.content.Context, android.net.Uri, android.view.SurfaceHolder, android.media.AudioAttributes, int);
     method public static android.media.MediaPlayer create(android.content.Context, int);
     method public static android.media.MediaPlayer create(android.content.Context, int, android.media.AudioAttributes, int);
+    method public android.media.VolumeShaper createVolumeShaper(android.media.VolumeShaper.Configuration);
     method public void deselectTrack(int) throws java.lang.IllegalStateException;
     method public int getAudioSessionId();
     method public android.media.BufferingParams getBufferingParams();
@@ -23281,6 +23283,10 @@ package android.media {
     ctor public UnsupportedSchemeException(java.lang.String);
   }
 
+  public abstract interface VolumeAutomation {
+    method public abstract android.media.VolumeShaper createVolumeShaper(android.media.VolumeShaper.Configuration);
+  }
+
   public abstract class VolumeProvider {
     ctor public VolumeProvider(int, int, int);
     method public final int getCurrentVolume();
@@ -23292,6 +23298,53 @@ package android.media {
     field public static final int VOLUME_CONTROL_ABSOLUTE = 2; // 0x2
     field public static final int VOLUME_CONTROL_FIXED = 0; // 0x0
     field public static final int VOLUME_CONTROL_RELATIVE = 1; // 0x1
+  }
+
+  public final class VolumeShaper implements java.lang.AutoCloseable {
+    method public void apply(android.media.VolumeShaper.Operation);
+    method public void close();
+    method public float getVolume();
+    method public void replace(android.media.VolumeShaper.Configuration, android.media.VolumeShaper.Operation, boolean);
+  }
+
+  public static final class VolumeShaper.Configuration implements android.os.Parcelable {
+    method public int describeContents();
+    method public double getDurationMs();
+    method public int getInterpolatorType();
+    method public static int getMaximumCurvePoints();
+    method public float[] getTimes();
+    method public float[] getVolumes();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.media.VolumeShaper.Configuration> CREATOR;
+    field public static final android.media.VolumeShaper.Configuration CUBIC_RAMP;
+    field public static final int INTERPOLATOR_TYPE_CUBIC = 2; // 0x2
+    field public static final int INTERPOLATOR_TYPE_CUBIC_MONOTONIC = 3; // 0x3
+    field public static final int INTERPOLATOR_TYPE_LINEAR = 1; // 0x1
+    field public static final int INTERPOLATOR_TYPE_STEP = 0; // 0x0
+    field public static final android.media.VolumeShaper.Configuration LINEAR_RAMP;
+    field public static final android.media.VolumeShaper.Configuration SCURVE_RAMP;
+    field public static final android.media.VolumeShaper.Configuration SINE_RAMP;
+  }
+
+  public static final class VolumeShaper.Configuration.Builder {
+    ctor public VolumeShaper.Configuration.Builder();
+    ctor public VolumeShaper.Configuration.Builder(android.media.VolumeShaper.Configuration);
+    method public android.media.VolumeShaper.Configuration build();
+    method public android.media.VolumeShaper.Configuration.Builder invertVolumes();
+    method public android.media.VolumeShaper.Configuration.Builder reflectTimes();
+    method public android.media.VolumeShaper.Configuration.Builder scaleToEndVolume(float);
+    method public android.media.VolumeShaper.Configuration.Builder scaleToStartVolume(float);
+    method public android.media.VolumeShaper.Configuration.Builder setCurve(float[], float[]);
+    method public android.media.VolumeShaper.Configuration.Builder setDurationMs(double);
+    method public android.media.VolumeShaper.Configuration.Builder setInterpolatorType(int);
+  }
+
+  public static final class VolumeShaper.Operation implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.media.VolumeShaper.Operation> CREATOR;
+    field public static final android.media.VolumeShaper.Operation PLAY;
+    field public static final android.media.VolumeShaper.Operation REVERSE;
   }
 
 }
