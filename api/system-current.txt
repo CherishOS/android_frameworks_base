@@ -4658,16 +4658,12 @@ package android.app {
     field public static final int VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION = 3; // 0x3
   }
 
-  public abstract class EphemeralResolverService extends android.app.Service {
+  public abstract deprecated class EphemeralResolverService extends android.app.InstantAppResolverService {
     ctor public EphemeralResolverService();
-    method public final void attachBaseContext(android.content.Context);
     method public android.os.Looper getLooper();
-    method public final android.os.IBinder onBind(android.content.Intent);
     method public abstract deprecated java.util.List<android.content.pm.EphemeralResolveInfo> onEphemeralResolveInfoList(int[], int);
     method public android.content.pm.EphemeralResolveInfo onGetEphemeralIntentFilter(java.lang.String);
     method public java.util.List<android.content.pm.EphemeralResolveInfo> onGetEphemeralResolveInfo(int[]);
-    field public static final java.lang.String EXTRA_RESOLVE_INFO = "android.app.extra.RESOLVE_INFO";
-    field public static final java.lang.String EXTRA_SEQUENCE = "android.app.extra.SEQUENCE";
   }
 
   public class ExpandableListActivity extends android.app.Activity implements android.widget.ExpandableListView.OnChildClickListener android.widget.ExpandableListView.OnGroupCollapseListener android.widget.ExpandableListView.OnGroupExpandListener android.view.View.OnCreateContextMenuListener {
@@ -4986,6 +4982,20 @@ package android.app {
     field public static final int TRANSIT_FRAGMENT_OPEN = 4097; // 0x1001
     field public static final int TRANSIT_NONE = 0; // 0x0
     field public static final int TRANSIT_UNSET = -1; // 0xffffffff
+  }
+
+  public abstract class InstantAppResolverService extends android.app.Service {
+    ctor public InstantAppResolverService();
+    method public final void attachBaseContext(android.content.Context);
+    method public final android.os.IBinder onBind(android.content.Intent);
+    method public void onGetInstantAppIntentFilter(int[], android.app.InstantAppResolverService.InstantAppResolutionCallback);
+    method public void onGetInstantAppResolveInfo(int[], android.app.InstantAppResolverService.InstantAppResolutionCallback);
+    field public static final java.lang.String EXTRA_RESOLVE_INFO = "android.app.extra.RESOLVE_INFO";
+    field public static final java.lang.String EXTRA_SEQUENCE = "android.app.extra.SEQUENCE";
+  }
+
+  public static final class InstantAppResolverService.InstantAppResolutionCallback {
+    method public void onInstantAppResolveInfo(java.util.List<android.content.pm.InstantAppResolveInfo>);
   }
 
   public class Instrumentation {
@@ -10477,7 +10487,7 @@ package android.content.pm {
     field public int reqTouchScreen;
   }
 
-  public final class EphemeralIntentFilter implements android.os.Parcelable {
+  public final deprecated class EphemeralIntentFilter implements android.os.Parcelable {
     ctor public EphemeralIntentFilter(java.lang.String, java.util.List<android.content.IntentFilter>);
     method public int describeContents();
     method public java.util.List<android.content.IntentFilter> getFilters();
@@ -10486,7 +10496,7 @@ package android.content.pm {
     field public static final android.os.Parcelable.Creator<android.content.pm.EphemeralIntentFilter> CREATOR;
   }
 
-  public final class EphemeralResolveInfo implements android.os.Parcelable {
+  public final deprecated class EphemeralResolveInfo implements android.os.Parcelable {
     ctor public deprecated EphemeralResolveInfo(android.net.Uri, java.lang.String, java.util.List<android.content.IntentFilter>);
     ctor public deprecated EphemeralResolveInfo(android.content.pm.EphemeralResolveInfo.EphemeralDigest, java.lang.String, java.util.List<android.content.pm.EphemeralIntentFilter>);
     ctor public EphemeralResolveInfo(android.content.pm.EphemeralResolveInfo.EphemeralDigest, java.lang.String, java.util.List<android.content.pm.EphemeralIntentFilter>, int);
@@ -10534,6 +10544,38 @@ package android.content.pm {
     field public java.lang.String name;
     field public int reqGlEsVersion;
     field public int version;
+  }
+
+  public final class InstantAppIntentFilter implements android.os.Parcelable {
+    ctor public InstantAppIntentFilter(java.lang.String, java.util.List<android.content.IntentFilter>);
+    method public int describeContents();
+    method public java.util.List<android.content.IntentFilter> getFilters();
+    method public java.lang.String getSplitName();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.content.pm.InstantAppIntentFilter> CREATOR;
+  }
+
+  public final class InstantAppResolveInfo implements android.os.Parcelable {
+    ctor public InstantAppResolveInfo(android.content.pm.InstantAppResolveInfo.InstantAppDigest, java.lang.String, java.util.List<android.content.pm.InstantAppIntentFilter>, int);
+    ctor public InstantAppResolveInfo(java.lang.String, java.lang.String, java.util.List<android.content.pm.InstantAppIntentFilter>);
+    method public int describeContents();
+    method public byte[] getDigestBytes();
+    method public int getDigestPrefix();
+    method public java.util.List<android.content.pm.InstantAppIntentFilter> getIntentFilters();
+    method public java.lang.String getPackageName();
+    method public int getVersionCode();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.content.pm.InstantAppResolveInfo> CREATOR;
+    field public static final java.lang.String SHA_ALGORITHM = "SHA-256";
+  }
+
+  public static final class InstantAppResolveInfo.InstantAppDigest implements android.os.Parcelable {
+    ctor public InstantAppResolveInfo.InstantAppDigest(java.lang.String);
+    method public int describeContents();
+    method public byte[][] getDigestBytes();
+    method public int[] getDigestPrefix();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.content.pm.InstantAppResolveInfo.InstantAppDigest> CREATOR;
   }
 
   public class InstrumentationInfo extends android.content.pm.PackageItemInfo implements android.os.Parcelable {
@@ -32726,12 +32768,12 @@ package android.os {
     field public static final int BATTERY_PLUGGED_AC = 1; // 0x1
     field public static final int BATTERY_PLUGGED_USB = 2; // 0x2
     field public static final int BATTERY_PLUGGED_WIRELESS = 4; // 0x4
-    field public static final int BATTERY_PROPERTY_STATUS = 6; // 0x6
     field public static final int BATTERY_PROPERTY_CAPACITY = 4; // 0x4
     field public static final int BATTERY_PROPERTY_CHARGE_COUNTER = 1; // 0x1
     field public static final int BATTERY_PROPERTY_CURRENT_AVERAGE = 3; // 0x3
     field public static final int BATTERY_PROPERTY_CURRENT_NOW = 2; // 0x2
     field public static final int BATTERY_PROPERTY_ENERGY_COUNTER = 5; // 0x5
+    field public static final int BATTERY_PROPERTY_STATUS = 6; // 0x6
     field public static final int BATTERY_STATUS_CHARGING = 2; // 0x2
     field public static final int BATTERY_STATUS_DISCHARGING = 3; // 0x3
     field public static final int BATTERY_STATUS_FULL = 5; // 0x5
