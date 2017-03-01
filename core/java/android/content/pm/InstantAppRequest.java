@@ -19,22 +19,22 @@ package android.content.pm;
 import android.content.Intent;
 
 /**
- * Information needed to make an ephemeral application resolution request.
+ * Information needed to make an instant application resolution request.
  * @hide
  */
-public final class EphemeralRequest {
-    /** Response from the first phase of ephemeral application resolution */
+public final class InstantAppRequest {
+    /** Response from the first phase of instant application resolution */
     public final AuxiliaryResolveInfo responseObj;
-    /** The original intent that triggered ephemeral application resolution */
+    /** The original intent that triggered instant application resolution */
     public final Intent origIntent;
     /** Resolved type of the intent */
     public final String resolvedType;
-    /** The name of the package requesting the ephemeral application */
+    /** The name of the package requesting the instant application */
     public final String callingPackage;
-    /** ID of the user requesting the ephemeral application */
+    /** ID of the user requesting the instant application */
     public final int userId;
 
-    public EphemeralRequest(AuxiliaryResolveInfo responseObj, Intent origIntent,
+    public InstantAppRequest(AuxiliaryResolveInfo responseObj, Intent origIntent,
             String resolvedType, String callingPackage, int userId) {
         this.responseObj = responseObj;
         this.origIntent = origIntent;
