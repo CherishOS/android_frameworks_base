@@ -37016,7 +37016,8 @@ package android.telecom {
 
   public static final class Call.RttCall {
     method public int getRttAudioMode();
-    method public java.lang.String read();
+    method public java.lang.String read() throws java.io.IOException;
+    method public java.lang.String readImmediately() throws java.io.IOException;
     method public void setRttMode(int);
     method public void write(java.lang.String) throws java.io.IOException;
     field public static final int RTT_MODE_FULL = 1; // 0x1
@@ -37136,6 +37137,7 @@ package android.telecom {
     method public final int getState();
     method public final android.telecom.StatusHints getStatusHints();
     method public final android.telecom.Connection.VideoProvider getVideoProvider();
+    method public void handleRttUpgradeResponse(android.telecom.Connection.RttTextStream);
     method public final boolean isRingbackRequested();
     method public void onAbort();
     method public void onAnswer(int);
@@ -37152,14 +37154,20 @@ package android.telecom {
     method public void onReject(java.lang.String);
     method public void onSeparate();
     method public void onShowIncomingCallUi();
+    method public void onStartRtt(android.telecom.Connection.RttTextStream);
     method public void onStateChanged(int);
     method public void onStopDtmfTone();
+    method public void onStopRtt();
     method public void onUnhold();
     method public static java.lang.String propertiesToString(int);
     method public final void putExtras(android.os.Bundle);
     method public final void removeExtras(java.util.List<java.lang.String>);
     method public final void removeExtras(java.lang.String...);
     method public void sendConnectionEvent(java.lang.String, android.os.Bundle);
+    method public final void sendRemoteRttRequest();
+    method public final void sendRttInitiationFailure(int);
+    method public final void sendRttInitiationSuccess();
+    method public final void sendRttSessionRemotelyTerminated();
     method public final void setActive();
     method public final void setAddress(android.net.Uri, int);
     method public final void setAudioModeIsVoip(boolean);
@@ -37212,6 +37220,7 @@ package android.telecom {
     field public static final java.lang.String EXTRA_LAST_FORWARDED_NUMBER = "android.telecom.extra.LAST_FORWARDED_NUMBER";
     field public static final int PROPERTY_HAS_CDMA_VOICE_PRIVACY = 32; // 0x20
     field public static final int PROPERTY_IS_EXTERNAL_CALL = 16; // 0x10
+    field public static final int PROPERTY_IS_RTT = 256; // 0x100
     field public static final int PROPERTY_SELF_MANAGED = 128; // 0x80
     field public static final int STATE_ACTIVE = 4; // 0x4
     field public static final int STATE_DIALING = 3; // 0x3
@@ -37230,6 +37239,12 @@ package android.telecom {
     field public static final int SESSION_MODIFY_REQUEST_REJECTED_BY_REMOTE = 5; // 0x5
     field public static final int SESSION_MODIFY_REQUEST_SUCCESS = 1; // 0x1
     field public static final int SESSION_MODIFY_REQUEST_TIMED_OUT = 4; // 0x4
+  }
+
+  public static final class Connection.RttTextStream {
+    method public java.lang.String read() throws java.io.IOException;
+    method public java.lang.String readImmediately() throws java.io.IOException;
+    method public void write(java.lang.String) throws java.io.IOException;
   }
 
   public static abstract class Connection.VideoProvider {
@@ -37272,7 +37287,9 @@ package android.telecom {
     method public android.telecom.PhoneAccountHandle getAccountHandle();
     method public android.net.Uri getAddress();
     method public android.os.Bundle getExtras();
+    method public android.telecom.Connection.RttTextStream getRttTextStream();
     method public int getVideoState();
+    method public boolean isRequestingRtt();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telecom.ConnectionRequest> CREATOR;
   }
