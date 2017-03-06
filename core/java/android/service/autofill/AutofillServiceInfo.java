@@ -38,12 +38,12 @@ import java.io.IOException;
 
 // TODO(b/33197203 , b/33802548): add CTS tests
 /**
- * {@link ServiceInfo} and meta-data about an {@link AutoFillService}.
+ * {@link ServiceInfo} and meta-data about an {@link AutofillService}.
  *
  * @hide
  */
-public final class AutoFillServiceInfo {
-    private static final String TAG = "AutoFillServiceInfo";
+public final class AutofillServiceInfo {
+    private static final String TAG = "AutofillServiceInfo";
 
     private static ServiceInfo getServiceInfoOrThrow(ComponentName comp, int userHandle)
             throws PackageManager.NameNotFoundException {
@@ -66,17 +66,26 @@ public final class AutoFillServiceInfo {
     @Nullable
     private final String mSettingsActivity;
 
-    public AutoFillServiceInfo(PackageManager pm, ComponentName comp, int userHandle)
+    public AutofillServiceInfo(PackageManager pm, ComponentName comp, int userHandle)
             throws PackageManager.NameNotFoundException {
         this(pm, getServiceInfoOrThrow(comp, userHandle));
     }
 
-    public AutoFillServiceInfo(PackageManager pm, ServiceInfo si) {
+    public AutofillServiceInfo(PackageManager pm, ServiceInfo si) {
         mServiceInfo = si;
         final TypedArray metaDataArray = getMetaDataArray(pm, si);
         if (metaDataArray != null) {
-            mSettingsActivity =
-                    metaDataArray.getString(R.styleable.AutoFillService_settingsActivity);
+            // TODO(b/35956626): inline newSettingsActivity once clients migrate
+            final String newSettingsActivity =
+                    metaDataArray.getString(R.styleable.AutofillService_settingsActivity);
+            System.out.println(">>> NEW CRAP MAN: " + newSettingsActivity); // TODO(felipeal): tmp
+            if (newSettingsActivity != null) {
+                mSettingsActivity = newSettingsActivity;
+            } else {
+                mSettingsActivity =
+                        metaDataArray.getString(R.styleable.AutoFillService_settingsActivity);
+            }
+            System.out.println(">>> FINAL CRAP MAN: " + mSettingsActivity); // TODO(felipeal): tmp
             metaDataArray.recycle();
         } else {
             mSettingsActivity = null;
@@ -89,13 +98,18 @@ public final class AutoFillServiceInfo {
     @Nullable
     private static TypedArray getMetaDataArray(PackageManager pm, ServiceInfo si) {
         // Check for permissions.
-        if (!Manifest.permission.BIND_AUTO_FILL.equals(si.permission)) {
-            Log.e(TAG, "Service does not require permission " + Manifest.permission.BIND_AUTO_FILL);
+        // TODO(b/35956626): remove check for BIND_AUTO_FILL once clients migrate
+        if (!Manifest.permission.BIND_AUTOFILL.equals(si.permission)
+                && !Manifest.permission.BIND_AUTO_FILL.equals(si.permission)) {
+            Log.e(TAG, "Service does not require permission " + Manifest.permission.BIND_AUTOFILL);
             return null;
         }
 
+        // TODO(b/35956626): remove once clients migrate
+        final boolean oldStyle = !Manifest.permission.BIND_AUTOFILL.equals(si.permission);
+
         // Get the AutoFill metadata, if declared.
-        XmlResourceParser parser = si.loadXmlMetaData(pm, AutoFillService.SERVICE_META_DATA);
+        XmlResourceParser parser = si.loadXmlMetaData(pm, AutofillService.SERVICE_META_DATA);
         if (parser == null) {
             return null;
         }
@@ -129,7 +143,8 @@ public final class AutoFillServiceInfo {
                 return null;
             }
 
-            return res.obtainAttributes(attrs, R.styleable.AutoFillService);
+            return oldStyle ? res.obtainAttributes(attrs, R.styleable.AutoFillService)
+                    : res.obtainAttributes(attrs, R.styleable.AutofillService);
         } finally {
             parser.close();
         }
