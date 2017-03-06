@@ -27,11 +27,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.ActivityInfo;
-import android.content.pm.EphemeralIntentFilter;
-import android.content.pm.EphemeralRequest;
-import android.content.pm.EphemeralResolveInfo;
+import android.content.pm.InstantAppRequest;
 import android.content.pm.AuxiliaryResolveInfo;
-import android.content.pm.EphemeralResolveInfo.EphemeralDigest;
+import android.content.pm.InstantAppIntentFilter;
+import android.content.pm.InstantAppResolveInfo;
+import android.content.pm.InstantAppResolveInfo.InstantAppDigest;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.RemoteException;
@@ -46,54 +46,52 @@ import java.util.List;
 import java.util.UUID;
 
 /** @hide */
-public abstract class EphemeralResolver {
-    public static AuxiliaryResolveInfo doEphemeralResolutionPhaseOne(Context context,
-            EphemeralResolverConnection connection, EphemeralRequest requestObj) {
+public abstract class InstantAppResolver {
+    public static AuxiliaryResolveInfo doInstantAppResolutionPhaseOne(Context context,
+            EphemeralResolverConnection connection, InstantAppRequest requestObj) {
         final Intent intent = requestObj.origIntent;
-        final EphemeralDigest digest =
-                new EphemeralDigest(intent.getData().getHost(), 5 /*maxDigests*/);
+        final InstantAppDigest digest =
+                new InstantAppDigest(intent.getData().getHost(), 5 /*maxDigests*/);
         final int[] shaPrefix = digest.getDigestPrefix();
-        final List<EphemeralResolveInfo> ephemeralResolveInfoList =
-                connection.getEphemeralResolveInfoList(shaPrefix);
-        if (ephemeralResolveInfoList == null || ephemeralResolveInfoList.size() == 0) {
-            // No hash prefix match; there are no ephemeral apps for this domain.
+        final List<InstantAppResolveInfo> instantAppResolveInfoList =
+                connection.getInstantAppResolveInfoList(shaPrefix);
+        if (instantAppResolveInfoList == null || instantAppResolveInfoList.size() == 0) {
+            // No hash prefix match; there are no instant apps for this domain.
             return null;
         }
 
         final String token = UUID.randomUUID().toString();
-        return EphemeralResolver.filterEphemeralIntent(ephemeralResolveInfoList,
+        return InstantAppResolver.filterInstantAppIntent(instantAppResolveInfoList,
                 intent, requestObj.resolvedType, requestObj.userId,
                 intent.getPackage(), digest, token);
     }
 
-    public static void doEphemeralResolutionPhaseTwo(Context context,
-            EphemeralResolverConnection connection, EphemeralRequest requestObj,
-            ActivityInfo ephemeralInstaller, Handler callbackHandler) {
+    public static void doInstantAppResolutionPhaseTwo(Context context,
+            EphemeralResolverConnection connection, InstantAppRequest requestObj,
+            ActivityInfo instantAppInstaller, Handler callbackHandler) {
         final Intent intent = requestObj.origIntent;
         final String hostName = intent.getData().getHost();
-        final EphemeralDigest digest = new EphemeralDigest(hostName, 5 /*maxDigests*/);
+        final InstantAppDigest digest = new InstantAppDigest(hostName, 5 /*maxDigests*/);
+        final int[] shaPrefix = digest.getDigestPrefix();
 
         final PhaseTwoCallback callback = new PhaseTwoCallback() {
             @Override
-            void onPhaseTwoResolved(EphemeralResolveInfo ephemeralResolveInfo,
+            void onPhaseTwoResolved(List<InstantAppResolveInfo> instantAppResolveInfoList,
                     int sequence) {
                 final String packageName;
                 final String splitName;
                 final int versionCode;
-                if (ephemeralResolveInfo != null) {
-                    final ArrayList<EphemeralResolveInfo> ephemeralResolveInfoList =
-                            new ArrayList<EphemeralResolveInfo>(1);
-                    ephemeralResolveInfoList.add(ephemeralResolveInfo);
-                    final AuxiliaryResolveInfo ephemeralIntentInfo =
-                            EphemeralResolver.filterEphemeralIntent(
-                                    ephemeralResolveInfoList, intent, null /*resolvedType*/,
+                if (instantAppResolveInfoList != null && instantAppResolveInfoList.size() > 0) {
+                    final AuxiliaryResolveInfo instantAppIntentInfo =
+                            InstantAppResolver.filterInstantAppIntent(
+                                    instantAppResolveInfoList, intent, null /*resolvedType*/,
                                     0 /*userId*/, intent.getPackage(), digest,
                                     requestObj.responseObj.token);
-                    if (ephemeralIntentInfo != null
-                            && ephemeralIntentInfo.resolveInfo != null) {
-                        packageName = ephemeralIntentInfo.resolveInfo.getPackageName();
-                        splitName = ephemeralIntentInfo.splitName;
-                        versionCode = ephemeralIntentInfo.resolveInfo.getVersionCode();
+                    if (instantAppIntentInfo != null
+                            && instantAppIntentInfo.resolveInfo != null) {
+                        packageName = instantAppIntentInfo.resolveInfo.getPackageName();
+                        splitName = instantAppIntentInfo.splitName;
+                        versionCode = instantAppIntentInfo.resolveInfo.getVersionCode();
                     } else {
                         packageName = null;
                         splitName = null;
@@ -115,27 +113,27 @@ public abstract class EphemeralResolver {
                         requestObj.responseObj.token,
                         false /*needsPhaseTwo*/);
                 installerIntent.setComponent(new ComponentName(
-                        ephemeralInstaller.packageName, ephemeralInstaller.name));
+                        instantAppInstaller.packageName, instantAppInstaller.name));
                 context.startActivity(installerIntent);
             }
         };
-        connection.getEphemeralIntentFilterList(
-                hostName, callback, callbackHandler, 0 /*sequence*/);
+        connection.getInstantAppIntentFilterList(
+                shaPrefix, hostName, callback, callbackHandler, 0 /*sequence*/);
     }
 
     /**
-     * Builds and returns an intent to launch the ephemeral installer.
+     * Builds and returns an intent to launch the instant installer.
      */
     public static Intent buildEphemeralInstallerIntent(@NonNull Intent origIntent,
             @NonNull String callingPackage,
             @NonNull String resolvedType,
             int userId,
-            @NonNull String ephemeralPackageName,
-            @Nullable String ephemeralSplitName,
+            @NonNull String instantAppPackageName,
+            @Nullable String instantAppSplitName,
             int versionCode,
             @Nullable String token,
             boolean needsPhaseTwo) {
-        // Construct the intent that launches the ephemeral installer
+        // Construct the intent that launches the instant installer
         int flags = origIntent.getFlags();
         final Intent intent = new Intent();
         intent.setFlags(flags
@@ -185,63 +183,63 @@ public abstract class EphemeralResolver {
                         new IntentSender(successIntentTarget));
             } catch (RemoteException ignore) { /* ignore; same process */ }
 
-            intent.putExtra(Intent.EXTRA_PACKAGE_NAME, ephemeralPackageName);
-            intent.putExtra(Intent.EXTRA_SPLIT_NAME, ephemeralSplitName);
+            intent.putExtra(Intent.EXTRA_PACKAGE_NAME, instantAppPackageName);
+            intent.putExtra(Intent.EXTRA_SPLIT_NAME, instantAppSplitName);
             intent.putExtra(Intent.EXTRA_VERSION_CODE, versionCode);
         }
 
         return intent;
     }
 
-    private static AuxiliaryResolveInfo filterEphemeralIntent(
-            List<EphemeralResolveInfo> ephemeralResolveInfoList,
+    private static AuxiliaryResolveInfo filterInstantAppIntent(
+            List<InstantAppResolveInfo> instantAppResolveInfoList,
             Intent intent, String resolvedType, int userId, String packageName,
-            EphemeralDigest digest, String token) {
+            InstantAppDigest digest, String token) {
         final int[] shaPrefix = digest.getDigestPrefix();
         final byte[][] digestBytes = digest.getDigestBytes();
         // Go in reverse order so we match the narrowest scope first.
         for (int i = shaPrefix.length - 1; i >= 0 ; --i) {
-            for (EphemeralResolveInfo ephemeralInfo : ephemeralResolveInfoList) {
-                if (!Arrays.equals(digestBytes[i], ephemeralInfo.getDigestBytes())) {
+            for (InstantAppResolveInfo instantAppInfo : instantAppResolveInfoList) {
+                if (!Arrays.equals(digestBytes[i], instantAppInfo.getDigestBytes())) {
                     continue;
                 }
                 if (packageName != null
-                        && !packageName.equals(ephemeralInfo.getPackageName())) {
+                        && !packageName.equals(instantAppInfo.getPackageName())) {
                     continue;
                 }
-                final List<EphemeralIntentFilter> ephemeralFilters =
-                        ephemeralInfo.getIntentFilters();
+                final List<InstantAppIntentFilter> instantAppFilters =
+                        instantAppInfo.getIntentFilters();
                 // No filters; we need to start phase two
-                if (ephemeralFilters == null || ephemeralFilters.isEmpty()) {
-                    return new AuxiliaryResolveInfo(ephemeralInfo,
+                if (instantAppFilters == null || instantAppFilters.isEmpty()) {
+                    return new AuxiliaryResolveInfo(instantAppInfo,
                             new IntentFilter(Intent.ACTION_VIEW) /*intentFilter*/,
                             null /*splitName*/, token, true /*needsPhase2*/);
                 }
                 // We have a domain match; resolve the filters to see if anything matches.
-                final PackageManagerService.EphemeralIntentResolver ephemeralResolver =
+                final PackageManagerService.EphemeralIntentResolver instantAppResolver =
                         new PackageManagerService.EphemeralIntentResolver();
-                for (int j = ephemeralFilters.size() - 1; j >= 0; --j) {
-                    final EphemeralIntentFilter ephemeralFilter = ephemeralFilters.get(j);
-                    final List<IntentFilter> splitFilters = ephemeralFilter.getFilters();
+                for (int j = instantAppFilters.size() - 1; j >= 0; --j) {
+                    final InstantAppIntentFilter instantAppFilter = instantAppFilters.get(j);
+                    final List<IntentFilter> splitFilters = instantAppFilter.getFilters();
                     if (splitFilters == null || splitFilters.isEmpty()) {
                         continue;
                     }
                     for (int k = splitFilters.size() - 1; k >= 0; --k) {
                         final AuxiliaryResolveInfo intentInfo =
-                                new AuxiliaryResolveInfo(ephemeralInfo,
-                                        splitFilters.get(k), ephemeralFilter.getSplitName(),
+                                new AuxiliaryResolveInfo(instantAppInfo,
+                                        splitFilters.get(k), instantAppFilter.getSplitName(),
                                         token, false /*needsPhase2*/);
-                        ephemeralResolver.addFilter(intentInfo);
+                        instantAppResolver.addFilter(intentInfo);
                     }
                 }
-                List<AuxiliaryResolveInfo> matchedResolveInfoList = ephemeralResolver.queryIntent(
+                List<AuxiliaryResolveInfo> matchedResolveInfoList = instantAppResolver.queryIntent(
                         intent, resolvedType, false /*defaultOnly*/, userId);
                 if (!matchedResolveInfoList.isEmpty()) {
                     return matchedResolveInfoList.get(0);
                 }
             }
         }
-        // Hash or filter mis-match; no ephemeral apps for this domain.
+        // Hash or filter mis-match; no instant apps for this domain.
         return null;
     }
 }
