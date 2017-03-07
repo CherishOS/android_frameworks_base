@@ -9908,6 +9908,7 @@ package android.content {
     method public final java.lang.String getDataScheme(int);
     method public final android.os.PatternMatcher getDataSchemeSpecificPart(int);
     method public final java.lang.String getDataType(int);
+    method public final int getOrder();
     method public final int getPriority();
     method public final boolean hasAction(java.lang.String);
     method public final boolean hasCategory(java.lang.String);
@@ -9926,6 +9927,7 @@ package android.content {
     method public void readFromXml(org.xmlpull.v1.XmlPullParser) throws java.io.IOException, org.xmlpull.v1.XmlPullParserException;
     method public final java.util.Iterator<android.os.PatternMatcher> schemeSpecificPartsIterator();
     method public final java.util.Iterator<java.lang.String> schemesIterator();
+    method public final void setOrder(int);
     method public final void setPriority(int);
     method public final java.util.Iterator<java.lang.String> typesIterator();
     method public final void writeToParcel(android.os.Parcel, int);
@@ -10599,6 +10601,20 @@ package android.content.pm {
     field public int version;
   }
 
+  public final class InstantAppInfo implements android.os.Parcelable {
+    ctor public InstantAppInfo(android.content.pm.ApplicationInfo, java.lang.String[], java.lang.String[]);
+    ctor public InstantAppInfo(java.lang.String, java.lang.CharSequence, java.lang.String[], java.lang.String[]);
+    method public int describeContents();
+    method public android.content.pm.ApplicationInfo getApplicationInfo();
+    method public java.lang.String[] getGrantedPermissions();
+    method public java.lang.String getPackageName();
+    method public java.lang.String[] getRequestedPermissions();
+    method public android.graphics.drawable.Drawable loadIcon(android.content.pm.PackageManager);
+    method public java.lang.CharSequence loadLabel(android.content.pm.PackageManager);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.content.pm.InstantAppInfo> CREATOR;
+  }
+
   public final class InstantAppIntentFilter implements android.os.Parcelable {
     ctor public InstantAppIntentFilter(java.lang.String, java.util.List<android.content.IntentFilter>);
     method public int describeContents();
@@ -10954,6 +10970,8 @@ package android.content.pm {
     method public abstract java.lang.String getInstallerPackageName(java.lang.String);
     method public abstract byte[] getInstantAppCookie();
     method public abstract int getInstantAppCookieMaxSize();
+    method public abstract android.graphics.drawable.Drawable getInstantAppIcon(java.lang.String);
+    method public abstract java.util.List<android.content.pm.InstantAppInfo> getInstantApps();
     method public abstract android.content.pm.InstrumentationInfo getInstrumentationInfo(android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract java.util.List<android.content.pm.IntentFilterVerificationInfo> getIntentFilterVerifications(java.lang.String);
     method public abstract int getIntentVerificationStatusAsUser(java.lang.String, int);
@@ -11198,6 +11216,7 @@ package android.content.pm {
     field public static final int MATCH_DIRECT_BOOT_UNAWARE = 262144; // 0x40000
     field public static final int MATCH_DISABLED_COMPONENTS = 512; // 0x200
     field public static final int MATCH_DISABLED_UNTIL_USED_COMPONENTS = 32768; // 0x8000
+    field public static final int MATCH_INSTANT = 8388608; // 0x800000
     field public static final int MATCH_SYSTEM_ONLY = 1048576; // 0x100000
     field public static final int MATCH_UNINSTALLED_PACKAGES = 8192; // 0x2000
     field public static final long MAXIMUM_VERIFICATION_TIMEOUT = 3600000L; // 0x36ee80L
@@ -33736,6 +33755,7 @@ package android.os {
     method public boolean match(java.lang.String);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.os.PatternMatcher> CREATOR;
+    field public static final int PATTERN_ADVANCED_GLOB = 3; // 0x3
     field public static final int PATTERN_LITERAL = 0; // 0x0
     field public static final int PATTERN_PREFIX = 1; // 0x1
     field public static final int PATTERN_SIMPLE_GLOB = 2; // 0x2
@@ -43829,6 +43849,8 @@ package android.test.mock {
     method public java.lang.String getInstallerPackageName(java.lang.String);
     method public byte[] getInstantAppCookie();
     method public int getInstantAppCookieMaxSize();
+    method public android.graphics.drawable.Drawable getInstantAppIcon(java.lang.String);
+    method public java.util.List<android.content.pm.InstantAppInfo> getInstantApps();
     method public android.content.pm.InstrumentationInfo getInstrumentationInfo(android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public java.util.List<android.content.pm.IntentFilterVerificationInfo> getIntentFilterVerifications(java.lang.String);
     method public int getIntentVerificationStatusAsUser(java.lang.String, int);
