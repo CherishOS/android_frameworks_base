@@ -6993,6 +6993,7 @@ package android.bluetooth {
     method public java.util.Set<android.bluetooth.BluetoothDevice> getBondedDevices();
     method public static synchronized android.bluetooth.BluetoothAdapter getDefaultAdapter();
     method public java.lang.String getName();
+    method public android.bluetooth.le.PeriodicAdvertisingManager getPeriodicAdvertisingManager();
     method public int getProfileConnectionState(int);
     method public boolean getProfileProxy(android.content.Context, android.bluetooth.BluetoothProfile.ServiceListener, int);
     method public android.bluetooth.BluetoothDevice getRemoteDevice(java.lang.String);
@@ -7795,6 +7796,36 @@ package android.bluetooth.le {
     method public void startScanFromSource(java.util.List<android.bluetooth.le.ScanFilter>, android.bluetooth.le.ScanSettings, android.os.WorkSource, android.bluetooth.le.ScanCallback);
     method public void startTruncatedScan(java.util.List<android.bluetooth.le.TruncatedFilter>, android.bluetooth.le.ScanSettings, android.bluetooth.le.ScanCallback);
     method public void stopScan(android.bluetooth.le.ScanCallback);
+  }
+
+  public abstract class PeriodicAdvertisingCallback {
+    ctor public PeriodicAdvertisingCallback();
+    method public void onPeriodicAdvertisingReport(android.bluetooth.le.PeriodicAdvertisingReport);
+    method public void onSyncEstablished(int, android.bluetooth.BluetoothDevice, int, int, int, int);
+    method public void onSyncLost(int);
+    field public static final int SYNC_NO_RESOURCES = 2; // 0x2
+    field public static final int SYNC_NO_RESPONSE = 1; // 0x1
+  }
+
+  public final class PeriodicAdvertisingManager {
+    method public void registerSync(android.bluetooth.le.ScanResult, int, int, android.bluetooth.le.PeriodicAdvertisingCallback);
+    method public void registerSync(android.bluetooth.le.ScanResult, int, int, android.bluetooth.le.PeriodicAdvertisingCallback, android.os.Handler);
+    method public void unregisterSync(android.bluetooth.le.PeriodicAdvertisingCallback);
+  }
+
+  public final class PeriodicAdvertisingReport implements android.os.Parcelable {
+    ctor public PeriodicAdvertisingReport(int, int, int, int, android.bluetooth.le.ScanRecord);
+    method public int describeContents();
+    method public android.bluetooth.le.ScanRecord getData();
+    method public int getDataStatus();
+    method public int getRssi();
+    method public int getSyncHandle();
+    method public long getTimestampNanos();
+    method public int getTxPower();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.bluetooth.le.PeriodicAdvertisingReport> CREATOR;
+    field public static final int DATA_COMPLETE = 0; // 0x0
+    field public static final int DATA_INCOMPLETE_TRUNCATED = 2; // 0x2
   }
 
   public final class ResultStorageDescriptor implements android.os.Parcelable {
