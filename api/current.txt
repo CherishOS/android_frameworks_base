@@ -7544,19 +7544,37 @@ package android.bluetooth.le {
   }
 
   public final class ScanResult implements android.os.Parcelable {
-    ctor public ScanResult(android.bluetooth.BluetoothDevice, android.bluetooth.le.ScanRecord, int, long);
+    ctor public deprecated ScanResult(android.bluetooth.BluetoothDevice, android.bluetooth.le.ScanRecord, int, long);
+    ctor public ScanResult(android.bluetooth.BluetoothDevice, int, int, int, int, int, int, int, android.bluetooth.le.ScanRecord, long);
     method public int describeContents();
+    method public int getAdvertisingSid();
+    method public int getDataStatus();
     method public android.bluetooth.BluetoothDevice getDevice();
+    method public int getPeriodicAdvertisingInterval();
+    method public int getPrimaryPhy();
     method public int getRssi();
     method public android.bluetooth.le.ScanRecord getScanRecord();
+    method public int getSecondaryPhy();
     method public long getTimestampNanos();
+    method public int getTxPower();
+    method public boolean isConnectable();
+    method public boolean isLegacy();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.bluetooth.le.ScanResult> CREATOR;
+    field public static final int DATA_COMPLETE = 0; // 0x0
+    field public static final int DATA_TRUNCATED = 2; // 0x2
+    field public static final int PHY_LE_1M = 1; // 0x1
+    field public static final int PHY_LE_2M = 2; // 0x2
+    field public static final int PHY_LE_CODED = 3; // 0x3
+    field public static final int PHY_UNUSED = 0; // 0x0
+    field public static final int SID_NOT_PRESENT = 255; // 0xff
   }
 
   public final class ScanSettings implements android.os.Parcelable {
     method public int describeContents();
     method public int getCallbackType();
+    method public boolean getLegacy();
+    method public int getPhy();
     method public long getReportDelayMillis();
     method public int getScanMode();
     method public int getScanResultType();
@@ -7570,6 +7588,9 @@ package android.bluetooth.le {
     field public static final int MATCH_NUM_FEW_ADVERTISEMENT = 2; // 0x2
     field public static final int MATCH_NUM_MAX_ADVERTISEMENT = 3; // 0x3
     field public static final int MATCH_NUM_ONE_ADVERTISEMENT = 1; // 0x1
+    field public static final int PHY_LE_1M = 1; // 0x1
+    field public static final int PHY_LE_ALL_SUPPORTED = 255; // 0xff
+    field public static final int PHY_LE_CODED = 3; // 0x3
     field public static final int SCAN_MODE_BALANCED = 1; // 0x1
     field public static final int SCAN_MODE_LOW_LATENCY = 2; // 0x2
     field public static final int SCAN_MODE_LOW_POWER = 0; // 0x0
@@ -7580,8 +7601,10 @@ package android.bluetooth.le {
     ctor public ScanSettings.Builder();
     method public android.bluetooth.le.ScanSettings build();
     method public android.bluetooth.le.ScanSettings.Builder setCallbackType(int);
+    method public android.bluetooth.le.ScanSettings.Builder setLegacy(boolean);
     method public android.bluetooth.le.ScanSettings.Builder setMatchMode(int);
     method public android.bluetooth.le.ScanSettings.Builder setNumOfMatches(int);
+    method public android.bluetooth.le.ScanSettings.Builder setPhy(int);
     method public android.bluetooth.le.ScanSettings.Builder setReportDelay(long);
     method public android.bluetooth.le.ScanSettings.Builder setScanMode(int);
   }
