@@ -7808,10 +7808,85 @@ package android.bluetooth.le {
     method public android.bluetooth.le.AdvertiseSettings.Builder setTxPowerLevel(int);
   }
 
+  public final class AdvertisingSet {
+    method public void enableAdvertising(boolean);
+    method public void periodicAdvertisingEnable(boolean);
+    method public void setAdvertisingData(android.bluetooth.le.AdvertiseData);
+    method public void setAdvertisingParameters(android.bluetooth.le.AdvertisingSetParameters);
+    method public void setPeriodicAdvertisingData(android.bluetooth.le.AdvertiseData);
+    method public void setPeriodicAdvertisingParameters(android.bluetooth.le.PeriodicAdvertisingParameters);
+    method public void setScanResponseData(android.bluetooth.le.AdvertiseData);
+  }
+
+  public abstract class AdvertisingSetCallback {
+    ctor public AdvertisingSetCallback();
+    method public void onAdvertisingDataSet(android.bluetooth.le.AdvertisingSet, int);
+    method public void onAdvertisingEnabled(android.bluetooth.le.AdvertisingSet, boolean, int);
+    method public void onAdvertisingParametersUpdated(android.bluetooth.le.AdvertisingSet, int);
+    method public void onAdvertisingSetStarted(android.bluetooth.le.AdvertisingSet, int);
+    method public void onAdvertisingSetStopped(android.bluetooth.le.AdvertisingSet);
+    method public void onPeriodicAdvertisingDataSet(android.bluetooth.le.AdvertisingSet, int);
+    method public void onPeriodicAdvertisingEnable(android.bluetooth.le.AdvertisingSet, boolean, int);
+    method public void onPeriodicAdvertisingParametersUpdated(android.bluetooth.le.AdvertisingSet, int);
+    method public void onScanResponseDataSet(android.bluetooth.le.AdvertisingSet, int);
+    field public static final int ADVERTISE_FAILED_ALREADY_STARTED = 3; // 0x3
+    field public static final int ADVERTISE_FAILED_DATA_TOO_LARGE = 1; // 0x1
+    field public static final int ADVERTISE_FAILED_FEATURE_UNSUPPORTED = 5; // 0x5
+    field public static final int ADVERTISE_FAILED_INTERNAL_ERROR = 4; // 0x4
+    field public static final int ADVERTISE_FAILED_TOO_MANY_ADVERTISERS = 2; // 0x2
+    field public static final int ADVERTISE_SUCCESS = 0; // 0x0
+  }
+
+  public final class AdvertisingSetParameters implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getInterval();
+    method public int getPrimaryPhy();
+    method public int getSecondaryPhy();
+    method public int getTimeout();
+    method public int getTxPowerLevel();
+    method public boolean includeTxPower();
+    method public boolean isAnonymous();
+    method public boolean isConnectable();
+    method public boolean isLegacy();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.bluetooth.le.AdvertisingSetParameters> CREATOR;
+    field public static final int INTERVAL_HIGH = 160; // 0xa0
+    field public static final int INTERVAL_LOW = 1600; // 0x640
+    field public static final int INTERVAL_MAX = 16777215; // 0xffffff
+    field public static final int INTERVAL_MEDIUM = 400; // 0x190
+    field public static final int INTERVAL_MIN = 160; // 0xa0
+    field public static final int PHY_LE_1M = 1; // 0x1
+    field public static final int PHY_LE_2M = 2; // 0x2
+    field public static final int PHY_LE_CODED = 3; // 0x3
+    field public static final int TX_POWER_HIGH = 1; // 0x1
+    field public static final int TX_POWER_LOW = -15; // 0xfffffff1
+    field public static final int TX_POWER_MAX = 1; // 0x1
+    field public static final int TX_POWER_MEDIUM = -7; // 0xfffffff9
+    field public static final int TX_POWER_MIN = -127; // 0xffffff81
+    field public static final int TX_POWER_ULTRA_LOW = -21; // 0xffffffeb
+  }
+
+  public static final class AdvertisingSetParameters.Builder {
+    ctor public AdvertisingSetParameters.Builder();
+    method public android.bluetooth.le.AdvertisingSetParameters build();
+    method public android.bluetooth.le.AdvertisingSetParameters.Builder setAnonymouus(boolean);
+    method public android.bluetooth.le.AdvertisingSetParameters.Builder setConnectable(boolean);
+    method public android.bluetooth.le.AdvertisingSetParameters.Builder setIncludeTxPower(boolean);
+    method public android.bluetooth.le.AdvertisingSetParameters.Builder setInterval(int);
+    method public android.bluetooth.le.AdvertisingSetParameters.Builder setLegacyMode(boolean);
+    method public android.bluetooth.le.AdvertisingSetParameters.Builder setPrimaryPhy(int);
+    method public android.bluetooth.le.AdvertisingSetParameters.Builder setSecondaryPhy(int);
+    method public android.bluetooth.le.AdvertisingSetParameters.Builder setTimeout(int);
+    method public android.bluetooth.le.AdvertisingSetParameters.Builder setTxPowerLevel(int);
+  }
+
   public final class BluetoothLeAdvertiser {
     method public void startAdvertising(android.bluetooth.le.AdvertiseSettings, android.bluetooth.le.AdvertiseData, android.bluetooth.le.AdvertiseCallback);
     method public void startAdvertising(android.bluetooth.le.AdvertiseSettings, android.bluetooth.le.AdvertiseData, android.bluetooth.le.AdvertiseData, android.bluetooth.le.AdvertiseCallback);
+    method public void startAdvertisingSet(android.bluetooth.le.AdvertisingSetParameters, android.bluetooth.le.AdvertiseData, android.bluetooth.le.AdvertiseData, android.bluetooth.le.PeriodicAdvertisingParameters, android.bluetooth.le.AdvertiseData, android.bluetooth.le.AdvertisingSetCallback);
+    method public void startAdvertisingSet(android.bluetooth.le.AdvertisingSetParameters, android.bluetooth.le.AdvertiseData, android.bluetooth.le.AdvertiseData, android.bluetooth.le.PeriodicAdvertisingParameters, android.bluetooth.le.AdvertiseData, android.bluetooth.le.AdvertisingSetCallback, android.os.Handler);
     method public void stopAdvertising(android.bluetooth.le.AdvertiseCallback);
+    method public void stopAdvertisingSet(android.bluetooth.le.AdvertisingSetCallback);
   }
 
   public final class BluetoothLeScanner {
@@ -7837,6 +7912,23 @@ package android.bluetooth.le {
     method public void registerSync(android.bluetooth.le.ScanResult, int, int, android.bluetooth.le.PeriodicAdvertisingCallback);
     method public void registerSync(android.bluetooth.le.ScanResult, int, int, android.bluetooth.le.PeriodicAdvertisingCallback, android.os.Handler);
     method public void unregisterSync(android.bluetooth.le.PeriodicAdvertisingCallback);
+  }
+
+  public final class PeriodicAdvertisingParameters implements android.os.Parcelable {
+    method public int describeContents();
+    method public boolean getEnable();
+    method public boolean getIncludeTxPower();
+    method public int getInterval();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.bluetooth.le.PeriodicAdvertisingParameters> CREATOR;
+  }
+
+  public static final class PeriodicAdvertisingParameters.Builder {
+    ctor public PeriodicAdvertisingParameters.Builder();
+    method public android.bluetooth.le.PeriodicAdvertisingParameters build();
+    method public android.bluetooth.le.PeriodicAdvertisingParameters.Builder setEnable(boolean);
+    method public android.bluetooth.le.PeriodicAdvertisingParameters.Builder setIncludeTxPower(boolean);
+    method public android.bluetooth.le.PeriodicAdvertisingParameters.Builder setInterval(int);
   }
 
   public final class PeriodicAdvertisingReport implements android.os.Parcelable {
