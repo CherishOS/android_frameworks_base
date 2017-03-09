@@ -8183,17 +8183,18 @@ package android.bluetooth.le {
 
 package android.companion {
 
-  public final class AssociationRequest implements android.os.Parcelable {
+  public final class AssociationRequest<F extends android.companion.DeviceFilter> implements android.os.Parcelable {
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.companion.AssociationRequest> CREATOR;
   }
 
-  public static final class AssociationRequest.Builder {
-    ctor public AssociationRequest.Builder();
-    method public android.companion.AssociationRequest.Builder addDeviceFilter(android.companion.DeviceFilter<?>);
-    method public android.companion.AssociationRequest build();
-    method public android.companion.AssociationRequest.Builder setSingleDevice(boolean);
+  public static final class AssociationRequest.Builder<F extends android.companion.DeviceFilter> {
+    method public android.companion.AssociationRequest<F> build();
+    method public static android.companion.AssociationRequest.Builder<android.companion.BluetoothDeviceFilter> createForBluetoothDevice();
+    method public static android.companion.AssociationRequest.Builder<android.companion.BluetoothLEDeviceFilter> createForBluetoothLEDevice();
+    method public android.companion.AssociationRequest.Builder<F> setDeviceFilter(F);
+    method public android.companion.AssociationRequest.Builder<F> setSingleDevice(boolean);
   }
 
   public final class BluetoothDeviceFilter implements android.companion.DeviceFilter {
@@ -8214,20 +8215,17 @@ package android.companion {
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.companion.BluetoothLEDeviceFilter> CREATOR;
-    field public static final int RENAME_PREFIX_LENGTH_LIMIT = 10; // 0xa
   }
 
   public static final class BluetoothLEDeviceFilter.Builder {
     ctor public BluetoothLEDeviceFilter.Builder();
     method public android.companion.BluetoothLEDeviceFilter build();
     method public android.companion.BluetoothLEDeviceFilter.Builder setNamePattern(java.util.regex.Pattern);
-    method public android.companion.BluetoothLEDeviceFilter.Builder setRawDataFilter(byte[], byte[]);
-    method public android.companion.BluetoothLEDeviceFilter.Builder setRename(java.lang.String, java.lang.String, int, int, boolean);
     method public android.companion.BluetoothLEDeviceFilter.Builder setScanFilter(android.bluetooth.le.ScanFilter);
   }
 
   public final class CompanionDeviceManager {
-    method public void associate(android.companion.AssociationRequest, android.companion.CompanionDeviceManager.Callback, android.os.Handler);
+    method public void associate(android.companion.AssociationRequest<?>, android.companion.CompanionDeviceManager.Callback, android.os.Handler);
     method public void disassociate(java.lang.String);
     method public java.util.List<java.lang.String> getAssociations();
     field public static final java.lang.String EXTRA_DEVICE = "android.companion.extra.DEVICE";
@@ -8240,18 +8238,6 @@ package android.companion {
   }
 
   public abstract interface DeviceFilter<D extends android.os.Parcelable> implements android.os.Parcelable {
-  }
-
-  public final class WifiDeviceFilter implements android.companion.DeviceFilter {
-    method public int describeContents();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.companion.WifiDeviceFilter> CREATOR;
-  }
-
-  public static final class WifiDeviceFilter.Builder {
-    ctor public WifiDeviceFilter.Builder();
-    method public android.companion.WifiDeviceFilter build();
-    method public android.companion.WifiDeviceFilter.Builder setNamePattern(java.util.regex.Pattern);
   }
 
 }
