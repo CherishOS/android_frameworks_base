@@ -44,9 +44,9 @@ import java.util.List;
  */
 // TODO(b/33197203): improve this javadoc
 //TODO(b/33197203): restrict manager calls to activity
-public final class AutoFillManager {
+public final class AutofillManager {
 
-    private static final String TAG = "AutoFillManager";
+    private static final String TAG = "AutofillManager";
 
     /**
      * Intent extra: The assist structure which captures the filled screen.
@@ -89,14 +89,14 @@ public final class AutoFillManager {
     private boolean mEnabled;
 
     /** @hide */
-    public interface AutoFillClient {
+    public interface AutofillClient {
         /**
-         * Asks the client to perform an auto-fill.
+         * Asks the client to perform an autofill.
          *
-         * @param ids The values to auto-fill
-         * @param values The values to auto-fill
+         * @param ids The values to autofill
+         * @param values The values to autofill
          */
-        void autoFill(List<AutoFillId> ids, List<AutoFillValue> values);
+        void autofill(List<AutofillId> ids, List<AutofillValue> values);
 
         /**
          * Asks the client to start an authentication flow.
@@ -115,17 +115,17 @@ public final class AutoFillManager {
     /**
      * @hide
      */
-    public AutoFillManager(Context context, IAutoFillManager service) {
+    public AutofillManager(Context context, IAutoFillManager service) {
         mContext = context;
         mService = service;
     }
 
     /**
-     * Called when an auto-fill operation on a {@link View} should start.
+     * Called when an autofill operation on a {@link View} should start.
      *
-     * @param view {@link View} that triggered the auto-fill request.
+     * @param view {@link View} that triggered the autofill request.
      */
-    public void startAutoFillRequest(@NonNull View view) {
+    public void startAutofillRequest(@NonNull View view) {
         ensureServiceClientAddedIfNeeded();
 
         if (!mEnabled) {
@@ -134,8 +134,8 @@ public final class AutoFillManager {
 
         final Rect bounds = mTempRect;
         view.getBoundsOnScreen(bounds);
-        final AutoFillId id = getAutoFillId(view);
-        final AutoFillValue value = view.getAutoFillValue();
+        final AutofillId id = getAutofillId(view);
+        final AutofillValue value = view.getAutofillValue();
 
         if (!mHasSession) {
             // Starts new session.
@@ -147,16 +147,16 @@ public final class AutoFillManager {
     }
 
     /**
-     * Called when an auto-fill operation on a {@link View} should stop.
+     * Called when an autofill operation on a {@link View} should stop.
      *
-     * @param view {@link View} that triggered the auto-fill request in
-     *             {@link #startAutoFillRequest(View)}.
+     * @param view {@link View} that triggered the autofill request in
+     *             {@link #startAutofillRequest(View)}.
      */
-    public void stopAutoFillRequest(@NonNull View view) {
+    public void stopAutofillRequest(@NonNull View view) {
         ensureServiceClientAddedIfNeeded();
 
         if (mEnabled && mHasSession) {
-            final AutoFillId id = getAutoFillId(view);
+            final AutofillId id = getAutofillId(view);
 
             // Update focus on existing session.
             updateSession(id, null, null, FLAG_FOCUS_LOST);
@@ -164,13 +164,13 @@ public final class AutoFillManager {
     }
 
     /**
-     * Called when an auto-fill operation on a virtual {@link View} should start.
+     * Called when an autofill operation on a virtual {@link View} should start.
      *
-     * @param parent parent of the {@link View} that triggered the auto-fill request.
+     * @param parent parent of the {@link View} that triggered the autofill request.
      * @param childId id identifying the virtual child inside the parent view.
      * @param bounds child boundaries, relative to the top window.
      */
-    public void startAutoFillRequestOnVirtualView(@NonNull View parent, int childId,
+    public void startAutofillRequestOnVirtualView(@NonNull View parent, int childId,
             @NonNull Rect bounds) {
         ensureServiceClientAddedIfNeeded();
 
@@ -178,7 +178,7 @@ public final class AutoFillManager {
             return;
         }
 
-        final AutoFillId id = getAutoFillId(parent, childId);
+        final AutofillId id = getAutofillId(parent, childId);
 
         if (!mHasSession) {
             // Starts new session.
@@ -190,17 +190,17 @@ public final class AutoFillManager {
     }
 
     /**
-     * Called when an auto-fill operation on a virtual {@link View} should stop.
+     * Called when an autofill operation on a virtual {@link View} should stop.
      *
-     * @param parent parent of the {@link View} that triggered the auto-fill request in
-     *               {@link #startAutoFillRequestOnVirtualView(View, int, Rect)}.
+     * @param parent parent of the {@link View} that triggered the autofill request in
+     *               {@link #startAutofillRequestOnVirtualView(View, int, Rect)}.
      * @param childId id identifying the virtual child inside the parent view.
      */
-    public void stopAutoFillRequestOnVirtualView(@NonNull View parent, int childId) {
+    public void stopAutofillRequestOnVirtualView(@NonNull View parent, int childId) {
         ensureServiceClientAddedIfNeeded();
 
         if (mEnabled && mHasSession) {
-            final AutoFillId id = getAutoFillId(parent, childId);
+            final AutofillId id = getAutofillId(parent, childId);
 
             // Update focus on existing session.
             updateSession(id, null, null, FLAG_FOCUS_LOST);
@@ -208,7 +208,7 @@ public final class AutoFillManager {
     }
 
     /**
-     * Called to indicate the value of an auto-fillable {@link View} changed.
+     * Called to indicate the value of an autofillable {@link View} changed.
      *
      * @param view view whose value changed.
      */
@@ -217,30 +217,30 @@ public final class AutoFillManager {
             return;
         }
 
-        final AutoFillId id = getAutoFillId(view);
-        final AutoFillValue value = view.getAutoFillValue();
+        final AutofillId id = getAutofillId(view);
+        final AutofillValue value = view.getAutofillValue();
         updateSession(id, null, value, FLAG_VALUE_CHANGED);
     }
 
 
     /**
-     * Called to indicate the value of an auto-fillable virtual {@link View} changed.
+     * Called to indicate the value of an autofillable virtual {@link View} changed.
      *
      * @param parent parent view whose value changed.
      * @param childId id identifying the virtual child inside the parent view.
      * @param value new value of the child.
      */
-    public void virtualValueChanged(View parent, int childId, AutoFillValue value) {
+    public void virtualValueChanged(View parent, int childId, AutofillValue value) {
         if (!mEnabled || !mHasSession) {
             return;
         }
 
-        final AutoFillId id = getAutoFillId(parent, childId);
+        final AutofillId id = getAutofillId(parent, childId);
         updateSession(id, null, value, FLAG_VALUE_CHANGED);
     }
 
     /**
-     * Called to indicate the current auto-fill context should be reset.
+     * Called to indicate the current autofill context should be reset.
      *
      * <p>For example, when a virtual view is rendering an {@code HTML} page with a form, it should
      * call this method after the form is submitted and another page is rendered.
@@ -253,9 +253,9 @@ public final class AutoFillManager {
         finishSession();
     }
 
-    private AutoFillClient getClient() {
-        if (mContext instanceof AutoFillClient) {
-            return (AutoFillClient) mContext;
+    private AutofillClient getClient() {
+        if (mContext instanceof AutofillClient) {
+            return (AutofillClient) mContext;
         }
         return null;
     }
@@ -283,16 +283,17 @@ public final class AutoFillManager {
         }
     }
 
-    private static AutoFillId getAutoFillId(View view) {
-        return new AutoFillId(view.getAccessibilityViewId());
+
+    private static AutofillId getAutofillId(View view) {
+        return new AutofillId(view.getAccessibilityViewId());
     }
 
-    private static AutoFillId getAutoFillId(View parent, int childId) {
-        return new AutoFillId(parent.getAccessibilityViewId(), childId);
+    private static AutofillId getAutofillId(View parent, int childId) {
+        return new AutofillId(parent.getAccessibilityViewId(), childId);
     }
 
-    private void startSession(AutoFillId id, IBinder windowToken,
-            Rect bounds, AutoFillValue value) {
+    private void startSession(AutofillId id, IBinder windowToken, Rect bounds,
+            AutofillValue value) {
         if (DEBUG) {
             Log.d(TAG, "startSession(): id=" + id + ", bounds=" + bounds + ", value=" + value);
         }
@@ -301,7 +302,7 @@ public final class AutoFillManager {
             mService.startSession(mContext.getActivityToken(), windowToken,
                     mServiceClient.asBinder(), id, bounds, value, mContext.getUserId(),
                     mCallback != null);
-            final AutoFillClient client = getClient();
+            final AutofillClient client = getClient();
             if (client != null) {
                 client.resetableStateAvailable();
             }
@@ -323,11 +324,11 @@ public final class AutoFillManager {
         }
     }
 
-    private void updateSession(AutoFillId id, Rect bounds, AutoFillValue value, int flags) {
+    private void updateSession(AutofillId id, Rect bounds, AutofillValue value, int flags) {
         if (DEBUG) {
             if (VERBOSE || (flags & FLAG_FOCUS_LOST) != 0) {
                 Log.d(TAG, "updateSession(): id=" + id + ", bounds=" + bounds + ", value=" + value
-                    + ", flags=" + flags);
+                        + ", flags=" + flags);
             }
         }
 
@@ -344,7 +345,7 @@ public final class AutoFillManager {
             return;
         }
         if (mServiceClient == null) {
-            mServiceClient = new AutoFillManagerClient(this);
+            mServiceClient = new AutofillManagerClient(this);
             try {
                 mEnabled = mService.addClient(mServiceClient, mContext.getUserId());
             } catch (RemoteException e) {
@@ -392,7 +393,7 @@ public final class AutoFillManager {
         }
     }
 
-    private void onAutofillEvent(IBinder windowToken, AutoFillId id, int event) {
+    private void onAutofillEvent(IBinder windowToken, AutofillId id, int event) {
         if (mCallback == null) return;
         if (id == null) {
             Log.w(TAG, "onAutofillEvent(): no id for event " + event);
@@ -466,31 +467,30 @@ public final class AutoFillManager {
                 @AutofillEventType int event) {}
     }
 
-    private static final class AutoFillManagerClient extends IAutoFillManagerClient.Stub {
-        private final WeakReference<AutoFillManager> mAutoFillManager;
+    private static final class AutofillManagerClient extends IAutoFillManagerClient.Stub {
+        private final WeakReference<AutofillManager> mAfm;
 
-        AutoFillManagerClient(AutoFillManager autoFillManager) {
-            mAutoFillManager = new WeakReference<>(autoFillManager);
+        AutofillManagerClient(AutofillManager autofillManager) {
+            mAfm = new WeakReference<>(autofillManager);
         }
 
         @Override
         public void setState(boolean enabled) {
-            final AutoFillManager autoFillManager = mAutoFillManager.get();
-            if (autoFillManager != null) {
-                autoFillManager.mContext.getMainThreadHandler().post(() ->
-                        autoFillManager.mEnabled = enabled);
+            final AutofillManager afm = mAfm.get();
+            if (afm != null) {
+                afm.mContext.getMainThreadHandler().post(() -> afm.mEnabled = enabled);
             }
         }
 
         @Override
-        public void autoFill(List<AutoFillId> ids, List<AutoFillValue> values) {
+        public void autofill(List<AutofillId> ids, List<AutofillValue> values) {
             // TODO(b/33197203): must keep the dataset so subsequent calls pass the same
             // dataset.extras to service
-            final AutoFillManager autoFillManager = mAutoFillManager.get();
-            if (autoFillManager != null) {
-                autoFillManager.mContext.getMainThreadHandler().post(() -> {
-                    if (autoFillManager.getClient() != null) {
-                        autoFillManager.getClient().autoFill(ids, values);
+            final AutofillManager afm = mAfm.get();
+            if (afm != null) {
+                afm.mContext.getMainThreadHandler().post(() -> {
+                    if (afm.getClient() != null) {
+                        afm.getClient().autofill(ids, values);
                     }
                 });
             }
@@ -498,23 +498,23 @@ public final class AutoFillManager {
 
         @Override
         public void authenticate(IntentSender intent, Intent fillInIntent) {
-            final AutoFillManager autoFillManager = mAutoFillManager.get();
-            if (autoFillManager != null) {
-                autoFillManager.mContext.getMainThreadHandler().post(() -> {
-                    if (autoFillManager.getClient() != null) {
-                        autoFillManager.getClient().authenticate(intent, fillInIntent);
+            final AutofillManager afm = mAfm.get();
+            if (afm != null) {
+                afm.mContext.getMainThreadHandler().post(() -> {
+                    if (afm.getClient() != null) {
+                        afm.getClient().authenticate(intent, fillInIntent);
                     }
                 });
             }
         }
 
         @Override
-        public void onAutofillEvent(IBinder windowToken, AutoFillId id, int event) {
-            final AutoFillManager autoFillManager = mAutoFillManager.get();
-            if (autoFillManager != null) {
-                autoFillManager.mContext.getMainThreadHandler().post(() -> {
-                    if (autoFillManager.getClient() != null) {
-                        autoFillManager.onAutofillEvent(windowToken, id, event);
+        public void onAutofillEvent(IBinder windowToken, AutofillId id, int event) {
+            final AutofillManager afm = mAfm.get();
+            if (afm != null) {
+                afm.mContext.getMainThreadHandler().post(() -> {
+                    if (afm.getClient() != null) {
+                        afm.onAutofillEvent(windowToken, id, event);
                     }
                 });
             }

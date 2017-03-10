@@ -20,6 +20,7 @@ package android {
     field public static final java.lang.String BATTERY_STATS = "android.permission.BATTERY_STATS";
     field public static final java.lang.String BIND_ACCESSIBILITY_SERVICE = "android.permission.BIND_ACCESSIBILITY_SERVICE";
     field public static final java.lang.String BIND_APPWIDGET = "android.permission.BIND_APPWIDGET";
+    field public static final java.lang.String BIND_AUTOFILL = "android.permission.BIND_AUTOFILL";
     field public static final java.lang.String BIND_AUTO_FILL = "android.permission.BIND_AUTO_FILL";
     field public static final deprecated java.lang.String BIND_CARRIER_MESSAGING_SERVICE = "android.permission.BIND_CARRIER_MESSAGING_SERVICE";
     field public static final java.lang.String BIND_CARRIER_SERVICES = "android.permission.BIND_CARRIER_SERVICES";
@@ -298,8 +299,6 @@ package android {
     field public static final int authorities = 16842776; // 0x1010018
     field public static final int autoAdvanceViewId = 16843535; // 0x101030f
     field public static final int autoCompleteTextViewStyle = 16842859; // 0x101006b
-    field public static final int autoFillHint = 16844121; // 0x1010559
-    field public static final int autoFillMode = 16844116; // 0x1010554
     field public static final int autoLink = 16842928; // 0x10100b0
     field public static final int autoMirrored = 16843754; // 0x10103ea
     field public static final int autoRemoveFromRecents = 16843847; // 0x1010447
@@ -312,6 +311,8 @@ package android {
     field public static final deprecated int autoText = 16843114; // 0x101016a
     field public static final int autoUrlDetect = 16843404; // 0x101028c
     field public static final int autoVerify = 16844014; // 0x10104ee
+    field public static final int autofillHint = 16844121; // 0x1010559
+    field public static final int autofillMode = 16844116; // 0x1010554
     field public static final int background = 16842964; // 0x10100d4
     field public static final int backgroundDimAmount = 16842802; // 0x1010032
     field public static final int backgroundDimEnabled = 16843295; // 0x101021f
@@ -6588,11 +6589,10 @@ package android.app.assist {
   public static class AssistStructure.ViewNode {
     method public float getAlpha();
     method public int getAutoFillHint();
-    method public android.view.autofill.AutoFillId getAutoFillId();
-    method public java.lang.String[] getAutoFillOptions();
-    method public deprecated android.view.autofill.AutoFillType getAutoFillType();
-    method public android.view.autofill.AutoFillValue getAutoFillValue();
+    method public android.view.autofill.AutofillId getAutofillId();
+    method public java.lang.String[] getAutofillOptions();
     method public int getAutofillType();
+    method public android.view.autofill.AutofillValue getAutofillValue();
     method public android.app.assist.AssistStructure.ViewNode getChildAt(int);
     method public int getChildCount();
     method public java.lang.String getClassName();
@@ -34869,7 +34869,7 @@ package android.provider {
     field public static final java.lang.String ALLOWED_GEOLOCATION_ORIGINS = "allowed_geolocation_origins";
     field public static final deprecated java.lang.String ALLOW_MOCK_LOCATION = "mock_location";
     field public static final java.lang.String ANDROID_ID = "android_id";
-    field public static final java.lang.String AUTO_FILL_SERVICE = "auto_fill_service";
+    field public static final java.lang.String AUTOFILL_SERVICE = "autofill_service";
     field public static final deprecated java.lang.String BACKGROUND_DATA = "background_data";
     field public static final deprecated java.lang.String BLUETOOTH_ON = "bluetooth_on";
     field public static final android.net.Uri CONTENT_URI;
@@ -36841,15 +36841,15 @@ package android.security.keystore {
 
 package android.service.autofill {
 
-  public abstract class AutoFillService extends android.app.Service {
-    ctor public AutoFillService();
+  public abstract class AutofillService extends android.app.Service {
+    ctor public AutofillService();
     method public final void disableSelf();
     method public final android.os.IBinder onBind(android.content.Intent);
     method public void onConnected();
     method public void onDisconnected();
     method public abstract void onFillRequest(android.app.assist.AssistStructure, android.os.Bundle, android.os.CancellationSignal, android.service.autofill.FillCallback);
     method public abstract void onSaveRequest(android.app.assist.AssistStructure, android.os.Bundle, android.service.autofill.SaveCallback);
-    field public static final java.lang.String SERVICE_INTERFACE = "android.service.autofill.AutoFillService";
+    field public static final java.lang.String SERVICE_INTERFACE = "android.service.autofill.AutofillService";
     field public static final java.lang.String SERVICE_META_DATA = "android.autofill";
   }
 
@@ -36863,7 +36863,7 @@ package android.service.autofill {
     ctor public Dataset.Builder(android.widget.RemoteViews);
     method public android.service.autofill.Dataset build();
     method public android.service.autofill.Dataset.Builder setAuthentication(android.content.IntentSender);
-    method public android.service.autofill.Dataset.Builder setValue(android.view.autofill.AutoFillId, android.view.autofill.AutoFillValue);
+    method public android.service.autofill.Dataset.Builder setValue(android.view.autofill.AutofillId, android.view.autofill.AutofillValue);
   }
 
   public final class FillCallback {
@@ -36903,7 +36903,7 @@ package android.service.autofill {
 
   public static final class SaveInfo.Builder {
     ctor public SaveInfo.Builder(int);
-    method public android.service.autofill.SaveInfo.Builder addSavableIds(android.view.autofill.AutoFillId...);
+    method public android.service.autofill.SaveInfo.Builder addSavableIds(android.view.autofill.AutofillId...);
     method public android.service.autofill.SaveInfo build();
     method public android.service.autofill.SaveInfo.Builder setDescription(java.lang.CharSequence);
     method public android.service.autofill.SaveInfo.Builder setNegativeAction(java.lang.CharSequence, android.content.IntentSender);
@@ -45330,8 +45330,8 @@ package android.view {
     method public void addTouchables(java.util.ArrayList<android.view.View>);
     method public android.view.ViewPropertyAnimator animate();
     method public void announceForAccessibility(java.lang.CharSequence);
-    method public void autoFill(android.view.autofill.AutoFillValue);
-    method public void autoFillVirtual(int, android.view.autofill.AutoFillValue);
+    method public void autofill(android.view.autofill.AutofillValue);
+    method public void autofillVirtual(int, android.view.autofill.AutofillValue);
     method protected boolean awakenScrollBars();
     method protected boolean awakenScrollBars(int);
     method protected boolean awakenScrollBars(int, boolean);
@@ -45385,7 +45385,7 @@ package android.view {
     method public boolean dispatchNestedScroll(int, int, int, int, int[]);
     method public void dispatchPointerCaptureChanged(boolean);
     method public boolean dispatchPopulateAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
-    method public void dispatchProvideAutoFillStructure(android.view.ViewStructure, int);
+    method public void dispatchProvideAutofillStructure(android.view.ViewStructure, int);
     method public void dispatchProvideStructure(android.view.ViewStructure);
     method protected void dispatchRestoreInstanceState(android.util.SparseArray<android.os.Parcelable>);
     method protected void dispatchSaveInstanceState(android.util.SparseArray<android.os.Parcelable>);
@@ -45421,11 +45421,10 @@ package android.view {
     method public float getAlpha();
     method public android.view.animation.Animation getAnimation();
     method public android.os.IBinder getApplicationWindowToken();
-    method public int getAutoFillHint();
-    method public int getAutoFillMode();
-    method public final deprecated android.view.autofill.AutoFillType getAutoFillType();
-    method public android.view.autofill.AutoFillValue getAutoFillValue();
+    method public int getAutofillHint();
+    method public int getAutofillMode();
     method public int getAutofillType();
+    method public android.view.autofill.AutofillValue getAutofillValue();
     method public android.graphics.drawable.Drawable getBackground();
     method public android.content.res.ColorStateList getBackgroundTintList();
     method public android.graphics.PorterDuff.Mode getBackgroundTintMode();
@@ -45511,7 +45510,7 @@ package android.view {
     method public float getPivotX();
     method public float getPivotY();
     method public android.view.PointerIcon getPointerIcon();
-    method public int getResolvedAutoFillMode();
+    method public int getResolvedAutofillMode();
     method public android.content.res.Resources getResources();
     method public final boolean getRevealOnFocusHint();
     method public final int getRight();
@@ -45671,8 +45670,8 @@ package android.view {
     method protected void onOverScrolled(int, int, boolean, boolean);
     method public void onPointerCaptureChange(boolean);
     method public void onPopulateAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
-    method public void onProvideAutoFillStructure(android.view.ViewStructure, int);
-    method public void onProvideAutoFillVirtualStructure(android.view.ViewStructure, int);
+    method public void onProvideAutofillStructure(android.view.ViewStructure, int);
+    method public void onProvideAutofillVirtualStructure(android.view.ViewStructure, int);
     method public void onProvideStructure(android.view.ViewStructure);
     method public void onProvideVirtualStructure(android.view.ViewStructure);
     method public android.view.PointerIcon onResolvePointerIcon(android.view.MotionEvent, int);
@@ -45746,8 +45745,8 @@ package android.view {
     method public void setActivated(boolean);
     method public void setAlpha(float);
     method public void setAnimation(android.view.animation.Animation);
-    method public void setAutoFillHint(int);
-    method public void setAutoFillMode(int);
+    method public void setAutofillHint(int);
+    method public void setAutofillMode(int);
     method public void setBackground(android.graphics.drawable.Drawable);
     method public void setBackgroundColor(int);
     method public deprecated void setBackgroundDrawable(android.graphics.drawable.Drawable);
@@ -45889,28 +45888,28 @@ package android.view {
     field public static final int ACCESSIBILITY_LIVE_REGION_NONE = 0; // 0x0
     field public static final int ACCESSIBILITY_LIVE_REGION_POLITE = 1; // 0x1
     field public static final android.util.Property<android.view.View, java.lang.Float> ALPHA;
+    field public static final int AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_DATE = 512; // 0x200
+    field public static final int AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_DAY = 4096; // 0x1000
+    field public static final int AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH = 1024; // 0x400
+    field public static final int AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR = 2048; // 0x800
+    field public static final int AUTOFILL_HINT_CREDIT_CARD_NUMBER = 128; // 0x80
+    field public static final int AUTOFILL_HINT_CREDIT_CARD_SECURITY_CODE = 256; // 0x100
+    field public static final int AUTOFILL_HINT_EMAIL_ADDRESS = 1; // 0x1
+    field public static final int AUTOFILL_HINT_NAME = 2; // 0x2
+    field public static final int AUTOFILL_HINT_NONE = 0; // 0x0
+    field public static final int AUTOFILL_HINT_PASSWORD = 8; // 0x8
+    field public static final int AUTOFILL_HINT_PHONE = 16; // 0x10
+    field public static final int AUTOFILL_HINT_POSTAL_ADDRESS = 32; // 0x20
+    field public static final int AUTOFILL_HINT_POSTAL_CODE = 64; // 0x40
+    field public static final int AUTOFILL_HINT_USERNAME = 4; // 0x4
+    field public static final int AUTOFILL_MODE_AUTO = 1; // 0x1
+    field public static final int AUTOFILL_MODE_INHERIT = 0; // 0x0
+    field public static final int AUTOFILL_MODE_MANUAL = 2; // 0x2
     field public static final int AUTOFILL_TYPE_DATE = 4; // 0x4
     field public static final int AUTOFILL_TYPE_LIST = 3; // 0x3
     field public static final int AUTOFILL_TYPE_NONE = 0; // 0x0
     field public static final int AUTOFILL_TYPE_TEXT = 1; // 0x1
     field public static final int AUTOFILL_TYPE_TOGGLE = 2; // 0x2
-    field public static final int AUTO_FILL_HINT_CREDIT_CARD_EXPIRATION_DATE = 512; // 0x200
-    field public static final int AUTO_FILL_HINT_CREDIT_CARD_EXPIRATION_DAY = 4096; // 0x1000
-    field public static final int AUTO_FILL_HINT_CREDIT_CARD_EXPIRATION_MONTH = 1024; // 0x400
-    field public static final int AUTO_FILL_HINT_CREDIT_CARD_EXPIRATION_YEAR = 2048; // 0x800
-    field public static final int AUTO_FILL_HINT_CREDIT_CARD_NUMBER = 128; // 0x80
-    field public static final int AUTO_FILL_HINT_CREDIT_CARD_SECURITY_CODE = 256; // 0x100
-    field public static final int AUTO_FILL_HINT_EMAIL_ADDRESS = 1; // 0x1
-    field public static final int AUTO_FILL_HINT_NAME = 2; // 0x2
-    field public static final int AUTO_FILL_HINT_NONE = 0; // 0x0
-    field public static final int AUTO_FILL_HINT_PASSWORD = 8; // 0x8
-    field public static final int AUTO_FILL_HINT_PHONE = 16; // 0x10
-    field public static final int AUTO_FILL_HINT_POSTAL_ADDRESS = 32; // 0x20
-    field public static final int AUTO_FILL_HINT_POSTAL_CODE = 64; // 0x40
-    field public static final int AUTO_FILL_HINT_USERNAME = 4; // 0x4
-    field public static final int AUTO_FILL_MODE_AUTO = 1; // 0x1
-    field public static final int AUTO_FILL_MODE_INHERIT = 0; // 0x0
-    field public static final int AUTO_FILL_MODE_MANUAL = 2; // 0x2
     field public static final int DRAG_FLAG_GLOBAL = 256; // 0x100
     field public static final int DRAG_FLAG_GLOBAL_PERSISTABLE_URI_PERMISSION = 64; // 0x40
     field public static final int DRAG_FLAG_GLOBAL_PREFIX_URI_PERMISSION = 128; // 0x80
@@ -46476,7 +46475,7 @@ package android.view {
     method public abstract int getLayoutDirection();
     method public abstract android.view.ViewParent getParent();
     method public abstract android.view.ViewParent getParentForAccessibility();
-    method public default int getResolvedAutoFillMode();
+    method public default int getResolvedAutofillMode();
     method public abstract int getTextAlignment();
     method public abstract int getTextDirection();
     method public abstract deprecated void invalidateChild(android.view.View, android.graphics.Rect);
@@ -46555,7 +46554,7 @@ package android.view {
     method public abstract int addChildCount(int);
     method public abstract void asyncCommit();
     method public abstract android.view.ViewStructure asyncNewChild(int);
-    method public abstract android.view.ViewStructure asyncNewChildForAutoFill(int, int, int);
+    method public abstract android.view.ViewStructure asyncNewChildForAutofill(int, int, int);
     method public abstract int getChildCount();
     method public abstract android.os.Bundle getExtras();
     method public abstract java.lang.CharSequence getHint();
@@ -46564,15 +46563,14 @@ package android.view {
     method public abstract int getTextSelectionStart();
     method public abstract boolean hasExtras();
     method public abstract android.view.ViewStructure newChild(int);
-    method public abstract android.view.ViewStructure newChildForAutoFill(int, int, int);
+    method public abstract android.view.ViewStructure newChildForAutofill(int, int, int);
     method public abstract void setAccessibilityFocused(boolean);
     method public abstract void setActivated(boolean);
     method public abstract void setAlpha(float);
-    method public abstract void setAutoFillHint(int);
-    method public abstract void setAutoFillOptions(java.lang.String[]);
-    method public abstract deprecated void setAutoFillType(android.view.autofill.AutoFillType);
-    method public abstract void setAutoFillValue(android.view.autofill.AutoFillValue);
+    method public abstract void setAutofillHint(int);
+    method public abstract void setAutofillOptions(java.lang.String[]);
     method public abstract void setAutofillType(int);
+    method public abstract void setAutofillValue(android.view.autofill.AutofillValue);
     method public abstract void setCheckable(boolean);
     method public abstract void setChecked(boolean);
     method public abstract void setChildCount(int);
@@ -47823,60 +47821,46 @@ package android.view.animation {
 
 package android.view.autofill {
 
-  public final class AutoFillId implements android.os.Parcelable {
+  public final class AutofillId implements android.os.Parcelable {
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.view.autofill.AutoFillId> CREATOR;
+    field public static final android.os.Parcelable.Creator<android.view.autofill.AutofillId> CREATOR;
   }
 
-  public final class AutoFillManager {
-    method public void registerCallback(android.view.autofill.AutoFillManager.AutofillCallback);
+  public final class AutofillManager {
+    method public void registerCallback(android.view.autofill.AutofillManager.AutofillCallback);
     method public void reset();
-    method public void startAutoFillRequest(android.view.View);
-    method public void startAutoFillRequestOnVirtualView(android.view.View, int, android.graphics.Rect);
-    method public void stopAutoFillRequest(android.view.View);
-    method public void stopAutoFillRequestOnVirtualView(android.view.View, int);
-    method public void unregisterCallback(android.view.autofill.AutoFillManager.AutofillCallback);
+    method public void startAutofillRequest(android.view.View);
+    method public void startAutofillRequestOnVirtualView(android.view.View, int, android.graphics.Rect);
+    method public void stopAutofillRequest(android.view.View);
+    method public void stopAutofillRequestOnVirtualView(android.view.View, int);
+    method public void unregisterCallback(android.view.autofill.AutofillManager.AutofillCallback);
     method public void valueChanged(android.view.View);
-    method public void virtualValueChanged(android.view.View, int, android.view.autofill.AutoFillValue);
+    method public void virtualValueChanged(android.view.View, int, android.view.autofill.AutofillValue);
     field public static final java.lang.String EXTRA_ASSIST_STRUCTURE = "android.view.autofill.extra.ASSIST_STRUCTURE";
     field public static final java.lang.String EXTRA_AUTHENTICATION_RESULT = "android.view.autofill.extra.AUTHENTICATION_RESULT";
   }
 
-  public static abstract class AutoFillManager.AutofillCallback {
-    ctor public AutoFillManager.AutofillCallback();
+  public static abstract class AutofillManager.AutofillCallback {
+    ctor public AutofillManager.AutofillCallback();
     method public void onAutofillEvent(android.view.View, int);
     method public void onAutofillEventVirtual(android.view.View, int, int);
     field public static final int EVENT_INPUT_HIDDEN = 2; // 0x2
     field public static final int EVENT_INPUT_SHOWN = 1; // 0x1
   }
 
-  public final class AutoFillType implements android.os.Parcelable {
+  public final class AutofillValue implements android.os.Parcelable {
     method public int describeContents();
-    method public static android.view.autofill.AutoFillType forDate();
-    method public static android.view.autofill.AutoFillType forList();
-    method public static android.view.autofill.AutoFillType forText();
-    method public static android.view.autofill.AutoFillType forToggle();
-    method public boolean isDate();
-    method public boolean isList();
-    method public boolean isText();
-    method public boolean isToggle();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.view.autofill.AutoFillType> CREATOR;
-  }
-
-  public final class AutoFillValue implements android.os.Parcelable {
-    method public int describeContents();
-    method public static android.view.autofill.AutoFillValue forDate(long);
-    method public static android.view.autofill.AutoFillValue forList(int);
-    method public static android.view.autofill.AutoFillValue forText(java.lang.CharSequence);
-    method public static android.view.autofill.AutoFillValue forToggle(boolean);
+    method public static android.view.autofill.AutofillValue forDate(long);
+    method public static android.view.autofill.AutofillValue forList(int);
+    method public static android.view.autofill.AutofillValue forText(java.lang.CharSequence);
+    method public static android.view.autofill.AutofillValue forToggle(boolean);
     method public long getDateValue();
     method public int getListValue();
     method public java.lang.CharSequence getTextValue();
     method public boolean getToggleValue();
     method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.view.autofill.AutoFillValue> CREATOR;
+    field public static final android.os.Parcelable.Creator<android.view.autofill.AutofillValue> CREATOR;
   }
 
 }
