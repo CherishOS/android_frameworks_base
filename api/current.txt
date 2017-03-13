@@ -26169,6 +26169,16 @@ package android.net.sip {
 
 package android.net.wifi {
 
+  public final class IconInfo implements android.os.Parcelable {
+    ctor public IconInfo(java.lang.String, byte[]);
+    ctor public IconInfo(android.net.wifi.IconInfo);
+    method public int describeContents();
+    method public byte[] getData();
+    method public java.lang.String getFilename();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.wifi.IconInfo> CREATOR;
+  }
+
   public class ScanResult implements android.os.Parcelable {
     method public int describeContents();
     method public boolean is80211mcResponder();
@@ -26368,7 +26378,7 @@ package android.net.wifi {
 
   public class WifiManager {
     method public int addNetwork(android.net.wifi.WifiConfiguration);
-    method public boolean addOrUpdatePasspointConfiguration(android.net.wifi.hotspot2.PasspointConfiguration);
+    method public void addOrUpdatePasspointConfiguration(android.net.wifi.hotspot2.PasspointConfiguration);
     method public static int calculateSignalLevel(int, int);
     method public void cancelWps(android.net.wifi.WifiManager.WpsCallback);
     method public static int compareSignalLevel(int, int);
@@ -26397,7 +26407,7 @@ package android.net.wifi {
     method public boolean reassociate();
     method public boolean reconnect();
     method public boolean removeNetwork(int);
-    method public boolean removePasspointConfiguration(java.lang.String);
+    method public void removePasspointConfiguration(java.lang.String);
     method public deprecated boolean saveConfiguration();
     method public void setTdlsEnabled(java.net.InetAddress, boolean);
     method public void setTdlsEnabledWithMacAddress(java.lang.String, boolean);
@@ -26412,26 +26422,21 @@ package android.net.wifi {
     field public static final java.lang.String ACTION_PICK_WIFI_NETWORK = "android.net.wifi.PICK_WIFI_NETWORK";
     field public static final java.lang.String ACTION_REQUEST_SCAN_ALWAYS_AVAILABLE = "android.net.wifi.action.REQUEST_SCAN_ALWAYS_AVAILABLE";
     field public static final int ERROR_AUTHENTICATING = 1; // 0x1
+    field public static final java.lang.String EXTRA_ANQP_ELEMENT_DATA = "android.net.wifi.extra.ANQP_ELEMENT_DATA";
     field public static final java.lang.String EXTRA_BSSID = "bssid";
+    field public static final java.lang.String EXTRA_BSSID_LONG = "android.net.wifi.extra.BSSID_LONG";
+    field public static final java.lang.String EXTRA_DELAY = "android.net.wifi.extra.DELAY";
+    field public static final java.lang.String EXTRA_ESS = "android.net.wifi.extra.ESS";
+    field public static final java.lang.String EXTRA_ICON_INFO = "android.net.wifi.extra.ICON_INFO";
     field public static final java.lang.String EXTRA_NETWORK_INFO = "networkInfo";
     field public static final java.lang.String EXTRA_NEW_RSSI = "newRssi";
     field public static final java.lang.String EXTRA_NEW_STATE = "newState";
-    field public static final java.lang.String EXTRA_PASSPOINT_DEAUTH_IMMINENT_BSSID = "android.net.wifi.extra.PASSPOINT_DEAUTH_IMMINENT_BSSID";
-    field public static final java.lang.String EXTRA_PASSPOINT_DEAUTH_IMMINENT_ESS = "android.net.wifi.extra.PASSPOINT_DEAUTH_IMMINENT_ESS";
-    field public static final java.lang.String EXTRA_PASSPOINT_DEAUTH_IMMINENT_REASON_URL = "android.net.wifi.extra.PASSPOINT_DEAUTH_IMMINENT_REASON_URL";
-    field public static final java.lang.String EXTRA_PASSPOINT_DEAUTH_IMMINENT_REAUTH_DELAY = "android.net.wifi.extra.PASSPOINT_DEAUTH_IMMINENT_REAUTH_DELAY";
-    field public static final java.lang.String EXTRA_PASSPOINT_ICON_BSSID = "android.net.wifi.extra.PASSPOINT_ICON_BSSID";
-    field public static final java.lang.String EXTRA_PASSPOINT_ICON_DATA = "android.net.wifi.extra.PASSPOINT_ICON_DATA";
-    field public static final java.lang.String EXTRA_PASSPOINT_ICON_FILENAME = "android.net.wifi.extra.PASSPOINT_ICON_FILENAME";
-    field public static final java.lang.String EXTRA_PASSPOINT_OSU_PROVIDERS_LIST_BSSID = "android.net.wifi.extra.PASSPOINT_OSU_PROVIDERS_LIST_BSSID";
-    field public static final java.lang.String EXTRA_PASSPOINT_OSU_PROVIDERS_LIST_DATA = "android.net.wifi.extra.PASSPOINT_OSU_PROVIDERS_LIST_DATA";
-    field public static final java.lang.String EXTRA_PASSPOINT_SUBSCRIPTION_REMEDIATION_BSSID = "android.net.wifi.extra.PASSPOINT_SUBSCRIPTION_REMEDIATION_BSSID";
-    field public static final java.lang.String EXTRA_PASSPOINT_SUBSCRIPTION_REMEDIATION_SERVER_METHOD = "android.net.wifi.extra.PASSPOINT_SUBSCRIPTION_REMEDIATION_SERVER_METHOD";
-    field public static final java.lang.String EXTRA_PASSPOINT_SUBSCRIPTION_REMEDIATION_SERVER_URL = "android.net.wifi.extra.PASSPOINT_SUBSCRIPTION_REMEDIATION_SERVER_URL";
     field public static final java.lang.String EXTRA_PREVIOUS_WIFI_STATE = "previous_wifi_state";
     field public static final java.lang.String EXTRA_RESULTS_UPDATED = "resultsUpdated";
+    field public static final java.lang.String EXTRA_SUBSCRIPTION_REMEDIATION_METHOD = "android.net.wifi.extra.SUBSCRIPTION_REMEDIATION_METHOD";
     field public static final java.lang.String EXTRA_SUPPLICANT_CONNECTED = "connected";
     field public static final java.lang.String EXTRA_SUPPLICANT_ERROR = "supplicantError";
+    field public static final java.lang.String EXTRA_URL = "android.net.wifi.extra.URL";
     field public static final java.lang.String EXTRA_WIFI_INFO = "wifiInfo";
     field public static final java.lang.String EXTRA_WIFI_STATE = "wifi_state";
     field public static final java.lang.String NETWORK_IDS_CHANGED_ACTION = "android.net.wifi.NETWORK_IDS_CHANGED";
@@ -26650,7 +26655,6 @@ package android.net.wifi.hotspot2 {
     method public void setUsageLimitStartTimeInMs(long);
     method public void setUsageLimitTimeLimitInMinutes(long);
     method public void setUsageLimitUsageTimePeriodInMinutes(long);
-    method public boolean validate();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.wifi.hotspot2.PasspointConfiguration> CREATOR;
   }
@@ -26691,7 +26695,6 @@ package android.net.wifi.hotspot2.pps {
     method public void setRealm(java.lang.String);
     method public void setSimCredential(android.net.wifi.hotspot2.pps.Credential.SimCredential);
     method public void setUserCredential(android.net.wifi.hotspot2.pps.Credential.UserCredential);
-    method public boolean validate();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.wifi.hotspot2.pps.Credential> CREATOR;
   }
@@ -26704,7 +26707,6 @@ package android.net.wifi.hotspot2.pps {
     method public java.lang.String getCertType();
     method public void setCertSha256Fingerprint(byte[]);
     method public void setCertType(java.lang.String);
-    method public boolean validate();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.wifi.hotspot2.pps.Credential.CertificateCredential> CREATOR;
   }
@@ -26717,7 +26719,6 @@ package android.net.wifi.hotspot2.pps {
     method public java.lang.String getImsi();
     method public void setEapType(int);
     method public void setImsi(java.lang.String);
-    method public boolean validate();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.wifi.hotspot2.pps.Credential.SimCredential> CREATOR;
   }
@@ -26740,7 +26741,6 @@ package android.net.wifi.hotspot2.pps {
     method public void setPassword(java.lang.String);
     method public void setSoftTokenApp(java.lang.String);
     method public void setUsername(java.lang.String);
-    method public boolean validate();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.wifi.hotspot2.pps.Credential.UserCredential> CREATOR;
   }
@@ -26765,7 +26765,6 @@ package android.net.wifi.hotspot2.pps {
     method public void setMatchAnyOis(long[]);
     method public void setOtherHomePartners(java.lang.String[]);
     method public void setRoamingConsortiumOis(long[]);
-    method public boolean validate();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.wifi.hotspot2.pps.HomeSp> CREATOR;
   }
@@ -26792,7 +26791,6 @@ package android.net.wifi.hotspot2.pps {
     method public void setPolicyUpdate(android.net.wifi.hotspot2.pps.UpdateParameter);
     method public void setPreferredRoamingPartnerList(java.util.List<android.net.wifi.hotspot2.pps.Policy.RoamingPartner>);
     method public void setRequiredProtoPortMap(java.util.Map<java.lang.Integer, java.lang.String>);
-    method public boolean validate();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.wifi.hotspot2.pps.Policy> CREATOR;
   }
@@ -26809,7 +26807,6 @@ package android.net.wifi.hotspot2.pps {
     method public void setFqdn(java.lang.String);
     method public void setFqdnExactMatch(boolean);
     method public void setPriority(int);
-    method public boolean validate();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.wifi.hotspot2.pps.Policy.RoamingPartner> CREATOR;
   }
@@ -26834,7 +26831,6 @@ package android.net.wifi.hotspot2.pps {
     method public void setUpdateIntervalInMinutes(long);
     method public void setUpdateMethod(java.lang.String);
     method public void setUsername(java.lang.String);
-    method public boolean validate();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.wifi.hotspot2.pps.UpdateParameter> CREATOR;
     field public static final long UPDATE_CHECK_INTERVAL_NEVER = 4294967295L; // 0xffffffffL
