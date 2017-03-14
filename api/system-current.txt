@@ -23588,23 +23588,23 @@ package android.media {
   }
 
   public final class MediaCas {
-    ctor public MediaCas(int) throws android.media.UnsupportedCasException;
+    ctor public MediaCas(int) throws android.media.MediaCasException.UnsupportedCasException;
     method public void closeSession(byte[]);
     method public static android.media.MediaCas.PluginDescriptor[] enumeratePlugins();
     method public static boolean isSystemIdSupported(int);
-    method public byte[] openSession(int);
-    method public byte[] openSession(int, int);
-    method public void processEcm(byte[], byte[], int, int);
-    method public void processEcm(byte[], byte[]);
-    method public void processEmm(byte[], int, int);
-    method public void processEmm(byte[]);
-    method public void provision(java.lang.String);
-    method public void refreshEntitlements(int, byte[]);
+    method public byte[] openSession(int) throws android.media.MediaCasException;
+    method public byte[] openSession(int, int) throws android.media.MediaCasException;
+    method public void processEcm(byte[], byte[], int, int) throws android.media.MediaCasException;
+    method public void processEcm(byte[], byte[]) throws android.media.MediaCasException;
+    method public void processEmm(byte[], int, int) throws android.media.MediaCasException;
+    method public void processEmm(byte[]) throws android.media.MediaCasException;
+    method public void provision(java.lang.String) throws android.media.MediaCasException;
+    method public void refreshEntitlements(int, byte[]) throws android.media.MediaCasException;
     method public void release();
-    method public void sendEvent(int, int, byte[]);
+    method public void sendEvent(int, int, byte[]) throws android.media.MediaCasException;
     method public void setEventListener(android.media.MediaCas.EventListener, android.os.Handler);
-    method public void setPrivateData(byte[]);
-    method public void setSessionPrivateData(byte[], byte[]);
+    method public void setPrivateData(byte[]) throws android.media.MediaCasException;
+    method public void setSessionPrivateData(byte[], byte[]) throws android.media.MediaCasException;
   }
 
   public static abstract interface MediaCas.EventListener {
@@ -23617,7 +23617,22 @@ package android.media {
   }
 
   public class MediaCasException extends java.lang.Exception {
-    ctor public MediaCasException(java.lang.String);
+  }
+
+  public static final class MediaCasException.DeniedByServerException extends android.media.MediaCasException {
+  }
+
+  public static final class MediaCasException.NotProvisionedException extends android.media.MediaCasException {
+  }
+
+  public static final class MediaCasException.ResourceBusyException extends android.media.MediaCasException {
+  }
+
+  public static final class MediaCasException.UnsupportedCasException extends android.media.MediaCasException {
+  }
+
+  public class MediaCasStateException extends java.lang.IllegalStateException {
+    method public java.lang.String getDiagnosticInfo();
   }
 
   public final class MediaCodec {
@@ -24045,7 +24060,7 @@ package android.media {
   }
 
   public final class MediaDescrambler {
-    ctor public MediaDescrambler(int) throws android.media.UnsupportedCasException;
+    ctor public MediaDescrambler(int) throws android.media.MediaCasException.UnsupportedCasException;
     method public final int descramble(java.nio.ByteBuffer, int, java.nio.ByteBuffer, int, android.media.MediaCodec.CryptoInfo);
     method public final void release();
     method public final boolean requiresSecureDecoderComponent(java.lang.String);
@@ -25365,10 +25380,6 @@ package android.media {
     field public static final int TONE_SUP_RADIO_ACK = 19; // 0x13
     field public static final int TONE_SUP_RADIO_NOTAVAIL = 20; // 0x14
     field public static final int TONE_SUP_RINGTONE = 23; // 0x17
-  }
-
-  public final class UnsupportedCasException extends android.media.MediaCasException {
-    ctor public UnsupportedCasException(java.lang.String);
   }
 
   public final class UnsupportedSchemeException extends android.media.MediaDrmException {
