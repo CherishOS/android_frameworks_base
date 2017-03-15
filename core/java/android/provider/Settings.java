@@ -5771,6 +5771,11 @@ public final class Settings {
          * @hide
          */
         public static final String NETWORK_TRAFFIC_FONT_STYLE = "network_traffic_font_style";
+		
+		/**
+         * @hide
+         */
+        public static final String ROAMING_INDICATOR_ICON = "roaming_indicator_icon";
 
 	/**
          * Show data usage in QS header
