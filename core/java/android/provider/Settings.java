@@ -6062,6 +6062,12 @@ public final class Settings {
 	/** @hide */
         public static final String BACK_GESTURE_HEIGHT = "back_gesture_height";
         /**
+         * Enable/disable Bluetooth Battery bar
+         * @hide
+         */
+        public static final String BLUETOOTH_SHOW_BATTERY = "bluetooth_show_battery";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
