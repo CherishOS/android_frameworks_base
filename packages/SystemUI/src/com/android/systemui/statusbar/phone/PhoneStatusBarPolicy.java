@@ -38,6 +38,7 @@ import android.os.Looper;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.service.notification.ZenModeConfig;
 import android.telecom.TelecomManager;
@@ -102,6 +103,9 @@ public class PhoneStatusBarPolicy
     private static final String TAG = "PhoneStatusBarPolicy";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
+    private static final String BLUETOOTH_SHOW_BATTERY =
+            "system:" + Settings.System.BLUETOOTH_SHOW_BATTERY;
+
     private final String mSlotCast;
     private final String mSlotHotspot;
     private final String mSlotBluetooth;
@@ -158,6 +162,8 @@ public class PhoneStatusBarPolicy
     private final Context mContext;
     private boolean mHideBluetooth;
 
+
+    private boolean mShowBluetoothBattery;
 
     @Inject
     public PhoneStatusBarPolicy(Context context, StatusBarIconController iconController,
@@ -224,7 +230,8 @@ public class PhoneStatusBarPolicy
         mDateFormatUtil = dateFormatUtil;
 
         Dependency.get(TunerService.class).addTunable(this,
-                StatusBarIconController.ICON_HIDE_LIST);
+                StatusBarIconController.ICON_HIDE_LIST,
+                BLUETOOTH_SHOW_BATTERY);
     }
 
     /** Initialize the object after construction. */
@@ -342,6 +349,11 @@ public class PhoneStatusBarPolicy
                     mHideBluetooth = hideBluetooth;
                     updateBluetooth();
                 }
+                break;
+            case BLUETOOTH_SHOW_BATTERY:
+                mShowBluetoothBattery =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                updateBluetooth();
                 break;
             default:
                 break;
@@ -470,7 +482,7 @@ public class PhoneStatusBarPolicy
         int batteryLevel = -1;
         if (mBluetooth != null && mBluetooth.isBluetoothConnected()) {
             bluetoothVisible = mBluetooth.isBluetoothEnabled();
-            batteryLevel = mBluetooth.getBatteryLevel();
+            batteryLevel = mShowBluetoothBattery ? mBluetooth.getBatteryLevel() : -1;
             contentDescription = mResources.getString(
                     R.string.accessibility_bluetooth_connected);
         }
