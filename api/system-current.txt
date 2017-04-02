@@ -35598,8 +35598,23 @@ package android.print {
   }
 
   public final class PrintManager {
+    method public void addPrintServiceRecommendationsChangeListener(android.print.PrintManager.PrintServiceRecommendationsChangeListener, android.os.Handler);
+    method public void addPrintServicesChangeListener(android.print.PrintManager.PrintServicesChangeListener, android.os.Handler);
     method public java.util.List<android.print.PrintJob> getPrintJobs();
+    method public java.util.List<android.printservice.recommendation.RecommendationInfo> getPrintServiceRecommendations();
+    method public java.util.List<android.printservice.PrintServiceInfo> getPrintServices(int);
     method public android.print.PrintJob print(java.lang.String, android.print.PrintDocumentAdapter, android.print.PrintAttributes);
+    method public void removePrintServiceRecommendationsChangeListener(android.print.PrintManager.PrintServiceRecommendationsChangeListener);
+    method public void removePrintServicesChangeListener(android.print.PrintManager.PrintServicesChangeListener);
+    field public static final int ENABLED_SERVICES = 1; // 0x1
+  }
+
+  public static abstract interface PrintManager.PrintServiceRecommendationsChangeListener {
+    method public abstract void onPrintServiceRecommendationsChanged();
+  }
+
+  public static abstract interface PrintManager.PrintServicesChangeListener {
+    method public abstract void onPrintServicesChanged();
   }
 
   public final class PrinterCapabilitiesInfo implements android.os.Parcelable {
@@ -35728,6 +35743,13 @@ package android.printservice {
     field public static final java.lang.String SERVICE_META_DATA = "android.printservice";
   }
 
+  public final class PrintServiceInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.content.ComponentName getComponentName();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.printservice.PrintServiceInfo> CREATOR;
+  }
+
   public abstract class PrinterDiscoverySession {
     ctor public PrinterDiscoverySession();
     method public final void addPrinters(java.util.List<android.print.PrinterInfo>);
@@ -35750,8 +35772,10 @@ package android.printservice {
 package android.printservice.recommendation {
 
   public final class RecommendationInfo implements android.os.Parcelable {
-    ctor public RecommendationInfo(java.lang.CharSequence, java.lang.CharSequence, int, boolean);
+    ctor public RecommendationInfo(java.lang.CharSequence, java.lang.CharSequence, java.util.List<java.net.InetAddress>, boolean);
+    ctor public deprecated RecommendationInfo(java.lang.CharSequence, java.lang.CharSequence, int, boolean);
     method public int describeContents();
+    method public java.util.List<java.net.InetAddress> getDiscoveredPrinters();
     method public java.lang.CharSequence getName();
     method public int getNumDiscoveredPrinters();
     method public java.lang.CharSequence getPackageName();
