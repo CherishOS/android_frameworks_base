@@ -39991,7 +39991,7 @@ package android.telephony {
     method public android.telephony.IccOpenLogicalChannelResponse iccOpenLogicalChannel(java.lang.String);
     method public java.lang.String iccTransmitApduBasicChannel(int, int, int, int, int, java.lang.String);
     method public java.lang.String iccTransmitApduLogicalChannel(int, int, int, int, int, int, java.lang.String);
-    method public boolean isConcurrentVoiceAndDataAllowed();
+    method public boolean isConcurrentVoiceAndDataSupported();
     method public boolean isDataEnabled();
     method public boolean isHearingAidCompatibilitySupported();
     method public boolean isNetworkRoaming();
@@ -40004,7 +40004,7 @@ package android.telephony {
     method public deprecated boolean sendDialerCode(java.lang.String);
     method public void sendDialerSpecialCode(java.lang.String);
     method public java.lang.String sendEnvelopeWithStatus(java.lang.String);
-    method public void sendUssdRequest(java.lang.String, android.telephony.TelephonyManager.OnReceiveUssdResponseCallback, android.os.Handler);
+    method public void sendUssdRequest(java.lang.String, android.telephony.TelephonyManager.UssdResponseCallback, android.os.Handler);
     method public void setDataEnabled(boolean);
     method public boolean setLine1NumberForDisplay(java.lang.String, java.lang.String);
     method public boolean setOperatorBrandOverride(java.lang.String);
@@ -40080,14 +40080,17 @@ package android.telephony {
     field public static final int SIM_STATE_PUK_REQUIRED = 3; // 0x3
     field public static final int SIM_STATE_READY = 5; // 0x5
     field public static final int SIM_STATE_UNKNOWN = 0; // 0x0
+    field public static final int USSD_ERROR_SERVICE_UNAVAIL = -2; // 0xfffffffe
+    field public static final int USSD_RETURN_FAILURE = -1; // 0xffffffff
+    field public static final int USSD_RETURN_SUCCESS = 100; // 0x64
     field public static final java.lang.String VVM_TYPE_CVVM = "vvm_type_cvvm";
     field public static final java.lang.String VVM_TYPE_OMTP = "vvm_type_omtp";
   }
 
-  public static abstract class TelephonyManager.OnReceiveUssdResponseCallback {
-    ctor public TelephonyManager.OnReceiveUssdResponseCallback();
-    method public void onReceiveUssdResponse(java.lang.String, java.lang.CharSequence);
-    method public void onReceiveUssdResponseFailed(java.lang.String, int);
+  public static abstract class TelephonyManager.UssdResponseCallback {
+    ctor public TelephonyManager.UssdResponseCallback();
+    method public void onReceiveUssdResponse(android.telephony.TelephonyManager, java.lang.String, java.lang.CharSequence);
+    method public void onReceiveUssdResponseFailed(android.telephony.TelephonyManager, java.lang.String, int);
   }
 
   public abstract class VisualVoicemailService extends android.app.Service {
