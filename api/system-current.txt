@@ -9386,7 +9386,6 @@ package android.content {
     field public static final java.lang.String DOWNLOAD_SERVICE = "download";
     field public static final java.lang.String DROPBOX_SERVICE = "dropbox";
     field public static final java.lang.String FINGERPRINT_SERVICE = "fingerprint";
-    field public static final java.lang.String FONT_SERVICE = "font";
     field public static final java.lang.String HARDWARE_PROPERTIES_SERVICE = "hardware_properties";
     field public static final java.lang.String HDMI_CONTROL_SERVICE = "hdmi_control";
     field public static final java.lang.String INPUT_METHOD_SERVICE = "input_method";
@@ -13975,7 +13974,7 @@ package android.graphics {
     method public void setFilterBitmap(boolean);
     method public void setFlags(int);
     method public void setFontFeatureSettings(java.lang.String);
-    method public boolean setFontVariationSettings(java.lang.String);
+    method public boolean setFontVariationSettings(java.lang.String) throws android.graphics.fonts.FontVariationAxis.InvalidFormatException;
     method public void setHinting(int);
     method public void setLetterSpacing(float);
     method public void setLinearText(boolean);
@@ -14509,8 +14508,8 @@ package android.graphics {
     method public static android.graphics.Typeface.Builder obtain();
     method public void recycle();
     method public void reset();
-    method public android.graphics.Typeface.Builder setFontVariationSettings(java.lang.String);
-    method public android.graphics.Typeface.Builder setFontVariationSettings(android.text.FontConfig.Axis[]);
+    method public android.graphics.Typeface.Builder setFontVariationSettings(java.lang.String) throws android.graphics.fonts.FontVariationAxis.InvalidFormatException;
+    method public android.graphics.Typeface.Builder setFontVariationSettings(android.graphics.fonts.FontVariationAxis[]);
     method public android.graphics.Typeface.Builder setItalic(int);
     method public android.graphics.Typeface.Builder setSourceFromAsset(android.content.res.AssetManager, java.lang.String);
     method public android.graphics.Typeface.Builder setSourceFromFile(java.io.File);
@@ -15118,6 +15117,21 @@ package android.graphics.fonts {
     method public java.lang.String getQuery();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.graphics.fonts.FontRequest> CREATOR;
+  }
+
+  public final class FontVariationAxis implements android.os.Parcelable {
+    ctor public FontVariationAxis(java.lang.String, float) throws android.graphics.fonts.FontVariationAxis.InvalidFormatException;
+    method public int describeContents();
+    method public static android.graphics.fonts.FontVariationAxis[] fromFontVariationSettings(java.lang.String) throws android.graphics.fonts.FontVariationAxis.InvalidFormatException;
+    method public float getStyleValue();
+    method public java.lang.String getTag();
+    method public static java.lang.String toFontVariationSettings(android.graphics.fonts.FontVariationAxis[]);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.graphics.fonts.FontVariationAxis> CREATOR;
+  }
+
+  public static class FontVariationAxis.InvalidFormatException extends java.lang.Exception {
+    ctor public FontVariationAxis.InvalidFormatException(java.lang.String);
   }
 
 }
@@ -44510,65 +44524,6 @@ package android.text {
     method public android.text.Editable newEditable(java.lang.CharSequence);
   }
 
-  public final class FontConfig implements android.os.Parcelable {
-    ctor public FontConfig(android.text.FontConfig.Family[], android.text.FontConfig.Alias[]);
-    method public int describeContents();
-    method public android.text.FontConfig.Alias[] getAliases();
-    method public android.text.FontConfig.Family[] getFamilies();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.text.FontConfig> CREATOR;
-  }
-
-  public static final class FontConfig.Alias implements android.os.Parcelable {
-    ctor public FontConfig.Alias(java.lang.String, java.lang.String, int);
-    method public int describeContents();
-    method public java.lang.String getName();
-    method public java.lang.String getToName();
-    method public int getWeight();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.text.FontConfig.Alias> CREATOR;
-  }
-
-  public static final class FontConfig.Axis implements android.os.Parcelable {
-    ctor public FontConfig.Axis(int, float);
-    ctor public FontConfig.Axis(java.lang.String, float);
-    method public int describeContents();
-    method public float getStyleValue();
-    method public int getTag();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.text.FontConfig.Axis> CREATOR;
-  }
-
-  public static final class FontConfig.Family implements android.os.Parcelable {
-    ctor public FontConfig.Family(java.lang.String, android.text.FontConfig.Font[], java.lang.String, int);
-    method public int describeContents();
-    method public android.text.FontConfig.Font[] getFonts();
-    method public java.lang.String getLanguage();
-    method public java.lang.String getName();
-    method public int getVariant();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.text.FontConfig.Family> CREATOR;
-    field public static final int VARIANT_COMPACT = 1; // 0x1
-    field public static final int VARIANT_DEFAULT = 0; // 0x0
-    field public static final int VARIANT_ELEGANT = 2; // 0x2
-  }
-
-  public static final class FontConfig.Font implements android.os.Parcelable {
-    method public int describeContents();
-    method public android.text.FontConfig.Axis[] getAxes();
-    method public java.lang.String getFontName();
-    method public int getTtcIndex();
-    method public android.net.Uri getUri();
-    method public int getWeight();
-    method public boolean isItalic();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.text.FontConfig.Font> CREATOR;
-  }
-
-  public final class FontManager {
-    method public android.text.FontConfig getSystemFonts();
-  }
-
   public abstract interface GetChars implements java.lang.CharSequence {
     method public abstract void getChars(int, int, char[], int);
   }
@@ -55190,7 +55145,7 @@ package android.widget {
     method public void setExtractedText(android.view.inputmethod.ExtractedText);
     method public void setFilters(android.text.InputFilter[]);
     method public void setFontFeatureSettings(java.lang.String);
-    method public boolean setFontVariationSettings(java.lang.String);
+    method public boolean setFontVariationSettings(java.lang.String) throws android.graphics.fonts.FontVariationAxis.InvalidFormatException;
     method protected boolean setFrame(int, int, int, int);
     method public void setFreezesText(boolean);
     method public void setGravity(int);
