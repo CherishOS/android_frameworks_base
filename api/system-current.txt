@@ -53,6 +53,7 @@ package android {
     field public static final java.lang.String BIND_PRINT_SERVICE = "android.permission.BIND_PRINT_SERVICE";
     field public static final java.lang.String BIND_QUICK_SETTINGS_TILE = "android.permission.BIND_QUICK_SETTINGS_TILE";
     field public static final java.lang.String BIND_REMOTEVIEWS = "android.permission.BIND_REMOTEVIEWS";
+    field public static final java.lang.String BIND_RESOLVER_RANKER_SERVICE = "android.permission.BIND_RESOLVER_RANKER_SERVICE";
     field public static final java.lang.String BIND_RUNTIME_PERMISSION_PRESENTER_SERVICE = "android.permission.BIND_RUNTIME_PERMISSION_PRESENTER_SERVICE";
     field public static final java.lang.String BIND_SCREENING_SERVICE = "android.permission.BIND_SCREENING_SERVICE";
     field public static final java.lang.String BIND_TELECOM_CONNECTION_SERVICE = "android.permission.BIND_TELECOM_CONNECTION_SERVICE";
@@ -40626,6 +40627,36 @@ package android.service.quicksettings {
     field public static final java.lang.String ACTION_QS_TILE_PREFERENCES = "android.service.quicksettings.action.QS_TILE_PREFERENCES";
     field public static final java.lang.String EXTRA_COMPONENT = "android.service.quicksettings.extra.COMPONENT";
     field public static final java.lang.String META_DATA_ACTIVE_TILE = "android.service.quicksettings.ACTIVE_TILE";
+  }
+
+}
+
+package android.service.resolver {
+
+  public abstract class ResolverRankerService extends android.app.Service {
+    ctor public ResolverRankerService();
+    method public android.os.IBinder onBind(android.content.Intent);
+    method public void onPredictSharingProbabilities(java.util.List<android.service.resolver.ResolverTarget>);
+    method public void onTrainRankingModel(java.util.List<android.service.resolver.ResolverTarget>, int);
+    field public static final java.lang.String BIND_PERMISSION = "android.permission.BIND_RESOLVER_RANKER_SERVICE";
+    field public static final java.lang.String SERVICE_INTERFACE = "android.service.resolver.ResolverRankerService";
+  }
+
+  public final class ResolverTarget implements android.os.Parcelable {
+    ctor public ResolverTarget();
+    method public int describeContents();
+    method public float getChooserScore();
+    method public float getLaunchScore();
+    method public float getRecencyScore();
+    method public float getSelectProbability();
+    method public float getTimeSpentScore();
+    method public void setChooserScore(float);
+    method public void setLaunchScore(float);
+    method public void setRecencyScore(float);
+    method public void setSelectProbability(float);
+    method public void setTimeSpentScore(float);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.resolver.ResolverTarget> CREATOR;
   }
 
 }
