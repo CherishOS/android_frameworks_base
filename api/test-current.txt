@@ -6859,6 +6859,8 @@ package android.app.job {
   }
 
   public class JobParameters implements android.os.Parcelable {
+    method public void completeWork(android.app.job.JobWorkItem);
+    method public android.app.job.JobWorkItem dequeueWork();
     method public int describeContents();
     method public android.content.ClipData getClipData();
     method public int getClipGrantFlags();
@@ -6876,6 +6878,7 @@ package android.app.job {
     ctor public JobScheduler();
     method public abstract void cancel(int);
     method public abstract void cancelAll();
+    method public abstract int enqueue(android.app.job.JobInfo, android.app.job.JobWorkItem);
     method public abstract java.util.List<android.app.job.JobInfo> getAllPendingJobs();
     method public abstract android.app.job.JobInfo getPendingJob(int);
     method public abstract int schedule(android.app.job.JobInfo);
@@ -6890,6 +6893,15 @@ package android.app.job {
     method public abstract boolean onStartJob(android.app.job.JobParameters);
     method public abstract boolean onStopJob(android.app.job.JobParameters);
     field public static final java.lang.String PERMISSION_BIND = "android.permission.BIND_JOB_SERVICE";
+  }
+
+  public final class JobWorkItem implements android.os.Parcelable {
+    ctor public JobWorkItem(android.content.Intent);
+    ctor public JobWorkItem(android.os.Parcel);
+    method public int describeContents();
+    method public android.content.Intent getIntent();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.app.job.JobWorkItem> CREATOR;
   }
 
 }
