@@ -1,5 +1,5 @@
-/**
- * Copyright (C) 2014 The Android Open Source Project
+/*
+ * Copyright (C) 2017 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,5 @@
 
 package android.app.job;
 
-import android.app.job.JobInfo;
-import android.app.job.JobWorkItem;
-
- /**
-  * IPC interface that supports the app-facing {@link #JobScheduler} api.
-  * {@hide}
-  */
-interface IJobScheduler {
-    int schedule(in JobInfo job);
-    int enqueue(in JobInfo job, in JobWorkItem work);
-    int scheduleAsPackage(in JobInfo job, String packageName, int userId, String tag);
-    void cancel(int jobId);
-    void cancelAll();
-    List<JobInfo> getAllPendingJobs();
-    JobInfo getPendingJob(int jobId);
-}
+/** @hide */
+parcelable JobWorkItem;
