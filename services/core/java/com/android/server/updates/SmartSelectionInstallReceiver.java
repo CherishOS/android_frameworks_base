@@ -16,13 +16,14 @@
 
 package com.android.server.updates;
 
-public class LangIdInstallReceiver extends ConfigUpdateInstallReceiver {
+public class SmartSelectionInstallReceiver extends ConfigUpdateInstallReceiver {
 
-    public LangIdInstallReceiver() {
+    public SmartSelectionInstallReceiver() {
         super(
             "/data/misc/textclassifier/",
-            "textclassifier.langid.model",
-            "metadata/langid",
+            "textclassifier.smartselection.model",
+            "metadata/smartselection",
             "version");
     }
 }
+
