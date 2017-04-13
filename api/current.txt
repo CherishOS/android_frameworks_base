@@ -13762,7 +13762,7 @@ package android.graphics {
   }
 
   public class Typeface {
-    method public static void create(android.graphics.fonts.FontRequest, android.graphics.Typeface.FontRequestCallback);
+    method public static deprecated void create(android.graphics.fonts.FontRequest, android.graphics.Typeface.FontRequestCallback);
     method public static android.graphics.Typeface create(java.lang.String, int);
     method public static android.graphics.Typeface create(android.graphics.Typeface, int);
     method public static android.graphics.Typeface createFromAsset(android.content.res.AssetManager, java.lang.String);
@@ -13796,7 +13796,7 @@ package android.graphics {
     method public android.graphics.Typeface.Builder setWeight(int);
   }
 
-  public static abstract interface Typeface.FontRequestCallback {
+  public static abstract deprecated interface Typeface.FontRequestCallback {
     method public abstract void onTypefaceRequestFailed(int);
     method public abstract void onTypefaceRetrieved(android.graphics.Typeface);
     field public static final int FAIL_REASON_FONT_LOAD_ERROR = -3; // 0xfffffffd
@@ -34505,6 +34505,7 @@ package android.provider {
     method public static android.graphics.Typeface buildTypeface(android.content.Context, android.os.CancellationSignal, android.provider.FontsContract.FontInfo[], int, boolean, java.lang.String);
     method public static android.graphics.Typeface buildTypeface(android.content.Context, android.os.CancellationSignal, android.provider.FontsContract.FontInfo[]);
     method public static android.provider.FontsContract.FontFamilyResult fetchFonts(android.content.Context, android.os.CancellationSignal, android.graphics.fonts.FontRequest) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public static void requestFont(android.content.Context, android.graphics.fonts.FontRequest, android.provider.FontsContract.FontRequestCallback, android.os.Handler);
   }
 
   public static final class FontsContract.Columns implements android.provider.BaseColumns {
@@ -34536,6 +34537,18 @@ package android.provider {
     method public android.net.Uri getUri();
     method public int getWeight();
     method public boolean isItalic();
+  }
+
+  public static class FontsContract.FontRequestCallback {
+    ctor public FontsContract.FontRequestCallback();
+    method public void onTypefaceRequestFailed(int);
+    method public void onTypefaceRetrieved(android.graphics.Typeface);
+    field public static final int FAIL_REASON_FONT_LOAD_ERROR = -3; // 0xfffffffd
+    field public static final int FAIL_REASON_FONT_NOT_FOUND = 1; // 0x1
+    field public static final int FAIL_REASON_FONT_UNAVAILABLE = 2; // 0x2
+    field public static final int FAIL_REASON_MALFORMED_QUERY = 3; // 0x3
+    field public static final int FAIL_REASON_PROVIDER_NOT_FOUND = -1; // 0xffffffff
+    field public static final int FAIL_REASON_WRONG_CERTIFICATES = -2; // 0xfffffffe
   }
 
   public final deprecated class LiveFolders implements android.provider.BaseColumns {
