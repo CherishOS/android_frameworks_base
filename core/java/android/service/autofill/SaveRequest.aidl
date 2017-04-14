@@ -1,11 +1,11 @@
-/*
- * Copyright (C) 2017 The Android Open Source Project
+/**
+ * Copyright (c) 2017, The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,17 +16,4 @@
 
 package android.service.autofill;
 
-import android.os.ICancellationSignal;
-
-import android.service.autofill.FillResponse;
-
-/**
- * Interface to receive the result of a save request.
- *
- * @hide
- */
-interface IFillCallback {
-    void onCancellable(in ICancellationSignal cancellation);
-    void onSuccess(in FillResponse response, int requestId);
-    void onFailure(CharSequence message);
-}
+parcelable SaveRequest;
