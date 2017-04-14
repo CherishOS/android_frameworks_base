@@ -14901,15 +14901,16 @@ package android.hardware {
     field public final int type;
   }
 
-  public final class SensorDirectChannel implements java.lang.AutoCloseable {
+  public final class SensorDirectChannel implements java.nio.channels.Channel {
     method public void close();
-    method public boolean isValid();
+    method public int configure(android.hardware.Sensor, int);
+    method public boolean isOpen();
     field public static final int RATE_FAST = 2; // 0x2
     field public static final int RATE_NORMAL = 1; // 0x1
     field public static final int RATE_STOP = 0; // 0x0
     field public static final int RATE_VERY_FAST = 3; // 0x3
-    field public static final int TYPE_ASHMEM = 1; // 0x1
     field public static final int TYPE_HARDWARE_BUFFER = 2; // 0x2
+    field public static final int TYPE_MEMORY_FILE = 1; // 0x1
   }
 
   public class SensorEvent {
@@ -14943,7 +14944,6 @@ package android.hardware {
 
   public abstract class SensorManager {
     method public boolean cancelTriggerSensor(android.hardware.TriggerEventListener, android.hardware.Sensor);
-    method public int configureDirectChannel(android.hardware.SensorDirectChannel, android.hardware.Sensor, int);
     method public android.hardware.SensorDirectChannel createDirectChannel(android.os.MemoryFile);
     method public android.hardware.SensorDirectChannel createDirectChannel(android.hardware.HardwareBuffer);
     method public boolean flush(android.hardware.SensorEventListener);
