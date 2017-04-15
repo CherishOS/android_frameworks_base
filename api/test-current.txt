@@ -37208,8 +37208,10 @@ package android.service.autofill {
     method public final android.os.IBinder onBind(android.content.Intent);
     method public void onConnected();
     method public void onDisconnected();
-    method public abstract void onFillRequest(android.app.assist.AssistStructure, android.os.Bundle, int, android.os.CancellationSignal, android.service.autofill.FillCallback);
-    method public abstract void onSaveRequest(android.app.assist.AssistStructure, android.os.Bundle, android.service.autofill.SaveCallback);
+    method public void onFillRequest(android.service.autofill.FillRequest, android.os.CancellationSignal, android.service.autofill.FillCallback);
+    method public abstract deprecated void onFillRequest(android.app.assist.AssistStructure, android.os.Bundle, int, android.os.CancellationSignal, android.service.autofill.FillCallback);
+    method public void onSaveRequest(android.service.autofill.SaveRequest, android.service.autofill.SaveCallback);
+    method public abstract deprecated void onSaveRequest(android.app.assist.AssistStructure, android.os.Bundle, android.service.autofill.SaveCallback);
     field public static final java.lang.String SERVICE_INTERFACE = "android.service.autofill.AutofillService";
     field public static final java.lang.String SERVICE_META_DATA = "android.autofill";
   }
@@ -37234,6 +37236,25 @@ package android.service.autofill {
     method public void onSuccess(android.service.autofill.FillResponse);
   }
 
+  public final class FillContext implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getRequestId();
+    method public android.app.assist.AssistStructure getStructure();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.FillContext> CREATOR;
+  }
+
+  public final class FillRequest implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.os.Bundle getClientState();
+    method public int getFlags();
+    method public int getId();
+    method public android.app.assist.AssistStructure getStructure();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.FillRequest> CREATOR;
+    field public static final int FLAG_MANUAL_REQUEST = 1; // 0x1
+  }
+
   public final class FillResponse implements android.os.Parcelable {
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
@@ -37245,7 +37266,8 @@ package android.service.autofill {
     method public android.service.autofill.FillResponse.Builder addDataset(android.service.autofill.Dataset);
     method public android.service.autofill.FillResponse build();
     method public android.service.autofill.FillResponse.Builder setAuthentication(android.view.autofill.AutofillId[], android.content.IntentSender, android.widget.RemoteViews);
-    method public android.service.autofill.FillResponse.Builder setExtras(android.os.Bundle);
+    method public android.service.autofill.FillResponse.Builder setClientState(android.os.Bundle);
+    method public deprecated android.service.autofill.FillResponse.Builder setExtras(android.os.Bundle);
     method public android.service.autofill.FillResponse.Builder setSaveInfo(android.service.autofill.SaveInfo);
   }
 
@@ -37272,6 +37294,14 @@ package android.service.autofill {
     method public android.service.autofill.SaveInfo.Builder setDescription(java.lang.CharSequence);
     method public android.service.autofill.SaveInfo.Builder setNegativeAction(java.lang.CharSequence, android.content.IntentSender);
     method public android.service.autofill.SaveInfo.Builder setOptionalIds(android.view.autofill.AutofillId[]);
+  }
+
+  public final class SaveRequest implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.os.Bundle getClientState();
+    method public java.util.List<android.service.autofill.FillContext> getFillContexts();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.SaveRequest> CREATOR;
   }
 
 }
@@ -48220,7 +48250,7 @@ package android.view.autofill {
     field public static final java.lang.String EXTRA_ASSIST_STRUCTURE = "android.view.autofill.extra.ASSIST_STRUCTURE";
     field public static final java.lang.String EXTRA_AUTHENTICATION_RESULT = "android.view.autofill.extra.AUTHENTICATION_RESULT";
     field public static final java.lang.String EXTRA_DATA_EXTRAS = "android.view.autofill.extra.DATA_EXTRAS";
-    field public static final int FLAG_MANUAL_REQUEST = 1; // 0x1
+    field public static final deprecated int FLAG_MANUAL_REQUEST = 1; // 0x1
   }
 
   public static abstract class AutofillManager.AutofillCallback {
