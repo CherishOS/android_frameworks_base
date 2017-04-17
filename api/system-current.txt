@@ -40149,6 +40149,7 @@ package android.service.autofill {
   public abstract class AutofillService extends android.app.Service {
     ctor public AutofillService();
     method public final deprecated void disableSelf();
+    method public final android.service.autofill.FillEventHistory getFillEventHistory();
     method public final android.os.IBinder onBind(android.content.Intent);
     method public void onConnected();
     method public void onDisconnected();
@@ -40171,6 +40172,7 @@ package android.service.autofill {
     ctor public Dataset.Builder();
     method public android.service.autofill.Dataset build();
     method public android.service.autofill.Dataset.Builder setAuthentication(android.content.IntentSender);
+    method public android.service.autofill.Dataset.Builder setId(java.lang.String);
     method public android.service.autofill.Dataset.Builder setValue(android.view.autofill.AutofillId, android.view.autofill.AutofillValue);
     method public android.service.autofill.Dataset.Builder setValue(android.view.autofill.AutofillId, android.view.autofill.AutofillValue, android.widget.RemoteViews);
   }
@@ -40186,6 +40188,23 @@ package android.service.autofill {
     method public android.app.assist.AssistStructure getStructure();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.autofill.FillContext> CREATOR;
+  }
+
+  public final class FillEventHistory implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.os.Bundle getClientState();
+    method public java.util.List<android.service.autofill.FillEventHistory.Event> getEvents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.FillEventHistory> CREATOR;
+  }
+
+  public static final class FillEventHistory.Event {
+    method public java.lang.String getDatasetId();
+    method public int getType();
+    field public static final int TYPE_AUTHENTICATION_SELECTED = 2; // 0x2
+    field public static final int TYPE_DATASET_AUTHENTICATION_SELECTED = 1; // 0x1
+    field public static final int TYPE_DATASET_SELECTED = 0; // 0x0
+    field public static final int TYPE_SAVE_SHOWN = 3; // 0x3
   }
 
   public final class FillRequest implements android.os.Parcelable {
