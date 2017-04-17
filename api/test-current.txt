@@ -7024,13 +7024,13 @@ package android.app.usage {
   }
 
   public class StorageStatsManager {
-    method public long getFreeBytes(java.lang.String);
-    method public long getTotalBytes(java.lang.String);
-    method public boolean isQuotaSupported(java.lang.String);
-    method public android.app.usage.ExternalStorageStats queryExternalStatsForUser(java.lang.String, android.os.UserHandle);
-    method public android.app.usage.StorageStats queryStatsForPackage(java.lang.String, java.lang.String, android.os.UserHandle);
-    method public android.app.usage.StorageStats queryStatsForUid(java.lang.String, int);
-    method public android.app.usage.StorageStats queryStatsForUser(java.lang.String, android.os.UserHandle);
+    method public long getFreeBytes(java.util.UUID) throws java.io.IOException;
+    method public long getTotalBytes(java.util.UUID) throws java.io.IOException;
+    method public boolean isQuotaSupported(java.util.UUID);
+    method public android.app.usage.ExternalStorageStats queryExternalStatsForUser(java.util.UUID, android.os.UserHandle) throws java.io.IOException;
+    method public android.app.usage.StorageStats queryStatsForPackage(java.util.UUID, java.lang.String, android.os.UserHandle) throws java.io.IOException, android.content.pm.PackageManager.NameNotFoundException;
+    method public android.app.usage.StorageStats queryStatsForUid(java.util.UUID, int) throws java.io.IOException;
+    method public android.app.usage.StorageStats queryStatsForUser(java.util.UUID, android.os.UserHandle) throws java.io.IOException;
   }
 
   public final class UsageEvents implements android.os.Parcelable {
@@ -10253,12 +10253,12 @@ package android.content.pm {
     field public java.lang.String[] splitNames;
     field public java.lang.String[] splitPublicSourceDirs;
     field public java.lang.String[] splitSourceDirs;
+    field public java.util.UUID storageUuid;
     field public int targetSdkVersion;
     field public java.lang.String taskAffinity;
     field public int theme;
     field public int uiOptions;
     field public int uid;
-    field public java.lang.String volumeUuid;
   }
 
   public static class ApplicationInfo.DisplayNameComparator implements java.util.Comparator {
@@ -30909,6 +30909,7 @@ package android.os {
     method public android.util.SizeF getSizeF(java.lang.String);
     method public <T extends android.os.Parcelable> android.util.SparseArray<T> getSparseParcelableArray(java.lang.String);
     method public java.util.ArrayList<java.lang.String> getStringArrayList(java.lang.String);
+    method public java.util.UUID getUuid(java.lang.String);
     method public boolean hasFileDescriptors();
     method public void putAll(android.os.Bundle);
     method public void putBinder(java.lang.String, android.os.IBinder);
@@ -30933,6 +30934,7 @@ package android.os {
     method public void putSizeF(java.lang.String, android.util.SizeF);
     method public void putSparseParcelableArray(java.lang.String, android.util.SparseArray<? extends android.os.Parcelable>);
     method public void putStringArrayList(java.lang.String, java.util.ArrayList<java.lang.String>);
+    method public void putUuid(java.lang.String, java.util.UUID);
     method public void readFromParcel(android.os.Parcel);
     method public void setClassLoader(java.lang.ClassLoader);
     method public void writeToParcel(android.os.Parcel, int);
@@ -31483,6 +31485,7 @@ package android.os {
     method public final <T> void readTypedArray(T[], android.os.Parcelable.Creator<T>);
     method public final <T> void readTypedList(java.util.List<T>, android.os.Parcelable.Creator<T>);
     method public final <T> T readTypedObject(android.os.Parcelable.Creator<T>);
+    method public final java.util.UUID readUuid();
     method public final java.lang.Object readValue(java.lang.ClassLoader);
     method public final void recycle();
     method public final void setDataCapacity(int);
@@ -31528,6 +31531,7 @@ package android.os {
     method public final <T extends android.os.Parcelable> void writeTypedArray(T[], int);
     method public final <T extends android.os.Parcelable> void writeTypedList(java.util.List<T>);
     method public final <T extends android.os.Parcelable> void writeTypedObject(T, int);
+    method public final void writeUuid(java.util.UUID);
     method public final void writeValue(java.lang.Object);
     field public static final android.os.Parcelable.Creator<java.lang.String> STRING_CREATOR;
   }
@@ -32162,15 +32166,16 @@ package android.os.storage {
   }
 
   public class StorageManager {
-    method public void allocateBytes(java.io.File, long, int) throws java.io.IOException;
+    method public void allocateBytes(java.util.UUID, long, int) throws java.io.IOException;
     method public void allocateBytes(java.io.FileDescriptor, long, int) throws java.io.IOException;
-    method public long getAllocatableBytes(java.io.File, int) throws java.io.IOException;
-    method public long getCacheQuotaBytes(java.io.File);
-    method public long getCacheSizeBytes(java.io.File);
+    method public long getAllocatableBytes(java.util.UUID, int) throws java.io.IOException;
+    method public long getCacheQuotaBytes(java.util.UUID) throws java.io.IOException;
+    method public long getCacheSizeBytes(java.util.UUID) throws java.io.IOException;
     method public java.lang.String getMountedObbPath(java.lang.String);
     method public android.os.storage.StorageVolume getPrimaryStorageVolume();
     method public android.os.storage.StorageVolume getStorageVolume(java.io.File);
     method public java.util.List<android.os.storage.StorageVolume> getStorageVolumes();
+    method public java.util.UUID getUuidForPath(java.io.File) throws java.io.IOException;
     method public boolean isCacheBehaviorGroup(java.io.File) throws java.io.IOException;
     method public boolean isCacheBehaviorTombstone(java.io.File) throws java.io.IOException;
     method public boolean isEncrypted(java.io.File);
@@ -32182,7 +32187,10 @@ package android.os.storage {
     method public void setCacheBehaviorTombstone(java.io.File, boolean) throws java.io.IOException;
     method public boolean unmountObb(java.lang.String, boolean, android.os.storage.OnObbStateChangeListener);
     field public static final java.lang.String ACTION_MANAGE_STORAGE = "android.os.storage.action.MANAGE_STORAGE";
+    field public static final java.lang.String EXTRA_REQUESTED_BYTES = "android.os.storage.extra.REQUESTED_BYTES";
+    field public static final java.lang.String EXTRA_UUID = "android.os.storage.extra.UUID";
     field public static final int FLAG_ALLOCATE_AGGRESSIVE = 1; // 0x1
+    field public static final java.util.UUID UUID_DEFAULT;
   }
 
   public final class StorageVolume implements android.os.Parcelable {
