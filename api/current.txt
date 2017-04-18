@@ -22776,7 +22776,7 @@ package android.media {
     method public android.media.MediaPlayer.DrmInfo getDrmInfo();
     method public java.lang.String getDrmPropertyString(java.lang.String) throws android.media.MediaPlayer.NoDrmSchemeException;
     method public int getDuration();
-    method public android.media.MediaDrm.KeyRequest getKeyRequest(byte[], java.lang.String, int, java.util.Map<java.lang.String, java.lang.String>) throws android.media.MediaPlayer.NoDrmSchemeException;
+    method public android.media.MediaDrm.KeyRequest getKeyRequest(byte[], byte[], java.lang.String, int, java.util.Map<java.lang.String, java.lang.String>) throws android.media.MediaPlayer.NoDrmSchemeException;
     method public android.os.PersistableBundle getMetrics();
     method public android.media.PlaybackParams getPlaybackParams();
     method public int getSelectedTrack(int) throws java.lang.IllegalStateException;
@@ -22790,7 +22790,7 @@ package android.media {
     method public void pause() throws java.lang.IllegalStateException;
     method public void prepare() throws java.io.IOException, java.lang.IllegalStateException;
     method public void prepareAsync() throws java.lang.IllegalStateException;
-    method public void prepareDrm(java.util.UUID) throws android.media.MediaPlayer.ProvisioningErrorException, android.media.ResourceBusyException, android.media.UnsupportedSchemeException;
+    method public void prepareDrm(java.util.UUID) throws android.media.MediaPlayer.ProvisioningNetworkErrorException, android.media.MediaPlayer.ProvisioningServerErrorException, android.media.ResourceBusyException, android.media.UnsupportedSchemeException;
     method public byte[] provideKeyResponse(byte[], byte[]) throws android.media.DeniedByServerException, android.media.MediaPlayer.NoDrmSchemeException;
     method public void release();
     method public void releaseDrm() throws android.media.MediaPlayer.NoDrmSchemeException;
@@ -22817,7 +22817,7 @@ package android.media {
     method public void setNextMediaPlayer(android.media.MediaPlayer);
     method public void setOnBufferingUpdateListener(android.media.MediaPlayer.OnBufferingUpdateListener);
     method public void setOnCompletionListener(android.media.MediaPlayer.OnCompletionListener);
-    method public void setOnDrmConfigListener(android.media.MediaPlayer.OnDrmConfigListener);
+    method public void setOnDrmConfigHelper(android.media.MediaPlayer.OnDrmConfigHelper);
     method public void setOnDrmInfoListener(android.media.MediaPlayer.OnDrmInfoListener);
     method public void setOnDrmInfoListener(android.media.MediaPlayer.OnDrmInfoListener, android.os.Handler);
     method public void setOnDrmPreparedListener(android.media.MediaPlayer.OnDrmPreparedListener);
@@ -22858,6 +22858,10 @@ package android.media {
     field public static final int MEDIA_INFO_VIDEO_RENDERING_START = 3; // 0x3
     field public static final int MEDIA_INFO_VIDEO_TRACK_LAGGING = 700; // 0x2bc
     field public static final java.lang.String MEDIA_MIMETYPE_TEXT_SUBRIP = "application/x-subrip";
+    field public static final int PREPARE_DRM_STATUS_PREPARATION_ERROR = 3; // 0x3
+    field public static final int PREPARE_DRM_STATUS_PROVISIONING_NETWORK_ERROR = 1; // 0x1
+    field public static final int PREPARE_DRM_STATUS_PROVISIONING_SERVER_ERROR = 2; // 0x2
+    field public static final int PREPARE_DRM_STATUS_SUCCESS = 0; // 0x0
     field public static final int SEEK_CLOSEST = 3; // 0x3
     field public static final int SEEK_CLOSEST_SYNC = 2; // 0x2
     field public static final int SEEK_NEXT_SYNC = 1; // 0x1
@@ -22867,7 +22871,6 @@ package android.media {
   }
 
   public static final class MediaPlayer.DrmInfo {
-    method public java.lang.String[] getMimes();
     method public java.util.Map<java.util.UUID, byte[]> getPssh();
     method public java.util.UUID[] getSupportedSchemes();
   }
@@ -22899,7 +22902,7 @@ package android.media {
     method public abstract void onCompletion(android.media.MediaPlayer);
   }
 
-  public static abstract interface MediaPlayer.OnDrmConfigListener {
+  public static abstract interface MediaPlayer.OnDrmConfigHelper {
     method public abstract void onDrmConfig(android.media.MediaPlayer);
   }
 
@@ -22908,7 +22911,7 @@ package android.media {
   }
 
   public static abstract interface MediaPlayer.OnDrmPreparedListener {
-    method public abstract void onDrmPrepared(android.media.MediaPlayer, boolean);
+    method public abstract void onDrmPrepared(android.media.MediaPlayer, int);
   }
 
   public static abstract interface MediaPlayer.OnErrorListener {
@@ -22939,8 +22942,12 @@ package android.media {
     method public abstract void onVideoSizeChanged(android.media.MediaPlayer, int, int);
   }
 
-  public static final class MediaPlayer.ProvisioningErrorException extends android.media.MediaDrmException {
-    ctor public MediaPlayer.ProvisioningErrorException(java.lang.String);
+  public static final class MediaPlayer.ProvisioningNetworkErrorException extends android.media.MediaDrmException {
+    ctor public MediaPlayer.ProvisioningNetworkErrorException(java.lang.String);
+  }
+
+  public static final class MediaPlayer.ProvisioningServerErrorException extends android.media.MediaDrmException {
+    ctor public MediaPlayer.ProvisioningServerErrorException(java.lang.String);
   }
 
   public static class MediaPlayer.TrackInfo implements android.os.Parcelable {
