@@ -6294,17 +6294,6 @@ package android.app {
     method public void setPersistentVrModeEnabled(boolean);
   }
 
-  public final class WallpaperColors implements android.os.Parcelable {
-    ctor public WallpaperColors(android.os.Parcel);
-    ctor public WallpaperColors(java.util.List<android.util.Pair<android.graphics.Color, java.lang.Integer>>);
-    ctor public WallpaperColors(java.util.List<android.util.Pair<android.graphics.Color, java.lang.Integer>>, boolean);
-    method public int describeContents();
-    method public java.util.List<android.util.Pair<android.graphics.Color, java.lang.Integer>> getColors();
-    method public boolean supportsDarkText();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.app.WallpaperColors> CREATOR;
-  }
-
   public final class WallpaperInfo implements android.os.Parcelable {
     ctor public WallpaperInfo(android.content.Context, android.content.pm.ResolveInfo) throws java.io.IOException, org.xmlpull.v1.XmlPullParserException;
     method public int describeContents();
@@ -6327,8 +6316,6 @@ package android.app {
   }
 
   public class WallpaperManager {
-    method public void addOnColorsChangedListener(android.app.WallpaperManager.OnColorsChangedListener);
-    method public void addOnColorsChangedListener(android.app.WallpaperManager.OnColorsChangedListener, android.os.Handler);
     method public void clear() throws java.io.IOException;
     method public void clear(int) throws java.io.IOException;
     method public void clearWallpaper();
@@ -6345,7 +6332,6 @@ package android.app {
     method public android.graphics.drawable.Drawable getDrawable();
     method public android.graphics.drawable.Drawable getFastDrawable();
     method public static android.app.WallpaperManager getInstance(android.content.Context);
-    method public android.app.WallpaperColors getWallpaperColors(int);
     method public android.os.ParcelFileDescriptor getWallpaperFile(int);
     method public int getWallpaperId(int);
     method public android.app.WallpaperInfo getWallpaperInfo();
@@ -6354,7 +6340,6 @@ package android.app {
     method public boolean isWallpaperSupported();
     method public android.graphics.drawable.Drawable peekDrawable();
     method public android.graphics.drawable.Drawable peekFastDrawable();
-    method public void removeOnColorsChangedListener(android.app.WallpaperManager.OnColorsChangedListener);
     method public void sendWallpaperCommand(android.os.IBinder, java.lang.String, int, int, int, android.os.Bundle);
     method public void setBitmap(android.graphics.Bitmap) throws java.io.IOException;
     method public int setBitmap(android.graphics.Bitmap, android.graphics.Rect, boolean) throws java.io.IOException;
@@ -6380,10 +6365,6 @@ package android.app {
     field public static final int FLAG_LOCK = 2; // 0x2
     field public static final int FLAG_SYSTEM = 1; // 0x1
     field public static final java.lang.String WALLPAPER_PREVIEW_META_DATA = "android.wallpaper.preview";
-  }
-
-  public static abstract interface WallpaperManager.OnColorsChangedListener {
-    method public abstract void onColorsChanged(android.app.WallpaperColors, int);
   }
 
 }
@@ -41005,12 +40986,10 @@ package android.service.wallpaper {
     method public int getDesiredMinimumHeight();
     method public int getDesiredMinimumWidth();
     method public android.view.SurfaceHolder getSurfaceHolder();
-    method public void invalidateColors();
     method public boolean isPreview();
     method public boolean isVisible();
     method public void onApplyWindowInsets(android.view.WindowInsets);
     method public android.os.Bundle onCommand(java.lang.String, int, int, int, android.os.Bundle, boolean);
-    method public android.app.WallpaperColors onComputeWallpaperColors();
     method public void onCreate(android.view.SurfaceHolder);
     method public void onDesiredSizeChanged(int, int);
     method public void onDestroy();
