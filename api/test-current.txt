@@ -3586,8 +3586,9 @@ package android.app {
     method public boolean dispatchTouchEvent(android.view.MotionEvent);
     method public boolean dispatchTrackballEvent(android.view.MotionEvent);
     method public void dump(java.lang.String, java.io.FileDescriptor, java.io.PrintWriter, java.lang.String[]);
-    method public void enterPictureInPictureMode();
-    method public boolean enterPictureInPictureMode(android.app.PictureInPictureArgs);
+    method public deprecated void enterPictureInPictureMode();
+    method public deprecated boolean enterPictureInPictureMode(android.app.PictureInPictureArgs);
+    method public boolean enterPictureInPictureMode(android.app.PictureInPictureParams);
     method public <T extends android.view.View> T findViewById(int);
     method public void finish();
     method public void finishActivity(int);
@@ -3611,6 +3612,7 @@ package android.app {
     method public android.view.LayoutInflater getLayoutInflater();
     method public android.app.LoaderManager getLoaderManager();
     method public java.lang.String getLocalClassName();
+    method public int getMaxNumPictureInPictureActions();
     method public final android.media.session.MediaController getMediaController();
     method public android.view.MenuInflater getMenuInflater();
     method public final android.app.Activity getParent();
@@ -3762,6 +3764,7 @@ package android.app {
     method public void setIntent(android.content.Intent);
     method public final void setMediaController(android.media.session.MediaController);
     method public void setPictureInPictureArgs(android.app.PictureInPictureArgs);
+    method public void setPictureInPictureParams(android.app.PictureInPictureParams);
     method public final deprecated void setProgress(int);
     method public final deprecated void setProgressBarIndeterminate(boolean);
     method public final deprecated void setProgressBarIndeterminateVisibility(boolean);
@@ -3841,7 +3844,7 @@ package android.app {
     method public int getLauncherLargeIconDensity();
     method public int getLauncherLargeIconSize();
     method public int getLockTaskModeState();
-    method public static int getMaxNumPictureInPictureActions();
+    method public static deprecated int getMaxNumPictureInPictureActions();
     method public int getMemoryClass();
     method public void getMemoryInfo(android.app.ActivityManager.MemoryInfo);
     method public static void getMyMemoryState(android.app.ActivityManager.RunningAppProcessInfo);
@@ -5709,16 +5712,29 @@ package android.app {
     method public abstract void onSendFinished(android.app.PendingIntent, android.content.Intent, int, java.lang.String, android.os.Bundle);
   }
 
-  public final class PictureInPictureArgs implements android.os.Parcelable {
-    ctor public PictureInPictureArgs();
-    ctor public PictureInPictureArgs(float, java.util.List<android.app.RemoteAction>);
-    method public android.app.PictureInPictureArgs clone();
+  public final deprecated class PictureInPictureArgs extends android.app.PictureInPictureParams {
+    ctor public deprecated PictureInPictureArgs();
+    ctor public deprecated PictureInPictureArgs(float, java.util.List<android.app.RemoteAction>);
+    method public deprecated void setActions(java.util.List<android.app.RemoteAction>);
+    method public deprecated void setAspectRatio(float);
+    method public deprecated void setSourceRectHint(android.graphics.Rect);
+  }
+
+  public class PictureInPictureParams implements android.os.Parcelable {
     method public int describeContents();
-    method public void setActions(java.util.List<android.app.RemoteAction>);
-    method public void setAspectRatio(float);
-    method public void setSourceRectHint(android.graphics.Rect);
     method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.app.PictureInPictureArgs> CREATOR;
+    field public static final android.os.Parcelable.Creator<android.app.PictureInPictureParams> CREATOR;
+    field protected android.util.Rational mAspectRatio;
+    field protected android.graphics.Rect mSourceRectHint;
+    field protected java.util.List<android.app.RemoteAction> mUserActions;
+  }
+
+  public static class PictureInPictureParams.Builder {
+    ctor public PictureInPictureParams.Builder();
+    method public android.app.PictureInPictureParams build();
+    method public android.app.PictureInPictureParams.Builder setActions(java.util.List<android.app.RemoteAction>);
+    method public android.app.PictureInPictureParams.Builder setAspectRatio(android.util.Rational);
+    method public android.app.PictureInPictureParams.Builder setSourceRectHint(android.graphics.Rect);
   }
 
   public class Presentation extends android.app.Dialog {
