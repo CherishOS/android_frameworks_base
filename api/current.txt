@@ -15,7 +15,6 @@ package android {
     field public static final java.lang.String ACCESS_WIFI_STATE = "android.permission.ACCESS_WIFI_STATE";
     field public static final java.lang.String ACCOUNT_MANAGER = "android.permission.ACCOUNT_MANAGER";
     field public static final java.lang.String ADD_VOICEMAIL = "com.android.voicemail.permission.ADD_VOICEMAIL";
-    field public static final java.lang.String ALLOCATE_AGGRESSIVE = "android.permission.ALLOCATE_AGGRESSIVE";
     field public static final java.lang.String ANSWER_PHONE_CALLS = "android.permission.ANSWER_PHONE_CALLS";
     field public static final java.lang.String BATTERY_STATS = "android.permission.BATTERY_STATS";
     field public static final java.lang.String BIND_ACCESSIBILITY_SERVICE = "android.permission.BIND_ACCESSIBILITY_SERVICE";
@@ -6991,8 +6990,8 @@ package android.app.usage {
 
   public final class StorageStats implements android.os.Parcelable {
     method public int describeContents();
+    method public long getAppBytes();
     method public long getCacheBytes();
-    method public long getCodeBytes();
     method public long getDataBytes();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.usage.StorageStats> CREATOR;
@@ -30748,7 +30747,6 @@ package android.os {
     method public android.util.SizeF getSizeF(java.lang.String);
     method public <T extends android.os.Parcelable> android.util.SparseArray<T> getSparseParcelableArray(java.lang.String);
     method public java.util.ArrayList<java.lang.String> getStringArrayList(java.lang.String);
-    method public java.util.UUID getUuid(java.lang.String);
     method public boolean hasFileDescriptors();
     method public void putAll(android.os.Bundle);
     method public void putBinder(java.lang.String, android.os.IBinder);
@@ -30773,7 +30771,6 @@ package android.os {
     method public void putSizeF(java.lang.String, android.util.SizeF);
     method public void putSparseParcelableArray(java.lang.String, android.util.SparseArray<? extends android.os.Parcelable>);
     method public void putStringArrayList(java.lang.String, java.util.ArrayList<java.lang.String>);
-    method public void putUuid(java.lang.String, java.util.UUID);
     method public void readFromParcel(android.os.Parcel);
     method public void setClassLoader(java.lang.ClassLoader);
     method public void writeToParcel(android.os.Parcel, int);
@@ -31303,7 +31300,6 @@ package android.os {
     method public final <T> void readTypedArray(T[], android.os.Parcelable.Creator<T>);
     method public final <T> void readTypedList(java.util.List<T>, android.os.Parcelable.Creator<T>);
     method public final <T> T readTypedObject(android.os.Parcelable.Creator<T>);
-    method public final java.util.UUID readUuid();
     method public final java.lang.Object readValue(java.lang.ClassLoader);
     method public final void recycle();
     method public final void setDataCapacity(int);
@@ -31349,7 +31345,6 @@ package android.os {
     method public final <T extends android.os.Parcelable> void writeTypedArray(T[], int);
     method public final <T extends android.os.Parcelable> void writeTypedList(java.util.List<T>);
     method public final <T extends android.os.Parcelable> void writeTypedObject(T, int);
-    method public final void writeUuid(java.util.UUID);
     method public final void writeValue(java.lang.Object);
     field public static final android.os.Parcelable.Creator<java.lang.String> STRING_CREATOR;
   }
@@ -31980,9 +31975,9 @@ package android.os.storage {
   }
 
   public class StorageManager {
-    method public void allocateBytes(java.util.UUID, long, int) throws java.io.IOException;
-    method public void allocateBytes(java.io.FileDescriptor, long, int) throws java.io.IOException;
-    method public long getAllocatableBytes(java.util.UUID, int) throws java.io.IOException;
+    method public void allocateBytes(java.util.UUID, long) throws java.io.IOException;
+    method public void allocateBytes(java.io.FileDescriptor, long) throws java.io.IOException;
+    method public long getAllocatableBytes(java.util.UUID) throws java.io.IOException;
     method public long getCacheQuotaBytes(java.util.UUID) throws java.io.IOException;
     method public long getCacheSizeBytes(java.util.UUID) throws java.io.IOException;
     method public java.lang.String getMountedObbPath(java.lang.String);
@@ -32003,7 +31998,6 @@ package android.os.storage {
     field public static final java.lang.String ACTION_MANAGE_STORAGE = "android.os.storage.action.MANAGE_STORAGE";
     field public static final java.lang.String EXTRA_REQUESTED_BYTES = "android.os.storage.extra.REQUESTED_BYTES";
     field public static final java.lang.String EXTRA_UUID = "android.os.storage.extra.UUID";
-    field public static final int FLAG_ALLOCATE_AGGRESSIVE = 1; // 0x1
     field public static final java.util.UUID UUID_DEFAULT;
   }
 
