@@ -51830,12 +51830,7 @@ package android.view.inputmethod {
 
 package android.view.textclassifier {
 
-  public final class TextClassificationManager {
-    method public android.view.textclassifier.TextClassifier getTextClassifier();
-    method public void setTextClassifier(android.view.textclassifier.TextClassifier);
-  }
-
-  public final class TextClassificationResult {
+  public final class TextClassification {
     method public float getConfidenceScore(java.lang.String);
     method public java.lang.String getEntity(int);
     method public int getEntityCount();
@@ -51846,19 +51841,24 @@ package android.view.textclassifier {
     method public java.lang.String getText();
   }
 
-  public static final class TextClassificationResult.Builder {
-    ctor public TextClassificationResult.Builder();
-    method public android.view.textclassifier.TextClassificationResult build();
-    method public android.view.textclassifier.TextClassificationResult.Builder setEntityType(java.lang.String, float);
-    method public android.view.textclassifier.TextClassificationResult.Builder setIcon(android.graphics.drawable.Drawable);
-    method public android.view.textclassifier.TextClassificationResult.Builder setIntent(android.content.Intent);
-    method public android.view.textclassifier.TextClassificationResult.Builder setLabel(java.lang.String);
-    method public android.view.textclassifier.TextClassificationResult.Builder setOnClickListener(android.view.View.OnClickListener);
-    method public android.view.textclassifier.TextClassificationResult.Builder setText(java.lang.String);
+  public static final class TextClassification.Builder {
+    ctor public TextClassification.Builder();
+    method public android.view.textclassifier.TextClassification build();
+    method public android.view.textclassifier.TextClassification.Builder setEntityType(java.lang.String, float);
+    method public android.view.textclassifier.TextClassification.Builder setIcon(android.graphics.drawable.Drawable);
+    method public android.view.textclassifier.TextClassification.Builder setIntent(android.content.Intent);
+    method public android.view.textclassifier.TextClassification.Builder setLabel(java.lang.String);
+    method public android.view.textclassifier.TextClassification.Builder setOnClickListener(android.view.View.OnClickListener);
+    method public android.view.textclassifier.TextClassification.Builder setText(java.lang.String);
+  }
+
+  public final class TextClassificationManager {
+    method public android.view.textclassifier.TextClassifier getTextClassifier();
+    method public void setTextClassifier(android.view.textclassifier.TextClassifier);
   }
 
   public abstract interface TextClassifier {
-    method public abstract android.view.textclassifier.TextClassificationResult getTextClassificationResult(java.lang.CharSequence, int, int, android.os.LocaleList);
+    method public abstract android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.os.LocaleList);
     method public abstract android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.os.LocaleList);
     field public static final android.view.textclassifier.TextClassifier NO_OP;
     field public static final java.lang.String TYPE_ADDRESS = "address";
