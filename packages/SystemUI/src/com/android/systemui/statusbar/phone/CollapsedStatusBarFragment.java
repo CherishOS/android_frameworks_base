@@ -71,6 +71,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private LinearLayout mCustomIconArea;
     private View mClockView;
     private int mClockStyle;
+    private View mCherishLogoRight;
     private View mNotificationIconAreaInner;
     private View mCenteredIconArea;
     private int mDisabled1;
@@ -177,6 +178,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mCustomCarrierLabel = mStatusBar.findViewById(R.id.statusbar_carrier_text);
  		mBatteryBars[0] = mStatusBar.findViewById(R.id.battery_bar);
         mBatteryBars[1] = mStatusBar.findViewById(R.id.battery_bar_1);
+        mCherishLogoRight = mStatusBar.findViewById(R.id.cherish_logo_right);
         showSystemIconArea(false);
         initEmergencyCryptkeeperText();
         animateHide(mClockView, false, false);
@@ -325,6 +327,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             animateHide(mRightClock, animate, true);
         }
         animateHide(mSystemIconArea, animate, true);
+		animateHide(mCherishLogoRight, animate);
         for (View batteryBar: mBatteryBars) {
             animateHide(batteryBar, animate, true);
         }
@@ -336,6 +339,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             animateShow(mRightClock, animate);
         }
         animateShow(mSystemIconArea, animate);
+		animateShow(mCherishLogoRight, animate);
         for (View batteryBar: mBatteryBars) {
             animateShow(batteryBar, animate);
         }

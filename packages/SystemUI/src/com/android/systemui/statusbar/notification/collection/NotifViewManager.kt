@@ -157,7 +157,7 @@ class NotifViewManager @Inject constructor(
                     // Child hasn't been added yet. add it!
                     if (listItem.attachedChildren == null ||
                             !listItem.attachedChildren.contains(childListItem)) {
-                        // TODO: old code here just Log.wtf()'d here. This might wreak havoc
+                        // TODO: old code here just Log.wtf()'d here. This might wreak Cherish
                         if (childListItem.view.parent != null) {
                             throw IllegalStateException("trying to add a notification child that " +
                                     "already has a parent. class: " +
