@@ -36907,6 +36907,30 @@ package android.service.autofill {
     field public static final java.lang.String SERVICE_META_DATA = "android.autofill";
   }
 
+  public final class CharSequenceTransformation implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.CharSequenceTransformation> CREATOR;
+  }
+
+  public static class CharSequenceTransformation.Builder {
+    ctor public CharSequenceTransformation.Builder();
+    method public android.service.autofill.CharSequenceTransformation.Builder addField(android.view.autofill.AutofillId, java.lang.String, java.lang.String);
+    method public android.service.autofill.CharSequenceTransformation build();
+  }
+
+  public final class CustomDescription implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.CustomDescription> CREATOR;
+  }
+
+  public static class CustomDescription.Builder {
+    ctor public CustomDescription.Builder(android.widget.RemoteViews);
+    method public android.service.autofill.CustomDescription.Builder addChild(int, android.service.autofill.Transformation);
+    method public android.service.autofill.CustomDescription build();
+  }
+
   public final class Dataset implements android.os.Parcelable {
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
@@ -36980,6 +37004,25 @@ package android.service.autofill {
     method public android.service.autofill.FillResponse.Builder setSaveInfo(android.service.autofill.SaveInfo);
   }
 
+  public final class ImageTransformation implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.ImageTransformation> CREATOR;
+  }
+
+  public static class ImageTransformation.Builder {
+    ctor public ImageTransformation.Builder(android.view.autofill.AutofillId);
+    method public android.service.autofill.ImageTransformation.Builder addOption(java.lang.String, int);
+    method public android.service.autofill.ImageTransformation build();
+  }
+
+  public final class LuhnChecksumValidator implements android.os.Parcelable {
+    ctor public LuhnChecksumValidator(android.view.autofill.AutofillId...);
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.LuhnChecksumValidator> CREATOR;
+  }
+
   public final class SaveCallback {
     method public void onFailure(java.lang.CharSequence);
     method public void onSuccess();
@@ -37003,10 +37046,12 @@ package android.service.autofill {
   public static final class SaveInfo.Builder {
     ctor public SaveInfo.Builder(int, android.view.autofill.AutofillId[]);
     method public android.service.autofill.SaveInfo build();
+    method public android.service.autofill.SaveInfo.Builder setCustomDescription(android.service.autofill.CustomDescription);
     method public android.service.autofill.SaveInfo.Builder setDescription(java.lang.CharSequence);
     method public android.service.autofill.SaveInfo.Builder setFlags(int);
     method public android.service.autofill.SaveInfo.Builder setNegativeAction(int, android.content.IntentSender);
     method public android.service.autofill.SaveInfo.Builder setOptionalIds(android.view.autofill.AutofillId[]);
+    method public android.service.autofill.SaveInfo.Builder setValidator(android.service.autofill.Validator);
   }
 
   public final class SaveRequest implements android.os.Parcelable {
@@ -37015,6 +37060,24 @@ package android.service.autofill {
     method public java.util.List<android.service.autofill.FillContext> getFillContexts();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.autofill.SaveRequest> CREATOR;
+  }
+
+  public final class SimpleRegexValidator implements android.os.Parcelable {
+    ctor public SimpleRegexValidator(android.view.autofill.AutofillId, java.lang.String);
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.SimpleRegexValidator> CREATOR;
+  }
+
+  public abstract interface Transformation {
+  }
+
+  public abstract interface Validator {
+  }
+
+  public final class Validators {
+    method public static android.service.autofill.Validator and(android.service.autofill.Validator...);
+    method public static android.service.autofill.Validator or(android.service.autofill.Validator...);
   }
 
 }
