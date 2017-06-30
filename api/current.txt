@@ -11872,6 +11872,7 @@ package android.database.sqlite {
     method public void beginTransactionWithListenerNonExclusive(android.database.sqlite.SQLiteTransactionListener);
     method public android.database.sqlite.SQLiteStatement compileStatement(java.lang.String) throws android.database.SQLException;
     method public static android.database.sqlite.SQLiteDatabase create(android.database.sqlite.SQLiteDatabase.CursorFactory);
+    method public static android.database.sqlite.SQLiteDatabase createInMemory(android.database.sqlite.SQLiteDatabase.OpenParams);
     method public int delete(java.lang.String, java.lang.String, java.lang.String[]);
     method public static boolean deleteDatabase(java.io.File);
     method public void disableWriteAheadLogging();
@@ -11901,6 +11902,7 @@ package android.database.sqlite {
     method public boolean needUpgrade(int);
     method protected void onAllReferencesReleased();
     method public static android.database.sqlite.SQLiteDatabase openDatabase(java.lang.String, android.database.sqlite.SQLiteDatabase.CursorFactory, int);
+    method public static android.database.sqlite.SQLiteDatabase openDatabase(java.lang.String, android.database.sqlite.SQLiteDatabase.OpenParams);
     method public static android.database.sqlite.SQLiteDatabase openDatabase(java.lang.String, android.database.sqlite.SQLiteDatabase.CursorFactory, int, android.database.DatabaseErrorHandler);
     method public static android.database.sqlite.SQLiteDatabase openOrCreateDatabase(java.io.File, android.database.sqlite.SQLiteDatabase.CursorFactory);
     method public static android.database.sqlite.SQLiteDatabase openOrCreateDatabase(java.lang.String, android.database.sqlite.SQLiteDatabase.CursorFactory);
@@ -11949,6 +11951,26 @@ package android.database.sqlite {
 
   public static abstract interface SQLiteDatabase.CursorFactory {
     method public abstract android.database.Cursor newCursor(android.database.sqlite.SQLiteDatabase, android.database.sqlite.SQLiteCursorDriver, java.lang.String, android.database.sqlite.SQLiteQuery);
+  }
+
+  public static final class SQLiteDatabase.OpenParams {
+    method public android.database.sqlite.SQLiteDatabase.CursorFactory getCursorFactory();
+    method public android.database.DatabaseErrorHandler getErrorHandler();
+    method public int getLookasideSlotCount();
+    method public int getLookasideSlotSize();
+    method public int getOpenFlags();
+  }
+
+  public static final class SQLiteDatabase.OpenParams.Builder {
+    ctor public SQLiteDatabase.OpenParams.Builder();
+    ctor public SQLiteDatabase.OpenParams.Builder(android.database.sqlite.SQLiteDatabase.OpenParams);
+    method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder addOpenFlags(int);
+    method public android.database.sqlite.SQLiteDatabase.OpenParams build();
+    method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder removeOpenFlags(int);
+    method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setCursorFactory(android.database.sqlite.SQLiteDatabase.CursorFactory);
+    method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setErrorHandler(android.database.DatabaseErrorHandler);
+    method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setLookasideConfig(int, int);
+    method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setOpenFlags(int);
   }
 
   public class SQLiteDatabaseCorruptException extends android.database.sqlite.SQLiteException {
@@ -12004,6 +12026,7 @@ package android.database.sqlite {
     method public void onDowngrade(android.database.sqlite.SQLiteDatabase, int, int);
     method public void onOpen(android.database.sqlite.SQLiteDatabase);
     method public abstract void onUpgrade(android.database.sqlite.SQLiteDatabase, int, int);
+    method public void setLookasideConfig(int, int);
     method public void setWriteAheadLoggingEnabled(boolean);
   }
 
