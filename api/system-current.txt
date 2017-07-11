@@ -11398,6 +11398,7 @@ package android.content.pm {
     field public static final java.lang.String FEATURE_BACKUP = "android.software.backup";
     field public static final java.lang.String FEATURE_BLUETOOTH = "android.hardware.bluetooth";
     field public static final java.lang.String FEATURE_BLUETOOTH_LE = "android.hardware.bluetooth_le";
+    field public static final java.lang.String FEATURE_BROADCAST_RADIO = "android.hardware.broadcastradio";
     field public static final java.lang.String FEATURE_CAMERA = "android.hardware.camera";
     field public static final java.lang.String FEATURE_CAMERA_ANY = "android.hardware.camera.any";
     field public static final java.lang.String FEATURE_CAMERA_AUTOFOCUS = "android.hardware.camera.autofocus";
@@ -17315,7 +17316,10 @@ package android.hardware.radio {
     method public int getNumTuners();
     method public java.lang.String getProduct();
     method public java.lang.String getSerial();
+    method public java.lang.String getServiceName();
+    method public java.lang.String getVendorExension();
     method public java.lang.String getVersion();
+    method public boolean isBackgroundScanningSupported();
     method public boolean isCaptureSupported();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.hardware.radio.RadioManager.ModuleProperties> CREATOR;
@@ -17327,7 +17331,10 @@ package android.hardware.radio {
     method public android.hardware.radio.RadioMetadata getMetadata();
     method public int getSignalStrength();
     method public int getSubChannel();
+    method public java.lang.String getVendorExension();
     method public boolean isDigital();
+    method public boolean isLive();
+    method public boolean isMuted();
     method public boolean isStereo();
     method public boolean isTuned();
     method public void writeToParcel(android.os.Parcel, int);
@@ -17385,15 +17392,21 @@ package android.hardware.radio {
     method public abstract int getConfiguration(android.hardware.radio.RadioManager.BandConfig[]);
     method public abstract boolean getMute();
     method public abstract int getProgramInformation(android.hardware.radio.RadioManager.ProgramInfo[]);
+    method public abstract java.util.List<android.hardware.radio.RadioManager.ProgramInfo> getProgramList(java.lang.String);
     method public abstract boolean hasControl();
+    method public abstract boolean isAnalogForced();
     method public abstract boolean isAntennaConnected();
     method public abstract int scan(int, boolean);
+    method public abstract void setAnalogForced(boolean);
     method public abstract int setConfiguration(android.hardware.radio.RadioManager.BandConfig);
     method public abstract int setMute(boolean);
+    method public abstract boolean startBackgroundScan();
     method public abstract int step(int, boolean);
     method public abstract int tune(int, int);
     field public static final int DIRECTION_DOWN = 1; // 0x1
     field public static final int DIRECTION_UP = 0; // 0x0
+    field public static final int ERROR_BACKGROUND_SCAN_FAILED = 6; // 0x6
+    field public static final int ERROR_BACKGROUND_SCAN_UNAVAILABLE = 5; // 0x5
     field public static final int ERROR_CANCELLED = 2; // 0x2
     field public static final int ERROR_CONFIG = 4; // 0x4
     field public static final int ERROR_HARDWARE_FAILURE = 0; // 0x0
@@ -17404,12 +17417,15 @@ package android.hardware.radio {
   public static abstract class RadioTuner.Callback {
     ctor public RadioTuner.Callback();
     method public void onAntennaState(boolean);
+    method public void onBackgroundScanAvailabilityChange(boolean);
+    method public void onBackgroundScanComplete();
     method public void onConfigurationChanged(android.hardware.radio.RadioManager.BandConfig);
     method public void onControlChanged(boolean);
     method public void onEmergencyAnnouncement(boolean);
     method public void onError(int);
     method public void onMetadataChanged(android.hardware.radio.RadioMetadata);
     method public void onProgramInfoChanged(android.hardware.radio.RadioManager.ProgramInfo);
+    method public void onProgramListChanged();
     method public void onTrafficAnnouncement(boolean);
   }
 
