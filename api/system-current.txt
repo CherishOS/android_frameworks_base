@@ -17215,6 +17215,63 @@ package android.hardware.location {
 
 package android.hardware.radio {
 
+  public final class ProgramSelector implements android.os.Parcelable {
+    ctor public ProgramSelector(int, android.hardware.radio.ProgramSelector.Identifier, android.hardware.radio.ProgramSelector.Identifier[], long[]);
+    method public static android.hardware.radio.ProgramSelector createAmFmSelector(int, int);
+    method public static android.hardware.radio.ProgramSelector createAmFmSelector(int, int, int);
+    method public int describeContents();
+    method public android.hardware.radio.ProgramSelector.Identifier[] getAllIds(int);
+    method public long getFirstId(int);
+    method public android.hardware.radio.ProgramSelector.Identifier getPrimaryId();
+    method public int getProgramType();
+    method public android.hardware.radio.ProgramSelector.Identifier[] getSecondaryIds();
+    method public long[] getVendorIds();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.hardware.radio.ProgramSelector> CREATOR;
+    field public static final int IDENTIFIER_TYPE_AMFM_FREQUENCY = 1; // 0x1
+    field public static final int IDENTIFIER_TYPE_DAB_ENSEMBLE = 6; // 0x6
+    field public static final int IDENTIFIER_TYPE_DAB_FREQUENCY = 8; // 0x8
+    field public static final int IDENTIFIER_TYPE_DAB_SCID = 7; // 0x7
+    field public static final int IDENTIFIER_TYPE_DAB_SIDECC = 5; // 0x5
+    field public static final int IDENTIFIER_TYPE_DRMO_FREQUENCY = 10; // 0xa
+    field public static final int IDENTIFIER_TYPE_DRMO_SERVICE_ID = 9; // 0x9
+    field public static final int IDENTIFIER_TYPE_HD_STATION_ID_EXT = 3; // 0x3
+    field public static final int IDENTIFIER_TYPE_HD_SUBCHANNEL = 4; // 0x4
+    field public static final int IDENTIFIER_TYPE_RDS_PI = 2; // 0x2
+    field public static final int IDENTIFIER_TYPE_SXM_CHANNEL = 12; // 0xc
+    field public static final int IDENTIFIER_TYPE_SXM_SERVICE_ID = 11; // 0xb
+    field public static final int IDENTIFIER_TYPE_VENDOR1_PRIMARY = 13; // 0xd
+    field public static final int IDENTIFIER_TYPE_VENDOR2_PRIMARY = 14; // 0xe
+    field public static final int IDENTIFIER_TYPE_VENDOR3_PRIMARY = 15; // 0xf
+    field public static final int IDENTIFIER_TYPE_VENDOR4_PRIMARY = 16; // 0x10
+    field public static final int PROGRAM_TYPE_AM = 1; // 0x1
+    field public static final int PROGRAM_TYPE_AM_HD = 3; // 0x3
+    field public static final int PROGRAM_TYPE_DAB = 5; // 0x5
+    field public static final int PROGRAM_TYPE_DRMO = 6; // 0x6
+    field public static final int PROGRAM_TYPE_FM = 2; // 0x2
+    field public static final int PROGRAM_TYPE_FM_HD = 4; // 0x4
+    field public static final int PROGRAM_TYPE_SXM = 7; // 0x7
+    field public static final int PROGRAM_TYPE_VENDOR1 = 8; // 0x8
+    field public static final int PROGRAM_TYPE_VENDOR2 = 9; // 0x9
+    field public static final int PROGRAM_TYPE_VENDOR3 = 10; // 0xa
+    field public static final int PROGRAM_TYPE_VENDOR4 = 11; // 0xb
+  }
+
+  public static final class ProgramSelector.Identifier implements android.os.Parcelable {
+    ctor public ProgramSelector.Identifier(int, long);
+    method public int describeContents();
+    method public int getType();
+    method public long getValue();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.hardware.radio.ProgramSelector.Identifier> CREATOR;
+  }
+
+  public static abstract class ProgramSelector.IdentifierType implements java.lang.annotation.Annotation {
+  }
+
+  public static abstract class ProgramSelector.ProgramType implements java.lang.annotation.Annotation {
+  }
+
   public class RadioManager {
     method public int listModules(java.util.List<android.hardware.radio.RadioManager.ModuleProperties>);
     method public android.hardware.radio.RadioTuner openTuner(int, android.hardware.radio.RadioManager.BandConfig, boolean, android.hardware.radio.RadioTuner.Callback, android.os.Handler);
@@ -17222,6 +17279,7 @@ package android.hardware.radio {
     field public static final int BAND_AM_HD = 3; // 0x3
     field public static final int BAND_FM = 1; // 0x1
     field public static final int BAND_FM_HD = 2; // 0x2
+    field public static final int BAND_INVALID = -1; // 0xffffffff
     field public static final int CLASS_AM_FM = 0; // 0x0
     field public static final int CLASS_DT = 2; // 0x2
     field public static final int CLASS_SAT = 1; // 0x1
@@ -17255,6 +17313,9 @@ package android.hardware.radio {
   public static class RadioManager.AmBandDescriptor extends android.hardware.radio.RadioManager.BandDescriptor {
     method public boolean isStereoSupported();
     field public static final android.os.Parcelable.Creator<android.hardware.radio.RadioManager.AmBandDescriptor> CREATOR;
+  }
+
+  public static abstract class RadioManager.Band implements java.lang.annotation.Annotation {
   }
 
   public static class RadioManager.BandConfig implements android.os.Parcelable {
@@ -17331,10 +17392,11 @@ package android.hardware.radio {
 
   public static class RadioManager.ProgramInfo implements android.os.Parcelable {
     method public int describeContents();
-    method public int getChannel();
+    method public deprecated int getChannel();
     method public android.hardware.radio.RadioMetadata getMetadata();
+    method public android.hardware.radio.ProgramSelector getSelector();
     method public int getSignalStrength();
-    method public int getSubChannel();
+    method public deprecated int getSubChannel();
     method public java.lang.String getVendorExension();
     method public boolean isDigital();
     method public boolean isLive();
@@ -17406,7 +17468,8 @@ package android.hardware.radio {
     method public abstract int setMute(boolean);
     method public abstract boolean startBackgroundScan();
     method public abstract int step(int, boolean);
-    method public abstract int tune(int, int);
+    method public abstract deprecated int tune(int, int);
+    method public abstract void tune(android.hardware.radio.ProgramSelector);
     field public static final int DIRECTION_DOWN = 1; // 0x1
     field public static final int DIRECTION_UP = 0; // 0x0
     field public static final int ERROR_BACKGROUND_SCAN_FAILED = 6; // 0x6
