@@ -219,7 +219,7 @@ public class StatusBarMobileView extends BaseStatusBarFrameLayout implements Dar
         if (mState.volteId > 0 ) {
             mVolte.setImageResource(mState.volteId);
             mVolte.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             mVolte.setVisibility(View.GONE);
         }
     }
