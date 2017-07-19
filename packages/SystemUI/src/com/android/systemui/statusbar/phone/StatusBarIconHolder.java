@@ -24,6 +24,7 @@ import android.os.UserHandle;
 
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.systemui.statusbar.phone.PhoneStatusBarPolicy.BluetoothIconState;
+import com.android.systemui.statusbar.connectivity.ImsIconState;
 import com.android.systemui.statusbar.phone.StatusBarSignalPolicy.CallIndicatorIconState;
 import com.android.systemui.statusbar.phone.StatusBarSignalPolicy.MobileIconState;
 import com.android.systemui.statusbar.phone.StatusBarSignalPolicy.WifiIconState;
@@ -64,23 +65,28 @@ public class StatusBarIconHolder {
     @Deprecated
     public static final int TYPE_WIFI_NEW = 4;
 
-    public static final int TYPE_BLUETOOTH = 5;
+    public static final int TYPE_IMS = 5;
+
+    public static final int TYPE_BLUETOOTH = 6;
 
     @IntDef({
             TYPE_ICON,
             TYPE_WIFI,
             TYPE_MOBILE,
             TYPE_MOBILE_NEW,
-            TYPE_WIFI_NEW
+            TYPE_WIFI_NEW,
+            TYPE_IMS
     })
     @Retention(RetentionPolicy.SOURCE)
     @interface IconType {}
 
-    public static final int TYPE_NETWORK_TRAFFIC = 6;
+    public static final int TYPE_NETWORK_TRAFFIC = 7;
 
     private StatusBarIcon mIcon;
     private WifiIconState mWifiState;
     private MobileIconState mMobileState;
+    private ImsIconState mImsState;
+
     private @IconType int mType = TYPE_ICON;
     private BluetoothIconState mBluetoothState;
 
@@ -136,6 +142,14 @@ public class StatusBarIconHolder {
         StatusBarIconHolder holder = new StatusBarIconHolder();
         holder.mBluetoothState = state;
         holder.mType = TYPE_BLUETOOTH;
+        return holder;
+    }
+
+    /** */
+    public static StatusBarIconHolder fromImsIconState(ImsIconState state) {
+        StatusBarIconHolder holder = new StatusBarIconHolder();
+        holder.mImsState = state;
+        holder.mType = TYPE_IMS;
         return holder;
     }
 
@@ -213,6 +227,14 @@ public class StatusBarIconHolder {
         mBluetoothState = state;
     }
 
+    public ImsIconState getImsState() {
+        return mImsState;
+    }
+
+    public void setImsState(ImsIconState state) {
+        mImsState = state;
+    }
+
     public boolean isVisible() {
         switch (mType) {
             case TYPE_ICON:
@@ -226,6 +248,8 @@ public class StatusBarIconHolder {
                 // The new pipeline controls visibilities via the view model and view binder, so
                 // this is effectively an unused return value.
                 return true;
+            case TYPE_IMS:
+                return mImsState.visible;
             case TYPE_BLUETOOTH:
                 return mBluetoothState.visible;
             default:
@@ -257,6 +281,9 @@ public class StatusBarIconHolder {
             case TYPE_WIFI_NEW:
                 // The new pipeline controls visibilities via the view model and view binder, so
                 // ignore setVisible.
+                break;
+            case TYPE_IMS:
+                mImsState.visible = visible;
                 break;
             case TYPE_BLUETOOTH:
                 mBluetoothState.visible = visible;
