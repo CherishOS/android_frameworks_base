@@ -146,7 +146,6 @@ package android {
     field public static final java.lang.String MANAGE_CA_CERTIFICATES = "android.permission.MANAGE_CA_CERTIFICATES";
     field public static final java.lang.String MANAGE_DEVICE_ADMINS = "android.permission.MANAGE_DEVICE_ADMINS";
     field public static final java.lang.String MANAGE_DOCUMENTS = "android.permission.MANAGE_DOCUMENTS";
-    field public static final java.lang.String MANAGE_FALLBACK_SUBSCRIPTION_PLANS = "android.permission.MANAGE_FALLBACK_SUBSCRIPTION_PLANS";
     field public static final java.lang.String MANAGE_OWN_CALLS = "android.permission.MANAGE_OWN_CALLS";
     field public static final java.lang.String MANAGE_USB = "android.permission.MANAGE_USB";
     field public static final java.lang.String MANAGE_USERS = "android.permission.MANAGE_USERS";
@@ -43083,7 +43082,7 @@ package android.telephony {
     method public void notifyConfigChangedForSubId(int);
     method public void updateConfigForPhoneId(int, java.lang.String);
     field public static final java.lang.String ACTION_CARRIER_CONFIG_CHANGED = "android.telephony.action.CARRIER_CONFIG_CHANGED";
-    field public static final int DATA_CYCLE_THRESHOLD_DISABLED = -2; // 0xfffffffe
+    field public static final deprecated int DATA_CYCLE_THRESHOLD_DISABLED = -2; // 0xfffffffe
     field public static final java.lang.String KEY_ADDITIONAL_CALL_SETTING_BOOL = "additional_call_setting_bool";
     field public static final java.lang.String KEY_ALLOW_ADDING_APNS_BOOL = "allow_adding_apns_bool";
     field public static final java.lang.String KEY_ALLOW_ADD_CALL_DURING_VIDEO_CALL_BOOL = "allow_add_call_during_video_call";
@@ -43125,9 +43124,10 @@ package android.telephony {
     field public static final java.lang.String KEY_CI_ACTION_ON_SYS_UPDATE_EXTRA_VAL_STRING = "ci_action_on_sys_update_extra_val_string";
     field public static final java.lang.String KEY_CI_ACTION_ON_SYS_UPDATE_INTENT_STRING = "ci_action_on_sys_update_intent_string";
     field public static final java.lang.String KEY_CONFIG_IMS_PACKAGE_OVERRIDE_STRING = "config_ims_package_override_string";
+    field public static final java.lang.String KEY_CONFIG_PLANS_PACKAGE_OVERRIDE_STRING = "config_plans_package_override_string";
     field public static final java.lang.String KEY_CSP_ENABLED_BOOL = "csp_enabled_bool";
-    field public static final java.lang.String KEY_DATA_LIMIT_THRESHOLD_BYTES_LONG = "data_limit_threshold_bytes_long";
-    field public static final java.lang.String KEY_DATA_WARNING_THRESHOLD_BYTES_LONG = "data_warning_threshold_bytes_long";
+    field public static final deprecated java.lang.String KEY_DATA_LIMIT_THRESHOLD_BYTES_LONG = "data_limit_threshold_bytes_long";
+    field public static final deprecated java.lang.String KEY_DATA_WARNING_THRESHOLD_BYTES_LONG = "data_warning_threshold_bytes_long";
     field public static final java.lang.String KEY_DEFAULT_SIM_CALL_MANAGER_STRING = "default_sim_call_manager_string";
     field public static final java.lang.String KEY_DEFAULT_VM_NUMBER_STRING = "default_vm_number_string";
     field public static final java.lang.String KEY_DIAL_STRING_REPLACE_STRING_ARRAY = "dial_string_replace_string_array";
@@ -43184,7 +43184,7 @@ package android.telephony {
     field public static final java.lang.String KEY_MMS_UA_PROF_TAG_NAME_STRING = "uaProfTagName";
     field public static final java.lang.String KEY_MMS_UA_PROF_URL_STRING = "uaProfUrl";
     field public static final java.lang.String KEY_MMS_USER_AGENT_STRING = "userAgent";
-    field public static final java.lang.String KEY_MONTHLY_DATA_CYCLE_DAY_INT = "monthly_data_cycle_day_int";
+    field public static final deprecated java.lang.String KEY_MONTHLY_DATA_CYCLE_DAY_INT = "monthly_data_cycle_day_int";
     field public static final java.lang.String KEY_ONLY_SINGLE_DC_ALLOWED_INT_ARRAY = "only_single_dc_allowed_int_array";
     field public static final java.lang.String KEY_OPERATOR_SELECTION_EXPAND_BOOL = "operator_selection_expand_bool";
     field public static final java.lang.String KEY_PREFER_2G_BOOL = "prefer_2g_bool";
@@ -43698,8 +43698,10 @@ package android.telephony {
     method public static int getDefaultSmsSubscriptionId();
     method public static int getDefaultSubscriptionId();
     method public static int getDefaultVoiceSubscriptionId();
+    method public java.util.List<android.telephony.SubscriptionPlan> getSubscriptionPlans(int);
     method public boolean isNetworkRoaming(int);
     method public void removeOnSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnSubscriptionsChangedListener);
+    method public void setSubscriptionPlans(int, java.util.List<android.telephony.SubscriptionPlan>);
     field public static final java.lang.String ACTION_DEFAULT_SMS_SUBSCRIPTION_CHANGED = "android.telephony.action.DEFAULT_SMS_SUBSCRIPTION_CHANGED";
     field public static final java.lang.String ACTION_DEFAULT_SUBSCRIPTION_CHANGED = "android.telephony.action.DEFAULT_SUBSCRIPTION_CHANGED";
     field public static final int DATA_ROAMING_DISABLE = 0; // 0x0
@@ -43711,6 +43713,38 @@ package android.telephony {
   public static class SubscriptionManager.OnSubscriptionsChangedListener {
     ctor public SubscriptionManager.OnSubscriptionsChangedListener();
     method public void onSubscriptionsChanged();
+  }
+
+  public final class SubscriptionPlan implements android.os.Parcelable {
+    method public java.util.Iterator<android.util.Pair<java.time.ZonedDateTime, java.time.ZonedDateTime>> cycleIterator();
+    method public int describeContents();
+    method public int getDataLimitBehavior();
+    method public long getDataLimitBytes();
+    method public long getDataUsageBytes();
+    method public long getDataUsageTime();
+    method public java.lang.CharSequence getSummary();
+    method public java.lang.CharSequence getTitle();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final long BYTES_UNKNOWN = -1L; // 0xffffffffffffffffL
+    field public static final long BYTES_UNLIMITED = 9223372036854775807L; // 0x7fffffffffffffffL
+    field public static final android.os.Parcelable.Creator<android.telephony.SubscriptionPlan> CREATOR;
+    field public static final int LIMIT_BEHAVIOR_BILLED = 1; // 0x1
+    field public static final int LIMIT_BEHAVIOR_DISABLED = 0; // 0x0
+    field public static final int LIMIT_BEHAVIOR_THROTTLED = 2; // 0x2
+    field public static final int LIMIT_BEHAVIOR_UNKNOWN = -1; // 0xffffffff
+    field public static final long TIME_UNKNOWN = -1L; // 0xffffffffffffffffL
+  }
+
+  public static class SubscriptionPlan.Builder {
+    method public android.telephony.SubscriptionPlan build();
+    method public static android.telephony.SubscriptionPlan.Builder createNonrecurring(java.time.ZonedDateTime, java.time.ZonedDateTime);
+    method public static android.telephony.SubscriptionPlan.Builder createRecurringDaily(java.time.ZonedDateTime);
+    method public static android.telephony.SubscriptionPlan.Builder createRecurringMonthly(java.time.ZonedDateTime);
+    method public static android.telephony.SubscriptionPlan.Builder createRecurringWeekly(java.time.ZonedDateTime);
+    method public android.telephony.SubscriptionPlan.Builder setDataLimit(long, int);
+    method public android.telephony.SubscriptionPlan.Builder setDataUsage(long, long);
+    method public android.telephony.SubscriptionPlan.Builder setSummary(java.lang.CharSequence);
+    method public android.telephony.SubscriptionPlan.Builder setTitle(java.lang.CharSequence);
   }
 
   public final class TelephonyHistogram implements android.os.Parcelable {
