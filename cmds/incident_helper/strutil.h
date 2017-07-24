@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The Android Open Source Project
+ * Copyright (C) 2017 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-#include "section_list.h"
+#ifndef STRUTIL_H
+#define STRUTIL_H
 
-/**
- * This is the mapping of section IDs to the commands that are run to get those commands.
- */
-const Section* SECTION_LIST[] = {
-    // Linux Services
-    new FileSection(2002, "/d/wakeup_sources"),
+#include <string>
+#include <vector>
 
-    // System Services
-    new DumpsysSection(3000, "fingerprint", "--proto", "--incident", NULL),
-    NULL
-};
+const std::string DEFAULT_WHITESPACE = " \t";
+
+std::string trim(const std::string& s, const std::string& whitespace = DEFAULT_WHITESPACE);
+void split(const std::string& line, std::vector<std::string>* words,
+    const std::string& delimiters = DEFAULT_WHITESPACE);
+bool assertHeaders(const char* expected[], const std::vector<std::string>& actual);
+
+#endif  // STRUTIL_H
