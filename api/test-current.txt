@@ -39868,6 +39868,14 @@ package android.telephony {
     field public static final int STATUS_UNKNOWN_ERROR = 4; // 0x4
   }
 
+  public class MbmsStreamingManager {
+    method public static android.telephony.MbmsStreamingManager create(android.content.Context, android.telephony.mbms.MbmsStreamingManagerCallback, int) throws android.telephony.mbms.MbmsException;
+    method public static android.telephony.MbmsStreamingManager create(android.content.Context, android.telephony.mbms.MbmsStreamingManagerCallback) throws android.telephony.mbms.MbmsException;
+    method public void dispose();
+    method public void getStreamingServices(java.util.List<java.lang.String>) throws android.telephony.mbms.MbmsException;
+    method public android.telephony.mbms.StreamingService startStreaming(android.telephony.mbms.StreamingServiceInfo, android.telephony.mbms.StreamingServiceCallback) throws android.telephony.mbms.MbmsException;
+  }
+
   public class NeighboringCellInfo implements android.os.Parcelable {
     ctor public deprecated NeighboringCellInfo();
     ctor public deprecated NeighboringCellInfo(int, int);
@@ -40488,6 +40496,95 @@ package android.telephony.gsm {
     ctor public deprecated SmsMessage.SubmitPdu();
     field public deprecated byte[] encodedMessage;
     field public deprecated byte[] encodedScAddress;
+  }
+
+}
+
+package android.telephony.mbms {
+
+  public class MbmsException extends java.lang.Exception {
+    method public int getErrorCode();
+    field public static final int ERROR_MIDDLEWARE_LOST = 3; // 0x3
+    field public static final int ERROR_MIDDLEWARE_NOT_BOUND = 2; // 0x2
+    field public static final int ERROR_NO_UNIQUE_MIDDLEWARE = 1; // 0x1
+    field public static final int SUCCESS = 0; // 0x0
+  }
+
+  public static class MbmsException.GeneralErrors {
+    ctor public MbmsException.GeneralErrors();
+    field public static final int ERROR_CARRIER_CHANGE_NOT_ALLOWED = 207; // 0xcf
+    field public static final int ERROR_IN_E911 = 204; // 0xcc
+    field public static final int ERROR_MIDDLEWARE_NOT_YET_READY = 201; // 0xc9
+    field public static final int ERROR_MIDDLEWARE_TEMPORARILY_UNAVAILABLE = 203; // 0xcb
+    field public static final int ERROR_NOT_CONNECTED_TO_HOME_CARRIER_LTE = 205; // 0xcd
+    field public static final int ERROR_OUT_OF_MEMORY = 202; // 0xca
+    field public static final int ERROR_UNABLE_TO_READ_SIM = 206; // 0xce
+  }
+
+  public static class MbmsException.InitializationErrors {
+    ctor public MbmsException.InitializationErrors();
+    field public static final int ERROR_APP_PERMISSIONS_NOT_GRANTED = 102; // 0x66
+    field public static final int ERROR_DUPLICATE_INITIALIZE = 101; // 0x65
+    field public static final int ERROR_UNABLE_TO_INITIALIZE = 103; // 0x67
+  }
+
+  public static class MbmsException.StreamingErrors {
+    ctor public MbmsException.StreamingErrors();
+    field public static final int ERROR_CONCURRENT_SERVICE_LIMIT_REACHED = 301; // 0x12d
+    field public static final int ERROR_DUPLICATE_START_STREAM = 303; // 0x12f
+    field public static final int ERROR_UNABLE_TO_START_SERVICE = 302; // 0x12e
+  }
+
+  public class MbmsStreamingManagerCallback extends android.os.Binder {
+    ctor public MbmsStreamingManagerCallback();
+    method public void error(int, java.lang.String) throws android.os.RemoteException;
+    method public void middlewareReady() throws android.os.RemoteException;
+    method public void streamingServicesUpdated(java.util.List<android.telephony.mbms.StreamingServiceInfo>) throws android.os.RemoteException;
+  }
+
+  public class ServiceInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method public java.lang.String getClassName();
+    method public java.util.List<java.util.Locale> getLocales();
+    method public java.util.Map<java.util.Locale, java.lang.String> getNames();
+    method public java.lang.String getServiceId();
+    method public java.util.Date getSessionEndTime();
+    method public java.util.Date getSessionStartTime();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.mbms.ServiceInfo> CREATOR;
+  }
+
+  public class StreamingService {
+    method public void dispose() throws android.telephony.mbms.MbmsException;
+    method public android.telephony.mbms.StreamingServiceInfo getInfo();
+    method public android.net.Uri getPlaybackUri() throws android.telephony.mbms.MbmsException;
+    method public void stopStreaming() throws android.telephony.mbms.MbmsException;
+    field public static final int BROADCAST_METHOD = 1; // 0x1
+    field public static final int REASON_BY_USER_REQUEST = 1; // 0x1
+    field public static final int REASON_END_OF_SESSION = 2; // 0x2
+    field public static final int REASON_FREQUENCY_CONFLICT = 3; // 0x3
+    field public static final int REASON_LEFT_MBMS_BROADCAST_AREA = 5; // 0x5
+    field public static final int REASON_NONE = 0; // 0x0
+    field public static final int REASON_NOT_CONNECTED_TO_HOMECARRIER_LTE = 5; // 0x5
+    field public static final int REASON_OUT_OF_MEMORY = 4; // 0x4
+    field public static final int STATE_STALLED = 3; // 0x3
+    field public static final int STATE_STARTED = 2; // 0x2
+    field public static final int STATE_STOPPED = 1; // 0x1
+    field public static final int UNICAST_METHOD = 2; // 0x2
+  }
+
+  public class StreamingServiceCallback extends android.os.Binder {
+    ctor public StreamingServiceCallback();
+    method public void broadcastSignalStrengthUpdated(int) throws android.os.RemoteException;
+    method public void error(int, java.lang.String) throws android.os.RemoteException;
+    method public void mediaDescriptionUpdated() throws android.os.RemoteException;
+    method public void streamMethodUpdated(int) throws android.os.RemoteException;
+    method public void streamStateUpdated(int, int) throws android.os.RemoteException;
+    field public static final int SIGNAL_STRENGTH_UNAVAILABLE = -1; // 0xffffffff
+  }
+
+  public class StreamingServiceInfo extends android.telephony.mbms.ServiceInfo implements android.os.Parcelable {
+    field public static final android.os.Parcelable.Creator<android.telephony.mbms.StreamingServiceInfo> CREATOR;
   }
 
 }
