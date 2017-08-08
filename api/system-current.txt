@@ -11180,12 +11180,14 @@ package android.content.pm {
     method public void abandon();
     method public void close();
     method public void commit(android.content.IntentSender);
+    method public void commitTransferred(android.content.IntentSender);
     method public void fsync(java.io.OutputStream) throws java.io.IOException;
     method public java.lang.String[] getNames() throws java.io.IOException;
     method public java.io.InputStream openRead(java.lang.String) throws java.io.IOException;
     method public java.io.OutputStream openWrite(java.lang.String, long, long) throws java.io.IOException;
     method public void removeSplit(java.lang.String) throws java.io.IOException;
     method public void setStagingProgress(float);
+    method public void transfer(java.lang.String) throws android.content.pm.PackageManager.NameNotFoundException;
   }
 
   public static abstract class PackageInstaller.SessionCallback {
@@ -11200,13 +11202,26 @@ package android.content.pm {
   public static class PackageInstaller.SessionInfo implements android.os.Parcelable {
     method public android.content.Intent createDetailsIntent();
     method public int describeContents();
+    method public boolean getAllocateAggressive();
+    method public boolean getAllowDowngrade();
     method public android.graphics.Bitmap getAppIcon();
     method public java.lang.CharSequence getAppLabel();
     method public java.lang.String getAppPackageName();
+    method public boolean getDontKillApp();
+    method public java.lang.String[] getGrantedRuntimePermissions();
+    method public boolean getInstallAsFullApp(boolean);
+    method public boolean getInstallAsInstantApp(boolean);
+    method public boolean getInstallAsVirtualPreload();
+    method public int getInstallLocation();
     method public int getInstallReason();
     method public java.lang.String getInstallerPackageName();
+    method public int getMode();
+    method public int getOriginatingUid();
+    method public android.net.Uri getOriginatingUri();
     method public float getProgress();
+    method public android.net.Uri getReferrerUri();
     method public int getSessionId();
+    method public long getSize();
     method public boolean isActive();
     method public boolean isSealed();
     method public void writeToParcel(android.os.Parcel, int);
@@ -17252,10 +17267,8 @@ package android.hardware.radio {
     field public static final int IDENTIFIER_TYPE_RDS_PI = 2; // 0x2
     field public static final int IDENTIFIER_TYPE_SXM_CHANNEL = 13; // 0xd
     field public static final int IDENTIFIER_TYPE_SXM_SERVICE_ID = 12; // 0xc
-    field public static final int IDENTIFIER_TYPE_VENDOR1_PRIMARY = 14; // 0xe
-    field public static final int IDENTIFIER_TYPE_VENDOR2_PRIMARY = 15; // 0xf
-    field public static final int IDENTIFIER_TYPE_VENDOR3_PRIMARY = 16; // 0x10
-    field public static final int IDENTIFIER_TYPE_VENDOR4_PRIMARY = 17; // 0x11
+    field public static final int IDENTIFIER_TYPE_VENDOR_PRIMARY_END = 1999; // 0x7cf
+    field public static final int IDENTIFIER_TYPE_VENDOR_PRIMARY_START = 1000; // 0x3e8
     field public static final int PROGRAM_TYPE_AM = 1; // 0x1
     field public static final int PROGRAM_TYPE_AM_HD = 3; // 0x3
     field public static final int PROGRAM_TYPE_DAB = 5; // 0x5
@@ -17263,10 +17276,8 @@ package android.hardware.radio {
     field public static final int PROGRAM_TYPE_FM = 2; // 0x2
     field public static final int PROGRAM_TYPE_FM_HD = 4; // 0x4
     field public static final int PROGRAM_TYPE_SXM = 7; // 0x7
-    field public static final int PROGRAM_TYPE_VENDOR1 = 8; // 0x8
-    field public static final int PROGRAM_TYPE_VENDOR2 = 9; // 0x9
-    field public static final int PROGRAM_TYPE_VENDOR3 = 10; // 0xa
-    field public static final int PROGRAM_TYPE_VENDOR4 = 11; // 0xb
+    field public static final int PROGRAM_TYPE_VENDOR_END = 1999; // 0x7cf
+    field public static final int PROGRAM_TYPE_VENDOR_START = 1000; // 0x3e8
   }
 
   public static final class ProgramSelector.Identifier implements android.os.Parcelable {
@@ -40275,6 +40286,13 @@ package android.service.autofill {
     field public static final android.os.Parcelable.Creator<android.service.autofill.LuhnChecksumValidator> CREATOR;
   }
 
+  public final class RegexValidator implements android.os.Parcelable android.service.autofill.Validator {
+    ctor public RegexValidator(android.view.autofill.AutofillId, java.util.regex.Pattern);
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.RegexValidator> CREATOR;
+  }
+
   public final class SaveCallback {
     method public void onFailure(java.lang.CharSequence);
     method public void onSuccess();
@@ -40313,13 +40331,6 @@ package android.service.autofill {
     method public java.util.List<android.service.autofill.FillContext> getFillContexts();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.autofill.SaveRequest> CREATOR;
-  }
-
-  public final class SimpleRegexValidator implements android.os.Parcelable android.service.autofill.Validator {
-    ctor public SimpleRegexValidator(android.view.autofill.AutofillId, java.util.regex.Pattern);
-    method public int describeContents();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.service.autofill.SimpleRegexValidator> CREATOR;
   }
 
   public abstract interface Transformation {
