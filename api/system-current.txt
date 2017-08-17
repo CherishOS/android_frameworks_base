@@ -41022,12 +41022,11 @@ package android.telephony {
   }
 
   public class MbmsStreamingManager {
-    method public static android.telephony.MbmsStreamingManager create(android.content.Context, android.telephony.mbms.MbmsStreamingManagerCallback, int, android.os.Handler) throws android.telephony.mbms.MbmsException;
-    method public static android.telephony.MbmsStreamingManager create(android.content.Context, android.telephony.mbms.MbmsStreamingManagerCallback, android.os.Handler) throws android.telephony.mbms.MbmsException;
+    method public static android.telephony.MbmsStreamingManager create(android.content.Context, android.telephony.mbms.MbmsStreamingManagerCallback, int) throws android.telephony.mbms.MbmsException;
     method public static android.telephony.MbmsStreamingManager create(android.content.Context, android.telephony.mbms.MbmsStreamingManagerCallback) throws android.telephony.mbms.MbmsException;
     method public void dispose();
     method public void getStreamingServices(java.util.List<java.lang.String>) throws android.telephony.mbms.MbmsException;
-    method public android.telephony.mbms.StreamingService startStreaming(android.telephony.mbms.StreamingServiceInfo, android.telephony.mbms.StreamingServiceCallback, android.os.Handler) throws android.telephony.mbms.MbmsException;
+    method public android.telephony.mbms.StreamingService startStreaming(android.telephony.mbms.StreamingServiceInfo, android.telephony.mbms.StreamingServiceCallback) throws android.telephony.mbms.MbmsException;
     field public static final java.lang.String MBMS_STREAMING_SERVICE_ACTION = "android.telephony.action.EmbmsStreaming";
   }
 
@@ -41737,6 +41736,7 @@ package android.telephony.mbms {
   }
 
   public static class MbmsException.GeneralErrors {
+    ctor public MbmsException.GeneralErrors();
     field public static final int ERROR_CARRIER_CHANGE_NOT_ALLOWED = 207; // 0xcf
     field public static final int ERROR_IN_E911 = 204; // 0xcc
     field public static final int ERROR_MIDDLEWARE_NOT_YET_READY = 201; // 0xc9
@@ -41747,31 +41747,36 @@ package android.telephony.mbms {
   }
 
   public static class MbmsException.InitializationErrors {
+    ctor public MbmsException.InitializationErrors();
     field public static final int ERROR_APP_PERMISSIONS_NOT_GRANTED = 102; // 0x66
     field public static final int ERROR_DUPLICATE_INITIALIZE = 101; // 0x65
     field public static final int ERROR_UNABLE_TO_INITIALIZE = 103; // 0x67
   }
 
   public static class MbmsException.StreamingErrors {
+    ctor public MbmsException.StreamingErrors();
     field public static final int ERROR_CONCURRENT_SERVICE_LIMIT_REACHED = 301; // 0x12d
     field public static final int ERROR_DUPLICATE_START_STREAM = 303; // 0x12f
     field public static final int ERROR_UNABLE_TO_START_SERVICE = 302; // 0x12e
   }
 
-  public class MbmsStreamingManagerCallback {
+  public class MbmsStreamingManagerCallback extends android.os.Binder {
     ctor public MbmsStreamingManagerCallback();
-    method public void onError(int, java.lang.String);
-    method public void onMiddlewareReady();
-    method public void onStreamingServicesUpdated(java.util.List<android.telephony.mbms.StreamingServiceInfo>);
+    method public void error(int, java.lang.String) throws android.os.RemoteException;
+    method public void middlewareReady() throws android.os.RemoteException;
+    method public void streamingServicesUpdated(java.util.List<android.telephony.mbms.StreamingServiceInfo>) throws android.os.RemoteException;
   }
 
-  public class ServiceInfo {
+  public class ServiceInfo implements android.os.Parcelable {
+    method public int describeContents();
     method public java.lang.String getClassName();
     method public java.util.List<java.util.Locale> getLocales();
     method public java.util.Map<java.util.Locale, java.lang.String> getNames();
     method public java.lang.String getServiceId();
     method public java.util.Date getSessionEndTime();
     method public java.util.Date getSessionStartTime();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.mbms.ServiceInfo> CREATOR;
   }
 
   public class StreamingService {
@@ -41793,20 +41798,18 @@ package android.telephony.mbms {
     field public static final int UNICAST_METHOD = 2; // 0x2
   }
 
-  public class StreamingServiceCallback {
+  public class StreamingServiceCallback extends android.os.Binder {
     ctor public StreamingServiceCallback();
-    method public void onBroadcastSignalStrengthUpdated(int);
-    method public void onError(int, java.lang.String);
-    method public void onMediaDescriptionUpdated();
-    method public void onStreamMethodUpdated(int);
-    method public void onStreamStateUpdated(int, int);
+    method public void broadcastSignalStrengthUpdated(int) throws android.os.RemoteException;
+    method public void error(int, java.lang.String) throws android.os.RemoteException;
+    method public void mediaDescriptionUpdated() throws android.os.RemoteException;
+    method public void streamMethodUpdated(int) throws android.os.RemoteException;
+    method public void streamStateUpdated(int, int) throws android.os.RemoteException;
     field public static final int SIGNAL_STRENGTH_UNAVAILABLE = -1; // 0xffffffff
   }
 
-  public final class StreamingServiceInfo extends android.telephony.mbms.ServiceInfo implements android.os.Parcelable {
+  public class StreamingServiceInfo extends android.telephony.mbms.ServiceInfo implements android.os.Parcelable {
     ctor public StreamingServiceInfo(java.util.Map<java.util.Locale, java.lang.String>, java.lang.String, java.util.List<java.util.Locale>, java.lang.String, java.util.Date, java.util.Date);
-    method public int describeContents();
-    method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.mbms.StreamingServiceInfo> CREATOR;
   }
 
@@ -41821,7 +41824,6 @@ package android.telephony.mbms.vendor {
     method public android.net.Uri getPlaybackUri(int, java.lang.String) throws android.os.RemoteException;
     method public int getStreamingServices(int, java.util.List<java.lang.String>) throws android.os.RemoteException;
     method public int initialize(android.telephony.mbms.MbmsStreamingManagerCallback, int) throws android.os.RemoteException;
-    method public void onAppCallbackDied(int, int);
     method public int startStreaming(int, java.lang.String, android.telephony.mbms.StreamingServiceCallback) throws android.os.RemoteException;
     method public void stopStreaming(int, java.lang.String) throws android.os.RemoteException;
   }
