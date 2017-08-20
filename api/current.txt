@@ -4214,12 +4214,6 @@ package android.app {
 
   public class Application extends android.content.ContextWrapper implements android.content.ComponentCallbacks2 {
     ctor public Application();
-    method public android.app.Activity instantiateActivity(java.lang.ClassLoader, java.lang.String, android.content.Intent);
-    method public android.app.backup.BackupAgent instantiateBackupAgent(java.lang.ClassLoader, java.lang.String);
-    method public android.app.Instrumentation instantiateInstrumentation(java.lang.ClassLoader, java.lang.String);
-    method public android.content.ContentProvider instantiateProvider(java.lang.ClassLoader, java.lang.String);
-    method public android.content.BroadcastReceiver instantiateReceiver(java.lang.ClassLoader, java.lang.String, android.content.Intent);
-    method public android.app.Service instantiateService(java.lang.ClassLoader, java.lang.String, android.content.Intent);
     method public void onConfigurationChanged(android.content.res.Configuration);
     method public void onCreate();
     method public void onLowMemory();
@@ -6140,7 +6134,6 @@ package android.app {
   }
 
   public class WallpaperManager {
-    method public void addOnColorsChangedListener(android.app.WallpaperManager.OnColorsChangedListener);
     method public void addOnColorsChangedListener(android.app.WallpaperManager.OnColorsChangedListener, android.os.Handler);
     method public void clear() throws java.io.IOException;
     method public void clear(int) throws java.io.IOException;
@@ -18119,11 +18112,13 @@ package android.icu.text {
     method public synchronized void applyLocalizedPattern(java.lang.String);
     method public synchronized void applyPattern(java.lang.String);
     method public synchronized boolean areSignificantDigitsUsed();
+    method public synchronized boolean equals(java.lang.Object);
     method public java.lang.StringBuffer format(double, java.lang.StringBuffer, java.text.FieldPosition);
     method public java.lang.StringBuffer format(long, java.lang.StringBuffer, java.text.FieldPosition);
     method public java.lang.StringBuffer format(java.math.BigInteger, java.lang.StringBuffer, java.text.FieldPosition);
     method public java.lang.StringBuffer format(java.math.BigDecimal, java.lang.StringBuffer, java.text.FieldPosition);
     method public java.lang.StringBuffer format(android.icu.math.BigDecimal, java.lang.StringBuffer, java.text.FieldPosition);
+    method public synchronized android.icu.util.Currency getCurrency();
     method public synchronized android.icu.text.CurrencyPluralInfo getCurrencyPluralInfo();
     method public synchronized android.icu.util.Currency.CurrencyUsage getCurrencyUsage();
     method public synchronized android.icu.text.DecimalFormatSymbols getDecimalFormatSymbols();
@@ -18131,8 +18126,12 @@ package android.icu.text {
     method public synchronized int getGroupingSize();
     method public synchronized java.math.MathContext getMathContext();
     method public synchronized android.icu.math.MathContext getMathContextICU();
+    method public synchronized int getMaximumFractionDigits();
+    method public synchronized int getMaximumIntegerDigits();
     method public synchronized int getMaximumSignificantDigits();
     method public synchronized byte getMinimumExponentDigits();
+    method public synchronized int getMinimumFractionDigits();
+    method public synchronized int getMinimumIntegerDigits();
     method public synchronized int getMinimumSignificantDigits();
     method public synchronized int getMultiplier();
     method public synchronized java.lang.String getNegativePrefix();
@@ -18143,13 +18142,19 @@ package android.icu.text {
     method public synchronized java.lang.String getPositivePrefix();
     method public synchronized java.lang.String getPositiveSuffix();
     method public synchronized java.math.BigDecimal getRoundingIncrement();
+    method public synchronized int getRoundingMode();
     method public synchronized int getSecondaryGroupingSize();
+    method public synchronized int hashCode();
     method public synchronized boolean isDecimalPatternMatchRequired();
     method public synchronized boolean isDecimalSeparatorAlwaysShown();
     method public synchronized boolean isExponentSignAlwaysShown();
+    method public synchronized boolean isGroupingUsed();
     method public synchronized boolean isParseBigDecimal();
+    method public synchronized boolean isParseIntegerOnly();
+    method public synchronized boolean isParseStrict();
     method public synchronized boolean isScientificNotation();
     method public java.lang.Number parse(java.lang.String, java.text.ParsePosition);
+    method public synchronized void setCurrency(android.icu.util.Currency);
     method public synchronized void setCurrencyPluralInfo(android.icu.text.CurrencyPluralInfo);
     method public synchronized void setCurrencyUsage(android.icu.util.Currency.CurrencyUsage);
     method public synchronized void setDecimalFormatSymbols(android.icu.text.DecimalFormatSymbols);
@@ -18158,10 +18163,15 @@ package android.icu.text {
     method public synchronized void setExponentSignAlwaysShown(boolean);
     method public synchronized void setFormatWidth(int);
     method public synchronized void setGroupingSize(int);
+    method public synchronized void setGroupingUsed(boolean);
     method public synchronized void setMathContext(java.math.MathContext);
     method public synchronized void setMathContextICU(android.icu.math.MathContext);
+    method public synchronized void setMaximumFractionDigits(int);
+    method public synchronized void setMaximumIntegerDigits(int);
     method public synchronized void setMaximumSignificantDigits(int);
     method public synchronized void setMinimumExponentDigits(byte);
+    method public synchronized void setMinimumFractionDigits(int);
+    method public synchronized void setMinimumIntegerDigits(int);
     method public synchronized void setMinimumSignificantDigits(int);
     method public synchronized void setMultiplier(int);
     method public synchronized void setNegativePrefix(java.lang.String);
@@ -18169,12 +18179,15 @@ package android.icu.text {
     method public synchronized void setPadCharacter(char);
     method public synchronized void setPadPosition(int);
     method public synchronized void setParseBigDecimal(boolean);
+    method public synchronized void setParseIntegerOnly(boolean);
     method public deprecated void setParseMaxDigits(int);
+    method public synchronized void setParseStrict(boolean);
     method public synchronized void setPositivePrefix(java.lang.String);
     method public synchronized void setPositiveSuffix(java.lang.String);
     method public synchronized void setRoundingIncrement(java.math.BigDecimal);
     method public synchronized void setRoundingIncrement(android.icu.math.BigDecimal);
     method public synchronized void setRoundingIncrement(double);
+    method public synchronized void setRoundingMode(int);
     method public synchronized void setScientificNotation(boolean);
     method public synchronized void setSecondaryGroupingSize(int);
     method public synchronized void setSignificantDigitsUsed(boolean);
@@ -26065,8 +26078,8 @@ package android.net {
     method public boolean protect(java.net.Socket);
     method public boolean protect(java.net.DatagramSocket);
     method public boolean setUnderlyingNetworks(android.net.Network[]);
-    field public static final java.lang.String METADATA_SUPPORTS_ALWAYS_ON = "android.net.VpnService.SUPPORTS_ALWAYS_ON";
     field public static final java.lang.String SERVICE_INTERFACE = "android.net.VpnService";
+    field public static final java.lang.String SERVICE_META_DATA_SUPPORTS_ALWAYS_ON = "android.net.VpnService.SUPPORTS_ALWAYS_ON";
   }
 
   public class VpnService.Builder {
@@ -38915,7 +38928,7 @@ package android.telecom {
 
   public static final class Call.RttCall {
     method public int getRttAudioMode();
-    method public java.lang.String read() throws java.io.IOException;
+    method public java.lang.String read();
     method public java.lang.String readImmediately() throws java.io.IOException;
     method public void setRttMode(int);
     method public void write(java.lang.String) throws java.io.IOException;
@@ -39632,6 +39645,7 @@ package android.telephony {
     field public static final java.lang.String KEY_DEFAULT_VM_NUMBER_STRING = "default_vm_number_string";
     field public static final java.lang.String KEY_DIAL_STRING_REPLACE_STRING_ARRAY = "dial_string_replace_string_array";
     field public static final java.lang.String KEY_DISABLE_CDMA_ACTIVATION_CODE_BOOL = "disable_cdma_activation_code_bool";
+    field public static final java.lang.String KEY_DISPLAY_HD_AUDIO_PROPERTY_BOOL = "display_hd_audio_property_bool";
     field public static final java.lang.String KEY_DROP_VIDEO_CALL_WHEN_ANSWERING_AUDIO_CALL_BOOL = "drop_video_call_when_answering_audio_call_bool";
     field public static final java.lang.String KEY_DTMF_TYPE_ENABLED_BOOL = "dtmf_type_enabled_bool";
     field public static final java.lang.String KEY_DURATION_BLOCKING_DISABLED_AFTER_EMERGENCY_INT = "duration_blocking_disabled_after_emergency_int";
@@ -41767,6 +41781,7 @@ package android.text {
     method public android.text.StaticLayout.Builder setMaxLines(int);
     method public android.text.StaticLayout.Builder setText(java.lang.CharSequence);
     method public android.text.StaticLayout.Builder setTextDirection(android.text.TextDirectionHeuristic);
+    method public android.text.StaticLayout.Builder setUseLineSpacingFromFallbacks(boolean);
   }
 
   public abstract interface TextDirectionHeuristic {
@@ -45362,15 +45377,11 @@ package android.view {
   public class Surface implements android.os.Parcelable {
     ctor public Surface(android.graphics.SurfaceTexture);
     method public int describeContents();
-    method public boolean isAutoRefreshEnabled();
-    method public boolean isSharedBufferModeEnabled();
     method public boolean isValid();
     method public android.graphics.Canvas lockCanvas(android.graphics.Rect) throws java.lang.IllegalArgumentException, android.view.Surface.OutOfResourcesException;
     method public android.graphics.Canvas lockHardwareCanvas();
     method public void readFromParcel(android.os.Parcel);
     method public void release();
-    method public void setAutoRefreshEnabled(boolean);
-    method public void setSharedBufferModeEnabled(boolean);
     method public deprecated void unlockCanvas(android.graphics.Canvas);
     method public void unlockCanvasAndPost(android.graphics.Canvas);
     method public void writeToParcel(android.os.Parcel, int);
@@ -47340,6 +47351,7 @@ package android.view.accessibility {
     method public java.util.List<android.accessibilityservice.AccessibilityServiceInfo> getEnabledAccessibilityServiceList(int);
     method public java.util.List<android.accessibilityservice.AccessibilityServiceInfo> getInstalledAccessibilityServiceList();
     method public void interrupt();
+    method public static boolean isAccessibilityButtonSupported();
     method public boolean isEnabled();
     method public boolean isTouchExplorationEnabled();
     method public void removeAccessibilityRequestPreparer(android.view.accessibility.AccessibilityRequestPreparer);
