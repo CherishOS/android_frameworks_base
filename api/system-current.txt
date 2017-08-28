@@ -43189,13 +43189,12 @@ package android.telephony {
     field public static final int STATUS_UNKNOWN = 0; // 0x0
   }
 
-  public class MbmsStreamingManager {
-    method public static android.telephony.MbmsStreamingManager create(android.content.Context, android.telephony.mbms.MbmsStreamingManagerCallback, int, android.os.Handler) throws android.telephony.mbms.MbmsException;
-    method public static android.telephony.MbmsStreamingManager create(android.content.Context, android.telephony.mbms.MbmsStreamingManagerCallback, android.os.Handler) throws android.telephony.mbms.MbmsException;
-    method public static android.telephony.MbmsStreamingManager create(android.content.Context, android.telephony.mbms.MbmsStreamingManagerCallback) throws android.telephony.mbms.MbmsException;
-    method public void dispose();
-    method public void getStreamingServices(java.util.List<java.lang.String>) throws android.telephony.mbms.MbmsException;
-    method public android.telephony.mbms.StreamingService startStreaming(android.telephony.mbms.StreamingServiceInfo, android.telephony.mbms.StreamingServiceCallback, android.os.Handler) throws android.telephony.mbms.MbmsException;
+  public class MbmsStreamingSession implements java.lang.AutoCloseable {
+    method public void close();
+    method public static android.telephony.MbmsStreamingSession create(android.content.Context, android.telephony.mbms.MbmsStreamingSessionCallback, int, android.os.Handler);
+    method public static android.telephony.MbmsStreamingSession create(android.content.Context, android.telephony.mbms.MbmsStreamingSessionCallback, android.os.Handler);
+    method public void requestUpdateStreamingServices(java.util.List<java.lang.String>);
+    method public android.telephony.mbms.StreamingService startStreaming(android.telephony.mbms.StreamingServiceInfo, android.telephony.mbms.StreamingServiceCallback, android.os.Handler);
     field public static final java.lang.String MBMS_STREAMING_SERVICE_ACTION = "android.telephony.action.EmbmsStreaming";
   }
 
@@ -44014,27 +44013,26 @@ package android.telephony.mbms {
     field public static final int ERROR_UNABLE_TO_START_SERVICE = 302; // 0x12e
   }
 
-  public class MbmsStreamingManagerCallback {
-    ctor public MbmsStreamingManagerCallback();
+  public class MbmsStreamingSessionCallback {
+    ctor public MbmsStreamingSessionCallback();
     method public void onError(int, java.lang.String);
     method public void onMiddlewareReady();
     method public void onStreamingServicesUpdated(java.util.List<android.telephony.mbms.StreamingServiceInfo>);
   }
 
   public class ServiceInfo {
-    method public java.lang.String getClassName();
     method public java.util.List<java.util.Locale> getLocales();
     method public java.util.Map<java.util.Locale, java.lang.String> getNames();
+    method public java.lang.String getServiceClassName();
     method public java.lang.String getServiceId();
     method public java.util.Date getSessionEndTime();
     method public java.util.Date getSessionStartTime();
   }
 
   public class StreamingService {
-    method public void dispose() throws android.telephony.mbms.MbmsException;
     method public android.telephony.mbms.StreamingServiceInfo getInfo();
-    method public android.net.Uri getPlaybackUri() throws android.telephony.mbms.MbmsException;
-    method public void stopStreaming() throws android.telephony.mbms.MbmsException;
+    method public android.net.Uri getPlaybackUri();
+    method public void stopStreaming();
     field public static final int BROADCAST_METHOD = 1; // 0x1
     field public static final int REASON_BY_USER_REQUEST = 1; // 0x1
     field public static final int REASON_END_OF_SESSION = 2; // 0x2
@@ -44095,11 +44093,10 @@ package android.telephony.mbms.vendor {
   public class MbmsStreamingServiceBase extends android.os.Binder {
     ctor public MbmsStreamingServiceBase();
     method public void dispose(int) throws android.os.RemoteException;
-    method public void disposeStream(int, java.lang.String) throws android.os.RemoteException;
     method public android.net.Uri getPlaybackUri(int, java.lang.String) throws android.os.RemoteException;
-    method public int getStreamingServices(int, java.util.List<java.lang.String>) throws android.os.RemoteException;
-    method public int initialize(android.telephony.mbms.MbmsStreamingManagerCallback, int) throws android.os.RemoteException;
+    method public int initialize(android.telephony.mbms.MbmsStreamingSessionCallback, int) throws android.os.RemoteException;
     method public void onAppCallbackDied(int, int);
+    method public int requestUpdateStreamingServices(int, java.util.List<java.lang.String>) throws android.os.RemoteException;
     method public int startStreaming(int, java.lang.String, android.telephony.mbms.StreamingServiceCallback) throws android.os.RemoteException;
     method public void stopStreaming(int, java.lang.String) throws android.os.RemoteException;
   }
