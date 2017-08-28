@@ -16565,6 +16565,7 @@ package android.hardware.display {
     method public android.view.Display getDisplay(int);
     method public android.view.Display[] getDisplays();
     method public android.view.Display[] getDisplays(java.lang.String);
+    method public android.graphics.Point getStableDisplaySize();
     method public void registerDisplayListener(android.hardware.display.DisplayManager.DisplayListener, android.os.Handler);
     method public void unregisterDisplayListener(android.hardware.display.DisplayManager.DisplayListener);
     field public static final java.lang.String DISPLAY_CATEGORY_PRESENTATION = "android.hardware.display.category.PRESENTATION";
@@ -33387,7 +33388,7 @@ package android.os {
     field public static final int N = 24; // 0x18
     field public static final int N_MR1 = 25; // 0x19
     field public static final int O = 26; // 0x1a
-    field public static final int O_MR1 = 10000; // 0x2710
+    field public static final int O_MR1 = 27; // 0x1b
   }
 
   public final class Bundle extends android.os.BaseBundle implements java.lang.Cloneable android.os.Parcelable {
@@ -42266,6 +42267,7 @@ package android.telecom {
     method public final void setConferenceableConnections(java.util.List<android.telecom.Connection>);
     method public final deprecated void setConnectTimeMillis(long);
     method public final void setConnectionCapabilities(int);
+    method public final void setConnectionElapsedTime(long);
     method public final void setConnectionProperties(int);
     method public final void setConnectionTime(long);
     method public final void setDialing();
@@ -43565,9 +43567,12 @@ package android.telephony {
     field public static final int MMS_ERROR_UNABLE_CONNECT_MMS = 3; // 0x3
     field public static final int MMS_ERROR_UNSPECIFIED = 1; // 0x1
     field public static final int RESULT_ERROR_GENERIC_FAILURE = 1; // 0x1
+    field public static final int RESULT_ERROR_LIMIT_EXCEEDED = 5; // 0x5
     field public static final int RESULT_ERROR_NO_SERVICE = 4; // 0x4
     field public static final int RESULT_ERROR_NULL_PDU = 3; // 0x3
     field public static final int RESULT_ERROR_RADIO_OFF = 2; // 0x2
+    field public static final int RESULT_ERROR_SHORT_CODE_NEVER_ALLOWED = 8; // 0x8
+    field public static final int RESULT_ERROR_SHORT_CODE_NOT_ALLOWED = 7; // 0x7
     field public static final int STATUS_ON_ICC_FREE = 0; // 0x0
     field public static final int STATUS_ON_ICC_READ = 1; // 0x1
     field public static final int STATUS_ON_ICC_SENT = 5; // 0x5
@@ -45005,6 +45010,22 @@ package android.text {
     method public int getTopPadding();
   }
 
+  public static final class DynamicLayout.Builder {
+    method public android.text.DynamicLayout build();
+    method public static android.text.DynamicLayout.Builder obtain(java.lang.CharSequence, android.text.TextPaint, int);
+    method public android.text.DynamicLayout.Builder setAlignment(android.text.Layout.Alignment);
+    method public android.text.DynamicLayout.Builder setBreakStrategy(int);
+    method public android.text.DynamicLayout.Builder setDisplayText(java.lang.CharSequence);
+    method public android.text.DynamicLayout.Builder setEllipsize(android.text.TextUtils.TruncateAt);
+    method public android.text.DynamicLayout.Builder setEllipsizedWidth(int);
+    method public android.text.DynamicLayout.Builder setHyphenationFrequency(int);
+    method public android.text.DynamicLayout.Builder setIncludePad(boolean);
+    method public android.text.DynamicLayout.Builder setJustificationMode(int);
+    method public android.text.DynamicLayout.Builder setLineSpacing(float, float);
+    method public android.text.DynamicLayout.Builder setTextDirection(android.text.TextDirectionHeuristic);
+    method public android.text.DynamicLayout.Builder setUseLineSpacingFromFallbacks(boolean);
+  }
+
   public abstract interface Editable implements java.lang.Appendable java.lang.CharSequence android.text.GetChars android.text.Spannable {
     method public abstract android.text.Editable append(java.lang.CharSequence);
     method public abstract android.text.Editable append(java.lang.CharSequence, int, int);
@@ -45169,6 +45190,8 @@ package android.text {
     field public static final int BREAK_STRATEGY_BALANCED = 2; // 0x2
     field public static final int BREAK_STRATEGY_HIGH_QUALITY = 1; // 0x1
     field public static final int BREAK_STRATEGY_SIMPLE = 0; // 0x0
+    field public static final float DEFAULT_LINESPACING_ADDITION = 0.0f;
+    field public static final float DEFAULT_LINESPACING_MULTIPLIER = 1.0f;
     field public static final int DIR_LEFT_TO_RIGHT = 1; // 0x1
     field public static final int DIR_RIGHT_TO_LEFT = -1; // 0xffffffff
     field public static final int HYPHENATION_FREQUENCY_FULL = 2; // 0x2
@@ -47918,9 +47941,13 @@ package android.view {
     field public static final int CONTEXT_CLICK = 6; // 0x6
     field public static final int FLAG_IGNORE_GLOBAL_SETTING = 2; // 0x2
     field public static final int FLAG_IGNORE_VIEW_SETTING = 1; // 0x1
+    field public static final int KEYBOARD_PRESS = 3; // 0x3
+    field public static final int KEYBOARD_RELEASE = 7; // 0x7
     field public static final int KEYBOARD_TAP = 3; // 0x3
     field public static final int LONG_PRESS = 0; // 0x0
+    field public static final int TEXT_HANDLE_MOVE = 9; // 0x9
     field public static final int VIRTUAL_KEY = 1; // 0x1
+    field public static final int VIRTUAL_KEY_RELEASE = 8; // 0x8
   }
 
   public class InflateException extends java.lang.RuntimeException {
@@ -48548,6 +48575,7 @@ package android.view {
     method public abstract void removeGroup(int);
     method public abstract void removeItem(int);
     method public abstract void setGroupCheckable(int, boolean, boolean);
+    method public default void setGroupDividerEnabled(boolean);
     method public abstract void setGroupEnabled(int, boolean);
     method public abstract void setGroupVisible(int, boolean);
     method public abstract void setQwertyMode(boolean);
