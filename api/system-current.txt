@@ -5347,6 +5347,7 @@ package android.app {
     field public static final java.lang.String EXTRA_AUDIO_CONTENTS_URI = "android.audioContents";
     field public static final java.lang.String EXTRA_BACKGROUND_IMAGE_URI = "android.backgroundImageUri";
     field public static final java.lang.String EXTRA_BIG_TEXT = "android.bigText";
+    field public static final java.lang.String EXTRA_CHANNEL_GROUP_ID = "android.intent.extra.CHANNEL_GROUP_ID";
     field public static final java.lang.String EXTRA_CHANNEL_ID = "android.intent.extra.CHANNEL_ID";
     field public static final java.lang.String EXTRA_CHRONOMETER_COUNT_DOWN = "android.chronometerCountDown";
     field public static final java.lang.String EXTRA_COLORIZED = "android.colorized";
@@ -5783,8 +5784,11 @@ package android.app {
     method public android.app.NotificationChannelGroup clone();
     method public int describeContents();
     method public java.util.List<android.app.NotificationChannel> getChannels();
+    method public java.lang.String getDescription();
     method public java.lang.String getId();
     method public java.lang.CharSequence getName();
+    method public boolean isBlocked();
+    method public void setDescription(java.lang.String);
     method public org.json.JSONObject toJson() throws org.json.JSONException;
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.NotificationChannelGroup> CREATOR;
@@ -6499,6 +6503,7 @@ package android.app.admin {
     method public void addPersistentPreferredActivity(android.content.ComponentName, android.content.IntentFilter, android.content.ComponentName);
     method public void addUserRestriction(android.content.ComponentName, java.lang.String);
     method public boolean bindDeviceAdminServiceAsUser(android.content.ComponentName, android.content.Intent, android.content.ServiceConnection, int, android.os.UserHandle);
+    method public boolean clearApplicationUserData(android.content.ComponentName, java.lang.String, android.app.admin.DevicePolicyManager.OnClearApplicationUserDataListener, android.os.Handler);
     method public void clearCrossProfileIntentFilters(android.content.ComponentName);
     method public deprecated void clearDeviceOwnerApp(java.lang.String);
     method public void clearPackagePersistentPreferredActivities(android.content.ComponentName, java.lang.String);
@@ -6776,6 +6781,7 @@ package android.app.admin {
     field public static final int RESET_PASSWORD_DO_NOT_ASK_CREDENTIALS_ON_BOOT = 2; // 0x2
     field public static final int RESET_PASSWORD_REQUIRE_ENTRY = 1; // 0x1
     field public static final int SKIP_SETUP_WIZARD = 1; // 0x1
+    field public static final int START_USER_IN_BACKGROUND = 8; // 0x8
     field public static final int STATE_USER_PROFILE_COMPLETE = 4; // 0x4
     field public static final int STATE_USER_SETUP_COMPLETE = 2; // 0x2
     field public static final int STATE_USER_SETUP_FINALIZED = 3; // 0x3
@@ -6783,6 +6789,10 @@ package android.app.admin {
     field public static final int STATE_USER_UNMANAGED = 0; // 0x0
     field public static final int WIPE_EXTERNAL_STORAGE = 1; // 0x1
     field public static final int WIPE_RESET_PROTECTION_DATA = 2; // 0x2
+  }
+
+  public static abstract interface DevicePolicyManager.OnClearApplicationUserDataListener {
+    method public abstract void onApplicationUserDataCleared(java.lang.String, boolean);
   }
 
   public final class DnsEvent extends android.app.admin.NetworkEvent implements android.os.Parcelable {
@@ -33391,6 +33401,7 @@ package android.os {
     field public static final int N_MR1 = 25; // 0x19
     field public static final int O = 26; // 0x1a
     field public static final int O_MR1 = 27; // 0x1b
+    field public static final int P = 10000; // 0x2710
   }
 
   public final class Bundle extends android.os.BaseBundle implements java.lang.Cloneable android.os.Parcelable {
@@ -37937,6 +37948,7 @@ package android.provider {
     field public static final java.lang.String ACTION_BLUETOOTH_SETTINGS = "android.settings.BLUETOOTH_SETTINGS";
     field public static final java.lang.String ACTION_CAPTIONING_SETTINGS = "android.settings.CAPTIONING_SETTINGS";
     field public static final java.lang.String ACTION_CAST_SETTINGS = "android.settings.CAST_SETTINGS";
+    field public static final java.lang.String ACTION_CHANNEL_GROUP_NOTIFICATION_SETTINGS = "android.settings.CHANNEL_GROUP_NOTIFICATION_SETTINGS";
     field public static final java.lang.String ACTION_CHANNEL_NOTIFICATION_SETTINGS = "android.settings.CHANNEL_NOTIFICATION_SETTINGS";
     field public static final java.lang.String ACTION_DATA_ROAMING_SETTINGS = "android.settings.DATA_ROAMING_SETTINGS";
     field public static final java.lang.String ACTION_DATE_SETTINGS = "android.settings.DATE_SETTINGS";
@@ -37997,6 +38009,7 @@ package android.provider {
     field public static final java.lang.String EXTRA_APP_PACKAGE = "android.provider.extra.APP_PACKAGE";
     field public static final java.lang.String EXTRA_AUTHORITIES = "authorities";
     field public static final java.lang.String EXTRA_BATTERY_SAVER_MODE_ENABLED = "android.settings.extra.battery_saver_mode_enabled";
+    field public static final java.lang.String EXTRA_CHANNEL_GROUP_ID = "android.provider.extra.CHANNEL_GROUP_ID";
     field public static final java.lang.String EXTRA_CHANNEL_ID = "android.provider.extra.CHANNEL_ID";
     field public static final java.lang.String EXTRA_DO_NOT_DISTURB_MODE_ENABLED = "android.settings.extra.do_not_disturb_mode_enabled";
     field public static final java.lang.String EXTRA_DO_NOT_DISTURB_MODE_MINUTES = "android.settings.extra.do_not_disturb_mode_minutes";
@@ -40167,13 +40180,14 @@ package android.service.autofill {
 
   public final class FillEventHistory implements android.os.Parcelable {
     method public int describeContents();
-    method public android.os.Bundle getClientState();
+    method public deprecated android.os.Bundle getClientState();
     method public java.util.List<android.service.autofill.FillEventHistory.Event> getEvents();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.autofill.FillEventHistory> CREATOR;
   }
 
   public static final class FillEventHistory.Event {
+    method public android.os.Bundle getClientState();
     method public java.lang.String getDatasetId();
     method public int getType();
     field public static final int TYPE_AUTHENTICATION_SELECTED = 2; // 0x2
@@ -43097,6 +43111,7 @@ package android.telephony {
     field public static final java.lang.String KEY_DURATION_BLOCKING_DISABLED_AFTER_EMERGENCY_INT = "duration_blocking_disabled_after_emergency_int";
     field public static final java.lang.String KEY_EDITABLE_ENHANCED_4G_LTE_BOOL = "editable_enhanced_4g_lte_bool";
     field public static final java.lang.String KEY_EDITABLE_VOICEMAIL_NUMBER_BOOL = "editable_voicemail_number_bool";
+    field public static final java.lang.String KEY_ENABLE_APPS_STRING_ARRAY = "enable_apps_string_array";
     field public static final java.lang.String KEY_ENABLE_DIALER_KEY_VIBRATION_BOOL = "enable_dialer_key_vibration_bool";
     field public static final java.lang.String KEY_FORCE_HOME_NETWORK_BOOL = "force_home_network_bool";
     field public static final java.lang.String KEY_GSM_DTMF_TONE_DELAY_INT = "gsm_dtmf_tone_delay_int";
