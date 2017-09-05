@@ -96,6 +96,7 @@ public class SystemSettings {
         Settings.System.LOCKSCREEN_BATTERY_INFO_FONT,
         Settings.System.COLOR_BUCKET_OVERLAY,
         Settings.System.CUSTOM_STATUSBAR_PADDING_START,
-        Settings.System.CUSTOM_STATUSBAR_PADDING_END
+        Settings.System.CUSTOM_STATUSBAR_PADDING_END,
+        Settings.System.INCALL_FEEDBACK_VIBRATE,
     };
 }
