@@ -13857,6 +13857,12 @@ public final class Settings {
          */
         public static final String DISABLE_TRANSITION_ANIMATIONS = "disable_transition_animations";
 
+	/**
+         * Show overlay of CPU core speeds
+         * @hide
+         */
+        public static final String SHOW_CPU_OVERLAY = "show_cpu_overlay";
+
         /**
          * Global settings that shouldn't be persisted.
          *
