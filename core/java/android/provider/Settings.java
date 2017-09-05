@@ -5035,6 +5035,24 @@ public final class Settings {
          * @hide
          */
         public static final String QS_PANEL_BG_USE_NEW_TINT = "qs_panel_bg_use_new_tint";
+		
+		/**
+         * Whether the phone vibrates on call connect
+         * @hide
+         */
+        public static final String VIBRATE_ON_CONNECT = "vibrate_on_connect";
+
+         /**
+         * Whether the phone vibrates on call waiting
+         * @hide
+         */
+        public static final String VIBRATE_ON_CALLWAITING = "vibrate_on_callwaiting";
+
+         /**
+         * Whether the phone vibrates on disconnect
+         * @hide
+         */
+        public static final String VIBRATE_ON_DISCONNECT = "vibrate_on_disconnect";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
@@ -6501,6 +6519,9 @@ public final class Settings {
            PRIVATE_SETTINGS.add(BACK_GESTURE_HAPTIC);
             PRIVATE_SETTINGS.add(DISPLAY_CUTOUT_HIDDEN);
 			PRIVATE_SETTINGS.add(QS_PANEL_BG_USE_NEW_TINT);
+			PRIVATE_SETTINGS.add(VIBRATE_ON_CONNECT);
+           PRIVATE_SETTINGS.add(VIBRATE_ON_CALLWAITING);
+           PRIVATE_SETTINGS.add(VIBRATE_ON_DISCONNECT);
         }
 
         /**
