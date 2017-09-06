@@ -5930,6 +5930,12 @@ public final class Settings {
          * @hide
          */
         public static final String LOCK_POWER_MENU_DISABLED = "lockscreen_power_menu_disabled";
+		
+		/**
+         * Whether to show QS panel footer warnings like for active VPN
+         * @hide
+         */
+        public static final String QS_FOOTER_WARNINGS = "qs_footer_warnings";
 
         /**
           * Volume keys control cursor in text fields (default is 0)
