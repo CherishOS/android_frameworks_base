@@ -5441,6 +5441,18 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
+		
+		/**
+         * Disable dashboard conditions in settings
+         * @hide
+         */
+        public static final String ENABLE_CONDITIONS = "enable_conditions";
+
+        /**
+         * Disable dashboard suggestions in settings
+         * @hide
+         */
+        public static final String ENABLE_SUGGESTIONS = "enable_suggestions";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
@@ -5626,6 +5638,8 @@ public final class Settings {
             PRIVATE_SETTINGS.add(OMNI_LOCKSCREEN_WEATHER_ENABLED);
             PRIVATE_SETTINGS.add(AICP_LOCKSCREEN_WEATHER_STYLE);
             PRIVATE_SETTINGS.add(THEMING_SETTINGS_DASHBOARD_ICONS);
+            PRIVATE_SETTINGS.add(ENABLE_CONDITIONS);
+            PRIVATE_SETTINGS.add(ENABLE_SUGGESTIONS);
         }
 
         /**

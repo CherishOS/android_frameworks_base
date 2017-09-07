@@ -92,5 +92,7 @@ public class SystemSettings {
         Settings.System.QS_SHOW_BRIGHTNESS_ABOVE_FOOTER,
         Settings.System.QS_SHOW_AUTO_BRIGHTNESS,
         Settings.System.THEMING_SETTINGS_DASHBOARD_ICONS,
+        Settings.System.ENABLE_CONDITIONS,
+        Settings.System.ENABLE_SUGGESTIONS,
     };
 }
