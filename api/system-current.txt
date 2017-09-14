@@ -57,6 +57,7 @@ package android {
     field public static final java.lang.String BIND_RESOLVER_RANKER_SERVICE = "android.permission.BIND_RESOLVER_RANKER_SERVICE";
     field public static final java.lang.String BIND_RUNTIME_PERMISSION_PRESENTER_SERVICE = "android.permission.BIND_RUNTIME_PERMISSION_PRESENTER_SERVICE";
     field public static final java.lang.String BIND_SCREENING_SERVICE = "android.permission.BIND_SCREENING_SERVICE";
+    field public static final java.lang.String BIND_SETTINGS_SUGGESTIONS_SERVICE = "android.permission.BIND_SETTINGS_SUGGESTIONS_SERVICE";
     field public static final java.lang.String BIND_TELECOM_CONNECTION_SERVICE = "android.permission.BIND_TELECOM_CONNECTION_SERVICE";
     field public static final java.lang.String BIND_TEXT_SERVICE = "android.permission.BIND_TEXT_SERVICE";
     field public static final java.lang.String BIND_TRUST_AGENT = "android.permission.BIND_TRUST_AGENT";
@@ -40816,6 +40817,35 @@ package android.service.restrictions {
     ctor public RestrictionsReceiver();
     method public void onReceive(android.content.Context, android.content.Intent);
     method public abstract void onRequestPermission(android.content.Context, java.lang.String, java.lang.String, java.lang.String, android.os.PersistableBundle);
+  }
+
+}
+
+package android.service.settings.suggestions {
+
+  public final class Suggestion implements android.os.Parcelable {
+    method public int describeContents();
+    method public java.lang.String getId();
+    method public android.app.PendingIntent getPendingIntent();
+    method public java.lang.CharSequence getSummary();
+    method public java.lang.CharSequence getTitle();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.settings.suggestions.Suggestion> CREATOR;
+  }
+
+  public static class Suggestion.Builder {
+    ctor public Suggestion.Builder(java.lang.String);
+    method public android.service.settings.suggestions.Suggestion build();
+    method public android.service.settings.suggestions.Suggestion.Builder setPendingIntent(android.app.PendingIntent);
+    method public android.service.settings.suggestions.Suggestion.Builder setSummary(java.lang.CharSequence);
+    method public android.service.settings.suggestions.Suggestion.Builder setTitle(java.lang.CharSequence);
+  }
+
+  public abstract class SuggestionService extends android.app.Service {
+    ctor public SuggestionService();
+    method public android.os.IBinder onBind(android.content.Intent);
+    method public abstract java.util.List<android.service.settings.suggestions.Suggestion> onGetSuggestions();
+    method public abstract void onSuggestionDismissed(android.service.settings.suggestions.Suggestion);
   }
 
 }
