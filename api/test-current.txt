@@ -40236,6 +40236,7 @@ package android.telephony {
     method public void unregisterStateCallback(android.telephony.mbms.DownloadRequest, android.telephony.mbms.DownloadStateCallback);
     field public static final java.lang.String DEFAULT_TOP_LEVEL_TEMP_DIRECTORY = "androidMbmsTempFileRoot";
     field public static final java.lang.String EXTRA_MBMS_COMPLETED_FILE_URI = "android.telephony.extra.MBMS_COMPLETED_FILE_URI";
+    field public static final java.lang.String EXTRA_MBMS_DOWNLOAD_REQUEST = "android.telephony.extra.MBMS_DOWNLOAD_REQUEST";
     field public static final java.lang.String EXTRA_MBMS_DOWNLOAD_RESULT = "android.telephony.extra.MBMS_DOWNLOAD_RESULT";
     field public static final java.lang.String EXTRA_MBMS_FILE_INFO = "android.telephony.extra.MBMS_FILE_INFO";
     field public static final int RESULT_CANCELLED = 2; // 0x2
@@ -40892,7 +40893,6 @@ package android.telephony.mbms {
   public final class DownloadRequest implements android.os.Parcelable {
     method public static android.telephony.mbms.DownloadRequest copy(android.telephony.mbms.DownloadRequest);
     method public int describeContents();
-    method public android.net.Uri getDestinationUri();
     method public java.lang.String getFileServiceId();
     method public static int getMaxAppIntentSize();
     method public static int getMaxDestinationUriSize();
@@ -40906,7 +40906,6 @@ package android.telephony.mbms {
     ctor public DownloadRequest.Builder();
     method public android.telephony.mbms.DownloadRequest build();
     method public android.telephony.mbms.DownloadRequest.Builder setAppIntent(android.content.Intent);
-    method public android.telephony.mbms.DownloadRequest.Builder setDest(android.net.Uri);
     method public android.telephony.mbms.DownloadRequest.Builder setServiceInfo(android.telephony.mbms.FileServiceInfo);
     method public android.telephony.mbms.DownloadRequest.Builder setSource(android.net.Uri);
     method public android.telephony.mbms.DownloadRequest.Builder setSubscriptionId(int);
@@ -40945,20 +40944,19 @@ package android.telephony.mbms {
     method public void onMiddlewareReady();
   }
 
-  public class MbmsException extends java.lang.Exception {
-    method public int getErrorCode();
+  public class MbmsErrors {
     field public static final int ERROR_MIDDLEWARE_LOST = 3; // 0x3
     field public static final int ERROR_MIDDLEWARE_NOT_BOUND = 2; // 0x2
     field public static final int ERROR_NO_UNIQUE_MIDDLEWARE = 1; // 0x1
     field public static final int SUCCESS = 0; // 0x0
   }
 
-  public static class MbmsException.DownloadErrors {
+  public static class MbmsErrors.DownloadErrors {
     field public static final int ERROR_CANNOT_CHANGE_TEMP_FILE_ROOT = 401; // 0x191
     field public static final int ERROR_UNKNOWN_DOWNLOAD_REQUEST = 402; // 0x192
   }
 
-  public static class MbmsException.GeneralErrors {
+  public static class MbmsErrors.GeneralErrors {
     field public static final int ERROR_CARRIER_CHANGE_NOT_ALLOWED = 207; // 0xcf
     field public static final int ERROR_IN_E911 = 204; // 0xcc
     field public static final int ERROR_MIDDLEWARE_NOT_YET_READY = 201; // 0xc9
@@ -40968,13 +40966,13 @@ package android.telephony.mbms {
     field public static final int ERROR_UNABLE_TO_READ_SIM = 206; // 0xce
   }
 
-  public static class MbmsException.InitializationErrors {
+  public static class MbmsErrors.InitializationErrors {
     field public static final int ERROR_APP_PERMISSIONS_NOT_GRANTED = 102; // 0x66
     field public static final int ERROR_DUPLICATE_INITIALIZE = 101; // 0x65
     field public static final int ERROR_UNABLE_TO_INITIALIZE = 103; // 0x67
   }
 
-  public static class MbmsException.StreamingErrors {
+  public static class MbmsErrors.StreamingErrors {
     field public static final int ERROR_CONCURRENT_SERVICE_LIMIT_REACHED = 301; // 0x12d
     field public static final int ERROR_DUPLICATE_START_STREAM = 303; // 0x12f
     field public static final int ERROR_UNABLE_TO_START_SERVICE = 302; // 0x12e
