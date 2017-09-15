@@ -39750,20 +39750,20 @@ package android.telephony {
     field public static final int STATUS_UNKNOWN_ERROR = 4; // 0x4
   }
 
-  public class MbmsDownloadManager {
-    method public void cancelDownload(android.telephony.mbms.DownloadRequest) throws android.telephony.mbms.MbmsException;
-    method public static android.telephony.MbmsDownloadManager create(android.content.Context, android.telephony.mbms.MbmsDownloadManagerCallback) throws android.telephony.mbms.MbmsException;
-    method public static android.telephony.MbmsDownloadManager create(android.content.Context, android.telephony.mbms.MbmsDownloadManagerCallback, android.os.Handler) throws android.telephony.mbms.MbmsException;
-    method public static android.telephony.MbmsDownloadManager create(android.content.Context, android.telephony.mbms.MbmsDownloadManagerCallback, int) throws android.telephony.mbms.MbmsException;
-    method public static android.telephony.MbmsDownloadManager create(android.content.Context, android.telephony.mbms.MbmsDownloadManagerCallback, int, android.os.Handler) throws android.telephony.mbms.MbmsException;
-    method public void dispose();
-    method public void download(android.telephony.mbms.DownloadRequest, android.telephony.mbms.DownloadStateCallback, android.os.Handler) throws android.telephony.mbms.MbmsException;
-    method public int getDownloadStatus(android.telephony.mbms.DownloadRequest, android.telephony.mbms.FileInfo) throws android.telephony.mbms.MbmsException;
-    method public void getFileServices(java.util.List<java.lang.String>) throws android.telephony.mbms.MbmsException;
+  public class MbmsDownloadSession implements java.lang.AutoCloseable {
+    method public void cancelDownload(android.telephony.mbms.DownloadRequest);
+    method public void close();
+    method public static android.telephony.MbmsDownloadSession create(android.content.Context, android.telephony.mbms.MbmsDownloadSessionCallback, android.os.Handler);
+    method public static android.telephony.MbmsDownloadSession create(android.content.Context, android.telephony.mbms.MbmsDownloadSessionCallback, int, android.os.Handler);
+    method public void download(android.telephony.mbms.DownloadRequest);
+    method public int getDownloadStatus(android.telephony.mbms.DownloadRequest, android.telephony.mbms.FileInfo);
     method public java.io.File getTempFileRootDirectory();
-    method public java.util.List<android.telephony.mbms.DownloadRequest> listPendingDownloads() throws android.telephony.mbms.MbmsException;
-    method public void resetDownloadKnowledge(android.telephony.mbms.DownloadRequest) throws android.telephony.mbms.MbmsException;
-    method public void setTempFileRootDirectory(java.io.File) throws android.telephony.mbms.MbmsException;
+    method public java.util.List<android.telephony.mbms.DownloadRequest> listPendingDownloads();
+    method public void registerStateCallback(android.telephony.mbms.DownloadRequest, android.telephony.mbms.DownloadStateCallback, android.os.Handler);
+    method public void requestUpdateFileServices(java.util.List<java.lang.String>);
+    method public void resetDownloadKnowledge(android.telephony.mbms.DownloadRequest);
+    method public void setTempFileRootDirectory(java.io.File);
+    method public void unregisterStateCallback(android.telephony.mbms.DownloadRequest, android.telephony.mbms.DownloadStateCallback);
     field public static final java.lang.String DEFAULT_TOP_LEVEL_TEMP_DIRECTORY = "androidMbmsTempFileRoot";
     field public static final java.lang.String EXTRA_MBMS_COMPLETED_FILE_URI = "android.telephony.extra.MBMS_COMPLETED_FILE_URI";
     field public static final java.lang.String EXTRA_MBMS_DOWNLOAD_RESULT = "android.telephony.extra.MBMS_DOWNLOAD_RESULT";
@@ -40444,7 +40444,7 @@ package android.telephony.mbms {
   public class DownloadStateCallback {
     ctor public DownloadStateCallback();
     method public void onProgressUpdated(android.telephony.mbms.DownloadRequest, android.telephony.mbms.FileInfo, int, int, int, int);
-    method public void onStateChanged(android.telephony.mbms.DownloadRequest, android.telephony.mbms.FileInfo, int);
+    method public void onStateUpdated(android.telephony.mbms.DownloadRequest, android.telephony.mbms.FileInfo, int);
   }
 
   public final class FileInfo implements android.os.Parcelable {
@@ -40462,16 +40462,16 @@ package android.telephony.mbms {
     field public static final android.os.Parcelable.Creator<android.telephony.mbms.FileServiceInfo> CREATOR;
   }
 
-  public class MbmsDownloadManagerCallback {
-    ctor public MbmsDownloadManagerCallback();
-    method public void onError(int, java.lang.String);
-    method public void onFileServicesUpdated(java.util.List<android.telephony.mbms.FileServiceInfo>);
-    method public void onMiddlewareReady();
-  }
-
   public class MbmsDownloadReceiver extends android.content.BroadcastReceiver {
     ctor public MbmsDownloadReceiver();
     method public void onReceive(android.content.Context, android.content.Intent);
+  }
+
+  public class MbmsDownloadSessionCallback {
+    ctor public MbmsDownloadSessionCallback();
+    method public void onError(int, java.lang.String);
+    method public void onFileServicesUpdated(java.util.List<android.telephony.mbms.FileServiceInfo>);
+    method public void onMiddlewareReady();
   }
 
   public class MbmsException extends java.lang.Exception {
@@ -40518,7 +40518,7 @@ package android.telephony.mbms {
 
   public class ServiceInfo {
     method public java.util.List<java.util.Locale> getLocales();
-    method public java.util.Map<java.util.Locale, java.lang.String> getNames();
+    method public java.lang.CharSequence getNameForLocale(java.util.Locale);
     method public java.lang.String getServiceClassName();
     method public java.lang.String getServiceId();
     method public java.util.Date getSessionEndTime();
