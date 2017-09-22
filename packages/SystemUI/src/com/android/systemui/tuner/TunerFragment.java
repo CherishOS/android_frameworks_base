@@ -126,13 +126,13 @@ public class TunerFragment extends PreferenceFragment {
             case android.R.id.home:
                 getActivity().finish();
                 return true;
-            case MENU_REMOVE:
+            /*case MENU_REMOVE:
                 mTunerService.showResetRequest(() -> {
                     if (getActivity() != null) {
                         getActivity().finish();
                     }
                 });
-                return true;
+                return true;*/
         }
         return super.onOptionsItemSelected(item);
     }
