@@ -8968,6 +8968,7 @@ package android.content {
     field public static final java.lang.String HARDWARE_PROPERTIES_SERVICE = "hardware_properties";
     field public static final java.lang.String INPUT_METHOD_SERVICE = "input_method";
     field public static final java.lang.String INPUT_SERVICE = "input";
+    field public static final java.lang.String IPSEC_SERVICE = "ipsec";
     field public static final java.lang.String JOB_SCHEDULER_SERVICE = "jobscheduler";
     field public static final java.lang.String KEYGUARD_SERVICE = "keyguard";
     field public static final java.lang.String LAUNCHER_APPS_SERVICE = "launcherapps";
@@ -25657,6 +25658,67 @@ package android.net {
     method public byte[] getRawAddress();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.IpPrefix> CREATOR;
+  }
+
+  public final class IpSecAlgorithm implements android.os.Parcelable {
+    ctor public IpSecAlgorithm(java.lang.String, byte[]);
+    ctor public IpSecAlgorithm(java.lang.String, byte[], int);
+    method public int describeContents();
+    method public byte[] getKey();
+    method public java.lang.String getName();
+    method public int getTruncationLengthBits();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final java.lang.String AUTH_HMAC_MD5 = "hmac(md5)";
+    field public static final java.lang.String AUTH_HMAC_SHA1 = "hmac(sha1)";
+    field public static final java.lang.String AUTH_HMAC_SHA256 = "hmac(sha256)";
+    field public static final java.lang.String AUTH_HMAC_SHA384 = "hmac(sha384)";
+    field public static final java.lang.String AUTH_HMAC_SHA512 = "hmac(sha512)";
+    field public static final android.os.Parcelable.Creator<android.net.IpSecAlgorithm> CREATOR;
+    field public static final java.lang.String CRYPT_AES_CBC = "cbc(aes)";
+  }
+
+  public final class IpSecManager {
+    method public void applyTransportModeTransform(java.io.FileDescriptor, android.net.IpSecTransform) throws java.io.IOException;
+    method public android.net.IpSecManager.UdpEncapsulationSocket openUdpEncapsulationSocket(int) throws java.io.IOException, android.net.IpSecManager.ResourceUnavailableException;
+    method public android.net.IpSecManager.UdpEncapsulationSocket openUdpEncapsulationSocket() throws java.io.IOException, android.net.IpSecManager.ResourceUnavailableException;
+    method public void removeTransportModeTransform(java.io.FileDescriptor, android.net.IpSecTransform) throws java.io.IOException;
+    method public android.net.IpSecManager.SecurityParameterIndex reserveSecurityParameterIndex(int, java.net.InetAddress) throws android.net.IpSecManager.ResourceUnavailableException;
+    method public android.net.IpSecManager.SecurityParameterIndex reserveSecurityParameterIndex(int, java.net.InetAddress, int) throws android.net.IpSecManager.ResourceUnavailableException, android.net.IpSecManager.SpiUnavailableException;
+    field public static final int INVALID_SECURITY_PARAMETER_INDEX = 0; // 0x0
+  }
+
+  public static final class IpSecManager.ResourceUnavailableException extends android.util.AndroidException {
+  }
+
+  public static final class IpSecManager.SecurityParameterIndex implements java.lang.AutoCloseable {
+    method public void close();
+    method protected void finalize();
+    method public int getSpi();
+  }
+
+  public static final class IpSecManager.SpiUnavailableException extends android.util.AndroidException {
+    method public int getSpi();
+  }
+
+  public static final class IpSecManager.UdpEncapsulationSocket implements java.lang.AutoCloseable {
+    method public void close() throws java.io.IOException;
+    method public int getPort();
+    method public java.io.FileDescriptor getSocket();
+  }
+
+  public final class IpSecTransform implements java.lang.AutoCloseable {
+    method public void close();
+    field public static final int DIRECTION_IN = 0; // 0x0
+    field public static final int DIRECTION_OUT = 1; // 0x1
+  }
+
+  public static class IpSecTransform.Builder {
+    ctor public IpSecTransform.Builder(android.content.Context);
+    method public android.net.IpSecTransform buildTransportModeTransform(java.net.InetAddress) throws java.io.IOException, android.net.IpSecManager.ResourceUnavailableException, android.net.IpSecManager.SpiUnavailableException;
+    method public android.net.IpSecTransform.Builder setAuthentication(int, android.net.IpSecAlgorithm);
+    method public android.net.IpSecTransform.Builder setEncryption(int, android.net.IpSecAlgorithm);
+    method public android.net.IpSecTransform.Builder setIpv4Encapsulation(android.net.IpSecManager.UdpEncapsulationSocket, int);
+    method public android.net.IpSecTransform.Builder setSpi(int, android.net.IpSecManager.SecurityParameterIndex);
   }
 
   public class LinkAddress implements android.os.Parcelable {
