@@ -62,6 +62,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -69,6 +70,7 @@ import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.Point;
 import android.graphics.PointF;
@@ -909,6 +911,8 @@ public class StatusBar extends SystemUI implements DemoMode,
 
         createAndAddWindows(result);
 
+        mCherishSettingsObserver.observe();
+        mCherishSettingsObserver.update();
         if (mWallpaperSupported) {
             // Make sure we always have the most current wallpaper info.
             IntentFilter wallpaperChangedFilter = new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED);
@@ -3927,6 +3931,38 @@ public class StatusBar extends SystemUI implements DemoMode,
             updateIsKeyguard();
         }
     };
+
+    private CherishSettingsObserver mCherishSettingsObserver = new CherishSettingsObserver(mHandler);
+    private class CherishSettingsObserver extends ContentObserver {
+        CherishSettingsObserver(Handler handler) {
+            super(handler);
+        }
+         void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HEADS_UP_STOPLIST_VALUES), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HEADS_UP_BLACKLIST_VALUES), false, this);
+        }
+         @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            update();
+        }
+         public void update() {
+            setHeadsUpStoplist();
+            setHeadsUpBlacklist();
+        }
+    }
+
+    private void setHeadsUpStoplist() {
+        if (mPresenter != null)
+            mPresenter.setHeadsUpStoplist();
+    }
+
+    private void setHeadsUpBlacklist() {
+        if (mPresenter != null)
+            mPresenter.setHeadsUpBlacklist();
+    }
 
     public int getWakefulnessState() {
         return mWakefulnessLifecycle.getWakefulness();
