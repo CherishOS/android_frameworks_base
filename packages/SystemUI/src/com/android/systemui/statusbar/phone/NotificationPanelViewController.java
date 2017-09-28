@@ -52,6 +52,7 @@ import android.app.PendingIntent;
 import android.app.StatusBarManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
@@ -131,6 +132,7 @@ import com.android.systemui.animation.ActivityLaunchAnimator;
 import com.android.systemui.animation.Interpolators;
 import com.android.systemui.animation.LaunchAnimator;
 import com.android.systemui.biometrics.AuthController;
+import com.android.systemui.camera.CameraIntents;
 import com.android.systemui.classifier.Classifier;
 import com.android.systemui.classifier.FalsingCollector;
 import com.android.systemui.controls.dagger.ControlsComponent;
@@ -3740,7 +3742,8 @@ public class NotificationPanelViewController extends PanelViewController {
         // If we are launching it when we are occluded already we don't want it to animate,
         // nor setting these flags, since the occluded state doesn't change anymore, hence it's
         // never reset.
-        if (!isFullyCollapsed()) {
+        if (!isFullyCollapsed() && mLastCameraLaunchSource ==
+                KeyguardBottomAreaView.CAMERA_LAUNCH_SOURCE_AFFORDANCE) {
             setLaunchingAffordance(true);
         } else {
             animate = false;
@@ -3776,12 +3779,12 @@ public class NotificationPanelViewController extends PanelViewController {
     /**
      * Whether the camera application can be launched for the camera launch gesture.
      */
-    public boolean canCameraGestureBeLaunched() {
+    public boolean canCameraGestureBeLaunched(int source) {
         if (!mCentralSurfaces.isCameraAllowedByAdmin()) {
             return false;
         }
 
-        ResolveInfo resolveInfo = mKeyguardBottomArea.resolveCameraIntent();
+        ResolveInfo resolveInfo = mKeyguardBottomArea.resolveCameraIntent(source);
         String
                 packageToLaunch =
                 (resolveInfo == null || resolveInfo.activityInfo == null) ? null
@@ -4673,12 +4676,20 @@ public class NotificationPanelViewController extends PanelViewController {
                     mView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL ? !rightIcon
                             : rightIcon;
             if (rightIcon) {
-                mCentralSurfaces.onCameraHintStarted();
+                Intent intent = mKeyguardBottomArea.getRightIntent();
+                if (intent == CameraIntents.getSecureCameraIntent(mView.getContext())
+                        || intent == CameraIntents.getSecureCameraIntent(mView.getContext())) {
+                    mCentralSurfaces.onCameraHintStarted();
+                } else {
+                    mCentralSurfaces.onCustomHintStarted();
+                }
             } else {
                 if (mKeyguardBottomArea.isLeftVoiceAssist()) {
                     mCentralSurfaces.onVoiceAssistHintStarted();
-                } else {
+                } else if (mKeyguardBottomArea.getLeftIntent() == KeyguardBottomAreaView.PHONE_INTENT) {
                     mCentralSurfaces.onPhoneHintStarted();
+                } else {
+                    mCentralSurfaces.onCustomHintStarted();
                 }
             }
         }
