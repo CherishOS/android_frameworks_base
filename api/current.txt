@@ -22779,6 +22779,10 @@ package android.media {
     field public static final java.lang.String KEY_DURATION = "durationUs";
     field public static final java.lang.String KEY_FLAC_COMPRESSION_LEVEL = "flac-compression-level";
     field public static final java.lang.String KEY_FRAME_RATE = "frame-rate";
+    field public static final java.lang.String KEY_GRID_COLS = "grid-cols";
+    field public static final java.lang.String KEY_GRID_HEIGHT = "grid-height";
+    field public static final java.lang.String KEY_GRID_ROWS = "grid-rows";
+    field public static final java.lang.String KEY_GRID_WIDTH = "grid-width";
     field public static final java.lang.String KEY_HDR_STATIC_INFO = "hdr-static-info";
     field public static final java.lang.String KEY_HEIGHT = "height";
     field public static final java.lang.String KEY_INTRA_REFRESH_PERIOD = "intra-refresh-period";
@@ -22822,6 +22826,7 @@ package android.media {
     field public static final java.lang.String MIMETYPE_AUDIO_RAW = "audio/raw";
     field public static final java.lang.String MIMETYPE_AUDIO_SCRAMBLED = "audio/scrambled";
     field public static final java.lang.String MIMETYPE_AUDIO_VORBIS = "audio/vorbis";
+    field public static final java.lang.String MIMETYPE_IMAGE_ANDROID_HEIC = "image/vnd.android.heic";
     field public static final java.lang.String MIMETYPE_TEXT_CEA_608 = "text/cea-608";
     field public static final java.lang.String MIMETYPE_TEXT_VTT = "text/vtt";
     field public static final java.lang.String MIMETYPE_VIDEO_AVC = "video/avc";
@@ -22914,9 +22919,13 @@ package android.media {
     ctor public MediaMetadataRetriever();
     method public java.lang.String extractMetadata(int);
     method public byte[] getEmbeddedPicture();
+    method public android.graphics.Bitmap getFrameAtIndex(int);
     method public android.graphics.Bitmap getFrameAtTime(long, int);
     method public android.graphics.Bitmap getFrameAtTime(long);
     method public android.graphics.Bitmap getFrameAtTime();
+    method public android.graphics.Bitmap[] getFramesAtIndex(int, int);
+    method public android.graphics.Bitmap getImageAtIndex(int);
+    method public android.graphics.Bitmap getPrimaryImage();
     method public android.graphics.Bitmap getScaledFrameAtTime(long, int, int, int);
     method public void release();
     method public void setDataSource(java.lang.String) throws java.lang.IllegalArgumentException;
@@ -22939,11 +22948,18 @@ package android.media {
     field public static final int METADATA_KEY_DURATION = 9; // 0x9
     field public static final int METADATA_KEY_GENRE = 6; // 0x6
     field public static final int METADATA_KEY_HAS_AUDIO = 16; // 0x10
+    field public static final int METADATA_KEY_HAS_IMAGE = 26; // 0x1a
     field public static final int METADATA_KEY_HAS_VIDEO = 17; // 0x11
+    field public static final int METADATA_KEY_IMAGE_COUNT = 27; // 0x1b
+    field public static final int METADATA_KEY_IMAGE_HEIGHT = 30; // 0x1e
+    field public static final int METADATA_KEY_IMAGE_PRIMARY = 28; // 0x1c
+    field public static final int METADATA_KEY_IMAGE_ROTATION = 31; // 0x1f
+    field public static final int METADATA_KEY_IMAGE_WIDTH = 29; // 0x1d
     field public static final int METADATA_KEY_LOCATION = 23; // 0x17
     field public static final int METADATA_KEY_MIMETYPE = 12; // 0xc
     field public static final int METADATA_KEY_NUM_TRACKS = 10; // 0xa
     field public static final int METADATA_KEY_TITLE = 7; // 0x7
+    field public static final int METADATA_KEY_VIDEO_FRAME_COUNT = 32; // 0x20
     field public static final int METADATA_KEY_VIDEO_HEIGHT = 19; // 0x13
     field public static final int METADATA_KEY_VIDEO_ROTATION = 24; // 0x18
     field public static final int METADATA_KEY_VIDEO_WIDTH = 18; // 0x12
@@ -52074,7 +52090,6 @@ package android.widget {
     method public android.graphics.Typeface getTypeface();
     method public android.text.style.URLSpan[] getUrls();
     method public boolean hasSelection();
-    method public void invalidate(int, int, int, int);
     method public boolean isAllCaps();
     method public boolean isCursorVisible();
     method public boolean isElegantTextHeight();
