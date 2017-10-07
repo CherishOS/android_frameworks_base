@@ -40302,8 +40302,10 @@ package android.service.autofill {
   }
 
   public static class ImageTransformation.Builder {
-    ctor public ImageTransformation.Builder(android.view.autofill.AutofillId, java.util.regex.Pattern, int);
-    method public android.service.autofill.ImageTransformation.Builder addOption(java.util.regex.Pattern, int);
+    ctor public deprecated ImageTransformation.Builder(android.view.autofill.AutofillId, java.util.regex.Pattern, int);
+    ctor public ImageTransformation.Builder(android.view.autofill.AutofillId, java.util.regex.Pattern, int, java.lang.CharSequence);
+    method public deprecated android.service.autofill.ImageTransformation.Builder addOption(java.util.regex.Pattern, int);
+    method public android.service.autofill.ImageTransformation.Builder addOption(java.util.regex.Pattern, int, java.lang.CharSequence);
     method public android.service.autofill.ImageTransformation build();
   }
 
@@ -40319,6 +40321,9 @@ package android.service.autofill {
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.autofill.RegexValidator> CREATOR;
+  }
+
+  public abstract interface Sanitizer {
   }
 
   public final class SaveCallback {
@@ -40344,6 +40349,7 @@ package android.service.autofill {
   public static final class SaveInfo.Builder {
     ctor public SaveInfo.Builder(int, android.view.autofill.AutofillId[]);
     ctor public SaveInfo.Builder(int);
+    method public android.service.autofill.SaveInfo.Builder addSanitizer(android.service.autofill.Sanitizer, android.view.autofill.AutofillId...);
     method public android.service.autofill.SaveInfo build();
     method public android.service.autofill.SaveInfo.Builder setCustomDescription(android.service.autofill.CustomDescription);
     method public android.service.autofill.SaveInfo.Builder setDescription(java.lang.CharSequence);
@@ -40360,6 +40366,13 @@ package android.service.autofill {
     method public java.util.List<android.service.autofill.FillContext> getFillContexts();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.autofill.SaveRequest> CREATOR;
+  }
+
+  public final class TextValueSanitizer implements android.os.Parcelable android.service.autofill.Sanitizer {
+    ctor public TextValueSanitizer(java.util.regex.Pattern, java.lang.String);
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.TextValueSanitizer> CREATOR;
   }
 
   public abstract interface Transformation {
