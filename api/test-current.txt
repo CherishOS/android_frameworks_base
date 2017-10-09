@@ -37805,6 +37805,7 @@ package android.service.notification {
     field public static final android.os.Parcelable.Creator<android.service.notification.Adjustment> CREATOR;
     field public static final java.lang.String KEY_PEOPLE = "key_people";
     field public static final java.lang.String KEY_SNOOZE_CRITERIA = "key_snooze_criteria";
+    field public static final java.lang.String KEY_USER_SENTIMENT = "key_user_sentiment";
   }
 
   public final class Condition implements android.os.Parcelable {
@@ -37891,6 +37892,7 @@ package android.service.notification {
     method public void onNotificationRemoved(android.service.notification.StatusBarNotification);
     method public void onNotificationRemoved(android.service.notification.StatusBarNotification, android.service.notification.NotificationListenerService.RankingMap);
     method public void onNotificationRemoved(android.service.notification.StatusBarNotification, android.service.notification.NotificationListenerService.RankingMap, int);
+    method public void onNotificationRemoved(android.service.notification.StatusBarNotification, android.service.notification.NotificationListenerService.RankingMap, android.service.notification.NotificationStats, int);
     method public final void requestInterruptionFilter(int);
     method public final void requestListenerHints(int);
     method public static void requestRebind(android.content.ComponentName);
@@ -37943,8 +37945,12 @@ package android.service.notification {
     method public java.lang.String getOverrideGroupKey();
     method public int getRank();
     method public int getSuppressedVisualEffects();
+    method public int getUserSentiment();
     method public boolean isAmbient();
     method public boolean matchesInterruptionFilter();
+    field public static final int USER_SENTIMENT_NEGATIVE = -1; // 0xffffffff
+    field public static final int USER_SENTIMENT_NEUTRAL = 0; // 0x0
+    field public static final int USER_SENTIMENT_POSITIVE = 1; // 0x1
   }
 
   public static class NotificationListenerService.RankingMap implements android.os.Parcelable {
@@ -37953,6 +37959,32 @@ package android.service.notification {
     method public boolean getRanking(java.lang.String, android.service.notification.NotificationListenerService.Ranking);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.notification.NotificationListenerService.RankingMap> CREATOR;
+  }
+
+  public final class NotificationStats implements android.os.Parcelable {
+    ctor public NotificationStats();
+    ctor protected NotificationStats(android.os.Parcel);
+    method public int describeContents();
+    method public int getDismissalSurface();
+    method public boolean hasDirectReplied();
+    method public boolean hasExpanded();
+    method public boolean hasInteracted();
+    method public boolean hasSeen();
+    method public boolean hasSnoozed();
+    method public boolean hasViewedSettings();
+    method public void setDirectReplied();
+    method public void setDismissalSurface(int);
+    method public void setExpanded();
+    method public void setSeen();
+    method public void setSnoozed();
+    method public void setViewedSettings();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.notification.NotificationStats> CREATOR;
+    field public static final int DISMISSAL_AOD = 2; // 0x2
+    field public static final int DISMISSAL_NOT_DISMISSED = -1; // 0xffffffff
+    field public static final int DISMISSAL_OTHER = 0; // 0x0
+    field public static final int DISMISSAL_PEEK = 1; // 0x1
+    field public static final int DISMISSAL_SHADE = 3; // 0x3
   }
 
   public final class SnoozeCriterion implements android.os.Parcelable {
