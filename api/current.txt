@@ -37182,10 +37182,15 @@ package android.service.autofill {
   }
 
   public static final class FillEventHistory.Event {
+    method public java.util.Map<android.view.autofill.AutofillId, java.lang.String> getChangedFields();
     method public android.os.Bundle getClientState();
     method public java.lang.String getDatasetId();
+    method public java.util.Set<java.lang.String> getIgnoredDatasetIds();
+    method public java.util.Map<android.view.autofill.AutofillId, java.util.Set<java.lang.String>> getManuallyEnteredField();
+    method public java.util.Set<java.lang.String> getSelectedDatasetIds();
     method public int getType();
     field public static final int TYPE_AUTHENTICATION_SELECTED = 2; // 0x2
+    field public static final int TYPE_CONTEXT_COMMITTED = 4; // 0x4
     field public static final int TYPE_DATASET_AUTHENTICATION_SELECTED = 1; // 0x1
     field public static final int TYPE_DATASET_SELECTED = 0; // 0x0
     field public static final int TYPE_SAVE_SHOWN = 3; // 0x3
@@ -37206,6 +37211,7 @@ package android.service.autofill {
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.autofill.FillResponse> CREATOR;
+    field public static final int FLAG_TRACK_CONTEXT_COMMITED = 1; // 0x1
   }
 
   public static final class FillResponse.Builder {
@@ -37214,6 +37220,7 @@ package android.service.autofill {
     method public android.service.autofill.FillResponse build();
     method public android.service.autofill.FillResponse.Builder setAuthentication(android.view.autofill.AutofillId[], android.content.IntentSender, android.widget.RemoteViews);
     method public android.service.autofill.FillResponse.Builder setClientState(android.os.Bundle);
+    method public android.service.autofill.FillResponse.Builder setFlags(int);
     method public android.service.autofill.FillResponse.Builder setIgnoredIds(android.view.autofill.AutofillId...);
     method public android.service.autofill.FillResponse.Builder setSaveInfo(android.service.autofill.SaveInfo);
   }
@@ -51961,6 +51968,7 @@ package android.widget {
     method public android.graphics.Typeface getTypeface();
     method public android.text.style.URLSpan[] getUrls();
     method public boolean hasSelection();
+    method public void invalidate(int, int, int, int);
     method public boolean isAllCaps();
     method public boolean isCursorVisible();
     method public boolean isElegantTextHeight();
