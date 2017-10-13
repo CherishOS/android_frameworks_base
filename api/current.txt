@@ -362,6 +362,7 @@ package android {
     field public static final int canRequestTouchExplorationMode = 16843735; // 0x10103d7
     field public static final int canRetrieveWindowContent = 16843653; // 0x1010385
     field public static final int candidatesTextStyleSpans = 16843312; // 0x1010230
+    field public static final int cantSaveState = 16844142; // 0x101056e
     field public static final deprecated int capitalize = 16843113; // 0x1010169
     field public static final int category = 16843752; // 0x10103e8
     field public static final int centerBright = 16842956; // 0x10100cc
@@ -5643,8 +5644,10 @@ package android.app {
     method public static java.lang.String suppressedEffectsToString(int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.NotificationManager.Policy> CREATOR;
+    field public static final int PRIORITY_CATEGORY_ALARMS = 32; // 0x20
     field public static final int PRIORITY_CATEGORY_CALLS = 8; // 0x8
     field public static final int PRIORITY_CATEGORY_EVENTS = 2; // 0x2
+    field public static final int PRIORITY_CATEGORY_MEDIA_SYSTEM_OTHER = 64; // 0x40
     field public static final int PRIORITY_CATEGORY_MESSAGES = 4; // 0x4
     field public static final int PRIORITY_CATEGORY_REMINDERS = 1; // 0x1
     field public static final int PRIORITY_CATEGORY_REPEAT_CALLERS = 16; // 0x10
@@ -10999,6 +11002,7 @@ package android.content.pm {
     method public android.content.ComponentName getActivity();
     method public java.util.Set<java.lang.String> getCategories();
     method public java.lang.CharSequence getDisabledMessage();
+    method public int getDisabledReason();
     method public android.os.PersistableBundle getExtras();
     method public java.lang.String getId();
     method public android.content.Intent getIntent();
@@ -11017,6 +11021,13 @@ package android.content.pm {
     method public boolean isPinned();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.ShortcutInfo> CREATOR;
+    field public static final int DISABLED_REASON_APP_CHANGED = 2; // 0x2
+    field public static final int DISABLED_REASON_BACKUP_NOT_SUPPORTED = 101; // 0x65
+    field public static final int DISABLED_REASON_BY_APP = 1; // 0x1
+    field public static final int DISABLED_REASON_NOT_DISABLED = 0; // 0x0
+    field public static final int DISABLED_REASON_OTHER_RESTORE_ISSUE = 103; // 0x67
+    field public static final int DISABLED_REASON_SIGNATURE_MISMATCH = 102; // 0x66
+    field public static final int DISABLED_REASON_VERSION_LOWER = 100; // 0x64
     field public static final java.lang.String SHORTCUT_CATEGORY_CONVERSATION = "android.shortcut.conversation";
   }
 
@@ -37240,6 +37251,7 @@ package android.service.autofill {
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.autofill.SaveInfo> CREATOR;
+    field public static final int FLAG_DONT_SAVE_ON_FINISH = 2; // 0x2
     field public static final int FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE = 1; // 0x1
     field public static final int NEGATIVE_BUTTON_STYLE_CANCEL = 0; // 0x0
     field public static final int NEGATIVE_BUTTON_STYLE_REJECT = 1; // 0x1
@@ -37261,6 +37273,7 @@ package android.service.autofill {
     method public android.service.autofill.SaveInfo.Builder setFlags(int);
     method public android.service.autofill.SaveInfo.Builder setNegativeAction(int, android.content.IntentSender);
     method public android.service.autofill.SaveInfo.Builder setOptionalIds(android.view.autofill.AutofillId[]);
+    method public android.service.autofill.SaveInfo.Builder setTriggerId(android.view.autofill.AutofillId);
     method public android.service.autofill.SaveInfo.Builder setValidator(android.service.autofill.Validator);
   }
 
@@ -40034,8 +40047,12 @@ package android.telephony {
     field public static final java.lang.String EXTRA_MBMS_DOWNLOAD_RESULT = "android.telephony.extra.MBMS_DOWNLOAD_RESULT";
     field public static final java.lang.String EXTRA_MBMS_FILE_INFO = "android.telephony.extra.MBMS_FILE_INFO";
     field public static final int RESULT_CANCELLED = 2; // 0x2
+    field public static final int RESULT_DOWNLOAD_FAILURE = 6; // 0x6
     field public static final int RESULT_EXPIRED = 3; // 0x3
+    field public static final int RESULT_FILE_ROOT_UNREACHABLE = 8; // 0x8
     field public static final int RESULT_IO_ERROR = 4; // 0x4
+    field public static final int RESULT_OUT_OF_STORAGE = 7; // 0x7
+    field public static final int RESULT_SERVICE_ID_NOT_DEFINED = 5; // 0x5
     field public static final int RESULT_SUCCESSFUL = 1; // 0x1
     field public static final int STATUS_ACTIVELY_DOWNLOADING = 1; // 0x1
     field public static final int STATUS_PENDING_DOWNLOAD = 2; // 0x2
@@ -45745,8 +45762,8 @@ package android.view {
     method protected boolean awakenScrollBars(int);
     method protected boolean awakenScrollBars(int, boolean);
     method public void bringToFront();
-    method public void buildDrawingCache();
-    method public void buildDrawingCache(boolean);
+    method public deprecated void buildDrawingCache();
+    method public deprecated void buildDrawingCache(boolean);
     method public void buildLayer();
     method public boolean callOnClick();
     method public boolean canResolveLayoutDirection();
@@ -45771,7 +45788,7 @@ package android.view {
     method protected int computeVerticalScrollRange();
     method public android.view.accessibility.AccessibilityNodeInfo createAccessibilityNodeInfo();
     method public void createContextMenu(android.view.ContextMenu);
-    method public void destroyDrawingCache();
+    method public deprecated void destroyDrawingCache();
     method public android.view.WindowInsets dispatchApplyWindowInsets(android.view.WindowInsets);
     method public boolean dispatchCapturedPointerEvent(android.view.MotionEvent);
     method public void dispatchConfigurationChanged(android.content.res.Configuration);
@@ -45852,10 +45869,10 @@ package android.view {
     method public static int getDefaultSize(int, int);
     method public android.view.Display getDisplay();
     method public final int[] getDrawableState();
-    method public android.graphics.Bitmap getDrawingCache();
-    method public android.graphics.Bitmap getDrawingCache(boolean);
-    method public int getDrawingCacheBackgroundColor();
-    method public int getDrawingCacheQuality();
+    method public deprecated android.graphics.Bitmap getDrawingCache();
+    method public deprecated android.graphics.Bitmap getDrawingCache(boolean);
+    method public deprecated int getDrawingCacheBackgroundColor();
+    method public deprecated int getDrawingCacheQuality();
     method public void getDrawingRect(android.graphics.Rect);
     method public long getDrawingTime();
     method public float getElevation();
@@ -45994,7 +46011,7 @@ package android.view {
     method public boolean isClickable();
     method public boolean isContextClickable();
     method public boolean isDirty();
-    method public boolean isDrawingCacheEnabled();
+    method public deprecated boolean isDrawingCacheEnabled();
     method public boolean isDuplicateParentStateEnabled();
     method public boolean isEnabled();
     method public final boolean isFocusable();
@@ -46165,9 +46182,9 @@ package android.view {
     method public void setContentDescription(java.lang.CharSequence);
     method public void setContextClickable(boolean);
     method public void setDefaultFocusHighlightEnabled(boolean);
-    method public void setDrawingCacheBackgroundColor(int);
-    method public void setDrawingCacheEnabled(boolean);
-    method public void setDrawingCacheQuality(int);
+    method public deprecated void setDrawingCacheBackgroundColor(int);
+    method public deprecated void setDrawingCacheEnabled(boolean);
+    method public deprecated void setDrawingCacheQuality(int);
     method public void setDuplicateParentStateEnabled(boolean);
     method public void setElevation(float);
     method public void setEnabled(boolean);
@@ -46318,9 +46335,9 @@ package android.view {
     field public static final int DRAG_FLAG_GLOBAL_URI_READ = 1; // 0x1
     field public static final int DRAG_FLAG_GLOBAL_URI_WRITE = 2; // 0x2
     field public static final int DRAG_FLAG_OPAQUE = 512; // 0x200
-    field public static final int DRAWING_CACHE_QUALITY_AUTO = 0; // 0x0
-    field public static final int DRAWING_CACHE_QUALITY_HIGH = 1048576; // 0x100000
-    field public static final int DRAWING_CACHE_QUALITY_LOW = 524288; // 0x80000
+    field public static final deprecated int DRAWING_CACHE_QUALITY_AUTO = 0; // 0x0
+    field public static final deprecated int DRAWING_CACHE_QUALITY_HIGH = 1048576; // 0x100000
+    field public static final deprecated int DRAWING_CACHE_QUALITY_LOW = 524288; // 0x80000
     field protected static final int[] EMPTY_STATE_SET;
     field protected static final int[] ENABLED_FOCUSED_SELECTED_STATE_SET;
     field protected static final int[] ENABLED_FOCUSED_SELECTED_WINDOW_FOCUSED_STATE_SET;
@@ -46712,7 +46729,7 @@ package android.view {
     method public android.animation.LayoutTransition getLayoutTransition();
     method public int getNestedScrollAxes();
     method public android.view.ViewGroupOverlay getOverlay();
-    method public int getPersistentDrawingCache();
+    method public deprecated int getPersistentDrawingCache();
     method public boolean getTouchscreenBlocksFocus();
     method public int indexOfChild(android.view.View);
     method public final deprecated void invalidateChild(android.view.View, android.graphics.Rect);
@@ -46765,7 +46782,7 @@ package android.view {
     method public void setAddStatesFromChildren(boolean);
     method public deprecated void setAlwaysDrawnWithCacheEnabled(boolean);
     method public deprecated void setAnimationCacheEnabled(boolean);
-    method protected void setChildrenDrawingCacheEnabled(boolean);
+    method protected deprecated void setChildrenDrawingCacheEnabled(boolean);
     method protected void setChildrenDrawingOrderEnabled(boolean);
     method protected deprecated void setChildrenDrawnWithCacheEnabled(boolean);
     method public void setClipChildren(boolean);
@@ -46777,7 +46794,7 @@ package android.view {
     method public void setLayoutTransition(android.animation.LayoutTransition);
     method public void setMotionEventSplittingEnabled(boolean);
     method public void setOnHierarchyChangeListener(android.view.ViewGroup.OnHierarchyChangeListener);
-    method public void setPersistentDrawingCache(int);
+    method public deprecated void setPersistentDrawingCache(int);
     method protected void setStaticTransformationsEnabled(boolean);
     method public void setTouchscreenBlocksFocus(boolean);
     method public void setTransitionGroup(boolean);
@@ -46795,10 +46812,10 @@ package android.view {
     field public static final int FOCUS_BLOCK_DESCENDANTS = 393216; // 0x60000
     field public static final int LAYOUT_MODE_CLIP_BOUNDS = 0; // 0x0
     field public static final int LAYOUT_MODE_OPTICAL_BOUNDS = 1; // 0x1
-    field public static final int PERSISTENT_ALL_CACHES = 3; // 0x3
-    field public static final int PERSISTENT_ANIMATION_CACHE = 1; // 0x1
-    field public static final int PERSISTENT_NO_CACHE = 0; // 0x0
-    field public static final int PERSISTENT_SCROLLING_CACHE = 2; // 0x2
+    field public static final deprecated int PERSISTENT_ALL_CACHES = 3; // 0x3
+    field public static final deprecated int PERSISTENT_ANIMATION_CACHE = 1; // 0x1
+    field public static final deprecated int PERSISTENT_NO_CACHE = 0; // 0x0
+    field public static final deprecated int PERSISTENT_SCROLLING_CACHE = 2; // 0x2
   }
 
   public static class ViewGroup.LayoutParams {
