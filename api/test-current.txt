@@ -35,6 +35,7 @@ package android {
     field public static final java.lang.String BIND_QUICK_SETTINGS_TILE = "android.permission.BIND_QUICK_SETTINGS_TILE";
     field public static final java.lang.String BIND_REMOTEVIEWS = "android.permission.BIND_REMOTEVIEWS";
     field public static final java.lang.String BIND_SCREENING_SERVICE = "android.permission.BIND_SCREENING_SERVICE";
+    field public static final java.lang.String BIND_SLICE = "android.permission.BIND_SLICE";
     field public static final java.lang.String BIND_TELECOM_CONNECTION_SERVICE = "android.permission.BIND_TELECOM_CONNECTION_SERVICE";
     field public static final java.lang.String BIND_TEXT_SERVICE = "android.permission.BIND_TEXT_SERVICE";
     field public static final java.lang.String BIND_TV_INPUT = "android.permission.BIND_TV_INPUT";
@@ -7010,6 +7011,88 @@ package android.app.job {
     method public android.content.Intent getIntent();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.job.JobWorkItem> CREATOR;
+  }
+
+}
+
+package android.app.slice {
+
+  public final class Slice implements android.os.Parcelable {
+    ctor protected Slice(android.os.Parcel);
+    method public static android.app.slice.Slice bindSlice(android.content.ContentResolver, android.net.Uri);
+    method public int describeContents();
+    method public java.util.List<java.lang.String> getHints();
+    method public java.util.List<android.app.slice.SliceItem> getItems();
+    method public android.net.Uri getUri();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.app.slice.Slice> CREATOR;
+    field public static final java.lang.String HINT_ACTIONS = "actions";
+    field public static final java.lang.String HINT_HORIZONTAL = "horizontal";
+    field public static final java.lang.String HINT_LARGE = "large";
+    field public static final java.lang.String HINT_LIST = "list";
+    field public static final java.lang.String HINT_LIST_ITEM = "list_item";
+    field public static final java.lang.String HINT_MESSAGE = "message";
+    field public static final java.lang.String HINT_NO_TINT = "no_tint";
+    field public static final java.lang.String HINT_PARTIAL = "partial";
+    field public static final java.lang.String HINT_SELECTED = "selected";
+    field public static final java.lang.String HINT_SOURCE = "source";
+    field public static final java.lang.String HINT_TITLE = "title";
+  }
+
+  public static class Slice.Builder {
+    ctor public Slice.Builder(android.net.Uri);
+    ctor public Slice.Builder(android.app.slice.Slice.Builder);
+    method public android.app.slice.Slice.Builder addAction(android.app.PendingIntent, android.app.slice.Slice);
+    method public android.app.slice.Slice.Builder addColor(int, java.lang.String...);
+    method public android.app.slice.Slice.Builder addColor(int, java.util.List<java.lang.String>);
+    method public android.app.slice.Slice.Builder addHints(java.lang.String...);
+    method public android.app.slice.Slice.Builder addHints(java.util.List<java.lang.String>);
+    method public android.app.slice.Slice.Builder addIcon(android.graphics.drawable.Icon, java.lang.String...);
+    method public android.app.slice.Slice.Builder addIcon(android.graphics.drawable.Icon, java.util.List<java.lang.String>);
+    method public android.app.slice.Slice.Builder addRemoteInput(android.app.RemoteInput, java.util.List<java.lang.String>);
+    method public android.app.slice.Slice.Builder addRemoteInput(android.app.RemoteInput, java.lang.String...);
+    method public android.app.slice.Slice.Builder addSubSlice(android.app.slice.Slice);
+    method public android.app.slice.Slice.Builder addText(java.lang.CharSequence, java.lang.String...);
+    method public android.app.slice.Slice.Builder addText(java.lang.CharSequence, java.util.List<java.lang.String>);
+    method public android.app.slice.Slice.Builder addTimestamp(long, java.lang.String...);
+    method public android.app.slice.Slice.Builder addTimestamp(long, java.util.List<java.lang.String>);
+    method public android.app.slice.Slice build();
+  }
+
+  public final class SliceItem implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.app.PendingIntent getAction();
+    method public int getColor();
+    method public java.util.List<java.lang.String> getHints();
+    method public android.graphics.drawable.Icon getIcon();
+    method public android.app.RemoteInput getRemoteInput();
+    method public android.app.slice.Slice getSlice();
+    method public java.lang.CharSequence getText();
+    method public long getTimestamp();
+    method public int getType();
+    method public boolean hasHint(java.lang.String);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.app.slice.SliceItem> CREATOR;
+    field public static final int TYPE_ACTION = 4; // 0x4
+    field public static final int TYPE_COLOR = 6; // 0x6
+    field public static final int TYPE_IMAGE = 3; // 0x3
+    field public static final int TYPE_REMOTE_INPUT = 9; // 0x9
+    field public static final int TYPE_SLICE = 1; // 0x1
+    field public static final int TYPE_TEXT = 2; // 0x2
+    field public static final int TYPE_TIMESTAMP = 8; // 0x8
+  }
+
+  public abstract class SliceProvider extends android.content.ContentProvider {
+    ctor public SliceProvider();
+    method public final int delete(android.net.Uri, java.lang.String, java.lang.String[]);
+    method public final java.lang.String getType(android.net.Uri);
+    method public final android.net.Uri insert(android.net.Uri, android.content.ContentValues);
+    method public abstract android.app.slice.Slice onBindSlice(android.net.Uri);
+    method public final android.database.Cursor query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String);
+    method public final android.database.Cursor query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String, android.os.CancellationSignal);
+    method public final android.database.Cursor query(android.net.Uri, java.lang.String[], android.os.Bundle, android.os.CancellationSignal);
+    method public final int update(android.net.Uri, android.content.ContentValues, java.lang.String, java.lang.String[]);
+    field public static final java.lang.String SLICE_TYPE = "vnd.android.slice";
   }
 
 }
