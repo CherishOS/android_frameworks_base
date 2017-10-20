@@ -1442,6 +1442,7 @@ package android {
     field public static final int trimPathEnd = 16843785; // 0x1010409
     field public static final int trimPathOffset = 16843786; // 0x101040a
     field public static final int trimPathStart = 16843784; // 0x1010408
+    field public static final int ttcIndex = 16844143; // 0x101056f
     field public static final int tunerCount = 16844061; // 0x101051d
     field public static final int turnScreenOn = 16844138; // 0x101056a
     field public static final int type = 16843169; // 0x10101a1
@@ -11690,6 +11691,7 @@ package android.database {
 
   public class CursorWindow extends android.database.sqlite.SQLiteClosable implements android.os.Parcelable {
     ctor public CursorWindow(java.lang.String);
+    ctor public CursorWindow(java.lang.String, long);
     ctor public deprecated CursorWindow(boolean);
     method public boolean allocRow();
     method public void clear();
@@ -25752,6 +25754,7 @@ package android.net {
     method public java.lang.String getName();
     method public int getTruncationLengthBits();
     method public void writeToParcel(android.os.Parcel, int);
+    field public static final java.lang.String AUTH_CRYPT_AES_GCM = "rfc4106(gcm(aes))";
     field public static final java.lang.String AUTH_HMAC_MD5 = "hmac(md5)";
     field public static final java.lang.String AUTH_HMAC_SHA1 = "hmac(sha1)";
     field public static final java.lang.String AUTH_HMAC_SHA256 = "hmac(sha256)";
@@ -25799,6 +25802,7 @@ package android.net {
   public static class IpSecTransform.Builder {
     ctor public IpSecTransform.Builder(android.content.Context);
     method public android.net.IpSecTransform buildTransportModeTransform(java.net.InetAddress) throws java.io.IOException, android.net.IpSecManager.ResourceUnavailableException, android.net.IpSecManager.SpiUnavailableException;
+    method public android.net.IpSecTransform.Builder setAuthenticatedEncryption(int, android.net.IpSecAlgorithm);
     method public android.net.IpSecTransform.Builder setAuthentication(int, android.net.IpSecAlgorithm);
     method public android.net.IpSecTransform.Builder setEncryption(int, android.net.IpSecAlgorithm);
     method public android.net.IpSecTransform.Builder setIpv4Encapsulation(android.net.IpSecManager.UdpEncapsulationSocket, int);
@@ -37201,6 +37205,19 @@ package android.service.autofill {
     field public static final java.lang.String SERVICE_META_DATA = "android.autofill";
   }
 
+  public final class BatchUpdates implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.BatchUpdates> CREATOR;
+  }
+
+  public static class BatchUpdates.Builder {
+    ctor public BatchUpdates.Builder();
+    method public android.service.autofill.BatchUpdates build();
+    method public android.service.autofill.BatchUpdates.Builder transformChild(int, android.service.autofill.Transformation);
+    method public android.service.autofill.BatchUpdates.Builder updateTemplate(android.widget.RemoteViews);
+  }
+
   public final class CharSequenceTransformation implements android.os.Parcelable android.service.autofill.Transformation {
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
@@ -37222,6 +37239,7 @@ package android.service.autofill {
   public static class CustomDescription.Builder {
     ctor public CustomDescription.Builder(android.widget.RemoteViews);
     method public android.service.autofill.CustomDescription.Builder addChild(int, android.service.autofill.Transformation);
+    method public android.service.autofill.CustomDescription.Builder batchUpdate(android.service.autofill.Validator, android.service.autofill.BatchUpdates);
     method public android.service.autofill.CustomDescription build();
   }
 
@@ -47103,9 +47121,9 @@ package android.view {
     method public abstract void setInputType(int);
     method public abstract void setLocaleList(android.os.LocaleList);
     method public abstract void setLongClickable(boolean);
-    method public abstract void setMaxTextEms(int);
-    method public abstract void setMaxTextLength(int);
-    method public abstract void setMinTextEms(int);
+    method public void setMaxTextEms(int);
+    method public void setMaxTextLength(int);
+    method public void setMinTextEms(int);
     method public abstract void setOpaque(boolean);
     method public abstract void setSelected(boolean);
     method public abstract void setText(java.lang.CharSequence);
