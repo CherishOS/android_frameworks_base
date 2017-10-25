@@ -6896,6 +6896,7 @@ package android.app.job {
     method public int getBackoffPolicy();
     method public android.content.ClipData getClipData();
     method public int getClipGrantFlags();
+    method public long getEstimatedNetworkBytes();
     method public android.os.PersistableBundle getExtras();
     method public long getFlexMillis();
     method public int getId();
@@ -6923,6 +6924,7 @@ package android.app.job {
     field public static final android.os.Parcelable.Creator<android.app.job.JobInfo> CREATOR;
     field public static final long DEFAULT_INITIAL_BACKOFF_MILLIS = 30000L; // 0x7530L
     field public static final long MAX_BACKOFF_DELAY_MILLIS = 18000000L; // 0x112a880L
+    field public static final int NETWORK_BYTES_UNKNOWN = -1; // 0xffffffff
     field public static final int NETWORK_TYPE_ANY = 1; // 0x1
     field public static final int NETWORK_TYPE_METERED = 4; // 0x4
     field public static final int NETWORK_TYPE_NONE = 0; // 0x0
@@ -6936,6 +6938,7 @@ package android.app.job {
     method public android.app.job.JobInfo build();
     method public android.app.job.JobInfo.Builder setBackoffCriteria(long, int);
     method public android.app.job.JobInfo.Builder setClipData(android.content.ClipData, int);
+    method public android.app.job.JobInfo.Builder setEstimatedNetworkBytes(long);
     method public android.app.job.JobInfo.Builder setExtras(android.os.PersistableBundle);
     method public android.app.job.JobInfo.Builder setMinimumLatency(long);
     method public android.app.job.JobInfo.Builder setOverrideDeadline(long);
@@ -7010,8 +7013,10 @@ package android.app.job {
 
   public final class JobWorkItem implements android.os.Parcelable {
     ctor public JobWorkItem(android.content.Intent);
+    ctor public JobWorkItem(android.content.Intent, long);
     method public int describeContents();
     method public int getDeliveryCount();
+    method public long getEstimatedNetworkBytes();
     method public android.content.Intent getIntent();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.job.JobWorkItem> CREATOR;
