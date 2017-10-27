@@ -40283,6 +40283,7 @@ package android.telephony {
     field public static final java.lang.String EXTRA_MBMS_DOWNLOAD_REQUEST = "android.telephony.extra.MBMS_DOWNLOAD_REQUEST";
     field public static final java.lang.String EXTRA_MBMS_DOWNLOAD_RESULT = "android.telephony.extra.MBMS_DOWNLOAD_RESULT";
     field public static final java.lang.String EXTRA_MBMS_FILE_INFO = "android.telephony.extra.MBMS_FILE_INFO";
+    field public static final java.lang.String MBMS_DOWNLOAD_SERVICE_OVERRIDE_METADATA = "mbms-download-service-override";
     field public static final int RESULT_CANCELLED = 2; // 0x2
     field public static final int RESULT_DOWNLOAD_FAILURE = 6; // 0x6
     field public static final int RESULT_EXPIRED = 3; // 0x3
@@ -40304,6 +40305,7 @@ package android.telephony {
     method public static android.telephony.MbmsStreamingSession create(android.content.Context, android.telephony.mbms.MbmsStreamingSessionCallback, android.os.Handler);
     method public void requestUpdateStreamingServices(java.util.List<java.lang.String>);
     method public android.telephony.mbms.StreamingService startStreaming(android.telephony.mbms.StreamingServiceInfo, android.telephony.mbms.StreamingServiceCallback, android.os.Handler);
+    field public static final java.lang.String MBMS_STREAMING_SERVICE_OVERRIDE_METADATA = "mbms-streaming-service-override";
   }
 
   public class NeighboringCellInfo implements android.os.Parcelable {
@@ -41081,9 +41083,25 @@ package android.telephony.mbms {
   }
 
   public final class StreamingServiceInfo extends android.telephony.mbms.ServiceInfo implements android.os.Parcelable {
+    ctor public StreamingServiceInfo(java.util.Map<java.util.Locale, java.lang.String>, java.lang.String, java.util.List<java.util.Locale>, java.lang.String, java.util.Date, java.util.Date);
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.mbms.StreamingServiceInfo> CREATOR;
+  }
+
+}
+
+package android.telephony.mbms.vendor {
+
+  public class MbmsStreamingServiceBase extends android.os.Binder {
+    ctor public MbmsStreamingServiceBase();
+    method public void dispose(int) throws android.os.RemoteException;
+    method public android.net.Uri getPlaybackUri(int, java.lang.String) throws android.os.RemoteException;
+    method public int initialize(android.telephony.mbms.MbmsStreamingSessionCallback, int) throws android.os.RemoteException;
+    method public void onAppCallbackDied(int, int);
+    method public int requestUpdateStreamingServices(int, java.util.List<java.lang.String>) throws android.os.RemoteException;
+    method public int startStreaming(int, java.lang.String, android.telephony.mbms.StreamingServiceCallback) throws android.os.RemoteException;
+    method public void stopStreaming(int, java.lang.String) throws android.os.RemoteException;
   }
 
 }
