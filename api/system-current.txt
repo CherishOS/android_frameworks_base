@@ -52684,14 +52684,22 @@ package android.view.textclassifier {
     method public android.view.textclassifier.TextClassification.Builder setText(java.lang.String);
   }
 
+  public static final class TextClassification.Options {
+    ctor public TextClassification.Options();
+    method public android.os.LocaleList getDefaultLocales();
+    method public android.view.textclassifier.TextClassification.Options setDefaultLocales(android.os.LocaleList);
+  }
+
   public final class TextClassificationManager {
     method public android.view.textclassifier.TextClassifier getTextClassifier();
     method public void setTextClassifier(android.view.textclassifier.TextClassifier);
   }
 
   public abstract interface TextClassifier {
-    method public abstract android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.os.LocaleList);
-    method public abstract android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.os.LocaleList);
+    method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.view.textclassifier.TextClassification.Options);
+    method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.os.LocaleList);
+    method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.view.textclassifier.TextSelection.Options);
+    method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.os.LocaleList);
     field public static final android.view.textclassifier.TextClassifier NO_OP;
     field public static final java.lang.String TYPE_ADDRESS = "address";
     field public static final java.lang.String TYPE_EMAIL = "email";
@@ -52712,6 +52720,12 @@ package android.view.textclassifier {
     ctor public TextSelection.Builder(int, int);
     method public android.view.textclassifier.TextSelection build();
     method public android.view.textclassifier.TextSelection.Builder setEntityType(java.lang.String, float);
+  }
+
+  public static final class TextSelection.Options {
+    ctor public TextSelection.Options();
+    method public android.os.LocaleList getDefaultLocales();
+    method public android.view.textclassifier.TextSelection.Options setDefaultLocales(android.os.LocaleList);
   }
 
 }
