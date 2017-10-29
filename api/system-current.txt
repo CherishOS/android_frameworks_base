@@ -6550,6 +6550,7 @@ package android.app.admin {
     method public java.lang.CharSequence getDeviceOwnerOrganizationName();
     method public java.util.List<byte[]> getInstalledCaCerts(android.content.ComponentName);
     method public int getKeyguardDisabledFeatures(android.content.ComponentName);
+    method public int getLockTaskFeatures(android.content.ComponentName);
     method public java.lang.String[] getLockTaskPackages(android.content.ComponentName);
     method public java.lang.CharSequence getLongSupportMessage(android.content.ComponentName);
     method public int getMaximumFailedPasswordsForWipe(android.content.ComponentName);
@@ -6649,6 +6650,7 @@ package android.app.admin {
     method public void setGlobalSetting(android.content.ComponentName, java.lang.String, java.lang.String);
     method public boolean setKeyguardDisabled(android.content.ComponentName, boolean);
     method public void setKeyguardDisabledFeatures(android.content.ComponentName, int);
+    method public void setLockTaskFeatures(android.content.ComponentName, int);
     method public void setLockTaskPackages(android.content.ComponentName, java.lang.String[]) throws java.lang.SecurityException;
     method public void setLongSupportMessage(android.content.ComponentName, java.lang.CharSequence);
     method public void setMasterVolumeMuted(android.content.ComponentName, boolean);
@@ -6776,6 +6778,13 @@ package android.app.admin {
     field public static final int KEYGUARD_DISABLE_TRUST_AGENTS = 16; // 0x10
     field public static final int KEYGUARD_DISABLE_UNREDACTED_NOTIFICATIONS = 8; // 0x8
     field public static final int KEYGUARD_DISABLE_WIDGETS_ALL = 1; // 0x1
+    field public static final int LOCK_TASK_FEATURE_GLOBAL_ACTIONS = 16; // 0x10
+    field public static final int LOCK_TASK_FEATURE_HOME = 4; // 0x4
+    field public static final int LOCK_TASK_FEATURE_KEYGUARD = 32; // 0x20
+    field public static final int LOCK_TASK_FEATURE_NONE = 0; // 0x0
+    field public static final int LOCK_TASK_FEATURE_NOTIFICATIONS = 2; // 0x2
+    field public static final int LOCK_TASK_FEATURE_RECENTS = 8; // 0x8
+    field public static final int LOCK_TASK_FEATURE_SYSTEM_INFO = 1; // 0x1
     field public static final java.lang.String MIME_TYPE_PROVISIONING_NFC = "application/com.android.managedprovisioning";
     field public static final int PASSWORD_QUALITY_ALPHABETIC = 262144; // 0x40000
     field public static final int PASSWORD_QUALITY_ALPHANUMERIC = 327680; // 0x50000
@@ -7469,6 +7478,27 @@ package android.app.slice {
     method public final android.database.Cursor query(android.net.Uri, java.lang.String[], android.os.Bundle, android.os.CancellationSignal);
     method public final int update(android.net.Uri, android.content.ContentValues, java.lang.String, java.lang.String[]);
     field public static final java.lang.String SLICE_TYPE = "vnd.android.slice";
+  }
+
+}
+
+package android.app.slice.widget {
+
+  public class SliceView extends android.view.ViewGroup {
+    ctor public SliceView(android.content.Context);
+    ctor public SliceView(android.content.Context, android.util.AttributeSet);
+    ctor public SliceView(android.content.Context, android.util.AttributeSet, int);
+    ctor public SliceView(android.content.Context, android.util.AttributeSet, int, int);
+    method public void clearSlice();
+    method public java.lang.String getMode();
+    method protected void onLayout(boolean, int, int, int, int);
+    method public void setMode(java.lang.String);
+    method public void setScrollable(boolean);
+    method public boolean setSlice(android.net.Uri);
+    method public void showSlice(android.app.slice.Slice);
+    field public static final java.lang.String MODE_LARGE = "SLICE_LARGE";
+    field public static final java.lang.String MODE_SHORTCUT = "SLICE_ICON";
+    field public static final java.lang.String MODE_SMALL = "SLICE_SMALL";
   }
 
 }
@@ -34767,6 +34797,7 @@ package android.os {
     field public static final java.lang.String DISALLOW_CONFIG_BLUETOOTH = "no_config_bluetooth";
     field public static final java.lang.String DISALLOW_CONFIG_CELL_BROADCASTS = "no_config_cell_broadcasts";
     field public static final java.lang.String DISALLOW_CONFIG_CREDENTIALS = "no_config_credentials";
+    field public static final java.lang.String DISALLOW_CONFIG_DATE_TIME = "no_config_date_time";
     field public static final java.lang.String DISALLOW_CONFIG_MOBILE_NETWORKS = "no_config_mobile_networks";
     field public static final java.lang.String DISALLOW_CONFIG_TETHERING = "no_config_tethering";
     field public static final java.lang.String DISALLOW_CONFIG_VPN = "no_config_vpn";
@@ -40418,6 +40449,7 @@ package android.service.autofill {
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.autofill.FillResponse> CREATOR;
+    field public static final int FLAG_DISABLE_ACTIVITY_ONLY = 2; // 0x2
     field public static final int FLAG_TRACK_CONTEXT_COMMITED = 1; // 0x1
   }
 
@@ -40425,6 +40457,7 @@ package android.service.autofill {
     ctor public FillResponse.Builder();
     method public android.service.autofill.FillResponse.Builder addDataset(android.service.autofill.Dataset);
     method public android.service.autofill.FillResponse build();
+    method public android.service.autofill.FillResponse.Builder disableAutofill(long);
     method public android.service.autofill.FillResponse.Builder setAuthentication(android.view.autofill.AutofillId[], android.content.IntentSender, android.widget.RemoteViews);
     method public android.service.autofill.FillResponse.Builder setClientState(android.os.Bundle);
     method public android.service.autofill.FillResponse.Builder setFlags(int);
@@ -43404,6 +43437,7 @@ package android.telephony {
     field public static final java.lang.String KEY_EDITABLE_ENHANCED_4G_LTE_BOOL = "editable_enhanced_4g_lte_bool";
     field public static final java.lang.String KEY_EDITABLE_VOICEMAIL_NUMBER_BOOL = "editable_voicemail_number_bool";
     field public static final java.lang.String KEY_ENABLE_APPS_STRING_ARRAY = "enable_apps_string_array";
+    field public static final java.lang.String KEY_EDITABLE_VOICEMAIL_NUMBER_SETTING_BOOL = "editable_voicemail_number_setting_bool";
     field public static final java.lang.String KEY_ENABLE_DIALER_KEY_VIBRATION_BOOL = "enable_dialer_key_vibration_bool";
     field public static final java.lang.String KEY_FORCE_HOME_NETWORK_BOOL = "force_home_network_bool";
     field public static final java.lang.String KEY_GSM_DTMF_TONE_DELAY_INT = "gsm_dtmf_tone_delay_int";
@@ -43494,6 +43528,8 @@ package android.telephony {
     method public int getLatitude();
     method public int getLongitude();
     method public int getNetworkId();
+    method public java.lang.CharSequence getOperatorAlphaLong();
+    method public java.lang.CharSequence getOperatorAlphaShort();
     method public int getSystemId();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.CellIdentityCdma> CREATOR;
@@ -43505,8 +43541,13 @@ package android.telephony {
     method public int getBsic();
     method public int getCid();
     method public int getLac();
-    method public int getMcc();
-    method public int getMnc();
+    method public deprecated int getMcc();
+    method public java.lang.String getMccStr();
+    method public deprecated int getMnc();
+    method public java.lang.String getMncStr();
+    method public java.lang.String getMobileNetworkOperator();
+    method public java.lang.CharSequence getOperatorAlphaLong();
+    method public java.lang.CharSequence getOperatorAlphaShort();
     method public deprecated int getPsc();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.CellIdentityGsm> CREATOR;
@@ -43516,8 +43557,13 @@ package android.telephony {
     method public int describeContents();
     method public int getCi();
     method public int getEarfcn();
-    method public int getMcc();
-    method public int getMnc();
+    method public deprecated int getMcc();
+    method public java.lang.String getMccStr();
+    method public deprecated int getMnc();
+    method public java.lang.String getMncStr();
+    method public java.lang.String getMobileNetworkOperator();
+    method public java.lang.CharSequence getOperatorAlphaLong();
+    method public java.lang.CharSequence getOperatorAlphaShort();
     method public int getPci();
     method public int getTac();
     method public void writeToParcel(android.os.Parcel, int);
@@ -43528,8 +43574,13 @@ package android.telephony {
     method public int describeContents();
     method public int getCid();
     method public int getLac();
-    method public int getMcc();
-    method public int getMnc();
+    method public deprecated int getMcc();
+    method public java.lang.String getMccStr();
+    method public deprecated int getMnc();
+    method public java.lang.String getMncStr();
+    method public java.lang.String getMobileNetworkOperator();
+    method public java.lang.CharSequence getOperatorAlphaLong();
+    method public java.lang.CharSequence getOperatorAlphaShort();
     method public int getPsc();
     method public int getUarfcn();
     method public void writeToParcel(android.os.Parcel, int);
