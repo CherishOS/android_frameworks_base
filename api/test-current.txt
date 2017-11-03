@@ -23211,8 +23211,9 @@ package android.media {
     field public static final int MUXER_OUTPUT_WEBM = 1; // 0x1
   }
 
-  public class MediaPlayer implements android.media.VolumeAutomation {
+  public class MediaPlayer implements android.media.AudioRouting android.media.VolumeAutomation {
     ctor public MediaPlayer();
+    method public void addOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener, android.os.Handler);
     method public void addTimedTextSource(java.lang.String, java.lang.String) throws java.io.IOException, java.lang.IllegalArgumentException, java.lang.IllegalStateException;
     method public void addTimedTextSource(android.content.Context, android.net.Uri, java.lang.String) throws java.io.IOException, java.lang.IllegalArgumentException, java.lang.IllegalStateException;
     method public void addTimedTextSource(java.io.FileDescriptor, java.lang.String) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException;
@@ -23234,6 +23235,8 @@ package android.media {
     method public android.media.MediaDrm.KeyRequest getKeyRequest(byte[], byte[], java.lang.String, int, java.util.Map<java.lang.String, java.lang.String>) throws android.media.MediaPlayer.NoDrmSchemeException;
     method public android.os.PersistableBundle getMetrics();
     method public android.media.PlaybackParams getPlaybackParams();
+    method public android.media.AudioDeviceInfo getPreferredDevice();
+    method public android.media.AudioDeviceInfo getRoutedDevice();
     method public int getSelectedTrack(int) throws java.lang.IllegalStateException;
     method public android.media.SyncParams getSyncParams();
     method public android.media.MediaTimestamp getTimestamp();
@@ -23249,6 +23252,7 @@ package android.media {
     method public byte[] provideKeyResponse(byte[], byte[]) throws android.media.DeniedByServerException, android.media.MediaPlayer.NoDrmSchemeException;
     method public void release();
     method public void releaseDrm() throws android.media.MediaPlayer.NoDrmSchemeException;
+    method public void removeOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener);
     method public void reset();
     method public void restoreKeys(byte[]) throws android.media.MediaPlayer.NoDrmSchemeException;
     method public void seekTo(long, int);
@@ -23285,6 +23289,7 @@ package android.media {
     method public void setOnTimedTextListener(android.media.MediaPlayer.OnTimedTextListener);
     method public void setOnVideoSizeChangedListener(android.media.MediaPlayer.OnVideoSizeChangedListener);
     method public void setPlaybackParams(android.media.PlaybackParams);
+    method public boolean setPreferredDevice(android.media.AudioDeviceInfo);
     method public void setScreenOnWhilePlaying(boolean);
     method public void setSurface(android.view.Surface);
     method public void setSyncParams(android.media.SyncParams);
