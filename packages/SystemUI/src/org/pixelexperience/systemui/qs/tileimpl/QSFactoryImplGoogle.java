@@ -42,6 +42,7 @@ import com.android.systemui.qs.tiles.GamingModeTile;
 import com.android.systemui.qs.tiles.HeadsUpTile;
 import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.InternetTile;
+import com.android.systemui.qs.tiles.LiveDisplayTile;
 import com.android.systemui.qs.tiles.LocationTile;
 import com.android.systemui.qs.tiles.MicrophoneToggleTile;
 import com.android.systemui.qs.tiles.MonoToggleTile;
@@ -69,7 +70,6 @@ import com.android.systemui.util.leak.GarbageMonitor;
 
 import org.pixelexperience.systemui.qs.tiles.BatterySaverTileGoogle;
 import org.pixelexperience.systemui.qs.tiles.ReverseChargingTile;
-
 import javax.inject.Inject;
 import javax.inject.Provider;
 
@@ -129,7 +129,8 @@ public class QSFactoryImplGoogle extends QSFactoryImpl {
             Provider<MusicTile> musicTileProvider,
             Provider<GamingModeTile> gamingModeTileProvider,
             Provider<PowerShareTile> powerShareTileProvider,
-            Provider<CompassTile> compassTileProvider) {
+            Provider<CompassTile> compassTileProvider,
+            Provider<LiveDisplayTile> liveDisplayTileProvider) {
         super(qsHostLazy,
                 customTileBuilderProvider,
                 wifiTileProvider,
@@ -176,9 +177,10 @@ public class QSFactoryImplGoogle extends QSFactoryImpl {
 				musicTileProvider,
                 gamingModeTileProvider,
                 powerShareTileProvider,
-                compassTileProvider);
-            mReverseChargingTileProvider = reverseChargingTileProvider;
-            mBatterySaverTileGoogleProvider = batterySaverTileGoogleProvider;
+                compassTileProvider,
+                liveDisplayTileProvider);
+        mReverseChargingTileProvider = reverseChargingTileProvider;
+        mBatterySaverTileGoogleProvider = batterySaverTileGoogleProvider;
     }
 
     @Override
