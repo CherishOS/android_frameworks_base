@@ -484,6 +484,7 @@ package android {
     field public static final int detailSocialSummary = 16843428; // 0x10102a4
     field public static final int detailsElementBackground = 16843598; // 0x101034e
     field public static final int dial = 16843010; // 0x1010102
+    field public static final int dialogCornerRadius = 16844145; // 0x1010571
     field public static final int dialogIcon = 16843252; // 0x10101f4
     field public static final int dialogLayout = 16843255; // 0x10101f7
     field public static final int dialogMessage = 16843251; // 0x10101f3
@@ -3873,6 +3874,7 @@ package android.app {
     method public void resizeStack(int, android.graphics.Rect) throws java.lang.SecurityException;
     method public deprecated void restartPackage(java.lang.String);
     method public void setTaskWindowingMode(int, int, boolean) throws java.lang.SecurityException;
+    method public void setTaskWindowingModeSplitScreenPrimary(int, int, boolean, boolean, android.graphics.Rect) throws java.lang.SecurityException;
     method public static void setVrThread(int);
     method public void setWatchHeapLimit(long);
     method public static boolean supportsMultiWindow(android.content.Context);
@@ -3886,6 +3888,8 @@ package android.app {
     field public static final int MOVE_TASK_WITH_HOME = 1; // 0x1
     field public static final int RECENT_IGNORE_UNAVAILABLE = 2; // 0x2
     field public static final int RECENT_WITH_EXCLUDED = 1; // 0x1
+    field public static final int SPLIT_SCREEN_CREATE_MODE_BOTTOM_OR_RIGHT = 1; // 0x1
+    field public static final int SPLIT_SCREEN_CREATE_MODE_TOP_OR_LEFT = 0; // 0x0
   }
 
   public static class ActivityManager.AppTask {
@@ -23207,8 +23211,9 @@ package android.media {
     field public static final int MUXER_OUTPUT_WEBM = 1; // 0x1
   }
 
-  public class MediaPlayer implements android.media.VolumeAutomation {
+  public class MediaPlayer implements android.media.AudioRouting android.media.VolumeAutomation {
     ctor public MediaPlayer();
+    method public void addOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener, android.os.Handler);
     method public void addTimedTextSource(java.lang.String, java.lang.String) throws java.io.IOException, java.lang.IllegalArgumentException, java.lang.IllegalStateException;
     method public void addTimedTextSource(android.content.Context, android.net.Uri, java.lang.String) throws java.io.IOException, java.lang.IllegalArgumentException, java.lang.IllegalStateException;
     method public void addTimedTextSource(java.io.FileDescriptor, java.lang.String) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException;
@@ -23230,6 +23235,8 @@ package android.media {
     method public android.media.MediaDrm.KeyRequest getKeyRequest(byte[], byte[], java.lang.String, int, java.util.Map<java.lang.String, java.lang.String>) throws android.media.MediaPlayer.NoDrmSchemeException;
     method public android.os.PersistableBundle getMetrics();
     method public android.media.PlaybackParams getPlaybackParams();
+    method public android.media.AudioDeviceInfo getPreferredDevice();
+    method public android.media.AudioDeviceInfo getRoutedDevice();
     method public int getSelectedTrack(int) throws java.lang.IllegalStateException;
     method public android.media.SyncParams getSyncParams();
     method public android.media.MediaTimestamp getTimestamp();
@@ -23245,6 +23252,7 @@ package android.media {
     method public byte[] provideKeyResponse(byte[], byte[]) throws android.media.DeniedByServerException, android.media.MediaPlayer.NoDrmSchemeException;
     method public void release();
     method public void releaseDrm() throws android.media.MediaPlayer.NoDrmSchemeException;
+    method public void removeOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener);
     method public void reset();
     method public void restoreKeys(byte[]) throws android.media.MediaPlayer.NoDrmSchemeException;
     method public void seekTo(long, int);
@@ -23281,6 +23289,7 @@ package android.media {
     method public void setOnTimedTextListener(android.media.MediaPlayer.OnTimedTextListener);
     method public void setOnVideoSizeChangedListener(android.media.MediaPlayer.OnVideoSizeChangedListener);
     method public void setPlaybackParams(android.media.PlaybackParams);
+    method public boolean setPreferredDevice(android.media.AudioDeviceInfo);
     method public void setScreenOnWhilePlaying(boolean);
     method public void setSurface(android.view.Surface);
     method public void setSyncParams(android.media.SyncParams);
@@ -26169,6 +26178,7 @@ package android.net {
     field public static final int NET_CAPABILITY_MMS = 0; // 0x0
     field public static final int NET_CAPABILITY_NOT_METERED = 11; // 0xb
     field public static final int NET_CAPABILITY_NOT_RESTRICTED = 13; // 0xd
+    field public static final int NET_CAPABILITY_NOT_ROAMING = 18; // 0x12
     field public static final int NET_CAPABILITY_NOT_VPN = 15; // 0xf
     field public static final int NET_CAPABILITY_RCS = 8; // 0x8
     field public static final int NET_CAPABILITY_SUPL = 1; // 0x1
@@ -26199,7 +26209,7 @@ package android.net {
     method public boolean isConnected();
     method public boolean isConnectedOrConnecting();
     method public boolean isFailover();
-    method public boolean isRoaming();
+    method public deprecated boolean isRoaming();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.NetworkInfo> CREATOR;
   }
@@ -32077,13 +32087,13 @@ package android.os {
   }
 
   public static final class StrictMode.ViolationInfo implements android.os.Parcelable {
-    ctor public StrictMode.ViolationInfo();
-    ctor public StrictMode.ViolationInfo(java.lang.Throwable, int);
     ctor public StrictMode.ViolationInfo(android.os.Parcel);
     ctor public StrictMode.ViolationInfo(android.os.Parcel, boolean);
     method public int describeContents();
     method public void dump(android.util.Printer, java.lang.String);
+    method public int getPolicyMask();
     method public java.lang.String getStackTrace();
+    method public int getViolationBit();
     method public java.lang.String getViolationDetails();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.os.StrictMode.ViolationInfo> CREATOR;
@@ -32091,7 +32101,6 @@ package android.os {
     field public int durationMillis;
     field public int numAnimationsRunning;
     field public long numInstances;
-    field public final int policy;
     field public java.lang.String[] tags;
     field public int violationNumThisLoop;
     field public long violationUptimeMillis;
@@ -40318,8 +40327,8 @@ package android.telephony {
     field public static final java.lang.String KEY_DURATION_BLOCKING_DISABLED_AFTER_EMERGENCY_INT = "duration_blocking_disabled_after_emergency_int";
     field public static final java.lang.String KEY_EDITABLE_ENHANCED_4G_LTE_BOOL = "editable_enhanced_4g_lte_bool";
     field public static final java.lang.String KEY_EDITABLE_VOICEMAIL_NUMBER_BOOL = "editable_voicemail_number_bool";
-    field public static final java.lang.String KEY_ENABLE_APPS_STRING_ARRAY = "enable_apps_string_array";
     field public static final java.lang.String KEY_EDITABLE_VOICEMAIL_NUMBER_SETTING_BOOL = "editable_voicemail_number_setting_bool";
+    field public static final java.lang.String KEY_ENABLE_APPS_STRING_ARRAY = "enable_apps_string_array";
     field public static final java.lang.String KEY_ENABLE_DIALER_KEY_VIBRATION_BOOL = "enable_dialer_key_vibration_bool";
     field public static final java.lang.String KEY_FORCE_HOME_NETWORK_BOOL = "force_home_network_bool";
     field public static final java.lang.String KEY_GSM_DTMF_TONE_DELAY_INT = "gsm_dtmf_tone_delay_int";
@@ -44977,25 +44986,25 @@ package android.util.proto {
     field public static final long FIELD_COUNT_UNKNOWN = 0L; // 0x0L
     field public static final int FIELD_ID_MASK = -8; // 0xfffffff8
     field public static final int FIELD_ID_SHIFT = 3; // 0x3
-    field public static final long FIELD_TYPE_BOOL = 55834574848L; // 0xd00000000L
-    field public static final long FIELD_TYPE_BYTES = 64424509440L; // 0xf00000000L
+    field public static final long FIELD_TYPE_BOOL = 34359738368L; // 0x800000000L
+    field public static final long FIELD_TYPE_BYTES = 51539607552L; // 0xc00000000L
     field public static final long FIELD_TYPE_DOUBLE = 4294967296L; // 0x100000000L
-    field public static final long FIELD_TYPE_ENUM = 68719476736L; // 0x1000000000L
-    field public static final long FIELD_TYPE_FIXED32 = 38654705664L; // 0x900000000L
-    field public static final long FIELD_TYPE_FIXED64 = 42949672960L; // 0xa00000000L
+    field public static final long FIELD_TYPE_ENUM = 60129542144L; // 0xe00000000L
+    field public static final long FIELD_TYPE_FIXED32 = 30064771072L; // 0x700000000L
+    field public static final long FIELD_TYPE_FIXED64 = 25769803776L; // 0x600000000L
     field public static final long FIELD_TYPE_FLOAT = 8589934592L; // 0x200000000L
-    field public static final long FIELD_TYPE_INT32 = 12884901888L; // 0x300000000L
-    field public static final long FIELD_TYPE_INT64 = 17179869184L; // 0x400000000L
+    field public static final long FIELD_TYPE_INT32 = 21474836480L; // 0x500000000L
+    field public static final long FIELD_TYPE_INT64 = 12884901888L; // 0x300000000L
     field public static final long FIELD_TYPE_MASK = 1095216660480L; // 0xff00000000L
-    field public static final long FIELD_TYPE_OBJECT = 73014444032L; // 0x1100000000L
-    field public static final long FIELD_TYPE_SFIXED32 = 47244640256L; // 0xb00000000L
-    field public static final long FIELD_TYPE_SFIXED64 = 51539607552L; // 0xc00000000L
+    field public static final long FIELD_TYPE_MESSAGE = 47244640256L; // 0xb00000000L
+    field public static final long FIELD_TYPE_SFIXED32 = 64424509440L; // 0xf00000000L
+    field public static final long FIELD_TYPE_SFIXED64 = 68719476736L; // 0x1000000000L
     field public static final int FIELD_TYPE_SHIFT = 32; // 0x20
-    field public static final long FIELD_TYPE_SINT32 = 30064771072L; // 0x700000000L
-    field public static final long FIELD_TYPE_SINT64 = 34359738368L; // 0x800000000L
-    field public static final long FIELD_TYPE_STRING = 60129542144L; // 0xe00000000L
-    field public static final long FIELD_TYPE_UINT32 = 21474836480L; // 0x500000000L
-    field public static final long FIELD_TYPE_UINT64 = 25769803776L; // 0x600000000L
+    field public static final long FIELD_TYPE_SINT32 = 73014444032L; // 0x1100000000L
+    field public static final long FIELD_TYPE_SINT64 = 77309411328L; // 0x1200000000L
+    field public static final long FIELD_TYPE_STRING = 38654705664L; // 0x900000000L
+    field public static final long FIELD_TYPE_UINT32 = 55834574848L; // 0xd00000000L
+    field public static final long FIELD_TYPE_UINT64 = 17179869184L; // 0x400000000L
     field public static final long FIELD_TYPE_UNKNOWN = 0L; // 0x0L
     field public static final java.lang.String TAG = "ProtoOutputStream";
     field public static final int WIRE_TYPE_END_GROUP = 4; // 0x4
