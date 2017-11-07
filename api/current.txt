@@ -31015,6 +31015,7 @@ package android.os {
   }
 
   public final class Debug {
+    method public static void attachJvmtiAgent(java.lang.String, java.lang.String) throws java.io.IOException;
     method public static deprecated void changeDebugPort(int);
     method public static void dumpHprofData(java.lang.String) throws java.io.IOException;
     method public static boolean dumpService(java.lang.String, java.io.FileDescriptor, java.lang.String[]);
@@ -44558,6 +44559,7 @@ package android.view {
     field public static final int STATE_DOZE_SUSPEND = 4; // 0x4
     field public static final int STATE_OFF = 1; // 0x1
     field public static final int STATE_ON = 2; // 0x2
+    field public static final int STATE_ON_SUSPEND = 6; // 0x6
     field public static final int STATE_UNKNOWN = 0; // 0x0
     field public static final int STATE_VR = 5; // 0x5
   }
@@ -48955,14 +48957,22 @@ package android.view.textclassifier {
     method public android.view.textclassifier.TextClassification.Builder setText(java.lang.String);
   }
 
+  public static final class TextClassification.Options {
+    ctor public TextClassification.Options();
+    method public android.os.LocaleList getDefaultLocales();
+    method public android.view.textclassifier.TextClassification.Options setDefaultLocales(android.os.LocaleList);
+  }
+
   public final class TextClassificationManager {
     method public android.view.textclassifier.TextClassifier getTextClassifier();
     method public void setTextClassifier(android.view.textclassifier.TextClassifier);
   }
 
   public abstract interface TextClassifier {
-    method public abstract android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.os.LocaleList);
-    method public abstract android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.os.LocaleList);
+    method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.view.textclassifier.TextClassification.Options);
+    method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.os.LocaleList);
+    method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.view.textclassifier.TextSelection.Options);
+    method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.os.LocaleList);
     field public static final android.view.textclassifier.TextClassifier NO_OP;
     field public static final java.lang.String TYPE_ADDRESS = "address";
     field public static final java.lang.String TYPE_EMAIL = "email";
@@ -48983,6 +48993,12 @@ package android.view.textclassifier {
     ctor public TextSelection.Builder(int, int);
     method public android.view.textclassifier.TextSelection build();
     method public android.view.textclassifier.TextSelection.Builder setEntityType(java.lang.String, float);
+  }
+
+  public static final class TextSelection.Options {
+    ctor public TextSelection.Options();
+    method public android.os.LocaleList getDefaultLocales();
+    method public android.view.textclassifier.TextSelection.Options setDefaultLocales(android.os.LocaleList);
   }
 
 }

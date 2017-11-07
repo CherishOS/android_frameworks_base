@@ -16,38 +16,45 @@
 
 #pragma once
 
-#include <utils/threads.h>
-#include <list>
+#include <unordered_map>
+
 #include "../condition/ConditionTracker.h"
 #include "../external/PullDataReceiver.h"
 #include "../external/StatsPullerManager.h"
-#include "CountAnomalyTracker.h"
+#include "../matchers/matcher_util.h"
 #include "MetricProducer.h"
 #include "frameworks/base/cmds/statsd/src/stats_log.pb.h"
 #include "frameworks/base/cmds/statsd/src/statsd_config.pb.h"
+#include "stats_util.h"
 
 namespace android {
 namespace os {
 namespace statsd {
 
-class ValueMetricProducer : public virtual MetricProducer, public virtual PullDataReceiver {
+// This gauge metric producer first register the puller to automatically pull the gauge at the
+// beginning of each bucket. If the condition is met, insert it to the bucket info. Otherwise
+// proactively pull the gauge when the condition is changed to be true. Therefore, the gauge metric
+// producer always reports the guage at the earliest time of the bucket when the condition is met.
+class GaugeMetricProducer : public virtual MetricProducer, public virtual PullDataReceiver {
 public:
-    ValueMetricProducer(const ValueMetric& valueMetric, const int conditionIndex,
-                        const sp<ConditionWizard>& wizard, const int pullTagId,
-                        const uint64_t startTimeNs);
+    // TODO: Pass in the start time from MetricsManager, it should be consistent
+    // for all metrics.
+    GaugeMetricProducer(const GaugeMetric& countMetric, const int conditionIndex,
+                        const sp<ConditionWizard>& wizard, const int pullTagId);
 
-    virtual ~ValueMetricProducer();
+    virtual ~GaugeMetricProducer();
 
-    void onConditionChanged(const bool condition, const uint64_t eventTime) override;
+    // Handles when the pulled data arrives.
+    void onDataPulled(const std::vector<std::shared_ptr<LogEvent>>& data) override;
+
+    void onConditionChanged(const bool conditionMet, const uint64_t eventTime) override;
+    void onSlicedConditionMayChange(const uint64_t eventTime) override;
 
     void finish() override;
 
     StatsLogReport onDumpReport() override;
 
-    void onSlicedConditionMayChange(const uint64_t eventTime);
-
-    void onDataPulled(const std::vector<std::shared_ptr<LogEvent>>& data) override;
-    // TODO: Implement this later.
+    // TODO: implements it when supporting proto stream.
     size_t byteSize() override {
         return 0;
     };
@@ -64,31 +71,25 @@ protected:
                                    bool scheduledPull) override;
 
 private:
-    const ValueMetric mMetric;
+    // The default bucket size for gauge metric is 1 second.
+    static const uint64_t kDefaultGaugemBucketSizeNs = 1000 * 1000 * 1000;
+    const GaugeMetric mMetric;
 
     StatsPullerManager& mStatsPullerManager = StatsPullerManager::GetInstance();
-
-    Mutex mLock;
-
     // tagId for pulled data. -1 if this is not pulled
     const int mPullTagId;
 
-    // internal state of a bucket.
-    typedef struct {
-        std::vector<std::pair<long, long>> raw;
-    } Interval;
-
-    std::unordered_map<HashableDimensionKey, Interval> mCurrentSlicedBucket;
-    // If condition is true and pulling on schedule, the previous bucket value needs to be carried
-    // over to the next bucket.
-    std::unordered_map<HashableDimensionKey, Interval> mNextSlicedBucket;
+    Mutex mLock;
 
     // Save the past buckets and we can clear when the StatsLogReport is dumped.
-    std::unordered_map<HashableDimensionKey, std::vector<ValueBucketInfo>> mPastBuckets;
+    std::unordered_map<HashableDimensionKey, std::vector<GaugeBucketInfo>> mPastBuckets;
 
-    long get_value(const LogEvent& event);
+    // The current bucket.
+    std::unordered_map<HashableDimensionKey, long> mCurrentSlicedBucket;
 
-    void flush_if_needed(const uint64_t eventTimeNs);
+    void flushGaugeIfNeededLocked(const uint64_t newEventTime);
+
+    long getGauge(const LogEvent& event);
 };
 
 }  // namespace statsd
