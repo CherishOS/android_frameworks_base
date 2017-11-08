@@ -52712,6 +52712,7 @@ package android.view.textclassifier {
   public abstract interface TextClassifier {
     method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.view.textclassifier.TextClassification.Options);
     method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.os.LocaleList);
+    method public default android.view.textclassifier.TextLinks generateLinks(java.lang.CharSequence, android.view.textclassifier.TextLinks.Options);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.view.textclassifier.TextSelection.Options);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.os.LocaleList);
     field public static final android.view.textclassifier.TextClassifier NO_OP;
@@ -52720,6 +52721,36 @@ package android.view.textclassifier {
     field public static final java.lang.String TYPE_OTHER = "other";
     field public static final java.lang.String TYPE_PHONE = "phone";
     field public static final java.lang.String TYPE_URL = "url";
+  }
+
+  public final class TextLinks {
+    method public boolean apply(android.text.SpannableString, java.util.function.Function<android.view.textclassifier.TextLinks.TextLink, android.text.style.ClickableSpan>);
+    method public java.util.Collection<android.view.textclassifier.TextLinks.TextLink> getLinks();
+  }
+
+  public static final class TextLinks.Builder {
+    ctor public TextLinks.Builder(java.lang.String);
+    method public android.view.textclassifier.TextLinks.Builder addLink(android.view.textclassifier.TextLinks.TextLink);
+    method public android.view.textclassifier.TextLinks build();
+  }
+
+  public static final class TextLinks.Options {
+    method public android.os.LocaleList getDefaultLocales();
+  }
+
+  public static final class TextLinks.Options.Builder {
+    ctor public TextLinks.Options.Builder();
+    method public android.view.textclassifier.TextLinks.Options build();
+    method public android.view.textclassifier.TextLinks.Options.Builder setLocaleList(android.os.LocaleList);
+  }
+
+  public static final class TextLinks.TextLink {
+    ctor public TextLinks.TextLink(java.lang.String, int, int, java.util.Map<java.lang.String, java.lang.Float>);
+    method public float getConfidenceScore(java.lang.String);
+    method public int getEnd();
+    method public java.lang.String getEntity(int);
+    method public int getEntityCount();
+    method public int getStart();
   }
 
   public final class TextSelection {
