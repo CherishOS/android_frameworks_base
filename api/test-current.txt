@@ -35545,6 +35545,7 @@ package android.provider {
     field public static final java.lang.String ALLOWED_GEOLOCATION_ORIGINS = "allowed_geolocation_origins";
     field public static final deprecated java.lang.String ALLOW_MOCK_LOCATION = "mock_location";
     field public static final java.lang.String ANDROID_ID = "android_id";
+    field public static final java.lang.String AUTOFILL_FEATURE_FIELD_DETECTION = "autofill_field_detection";
     field public static final java.lang.String AUTOFILL_SERVICE = "autofill_service";
     field public static final deprecated java.lang.String BACKGROUND_DATA = "background_data";
     field public static final deprecated java.lang.String BLUETOOTH_ON = "bluetooth_on";
@@ -37600,6 +37601,13 @@ package android.service.autofill {
     method public android.service.autofill.Dataset.Builder setValue(android.view.autofill.AutofillId, android.view.autofill.AutofillValue, java.util.regex.Pattern, android.widget.RemoteViews);
   }
 
+  public final class FieldsDetection implements android.os.Parcelable {
+    ctor public FieldsDetection(android.view.autofill.AutofillId, java.lang.String, java.lang.String);
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.FieldsDetection> CREATOR;
+  }
+
   public final class FillCallback {
     method public void onFailure(java.lang.CharSequence);
     method public void onSuccess(android.service.autofill.FillResponse);
@@ -37625,6 +37633,7 @@ package android.service.autofill {
     method public java.util.Map<android.view.autofill.AutofillId, java.lang.String> getChangedFields();
     method public android.os.Bundle getClientState();
     method public java.lang.String getDatasetId();
+    method public java.util.Map<java.lang.String, java.lang.Integer> getDetectedFields();
     method public java.util.Set<java.lang.String> getIgnoredDatasetIds();
     method public java.util.Map<android.view.autofill.AutofillId, java.util.Set<java.lang.String>> getManuallyEnteredField();
     method public java.util.Set<java.lang.String> getSelectedDatasetIds();
@@ -37662,6 +37671,7 @@ package android.service.autofill {
     method public android.service.autofill.FillResponse.Builder disableAutofill(long);
     method public android.service.autofill.FillResponse.Builder setAuthentication(android.view.autofill.AutofillId[], android.content.IntentSender, android.widget.RemoteViews);
     method public android.service.autofill.FillResponse.Builder setClientState(android.os.Bundle);
+    method public android.service.autofill.FillResponse.Builder setFieldsDetection(android.service.autofill.FieldsDetection);
     method public android.service.autofill.FillResponse.Builder setFlags(int);
     method public android.service.autofill.FillResponse.Builder setIgnoredIds(android.view.autofill.AutofillId...);
     method public android.service.autofill.FillResponse.Builder setSaveInfo(android.service.autofill.SaveInfo);
