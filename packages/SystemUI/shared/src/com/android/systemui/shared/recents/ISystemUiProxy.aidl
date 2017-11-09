@@ -11,16 +11,23 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  */
 
-package android.telephony.ims.feature;
+package com.android.systemui.shared.recents;
+
+import android.graphics.Bitmap;
+import android.graphics.Rect;
 
 /**
- * Feature interface that provides access to RCS APIs. Currently empty until RCS support is added
- * in the framework.
- * @hide
+ * Temporary callbacks into SystemUI.
  */
+interface ISystemUiProxy {
 
-public interface IRcsFeature {
+    /**
+     * Proxies SurfaceControl.screenshot().
+     */
+    Bitmap screenshot(in Rect sourceCrop, int width, int height,
+                      int minLayer, int maxLayer, boolean useIdentityTransform,
+                      int rotation);
 }
