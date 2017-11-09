@@ -6615,6 +6615,7 @@ package android.app.admin {
     field public static final int LOCK_TASK_FEATURE_NOTIFICATIONS = 2; // 0x2
     field public static final int LOCK_TASK_FEATURE_RECENTS = 8; // 0x8
     field public static final int LOCK_TASK_FEATURE_SYSTEM_INFO = 1; // 0x1
+    field public static final int MAKE_USER_EPHEMERAL = 2; // 0x2
     field public static final java.lang.String MIME_TYPE_PROVISIONING_NFC = "application/com.android.managedprovisioning";
     field public static final int PASSWORD_QUALITY_ALPHABETIC = 262144; // 0x40000
     field public static final int PASSWORD_QUALITY_ALPHANUMERIC = 327680; // 0x50000
@@ -12308,6 +12309,7 @@ package android.database.sqlite {
     method public static int getWALAutoCheckpoint();
     method public static int getWALConnectionPoolSize();
     method public static java.lang.String getWALSyncMode();
+    method public static boolean isCompatibilityWalSupported();
     method public static int releaseMemory();
   }
 
@@ -32255,6 +32257,7 @@ package android.os {
     field public static final java.lang.String DISALLOW_UNINSTALL_APPS = "no_uninstall_apps";
     field public static final java.lang.String DISALLOW_UNMUTE_MICROPHONE = "no_unmute_microphone";
     field public static final java.lang.String DISALLOW_USB_FILE_TRANSFER = "no_usb_file_transfer";
+    field public static final java.lang.String DISALLOW_USER_SWITCH = "no_user_switch";
     field public static final java.lang.String ENSURE_VERIFY_APPS = "ensure_verify_apps";
     field public static final java.lang.String KEY_RESTRICTIONS_PENDING = "restrictions_pending";
     field public static final int USER_CREATION_FAILED_NOT_PERMITTED = 1; // 0x1
@@ -35545,6 +35548,7 @@ package android.provider {
     field public static final java.lang.String ALLOWED_GEOLOCATION_ORIGINS = "allowed_geolocation_origins";
     field public static final deprecated java.lang.String ALLOW_MOCK_LOCATION = "mock_location";
     field public static final java.lang.String ANDROID_ID = "android_id";
+    field public static final java.lang.String AUTOFILL_FEATURE_FIELD_DETECTION = "autofill_field_detection";
     field public static final java.lang.String AUTOFILL_SERVICE = "autofill_service";
     field public static final deprecated java.lang.String BACKGROUND_DATA = "background_data";
     field public static final deprecated java.lang.String BLUETOOTH_ON = "bluetooth_on";
@@ -37600,6 +37604,13 @@ package android.service.autofill {
     method public android.service.autofill.Dataset.Builder setValue(android.view.autofill.AutofillId, android.view.autofill.AutofillValue, java.util.regex.Pattern, android.widget.RemoteViews);
   }
 
+  public final class FieldsDetection implements android.os.Parcelable {
+    ctor public FieldsDetection(android.view.autofill.AutofillId, java.lang.String, java.lang.String);
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.FieldsDetection> CREATOR;
+  }
+
   public final class FillCallback {
     method public void onFailure(java.lang.CharSequence);
     method public void onSuccess(android.service.autofill.FillResponse);
@@ -37625,6 +37636,7 @@ package android.service.autofill {
     method public java.util.Map<android.view.autofill.AutofillId, java.lang.String> getChangedFields();
     method public android.os.Bundle getClientState();
     method public java.lang.String getDatasetId();
+    method public java.util.Map<java.lang.String, java.lang.Integer> getDetectedFields();
     method public java.util.Set<java.lang.String> getIgnoredDatasetIds();
     method public java.util.Map<android.view.autofill.AutofillId, java.util.Set<java.lang.String>> getManuallyEnteredField();
     method public java.util.Set<java.lang.String> getSelectedDatasetIds();
@@ -37662,6 +37674,7 @@ package android.service.autofill {
     method public android.service.autofill.FillResponse.Builder disableAutofill(long);
     method public android.service.autofill.FillResponse.Builder setAuthentication(android.view.autofill.AutofillId[], android.content.IntentSender, android.widget.RemoteViews);
     method public android.service.autofill.FillResponse.Builder setClientState(android.os.Bundle);
+    method public android.service.autofill.FillResponse.Builder setFieldsDetection(android.service.autofill.FieldsDetection);
     method public android.service.autofill.FillResponse.Builder setFlags(int);
     method public android.service.autofill.FillResponse.Builder setIgnoredIds(android.view.autofill.AutofillId...);
     method public android.service.autofill.FillResponse.Builder setSaveInfo(android.service.autofill.SaveInfo);
@@ -38809,6 +38822,16 @@ package android.system {
     field public final int errno;
   }
 
+  public class Int32Ref {
+    ctor public Int32Ref(int);
+    field public int value;
+  }
+
+  public class Int64Ref {
+    ctor public Int64Ref(long);
+    field public long value;
+  }
+
   public final class Os {
     method public static java.io.FileDescriptor accept(java.io.FileDescriptor, java.net.InetSocketAddress) throws android.system.ErrnoException, java.net.SocketException;
     method public static boolean access(java.lang.String, int) throws android.system.ErrnoException;
@@ -38878,7 +38901,8 @@ package android.system {
     method public static void remove(java.lang.String) throws android.system.ErrnoException;
     method public static void removexattr(java.lang.String, java.lang.String) throws android.system.ErrnoException;
     method public static void rename(java.lang.String, java.lang.String) throws android.system.ErrnoException;
-    method public static long sendfile(java.io.FileDescriptor, java.io.FileDescriptor, android.util.MutableLong, long) throws android.system.ErrnoException;
+    method public static deprecated long sendfile(java.io.FileDescriptor, java.io.FileDescriptor, android.util.MutableLong, long) throws android.system.ErrnoException;
+    method public static long sendfile(java.io.FileDescriptor, java.io.FileDescriptor, android.system.Int64Ref, long) throws android.system.ErrnoException;
     method public static int sendto(java.io.FileDescriptor, java.nio.ByteBuffer, int, java.net.InetAddress, int) throws android.system.ErrnoException, java.net.SocketException;
     method public static int sendto(java.io.FileDescriptor, byte[], int, int, int, java.net.InetAddress, int) throws android.system.ErrnoException, java.net.SocketException;
     method public static void setegid(int) throws android.system.ErrnoException;
@@ -38903,7 +38927,8 @@ package android.system {
     method public static int umask(int);
     method public static android.system.StructUtsname uname();
     method public static void unsetenv(java.lang.String) throws android.system.ErrnoException;
-    method public static int waitpid(int, android.util.MutableInt, int) throws android.system.ErrnoException;
+    method public static deprecated int waitpid(int, android.util.MutableInt, int) throws android.system.ErrnoException;
+    method public static int waitpid(int, android.system.Int32Ref, int) throws android.system.ErrnoException;
     method public static int write(java.io.FileDescriptor, java.nio.ByteBuffer) throws android.system.ErrnoException, java.io.InterruptedIOException;
     method public static int write(java.io.FileDescriptor, byte[], int, int) throws android.system.ErrnoException, java.io.InterruptedIOException;
     method public static int writev(java.io.FileDescriptor, java.lang.Object[], int[], int[]) throws android.system.ErrnoException, java.io.InterruptedIOException;
@@ -49610,6 +49635,7 @@ package android.view.textclassifier {
   public abstract interface TextClassifier {
     method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.view.textclassifier.TextClassification.Options);
     method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.os.LocaleList);
+    method public default android.view.textclassifier.TextLinks generateLinks(java.lang.CharSequence, android.view.textclassifier.TextLinks.Options);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.view.textclassifier.TextSelection.Options);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.os.LocaleList);
     field public static final android.view.textclassifier.TextClassifier NO_OP;
@@ -49618,6 +49644,36 @@ package android.view.textclassifier {
     field public static final java.lang.String TYPE_OTHER = "other";
     field public static final java.lang.String TYPE_PHONE = "phone";
     field public static final java.lang.String TYPE_URL = "url";
+  }
+
+  public final class TextLinks {
+    method public boolean apply(android.text.SpannableString, java.util.function.Function<android.view.textclassifier.TextLinks.TextLink, android.text.style.ClickableSpan>);
+    method public java.util.Collection<android.view.textclassifier.TextLinks.TextLink> getLinks();
+  }
+
+  public static final class TextLinks.Builder {
+    ctor public TextLinks.Builder(java.lang.String);
+    method public android.view.textclassifier.TextLinks.Builder addLink(android.view.textclassifier.TextLinks.TextLink);
+    method public android.view.textclassifier.TextLinks build();
+  }
+
+  public static final class TextLinks.Options {
+    method public android.os.LocaleList getDefaultLocales();
+  }
+
+  public static final class TextLinks.Options.Builder {
+    ctor public TextLinks.Options.Builder();
+    method public android.view.textclassifier.TextLinks.Options build();
+    method public android.view.textclassifier.TextLinks.Options.Builder setLocaleList(android.os.LocaleList);
+  }
+
+  public static final class TextLinks.TextLink {
+    ctor public TextLinks.TextLink(java.lang.String, int, int, java.util.Map<java.lang.String, java.lang.Float>);
+    method public float getConfidenceScore(java.lang.String);
+    method public int getEnd();
+    method public java.lang.String getEntity(int);
+    method public int getEntityCount();
+    method public int getStart();
   }
 
   public final class TextSelection {
