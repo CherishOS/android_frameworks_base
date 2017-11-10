@@ -49424,6 +49424,44 @@ package android.webkit {
     method public void proceed();
   }
 
+  public class TracingConfig {
+    ctor public TracingConfig(int);
+    ctor public TracingConfig(int, java.lang.String, int);
+    method public java.lang.String getCustomCategoryPattern();
+    method public int getPresetCategories();
+    method public int getTracingMode();
+    field public static final int CATEGORIES_FRAME_VIEWER = 4; // 0x4
+    field public static final int CATEGORIES_INPUT_LATENCY = 1; // 0x1
+    field public static final int CATEGORIES_JAVASCRIPT_AND_RENDERING = 3; // 0x3
+    field public static final int CATEGORIES_NONE = -1; // 0xffffffff
+    field public static final int CATEGORIES_RENDERING = 2; // 0x2
+    field public static final int CATEGORIES_WEB_DEVELOPER = 0; // 0x0
+    field public static final int RECORD_CONTINUOUSLY = 1; // 0x1
+    field public static final int RECORD_TO_CONSOLE = 3; // 0x3
+    field public static final int RECORD_UNTIL_FULL = 0; // 0x0
+    field public static final int RECORD_UNTIL_FULL_LARGE_BUFFER = 2; // 0x2
+  }
+
+  public abstract class TracingController {
+    ctor public TracingController();
+    method public static android.webkit.TracingController getInstance();
+    method public abstract boolean isTracing();
+    method public abstract boolean start(android.webkit.TracingConfig);
+    method public abstract boolean stop();
+    method public abstract boolean stopAndFlush(android.webkit.TracingController.TracingOutputStream, android.os.Handler);
+  }
+
+  public static abstract interface TracingController.TracingOutputStream {
+    method public abstract void complete();
+    method public abstract void write(byte[]);
+  }
+
+  public class TracingFileOutputStream implements android.webkit.TracingController.TracingOutputStream {
+    ctor public TracingFileOutputStream(java.lang.String) throws java.io.FileNotFoundException;
+    method public void complete();
+    method public void write(byte[]);
+  }
+
   public final class URLUtil {
     ctor public URLUtil();
     method public static java.lang.String composeSearchUrl(java.lang.String, java.lang.String, java.lang.String);
