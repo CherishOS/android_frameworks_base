@@ -32059,6 +32059,14 @@ package android.os {
     field public static final int DETECT_VM_UNTAGGED_SOCKET = -2147483648; // 0x80000000
   }
 
+  public static abstract interface StrictMode.OnThreadViolationListener {
+    method public abstract void onThreadViolation(android.os.strictmode.Violation);
+  }
+
+  public static abstract interface StrictMode.OnVmViolationListener {
+    method public abstract void onVmViolation(android.os.strictmode.Violation);
+  }
+
   public static final class StrictMode.ThreadPolicy {
     field public static final android.os.StrictMode.ThreadPolicy LAX;
   }
@@ -32079,6 +32087,7 @@ package android.os {
     method public android.os.StrictMode.ThreadPolicy.Builder penaltyDialog();
     method public android.os.StrictMode.ThreadPolicy.Builder penaltyDropBox();
     method public android.os.StrictMode.ThreadPolicy.Builder penaltyFlashScreen();
+    method public android.os.StrictMode.ThreadPolicy.Builder penaltyListener(android.os.StrictMode.OnThreadViolationListener, java.util.concurrent.Executor);
     method public android.os.StrictMode.ThreadPolicy.Builder penaltyLog();
     method public android.os.StrictMode.ThreadPolicy.Builder permitAll();
     method public android.os.StrictMode.ThreadPolicy.Builder permitCustomSlowCalls();
@@ -32134,6 +32143,7 @@ package android.os {
     method public android.os.StrictMode.VmPolicy.Builder penaltyDeathOnCleartextNetwork();
     method public android.os.StrictMode.VmPolicy.Builder penaltyDeathOnFileUriExposure();
     method public android.os.StrictMode.VmPolicy.Builder penaltyDropBox();
+    method public android.os.StrictMode.VmPolicy.Builder penaltyListener(android.os.StrictMode.OnVmViolationListener, java.util.concurrent.Executor);
     method public android.os.StrictMode.VmPolicy.Builder penaltyLog();
     method public android.os.StrictMode.VmPolicy.Builder setClassInstanceLimit(java.lang.Class, int);
   }
@@ -32495,6 +32505,62 @@ package android.os.storage {
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.os.storage.StorageVolume> CREATOR;
     field public static final java.lang.String EXTRA_STORAGE_VOLUME = "android.os.storage.extra.STORAGE_VOLUME";
+  }
+
+}
+
+package android.os.strictmode {
+
+  public final class CleartextNetworkViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class ContentUriWithoutPermissionViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class CustomViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class DiskReadViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class DiskWriteViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class FileUriExposedViolation extends android.os.strictmode.Violation {
+  }
+
+  public class InstanceCountViolation extends android.os.strictmode.Violation {
+    method public long getNumberOfInstances();
+  }
+
+  public final class IntentReceiverLeakedViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class LeakedClosableViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class NetworkViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class ResourceMismatchViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class ServiceConnectionLeakedViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class SqliteObjectLeakedViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class UnbufferedIoViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class UntaggedSocketViolation extends android.os.strictmode.Violation {
+  }
+
+  public abstract class Violation extends java.lang.Throwable {
+  }
+
+  public final class WebViewMethodCalledOnWrongThreadViolation extends android.os.strictmode.Violation {
   }
 
 }
