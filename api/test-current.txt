@@ -4972,6 +4972,7 @@ package android.app {
     method public void setInTouchMode(boolean);
     method public void start();
     method public android.app.Activity startActivitySync(android.content.Intent);
+    method public android.app.Activity startActivitySync(android.content.Intent, android.os.Bundle);
     method public deprecated void startAllocCounting();
     method public void startPerformanceSnapshot();
     method public void startProfiling();
@@ -6921,7 +6922,8 @@ package android.app.job {
     method public static final long getMinFlexMillis();
     method public long getMinLatencyMillis();
     method public static final long getMinPeriodMillis();
-    method public int getNetworkType();
+    method public deprecated int getNetworkType();
+    method public android.net.NetworkRequest getRequiredNetwork();
     method public android.content.ComponentName getService();
     method public android.os.Bundle getTransientExtras();
     method public long getTriggerContentMaxDelay();
@@ -6941,7 +6943,8 @@ package android.app.job {
     field public static final long MAX_BACKOFF_DELAY_MILLIS = 18000000L; // 0x112a880L
     field public static final int NETWORK_BYTES_UNKNOWN = -1; // 0xffffffff
     field public static final int NETWORK_TYPE_ANY = 1; // 0x1
-    field public static final int NETWORK_TYPE_METERED = 4; // 0x4
+    field public static final int NETWORK_TYPE_CELLULAR = 4; // 0x4
+    field public static final deprecated int NETWORK_TYPE_METERED = 4; // 0x4
     field public static final int NETWORK_TYPE_NONE = 0; // 0x0
     field public static final int NETWORK_TYPE_NOT_ROAMING = 3; // 0x3
     field public static final int NETWORK_TYPE_UNMETERED = 2; // 0x2
@@ -6960,6 +6963,7 @@ package android.app.job {
     method public android.app.job.JobInfo.Builder setPeriodic(long);
     method public android.app.job.JobInfo.Builder setPeriodic(long, long);
     method public android.app.job.JobInfo.Builder setPersisted(boolean);
+    method public android.app.job.JobInfo.Builder setRequiredNetwork(android.net.NetworkRequest);
     method public android.app.job.JobInfo.Builder setRequiredNetworkType(int);
     method public android.app.job.JobInfo.Builder setRequiresBatteryNotLow(boolean);
     method public android.app.job.JobInfo.Builder setRequiresCharging(boolean);
@@ -18419,11 +18423,13 @@ package android.icu.text {
     method public synchronized void applyLocalizedPattern(java.lang.String);
     method public synchronized void applyPattern(java.lang.String);
     method public synchronized boolean areSignificantDigitsUsed();
+    method public synchronized boolean equals(java.lang.Object);
     method public java.lang.StringBuffer format(double, java.lang.StringBuffer, java.text.FieldPosition);
     method public java.lang.StringBuffer format(long, java.lang.StringBuffer, java.text.FieldPosition);
     method public java.lang.StringBuffer format(java.math.BigInteger, java.lang.StringBuffer, java.text.FieldPosition);
     method public java.lang.StringBuffer format(java.math.BigDecimal, java.lang.StringBuffer, java.text.FieldPosition);
     method public java.lang.StringBuffer format(android.icu.math.BigDecimal, java.lang.StringBuffer, java.text.FieldPosition);
+    method public synchronized android.icu.util.Currency getCurrency();
     method public synchronized android.icu.text.CurrencyPluralInfo getCurrencyPluralInfo();
     method public synchronized android.icu.util.Currency.CurrencyUsage getCurrencyUsage();
     method public synchronized android.icu.text.DecimalFormatSymbols getDecimalFormatSymbols();
@@ -18431,8 +18437,12 @@ package android.icu.text {
     method public synchronized int getGroupingSize();
     method public synchronized java.math.MathContext getMathContext();
     method public synchronized android.icu.math.MathContext getMathContextICU();
+    method public synchronized int getMaximumFractionDigits();
+    method public synchronized int getMaximumIntegerDigits();
     method public synchronized int getMaximumSignificantDigits();
     method public synchronized byte getMinimumExponentDigits();
+    method public synchronized int getMinimumFractionDigits();
+    method public synchronized int getMinimumIntegerDigits();
     method public synchronized int getMinimumSignificantDigits();
     method public synchronized int getMultiplier();
     method public synchronized java.lang.String getNegativePrefix();
@@ -18443,13 +18453,19 @@ package android.icu.text {
     method public synchronized java.lang.String getPositivePrefix();
     method public synchronized java.lang.String getPositiveSuffix();
     method public synchronized java.math.BigDecimal getRoundingIncrement();
+    method public synchronized int getRoundingMode();
     method public synchronized int getSecondaryGroupingSize();
+    method public synchronized int hashCode();
     method public synchronized boolean isDecimalPatternMatchRequired();
     method public synchronized boolean isDecimalSeparatorAlwaysShown();
     method public synchronized boolean isExponentSignAlwaysShown();
+    method public synchronized boolean isGroupingUsed();
     method public synchronized boolean isParseBigDecimal();
+    method public synchronized boolean isParseIntegerOnly();
+    method public synchronized boolean isParseStrict();
     method public synchronized boolean isScientificNotation();
     method public java.lang.Number parse(java.lang.String, java.text.ParsePosition);
+    method public synchronized void setCurrency(android.icu.util.Currency);
     method public synchronized void setCurrencyPluralInfo(android.icu.text.CurrencyPluralInfo);
     method public synchronized void setCurrencyUsage(android.icu.util.Currency.CurrencyUsage);
     method public synchronized void setDecimalFormatSymbols(android.icu.text.DecimalFormatSymbols);
@@ -18458,10 +18474,15 @@ package android.icu.text {
     method public synchronized void setExponentSignAlwaysShown(boolean);
     method public synchronized void setFormatWidth(int);
     method public synchronized void setGroupingSize(int);
+    method public synchronized void setGroupingUsed(boolean);
     method public synchronized void setMathContext(java.math.MathContext);
     method public synchronized void setMathContextICU(android.icu.math.MathContext);
+    method public synchronized void setMaximumFractionDigits(int);
+    method public synchronized void setMaximumIntegerDigits(int);
     method public synchronized void setMaximumSignificantDigits(int);
     method public synchronized void setMinimumExponentDigits(byte);
+    method public synchronized void setMinimumFractionDigits(int);
+    method public synchronized void setMinimumIntegerDigits(int);
     method public synchronized void setMinimumSignificantDigits(int);
     method public synchronized void setMultiplier(int);
     method public synchronized void setNegativePrefix(java.lang.String);
@@ -18469,12 +18490,15 @@ package android.icu.text {
     method public synchronized void setPadCharacter(char);
     method public synchronized void setPadPosition(int);
     method public synchronized void setParseBigDecimal(boolean);
+    method public synchronized void setParseIntegerOnly(boolean);
     method public deprecated void setParseMaxDigits(int);
+    method public synchronized void setParseStrict(boolean);
     method public synchronized void setPositivePrefix(java.lang.String);
     method public synchronized void setPositiveSuffix(java.lang.String);
     method public synchronized void setRoundingIncrement(java.math.BigDecimal);
     method public synchronized void setRoundingIncrement(android.icu.math.BigDecimal);
     method public synchronized void setRoundingIncrement(double);
+    method public synchronized void setRoundingMode(int);
     method public synchronized void setScientificNotation(boolean);
     method public synchronized void setSecondaryGroupingSize(int);
     method public synchronized void setSignificantDigitsUsed(boolean);
@@ -32059,6 +32083,14 @@ package android.os {
     field public static final int DETECT_VM_UNTAGGED_SOCKET = -2147483648; // 0x80000000
   }
 
+  public static abstract interface StrictMode.OnThreadViolationListener {
+    method public abstract void onThreadViolation(android.os.strictmode.Violation);
+  }
+
+  public static abstract interface StrictMode.OnVmViolationListener {
+    method public abstract void onVmViolation(android.os.strictmode.Violation);
+  }
+
   public static final class StrictMode.ThreadPolicy {
     field public static final android.os.StrictMode.ThreadPolicy LAX;
   }
@@ -32079,6 +32111,7 @@ package android.os {
     method public android.os.StrictMode.ThreadPolicy.Builder penaltyDialog();
     method public android.os.StrictMode.ThreadPolicy.Builder penaltyDropBox();
     method public android.os.StrictMode.ThreadPolicy.Builder penaltyFlashScreen();
+    method public android.os.StrictMode.ThreadPolicy.Builder penaltyListener(android.os.StrictMode.OnThreadViolationListener, java.util.concurrent.Executor);
     method public android.os.StrictMode.ThreadPolicy.Builder penaltyLog();
     method public android.os.StrictMode.ThreadPolicy.Builder permitAll();
     method public android.os.StrictMode.ThreadPolicy.Builder permitCustomSlowCalls();
@@ -32134,6 +32167,7 @@ package android.os {
     method public android.os.StrictMode.VmPolicy.Builder penaltyDeathOnCleartextNetwork();
     method public android.os.StrictMode.VmPolicy.Builder penaltyDeathOnFileUriExposure();
     method public android.os.StrictMode.VmPolicy.Builder penaltyDropBox();
+    method public android.os.StrictMode.VmPolicy.Builder penaltyListener(android.os.StrictMode.OnVmViolationListener, java.util.concurrent.Executor);
     method public android.os.StrictMode.VmPolicy.Builder penaltyLog();
     method public android.os.StrictMode.VmPolicy.Builder setClassInstanceLimit(java.lang.Class, int);
   }
@@ -32141,10 +32175,12 @@ package android.os {
   public final class SystemClock {
     method public static long currentThreadTimeMillis();
     method public static long elapsedRealtime();
+    method public static java.time.Clock elapsedRealtimeClock();
     method public static long elapsedRealtimeNanos();
     method public static boolean setCurrentTimeMillis(long);
     method public static void sleep(long);
     method public static long uptimeMillis();
+    method public static java.time.Clock uptimeMillisClock();
   }
 
   public class TestLooperManager {
@@ -32229,6 +32265,7 @@ package android.os {
     field public static final java.lang.String DISALLOW_CONFIG_CELL_BROADCASTS = "no_config_cell_broadcasts";
     field public static final java.lang.String DISALLOW_CONFIG_CREDENTIALS = "no_config_credentials";
     field public static final java.lang.String DISALLOW_CONFIG_DATE_TIME = "no_config_date_time";
+    field public static final java.lang.String DISALLOW_CONFIG_LOCALE = "no_config_locale";
     field public static final java.lang.String DISALLOW_CONFIG_MOBILE_NETWORKS = "no_config_mobile_networks";
     field public static final java.lang.String DISALLOW_CONFIG_TETHERING = "no_config_tethering";
     field public static final java.lang.String DISALLOW_CONFIG_VPN = "no_config_vpn";
@@ -32494,6 +32531,62 @@ package android.os.storage {
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.os.storage.StorageVolume> CREATOR;
     field public static final java.lang.String EXTRA_STORAGE_VOLUME = "android.os.storage.extra.STORAGE_VOLUME";
+  }
+
+}
+
+package android.os.strictmode {
+
+  public final class CleartextNetworkViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class ContentUriWithoutPermissionViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class CustomViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class DiskReadViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class DiskWriteViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class FileUriExposedViolation extends android.os.strictmode.Violation {
+  }
+
+  public class InstanceCountViolation extends android.os.strictmode.Violation {
+    method public long getNumberOfInstances();
+  }
+
+  public final class IntentReceiverLeakedViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class LeakedClosableViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class NetworkViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class ResourceMismatchViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class ServiceConnectionLeakedViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class SqliteObjectLeakedViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class UnbufferedIoViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class UntaggedSocketViolation extends android.os.strictmode.Violation {
+  }
+
+  public abstract class Violation extends java.lang.Throwable {
+  }
+
+  public final class WebViewMethodCalledOnWrongThreadViolation extends android.os.strictmode.Violation {
   }
 
 }
@@ -39624,7 +39717,9 @@ package android.telecom {
     ctor public CallAudioState(boolean, int, int);
     method public static java.lang.String audioRouteToString(int);
     method public int describeContents();
+    method public android.bluetooth.BluetoothDevice getActiveBluetoothDevice();
     method public int getRoute();
+    method public java.util.Collection<android.bluetooth.BluetoothDevice> getSupportedBluetoothDevices();
     method public int getSupportedRouteMask();
     method public boolean isMuted();
     method public void writeToParcel(android.os.Parcel, int);
@@ -39759,6 +39854,7 @@ package android.telecom {
     method public final void putExtras(android.os.Bundle);
     method public final void removeExtras(java.util.List<java.lang.String>);
     method public final void removeExtras(java.lang.String...);
+    method public void requestBluetoothAudio(java.lang.String);
     method public void sendConnectionEvent(java.lang.String, android.os.Bundle);
     method public final void sendRemoteRttRequest();
     method public final void sendRttInitiationFailure(int);
@@ -39962,6 +40058,7 @@ package android.telecom {
     method public void onCanAddCallChanged(boolean);
     method public void onConnectionEvent(android.telecom.Call, java.lang.String, android.os.Bundle);
     method public void onSilenceRinger();
+    method public final void requestBluetoothAudio(java.lang.String);
     method public final void setAudioRoute(int);
     method public final void setMuted(boolean);
     field public static final java.lang.String SERVICE_INTERFACE = "android.telecom.InCallService";
