@@ -121,7 +121,6 @@ package android {
     field public static final java.lang.String REQUEST_IGNORE_BATTERY_OPTIMIZATIONS = "android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS";
     field public static final java.lang.String REQUEST_INSTALL_PACKAGES = "android.permission.REQUEST_INSTALL_PACKAGES";
     field public static final deprecated java.lang.String RESTART_PACKAGES = "android.permission.RESTART_PACKAGES";
-    field public static final java.lang.String SEND_EMBMS_INTENTS = "android.permission.SEND_EMBMS_INTENTS";
     field public static final java.lang.String SEND_RESPOND_VIA_MESSAGE = "android.permission.SEND_RESPOND_VIA_MESSAGE";
     field public static final java.lang.String SEND_SMS = "android.permission.SEND_SMS";
     field public static final java.lang.String SET_ALARM = "com.android.alarm.permission.SET_ALARM";
@@ -389,6 +388,7 @@ package android {
     field public static final int childIndicatorRight = 16843024; // 0x1010110
     field public static final int childIndicatorStart = 16843731; // 0x10103d3
     field public static final int choiceMode = 16843051; // 0x101012b
+    field public static final int classLoader = 16844139; // 0x101056b
     field public static final int clearTaskOnLaunch = 16842773; // 0x1010015
     field public static final int clickable = 16842981; // 0x10100e5
     field public static final int clipChildren = 16842986; // 0x10100ea
@@ -919,6 +919,7 @@ package android {
     field public static final int multiprocess = 16842771; // 0x1010013
     field public static final int name = 16842755; // 0x1010003
     field public static final int navigationBarColor = 16843858; // 0x1010452
+    field public static final int navigationBarDividerColor = 16844141; // 0x101056d
     field public static final int navigationContentDescription = 16843969; // 0x10104c1
     field public static final int navigationIcon = 16843968; // 0x10104c0
     field public static final int navigationMode = 16843471; // 0x10102cf
@@ -1181,6 +1182,7 @@ package android {
     field public static final int showSilent = 16843259; // 0x10101fb
     field public static final int showText = 16843949; // 0x10104ad
     field public static final deprecated int showWeekNumber = 16843582; // 0x101033e
+    field public static final int showWhenLocked = 16844137; // 0x1010569
     field public static final deprecated int shownWeekCount = 16843585; // 0x1010341
     field public static final int shrinkColumns = 16843082; // 0x101014a
     field public static final deprecated int singleLine = 16843101; // 0x101015d
@@ -1439,6 +1441,7 @@ package android {
     field public static final int trimPathOffset = 16843786; // 0x101040a
     field public static final int trimPathStart = 16843784; // 0x1010408
     field public static final int tunerCount = 16844061; // 0x101051d
+    field public static final int turnScreenOn = 16844138; // 0x101056a
     field public static final int type = 16843169; // 0x10101a1
     field public static final int typeface = 16842902; // 0x1010096
     field public static final int uiOptions = 16843672; // 0x1010398
@@ -1522,6 +1525,7 @@ package android {
     field public static final int windowHideAnimation = 16842935; // 0x10100b7
     field public static final int windowIsFloating = 16842839; // 0x1010057
     field public static final int windowIsTranslucent = 16842840; // 0x1010058
+    field public static final int windowLightNavigationBar = 16844140; // 0x101056c
     field public static final int windowLightStatusBar = 16844000; // 0x10104e0
     field public static final int windowMinWidthMajor = 16843606; // 0x1010356
     field public static final int windowMinWidthMinor = 16843607; // 0x1010357
@@ -1936,6 +1940,7 @@ package android {
     field public static final int VideoView_error_text_invalid_progressive_playback = 17039381; // 0x1040015
     field public static final int VideoView_error_text_unknown = 17039377; // 0x1040011
     field public static final int VideoView_error_title = 17039378; // 0x1040012
+    field public static final int autofill = 17039386; // 0x104001a
     field public static final int cancel = 17039360; // 0x1040000
     field public static final int copy = 17039361; // 0x1040001
     field public static final int copyUrl = 17039362; // 0x1040002
@@ -3163,6 +3168,7 @@ package android.animation {
 
   public final class AnimatorSet extends android.animation.Animator {
     ctor public AnimatorSet();
+    method public android.animation.AnimatorSet clone();
     method public java.util.ArrayList<android.animation.Animator> getChildAnimations();
     method public long getCurrentPlayTime();
     method public long getDuration();
@@ -3281,6 +3287,7 @@ package android.animation {
 
   public final class ObjectAnimator extends android.animation.ValueAnimator {
     ctor public ObjectAnimator();
+    method public android.animation.ObjectAnimator clone();
     method public java.lang.String getPropertyName();
     method public java.lang.Object getTarget();
     method public static android.animation.ObjectAnimator ofArgb(java.lang.Object, java.lang.String, int...);
@@ -3306,6 +3313,7 @@ package android.animation {
     method public static <T, V> android.animation.ObjectAnimator ofObject(T, android.util.Property<T, V>, android.animation.TypeConverter<android.graphics.PointF, V>, android.graphics.Path);
     method public static android.animation.ObjectAnimator ofPropertyValuesHolder(java.lang.Object, android.animation.PropertyValuesHolder...);
     method public void setAutoCancel(boolean);
+    method public android.animation.ObjectAnimator setDuration(long);
     method public void setProperty(android.util.Property);
     method public void setPropertyName(java.lang.String);
   }
@@ -3387,6 +3395,7 @@ package android.animation {
     ctor public ValueAnimator();
     method public void addUpdateListener(android.animation.ValueAnimator.AnimatorUpdateListener);
     method public static boolean areAnimatorsEnabled();
+    method public android.animation.ValueAnimator clone();
     method public float getAnimatedFraction();
     method public java.lang.Object getAnimatedValue();
     method public java.lang.Object getAnimatedValue(java.lang.String);
@@ -3760,10 +3769,12 @@ package android.app {
     method public final void setResult(int);
     method public final void setResult(int, android.content.Intent);
     method public final deprecated void setSecondaryProgress(int);
+    method public void setShowWhenLocked(boolean);
     method public void setTaskDescription(android.app.ActivityManager.TaskDescription);
     method public void setTitle(java.lang.CharSequence);
     method public void setTitle(int);
     method public deprecated void setTitleColor(int);
+    method public void setTurnScreenOn(boolean);
     method public void setVisible(boolean);
     method public final void setVolumeControlStream(int);
     method public void setVrModeEnabled(boolean, android.content.ComponentName) throws android.content.pm.PackageManager.NameNotFoundException;
@@ -4960,6 +4971,7 @@ package android.app {
     ctor public IntentService(java.lang.String);
     method public android.os.IBinder onBind(android.content.Intent);
     method protected abstract void onHandleIntent(android.content.Intent);
+    method public void onStart(android.content.Intent, int);
     method public void setIntentRedelivery(boolean);
   }
 
@@ -5593,6 +5605,7 @@ package android.app {
     method public java.util.List<android.app.NotificationChannelGroup> getNotificationChannelGroups();
     method public java.util.List<android.app.NotificationChannel> getNotificationChannels();
     method public android.app.NotificationManager.Policy getNotificationPolicy();
+    method public boolean isNotificationListenerAccessGranted(android.content.ComponentName);
     method public boolean isNotificationPolicyAccessGranted();
     method public void notify(int, android.app.Notification);
     method public void notify(java.lang.String, int, android.app.Notification);
@@ -6123,7 +6136,6 @@ package android.app {
   }
 
   public class WallpaperManager {
-    method public void addOnColorsChangedListener(android.app.WallpaperManager.OnColorsChangedListener);
     method public void addOnColorsChangedListener(android.app.WallpaperManager.OnColorsChangedListener, android.os.Handler);
     method public void clear() throws java.io.IOException;
     method public void clear(int) throws java.io.IOException;
@@ -9353,6 +9365,7 @@ package android.content {
     field public static final java.lang.String ACTION_INPUT_METHOD_CHANGED = "android.intent.action.INPUT_METHOD_CHANGED";
     field public static final java.lang.String ACTION_INSERT = "android.intent.action.INSERT";
     field public static final java.lang.String ACTION_INSERT_OR_EDIT = "android.intent.action.INSERT_OR_EDIT";
+    field public static final java.lang.String ACTION_INSTALL_FAILURE = "android.intent.action.INSTALL_FAILURE";
     field public static final java.lang.String ACTION_INSTALL_PACKAGE = "android.intent.action.INSTALL_PACKAGE";
     field public static final java.lang.String ACTION_LOCALE_CHANGED = "android.intent.action.LOCALE_CHANGED";
     field public static final java.lang.String ACTION_LOCKED_BOOT_COMPLETED = "android.intent.action.LOCKED_BOOT_COMPLETED";
@@ -9535,6 +9548,7 @@ package android.content {
     field public static final deprecated java.lang.String EXTRA_SHORTCUT_INTENT = "android.intent.extra.shortcut.INTENT";
     field public static final deprecated java.lang.String EXTRA_SHORTCUT_NAME = "android.intent.extra.shortcut.NAME";
     field public static final java.lang.String EXTRA_SHUTDOWN_USERSPACE_ONLY = "android.intent.extra.SHUTDOWN_USERSPACE_ONLY";
+    field public static final java.lang.String EXTRA_SPLIT_NAME = "android.intent.extra.SPLIT_NAME";
     field public static final java.lang.String EXTRA_STREAM = "android.intent.extra.STREAM";
     field public static final java.lang.String EXTRA_SUBJECT = "android.intent.extra.SUBJECT";
     field public static final java.lang.String EXTRA_TEMPLATE = "android.intent.extra.TEMPLATE";
@@ -10155,6 +10169,7 @@ package android.content.pm {
     method public int describeContents();
     method public void dump(android.util.Printer, java.lang.String);
     method public static java.lang.CharSequence getCategoryTitle(android.content.Context, int);
+    method public boolean isVirtualPreload();
     method public java.lang.CharSequence loadDescription(android.content.pm.PackageManager);
     field public static final int CATEGORY_AUDIO = 1; // 0x1
     field public static final int CATEGORY_GAME = 0; // 0x0
@@ -10489,6 +10504,7 @@ package android.content.pm {
     method public java.io.OutputStream openWrite(java.lang.String, long, long) throws java.io.IOException;
     method public void removeSplit(java.lang.String) throws java.io.IOException;
     method public void setStagingProgress(float);
+    method public void transfer(java.lang.String) throws android.content.pm.PackageManager.NameNotFoundException;
   }
 
   public static abstract class PackageInstaller.SessionCallback {
@@ -10506,10 +10522,16 @@ package android.content.pm {
     method public android.graphics.Bitmap getAppIcon();
     method public java.lang.CharSequence getAppLabel();
     method public java.lang.String getAppPackageName();
+    method public int getInstallLocation();
     method public int getInstallReason();
     method public java.lang.String getInstallerPackageName();
+    method public int getMode();
+    method public int getOriginatingUid();
+    method public android.net.Uri getOriginatingUri();
     method public float getProgress();
+    method public android.net.Uri getReferrerUri();
     method public int getSessionId();
+    method public long getSize();
     method public boolean isActive();
     method public boolean isSealed();
     method public void writeToParcel(android.os.Parcel, int);
@@ -10716,8 +10738,11 @@ package android.content.pm {
     field public static final java.lang.String FEATURE_NFC_HOST_CARD_EMULATION = "android.hardware.nfc.hce";
     field public static final java.lang.String FEATURE_NFC_HOST_CARD_EMULATION_NFCF = "android.hardware.nfc.hcef";
     field public static final java.lang.String FEATURE_OPENGLES_EXTENSION_PACK = "android.hardware.opengles.aep";
+    field public static final java.lang.String FEATURE_PC = "android.hardware.type.pc";
     field public static final java.lang.String FEATURE_PICTURE_IN_PICTURE = "android.software.picture_in_picture";
     field public static final java.lang.String FEATURE_PRINTING = "android.software.print";
+    field public static final java.lang.String FEATURE_RAM_LOW = "android.hardware.ram.low";
+    field public static final java.lang.String FEATURE_RAM_NORMAL = "android.hardware.ram.normal";
     field public static final java.lang.String FEATURE_SCREEN_LANDSCAPE = "android.hardware.screen.landscape";
     field public static final java.lang.String FEATURE_SCREEN_PORTRAIT = "android.hardware.screen.portrait";
     field public static final java.lang.String FEATURE_SECURELY_REMOVES_USERS = "android.software.securely_removes_users";
@@ -10757,6 +10782,7 @@ package android.content.pm {
     field public static final java.lang.String FEATURE_WIFI = "android.hardware.wifi";
     field public static final java.lang.String FEATURE_WIFI_AWARE = "android.hardware.wifi.aware";
     field public static final java.lang.String FEATURE_WIFI_DIRECT = "android.hardware.wifi.direct";
+    field public static final java.lang.String FEATURE_WIFI_PASSPOINT = "android.hardware.wifi.passpoint";
     field public static final int GET_ACTIVITIES = 1; // 0x1
     field public static final int GET_CONFIGURATIONS = 16384; // 0x4000
     field public static final deprecated int GET_DISABLED_COMPONENTS = 512; // 0x200
@@ -10857,6 +10883,7 @@ package android.content.pm {
     field public static final int PROTECTION_FLAG_APPOP = 64; // 0x40
     field public static final int PROTECTION_FLAG_DEVELOPMENT = 32; // 0x20
     field public static final int PROTECTION_FLAG_INSTALLER = 256; // 0x100
+    field public static final int PROTECTION_FLAG_INSTANT = 4096; // 0x1000
     field public static final int PROTECTION_FLAG_PRE23 = 128; // 0x80
     field public static final int PROTECTION_FLAG_PREINSTALLED = 1024; // 0x400
     field public static final int PROTECTION_FLAG_PRIVILEGED = 16; // 0x10
@@ -11063,6 +11090,7 @@ package android.content.res {
 
   public static class AssetFileDescriptor.AutoCloseInputStream extends android.os.ParcelFileDescriptor.AutoCloseInputStream {
     ctor public AssetFileDescriptor.AutoCloseInputStream(android.content.res.AssetFileDescriptor) throws java.io.IOException;
+    method public void mark(int);
   }
 
   public static class AssetFileDescriptor.AutoCloseOutputStream extends android.os.ParcelFileDescriptor.AutoCloseOutputStream {
@@ -11370,6 +11398,7 @@ package android.database {
     method public void copyStringToBuffer(int, android.database.CharArrayBuffer);
     method public void deactivate();
     method public void fillWindow(int, android.database.CursorWindow);
+    method protected void finalize();
     method public byte[] getBlob(int);
     method public int getColumnCount();
     method public int getColumnIndex(java.lang.String);
@@ -11851,6 +11880,7 @@ package android.database.sqlite {
     method public void beginTransactionWithListenerNonExclusive(android.database.sqlite.SQLiteTransactionListener);
     method public android.database.sqlite.SQLiteStatement compileStatement(java.lang.String) throws android.database.SQLException;
     method public static android.database.sqlite.SQLiteDatabase create(android.database.sqlite.SQLiteDatabase.CursorFactory);
+    method public static android.database.sqlite.SQLiteDatabase createInMemory(android.database.sqlite.SQLiteDatabase.OpenParams);
     method public int delete(java.lang.String, java.lang.String, java.lang.String[]);
     method public static boolean deleteDatabase(java.io.File);
     method public void disableWriteAheadLogging();
@@ -11880,6 +11910,7 @@ package android.database.sqlite {
     method public boolean needUpgrade(int);
     method protected void onAllReferencesReleased();
     method public static android.database.sqlite.SQLiteDatabase openDatabase(java.lang.String, android.database.sqlite.SQLiteDatabase.CursorFactory, int);
+    method public static android.database.sqlite.SQLiteDatabase openDatabase(java.io.File, android.database.sqlite.SQLiteDatabase.OpenParams);
     method public static android.database.sqlite.SQLiteDatabase openDatabase(java.lang.String, android.database.sqlite.SQLiteDatabase.CursorFactory, int, android.database.DatabaseErrorHandler);
     method public static android.database.sqlite.SQLiteDatabase openOrCreateDatabase(java.io.File, android.database.sqlite.SQLiteDatabase.CursorFactory);
     method public static android.database.sqlite.SQLiteDatabase openOrCreateDatabase(java.lang.String, android.database.sqlite.SQLiteDatabase.CursorFactory);
@@ -11928,6 +11959,28 @@ package android.database.sqlite {
 
   public static abstract interface SQLiteDatabase.CursorFactory {
     method public abstract android.database.Cursor newCursor(android.database.sqlite.SQLiteDatabase, android.database.sqlite.SQLiteCursorDriver, java.lang.String, android.database.sqlite.SQLiteQuery);
+  }
+
+  public static final class SQLiteDatabase.OpenParams {
+    method public android.database.sqlite.SQLiteDatabase.CursorFactory getCursorFactory();
+    method public android.database.DatabaseErrorHandler getErrorHandler();
+    method public long getIdleConnectionTimeout();
+    method public int getLookasideSlotCount();
+    method public int getLookasideSlotSize();
+    method public int getOpenFlags();
+  }
+
+  public static final class SQLiteDatabase.OpenParams.Builder {
+    ctor public SQLiteDatabase.OpenParams.Builder();
+    ctor public SQLiteDatabase.OpenParams.Builder(android.database.sqlite.SQLiteDatabase.OpenParams);
+    method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder addOpenFlags(int);
+    method public android.database.sqlite.SQLiteDatabase.OpenParams build();
+    method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder removeOpenFlags(int);
+    method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setCursorFactory(android.database.sqlite.SQLiteDatabase.CursorFactory);
+    method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setErrorHandler(android.database.DatabaseErrorHandler);
+    method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setIdleConnectionTimeout(long);
+    method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setLookasideConfig(int, int);
+    method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setOpenFlags(int);
   }
 
   public class SQLiteDatabaseCorruptException extends android.database.sqlite.SQLiteException {
@@ -11983,6 +12036,8 @@ package android.database.sqlite {
     method public void onDowngrade(android.database.sqlite.SQLiteDatabase, int, int);
     method public void onOpen(android.database.sqlite.SQLiteDatabase);
     method public abstract void onUpgrade(android.database.sqlite.SQLiteDatabase, int, int);
+    method public void setIdleConnectionTimeout(long);
+    method public void setLookasideConfig(int, int);
     method public void setWriteAheadLoggingEnabled(boolean);
   }
 
@@ -13844,6 +13899,7 @@ package android.graphics.drawable {
     method public void scheduleDrawable(android.graphics.drawable.Drawable, java.lang.Runnable, long);
     method public void setAlpha(int);
     method public void setColorFilter(android.graphics.ColorFilter);
+    method public void setDither(boolean);
     method public void setOpacity(int);
     method public void unscheduleDrawable(android.graphics.drawable.Drawable, java.lang.Runnable);
   }
@@ -13924,6 +13980,7 @@ package android.graphics.drawable {
     method public void setAlpha(int);
     method public void setAntiAlias(boolean);
     method public void setColorFilter(android.graphics.ColorFilter);
+    method public void setDither(boolean);
     method public void setGravity(int);
     method public void setMipMap(boolean);
     method public void setTargetDensity(android.graphics.Canvas);
@@ -14049,6 +14106,7 @@ package android.graphics.drawable {
     method public void setAlpha(int);
     method public void setColorFilter(android.graphics.ColorFilter);
     method protected void setConstantState(android.graphics.drawable.DrawableContainer.DrawableContainerState);
+    method public void setDither(boolean);
     method public void setEnterFadeDuration(int);
     method public void setExitFadeDuration(int);
     method public void unscheduleDrawable(android.graphics.drawable.Drawable, java.lang.Runnable);
@@ -14115,6 +14173,7 @@ package android.graphics.drawable {
     method public void setColors(int[]);
     method public void setCornerRadii(float[]);
     method public void setCornerRadius(float);
+    method public void setDither(boolean);
     method public void setGradientCenter(float, float);
     method public void setGradientRadius(float);
     method public void setGradientType(int);
@@ -14209,6 +14268,7 @@ package android.graphics.drawable {
     method public void scheduleDrawable(android.graphics.drawable.Drawable, java.lang.Runnable, long);
     method public void setAlpha(int);
     method public void setColorFilter(android.graphics.ColorFilter);
+    method public void setDither(boolean);
     method public void setDrawable(int, android.graphics.drawable.Drawable);
     method public boolean setDrawableByLayerId(int, android.graphics.drawable.Drawable);
     method public void setId(int, int);
@@ -14249,6 +14309,7 @@ package android.graphics.drawable {
     method public android.graphics.Paint getPaint();
     method public void setAlpha(int);
     method public void setColorFilter(android.graphics.ColorFilter);
+    method public void setDither(boolean);
     method public void setTargetDensity(android.graphics.Canvas);
     method public void setTargetDensity(android.util.DisplayMetrics);
     method public void setTargetDensity(int);
@@ -14311,6 +14372,7 @@ package android.graphics.drawable {
     method protected void onDraw(android.graphics.drawable.shapes.Shape, android.graphics.Canvas, android.graphics.Paint);
     method public void setAlpha(int);
     method public void setColorFilter(android.graphics.ColorFilter);
+    method public void setDither(boolean);
     method public void setIntrinsicHeight(int);
     method public void setIntrinsicWidth(int);
     method public void setPadding(int, int, int, int);
@@ -14352,27 +14414,32 @@ package android.graphics.drawable.shapes {
 
   public class ArcShape extends android.graphics.drawable.shapes.RectShape {
     ctor public ArcShape(float, float);
+    method public android.graphics.drawable.shapes.ArcShape clone() throws java.lang.CloneNotSupportedException;
     method public final float getStartAngle();
     method public final float getSweepAngle();
   }
 
   public class OvalShape extends android.graphics.drawable.shapes.RectShape {
     ctor public OvalShape();
+    method public android.graphics.drawable.shapes.OvalShape clone() throws java.lang.CloneNotSupportedException;
   }
 
   public class PathShape extends android.graphics.drawable.shapes.Shape {
     ctor public PathShape(android.graphics.Path, float, float);
+    method public android.graphics.drawable.shapes.PathShape clone() throws java.lang.CloneNotSupportedException;
     method public void draw(android.graphics.Canvas, android.graphics.Paint);
   }
 
   public class RectShape extends android.graphics.drawable.shapes.Shape {
     ctor public RectShape();
+    method public android.graphics.drawable.shapes.RectShape clone() throws java.lang.CloneNotSupportedException;
     method public void draw(android.graphics.Canvas, android.graphics.Paint);
     method protected final android.graphics.RectF rect();
   }
 
   public class RoundRectShape extends android.graphics.drawable.shapes.RectShape {
     ctor public RoundRectShape(float[], android.graphics.RectF, float[]);
+    method public android.graphics.drawable.shapes.RoundRectShape clone() throws java.lang.CloneNotSupportedException;
   }
 
   public abstract class Shape implements java.lang.Cloneable {
@@ -14457,6 +14524,7 @@ package android.hardware {
     method public final void autoFocus(android.hardware.Camera.AutoFocusCallback);
     method public final void cancelAutoFocus();
     method public final boolean enableShutterSound(boolean);
+    method protected void finalize();
     method public static void getCameraInfo(int, android.hardware.Camera.CameraInfo);
     method public static int getNumberOfCameras();
     method public android.hardware.Camera.Parameters getParameters();
@@ -15066,6 +15134,7 @@ package android.hardware.camera2 {
     method public <T> T get(android.hardware.camera2.CameraCharacteristics.Key<T>);
     method public java.util.List<android.hardware.camera2.CaptureRequest.Key<?>> getAvailableCaptureRequestKeys();
     method public java.util.List<android.hardware.camera2.CaptureResult.Key<?>> getAvailableCaptureResultKeys();
+    method public java.util.List<android.hardware.camera2.CameraCharacteristics.Key<?>> getKeys();
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> COLOR_CORRECTION_AVAILABLE_ABERRATION_MODES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AE_AVAILABLE_ANTIBANDING_MODES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AE_AVAILABLE_MODES;
@@ -15422,6 +15491,7 @@ package android.hardware.camera2 {
   public final class CaptureRequest extends android.hardware.camera2.CameraMetadata implements android.os.Parcelable {
     method public int describeContents();
     method public <T> T get(android.hardware.camera2.CaptureRequest.Key<T>);
+    method public java.util.List<android.hardware.camera2.CaptureRequest.Key<?>> getKeys();
     method public java.lang.Object getTag();
     method public boolean isReprocess();
     method public void writeToParcel(android.os.Parcel, int);
@@ -15500,6 +15570,7 @@ package android.hardware.camera2 {
   public class CaptureResult extends android.hardware.camera2.CameraMetadata {
     method public <T> T get(android.hardware.camera2.CaptureResult.Key<T>);
     method public long getFrameNumber();
+    method public java.util.List<android.hardware.camera2.CaptureResult.Key<?>> getKeys();
     method public android.hardware.camera2.CaptureRequest getRequest();
     method public int getSequenceId();
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Boolean> BLACK_LEVEL_LOCK;
@@ -15791,9 +15862,12 @@ package android.hardware.fingerprint {
     field public static final int FINGERPRINT_ERROR_CANCELED = 5; // 0x5
     field public static final int FINGERPRINT_ERROR_HW_UNAVAILABLE = 1; // 0x1
     field public static final int FINGERPRINT_ERROR_LOCKOUT = 7; // 0x7
+    field public static final int FINGERPRINT_ERROR_LOCKOUT_PERMANENT = 9; // 0x9
     field public static final int FINGERPRINT_ERROR_NO_SPACE = 4; // 0x4
     field public static final int FINGERPRINT_ERROR_TIMEOUT = 3; // 0x3
     field public static final int FINGERPRINT_ERROR_UNABLE_TO_PROCESS = 2; // 0x2
+    field public static final int FINGERPRINT_ERROR_USER_CANCELED = 10; // 0xa
+    field public static final int FINGERPRINT_ERROR_VENDOR = 8; // 0x8
   }
 
   public static abstract class FingerprintManager.AuthenticationCallback {
@@ -17937,6 +18011,7 @@ package android.icu.text {
   }
 
   public class DateIntervalFormat extends android.icu.text.UFormat {
+    method public synchronized java.lang.Object clone();
     method public final java.lang.StringBuffer format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition);
     method public final synchronized java.lang.StringBuffer format(android.icu.util.DateInterval, java.lang.StringBuffer, java.text.FieldPosition);
     method public final synchronized java.lang.StringBuffer format(android.icu.util.Calendar, android.icu.util.Calendar, java.lang.StringBuffer, java.text.FieldPosition);
@@ -18742,6 +18817,7 @@ package android.icu.text {
 
   public final class RuleBasedCollator extends android.icu.text.Collator {
     ctor public RuleBasedCollator(java.lang.String) throws java.lang.Exception;
+    method public android.icu.text.RuleBasedCollator cloneAsThawed();
     method public int compare(java.lang.String, java.lang.String);
     method public android.icu.text.CollationElementIterator getCollationElementIterator(java.lang.String);
     method public android.icu.text.CollationElementIterator getCollationElementIterator(java.text.CharacterIterator);
@@ -18768,6 +18844,7 @@ package android.icu.text {
     method public void setFrenchCollation(boolean);
     method public void setFrenchCollationDefault();
     method public void setLowerCaseFirst(boolean);
+    method public android.icu.text.RuleBasedCollator setMaxVariable(int);
     method public void setNumericCollation(boolean);
     method public void setNumericCollationDefault();
     method public void setStrengthDefault();
@@ -21291,6 +21368,7 @@ package android.media {
     ctor public AudioRecord(int, int, int, int, int) throws java.lang.IllegalArgumentException;
     method public void addOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener, android.os.Handler);
     method public deprecated void addOnRoutingChangedListener(android.media.AudioRecord.OnRoutingChangedListener, android.os.Handler);
+    method protected void finalize();
     method public int getAudioFormat();
     method public int getAudioSessionId();
     method public int getAudioSource();
@@ -21395,6 +21473,7 @@ package android.media {
     method public deprecated void addOnRoutingChangedListener(android.media.AudioTrack.OnRoutingChangedListener, android.os.Handler);
     method public int attachAuxEffect(int);
     method public android.media.VolumeShaper createVolumeShaper(android.media.VolumeShaper.Configuration);
+    method protected void finalize();
     method public void flush();
     method public int getAudioFormat();
     method public int getAudioSessionId();
@@ -21793,6 +21872,7 @@ package android.media {
     method public boolean clearQueue();
     method public java.lang.Object clone() throws java.lang.CloneNotSupportedException;
     method public boolean closeJetFile();
+    method protected void finalize();
     method public static android.media.JetPlayer getJetPlayer();
     method public static int getMaxTracks();
     method public boolean loadJetFile(java.lang.String);
@@ -21832,6 +21912,7 @@ package android.media {
     ctor public MediaCas(int) throws android.media.MediaCasException.UnsupportedCasException;
     method public void close();
     method public static android.media.MediaCas.PluginDescriptor[] enumeratePlugins();
+    method protected void finalize();
     method public static boolean isSystemIdSupported(int);
     method public android.media.MediaCas.Session openSession() throws android.media.MediaCasException;
     method public void processEmm(byte[], int, int) throws android.media.MediaCasException;
@@ -21888,6 +21969,7 @@ package android.media {
     method public static android.view.Surface createPersistentInputSurface();
     method public final int dequeueInputBuffer(long);
     method public final int dequeueOutputBuffer(android.media.MediaCodec.BufferInfo, long);
+    method protected void finalize();
     method public final void flush();
     method public android.media.MediaCodecInfo getCodecInfo();
     method public java.nio.ByteBuffer getInputBuffer(int);
@@ -22128,6 +22210,8 @@ package android.media {
     field public static final int AVCLevel51 = 32768; // 0x8000
     field public static final int AVCLevel52 = 65536; // 0x10000
     field public static final int AVCProfileBaseline = 1; // 0x1
+    field public static final int AVCProfileConstrainedBaseline = 65536; // 0x10000
+    field public static final int AVCProfileConstrainedHigh = 524288; // 0x80000
     field public static final int AVCProfileExtended = 4; // 0x4
     field public static final int AVCProfileHigh = 8; // 0x8
     field public static final int AVCProfileHigh10 = 16; // 0x10
@@ -22145,11 +22229,13 @@ package android.media {
     field public static final int DolbyVisionLevelUhd60 = 256; // 0x100
     field public static final int DolbyVisionProfileDvavPen = 2; // 0x2
     field public static final int DolbyVisionProfileDvavPer = 1; // 0x1
+    field public static final int DolbyVisionProfileDvavSe = 512; // 0x200
     field public static final int DolbyVisionProfileDvheDen = 8; // 0x8
     field public static final int DolbyVisionProfileDvheDer = 4; // 0x4
     field public static final int DolbyVisionProfileDvheDtb = 128; // 0x80
     field public static final int DolbyVisionProfileDvheDth = 64; // 0x40
     field public static final int DolbyVisionProfileDvheDtr = 16; // 0x10
+    field public static final int DolbyVisionProfileDvheSt = 256; // 0x100
     field public static final int DolbyVisionProfileDvheStn = 32; // 0x20
     field public static final int H263Level10 = 1; // 0x1
     field public static final int H263Level20 = 2; // 0x2
@@ -22299,6 +22385,7 @@ package android.media {
 
   public final class MediaCrypto {
     ctor public MediaCrypto(java.util.UUID, byte[]) throws android.media.MediaCryptoException;
+    method protected void finalize();
     method public static final boolean isCryptoSchemeSupported(java.util.UUID);
     method public final void release();
     method public final boolean requiresSecureDecoderComponent(java.lang.String);
@@ -22319,6 +22406,7 @@ package android.media {
     ctor public MediaDescrambler(int) throws android.media.MediaCasException.UnsupportedCasException;
     method public void close();
     method public final int descramble(java.nio.ByteBuffer, java.nio.ByteBuffer, android.media.MediaCodec.CryptoInfo);
+    method protected void finalize();
     method public final boolean requiresSecureDecoderComponent(java.lang.String);
     method public final void setMediaCasSession(android.media.MediaCas.Session);
   }
@@ -22361,6 +22449,7 @@ package android.media {
   public final class MediaDrm {
     ctor public MediaDrm(java.util.UUID) throws android.media.UnsupportedSchemeException;
     method public void closeSession(byte[]);
+    method protected void finalize();
     method public android.media.MediaDrm.CryptoSession getCryptoSession(byte[], java.lang.String, java.lang.String);
     method public android.media.MediaDrm.KeyRequest getKeyRequest(byte[], byte[], java.lang.String, int, java.util.HashMap<java.lang.String, java.lang.String>) throws android.media.NotProvisionedException;
     method public byte[] getPropertyByteArray(java.lang.String);
@@ -22457,6 +22546,7 @@ package android.media {
   public final class MediaExtractor {
     ctor public MediaExtractor();
     method public boolean advance();
+    method protected void finalize();
     method public long getCachedDuration();
     method public android.media.MediaExtractor.CasInfo getCasInfo(int);
     method public android.media.DrmInitData getDrmInitData();
@@ -22689,6 +22779,7 @@ package android.media {
     method public android.graphics.Bitmap getFrameAtTime(long, int);
     method public android.graphics.Bitmap getFrameAtTime(long);
     method public android.graphics.Bitmap getFrameAtTime();
+    method public android.graphics.Bitmap getScaledFrameAtTime(long, int, int, int);
     method public void release();
     method public void setDataSource(java.lang.String) throws java.lang.IllegalArgumentException;
     method public void setDataSource(java.lang.String, java.util.Map<java.lang.String, java.lang.String>) throws java.lang.IllegalArgumentException;
@@ -22758,6 +22849,7 @@ package android.media {
     method public static android.media.MediaPlayer create(android.content.Context, int, android.media.AudioAttributes, int);
     method public android.media.VolumeShaper createVolumeShaper(android.media.VolumeShaper.Configuration);
     method public void deselectTrack(int) throws java.lang.IllegalStateException;
+    method protected void finalize();
     method public int getAudioSessionId();
     method public int getCurrentPosition();
     method public android.media.MediaPlayer.DrmInfo getDrmInfo();
@@ -22953,6 +23045,7 @@ package android.media {
 
   public class MediaRecorder {
     ctor public MediaRecorder();
+    method protected void finalize();
     method public static final int getAudioSourceMax();
     method public int getMaxAmplitude() throws java.lang.IllegalStateException;
     method public android.os.PersistableBundle getMetrics();
@@ -23224,6 +23317,7 @@ package android.media {
   public final class MediaSync {
     ctor public MediaSync();
     method public final android.view.Surface createInputSurface();
+    method protected void finalize();
     method public void flush();
     method public android.media.PlaybackParams getPlaybackParams();
     method public android.media.SyncParams getSyncParams();
@@ -23343,6 +23437,10 @@ package android.media {
 
   public deprecated class RemoteControlClient.MetadataEditor extends android.media.MediaMetadataEditor {
     method public synchronized void apply();
+    method public synchronized android.media.RemoteControlClient.MetadataEditor putBitmap(int, android.graphics.Bitmap) throws java.lang.IllegalArgumentException;
+    method public synchronized android.media.RemoteControlClient.MetadataEditor putLong(int, long) throws java.lang.IllegalArgumentException;
+    method public synchronized android.media.RemoteControlClient.MetadataEditor putObject(int, java.lang.Object) throws java.lang.IllegalArgumentException;
+    method public synchronized android.media.RemoteControlClient.MetadataEditor putString(int, java.lang.String) throws java.lang.IllegalArgumentException;
     field public static final int BITMAP_KEY_ARTWORK = 100; // 0x64
   }
 
@@ -23389,6 +23487,7 @@ package android.media {
   }
 
   public class Ringtone {
+    method protected void finalize();
     method public android.media.AudioAttributes getAudioAttributes();
     method public deprecated int getStreamType();
     method public java.lang.String getTitle(android.content.Context);
@@ -23442,6 +23541,7 @@ package android.media {
     ctor public deprecated SoundPool(int, int, int);
     method public final void autoPause();
     method public final void autoResume();
+    method protected void finalize();
     method public int load(java.lang.String, int);
     method public int load(android.content.Context, int, int);
     method public int load(android.content.res.AssetFileDescriptor, int);
@@ -23510,6 +23610,7 @@ package android.media {
 
   public class ToneGenerator {
     ctor public ToneGenerator(int, int);
+    method protected void finalize();
     method public final int getAudioSessionId();
     method public void release();
     method public boolean startTone(int);
@@ -23642,6 +23743,7 @@ package android.media {
   public final class VolumeShaper implements java.lang.AutoCloseable {
     method public void apply(android.media.VolumeShaper.Operation);
     method public void close();
+    method protected void finalize();
     method public float getVolume();
     method public void replace(android.media.VolumeShaper.Configuration, android.media.VolumeShaper.Operation, boolean);
   }
@@ -23696,6 +23798,7 @@ package android.media.audiofx {
   }
 
   public class AudioEffect {
+    method protected void finalize();
     method public android.media.audiofx.AudioEffect.Descriptor getDescriptor() throws java.lang.IllegalStateException;
     method public boolean getEnabled() throws java.lang.IllegalStateException;
     method public int getId() throws java.lang.IllegalStateException;
@@ -23948,6 +24051,7 @@ package android.media.audiofx {
 
   public class Visualizer {
     ctor public Visualizer(int) throws java.lang.RuntimeException, java.lang.UnsupportedOperationException;
+    method protected void finalize();
     method public int getCaptureSize() throws java.lang.IllegalStateException;
     method public static int[] getCaptureSizeRange();
     method public boolean getEnabled();
@@ -24505,6 +24609,7 @@ package android.media.tv {
     method public static boolean isChannelUriForPassthroughInput(android.net.Uri);
     method public static boolean isChannelUriForTunerInput(android.net.Uri);
     method public static boolean isProgramUri(android.net.Uri);
+    method public static boolean isRecordedProgramUri(android.net.Uri);
     method public static void requestChannelBrowsable(android.content.Context, long);
     field public static final java.lang.String ACTION_INITIALIZE_PROGRAMS = "android.media.tv.action.INITIALIZE_PROGRAMS";
     field public static final java.lang.String ACTION_PREVIEW_PROGRAM_ADDED_TO_WATCH_NEXT = "android.media.tv.action.PREVIEW_PROGRAM_ADDED_TO_WATCH_NEXT";
@@ -27071,7 +27176,8 @@ package android.net.wifi.p2p {
     method public abstract void onSuccess();
   }
 
-  public static class WifiP2pManager.Channel {
+  public static class WifiP2pManager.Channel implements java.lang.AutoCloseable {
+    method public void close();
   }
 
   public static abstract interface WifiP2pManager.ChannelListener {
@@ -30610,6 +30716,7 @@ package android.os {
     field public static final int N = 24; // 0x18
     field public static final int N_MR1 = 25; // 0x19
     field public static final int O = 26; // 0x1a
+    field public static final int O_MR1 = 27; // 0x1b
   }
 
   public final class Bundle extends android.os.BaseBundle implements java.lang.Cloneable android.os.Parcelable {
@@ -30675,6 +30782,7 @@ package android.os {
     method public void putStringArrayList(java.lang.String, java.util.ArrayList<java.lang.String>);
     method public void readFromParcel(android.os.Parcel);
     method public void setClassLoader(java.lang.ClassLoader);
+    method public synchronized java.lang.String toString();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.os.Bundle> CREATOR;
     field public static final android.os.Bundle EMPTY;
@@ -30906,6 +31014,7 @@ package android.os {
   public abstract class FileObserver {
     ctor public FileObserver(java.lang.String);
     ctor public FileObserver(java.lang.String, int);
+    method protected void finalize();
     method public abstract void onEvent(int, java.lang.String);
     method public void startWatching();
     method public void stopWatching();
@@ -31057,11 +31166,11 @@ package android.os {
 
   public class MemoryFile {
     ctor public MemoryFile(java.lang.String, int) throws java.io.IOException;
-    method public synchronized boolean allowPurging(boolean) throws java.io.IOException;
+    method public deprecated synchronized boolean allowPurging(boolean) throws java.io.IOException;
     method public void close();
     method public java.io.InputStream getInputStream();
     method public java.io.OutputStream getOutputStream();
-    method public boolean isPurgingAllowed();
+    method public deprecated boolean isPurgingAllowed();
     method public int length();
     method public int readBytes(byte[], int, int, int) throws java.io.IOException;
     method public void writeBytes(byte[], int, int, int) throws java.io.IOException;
@@ -31358,6 +31467,7 @@ package android.os {
     method public int describeContents();
     method public android.os.PersistableBundle getPersistableBundle(java.lang.String);
     method public void putPersistableBundle(java.lang.String, android.os.PersistableBundle);
+    method public synchronized java.lang.String toString();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.os.PersistableBundle> CREATOR;
     field public static final android.os.PersistableBundle EMPTY;
@@ -31483,6 +31593,20 @@ package android.os {
     method public void send(int, android.os.Bundle);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.os.ResultReceiver> CREATOR;
+  }
+
+  public final class SharedMemory implements java.io.Closeable android.os.Parcelable {
+    method public void close();
+    method public static android.os.SharedMemory create(java.lang.String, int) throws android.system.ErrnoException;
+    method public int describeContents();
+    method public int getSize();
+    method public java.nio.ByteBuffer map(int, int, int) throws android.system.ErrnoException;
+    method public java.nio.ByteBuffer mapReadOnly() throws android.system.ErrnoException;
+    method public java.nio.ByteBuffer mapReadWrite() throws android.system.ErrnoException;
+    method public boolean setProtect(int);
+    method public static void unmap(java.nio.ByteBuffer);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.os.SharedMemory> CREATOR;
   }
 
   public class StatFs {
@@ -31889,6 +32013,7 @@ package android.os.storage {
     method public android.os.storage.StorageVolume getStorageVolume(java.io.File);
     method public java.util.List<android.os.storage.StorageVolume> getStorageVolumes();
     method public java.util.UUID getUuidForPath(java.io.File) throws java.io.IOException;
+    method public boolean isAllocationSupported(java.io.FileDescriptor);
     method public boolean isCacheBehaviorGroup(java.io.File) throws java.io.IOException;
     method public boolean isCacheBehaviorTombstone(java.io.File) throws java.io.IOException;
     method public boolean isEncrypted(java.io.File);
@@ -35680,6 +35805,7 @@ package android.renderscript {
     method public static android.renderscript.AllocationAdapter create1D(android.renderscript.RenderScript, android.renderscript.Allocation);
     method public static android.renderscript.AllocationAdapter create2D(android.renderscript.RenderScript, android.renderscript.Allocation);
     method public static android.renderscript.AllocationAdapter createTyped(android.renderscript.RenderScript, android.renderscript.Allocation, android.renderscript.Type);
+    method public synchronized void resize(int);
     method public void setFace(android.renderscript.Type.CubemapFace);
     method public void setLOD(int);
     method public void setX(int);
@@ -36939,6 +37065,30 @@ package android.service.autofill {
     field public static final java.lang.String SERVICE_META_DATA = "android.autofill";
   }
 
+  public final class CharSequenceTransformation implements android.os.Parcelable android.service.autofill.Transformation {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.CharSequenceTransformation> CREATOR;
+  }
+
+  public static class CharSequenceTransformation.Builder {
+    ctor public CharSequenceTransformation.Builder(android.view.autofill.AutofillId, java.util.regex.Pattern, java.lang.String);
+    method public android.service.autofill.CharSequenceTransformation.Builder addField(android.view.autofill.AutofillId, java.util.regex.Pattern, java.lang.String);
+    method public android.service.autofill.CharSequenceTransformation build();
+  }
+
+  public final class CustomDescription implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.CustomDescription> CREATOR;
+  }
+
+  public static class CustomDescription.Builder {
+    ctor public CustomDescription.Builder(android.widget.RemoteViews);
+    method public android.service.autofill.CustomDescription.Builder addChild(int, android.service.autofill.Transformation);
+    method public android.service.autofill.CustomDescription build();
+  }
+
   public final class Dataset implements android.os.Parcelable {
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
@@ -37012,6 +37162,32 @@ package android.service.autofill {
     method public android.service.autofill.FillResponse.Builder setSaveInfo(android.service.autofill.SaveInfo);
   }
 
+  public final class ImageTransformation implements android.os.Parcelable android.service.autofill.Transformation {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.ImageTransformation> CREATOR;
+  }
+
+  public static class ImageTransformation.Builder {
+    ctor public ImageTransformation.Builder(android.view.autofill.AutofillId, java.util.regex.Pattern, int);
+    method public android.service.autofill.ImageTransformation.Builder addOption(java.util.regex.Pattern, int);
+    method public android.service.autofill.ImageTransformation build();
+  }
+
+  public final class LuhnChecksumValidator implements android.os.Parcelable android.service.autofill.Validator {
+    ctor public LuhnChecksumValidator(android.view.autofill.AutofillId...);
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.LuhnChecksumValidator> CREATOR;
+  }
+
+  public final class RegexValidator implements android.os.Parcelable android.service.autofill.Validator {
+    ctor public RegexValidator(android.view.autofill.AutofillId, java.util.regex.Pattern);
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.RegexValidator> CREATOR;
+  }
+
   public final class SaveCallback {
     method public void onFailure(java.lang.CharSequence);
     method public void onSuccess();
@@ -37034,11 +37210,14 @@ package android.service.autofill {
 
   public static final class SaveInfo.Builder {
     ctor public SaveInfo.Builder(int, android.view.autofill.AutofillId[]);
+    ctor public SaveInfo.Builder(int);
     method public android.service.autofill.SaveInfo build();
+    method public android.service.autofill.SaveInfo.Builder setCustomDescription(android.service.autofill.CustomDescription);
     method public android.service.autofill.SaveInfo.Builder setDescription(java.lang.CharSequence);
     method public android.service.autofill.SaveInfo.Builder setFlags(int);
     method public android.service.autofill.SaveInfo.Builder setNegativeAction(int, android.content.IntentSender);
     method public android.service.autofill.SaveInfo.Builder setOptionalIds(android.view.autofill.AutofillId[]);
+    method public android.service.autofill.SaveInfo.Builder setValidator(android.service.autofill.Validator);
   }
 
   public final class SaveRequest implements android.os.Parcelable {
@@ -37047,6 +37226,17 @@ package android.service.autofill {
     method public java.util.List<android.service.autofill.FillContext> getFillContexts();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.autofill.SaveRequest> CREATOR;
+  }
+
+  public abstract interface Transformation {
+  }
+
+  public abstract interface Validator {
+  }
+
+  public final class Validators {
+    method public static android.service.autofill.Validator and(android.service.autofill.Validator...);
+    method public static android.service.autofill.Validator or(android.service.autofill.Validator...);
   }
 
 }
@@ -37682,8 +37872,10 @@ package android.service.wallpaper {
     method public android.view.SurfaceHolder getSurfaceHolder();
     method public boolean isPreview();
     method public boolean isVisible();
+    method public void notifyColorsChanged();
     method public void onApplyWindowInsets(android.view.WindowInsets);
     method public android.os.Bundle onCommand(java.lang.String, int, int, int, android.os.Bundle, boolean);
+    method public android.app.WallpaperColors onComputeColors();
     method public void onCreate(android.view.SurfaceHolder);
     method public void onDesiredSizeChanged(int, int);
     method public void onDestroy();
@@ -38795,6 +38987,7 @@ package android.telecom {
   public static final class Call.RttCall {
     method public int getRttAudioMode();
     method public java.lang.String read();
+    method public java.lang.String readImmediately() throws java.io.IOException;
     method public void setRttMode(int);
     method public void write(java.lang.String) throws java.io.IOException;
     field public static final int RTT_MODE_FULL = 1; // 0x1
@@ -39516,6 +39709,7 @@ package android.telephony {
     field public static final java.lang.String KEY_DEFAULT_VM_NUMBER_STRING = "default_vm_number_string";
     field public static final java.lang.String KEY_DIAL_STRING_REPLACE_STRING_ARRAY = "dial_string_replace_string_array";
     field public static final java.lang.String KEY_DISABLE_CDMA_ACTIVATION_CODE_BOOL = "disable_cdma_activation_code_bool";
+    field public static final java.lang.String KEY_DISPLAY_HD_AUDIO_PROPERTY_BOOL = "display_hd_audio_property_bool";
     field public static final java.lang.String KEY_DROP_VIDEO_CALL_WHEN_ANSWERING_AUDIO_CALL_BOOL = "drop_video_call_when_answering_audio_call_bool";
     field public static final java.lang.String KEY_DTMF_TYPE_ENABLED_BOOL = "dtmf_type_enabled_bool";
     field public static final java.lang.String KEY_DURATION_BLOCKING_DISABLED_AFTER_EMERGENCY_INT = "duration_blocking_disabled_after_emergency_int";
@@ -40265,6 +40459,7 @@ package android.telephony {
     field public static final java.lang.String EXTRA_CALL_VOICEMAIL_INTENT = "android.telephony.extra.CALL_VOICEMAIL_INTENT";
     field public static final java.lang.String EXTRA_HIDE_PUBLIC_SETTINGS = "android.telephony.extra.HIDE_PUBLIC_SETTINGS";
     field public static final java.lang.String EXTRA_INCOMING_NUMBER = "incoming_number";
+    field public static final java.lang.String EXTRA_IS_REFRESH = "android.telephony.extra.IS_REFRESH";
     field public static final java.lang.String EXTRA_LAUNCH_VOICEMAIL_SETTINGS_INTENT = "android.telephony.extra.LAUNCH_VOICEMAIL_SETTINGS_INTENT";
     field public static final java.lang.String EXTRA_NOTIFICATION_COUNT = "android.telephony.extra.NOTIFICATION_COUNT";
     field public static final java.lang.String EXTRA_PHONE_ACCOUNT_HANDLE = "android.telephony.extra.PHONE_ACCOUNT_HANDLE";
@@ -40466,6 +40661,7 @@ package android.telephony.gsm {
 
   public static deprecated class SmsMessage.SubmitPdu {
     ctor public deprecated SmsMessage.SubmitPdu();
+    method public deprecated java.lang.String toString();
     field public deprecated byte[] encodedMessage;
     field public deprecated byte[] encodedScAddress;
   }
@@ -40676,6 +40872,7 @@ package android.test {
     method public java.util.List<junit.framework.TestCase> getTestCases();
     method public java.lang.String getTestClassName();
     method public junit.framework.TestResult getTestResult();
+    method protected java.lang.Class loadSuiteClass(java.lang.String) throws java.lang.ClassNotFoundException;
     method protected void runFailed(java.lang.String);
     method public void runTest();
     method public void runTest(junit.framework.TestResult);
@@ -40936,10 +41133,12 @@ package android.test.mock {
     ctor protected MockContentProvider();
     ctor public MockContentProvider(android.content.Context);
     ctor public MockContentProvider(android.content.Context, java.lang.String, java.lang.String, android.content.pm.PathPermission[]);
+    method public android.content.ContentProviderResult[] applyBatch(java.util.ArrayList<android.content.ContentProviderOperation>);
     method public int delete(android.net.Uri, java.lang.String, java.lang.String[]);
     method public java.lang.String getType(android.net.Uri);
     method public android.net.Uri insert(android.net.Uri, android.content.ContentValues);
     method public boolean onCreate();
+    method public android.content.res.AssetFileDescriptor openTypedAssetFile(android.net.Uri, java.lang.String, android.os.Bundle);
     method public android.database.Cursor query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String);
     method public int update(android.net.Uri, android.content.ContentValues, java.lang.String, java.lang.String[]);
   }
@@ -41209,6 +41408,10 @@ package android.test.mock {
 
   public deprecated class MockResources extends android.content.res.Resources {
     ctor public MockResources();
+    method public int getColor(int) throws android.content.res.Resources.NotFoundException;
+    method public android.content.res.ColorStateList getColorStateList(int) throws android.content.res.Resources.NotFoundException;
+    method public android.graphics.drawable.Drawable getDrawable(int) throws android.content.res.Resources.NotFoundException;
+    method public void updateConfiguration(android.content.res.Configuration, android.util.DisplayMetrics);
   }
 
 }
@@ -41444,6 +41647,7 @@ package android.text {
 
   public static class InputFilter.AllCaps implements android.text.InputFilter {
     ctor public InputFilter.AllCaps();
+    ctor public InputFilter.AllCaps(java.util.Locale);
     method public java.lang.CharSequence filter(java.lang.CharSequence, int, int, android.text.Spanned, int, int);
   }
 
@@ -42456,6 +42660,7 @@ package android.text.style {
 
   public abstract class MetricAffectingSpan extends android.text.style.CharacterStyle implements android.text.style.UpdateLayout {
     ctor public MetricAffectingSpan();
+    method public android.text.style.MetricAffectingSpan getUnderlying();
     method public abstract void updateMeasureState(android.text.TextPaint);
   }
 
@@ -43136,14 +43341,28 @@ package android.transition {
   public class TransitionSet extends android.transition.Transition {
     ctor public TransitionSet();
     ctor public TransitionSet(android.content.Context, android.util.AttributeSet);
+    method public android.transition.TransitionSet addListener(android.transition.Transition.TransitionListener);
+    method public android.transition.TransitionSet addTarget(android.view.View);
+    method public android.transition.TransitionSet addTarget(int);
+    method public android.transition.TransitionSet addTarget(java.lang.String);
+    method public android.transition.TransitionSet addTarget(java.lang.Class);
     method public android.transition.TransitionSet addTransition(android.transition.Transition);
     method public void captureEndValues(android.transition.TransitionValues);
     method public void captureStartValues(android.transition.TransitionValues);
+    method public android.transition.TransitionSet clone();
     method public int getOrdering();
     method public android.transition.Transition getTransitionAt(int);
     method public int getTransitionCount();
+    method public android.transition.TransitionSet removeListener(android.transition.Transition.TransitionListener);
+    method public android.transition.TransitionSet removeTarget(int);
+    method public android.transition.TransitionSet removeTarget(android.view.View);
+    method public android.transition.TransitionSet removeTarget(java.lang.Class);
+    method public android.transition.TransitionSet removeTarget(java.lang.String);
     method public android.transition.TransitionSet removeTransition(android.transition.Transition);
+    method public android.transition.TransitionSet setDuration(long);
+    method public android.transition.TransitionSet setInterpolator(android.animation.TimeInterpolator);
     method public android.transition.TransitionSet setOrdering(int);
+    method public android.transition.TransitionSet setStartDelay(long);
     field public static final int ORDERING_SEQUENTIAL = 1; // 0x1
     field public static final int ORDERING_TOGETHER = 0; // 0x0
   }
@@ -43308,6 +43527,9 @@ package android.util {
 
   public class Base64InputStream extends java.io.FilterInputStream {
     ctor public Base64InputStream(java.io.InputStream, int);
+    method public int available();
+    method public void mark(int);
+    method public void reset();
   }
 
   public class Base64OutputStream extends java.io.FilterOutputStream {
@@ -44275,9 +44497,13 @@ package android.view {
     field public static final int CONTEXT_CLICK = 6; // 0x6
     field public static final int FLAG_IGNORE_GLOBAL_SETTING = 2; // 0x2
     field public static final int FLAG_IGNORE_VIEW_SETTING = 1; // 0x1
+    field public static final int KEYBOARD_PRESS = 3; // 0x3
+    field public static final int KEYBOARD_RELEASE = 7; // 0x7
     field public static final int KEYBOARD_TAP = 3; // 0x3
     field public static final int LONG_PRESS = 0; // 0x0
+    field public static final int TEXT_HANDLE_MOVE = 9; // 0x9
     field public static final int VIRTUAL_KEY = 1; // 0x1
+    field public static final int VIRTUAL_KEY_RELEASE = 8; // 0x8
   }
 
   public class InflateException extends java.lang.RuntimeException {
@@ -44306,6 +44532,7 @@ package android.view {
     method public android.os.Vibrator getVibrator();
     method public boolean[] hasKeys(int...);
     method public boolean hasMicrophone();
+    method public boolean isEnabled();
     method public boolean isVirtual();
     method public boolean supportsSource(int);
     method public void writeToParcel(android.os.Parcel, int);
@@ -45421,6 +45648,7 @@ package android.view {
     method public android.graphics.Canvas lockCanvas();
     method public android.graphics.Canvas lockCanvas(android.graphics.Rect);
     method protected final void onDraw(android.graphics.Canvas);
+    method public void setBackgroundDrawable(android.graphics.drawable.Drawable);
     method public void setOpaque(boolean);
     method public void setSurfaceTexture(android.graphics.SurfaceTexture);
     method public void setSurfaceTextureListener(android.view.TextureView.SurfaceTextureListener);
@@ -46444,6 +46672,7 @@ package android.view {
     method public int getLayoutMode();
     method public android.animation.LayoutTransition getLayoutTransition();
     method public int getNestedScrollAxes();
+    method public android.view.ViewGroupOverlay getOverlay();
     method public int getPersistentDrawingCache();
     method public boolean getTouchscreenBlocksFocus();
     method public int indexOfChild(android.view.View);
@@ -46874,6 +47103,7 @@ package android.view {
     method public final boolean isActive();
     method public abstract boolean isFloating();
     method public abstract boolean isShortcutKey(int, android.view.KeyEvent);
+    method public boolean isWideColorGamut();
     method public final void makeActive();
     method protected abstract void onActive();
     method public abstract void onConfigurationChanged(android.content.res.Configuration);
@@ -47136,12 +47366,12 @@ package android.view {
     field public static final int FLAG_SCALED = 16384; // 0x4000
     field public static final int FLAG_SECURE = 8192; // 0x2000
     field public static final int FLAG_SHOW_WALLPAPER = 1048576; // 0x100000
-    field public static final int FLAG_SHOW_WHEN_LOCKED = 524288; // 0x80000
+    field public static final deprecated int FLAG_SHOW_WHEN_LOCKED = 524288; // 0x80000
     field public static final int FLAG_SPLIT_TOUCH = 8388608; // 0x800000
     field public static final deprecated int FLAG_TOUCHABLE_WHEN_WAKING = 64; // 0x40
     field public static final int FLAG_TRANSLUCENT_NAVIGATION = 134217728; // 0x8000000
     field public static final int FLAG_TRANSLUCENT_STATUS = 67108864; // 0x4000000
-    field public static final int FLAG_TURN_SCREEN_ON = 2097152; // 0x200000
+    field public static final deprecated int FLAG_TURN_SCREEN_ON = 2097152; // 0x200000
     field public static final int FLAG_WATCH_OUTSIDE_TOUCH = 262144; // 0x40000
     field public static final int FORMAT_CHANGED = 8; // 0x8
     field public static final int LAST_APPLICATION_WINDOW = 99; // 0x63
@@ -47295,6 +47525,7 @@ package android.view.accessibility {
   }
 
   public final class AccessibilityManager {
+    method public void addAccessibilityRequestPreparer(android.view.accessibility.AccessibilityRequestPreparer);
     method public boolean addAccessibilityStateChangeListener(android.view.accessibility.AccessibilityManager.AccessibilityStateChangeListener);
     method public void addAccessibilityStateChangeListener(android.view.accessibility.AccessibilityManager.AccessibilityStateChangeListener, android.os.Handler);
     method public boolean addTouchExplorationStateChangeListener(android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener);
@@ -47303,8 +47534,10 @@ package android.view.accessibility {
     method public java.util.List<android.accessibilityservice.AccessibilityServiceInfo> getEnabledAccessibilityServiceList(int);
     method public java.util.List<android.accessibilityservice.AccessibilityServiceInfo> getInstalledAccessibilityServiceList();
     method public void interrupt();
+    method public static boolean isAccessibilityButtonSupported();
     method public boolean isEnabled();
     method public boolean isTouchExplorationEnabled();
+    method public void removeAccessibilityRequestPreparer(android.view.accessibility.AccessibilityRequestPreparer);
     method public boolean removeAccessibilityStateChangeListener(android.view.accessibility.AccessibilityManager.AccessibilityStateChangeListener);
     method public boolean removeTouchExplorationStateChangeListener(android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener);
     method public void sendAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
@@ -47621,6 +47854,13 @@ package android.view.accessibility {
     method public void setToIndex(int);
   }
 
+  public abstract class AccessibilityRequestPreparer {
+    ctor public AccessibilityRequestPreparer(android.view.View, int);
+    method public android.view.View getView();
+    method public abstract void onPrepareExtraData(int, java.lang.String, android.os.Bundle, android.os.Message);
+    field public static final int REQUEST_TYPE_EXTRA_DATA = 1; // 0x1
+  }
+
   public final class AccessibilityWindowInfo implements android.os.Parcelable {
     method public int describeContents();
     method public android.view.accessibility.AccessibilityNodeInfo getAnchor();
@@ -47713,6 +47953,7 @@ package android.view.animation {
     ctor public Animation(android.content.Context, android.util.AttributeSet);
     method protected void applyTransformation(float, android.view.animation.Transformation);
     method public void cancel();
+    method protected android.view.animation.Animation clone() throws java.lang.CloneNotSupportedException;
     method public long computeDurationHint();
     method protected void ensureInterpolator();
     method public int getBackgroundColor();
@@ -47784,6 +48025,7 @@ package android.view.animation {
     ctor public AnimationSet(android.content.Context, android.util.AttributeSet);
     ctor public AnimationSet(boolean);
     method public void addAnimation(android.view.animation.Animation);
+    method protected android.view.animation.AnimationSet clone() throws java.lang.CloneNotSupportedException;
     method public java.util.List<android.view.animation.Animation> getAnimations();
   }
 
@@ -47988,6 +48230,8 @@ package android.view.autofill {
     method public void notifyViewEntered(android.view.View, int, android.graphics.Rect);
     method public void notifyViewExited(android.view.View);
     method public void notifyViewExited(android.view.View, int);
+    method public void notifyViewVisibilityChanged(android.view.View, boolean);
+    method public void notifyViewVisibilityChanged(android.view.View, int, boolean);
     method public void registerCallback(android.view.autofill.AutofillManager.AutofillCallback);
     method public void requestAutofill(android.view.View);
     method public void requestAutofill(android.view.View, int, android.graphics.Rect);
@@ -48634,6 +48878,10 @@ package android.webkit {
   public final deprecated class CookieSyncManager extends android.webkit.WebSyncManager {
     method public static android.webkit.CookieSyncManager createInstance(android.content.Context);
     method public static android.webkit.CookieSyncManager getInstance();
+    method public deprecated void resetSync();
+    method public deprecated void startSync();
+    method public deprecated void stopSync();
+    method public deprecated void sync();
     method protected deprecated void syncFromRamToFlash();
     field protected static final java.lang.String LOGTAG = "websync";
     field protected android.webkit.WebViewDatabase mDataBase;
@@ -48713,6 +48961,13 @@ package android.webkit {
     ctor public RenderProcessGoneDetail();
     method public abstract boolean didCrash();
     method public abstract int rendererPriorityAtExit();
+  }
+
+  public abstract class SafeBrowsingResponse {
+    ctor public SafeBrowsingResponse();
+    method public abstract void backToSafety(boolean);
+    method public abstract void proceed(boolean);
+    method public abstract void showInterstitial(boolean);
   }
 
   public class ServiceWorkerClient {
@@ -49133,8 +49388,10 @@ package android.webkit {
     method public int getProgress();
     method public boolean getRendererPriorityWaivedWhenNotVisible();
     method public int getRendererRequestedPriority();
+    method public static android.net.Uri getSafeBrowsingPrivacyPolicyUrl();
     method public deprecated float getScale();
     method public android.webkit.WebSettings getSettings();
+    method public android.view.textclassifier.TextClassifier getTextClassifier();
     method public java.lang.String getTitle();
     method public java.lang.String getUrl();
     method public android.webkit.WebChromeClient getWebChromeClient();
@@ -49181,11 +49438,15 @@ package android.webkit {
     method public void setNetworkAvailable(boolean);
     method public deprecated void setPictureListener(android.webkit.WebView.PictureListener);
     method public void setRendererPriorityPolicy(int, boolean);
+    method public static void setSafeBrowsingWhitelist(java.util.List<java.lang.String>, android.webkit.ValueCallback<java.lang.Boolean>);
+    method public void setTextClassifier(android.view.textclassifier.TextClassifier);
     method public deprecated void setVerticalScrollbarOverlay(boolean);
     method public void setWebChromeClient(android.webkit.WebChromeClient);
     method public static void setWebContentsDebuggingEnabled(boolean);
     method public void setWebViewClient(android.webkit.WebViewClient);
+    method public deprecated boolean shouldDelayChildPressedState();
     method public deprecated boolean showFindDialog(java.lang.String, boolean);
+    method public static void startSafeBrowsing(android.content.Context, android.webkit.ValueCallback<java.lang.Boolean>);
     method public void stopLoading();
     method public void zoomBy(float);
     method public boolean zoomIn();
@@ -49248,6 +49509,7 @@ package android.webkit {
     method public void onReceivedLoginRequest(android.webkit.WebView, java.lang.String, java.lang.String, java.lang.String);
     method public void onReceivedSslError(android.webkit.WebView, android.webkit.SslErrorHandler, android.net.http.SslError);
     method public boolean onRenderProcessGone(android.webkit.WebView, android.webkit.RenderProcessGoneDetail);
+    method public void onSafeBrowsingHit(android.webkit.WebView, android.webkit.WebResourceRequest, int, android.webkit.SafeBrowsingResponse);
     method public void onScaleChanged(android.webkit.WebView, float, float);
     method public deprecated void onTooManyRedirects(android.webkit.WebView, android.os.Message, android.os.Message);
     method public void onUnhandledKeyEvent(android.webkit.WebView, android.view.KeyEvent);
@@ -49272,6 +49534,10 @@ package android.webkit {
     field public static final int ERROR_UNSAFE_RESOURCE = -16; // 0xfffffff0
     field public static final int ERROR_UNSUPPORTED_AUTH_SCHEME = -3; // 0xfffffffd
     field public static final int ERROR_UNSUPPORTED_SCHEME = -10; // 0xfffffff6
+    field public static final int SAFE_BROWSING_THREAT_MALWARE = 1; // 0x1
+    field public static final int SAFE_BROWSING_THREAT_PHISHING = 2; // 0x2
+    field public static final int SAFE_BROWSING_THREAT_UNKNOWN = 0; // 0x0
+    field public static final int SAFE_BROWSING_THREAT_UNWANTED_SOFTWARE = 3; // 0x3
   }
 
   public abstract class WebViewDatabase {
@@ -49308,6 +49574,7 @@ package android.widget {
     method public void clearTextFilter();
     method public void deferNotifyDataSetChanged();
     method public void fling(int);
+    method public android.widget.AbsListView.LayoutParams generateLayoutParams(android.util.AttributeSet);
     method public int getCacheColorHint();
     method public int getCheckedItemCount();
     method public long[] getCheckedItemIds();
@@ -49474,6 +49741,9 @@ package android.widget {
     ctor public ActionMenuView(android.content.Context);
     ctor public ActionMenuView(android.content.Context, android.util.AttributeSet);
     method public void dismissPopupMenus();
+    method protected android.widget.ActionMenuView.LayoutParams generateDefaultLayoutParams();
+    method public android.widget.ActionMenuView.LayoutParams generateLayoutParams(android.util.AttributeSet);
+    method protected android.widget.ActionMenuView.LayoutParams generateLayoutParams(android.view.ViewGroup.LayoutParams);
     method public android.view.Menu getMenu();
     method public android.graphics.drawable.Drawable getOverflowIcon();
     method public int getPopupTheme();
@@ -49649,7 +49919,6 @@ package android.widget {
     method public void addAll(T...);
     method public void clear();
     method public static android.widget.ArrayAdapter<java.lang.CharSequence> createFromResource(android.content.Context, int, int);
-    method public java.lang.CharSequence[] getAutofillOptions();
     method public android.content.Context getContext();
     method public int getCount();
     method public android.content.res.Resources.Theme getDropDownViewTheme();
@@ -49739,6 +50008,7 @@ package android.widget {
     method public void notifyDataSetChanged();
     method public void notifyDataSetInvalidated();
     method public void registerDataSetObserver(android.database.DataSetObserver);
+    method public void setAutofillOptions(java.lang.CharSequence...);
     method public void unregisterDataSetObserver(android.database.DataSetObserver);
   }
 
@@ -50017,6 +50287,7 @@ package android.widget {
     ctor public EditText(android.content.Context, android.util.AttributeSet, int);
     ctor public EditText(android.content.Context, android.util.AttributeSet, int, int);
     method public void extendSelection(int);
+    method public android.text.Editable getText();
     method public void selectAll();
     method public void setSelection(int, int);
     method public void setSelection(int);
@@ -50138,6 +50409,8 @@ package android.widget {
     ctor public FrameLayout(android.content.Context, android.util.AttributeSet);
     ctor public FrameLayout(android.content.Context, android.util.AttributeSet, int);
     ctor public FrameLayout(android.content.Context, android.util.AttributeSet, int, int);
+    method protected android.widget.FrameLayout.LayoutParams generateDefaultLayoutParams();
+    method public android.widget.FrameLayout.LayoutParams generateLayoutParams(android.util.AttributeSet);
     method public deprecated boolean getConsiderGoneChildrenWhenMeasuring();
     method public boolean getMeasureAllChildren();
     method protected void onLayout(boolean, int, int, int, int);
@@ -50184,6 +50457,9 @@ package android.widget {
     ctor public GridLayout(android.content.Context, android.util.AttributeSet);
     ctor public GridLayout(android.content.Context, android.util.AttributeSet, int);
     ctor public GridLayout(android.content.Context, android.util.AttributeSet, int, int);
+    method protected android.widget.GridLayout.LayoutParams generateDefaultLayoutParams();
+    method public android.widget.GridLayout.LayoutParams generateLayoutParams(android.util.AttributeSet);
+    method protected android.widget.GridLayout.LayoutParams generateLayoutParams(android.view.ViewGroup.LayoutParams);
     method public int getAlignmentMode();
     method public int getColumnCount();
     method public int getOrientation();
@@ -50396,6 +50672,9 @@ package android.widget {
     ctor public LinearLayout(android.content.Context, android.util.AttributeSet);
     ctor public LinearLayout(android.content.Context, android.util.AttributeSet, int);
     ctor public LinearLayout(android.content.Context, android.util.AttributeSet, int, int);
+    method protected android.widget.LinearLayout.LayoutParams generateDefaultLayoutParams();
+    method public android.widget.LinearLayout.LayoutParams generateLayoutParams(android.util.AttributeSet);
+    method protected android.widget.LinearLayout.LayoutParams generateLayoutParams(android.view.ViewGroup.LayoutParams);
     method public int getBaselineAlignedChildIndex();
     method public android.graphics.drawable.Drawable getDividerDrawable();
     method public int getDividerPadding();
@@ -50782,6 +51061,8 @@ package android.widget {
     method public final synchronized void incrementSecondaryProgressBy(int);
     method public boolean isAnimating();
     method public synchronized boolean isIndeterminate();
+    method protected synchronized void onDraw(android.graphics.Canvas);
+    method protected synchronized void onMeasure(int, int);
     method public void onRestoreInstanceState(android.os.Parcelable);
     method public android.os.Parcelable onSaveInstanceState();
     method public synchronized void setIndeterminate(boolean);
@@ -50837,6 +51118,7 @@ package android.widget {
     ctor public RadioGroup(android.content.Context, android.util.AttributeSet);
     method public void check(int);
     method public void clearCheck();
+    method public android.widget.RadioGroup.LayoutParams generateLayoutParams(android.util.AttributeSet);
     method public int getCheckedRadioButtonId();
     method public void setOnCheckedChangeListener(android.widget.RadioGroup.OnCheckedChangeListener);
   }
@@ -50879,6 +51161,7 @@ package android.widget {
     ctor public RelativeLayout(android.content.Context, android.util.AttributeSet);
     ctor public RelativeLayout(android.content.Context, android.util.AttributeSet, int);
     ctor public RelativeLayout(android.content.Context, android.util.AttributeSet, int, int);
+    method public android.widget.RelativeLayout.LayoutParams generateLayoutParams(android.util.AttributeSet);
     method public int getGravity();
     method protected void onLayout(boolean, int, int, int, int);
     method public void setGravity(int);
@@ -51422,6 +51705,7 @@ package android.widget {
   public class TableLayout extends android.widget.LinearLayout {
     ctor public TableLayout(android.content.Context);
     ctor public TableLayout(android.content.Context, android.util.AttributeSet);
+    method public android.widget.TableLayout.LayoutParams generateLayoutParams(android.util.AttributeSet);
     method public boolean isColumnCollapsed(int);
     method public boolean isColumnShrinkable(int);
     method public boolean isColumnStretchable(int);
@@ -51446,6 +51730,7 @@ package android.widget {
   public class TableRow extends android.widget.LinearLayout {
     ctor public TableRow(android.content.Context);
     ctor public TableRow(android.content.Context, android.util.AttributeSet);
+    method public android.widget.TableRow.LayoutParams generateLayoutParams(android.util.AttributeSet);
     method public android.view.View getVirtualChildAt(int);
     method public int getVirtualChildCount();
   }
@@ -51787,6 +52072,7 @@ package android.widget {
     ctor public ToggleButton(android.content.Context);
     method public java.lang.CharSequence getTextOff();
     method public java.lang.CharSequence getTextOn();
+    method public void setBackgroundDrawable(android.graphics.drawable.Drawable);
     method public void setTextOff(java.lang.CharSequence);
     method public void setTextOn(java.lang.CharSequence);
   }
@@ -51798,6 +52084,9 @@ package android.widget {
     ctor public Toolbar(android.content.Context, android.util.AttributeSet, int, int);
     method public void collapseActionView();
     method public void dismissPopupMenus();
+    method protected android.widget.Toolbar.LayoutParams generateDefaultLayoutParams();
+    method public android.widget.Toolbar.LayoutParams generateLayoutParams(android.util.AttributeSet);
+    method protected android.widget.Toolbar.LayoutParams generateLayoutParams(android.view.ViewGroup.LayoutParams);
     method public int getContentInsetEnd();
     method public int getContentInsetEndWithActions();
     method public int getContentInsetLeft();
@@ -52321,6 +52610,13 @@ package dalvik.system {
   public class BaseDexClassLoader extends java.lang.ClassLoader {
     ctor public BaseDexClassLoader(java.lang.String, java.io.File, java.lang.String, java.lang.ClassLoader);
     method public java.lang.String findLibrary(java.lang.String);
+    method protected java.util.Enumeration<java.net.URL> findResources(java.lang.String);
+    method protected synchronized java.lang.Package getPackage(java.lang.String);
+  }
+
+  public final class DelegateLastClassLoader extends dalvik.system.PathClassLoader {
+    ctor public DelegateLastClassLoader(java.lang.String, java.lang.ClassLoader);
+    ctor public DelegateLastClassLoader(java.lang.String, java.lang.String, java.lang.ClassLoader);
   }
 
   public class DexClassLoader extends dalvik.system.BaseDexClassLoader {
@@ -52543,6 +52839,10 @@ package java.io {
   public class BufferedInputStream extends java.io.FilterInputStream {
     ctor public BufferedInputStream(java.io.InputStream);
     ctor public BufferedInputStream(java.io.InputStream, int);
+    method public synchronized int available() throws java.io.IOException;
+    method public synchronized int read() throws java.io.IOException;
+    method public synchronized int read(byte[], int, int) throws java.io.IOException;
+    method public synchronized long skip(long) throws java.io.IOException;
     field protected volatile byte[] buf;
     field protected int count;
     field protected int marklimit;
@@ -52553,6 +52853,9 @@ package java.io {
   public class BufferedOutputStream extends java.io.FilterOutputStream {
     ctor public BufferedOutputStream(java.io.OutputStream);
     ctor public BufferedOutputStream(java.io.OutputStream, int);
+    method public synchronized void flush() throws java.io.IOException;
+    method public synchronized void write(int) throws java.io.IOException;
+    method public synchronized void write(byte[], int, int) throws java.io.IOException;
     field protected byte[] buf;
     field protected int count;
   }
@@ -52578,7 +52881,12 @@ package java.io {
   public class ByteArrayInputStream extends java.io.InputStream {
     ctor public ByteArrayInputStream(byte[]);
     ctor public ByteArrayInputStream(byte[], int, int);
+    method public synchronized int available();
+    method public void mark(int);
     method public synchronized int read();
+    method public synchronized int read(byte[], int, int);
+    method public synchronized void reset();
+    method public synchronized long skip(long);
     field protected byte[] buf;
     field protected int count;
     field protected int mark;
@@ -52591,9 +52899,11 @@ package java.io {
     method public synchronized void reset();
     method public synchronized int size();
     method public synchronized byte[] toByteArray();
+    method public synchronized java.lang.String toString();
     method public synchronized java.lang.String toString(java.lang.String) throws java.io.UnsupportedEncodingException;
     method public deprecated synchronized java.lang.String toString(int);
     method public synchronized void write(int);
+    method public synchronized void write(byte[], int, int);
     method public synchronized void writeTo(java.io.OutputStream) throws java.io.IOException;
     field protected byte[] buf;
     field protected int count;
@@ -52613,12 +52923,17 @@ package java.io {
   public class CharArrayWriter extends java.io.Writer {
     ctor public CharArrayWriter();
     ctor public CharArrayWriter(int);
+    method public java.io.CharArrayWriter append(java.lang.CharSequence);
+    method public java.io.CharArrayWriter append(java.lang.CharSequence, int, int);
+    method public java.io.CharArrayWriter append(char);
     method public void close();
     method public void flush();
     method public void reset();
     method public int size();
     method public char[] toCharArray();
+    method public void write(int);
     method public void write(char[], int, int);
+    method public void write(java.lang.String, int, int);
     method public void writeTo(java.io.Writer) throws java.io.IOException;
     field protected char[] buf;
     field protected int count;
@@ -52705,6 +53020,8 @@ package java.io {
   public class DataOutputStream extends java.io.FilterOutputStream implements java.io.DataOutput {
     ctor public DataOutputStream(java.io.OutputStream);
     method public final int size();
+    method public synchronized void write(int) throws java.io.IOException;
+    method public synchronized void write(byte[], int, int) throws java.io.IOException;
     method public final void writeBoolean(boolean) throws java.io.IOException;
     method public final void writeByte(int) throws java.io.IOException;
     method public final void writeBytes(java.lang.String) throws java.io.IOException;
@@ -52804,6 +53121,7 @@ package java.io {
     ctor public FileInputStream(java.lang.String) throws java.io.FileNotFoundException;
     ctor public FileInputStream(java.io.File) throws java.io.FileNotFoundException;
     ctor public FileInputStream(java.io.FileDescriptor);
+    method protected void finalize() throws java.io.IOException;
     method public java.nio.channels.FileChannel getChannel();
     method public final java.io.FileDescriptor getFD() throws java.io.IOException;
     method public int read() throws java.io.IOException;
@@ -52820,6 +53138,7 @@ package java.io {
     ctor public FileOutputStream(java.io.File) throws java.io.FileNotFoundException;
     ctor public FileOutputStream(java.io.File, boolean) throws java.io.FileNotFoundException;
     ctor public FileOutputStream(java.io.FileDescriptor);
+    method protected void finalize() throws java.io.IOException;
     method public java.nio.channels.FileChannel getChannel();
     method public final java.io.FileDescriptor getFD() throws java.io.IOException;
     method public void write(int) throws java.io.IOException;
@@ -52933,6 +53252,8 @@ package java.io {
   public deprecated class LineNumberInputStream extends java.io.FilterInputStream {
     ctor public LineNumberInputStream(java.io.InputStream);
     method public int getLineNumber();
+    method public void mark(int);
+    method public void reset() throws java.io.IOException;
     method public void setLineNumber(int);
   }
 
@@ -53162,8 +53483,10 @@ package java.io {
     ctor public PipedInputStream(java.io.PipedOutputStream, int) throws java.io.IOException;
     ctor public PipedInputStream();
     ctor public PipedInputStream(int);
+    method public synchronized int available() throws java.io.IOException;
     method public void connect(java.io.PipedOutputStream) throws java.io.IOException;
     method public synchronized int read() throws java.io.IOException;
+    method public synchronized int read(byte[], int, int) throws java.io.IOException;
     method protected synchronized void receive(int) throws java.io.IOException;
     field protected static final int PIPE_SIZE = 1024; // 0x400
     field protected byte[] buffer;
@@ -53175,6 +53498,7 @@ package java.io {
     ctor public PipedOutputStream(java.io.PipedInputStream) throws java.io.IOException;
     ctor public PipedOutputStream();
     method public synchronized void connect(java.io.PipedInputStream) throws java.io.IOException;
+    method public synchronized void flush() throws java.io.IOException;
     method public void write(int) throws java.io.IOException;
   }
 
@@ -53185,7 +53509,9 @@ package java.io {
     ctor public PipedReader(int);
     method public void close() throws java.io.IOException;
     method public void connect(java.io.PipedWriter) throws java.io.IOException;
+    method public synchronized int read() throws java.io.IOException;
     method public synchronized int read(char[], int, int) throws java.io.IOException;
+    method public synchronized boolean ready() throws java.io.IOException;
   }
 
   public class PipedWriter extends java.io.Writer {
@@ -53210,6 +53536,8 @@ package java.io {
     method public java.io.PrintStream append(char);
     method public boolean checkError();
     method protected void clearError();
+    method public void close();
+    method public void flush();
     method public java.io.PrintStream format(java.lang.String, java.lang.Object...);
     method public java.io.PrintStream format(java.util.Locale, java.lang.String, java.lang.Object...);
     method public void print(boolean);
@@ -53234,6 +53562,8 @@ package java.io {
     method public void println(java.lang.String);
     method public void println(java.lang.Object);
     method protected void setError();
+    method public void write(int);
+    method public void write(byte[], int, int);
   }
 
   public class PrintWriter extends java.io.Writer {
@@ -53245,6 +53575,9 @@ package java.io {
     ctor public PrintWriter(java.lang.String, java.lang.String) throws java.io.FileNotFoundException, java.io.UnsupportedEncodingException;
     ctor public PrintWriter(java.io.File) throws java.io.FileNotFoundException;
     ctor public PrintWriter(java.io.File, java.lang.String) throws java.io.FileNotFoundException, java.io.UnsupportedEncodingException;
+    method public java.io.PrintWriter append(java.lang.CharSequence);
+    method public java.io.PrintWriter append(java.lang.CharSequence, int, int);
+    method public java.io.PrintWriter append(char);
     method public boolean checkError();
     method protected void clearError();
     method public void close();
@@ -53273,13 +53606,18 @@ package java.io {
     method public void println(java.lang.String);
     method public void println(java.lang.Object);
     method protected void setError();
+    method public void write(int);
     method public void write(char[], int, int);
+    method public void write(char[]);
+    method public void write(java.lang.String, int, int);
+    method public void write(java.lang.String);
     field protected java.io.Writer out;
   }
 
   public class PushbackInputStream extends java.io.FilterInputStream {
     ctor public PushbackInputStream(java.io.InputStream, int);
     ctor public PushbackInputStream(java.io.InputStream);
+    method public synchronized void close() throws java.io.IOException;
     method public void unread(int) throws java.io.IOException;
     method public void unread(byte[], int, int) throws java.io.IOException;
     method public void unread(byte[]) throws java.io.IOException;
@@ -53403,7 +53741,11 @@ package java.io {
 
   public deprecated class StringBufferInputStream extends java.io.InputStream {
     ctor public StringBufferInputStream(java.lang.String);
+    method public synchronized int available();
     method public synchronized int read();
+    method public synchronized int read(byte[], int, int);
+    method public synchronized void reset();
+    method public synchronized long skip(long);
     field protected java.lang.String buffer;
     field protected int count;
     field protected int pos;
@@ -53418,10 +53760,16 @@ package java.io {
   public class StringWriter extends java.io.Writer {
     ctor public StringWriter();
     ctor public StringWriter(int);
+    method public java.io.StringWriter append(java.lang.CharSequence);
+    method public java.io.StringWriter append(java.lang.CharSequence, int, int);
+    method public java.io.StringWriter append(char);
     method public void close() throws java.io.IOException;
     method public void flush();
     method public java.lang.StringBuffer getBuffer();
+    method public void write(int);
     method public void write(char[], int, int);
+    method public void write(java.lang.String);
+    method public void write(java.lang.String, int, int);
   }
 
   public class SyncFailedException extends java.io.IOException {
@@ -53436,6 +53784,7 @@ package java.io {
   public class UncheckedIOException extends java.lang.RuntimeException {
     ctor public UncheckedIOException(java.lang.String, java.io.IOException);
     ctor public UncheckedIOException(java.io.IOException);
+    method public java.io.IOException getCause();
   }
 
   public class UnsupportedEncodingException extends java.io.IOException {
@@ -53445,6 +53794,7 @@ package java.io {
 
   public class WriteAbortedException extends java.io.ObjectStreamException {
     ctor public WriteAbortedException(java.lang.String, java.lang.Exception);
+    method public java.lang.Throwable getCause();
     field public java.lang.Exception detail;
   }
 
@@ -54212,6 +54562,7 @@ package java.lang {
     ctor public ClassNotFoundException();
     ctor public ClassNotFoundException(java.lang.String);
     ctor public ClassNotFoundException(java.lang.String, java.lang.Throwable);
+    method public java.lang.Throwable getCause();
     method public java.lang.Throwable getException();
   }
 
@@ -54316,6 +54667,7 @@ package java.lang {
     ctor public ExceptionInInitializerError();
     ctor public ExceptionInInitializerError(java.lang.Throwable);
     ctor public ExceptionInInitializerError(java.lang.String);
+    method public java.lang.Throwable getCause();
     method public java.lang.Throwable getException();
   }
 
@@ -55103,8 +55455,16 @@ package java.lang {
     method public synchronized java.lang.StringBuffer append(float);
     method public synchronized java.lang.StringBuffer append(double);
     method public synchronized java.lang.StringBuffer appendCodePoint(int);
+    method public synchronized int capacity();
+    method public synchronized char charAt(int);
+    method public synchronized int codePointAt(int);
+    method public synchronized int codePointBefore(int);
+    method public synchronized int codePointCount(int, int);
     method public synchronized java.lang.StringBuffer delete(int, int);
     method public synchronized java.lang.StringBuffer deleteCharAt(int);
+    method public synchronized void ensureCapacity(int);
+    method public synchronized void getChars(int, int, char[], int);
+    method public synchronized int indexOf(java.lang.String, int);
     method public synchronized java.lang.StringBuffer insert(int, char[], int, int);
     method public synchronized java.lang.StringBuffer insert(int, java.lang.Object);
     method public synchronized java.lang.StringBuffer insert(int, java.lang.String);
@@ -55117,9 +55477,18 @@ package java.lang {
     method public java.lang.StringBuffer insert(int, long);
     method public java.lang.StringBuffer insert(int, float);
     method public java.lang.StringBuffer insert(int, double);
+    method public synchronized int lastIndexOf(java.lang.String, int);
+    method public synchronized int length();
+    method public synchronized int offsetByCodePoints(int, int);
     method public synchronized java.lang.StringBuffer replace(int, int, java.lang.String);
     method public synchronized java.lang.StringBuffer reverse();
+    method public synchronized void setCharAt(int, char);
+    method public synchronized void setLength(int);
+    method public synchronized java.lang.CharSequence subSequence(int, int);
+    method public synchronized java.lang.String substring(int);
+    method public synchronized java.lang.String substring(int, int);
     method public synchronized java.lang.String toString();
+    method public synchronized void trimToSize();
   }
 
   public final class StringBuilder extends java.lang.AbstractStringBuilder implements java.lang.CharSequence java.io.Serializable {
@@ -55774,6 +56143,7 @@ package java.lang.reflect {
     ctor protected InvocationTargetException();
     ctor public InvocationTargetException(java.lang.Throwable);
     ctor public InvocationTargetException(java.lang.Throwable, java.lang.String);
+    method public java.lang.Throwable getCause();
     method public java.lang.Throwable getTargetException();
   }
 
@@ -55889,6 +56259,7 @@ package java.lang.reflect {
   public class UndeclaredThrowableException extends java.lang.RuntimeException {
     ctor public UndeclaredThrowableException(java.lang.Throwable);
     ctor public UndeclaredThrowableException(java.lang.Throwable, java.lang.String);
+    method public java.lang.Throwable getCause();
     method public java.lang.Throwable getUndeclaredThrowable();
   }
 
@@ -56786,6 +57157,7 @@ package java.net {
     method public java.lang.String getQuery();
     method public java.lang.String getRef();
     method public java.lang.String getUserInfo();
+    method public synchronized int hashCode();
     method public java.net.URLConnection openConnection() throws java.io.IOException;
     method public java.net.URLConnection openConnection(java.net.Proxy) throws java.io.IOException;
     method public final java.io.InputStream openStream() throws java.io.IOException;
@@ -57015,7 +57387,6 @@ package java.nio {
     method public final int arrayOffset();
     method public abstract java.nio.CharBuffer asReadOnlyBuffer();
     method public final char charAt(int);
-    method public java.util.stream.IntStream chars();
     method public abstract java.nio.CharBuffer compact();
     method public int compareTo(java.nio.CharBuffer);
     method public abstract java.nio.CharBuffer duplicate();
@@ -57872,6 +58243,7 @@ package java.nio.file {
 
   public final class DirectoryIteratorException extends java.util.ConcurrentModificationException {
     ctor public DirectoryIteratorException(java.io.IOException);
+    method public java.io.IOException getCause();
   }
 
   public class DirectoryNotEmptyException extends java.nio.file.FileSystemException {
@@ -58837,9 +59209,11 @@ package java.security {
   public static class KeyStore.PasswordProtection implements javax.security.auth.Destroyable java.security.KeyStore.ProtectionParameter {
     ctor public KeyStore.PasswordProtection(char[]);
     ctor public KeyStore.PasswordProtection(char[], java.lang.String, java.security.spec.AlgorithmParameterSpec);
+    method public synchronized void destroy() throws javax.security.auth.DestroyFailedException;
     method public synchronized char[] getPassword();
     method public java.lang.String getProtectionAlgorithm();
     method public java.security.spec.AlgorithmParameterSpec getProtectionParameters();
+    method public synchronized boolean isDestroyed();
   }
 
   public static final class KeyStore.PrivateKeyEntry implements java.security.KeyStore.Entry {
@@ -59019,6 +59393,7 @@ package java.security {
 
   public class PrivilegedActionException extends java.lang.Exception {
     ctor public PrivilegedActionException(java.lang.Exception);
+    method public java.lang.Throwable getCause();
     method public java.lang.Exception getException();
   }
 
@@ -59041,22 +59416,30 @@ package java.security {
     method public synchronized java.lang.Object compute(java.lang.Object, java.util.function.BiFunction<? super java.lang.Object, ? super java.lang.Object, ? extends java.lang.Object>);
     method public synchronized java.lang.Object computeIfAbsent(java.lang.Object, java.util.function.Function<? super java.lang.Object, ? extends java.lang.Object>);
     method public synchronized java.lang.Object computeIfPresent(java.lang.Object, java.util.function.BiFunction<? super java.lang.Object, ? super java.lang.Object, ? extends java.lang.Object>);
+    method public java.util.Enumeration<java.lang.Object> elements();
+    method public synchronized java.util.Set<java.util.Map.Entry<java.lang.Object, java.lang.Object>> entrySet();
     method public synchronized void forEach(java.util.function.BiConsumer<? super java.lang.Object, ? super java.lang.Object>);
+    method public java.lang.Object get(java.lang.Object);
     method public java.lang.String getInfo();
     method public java.lang.String getName();
     method public synchronized java.lang.Object getOrDefault(java.lang.Object, java.lang.Object);
     method public synchronized java.security.Provider.Service getService(java.lang.String, java.lang.String);
     method public synchronized java.util.Set<java.security.Provider.Service> getServices();
     method public double getVersion();
+    method public java.util.Set<java.lang.Object> keySet();
+    method public java.util.Enumeration<java.lang.Object> keys();
     method public synchronized java.lang.Object merge(java.lang.Object, java.lang.Object, java.util.function.BiFunction<? super java.lang.Object, ? super java.lang.Object, ? extends java.lang.Object>);
     method public synchronized java.lang.Object put(java.lang.Object, java.lang.Object);
     method public synchronized void putAll(java.util.Map<?, ?>);
     method public synchronized java.lang.Object putIfAbsent(java.lang.Object, java.lang.Object);
     method protected synchronized void putService(java.security.Provider.Service);
+    method public synchronized java.lang.Object remove(java.lang.Object);
     method protected synchronized void removeService(java.security.Provider.Service);
     method public synchronized boolean replace(java.lang.Object, java.lang.Object, java.lang.Object);
     method public synchronized java.lang.Object replace(java.lang.Object, java.lang.Object);
     method public synchronized void replaceAll(java.util.function.BiFunction<? super java.lang.Object, ? super java.lang.Object, ? extends java.lang.Object>);
+    method public java.lang.String toString();
+    method public java.util.Collection<java.lang.Object> values();
   }
 
   public static class Provider.Service {
@@ -59102,7 +59485,9 @@ package java.security {
     method public final java.security.Provider getProvider();
     method public static byte[] getSeed(int);
     method protected final int next(int);
+    method public synchronized void nextBytes(byte[]);
     method public synchronized void setSeed(byte[]);
+    method public void setSeed(long);
   }
 
   public abstract class SecureRandomSpi implements java.io.Serializable {
@@ -59649,6 +60034,7 @@ package java.security.cert {
 
   public abstract class PKIXRevocationChecker extends java.security.cert.PKIXCertPathChecker {
     ctor protected PKIXRevocationChecker();
+    method public java.security.cert.PKIXRevocationChecker clone();
     method public java.util.List<java.security.cert.Extension> getOcspExtensions();
     method public java.net.URI getOcspResponder();
     method public java.security.cert.X509Certificate getOcspResponderCert();
@@ -61901,7 +62287,6 @@ package java.time {
   public final class DayOfWeek extends java.lang.Enum implements java.time.temporal.TemporalAccessor java.time.temporal.TemporalAdjuster {
     method public java.time.temporal.Temporal adjustInto(java.time.temporal.Temporal);
     method public static java.time.DayOfWeek from(java.time.temporal.TemporalAccessor);
-    method public int get(java.time.temporal.TemporalField);
     method public java.lang.String getDisplayName(java.time.format.TextStyle, java.util.Locale);
     method public long getLong(java.time.temporal.TemporalField);
     method public int getValue();
@@ -61909,8 +62294,6 @@ package java.time {
     method public java.time.DayOfWeek minus(long);
     method public static java.time.DayOfWeek of(int);
     method public java.time.DayOfWeek plus(long);
-    method public <R> R query(java.time.temporal.TemporalQuery<R>);
-    method public java.time.temporal.ValueRange range(java.time.temporal.TemporalField);
     method public static java.time.DayOfWeek valueOf(java.lang.String);
     method public static final java.time.DayOfWeek[] values();
     enum_constant public static final java.time.DayOfWeek FRIDAY;
@@ -61986,6 +62369,8 @@ package java.time {
     method public boolean isBefore(java.time.Instant);
     method public boolean isSupported(java.time.temporal.TemporalField);
     method public boolean isSupported(java.time.temporal.TemporalUnit);
+    method public java.time.Instant minus(java.time.temporal.TemporalAmount);
+    method public java.time.Instant minus(long, java.time.temporal.TemporalUnit);
     method public java.time.Instant minusMillis(long);
     method public java.time.Instant minusNanos(long);
     method public java.time.Instant minusSeconds(long);
@@ -61995,6 +62380,7 @@ package java.time {
     method public static java.time.Instant ofEpochSecond(long);
     method public static java.time.Instant ofEpochSecond(long, long);
     method public static java.time.Instant parse(java.lang.CharSequence);
+    method public java.time.Instant plus(java.time.temporal.TemporalAmount);
     method public java.time.Instant plus(long, java.time.temporal.TemporalUnit);
     method public java.time.Instant plusMillis(long);
     method public java.time.Instant plusNanos(long);
@@ -62002,6 +62388,7 @@ package java.time {
     method public long toEpochMilli();
     method public java.time.Instant truncatedTo(java.time.temporal.TemporalUnit);
     method public long until(java.time.temporal.Temporal, java.time.temporal.TemporalUnit);
+    method public java.time.Instant with(java.time.temporal.TemporalAdjuster);
     method public java.time.Instant with(java.time.temporal.TemporalField, long);
     field public static final java.time.Instant EPOCH;
     field public static final java.time.Instant MAX;
@@ -62011,6 +62398,7 @@ package java.time {
   public final class LocalDate implements java.time.chrono.ChronoLocalDate java.io.Serializable java.time.temporal.Temporal java.time.temporal.TemporalAdjuster {
     method public java.time.LocalDateTime atStartOfDay();
     method public java.time.ZonedDateTime atStartOfDay(java.time.ZoneId);
+    method public java.time.LocalDateTime atTime(java.time.LocalTime);
     method public java.time.LocalDateTime atTime(int, int);
     method public java.time.LocalDateTime atTime(int, int, int);
     method public java.time.LocalDateTime atTime(int, int, int, int);
@@ -62025,6 +62413,8 @@ package java.time {
     method public int getMonthValue();
     method public int getYear();
     method public int lengthOfMonth();
+    method public java.time.LocalDate minus(java.time.temporal.TemporalAmount);
+    method public java.time.LocalDate minus(long, java.time.temporal.TemporalUnit);
     method public java.time.LocalDate minusDays(long);
     method public java.time.LocalDate minusMonths(long);
     method public java.time.LocalDate minusWeeks(long);
@@ -62038,12 +62428,16 @@ package java.time {
     method public static java.time.LocalDate ofYearDay(int, int);
     method public static java.time.LocalDate parse(java.lang.CharSequence);
     method public static java.time.LocalDate parse(java.lang.CharSequence, java.time.format.DateTimeFormatter);
+    method public java.time.LocalDate plus(java.time.temporal.TemporalAmount);
+    method public java.time.LocalDate plus(long, java.time.temporal.TemporalUnit);
     method public java.time.LocalDate plusDays(long);
     method public java.time.LocalDate plusMonths(long);
     method public java.time.LocalDate plusWeeks(long);
     method public java.time.LocalDate plusYears(long);
     method public long until(java.time.temporal.Temporal, java.time.temporal.TemporalUnit);
     method public java.time.Period until(java.time.chrono.ChronoLocalDate);
+    method public java.time.LocalDate with(java.time.temporal.TemporalAdjuster);
+    method public java.time.LocalDate with(java.time.temporal.TemporalField, long);
     method public java.time.LocalDate withDayOfMonth(int);
     method public java.time.LocalDate withDayOfYear(int);
     method public java.time.LocalDate withMonth(int);
@@ -62068,6 +62462,8 @@ package java.time {
     method public int getSecond();
     method public int getYear();
     method public boolean isSupported(java.time.temporal.TemporalField);
+    method public java.time.LocalDateTime minus(java.time.temporal.TemporalAmount);
+    method public java.time.LocalDateTime minus(long, java.time.temporal.TemporalUnit);
     method public java.time.LocalDateTime minusDays(long);
     method public java.time.LocalDateTime minusHours(long);
     method public java.time.LocalDateTime minusMinutes(long);
@@ -62090,6 +62486,7 @@ package java.time {
     method public static java.time.LocalDateTime ofInstant(java.time.Instant, java.time.ZoneId);
     method public static java.time.LocalDateTime parse(java.lang.CharSequence);
     method public static java.time.LocalDateTime parse(java.lang.CharSequence, java.time.format.DateTimeFormatter);
+    method public java.time.LocalDateTime plus(java.time.temporal.TemporalAmount);
     method public java.time.LocalDateTime plus(long, java.time.temporal.TemporalUnit);
     method public java.time.LocalDateTime plusDays(long);
     method public java.time.LocalDateTime plusHours(long);
@@ -62103,6 +62500,7 @@ package java.time {
     method public java.time.LocalTime toLocalTime();
     method public java.time.LocalDateTime truncatedTo(java.time.temporal.TemporalUnit);
     method public long until(java.time.temporal.Temporal, java.time.temporal.TemporalUnit);
+    method public java.time.LocalDateTime with(java.time.temporal.TemporalAdjuster);
     method public java.time.LocalDateTime with(java.time.temporal.TemporalField, long);
     method public java.time.LocalDateTime withDayOfMonth(int);
     method public java.time.LocalDateTime withDayOfYear(int);
@@ -62132,6 +62530,8 @@ package java.time {
     method public boolean isBefore(java.time.LocalTime);
     method public boolean isSupported(java.time.temporal.TemporalField);
     method public boolean isSupported(java.time.temporal.TemporalUnit);
+    method public java.time.LocalTime minus(java.time.temporal.TemporalAmount);
+    method public java.time.LocalTime minus(long, java.time.temporal.TemporalUnit);
     method public java.time.LocalTime minusHours(long);
     method public java.time.LocalTime minusMinutes(long);
     method public java.time.LocalTime minusNanos(long);
@@ -62146,6 +62546,7 @@ package java.time {
     method public static java.time.LocalTime ofSecondOfDay(long);
     method public static java.time.LocalTime parse(java.lang.CharSequence);
     method public static java.time.LocalTime parse(java.lang.CharSequence, java.time.format.DateTimeFormatter);
+    method public java.time.LocalTime plus(java.time.temporal.TemporalAmount);
     method public java.time.LocalTime plus(long, java.time.temporal.TemporalUnit);
     method public java.time.LocalTime plusHours(long);
     method public java.time.LocalTime plusMinutes(long);
@@ -62155,6 +62556,7 @@ package java.time {
     method public int toSecondOfDay();
     method public java.time.LocalTime truncatedTo(java.time.temporal.TemporalUnit);
     method public long until(java.time.temporal.Temporal, java.time.temporal.TemporalUnit);
+    method public java.time.LocalTime with(java.time.temporal.TemporalAdjuster);
     method public java.time.LocalTime with(java.time.temporal.TemporalField, long);
     method public java.time.LocalTime withHour(int);
     method public java.time.LocalTime withMinute(int);
@@ -62171,7 +62573,6 @@ package java.time {
     method public int firstDayOfYear(boolean);
     method public java.time.Month firstMonthOfQuarter();
     method public static java.time.Month from(java.time.temporal.TemporalAccessor);
-    method public int get(java.time.temporal.TemporalField);
     method public java.lang.String getDisplayName(java.time.format.TextStyle, java.util.Locale);
     method public long getLong(java.time.temporal.TemporalField);
     method public int getValue();
@@ -62182,8 +62583,6 @@ package java.time {
     method public java.time.Month minus(long);
     method public static java.time.Month of(int);
     method public java.time.Month plus(long);
-    method public <R> R query(java.time.temporal.TemporalQuery<R>);
-    method public java.time.temporal.ValueRange range(java.time.temporal.TemporalField);
     method public static java.time.Month valueOf(java.lang.String);
     method public static final java.time.Month[] values();
     enum_constant public static final java.time.Month APRIL;
@@ -62250,6 +62649,8 @@ package java.time {
     method public boolean isEqual(java.time.OffsetDateTime);
     method public boolean isSupported(java.time.temporal.TemporalField);
     method public boolean isSupported(java.time.temporal.TemporalUnit);
+    method public java.time.OffsetDateTime minus(java.time.temporal.TemporalAmount);
+    method public java.time.OffsetDateTime minus(long, java.time.temporal.TemporalUnit);
     method public java.time.OffsetDateTime minusDays(long);
     method public java.time.OffsetDateTime minusHours(long);
     method public java.time.OffsetDateTime minusMinutes(long);
@@ -62267,6 +62668,7 @@ package java.time {
     method public static java.time.OffsetDateTime ofInstant(java.time.Instant, java.time.ZoneId);
     method public static java.time.OffsetDateTime parse(java.lang.CharSequence);
     method public static java.time.OffsetDateTime parse(java.lang.CharSequence, java.time.format.DateTimeFormatter);
+    method public java.time.OffsetDateTime plus(java.time.temporal.TemporalAmount);
     method public java.time.OffsetDateTime plus(long, java.time.temporal.TemporalUnit);
     method public java.time.OffsetDateTime plusDays(long);
     method public java.time.OffsetDateTime plusHours(long);
@@ -62286,6 +62688,7 @@ package java.time {
     method public java.time.ZonedDateTime toZonedDateTime();
     method public java.time.OffsetDateTime truncatedTo(java.time.temporal.TemporalUnit);
     method public long until(java.time.temporal.Temporal, java.time.temporal.TemporalUnit);
+    method public java.time.OffsetDateTime with(java.time.temporal.TemporalAdjuster);
     method public java.time.OffsetDateTime with(java.time.temporal.TemporalField, long);
     method public java.time.OffsetDateTime withDayOfMonth(int);
     method public java.time.OffsetDateTime withDayOfYear(int);
@@ -62318,6 +62721,8 @@ package java.time {
     method public boolean isEqual(java.time.OffsetTime);
     method public boolean isSupported(java.time.temporal.TemporalField);
     method public boolean isSupported(java.time.temporal.TemporalUnit);
+    method public java.time.OffsetTime minus(java.time.temporal.TemporalAmount);
+    method public java.time.OffsetTime minus(long, java.time.temporal.TemporalUnit);
     method public java.time.OffsetTime minusHours(long);
     method public java.time.OffsetTime minusMinutes(long);
     method public java.time.OffsetTime minusNanos(long);
@@ -62330,6 +62735,7 @@ package java.time {
     method public static java.time.OffsetTime ofInstant(java.time.Instant, java.time.ZoneId);
     method public static java.time.OffsetTime parse(java.lang.CharSequence);
     method public static java.time.OffsetTime parse(java.lang.CharSequence, java.time.format.DateTimeFormatter);
+    method public java.time.OffsetTime plus(java.time.temporal.TemporalAmount);
     method public java.time.OffsetTime plus(long, java.time.temporal.TemporalUnit);
     method public java.time.OffsetTime plusHours(long);
     method public java.time.OffsetTime plusMinutes(long);
@@ -62338,6 +62744,7 @@ package java.time {
     method public java.time.LocalTime toLocalTime();
     method public java.time.OffsetTime truncatedTo(java.time.temporal.TemporalUnit);
     method public long until(java.time.temporal.Temporal, java.time.temporal.TemporalUnit);
+    method public java.time.OffsetTime with(java.time.temporal.TemporalAdjuster);
     method public java.time.OffsetTime with(java.time.temporal.TemporalField, long);
     method public java.time.OffsetTime withHour(int);
     method public java.time.OffsetTime withMinute(int);
@@ -62364,6 +62771,7 @@ package java.time {
     method public java.time.Period minusMonths(long);
     method public java.time.Period minusYears(long);
     method public java.time.Period multipliedBy(int);
+    method public java.time.Period negated();
     method public java.time.Period normalized();
     method public static java.time.Period of(int, int, int);
     method public static java.time.Period ofDays(int);
@@ -62402,6 +62810,8 @@ package java.time {
     method public boolean isSupported(java.time.temporal.TemporalUnit);
     method public boolean isValidMonthDay(java.time.MonthDay);
     method public int length();
+    method public java.time.Year minus(java.time.temporal.TemporalAmount);
+    method public java.time.Year minus(long, java.time.temporal.TemporalUnit);
     method public java.time.Year minusYears(long);
     method public static java.time.Year now();
     method public static java.time.Year now(java.time.ZoneId);
@@ -62409,9 +62819,11 @@ package java.time {
     method public static java.time.Year of(int);
     method public static java.time.Year parse(java.lang.CharSequence);
     method public static java.time.Year parse(java.lang.CharSequence, java.time.format.DateTimeFormatter);
+    method public java.time.Year plus(java.time.temporal.TemporalAmount);
     method public java.time.Year plus(long, java.time.temporal.TemporalUnit);
     method public java.time.Year plusYears(long);
     method public long until(java.time.temporal.Temporal, java.time.temporal.TemporalUnit);
+    method public java.time.Year with(java.time.temporal.TemporalAdjuster);
     method public java.time.Year with(java.time.temporal.TemporalField, long);
     field public static final int MAX_VALUE = 999999999; // 0x3b9ac9ff
     field public static final int MIN_VALUE = -999999999; // 0xc4653601
@@ -62436,6 +62848,8 @@ package java.time {
     method public boolean isValidDay(int);
     method public int lengthOfMonth();
     method public int lengthOfYear();
+    method public java.time.YearMonth minus(java.time.temporal.TemporalAmount);
+    method public java.time.YearMonth minus(long, java.time.temporal.TemporalUnit);
     method public java.time.YearMonth minusMonths(long);
     method public java.time.YearMonth minusYears(long);
     method public static java.time.YearMonth now();
@@ -62445,10 +62859,12 @@ package java.time {
     method public static java.time.YearMonth of(int, int);
     method public static java.time.YearMonth parse(java.lang.CharSequence);
     method public static java.time.YearMonth parse(java.lang.CharSequence, java.time.format.DateTimeFormatter);
+    method public java.time.YearMonth plus(java.time.temporal.TemporalAmount);
     method public java.time.YearMonth plus(long, java.time.temporal.TemporalUnit);
     method public java.time.YearMonth plusMonths(long);
     method public java.time.YearMonth plusYears(long);
     method public long until(java.time.temporal.Temporal, java.time.temporal.TemporalUnit);
+    method public java.time.YearMonth with(java.time.temporal.TemporalAdjuster);
     method public java.time.YearMonth with(java.time.temporal.TemporalField, long);
     method public java.time.YearMonth withMonth(int);
     method public java.time.YearMonth withYear(int);
@@ -62472,7 +62888,6 @@ package java.time {
     method public java.time.temporal.Temporal adjustInto(java.time.temporal.Temporal);
     method public int compareTo(java.time.ZoneOffset);
     method public static java.time.ZoneOffset from(java.time.temporal.TemporalAccessor);
-    method public int get(java.time.temporal.TemporalField);
     method public java.lang.String getId();
     method public long getLong(java.time.temporal.TemporalField);
     method public java.time.zone.ZoneRules getRules();
@@ -62483,8 +62898,6 @@ package java.time {
     method public static java.time.ZoneOffset ofHoursMinutes(int, int);
     method public static java.time.ZoneOffset ofHoursMinutesSeconds(int, int, int);
     method public static java.time.ZoneOffset ofTotalSeconds(int);
-    method public <R> R query(java.time.temporal.TemporalQuery<R>);
-    method public java.time.temporal.ValueRange range(java.time.temporal.TemporalField);
     field public static final java.time.ZoneOffset MAX;
     field public static final java.time.ZoneOffset MIN;
     field public static final java.time.ZoneOffset UTC;
@@ -62505,6 +62918,8 @@ package java.time {
     method public int getYear();
     method public java.time.ZoneId getZone();
     method public boolean isSupported(java.time.temporal.TemporalField);
+    method public java.time.ZonedDateTime minus(java.time.temporal.TemporalAmount);
+    method public java.time.ZonedDateTime minus(long, java.time.temporal.TemporalUnit);
     method public java.time.ZonedDateTime minusDays(long);
     method public java.time.ZonedDateTime minusHours(long);
     method public java.time.ZonedDateTime minusMinutes(long);
@@ -62525,6 +62940,7 @@ package java.time {
     method public static java.time.ZonedDateTime ofStrict(java.time.LocalDateTime, java.time.ZoneOffset, java.time.ZoneId);
     method public static java.time.ZonedDateTime parse(java.lang.CharSequence);
     method public static java.time.ZonedDateTime parse(java.lang.CharSequence, java.time.format.DateTimeFormatter);
+    method public java.time.ZonedDateTime plus(java.time.temporal.TemporalAmount);
     method public java.time.ZonedDateTime plus(long, java.time.temporal.TemporalUnit);
     method public java.time.ZonedDateTime plusDays(long);
     method public java.time.ZonedDateTime plusHours(long);
@@ -62534,10 +62950,12 @@ package java.time {
     method public java.time.ZonedDateTime plusSeconds(long);
     method public java.time.ZonedDateTime plusWeeks(long);
     method public java.time.ZonedDateTime plusYears(long);
+    method public java.time.LocalDate toLocalDate();
     method public java.time.LocalDateTime toLocalDateTime();
     method public java.time.OffsetDateTime toOffsetDateTime();
     method public java.time.ZonedDateTime truncatedTo(java.time.temporal.TemporalUnit);
     method public long until(java.time.temporal.Temporal, java.time.temporal.TemporalUnit);
+    method public java.time.ZonedDateTime with(java.time.temporal.TemporalAdjuster);
     method public java.time.ZonedDateTime with(java.time.temporal.TemporalField, long);
     method public java.time.ZonedDateTime withDayOfMonth(int);
     method public java.time.ZonedDateTime withDayOfYear(int);
@@ -62582,17 +63000,27 @@ package java.time.chrono {
     method public default boolean isSupported(java.time.temporal.TemporalUnit);
     method public abstract int lengthOfMonth();
     method public default int lengthOfYear();
+    method public default java.time.chrono.ChronoLocalDate minus(java.time.temporal.TemporalAmount);
+    method public default java.time.chrono.ChronoLocalDate minus(long, java.time.temporal.TemporalUnit);
+    method public default java.time.chrono.ChronoLocalDate plus(java.time.temporal.TemporalAmount);
     method public default java.time.chrono.ChronoLocalDate plus(long, java.time.temporal.TemporalUnit);
     method public static java.util.Comparator<java.time.chrono.ChronoLocalDate> timeLineOrder();
     method public default long toEpochDay();
     method public abstract java.lang.String toString();
     method public abstract long until(java.time.temporal.Temporal, java.time.temporal.TemporalUnit);
     method public abstract java.time.chrono.ChronoPeriod until(java.time.chrono.ChronoLocalDate);
+    method public default java.time.chrono.ChronoLocalDate with(java.time.temporal.TemporalAdjuster);
     method public default java.time.chrono.ChronoLocalDate with(java.time.temporal.TemporalField, long);
   }
 
    abstract class ChronoLocalDateImpl<D extends java.time.chrono.ChronoLocalDate> implements java.time.chrono.ChronoLocalDate java.io.Serializable java.time.temporal.Temporal java.time.temporal.TemporalAdjuster {
+    method public D minus(java.time.temporal.TemporalAmount);
+    method public D minus(long, java.time.temporal.TemporalUnit);
+    method public D plus(java.time.temporal.TemporalAmount);
+    method public D plus(long, java.time.temporal.TemporalUnit);
     method public long until(java.time.temporal.Temporal, java.time.temporal.TemporalUnit);
+    method public D with(java.time.temporal.TemporalAdjuster);
+    method public D with(java.time.temporal.TemporalField, long);
   }
 
   public abstract interface ChronoLocalDateTime<D extends java.time.chrono.ChronoLocalDate> implements java.lang.Comparable java.time.temporal.Temporal java.time.temporal.TemporalAdjuster {
@@ -62609,6 +63037,9 @@ package java.time.chrono {
     method public default boolean isEqual(java.time.chrono.ChronoLocalDateTime<?>);
     method public abstract boolean isSupported(java.time.temporal.TemporalField);
     method public default boolean isSupported(java.time.temporal.TemporalUnit);
+    method public default java.time.chrono.ChronoLocalDateTime<D> minus(java.time.temporal.TemporalAmount);
+    method public default java.time.chrono.ChronoLocalDateTime<D> minus(long, java.time.temporal.TemporalUnit);
+    method public default java.time.chrono.ChronoLocalDateTime<D> plus(java.time.temporal.TemporalAmount);
     method public abstract java.time.chrono.ChronoLocalDateTime<D> plus(long, java.time.temporal.TemporalUnit);
     method public static java.util.Comparator<java.time.chrono.ChronoLocalDateTime<?>> timeLineOrder();
     method public default long toEpochSecond(java.time.ZoneOffset);
@@ -62616,6 +63047,7 @@ package java.time.chrono {
     method public abstract D toLocalDate();
     method public abstract java.time.LocalTime toLocalTime();
     method public abstract java.lang.String toString();
+    method public default java.time.chrono.ChronoLocalDateTime<D> with(java.time.temporal.TemporalAdjuster);
     method public abstract java.time.chrono.ChronoLocalDateTime<D> with(java.time.temporal.TemporalField, long);
   }
 
@@ -62653,6 +63085,9 @@ package java.time.chrono {
     method public default boolean isEqual(java.time.chrono.ChronoZonedDateTime<?>);
     method public abstract boolean isSupported(java.time.temporal.TemporalField);
     method public default boolean isSupported(java.time.temporal.TemporalUnit);
+    method public default java.time.chrono.ChronoZonedDateTime<D> minus(java.time.temporal.TemporalAmount);
+    method public default java.time.chrono.ChronoZonedDateTime<D> minus(long, java.time.temporal.TemporalUnit);
+    method public default java.time.chrono.ChronoZonedDateTime<D> plus(java.time.temporal.TemporalAmount);
     method public abstract java.time.chrono.ChronoZonedDateTime<D> plus(long, java.time.temporal.TemporalUnit);
     method public static java.util.Comparator<java.time.chrono.ChronoZonedDateTime<?>> timeLineOrder();
     method public default long toEpochSecond();
@@ -62661,6 +63096,7 @@ package java.time.chrono {
     method public abstract java.time.chrono.ChronoLocalDateTime<D> toLocalDateTime();
     method public default java.time.LocalTime toLocalTime();
     method public abstract java.lang.String toString();
+    method public default java.time.chrono.ChronoZonedDateTime<D> with(java.time.temporal.TemporalAdjuster);
     method public abstract java.time.chrono.ChronoZonedDateTime<D> with(java.time.temporal.TemporalField, long);
     method public abstract java.time.chrono.ChronoZonedDateTime<D> withEarlierOffsetAtOverlap();
     method public abstract java.time.chrono.ChronoZonedDateTime<D> withLaterOffsetAtOverlap();
@@ -62727,6 +63163,7 @@ package java.time.chrono {
     method public java.time.chrono.ChronoLocalDateTime<java.time.chrono.HijrahDate> localDateTime(java.time.temporal.TemporalAccessor);
     method public int prolepticYear(java.time.chrono.Era, int);
     method public java.time.temporal.ValueRange range(java.time.temporal.ChronoField);
+    method public java.time.chrono.HijrahDate resolveDate(java.util.Map<java.time.temporal.TemporalField, java.lang.Long>, java.time.format.ResolverStyle);
     method public java.time.chrono.ChronoZonedDateTime<java.time.chrono.HijrahDate> zonedDateTime(java.time.temporal.TemporalAccessor);
     method public java.time.chrono.ChronoZonedDateTime<java.time.chrono.HijrahDate> zonedDateTime(java.time.Instant, java.time.ZoneId);
     field public static final java.time.chrono.HijrahChronology INSTANCE;
@@ -62738,23 +63175,24 @@ package java.time.chrono {
     method public java.time.chrono.HijrahChronology getChronology();
     method public java.time.chrono.HijrahEra getEra();
     method public long getLong(java.time.temporal.TemporalField);
-    method public boolean isLeapYear();
     method public int lengthOfMonth();
-    method public int lengthOfYear();
+    method public java.time.chrono.HijrahDate minus(java.time.temporal.TemporalAmount);
+    method public java.time.chrono.HijrahDate minus(long, java.time.temporal.TemporalUnit);
     method public static java.time.chrono.HijrahDate now();
     method public static java.time.chrono.HijrahDate now(java.time.ZoneId);
     method public static java.time.chrono.HijrahDate now(java.time.Clock);
     method public static java.time.chrono.HijrahDate of(int, int, int);
-    method public java.time.temporal.ValueRange range(java.time.temporal.TemporalField);
-    method public long toEpochDay();
+    method public java.time.chrono.HijrahDate plus(java.time.temporal.TemporalAmount);
+    method public java.time.chrono.HijrahDate plus(long, java.time.temporal.TemporalUnit);
     method public java.time.chrono.ChronoPeriod until(java.time.chrono.ChronoLocalDate);
+    method public java.time.chrono.HijrahDate with(java.time.temporal.TemporalField, long);
+    method public java.time.chrono.HijrahDate with(java.time.temporal.TemporalAdjuster);
     method public java.time.chrono.HijrahDate withVariant(java.time.chrono.HijrahChronology);
   }
 
   public final class HijrahEra extends java.lang.Enum implements java.time.chrono.Era {
     method public int getValue();
     method public static java.time.chrono.HijrahEra of(int);
-    method public java.time.temporal.ValueRange range(java.time.temporal.TemporalField);
     method public static java.time.chrono.HijrahEra valueOf(java.lang.String);
     method public static final java.time.chrono.HijrahEra[] values();
     enum_constant public static final java.time.chrono.HijrahEra AH;
@@ -62779,6 +63217,7 @@ package java.time.chrono {
     method public java.time.Period period(int, int, int);
     method public int prolepticYear(java.time.chrono.Era, int);
     method public java.time.temporal.ValueRange range(java.time.temporal.ChronoField);
+    method public java.time.LocalDate resolveDate(java.util.Map<java.time.temporal.TemporalField, java.lang.Long>, java.time.format.ResolverStyle);
     method public java.time.ZonedDateTime zonedDateTime(java.time.temporal.TemporalAccessor);
     method public java.time.ZonedDateTime zonedDateTime(java.time.Instant, java.time.ZoneId);
     field public static final java.time.chrono.IsoChronology INSTANCE;
@@ -62811,6 +63250,7 @@ package java.time.chrono {
     method public java.time.chrono.ChronoLocalDateTime<java.time.chrono.JapaneseDate> localDateTime(java.time.temporal.TemporalAccessor);
     method public int prolepticYear(java.time.chrono.Era, int);
     method public java.time.temporal.ValueRange range(java.time.temporal.ChronoField);
+    method public java.time.chrono.JapaneseDate resolveDate(java.util.Map<java.time.temporal.TemporalField, java.lang.Long>, java.time.format.ResolverStyle);
     method public java.time.chrono.ChronoZonedDateTime<java.time.chrono.JapaneseDate> zonedDateTime(java.time.temporal.TemporalAccessor);
     method public java.time.chrono.ChronoZonedDateTime<java.time.chrono.JapaneseDate> zonedDateTime(java.time.Instant, java.time.ZoneId);
     field public static final java.time.chrono.JapaneseChronology INSTANCE;
@@ -62822,17 +63262,19 @@ package java.time.chrono {
     method public java.time.chrono.JapaneseChronology getChronology();
     method public java.time.chrono.JapaneseEra getEra();
     method public long getLong(java.time.temporal.TemporalField);
-    method public boolean isSupported(java.time.temporal.TemporalField);
     method public int lengthOfMonth();
-    method public int lengthOfYear();
+    method public java.time.chrono.JapaneseDate minus(java.time.temporal.TemporalAmount);
+    method public java.time.chrono.JapaneseDate minus(long, java.time.temporal.TemporalUnit);
     method public static java.time.chrono.JapaneseDate now();
     method public static java.time.chrono.JapaneseDate now(java.time.ZoneId);
     method public static java.time.chrono.JapaneseDate now(java.time.Clock);
     method public static java.time.chrono.JapaneseDate of(java.time.chrono.JapaneseEra, int, int, int);
     method public static java.time.chrono.JapaneseDate of(int, int, int);
-    method public java.time.temporal.ValueRange range(java.time.temporal.TemporalField);
-    method public long toEpochDay();
+    method public java.time.chrono.JapaneseDate plus(java.time.temporal.TemporalAmount);
+    method public java.time.chrono.JapaneseDate plus(long, java.time.temporal.TemporalUnit);
     method public java.time.chrono.ChronoPeriod until(java.time.chrono.ChronoLocalDate);
+    method public java.time.chrono.JapaneseDate with(java.time.temporal.TemporalField, long);
+    method public java.time.chrono.JapaneseDate with(java.time.temporal.TemporalAdjuster);
   }
 
   public final class JapaneseEra implements java.time.chrono.Era java.io.Serializable {
@@ -62864,6 +63306,7 @@ package java.time.chrono {
     method public java.time.chrono.ChronoLocalDateTime<java.time.chrono.MinguoDate> localDateTime(java.time.temporal.TemporalAccessor);
     method public int prolepticYear(java.time.chrono.Era, int);
     method public java.time.temporal.ValueRange range(java.time.temporal.ChronoField);
+    method public java.time.chrono.MinguoDate resolveDate(java.util.Map<java.time.temporal.TemporalField, java.lang.Long>, java.time.format.ResolverStyle);
     method public java.time.chrono.ChronoZonedDateTime<java.time.chrono.MinguoDate> zonedDateTime(java.time.temporal.TemporalAccessor);
     method public java.time.chrono.ChronoZonedDateTime<java.time.chrono.MinguoDate> zonedDateTime(java.time.Instant, java.time.ZoneId);
     field public static final java.time.chrono.MinguoChronology INSTANCE;
@@ -62876,13 +63319,17 @@ package java.time.chrono {
     method public java.time.chrono.MinguoEra getEra();
     method public long getLong(java.time.temporal.TemporalField);
     method public int lengthOfMonth();
+    method public java.time.chrono.MinguoDate minus(java.time.temporal.TemporalAmount);
+    method public java.time.chrono.MinguoDate minus(long, java.time.temporal.TemporalUnit);
     method public static java.time.chrono.MinguoDate now();
     method public static java.time.chrono.MinguoDate now(java.time.ZoneId);
     method public static java.time.chrono.MinguoDate now(java.time.Clock);
     method public static java.time.chrono.MinguoDate of(int, int, int);
-    method public java.time.temporal.ValueRange range(java.time.temporal.TemporalField);
-    method public long toEpochDay();
+    method public java.time.chrono.MinguoDate plus(java.time.temporal.TemporalAmount);
+    method public java.time.chrono.MinguoDate plus(long, java.time.temporal.TemporalUnit);
     method public java.time.chrono.ChronoPeriod until(java.time.chrono.ChronoLocalDate);
+    method public java.time.chrono.MinguoDate with(java.time.temporal.TemporalField, long);
+    method public java.time.chrono.MinguoDate with(java.time.temporal.TemporalAdjuster);
   }
 
   public final class MinguoEra extends java.lang.Enum implements java.time.chrono.Era {
@@ -62912,6 +63359,7 @@ package java.time.chrono {
     method public java.time.chrono.ChronoLocalDateTime<java.time.chrono.ThaiBuddhistDate> localDateTime(java.time.temporal.TemporalAccessor);
     method public int prolepticYear(java.time.chrono.Era, int);
     method public java.time.temporal.ValueRange range(java.time.temporal.ChronoField);
+    method public java.time.chrono.ThaiBuddhistDate resolveDate(java.util.Map<java.time.temporal.TemporalField, java.lang.Long>, java.time.format.ResolverStyle);
     method public java.time.chrono.ChronoZonedDateTime<java.time.chrono.ThaiBuddhistDate> zonedDateTime(java.time.temporal.TemporalAccessor);
     method public java.time.chrono.ChronoZonedDateTime<java.time.chrono.ThaiBuddhistDate> zonedDateTime(java.time.Instant, java.time.ZoneId);
     field public static final java.time.chrono.ThaiBuddhistChronology INSTANCE;
@@ -62924,13 +63372,17 @@ package java.time.chrono {
     method public java.time.chrono.ThaiBuddhistEra getEra();
     method public long getLong(java.time.temporal.TemporalField);
     method public int lengthOfMonth();
+    method public java.time.chrono.ThaiBuddhistDate minus(java.time.temporal.TemporalAmount);
+    method public java.time.chrono.ThaiBuddhistDate minus(long, java.time.temporal.TemporalUnit);
     method public static java.time.chrono.ThaiBuddhistDate now();
     method public static java.time.chrono.ThaiBuddhistDate now(java.time.ZoneId);
     method public static java.time.chrono.ThaiBuddhistDate now(java.time.Clock);
     method public static java.time.chrono.ThaiBuddhistDate of(int, int, int);
-    method public java.time.temporal.ValueRange range(java.time.temporal.TemporalField);
-    method public long toEpochDay();
+    method public java.time.chrono.ThaiBuddhistDate plus(java.time.temporal.TemporalAmount);
+    method public java.time.chrono.ThaiBuddhistDate plus(long, java.time.temporal.TemporalUnit);
     method public java.time.chrono.ChronoPeriod until(java.time.chrono.ChronoLocalDate);
+    method public java.time.chrono.ThaiBuddhistDate with(java.time.temporal.TemporalField, long);
+    method public java.time.chrono.ThaiBuddhistDate with(java.time.temporal.TemporalAdjuster);
   }
 
   public final class ThaiBuddhistEra extends java.lang.Enum implements java.time.chrono.Era {
@@ -63109,7 +63561,6 @@ package java.time.temporal {
     method public int checkValidIntValue(long);
     method public long checkValidValue(long);
     method public java.time.temporal.TemporalUnit getBaseUnit();
-    method public java.lang.String getDisplayName(java.util.Locale);
     method public long getFrom(java.time.temporal.TemporalAccessor);
     method public java.time.temporal.TemporalUnit getRangeUnit();
     method public boolean isDateBased();
@@ -63157,7 +63608,6 @@ package java.time.temporal {
     method public java.time.Duration getDuration();
     method public boolean isDateBased();
     method public boolean isDurationEstimated();
-    method public boolean isSupportedBy(java.time.temporal.Temporal);
     method public boolean isTimeBased();
     method public static java.time.temporal.ChronoUnit valueOf(java.lang.String);
     method public static final java.time.temporal.ChronoUnit[] values();
@@ -63497,7 +63947,6 @@ package java.util {
     method public E removeLast();
     method public boolean removeLastOccurrence(java.lang.Object);
     method public int size();
-    method public java.util.Spliterator<E> spliterator();
   }
 
   public class ArrayList<E> extends java.util.AbstractList implements java.lang.Cloneable java.util.List java.util.RandomAccess java.io.Serializable {
@@ -63508,11 +63957,7 @@ package java.util {
     method public void ensureCapacity(int);
     method public void forEach(java.util.function.Consumer<? super E>);
     method public E get(int);
-    method public boolean removeIf(java.util.function.Predicate<? super E>);
-    method public void replaceAll(java.util.function.UnaryOperator<E>);
     method public int size();
-    method public void sort(java.util.Comparator<? super E>);
-    method public java.util.Spliterator<E> spliterator();
     method public void trimToSize();
   }
 
@@ -63883,6 +64328,7 @@ package java.util {
     method public default boolean removeIf(java.util.function.Predicate<? super E>);
     method public abstract boolean retainAll(java.util.Collection<?>);
     method public abstract int size();
+    method public default java.util.Spliterator<E> spliterator();
     method public default java.util.stream.Stream<E> stream();
     method public abstract java.lang.Object[] toArray();
     method public abstract <T> T[] toArray(T[]);
@@ -64223,18 +64669,7 @@ package java.util {
     ctor public HashMap();
     ctor public HashMap(java.util.Map<? extends K, ? extends V>);
     method public java.lang.Object clone();
-    method public V compute(K, java.util.function.BiFunction<? super K, ? super V, ? extends V>);
-    method public V computeIfAbsent(K, java.util.function.Function<? super K, ? extends V>);
-    method public V computeIfPresent(K, java.util.function.BiFunction<? super K, ? super V, ? extends V>);
     method public java.util.Set<java.util.Map.Entry<K, V>> entrySet();
-    method public void forEach(java.util.function.BiConsumer<? super K, ? super V>);
-    method public V getOrDefault(java.lang.Object, V);
-    method public V merge(K, V, java.util.function.BiFunction<? super V, ? super V, ? extends V>);
-    method public V putIfAbsent(K, V);
-    method public boolean remove(java.lang.Object, java.lang.Object);
-    method public boolean replace(K, V, V);
-    method public V replace(K, V);
-    method public void replaceAll(java.util.function.BiFunction<? super K, ? super V, ? extends V>);
   }
 
   public class HashSet<E> extends java.util.AbstractSet implements java.lang.Cloneable java.io.Serializable java.util.Set {
@@ -64245,7 +64680,6 @@ package java.util {
     method public java.lang.Object clone();
     method public java.util.Iterator<E> iterator();
     method public int size();
-    method public java.util.Spliterator<E> spliterator();
   }
 
   public class Hashtable<K, V> extends java.util.Dictionary implements java.lang.Cloneable java.util.Map java.io.Serializable {
@@ -64263,9 +64697,11 @@ package java.util {
     method public boolean containsValue(java.lang.Object);
     method public synchronized java.util.Enumeration<V> elements();
     method public java.util.Set<java.util.Map.Entry<K, V>> entrySet();
+    method public synchronized boolean equals(java.lang.Object);
     method public synchronized void forEach(java.util.function.BiConsumer<? super K, ? super V>);
     method public synchronized V get(java.lang.Object);
     method public synchronized V getOrDefault(java.lang.Object, V);
+    method public synchronized int hashCode();
     method public synchronized boolean isEmpty();
     method public java.util.Set<K> keySet();
     method public synchronized java.util.Enumeration<K> keys();
@@ -64280,6 +64716,7 @@ package java.util {
     method public synchronized V replace(K, V);
     method public synchronized void replaceAll(java.util.function.BiFunction<? super K, ? super V, ? extends V>);
     method public synchronized int size();
+    method public synchronized java.lang.String toString();
     method public java.util.Collection<V> values();
   }
 
@@ -64289,8 +64726,6 @@ package java.util {
     ctor public IdentityHashMap(java.util.Map<? extends K, ? extends V>);
     method public java.lang.Object clone();
     method public java.util.Set<java.util.Map.Entry<K, V>> entrySet();
-    method public void forEach(java.util.function.BiConsumer<? super K, ? super V>);
-    method public void replaceAll(java.util.function.BiFunction<? super K, ? super V, ? extends V>);
   }
 
   public class IllegalFormatCodePointException extends java.util.IllegalFormatException {
@@ -64401,7 +64836,6 @@ package java.util {
     method public E removeLast();
     method public boolean removeLastOccurrence(java.lang.Object);
     method public int size();
-    method public java.util.Spliterator<E> spliterator();
   }
 
   public abstract interface List<E> implements java.util.Collection {
@@ -65024,6 +65458,7 @@ package java.util {
     ctor public SimpleTimeZone(int, java.lang.String, int, int, int, int, int, int, int, int, int, int, int);
     method public int getOffset(int, int, int, int, int, int);
     method public int getRawOffset();
+    method public synchronized int hashCode();
     method public boolean inDaylightTime(java.util.Date);
     method public void setDSTSavings(int);
     method public void setEndRule(int, int, int, int);
@@ -65296,7 +65731,6 @@ package java.util {
     method public K firstKey();
     method public java.util.Map.Entry<K, V> floorEntry(K);
     method public K floorKey(K);
-    method public void forEach(java.util.function.BiConsumer<? super K, ? super V>);
     method public java.util.NavigableMap<K, V> headMap(K, boolean);
     method public java.util.SortedMap<K, V> headMap(K);
     method public java.util.Map.Entry<K, V> higherEntry(K);
@@ -65308,9 +65742,6 @@ package java.util {
     method public java.util.NavigableSet<K> navigableKeySet();
     method public java.util.Map.Entry<K, V> pollFirstEntry();
     method public java.util.Map.Entry<K, V> pollLastEntry();
-    method public boolean replace(K, V, V);
-    method public V replace(K, V);
-    method public void replaceAll(java.util.function.BiFunction<? super K, ? super V, ? extends V>);
     method public java.util.NavigableMap<K, V> subMap(K, boolean, K, boolean);
     method public java.util.SortedMap<K, V> subMap(K, K);
     method public java.util.NavigableMap<K, V> tailMap(K, boolean);
@@ -65338,7 +65769,6 @@ package java.util {
     method public E pollFirst();
     method public E pollLast();
     method public int size();
-    method public java.util.Spliterator<E> spliterator();
     method public java.util.NavigableSet<E> subSet(E, boolean, E, boolean);
     method public java.util.SortedSet<E> subSet(E, E);
     method public java.util.NavigableSet<E> tailSet(E, boolean);
@@ -65375,30 +65805,49 @@ package java.util {
     ctor public Vector(int);
     ctor public Vector();
     ctor public Vector(java.util.Collection<? extends E>);
+    method public synchronized boolean add(E);
+    method public synchronized boolean addAll(java.util.Collection<? extends E>);
+    method public synchronized boolean addAll(int, java.util.Collection<? extends E>);
     method public synchronized void addElement(E);
     method public synchronized int capacity();
     method public synchronized java.lang.Object clone();
+    method public synchronized boolean containsAll(java.util.Collection<?>);
     method public synchronized void copyInto(java.lang.Object[]);
     method public synchronized E elementAt(int);
     method public java.util.Enumeration<E> elements();
     method public synchronized void ensureCapacity(int);
+    method public synchronized boolean equals(java.lang.Object);
     method public synchronized E firstElement();
     method public synchronized void forEach(java.util.function.Consumer<? super E>);
     method public synchronized E get(int);
+    method public synchronized int hashCode();
     method public synchronized int indexOf(java.lang.Object, int);
     method public synchronized void insertElementAt(E, int);
+    method public synchronized boolean isEmpty();
+    method public synchronized java.util.Iterator<E> iterator();
     method public synchronized E lastElement();
+    method public synchronized int lastIndexOf(java.lang.Object);
     method public synchronized int lastIndexOf(java.lang.Object, int);
+    method public synchronized java.util.ListIterator<E> listIterator(int);
+    method public synchronized java.util.ListIterator<E> listIterator();
+    method public synchronized E remove(int);
+    method public synchronized boolean removeAll(java.util.Collection<?>);
     method public synchronized void removeAllElements();
     method public synchronized boolean removeElement(java.lang.Object);
     method public synchronized void removeElementAt(int);
     method public synchronized boolean removeIf(java.util.function.Predicate<? super E>);
+    method protected synchronized void removeRange(int, int);
     method public synchronized void replaceAll(java.util.function.UnaryOperator<E>);
+    method public synchronized boolean retainAll(java.util.Collection<?>);
+    method public synchronized E set(int, E);
     method public synchronized void setElementAt(E, int);
     method public synchronized void setSize(int);
     method public synchronized int size();
     method public synchronized void sort(java.util.Comparator<? super E>);
-    method public java.util.Spliterator<E> spliterator();
+    method public synchronized java.util.List<E> subList(int, int);
+    method public synchronized java.lang.Object[] toArray();
+    method public synchronized <T> T[] toArray(T[]);
+    method public synchronized java.lang.String toString();
     method public synchronized void trimToSize();
     field protected int capacityIncrement;
     field protected int elementCount;
@@ -65411,8 +65860,6 @@ package java.util {
     ctor public WeakHashMap();
     ctor public WeakHashMap(java.util.Map<? extends K, ? extends V>);
     method public java.util.Set<java.util.Map.Entry<K, V>> entrySet();
-    method public void forEach(java.util.function.BiConsumer<? super K, ? super V>);
-    method public void replaceAll(java.util.function.BiFunction<? super K, ? super V, ? extends V>);
   }
 
 }
@@ -65447,7 +65894,6 @@ package java.util.concurrent {
     method public void put(E) throws java.lang.InterruptedException;
     method public int remainingCapacity();
     method public int size();
-    method public java.util.Spliterator<E> spliterator();
     method public E take() throws java.lang.InterruptedException;
   }
 
@@ -65638,13 +66084,9 @@ package java.util.concurrent {
     ctor public ConcurrentHashMap(java.util.Map<? extends K, ? extends V>);
     ctor public ConcurrentHashMap(int, float);
     ctor public ConcurrentHashMap(int, float, int);
-    method public V compute(K, java.util.function.BiFunction<? super K, ? super V, ? extends V>);
-    method public V computeIfAbsent(K, java.util.function.Function<? super K, ? extends V>);
-    method public V computeIfPresent(K, java.util.function.BiFunction<? super K, ? super V, ? extends V>);
     method public boolean contains(java.lang.Object);
     method public java.util.Enumeration<V> elements();
     method public java.util.Set<java.util.Map.Entry<K, V>> entrySet();
-    method public void forEach(java.util.function.BiConsumer<? super K, ? super V>);
     method public void forEach(long, java.util.function.BiConsumer<? super K, ? super V>);
     method public <U> void forEach(long, java.util.function.BiFunction<? super K, ? super V, ? extends U>, java.util.function.Consumer<? super U>);
     method public void forEachEntry(long, java.util.function.Consumer<? super java.util.Map.Entry<K, V>>);
@@ -65653,14 +66095,11 @@ package java.util.concurrent {
     method public <U> void forEachKey(long, java.util.function.Function<? super K, ? extends U>, java.util.function.Consumer<? super U>);
     method public void forEachValue(long, java.util.function.Consumer<? super V>);
     method public <U> void forEachValue(long, java.util.function.Function<? super V, ? extends U>, java.util.function.Consumer<? super U>);
-    method public V getOrDefault(java.lang.Object, V);
     method public java.util.concurrent.ConcurrentHashMap.KeySetView<K, V> keySet(V);
     method public java.util.Enumeration<K> keys();
     method public long mappingCount();
-    method public V merge(K, V, java.util.function.BiFunction<? super V, ? super V, ? extends V>);
     method public static <K> java.util.concurrent.ConcurrentHashMap.KeySetView<K, java.lang.Boolean> newKeySet();
     method public static <K> java.util.concurrent.ConcurrentHashMap.KeySetView<K, java.lang.Boolean> newKeySet(int);
-    method public V putIfAbsent(K, V);
     method public <U> U reduce(long, java.util.function.BiFunction<? super K, ? super V, ? extends U>, java.util.function.BiFunction<? super U, ? super U, ? extends U>);
     method public java.util.Map.Entry<K, V> reduceEntries(long, java.util.function.BiFunction<java.util.Map.Entry<K, V>, java.util.Map.Entry<K, V>, ? extends java.util.Map.Entry<K, V>>);
     method public <U> U reduceEntries(long, java.util.function.Function<java.util.Map.Entry<K, V>, ? extends U>, java.util.function.BiFunction<? super U, ? super U, ? extends U>);
@@ -65680,10 +66119,6 @@ package java.util.concurrent {
     method public double reduceValuesToDouble(long, java.util.function.ToDoubleFunction<? super V>, double, java.util.function.DoubleBinaryOperator);
     method public int reduceValuesToInt(long, java.util.function.ToIntFunction<? super V>, int, java.util.function.IntBinaryOperator);
     method public long reduceValuesToLong(long, java.util.function.ToLongFunction<? super V>, long, java.util.function.LongBinaryOperator);
-    method public boolean remove(java.lang.Object, java.lang.Object);
-    method public boolean replace(K, V, V);
-    method public V replace(K, V);
-    method public void replaceAll(java.util.function.BiFunction<? super K, ? super V, ? extends V>);
     method public <U> U search(long, java.util.function.BiFunction<? super K, ? super V, ? extends U>);
     method public <U> U searchEntries(long, java.util.function.Function<java.util.Map.Entry<K, V>, ? extends U>);
     method public <U> U searchKeys(long, java.util.function.Function<? super K, ? extends U>);
@@ -65744,7 +66179,6 @@ package java.util.concurrent {
     method public E removeLast();
     method public boolean removeLastOccurrence(java.lang.Object);
     method public int size();
-    method public java.util.Spliterator<E> spliterator();
   }
 
   public class ConcurrentLinkedQueue<E> extends java.util.AbstractQueue implements java.util.Queue java.io.Serializable {
@@ -65755,7 +66189,6 @@ package java.util.concurrent {
     method public E peek();
     method public E poll();
     method public int size();
-    method public java.util.Spliterator<E> spliterator();
   }
 
   public abstract interface ConcurrentMap<K, V> implements java.util.Map {
@@ -65787,9 +66220,6 @@ package java.util.concurrent {
     method public K ceilingKey(K);
     method public java.util.concurrent.ConcurrentSkipListMap<K, V> clone();
     method public java.util.Comparator<? super K> comparator();
-    method public V compute(K, java.util.function.BiFunction<? super K, ? super V, ? extends V>);
-    method public V computeIfAbsent(K, java.util.function.Function<? super K, ? extends V>);
-    method public V computeIfPresent(K, java.util.function.BiFunction<? super K, ? super V, ? extends V>);
     method public java.util.NavigableSet<K> descendingKeySet();
     method public java.util.concurrent.ConcurrentNavigableMap<K, V> descendingMap();
     method public java.util.Set<java.util.Map.Entry<K, V>> entrySet();
@@ -65797,25 +66227,18 @@ package java.util.concurrent {
     method public K firstKey();
     method public java.util.Map.Entry<K, V> floorEntry(K);
     method public K floorKey(K);
-    method public void forEach(java.util.function.BiConsumer<? super K, ? super V>);
-    method public V getOrDefault(java.lang.Object, V);
     method public java.util.concurrent.ConcurrentNavigableMap<K, V> headMap(K, boolean);
     method public java.util.concurrent.ConcurrentNavigableMap<K, V> headMap(K);
     method public java.util.Map.Entry<K, V> higherEntry(K);
     method public K higherKey(K);
+    method public java.util.NavigableSet<K> keySet();
     method public java.util.Map.Entry<K, V> lastEntry();
     method public K lastKey();
     method public java.util.Map.Entry<K, V> lowerEntry(K);
     method public K lowerKey(K);
-    method public V merge(K, V, java.util.function.BiFunction<? super V, ? super V, ? extends V>);
     method public java.util.NavigableSet<K> navigableKeySet();
     method public java.util.Map.Entry<K, V> pollFirstEntry();
     method public java.util.Map.Entry<K, V> pollLastEntry();
-    method public V putIfAbsent(K, V);
-    method public boolean remove(java.lang.Object, java.lang.Object);
-    method public boolean replace(K, V, V);
-    method public V replace(K, V);
-    method public void replaceAll(java.util.function.BiFunction<? super K, ? super V, ? extends V>);
     method public java.util.concurrent.ConcurrentNavigableMap<K, V> subMap(K, boolean, K, boolean);
     method public java.util.concurrent.ConcurrentNavigableMap<K, V> subMap(K, K);
     method public java.util.concurrent.ConcurrentNavigableMap<K, V> tailMap(K, boolean);
@@ -65843,7 +66266,6 @@ package java.util.concurrent {
     method public E pollFirst();
     method public E pollLast();
     method public int size();
-    method public java.util.Spliterator<E> spliterator();
     method public java.util.NavigableSet<E> subSet(E, boolean, E, boolean);
     method public java.util.NavigableSet<E> subSet(E, E);
     method public java.util.NavigableSet<E> tailSet(E, boolean);
@@ -65890,9 +66312,7 @@ package java.util.concurrent {
     ctor public CopyOnWriteArraySet(java.util.Collection<? extends E>);
     method public void forEach(java.util.function.Consumer<? super E>);
     method public java.util.Iterator<E> iterator();
-    method public boolean removeIf(java.util.function.Predicate<? super E>);
     method public int size();
-    method public java.util.Spliterator<E> spliterator();
   }
 
   public class CountDownLatch {
@@ -66051,6 +66471,7 @@ package java.util.concurrent {
     method public java.lang.Thread.UncaughtExceptionHandler getUncaughtExceptionHandler();
     method public boolean hasQueuedSubmissions();
     method public <T> T invoke(java.util.concurrent.ForkJoinTask<T>);
+    method public <T> java.util.List<java.util.concurrent.Future<T>> invokeAll(java.util.Collection<? extends java.util.concurrent.Callable<T>>);
     method public boolean isQuiescent();
     method public boolean isShutdown();
     method public boolean isTerminated();
@@ -66060,6 +66481,9 @@ package java.util.concurrent {
     method public void shutdown();
     method public java.util.List<java.lang.Runnable> shutdownNow();
     method public <T> java.util.concurrent.ForkJoinTask<T> submit(java.util.concurrent.ForkJoinTask<T>);
+    method public <T> java.util.concurrent.ForkJoinTask<T> submit(java.util.concurrent.Callable<T>);
+    method public <T> java.util.concurrent.ForkJoinTask<T> submit(java.lang.Runnable, T);
+    method public java.util.concurrent.ForkJoinTask<?> submit(java.lang.Runnable);
     field public static final java.util.concurrent.ForkJoinPool.ForkJoinWorkerThreadFactory defaultForkJoinWorkerThreadFactory;
   }
 
@@ -66183,7 +66607,6 @@ package java.util.concurrent {
     method public E removeLast();
     method public boolean removeLastOccurrence(java.lang.Object);
     method public int size();
-    method public java.util.Spliterator<E> spliterator();
     method public E take() throws java.lang.InterruptedException;
     method public E takeFirst() throws java.lang.InterruptedException;
     method public E takeLast() throws java.lang.InterruptedException;
@@ -66204,7 +66627,6 @@ package java.util.concurrent {
     method public void put(E) throws java.lang.InterruptedException;
     method public int remainingCapacity();
     method public int size();
-    method public java.util.Spliterator<E> spliterator();
     method public E take() throws java.lang.InterruptedException;
   }
 
@@ -66224,7 +66646,6 @@ package java.util.concurrent {
     method public void put(E);
     method public int remainingCapacity();
     method public int size();
-    method public java.util.Spliterator<E> spliterator();
     method public E take() throws java.lang.InterruptedException;
     method public void transfer(E) throws java.lang.InterruptedException;
     method public boolean tryTransfer(E);
@@ -66272,7 +66693,6 @@ package java.util.concurrent {
     method public void put(E);
     method public int remainingCapacity();
     method public int size();
-    method public java.util.Spliterator<E> spliterator();
     method public E take() throws java.lang.InterruptedException;
   }
 
@@ -66376,7 +66796,6 @@ package java.util.concurrent {
     method public void put(E) throws java.lang.InterruptedException;
     method public int remainingCapacity();
     method public int size();
-    method public java.util.Spliterator<E> spliterator();
     method public E take() throws java.lang.InterruptedException;
   }
 
@@ -66388,9 +66807,11 @@ package java.util.concurrent {
     method public static java.util.concurrent.ThreadLocalRandom current();
     method public double nextDouble(double);
     method public double nextDouble(double, double);
+    method public double nextGaussian();
     method public int nextInt(int, int);
     method public long nextLong(long);
     method public long nextLong(long, long);
+    method public void setSeed(long);
   }
 
   public class ThreadPoolExecutor extends java.util.concurrent.AbstractExecutorService {
@@ -66404,6 +66825,7 @@ package java.util.concurrent {
     method public boolean awaitTermination(long, java.util.concurrent.TimeUnit) throws java.lang.InterruptedException;
     method protected void beforeExecute(java.lang.Thread, java.lang.Runnable);
     method public void execute(java.lang.Runnable);
+    method protected void finalize();
     method public int getActiveCount();
     method public long getCompletedTaskCount();
     method public int getCorePoolSize();
@@ -67274,8 +67696,11 @@ package java.util.jar {
     ctor public JarFile(java.io.File) throws java.io.IOException;
     ctor public JarFile(java.io.File, boolean) throws java.io.IOException;
     ctor public JarFile(java.io.File, boolean, int) throws java.io.IOException;
+    method public java.util.Enumeration<java.util.jar.JarEntry> entries();
+    method public synchronized java.io.InputStream getInputStream(java.util.zip.ZipEntry) throws java.io.IOException;
     method public java.util.jar.JarEntry getJarEntry(java.lang.String);
     method public java.util.jar.Manifest getManifest() throws java.io.IOException;
+    method public java.util.stream.Stream<java.util.jar.JarEntry> stream();
     field public static final java.lang.String MANIFEST_NAME = "META-INF/MANIFEST.MF";
   }
 
@@ -67355,6 +67780,8 @@ package java.util.logging {
 
   public class ConsoleHandler extends java.util.logging.StreamHandler {
     ctor public ConsoleHandler();
+    method public void close();
+    method public void publish(java.util.logging.LogRecord);
   }
 
   public class ErrorManager {
@@ -68144,6 +68571,7 @@ package java.util.zip {
     method public int deflate(byte[]);
     method public int deflate(byte[], int, int, int);
     method public void end();
+    method protected void finalize();
     method public void finish();
     method public boolean finished();
     method public int getAdler();
@@ -68176,6 +68604,8 @@ package java.util.zip {
     ctor public DeflaterInputStream(java.io.InputStream);
     ctor public DeflaterInputStream(java.io.InputStream, java.util.zip.Deflater);
     ctor public DeflaterInputStream(java.io.InputStream, java.util.zip.Deflater, int);
+    method public void mark(int);
+    method public void reset() throws java.io.IOException;
     field protected final byte[] buf;
     field protected final java.util.zip.Deflater def;
   }
@@ -68206,6 +68636,7 @@ package java.util.zip {
     ctor public GZIPOutputStream(java.io.OutputStream, int, boolean) throws java.io.IOException;
     ctor public GZIPOutputStream(java.io.OutputStream) throws java.io.IOException;
     ctor public GZIPOutputStream(java.io.OutputStream, boolean) throws java.io.IOException;
+    method public synchronized void write(byte[], int, int) throws java.io.IOException;
     field protected java.util.zip.CRC32 crc;
   }
 
@@ -68213,6 +68644,7 @@ package java.util.zip {
     ctor public Inflater(boolean);
     ctor public Inflater();
     method public void end();
+    method protected void finalize();
     method public boolean finished();
     method public int getAdler();
     method public long getBytesRead();
@@ -68339,6 +68771,7 @@ package java.util.zip {
     ctor public ZipFile(java.io.File, java.nio.charset.Charset) throws java.io.IOException;
     method public void close() throws java.io.IOException;
     method public java.util.Enumeration<? extends java.util.zip.ZipEntry> entries();
+    method protected void finalize() throws java.io.IOException;
     method public java.lang.String getComment();
     method public java.util.zip.ZipEntry getEntry(java.lang.String);
     method public java.io.InputStream getInputStream(java.util.zip.ZipEntry) throws java.io.IOException;
@@ -68445,6 +68878,7 @@ package java.util.zip {
     method public void setComment(java.lang.String);
     method public void setLevel(int);
     method public void setMethod(int);
+    method public synchronized void write(byte[], int, int) throws java.io.IOException;
     field public static final int CENATT = 36; // 0x24
     field public static final int CENATX = 38; // 0x26
     field public static final int CENCOM = 32; // 0x20
@@ -68601,6 +69035,7 @@ package javax.crypto {
 
   public class ExemptionMechanism {
     ctor protected ExemptionMechanism(javax.crypto.ExemptionMechanismSpi, java.security.Provider, java.lang.String);
+    method protected void finalize();
     method public final byte[] genExemptionBlob() throws javax.crypto.ExemptionMechanismException, java.lang.IllegalStateException;
     method public final int genExemptionBlob(byte[]) throws javax.crypto.ExemptionMechanismException, java.lang.IllegalStateException, javax.crypto.ShortBufferException;
     method public final int genExemptionBlob(byte[], int) throws javax.crypto.ExemptionMechanismException, java.lang.IllegalStateException, javax.crypto.ShortBufferException;
@@ -70989,6 +71424,7 @@ package javax.xml.transform {
     ctor public TransformerException(java.lang.String, java.lang.Throwable);
     ctor public TransformerException(java.lang.String, javax.xml.transform.SourceLocator);
     ctor public TransformerException(java.lang.String, javax.xml.transform.SourceLocator, java.lang.Throwable);
+    method public java.lang.Throwable getCause();
     method public java.lang.Throwable getException();
     method public java.lang.String getLocationAsString();
     method public javax.xml.transform.SourceLocator getLocator();
@@ -71259,6 +71695,7 @@ package javax.xml.xpath {
   public class XPathException extends java.lang.Exception {
     ctor public XPathException(java.lang.String);
     ctor public XPathException(java.lang.Throwable);
+    method public java.lang.Throwable getCause();
   }
 
   public abstract interface XPathExpression {
