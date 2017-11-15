@@ -7048,6 +7048,7 @@ package android.app.slice {
   public final class Slice implements android.os.Parcelable {
     ctor protected Slice(android.os.Parcel);
     method public static android.app.slice.Slice bindSlice(android.content.ContentResolver, android.net.Uri);
+    method public static android.app.slice.Slice bindSlice(android.content.Context, android.content.Intent);
     method public int describeContents();
     method public java.util.List<java.lang.String> getHints();
     method public java.util.List<android.app.slice.SliceItem> getItems();
@@ -7116,6 +7117,7 @@ package android.app.slice {
     method public final java.lang.String getType(android.net.Uri);
     method public final android.net.Uri insert(android.net.Uri, android.content.ContentValues);
     method public abstract android.app.slice.Slice onBindSlice(android.net.Uri);
+    method public android.net.Uri onMapIntentToUri(android.content.Intent);
     method public final android.database.Cursor query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String);
     method public final android.database.Cursor query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String, android.os.CancellationSignal);
     method public final android.database.Cursor query(android.net.Uri, java.lang.String[], android.os.Bundle, android.os.CancellationSignal);
@@ -10653,10 +10655,10 @@ package android.content.pm {
     method public android.content.pm.LauncherApps.ShortcutQuery setQueryFlags(int);
     method public android.content.pm.LauncherApps.ShortcutQuery setShortcutIds(java.util.List<java.lang.String>);
     field public static final int FLAG_GET_KEY_FIELDS_ONLY = 4; // 0x4
-    field public static final int FLAG_MATCH_ALL_PINNED = 1024; // 0x400
     field public static final int FLAG_MATCH_DYNAMIC = 1; // 0x1
     field public static final int FLAG_MATCH_MANIFEST = 8; // 0x8
     field public static final int FLAG_MATCH_PINNED = 2; // 0x2
+    field public static final int FLAG_MATCH_PINNED_BY_ANY_LAUNCHER = 1024; // 0x400
   }
 
   public class PackageInfo implements android.os.Parcelable {
@@ -12226,9 +12228,11 @@ package android.database.sqlite {
     method public android.database.sqlite.SQLiteDatabase.CursorFactory getCursorFactory();
     method public android.database.DatabaseErrorHandler getErrorHandler();
     method public long getIdleConnectionTimeout();
+    method public java.lang.String getJournalMode();
     method public int getLookasideSlotCount();
     method public int getLookasideSlotSize();
     method public int getOpenFlags();
+    method public java.lang.String getSynchronousMode();
   }
 
   public static final class SQLiteDatabase.OpenParams.Builder {
@@ -12240,8 +12244,10 @@ package android.database.sqlite {
     method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setCursorFactory(android.database.sqlite.SQLiteDatabase.CursorFactory);
     method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setErrorHandler(android.database.DatabaseErrorHandler);
     method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setIdleConnectionTimeout(long);
+    method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setJournalMode(java.lang.String);
     method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setLookasideConfig(int, int);
     method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setOpenFlags(int);
+    method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setSynchronousMode(java.lang.String);
   }
 
   public class SQLiteDatabaseCorruptException extends android.database.sqlite.SQLiteException {
@@ -12335,6 +12341,7 @@ package android.database.sqlite {
   public abstract class SQLiteOpenHelper {
     ctor public SQLiteOpenHelper(android.content.Context, java.lang.String, android.database.sqlite.SQLiteDatabase.CursorFactory, int);
     ctor public SQLiteOpenHelper(android.content.Context, java.lang.String, android.database.sqlite.SQLiteDatabase.CursorFactory, int, android.database.DatabaseErrorHandler);
+    ctor public SQLiteOpenHelper(android.content.Context, java.lang.String, int, android.database.sqlite.SQLiteDatabase.OpenParams);
     method public synchronized void close();
     method public java.lang.String getDatabaseName();
     method public android.database.sqlite.SQLiteDatabase getReadableDatabase();
@@ -15420,6 +15427,7 @@ package android.hardware.camera2 {
     method public abstract int setRepeatingBurst(java.util.List<android.hardware.camera2.CaptureRequest>, android.hardware.camera2.CameraCaptureSession.CaptureCallback, android.os.Handler) throws android.hardware.camera2.CameraAccessException;
     method public abstract int setRepeatingRequest(android.hardware.camera2.CaptureRequest, android.hardware.camera2.CameraCaptureSession.CaptureCallback, android.os.Handler) throws android.hardware.camera2.CameraAccessException;
     method public abstract void stopRepeating() throws android.hardware.camera2.CameraAccessException;
+    method public void updateOutputConfiguration(android.hardware.camera2.params.OutputConfiguration) throws android.hardware.camera2.CameraAccessException;
   }
 
   public static abstract class CameraCaptureSession.CaptureCallback {
@@ -16065,9 +16073,11 @@ package android.hardware.camera2.params {
     method public void addSurface(android.view.Surface);
     method public int describeContents();
     method public void enableSurfaceSharing();
+    method public static int getMaxSharedSurfaceCount();
     method public android.view.Surface getSurface();
     method public int getSurfaceGroupId();
     method public java.util.List<android.view.Surface> getSurfaces();
+    method public void removeSurface(android.view.Surface);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.hardware.camera2.params.OutputConfiguration> CREATOR;
     field public static final int SURFACE_GROUP_ID_NONE = -1; // 0xffffffff
@@ -41458,6 +41468,7 @@ package android.telephony.mbms {
   }
 
   public final class FileInfo implements android.os.Parcelable {
+    ctor public FileInfo(android.net.Uri, java.lang.String);
     method public int describeContents();
     method public java.lang.String getMimeType();
     method public android.net.Uri getUri();
@@ -41571,6 +41582,14 @@ package android.telephony.mbms {
     field public static final android.os.Parcelable.Creator<android.telephony.mbms.StreamingServiceInfo> CREATOR;
   }
 
+  public final class UriPathPair implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.net.Uri getContentUri();
+    method public android.net.Uri getFilePathUri();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.mbms.UriPathPair> CREATOR;
+  }
+
 }
 
 package android.telephony.mbms.vendor {
@@ -41600,6 +41619,23 @@ package android.telephony.mbms.vendor {
     method public int requestUpdateStreamingServices(int, java.util.List<java.lang.String>) throws android.os.RemoteException;
     method public int startStreaming(int, java.lang.String, android.telephony.mbms.StreamingServiceCallback) throws android.os.RemoteException;
     method public void stopStreaming(int, java.lang.String) throws android.os.RemoteException;
+  }
+
+  public class VendorUtils {
+    ctor public VendorUtils();
+    method public static android.content.ComponentName getAppReceiverFromPackageName(android.content.Context, java.lang.String);
+    field public static final java.lang.String ACTION_CLEANUP = "android.telephony.mbms.action.CLEANUP";
+    field public static final java.lang.String ACTION_DOWNLOAD_RESULT_INTERNAL = "android.telephony.mbms.action.DOWNLOAD_RESULT_INTERNAL";
+    field public static final java.lang.String ACTION_FILE_DESCRIPTOR_REQUEST = "android.telephony.mbms.action.FILE_DESCRIPTOR_REQUEST";
+    field public static final java.lang.String EXTRA_FD_COUNT = "android.telephony.mbms.extra.FD_COUNT";
+    field public static final java.lang.String EXTRA_FINAL_URI = "android.telephony.mbms.extra.FINAL_URI";
+    field public static final java.lang.String EXTRA_FREE_URI_LIST = "android.telephony.mbms.extra.FREE_URI_LIST";
+    field public static final java.lang.String EXTRA_PAUSED_LIST = "android.telephony.mbms.extra.PAUSED_LIST";
+    field public static final java.lang.String EXTRA_PAUSED_URI_LIST = "android.telephony.mbms.extra.PAUSED_URI_LIST";
+    field public static final java.lang.String EXTRA_SERVICE_ID = "android.telephony.mbms.extra.SERVICE_ID";
+    field public static final java.lang.String EXTRA_TEMP_FILES_IN_USE = "android.telephony.mbms.extra.TEMP_FILES_IN_USE";
+    field public static final java.lang.String EXTRA_TEMP_FILE_ROOT = "android.telephony.mbms.extra.TEMP_FILE_ROOT";
+    field public static final java.lang.String EXTRA_TEMP_LIST = "android.telephony.mbms.extra.TEMP_LIST";
   }
 
 }

@@ -7418,6 +7418,7 @@ package android.app.slice {
   public final class Slice implements android.os.Parcelable {
     ctor protected Slice(android.os.Parcel);
     method public static android.app.slice.Slice bindSlice(android.content.ContentResolver, android.net.Uri);
+    method public static android.app.slice.Slice bindSlice(android.content.Context, android.content.Intent);
     method public int describeContents();
     method public java.util.List<java.lang.String> getHints();
     method public java.util.List<android.app.slice.SliceItem> getItems();
@@ -7486,6 +7487,7 @@ package android.app.slice {
     method public final java.lang.String getType(android.net.Uri);
     method public final android.net.Uri insert(android.net.Uri, android.content.ContentValues);
     method public abstract android.app.slice.Slice onBindSlice(android.net.Uri);
+    method public android.net.Uri onMapIntentToUri(android.content.Intent);
     method public final android.database.Cursor query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String);
     method public final android.database.Cursor query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String, android.os.CancellationSignal);
     method public final android.database.Cursor query(android.net.Uri, java.lang.String[], android.os.Bundle, android.os.CancellationSignal);
@@ -9668,6 +9670,7 @@ package android.content {
     field public static final java.lang.String SEARCH_SERVICE = "search";
     field public static final java.lang.String SENSOR_SERVICE = "sensor";
     field public static final java.lang.String SHORTCUT_SERVICE = "shortcut";
+    field public static final java.lang.String STATS_MANAGER = "stats";
     field public static final java.lang.String STORAGE_SERVICE = "storage";
     field public static final java.lang.String STORAGE_STATS_SERVICE = "storagestats";
     field public static final java.lang.String SYSTEM_HEALTH_SERVICE = "systemhealth";
@@ -11192,6 +11195,7 @@ package android.content.pm {
     field public static final int FLAG_MATCH_DYNAMIC = 1; // 0x1
     field public static final int FLAG_MATCH_MANIFEST = 8; // 0x8
     field public static final int FLAG_MATCH_PINNED = 2; // 0x2
+    field public static final int FLAG_MATCH_PINNED_BY_ANY_LAUNCHER = 1024; // 0x400
   }
 
   public class PackageInfo implements android.os.Parcelable {
@@ -12883,9 +12887,11 @@ package android.database.sqlite {
     method public android.database.sqlite.SQLiteDatabase.CursorFactory getCursorFactory();
     method public android.database.DatabaseErrorHandler getErrorHandler();
     method public long getIdleConnectionTimeout();
+    method public java.lang.String getJournalMode();
     method public int getLookasideSlotCount();
     method public int getLookasideSlotSize();
     method public int getOpenFlags();
+    method public java.lang.String getSynchronousMode();
   }
 
   public static final class SQLiteDatabase.OpenParams.Builder {
@@ -12897,8 +12903,10 @@ package android.database.sqlite {
     method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setCursorFactory(android.database.sqlite.SQLiteDatabase.CursorFactory);
     method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setErrorHandler(android.database.DatabaseErrorHandler);
     method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setIdleConnectionTimeout(long);
+    method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setJournalMode(java.lang.String);
     method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setLookasideConfig(int, int);
     method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setOpenFlags(int);
+    method public android.database.sqlite.SQLiteDatabase.OpenParams.Builder setSynchronousMode(java.lang.String);
   }
 
   public class SQLiteDatabaseCorruptException extends android.database.sqlite.SQLiteException {
@@ -12945,6 +12953,7 @@ package android.database.sqlite {
   public abstract class SQLiteOpenHelper {
     ctor public SQLiteOpenHelper(android.content.Context, java.lang.String, android.database.sqlite.SQLiteDatabase.CursorFactory, int);
     ctor public SQLiteOpenHelper(android.content.Context, java.lang.String, android.database.sqlite.SQLiteDatabase.CursorFactory, int, android.database.DatabaseErrorHandler);
+    ctor public SQLiteOpenHelper(android.content.Context, java.lang.String, int, android.database.sqlite.SQLiteDatabase.OpenParams);
     method public synchronized void close();
     method public java.lang.String getDatabaseName();
     method public android.database.sqlite.SQLiteDatabase getReadableDatabase();
@@ -16033,6 +16042,7 @@ package android.hardware.camera2 {
     method public abstract int setRepeatingBurst(java.util.List<android.hardware.camera2.CaptureRequest>, android.hardware.camera2.CameraCaptureSession.CaptureCallback, android.os.Handler) throws android.hardware.camera2.CameraAccessException;
     method public abstract int setRepeatingRequest(android.hardware.camera2.CaptureRequest, android.hardware.camera2.CameraCaptureSession.CaptureCallback, android.os.Handler) throws android.hardware.camera2.CameraAccessException;
     method public abstract void stopRepeating() throws android.hardware.camera2.CameraAccessException;
+    method public void updateOutputConfiguration(android.hardware.camera2.params.OutputConfiguration) throws android.hardware.camera2.CameraAccessException;
   }
 
   public static abstract class CameraCaptureSession.CaptureCallback {
@@ -16680,10 +16690,12 @@ package android.hardware.camera2.params {
     method public void addSurface(android.view.Surface);
     method public int describeContents();
     method public void enableSurfaceSharing();
+    method public static int getMaxSharedSurfaceCount();
     method public int getRotation();
     method public android.view.Surface getSurface();
     method public int getSurfaceGroupId();
     method public java.util.List<android.view.Surface> getSurfaces();
+    method public void removeSurface(android.view.Surface);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.hardware.camera2.params.OutputConfiguration> CREATOR;
     field public static final int ROTATION_0 = 0; // 0x0
@@ -48167,6 +48179,12 @@ package android.util {
     method public static int[] trimStateSet(int[], int);
     field public static final int[] NOTHING;
     field public static final int[] WILD_CARD;
+  }
+
+  public final class StatsManager {
+    method public byte[] getData(java.lang.String);
+    method public boolean addConfiguration(java.lang.String, byte[], java.lang.String, java.lang.String);
+    method public boolean removeConfiguration(java.lang.String);
   }
 
   public class StringBuilderPrinter implements android.util.Printer {
