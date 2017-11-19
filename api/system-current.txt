@@ -41928,7 +41928,6 @@ package android.system {
     method public static void remove(java.lang.String) throws android.system.ErrnoException;
     method public static void removexattr(java.lang.String, java.lang.String) throws android.system.ErrnoException;
     method public static void rename(java.lang.String, java.lang.String) throws android.system.ErrnoException;
-    method public static deprecated long sendfile(java.io.FileDescriptor, java.io.FileDescriptor, android.util.MutableLong, long) throws android.system.ErrnoException;
     method public static long sendfile(java.io.FileDescriptor, java.io.FileDescriptor, android.system.Int64Ref, long) throws android.system.ErrnoException;
     method public static int sendto(java.io.FileDescriptor, java.nio.ByteBuffer, int, java.net.InetAddress, int) throws android.system.ErrnoException, java.net.SocketException;
     method public static int sendto(java.io.FileDescriptor, byte[], int, int, int, java.net.InetAddress, int) throws android.system.ErrnoException, java.net.SocketException;
@@ -41954,7 +41953,6 @@ package android.system {
     method public static int umask(int);
     method public static android.system.StructUtsname uname();
     method public static void unsetenv(java.lang.String) throws android.system.ErrnoException;
-    method public static deprecated int waitpid(int, android.util.MutableInt, int) throws android.system.ErrnoException;
     method public static int waitpid(int, android.system.Int32Ref, int) throws android.system.ErrnoException;
     method public static int write(java.io.FileDescriptor, java.nio.ByteBuffer) throws android.system.ErrnoException, java.io.InterruptedIOException;
     method public static int write(java.io.FileDescriptor, byte[], int, int) throws android.system.ErrnoException, java.io.InterruptedIOException;
@@ -49832,6 +49830,7 @@ package android.view {
     method public void addExtraDataToAccessibilityNodeInfo(android.view.accessibility.AccessibilityNodeInfo, java.lang.String, android.os.Bundle);
     method public void addFocusables(java.util.ArrayList<android.view.View>, int);
     method public void addFocusables(java.util.ArrayList<android.view.View>, int, int);
+    method public void addKeyFallbackListener(android.view.View.OnKeyFallbackListener);
     method public void addKeyboardNavigationClusters(java.util.Collection<android.view.View>, int);
     method public void addOnAttachStateChangeListener(android.view.View.OnAttachStateChangeListener);
     method public void addOnLayoutChangeListener(android.view.View.OnLayoutChangeListener);
@@ -50166,6 +50165,7 @@ package android.view {
     method public void onInitializeAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
     method public void onInitializeAccessibilityNodeInfo(android.view.accessibility.AccessibilityNodeInfo);
     method public boolean onKeyDown(int, android.view.KeyEvent);
+    method public boolean onKeyFallback(android.view.KeyEvent);
     method public boolean onKeyLongPress(int, android.view.KeyEvent);
     method public boolean onKeyMultiple(int, int, android.view.KeyEvent);
     method public boolean onKeyPreIme(int, android.view.KeyEvent);
@@ -50219,6 +50219,7 @@ package android.view {
     method public void refreshDrawableState();
     method public void releasePointerCapture();
     method public boolean removeCallbacks(java.lang.Runnable);
+    method public void removeKeyFallbackListener(android.view.View.OnKeyFallbackListener);
     method public void removeOnAttachStateChangeListener(android.view.View.OnAttachStateChangeListener);
     method public void removeOnLayoutChangeListener(android.view.View.OnLayoutChangeListener);
     method public void requestApplyInsets();
@@ -50635,6 +50636,10 @@ package android.view {
 
   public static abstract interface View.OnHoverListener {
     method public abstract boolean onHover(android.view.View, android.view.MotionEvent);
+  }
+
+  public static abstract interface View.OnKeyFallbackListener {
+    method public abstract boolean onKeyFallback(android.view.View, android.view.KeyEvent);
   }
 
   public static abstract interface View.OnKeyListener {
