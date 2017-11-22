@@ -2777,6 +2777,7 @@ package android.accessibilityservice {
     field public static final int GESTURE_SWIPE_UP_AND_RIGHT = 14; // 0xe
     field public static final int GLOBAL_ACTION_BACK = 1; // 0x1
     field public static final int GLOBAL_ACTION_HOME = 2; // 0x2
+    field public static final int GLOBAL_ACTION_LOCK_SCREEN = 8; // 0x8
     field public static final int GLOBAL_ACTION_NOTIFICATIONS = 4; // 0x4
     field public static final int GLOBAL_ACTION_POWER_DIALOG = 6; // 0x6
     field public static final int GLOBAL_ACTION_QUICK_SETTINGS = 5; // 0x5
@@ -6958,6 +6959,7 @@ package android.app.job {
     method public android.app.job.JobInfo.Builder setClipData(android.content.ClipData, int);
     method public android.app.job.JobInfo.Builder setEstimatedNetworkBytes(long);
     method public android.app.job.JobInfo.Builder setExtras(android.os.PersistableBundle);
+    method public android.app.job.JobInfo.Builder setImportantWhileForeground(boolean);
     method public android.app.job.JobInfo.Builder setMinimumLatency(long);
     method public android.app.job.JobInfo.Builder setOverrideDeadline(long);
     method public android.app.job.JobInfo.Builder setPeriodic(long);
@@ -7047,11 +7049,12 @@ package android.app.slice {
 
   public final class Slice implements android.os.Parcelable {
     ctor protected Slice(android.os.Parcel);
-    method public static android.app.slice.Slice bindSlice(android.content.ContentResolver, android.net.Uri);
-    method public static android.app.slice.Slice bindSlice(android.content.Context, android.content.Intent);
+    method public static android.app.slice.Slice bindSlice(android.content.ContentResolver, android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
+    method public static android.app.slice.Slice bindSlice(android.content.Context, android.content.Intent, java.util.List<android.app.slice.SliceSpec>);
     method public int describeContents();
     method public java.util.List<java.lang.String> getHints();
     method public java.util.List<android.app.slice.SliceItem> getItems();
+    method public android.app.slice.SliceSpec getSpec();
     method public android.net.Uri getUri();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.slice.Slice> CREATOR;
@@ -7060,55 +7063,59 @@ package android.app.slice {
     field public static final java.lang.String HINT_LARGE = "large";
     field public static final java.lang.String HINT_LIST = "list";
     field public static final java.lang.String HINT_LIST_ITEM = "list_item";
-    field public static final java.lang.String HINT_MESSAGE = "message";
     field public static final java.lang.String HINT_NO_TINT = "no_tint";
     field public static final java.lang.String HINT_PARTIAL = "partial";
     field public static final java.lang.String HINT_SELECTED = "selected";
-    field public static final java.lang.String HINT_SOURCE = "source";
     field public static final java.lang.String HINT_TITLE = "title";
+    field public static final java.lang.String SUBTYPE_MESSAGE = "message";
+    field public static final java.lang.String SUBTYPE_SOURCE = "source";
   }
 
   public static class Slice.Builder {
     ctor public Slice.Builder(android.net.Uri);
     ctor public Slice.Builder(android.app.slice.Slice.Builder);
     method public android.app.slice.Slice.Builder addAction(android.app.PendingIntent, android.app.slice.Slice);
-    method public android.app.slice.Slice.Builder addColor(int, java.lang.String...);
-    method public android.app.slice.Slice.Builder addColor(int, java.util.List<java.lang.String>);
+    method public android.app.slice.Slice.Builder addAction(android.app.PendingIntent, android.app.slice.Slice, java.lang.String);
+    method public android.app.slice.Slice.Builder addColor(int, java.lang.String, java.lang.String...);
+    method public android.app.slice.Slice.Builder addColor(int, java.lang.String, java.util.List<java.lang.String>);
     method public android.app.slice.Slice.Builder addHints(java.lang.String...);
     method public android.app.slice.Slice.Builder addHints(java.util.List<java.lang.String>);
-    method public android.app.slice.Slice.Builder addIcon(android.graphics.drawable.Icon, java.lang.String...);
-    method public android.app.slice.Slice.Builder addIcon(android.graphics.drawable.Icon, java.util.List<java.lang.String>);
-    method public android.app.slice.Slice.Builder addRemoteInput(android.app.RemoteInput, java.util.List<java.lang.String>);
-    method public android.app.slice.Slice.Builder addRemoteInput(android.app.RemoteInput, java.lang.String...);
+    method public android.app.slice.Slice.Builder addIcon(android.graphics.drawable.Icon, java.lang.String, java.lang.String...);
+    method public android.app.slice.Slice.Builder addIcon(android.graphics.drawable.Icon, java.lang.String, java.util.List<java.lang.String>);
+    method public android.app.slice.Slice.Builder addRemoteInput(android.app.RemoteInput, java.lang.String, java.util.List<java.lang.String>);
+    method public android.app.slice.Slice.Builder addRemoteInput(android.app.RemoteInput, java.lang.String, java.lang.String...);
     method public android.app.slice.Slice.Builder addSubSlice(android.app.slice.Slice);
-    method public android.app.slice.Slice.Builder addText(java.lang.CharSequence, java.lang.String...);
-    method public android.app.slice.Slice.Builder addText(java.lang.CharSequence, java.util.List<java.lang.String>);
-    method public android.app.slice.Slice.Builder addTimestamp(long, java.lang.String...);
-    method public android.app.slice.Slice.Builder addTimestamp(long, java.util.List<java.lang.String>);
+    method public android.app.slice.Slice.Builder addSubSlice(android.app.slice.Slice, java.lang.String);
+    method public android.app.slice.Slice.Builder addText(java.lang.CharSequence, java.lang.String, java.lang.String...);
+    method public android.app.slice.Slice.Builder addText(java.lang.CharSequence, java.lang.String, java.util.List<java.lang.String>);
+    method public android.app.slice.Slice.Builder addTimestamp(long, java.lang.String, java.lang.String...);
+    method public android.app.slice.Slice.Builder addTimestamp(long, java.lang.String, java.util.List<java.lang.String>);
     method public android.app.slice.Slice build();
+    method public android.app.slice.Slice.Builder setSpec(android.app.slice.SliceSpec);
   }
 
   public final class SliceItem implements android.os.Parcelable {
     method public int describeContents();
     method public android.app.PendingIntent getAction();
     method public int getColor();
+    method public java.lang.String getFormat();
     method public java.util.List<java.lang.String> getHints();
     method public android.graphics.drawable.Icon getIcon();
     method public android.app.RemoteInput getRemoteInput();
     method public android.app.slice.Slice getSlice();
+    method public java.lang.String getSubType();
     method public java.lang.CharSequence getText();
     method public long getTimestamp();
-    method public int getType();
     method public boolean hasHint(java.lang.String);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.slice.SliceItem> CREATOR;
-    field public static final int TYPE_ACTION = 4; // 0x4
-    field public static final int TYPE_COLOR = 6; // 0x6
-    field public static final int TYPE_IMAGE = 3; // 0x3
-    field public static final int TYPE_REMOTE_INPUT = 9; // 0x9
-    field public static final int TYPE_SLICE = 1; // 0x1
-    field public static final int TYPE_TEXT = 2; // 0x2
-    field public static final int TYPE_TIMESTAMP = 8; // 0x8
+    field public static final java.lang.String FORMAT_ACTION = "action";
+    field public static final java.lang.String FORMAT_COLOR = "color";
+    field public static final java.lang.String FORMAT_IMAGE = "image";
+    field public static final java.lang.String FORMAT_REMOTE_INPUT = "input";
+    field public static final java.lang.String FORMAT_SLICE = "slice";
+    field public static final java.lang.String FORMAT_TEXT = "text";
+    field public static final java.lang.String FORMAT_TIMESTAMP = "timestamp";
   }
 
   public abstract class SliceProvider extends android.content.ContentProvider {
@@ -7116,13 +7123,24 @@ package android.app.slice {
     method public final int delete(android.net.Uri, java.lang.String, java.lang.String[]);
     method public final java.lang.String getType(android.net.Uri);
     method public final android.net.Uri insert(android.net.Uri, android.content.ContentValues);
-    method public abstract android.app.slice.Slice onBindSlice(android.net.Uri);
+    method public android.app.slice.Slice onBindSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
+    method public deprecated android.app.slice.Slice onBindSlice(android.net.Uri);
     method public android.net.Uri onMapIntentToUri(android.content.Intent);
     method public final android.database.Cursor query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String);
     method public final android.database.Cursor query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String, android.os.CancellationSignal);
     method public final android.database.Cursor query(android.net.Uri, java.lang.String[], android.os.Bundle, android.os.CancellationSignal);
     method public final int update(android.net.Uri, android.content.ContentValues, java.lang.String, java.lang.String[]);
     field public static final java.lang.String SLICE_TYPE = "vnd.android.slice";
+  }
+
+  public final class SliceSpec implements android.os.Parcelable {
+    ctor public SliceSpec(java.lang.String, int);
+    method public boolean canRender(android.app.slice.SliceSpec);
+    method public int describeContents();
+    method public int getRevision();
+    method public java.lang.String getType();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.app.slice.SliceSpec> CREATOR;
   }
 
 }
@@ -23232,6 +23250,7 @@ package android.media {
 
   public static final class MediaMuxer.OutputFormat {
     field public static final int MUXER_OUTPUT_3GPP = 2; // 0x2
+    field public static final int MUXER_OUTPUT_HEIF = 3; // 0x3
     field public static final int MUXER_OUTPUT_MPEG_4 = 0; // 0x0
     field public static final int MUXER_OUTPUT_WEBM = 1; // 0x1
   }
