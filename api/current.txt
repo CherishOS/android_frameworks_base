@@ -4700,7 +4700,6 @@ package android.app {
     ctor public FragmentBreadCrumbs(android.content.Context, android.util.AttributeSet);
     ctor public FragmentBreadCrumbs(android.content.Context, android.util.AttributeSet, int);
     method public void onBackStackChanged();
-    method protected void onLayout(boolean, int, int, int, int);
     method public void setActivity(android.app.Activity);
     method public void setMaxVisible(int);
     method public void setOnBreadCrumbClickListener(android.app.FragmentBreadCrumbs.OnBreadCrumbClickListener);
@@ -6591,7 +6590,6 @@ package android.app.admin {
     method public int describeContents();
     method public java.lang.String getPackageName();
     method public long getTimestamp();
-    method public abstract void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.admin.NetworkEvent> CREATOR;
   }
 
@@ -6809,14 +6807,10 @@ package android.app.backup {
     method public int requestRestore(android.app.backup.RestoreObserver);
   }
 
-  public class FileBackupHelper extends android.app.backup.FileBackupHelperBase implements android.app.backup.BackupHelper {
+  public class FileBackupHelper implements android.app.backup.BackupHelper {
     ctor public FileBackupHelper(android.content.Context, java.lang.String...);
     method public void performBackup(android.os.ParcelFileDescriptor, android.app.backup.BackupDataOutput, android.os.ParcelFileDescriptor);
     method public void restoreEntity(android.app.backup.BackupDataInputStream);
-  }
-
-   class FileBackupHelperBase {
-    method public void writeNewStateDescription(android.os.ParcelFileDescriptor);
   }
 
   public class FullBackupDataOutput {
@@ -6830,7 +6824,7 @@ package android.app.backup {
     method public void restoreStarting(int);
   }
 
-  public class SharedPreferencesBackupHelper extends android.app.backup.FileBackupHelperBase implements android.app.backup.BackupHelper {
+  public class SharedPreferencesBackupHelper implements android.app.backup.BackupHelper {
     ctor public SharedPreferencesBackupHelper(android.content.Context, java.lang.String...);
     method public void performBackup(android.os.ParcelFileDescriptor, android.app.backup.BackupDataOutput, android.os.ParcelFileDescriptor);
     method public void restoreEntity(android.app.backup.BackupDataInputStream);
@@ -11579,17 +11573,9 @@ package android.database {
     method public int getColumnIndex(java.lang.String);
     method public int getColumnIndexOrThrow(java.lang.String);
     method public java.lang.String getColumnName(int);
-    method public abstract java.lang.String[] getColumnNames();
-    method public abstract int getCount();
-    method public abstract double getDouble(int);
     method public android.os.Bundle getExtras();
-    method public abstract float getFloat(int);
-    method public abstract int getInt(int);
-    method public abstract long getLong(int);
     method public android.net.Uri getNotificationUri();
     method public final int getPosition();
-    method public abstract short getShort(int);
-    method public abstract java.lang.String getString(int);
     method public int getType(int);
     method protected deprecated java.lang.Object getUpdatedField(int);
     method public boolean getWantsAllOnMoveCalls();
@@ -11600,7 +11586,6 @@ package android.database {
     method protected deprecated boolean isFieldUpdated(int);
     method public final boolean isFirst();
     method public final boolean isLast();
-    method public abstract boolean isNull(int);
     method public final boolean move(int);
     method public final boolean moveToFirst();
     method public final boolean moveToLast();
@@ -17833,6 +17818,7 @@ package android.icu.text {
   public final class CollationElementIterator {
     method public int getMaxExpansion(int);
     method public int getOffset();
+    method public deprecated int hashCode();
     method public int next();
     method public int previous();
     method public static final int primaryOrder(int);
@@ -17945,6 +17931,7 @@ package android.icu.text {
     method public static android.icu.text.CurrencyPluralInfo getInstance(android.icu.util.ULocale);
     method public android.icu.util.ULocale getLocale();
     method public android.icu.text.PluralRules getPluralRules();
+    method public deprecated int hashCode();
     method public void setCurrencyPluralPattern(java.lang.String, java.lang.String);
     method public void setLocale(android.icu.util.ULocale);
     method public void setPluralRules(java.lang.String);
@@ -18234,6 +18221,7 @@ package android.icu.text {
     method public boolean firstDateInPtnIsLaterDate();
     method public java.lang.String getFirstPart();
     method public java.lang.String getSecondPart();
+    method public deprecated java.lang.String toString();
   }
 
   public class DateTimePatternGenerator implements java.lang.Cloneable android.icu.util.Freezable {
@@ -18714,6 +18702,7 @@ package android.icu.text {
   }
 
   public final class Normalizer implements java.lang.Cloneable {
+    method public deprecated java.lang.Object clone();
     method public static int compare(char[], int, int, char[], int, int, int);
     method public static int compare(java.lang.String, java.lang.String, int);
     method public static int compare(char[], char[], int);
@@ -18906,6 +18895,7 @@ package android.icu.text {
     method public java.util.Set<java.lang.String> getKeywords();
     method public java.util.Collection<java.lang.Double> getSamples(java.lang.String);
     method public double getUniqueKeywordValue(java.lang.String);
+    method public deprecated int hashCode();
     method public static android.icu.text.PluralRules parseDescription(java.lang.String) throws java.text.ParseException;
     method public java.lang.String select(double);
     field public static final android.icu.text.PluralRules DEFAULT;
@@ -19148,6 +19138,7 @@ package android.icu.text {
     ctor public StringPrepParseException(java.lang.String, int, java.lang.String, int);
     ctor public StringPrepParseException(java.lang.String, int, java.lang.String, int, int);
     method public int getError();
+    method public deprecated int hashCode();
     field public static final int ACE_PREFIX_ERROR = 6; // 0x6
     field public static final int BUFFER_OVERFLOW_ERROR = 9; // 0x9
     field public static final int CHECK_BIDI_ERROR = 4; // 0x4
@@ -19534,20 +19525,6 @@ package android.icu.util {
     field public static final int BE = 0; // 0x0
   }
 
-   abstract class CECalendar extends android.icu.util.Calendar {
-    ctor protected CECalendar();
-    ctor protected CECalendar(android.icu.util.TimeZone);
-    ctor protected CECalendar(java.util.Locale);
-    ctor protected CECalendar(android.icu.util.ULocale);
-    ctor protected CECalendar(android.icu.util.TimeZone, java.util.Locale);
-    ctor protected CECalendar(android.icu.util.TimeZone, android.icu.util.ULocale);
-    ctor protected CECalendar(int, int, int);
-    ctor protected CECalendar(java.util.Date);
-    ctor protected CECalendar(int, int, int, int, int, int);
-    method protected int handleComputeMonthStart(int, int, boolean);
-    method protected int handleGetLimit(int, int);
-  }
-
   public abstract class Calendar implements java.lang.Cloneable java.lang.Comparable java.io.Serializable {
     ctor protected Calendar();
     ctor protected Calendar(android.icu.util.TimeZone, java.util.Locale);
@@ -19763,7 +19740,7 @@ package android.icu.util {
     method protected int handleGetLimit(int, int);
   }
 
-  public final class CopticCalendar extends android.icu.util.CECalendar {
+  public final class CopticCalendar extends android.icu.util.Calendar {
     ctor public CopticCalendar();
     ctor public CopticCalendar(android.icu.util.TimeZone);
     ctor public CopticCalendar(java.util.Locale);
@@ -19773,6 +19750,7 @@ package android.icu.util {
     ctor public CopticCalendar(int, int, int);
     ctor public CopticCalendar(java.util.Date);
     ctor public CopticCalendar(int, int, int, int, int, int);
+    method protected deprecated void handleComputeFields(int);
     method protected deprecated int handleGetExtendedYear();
     field public static final int AMSHIR = 5; // 0x5
     field public static final int BABA = 1; // 0x1
@@ -19840,7 +19818,7 @@ package android.icu.util {
     method public long getToDate();
   }
 
-  public final class EthiopicCalendar extends android.icu.util.CECalendar {
+  public final class EthiopicCalendar extends android.icu.util.Calendar {
     ctor public EthiopicCalendar();
     ctor public EthiopicCalendar(android.icu.util.TimeZone);
     ctor public EthiopicCalendar(java.util.Locale);
@@ -19850,7 +19828,9 @@ package android.icu.util {
     ctor public EthiopicCalendar(int, int, int);
     ctor public EthiopicCalendar(java.util.Date);
     ctor public EthiopicCalendar(int, int, int, int, int, int);
+    method protected deprecated void handleComputeFields(int);
     method protected deprecated int handleGetExtendedYear();
+    method protected deprecated int handleGetLimit(int, int);
     method public boolean isAmeteAlemEra();
     method public void setAmeteAlemEra(boolean);
     field public static final int GENBOT = 8; // 0x8
@@ -19909,6 +19889,7 @@ package android.icu.util {
     method protected int handleComputeMonthStart(int, int, boolean);
     method protected int handleGetExtendedYear();
     method protected int handleGetLimit(int, int);
+    method protected deprecated void validateField(int);
     field public static final int ADAR = 6; // 0x6
     field public static final int ADAR_1 = 5; // 0x5
     field public static final int AV = 11; // 0xb
@@ -23535,7 +23516,6 @@ package android.media {
 
   public static abstract interface MediaScannerConnection.MediaScannerConnectionClient implements android.media.MediaScannerConnection.OnScanCompletedListener {
     method public abstract void onMediaScannerConnected();
-    method public abstract void onScanCompleted(java.lang.String, android.net.Uri);
   }
 
   public static abstract interface MediaScannerConnection.OnScanCompletedListener {
@@ -23665,6 +23645,7 @@ package android.media {
 
   public deprecated class RemoteControlClient.MetadataEditor extends android.media.MediaMetadataEditor {
     method public synchronized void apply();
+    method public java.lang.Object clone() throws java.lang.CloneNotSupportedException;
     method public synchronized android.media.RemoteControlClient.MetadataEditor putBitmap(int, android.graphics.Bitmap) throws java.lang.IllegalArgumentException;
     method public synchronized android.media.RemoteControlClient.MetadataEditor putLong(int, long) throws java.lang.IllegalArgumentException;
     method public synchronized android.media.RemoteControlClient.MetadataEditor putObject(int, java.lang.Object) throws java.lang.IllegalArgumentException;
@@ -25421,7 +25402,6 @@ package android.media.tv {
     method public boolean dispatchUnhandledInputEvent(android.view.InputEvent);
     method public java.lang.String getSelectedTrack(int);
     method public java.util.List<android.media.tv.TvTrackInfo> getTracks(int);
-    method protected void onLayout(boolean, int, int, int, int);
     method public boolean onUnhandledInputEvent(android.view.InputEvent);
     method public void reset();
     method public void selectTrack(int, java.lang.String);
@@ -27681,7 +27661,6 @@ package android.nfc.cardemulation {
 
   public abstract class OffHostApduService extends android.app.Service {
     ctor public OffHostApduService();
-    method public abstract android.os.IBinder onBind(android.content.Intent);
     field public static final java.lang.String SERVICE_INTERFACE = "android.nfc.cardemulation.action.OFF_HOST_APDU_SERVICE";
     field public static final java.lang.String SERVICE_META_DATA = "android.nfc.cardemulation.off_host_apdu_service";
   }
@@ -27690,14 +27669,7 @@ package android.nfc.cardemulation {
 
 package android.nfc.tech {
 
-   abstract class BasicTagTechnology implements android.nfc.tech.TagTechnology {
-    method public void close() throws java.io.IOException;
-    method public void connect() throws java.io.IOException;
-    method public android.nfc.Tag getTag();
-    method public boolean isConnected();
-  }
-
-  public final class IsoDep extends android.nfc.tech.BasicTagTechnology {
+  public final class IsoDep implements android.nfc.tech.TagTechnology {
     method public static android.nfc.tech.IsoDep get(android.nfc.Tag);
     method public byte[] getHiLayerResponse();
     method public byte[] getHistoricalBytes();
@@ -27708,7 +27680,7 @@ package android.nfc.tech {
     method public byte[] transceive(byte[]) throws java.io.IOException;
   }
 
-  public final class MifareClassic extends android.nfc.tech.BasicTagTechnology {
+  public final class MifareClassic implements android.nfc.tech.TagTechnology {
     method public boolean authenticateSectorWithKeyA(int, byte[]) throws java.io.IOException;
     method public boolean authenticateSectorWithKeyB(int, byte[]) throws java.io.IOException;
     method public int blockToSector(int);
@@ -27743,7 +27715,7 @@ package android.nfc.tech {
     field public static final int TYPE_UNKNOWN = -1; // 0xffffffff
   }
 
-  public final class MifareUltralight extends android.nfc.tech.BasicTagTechnology {
+  public final class MifareUltralight implements android.nfc.tech.TagTechnology {
     method public static android.nfc.tech.MifareUltralight get(android.nfc.Tag);
     method public int getMaxTransceiveLength();
     method public int getTimeout();
@@ -27758,7 +27730,7 @@ package android.nfc.tech {
     field public static final int TYPE_UNKNOWN = -1; // 0xffffffff
   }
 
-  public final class Ndef extends android.nfc.tech.BasicTagTechnology {
+  public final class Ndef implements android.nfc.tech.TagTechnology {
     method public boolean canMakeReadOnly();
     method public static android.nfc.tech.Ndef get(android.nfc.Tag);
     method public android.nfc.NdefMessage getCachedNdefMessage();
@@ -27775,13 +27747,13 @@ package android.nfc.tech {
     field public static final java.lang.String NFC_FORUM_TYPE_4 = "org.nfcforum.ndef.type4";
   }
 
-  public final class NdefFormatable extends android.nfc.tech.BasicTagTechnology {
+  public final class NdefFormatable implements android.nfc.tech.TagTechnology {
     method public void format(android.nfc.NdefMessage) throws android.nfc.FormatException, java.io.IOException;
     method public void formatReadOnly(android.nfc.NdefMessage) throws android.nfc.FormatException, java.io.IOException;
     method public static android.nfc.tech.NdefFormatable get(android.nfc.Tag);
   }
 
-  public final class NfcA extends android.nfc.tech.BasicTagTechnology {
+  public final class NfcA implements android.nfc.tech.TagTechnology {
     method public static android.nfc.tech.NfcA get(android.nfc.Tag);
     method public byte[] getAtqa();
     method public int getMaxTransceiveLength();
@@ -27791,7 +27763,7 @@ package android.nfc.tech {
     method public byte[] transceive(byte[]) throws java.io.IOException;
   }
 
-  public final class NfcB extends android.nfc.tech.BasicTagTechnology {
+  public final class NfcB implements android.nfc.tech.TagTechnology {
     method public static android.nfc.tech.NfcB get(android.nfc.Tag);
     method public byte[] getApplicationData();
     method public int getMaxTransceiveLength();
@@ -27799,7 +27771,7 @@ package android.nfc.tech {
     method public byte[] transceive(byte[]) throws java.io.IOException;
   }
 
-  public final class NfcBarcode extends android.nfc.tech.BasicTagTechnology {
+  public final class NfcBarcode implements android.nfc.tech.TagTechnology {
     method public static android.nfc.tech.NfcBarcode get(android.nfc.Tag);
     method public byte[] getBarcode();
     method public int getType();
@@ -27807,7 +27779,7 @@ package android.nfc.tech {
     field public static final int TYPE_UNKNOWN = -1; // 0xffffffff
   }
 
-  public final class NfcF extends android.nfc.tech.BasicTagTechnology {
+  public final class NfcF implements android.nfc.tech.TagTechnology {
     method public static android.nfc.tech.NfcF get(android.nfc.Tag);
     method public byte[] getManufacturer();
     method public int getMaxTransceiveLength();
@@ -27817,7 +27789,7 @@ package android.nfc.tech {
     method public byte[] transceive(byte[]) throws java.io.IOException;
   }
 
-  public final class NfcV extends android.nfc.tech.BasicTagTechnology {
+  public final class NfcV implements android.nfc.tech.TagTechnology {
     method public static android.nfc.tech.NfcV get(android.nfc.Tag);
     method public byte getDsfId();
     method public int getMaxTransceiveLength();
@@ -27826,7 +27798,6 @@ package android.nfc.tech {
   }
 
   public abstract interface TagTechnology implements java.io.Closeable {
-    method public abstract void close() throws java.io.IOException;
     method public abstract void connect() throws java.io.IOException;
     method public abstract android.nfc.Tag getTag();
     method public abstract boolean isConnected();
@@ -40236,7 +40207,6 @@ package android.telephony {
     method public int describeContents();
     method public long getTimeStamp();
     method public boolean isRegistered();
-    method public abstract void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.CellInfo> CREATOR;
   }
 
@@ -40289,7 +40259,6 @@ package android.telephony {
 
   public final class CellSignalStrengthCdma extends android.telephony.CellSignalStrength implements android.os.Parcelable {
     method public int describeContents();
-    method public boolean equals(java.lang.Object);
     method public int getAsuLevel();
     method public int getCdmaDbm();
     method public int getCdmaEcio();
@@ -40300,26 +40269,22 @@ package android.telephony {
     method public int getEvdoLevel();
     method public int getEvdoSnr();
     method public int getLevel();
-    method public int hashCode();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.CellSignalStrengthCdma> CREATOR;
   }
 
   public final class CellSignalStrengthGsm extends android.telephony.CellSignalStrength implements android.os.Parcelable {
     method public int describeContents();
-    method public boolean equals(java.lang.Object);
     method public int getAsuLevel();
     method public int getDbm();
     method public int getLevel();
     method public int getTimingAdvance();
-    method public int hashCode();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.CellSignalStrengthGsm> CREATOR;
   }
 
   public final class CellSignalStrengthLte extends android.telephony.CellSignalStrength implements android.os.Parcelable {
     method public int describeContents();
-    method public boolean equals(java.lang.Object);
     method public int getAsuLevel();
     method public int getCqi();
     method public int getDbm();
@@ -40328,18 +40293,15 @@ package android.telephony {
     method public int getRsrq();
     method public int getRssnr();
     method public int getTimingAdvance();
-    method public int hashCode();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.CellSignalStrengthLte> CREATOR;
   }
 
   public final class CellSignalStrengthWcdma extends android.telephony.CellSignalStrength implements android.os.Parcelable {
     method public int describeContents();
-    method public boolean equals(java.lang.Object);
     method public int getAsuLevel();
     method public int getDbm();
     method public int getLevel();
-    method public int hashCode();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.CellSignalStrengthWcdma> CREATOR;
   }
@@ -42241,7 +42203,7 @@ package android.text {
     method public android.text.Spannable newSpannable(java.lang.CharSequence);
   }
 
-  public class SpannableString extends android.text.SpannableStringInternal implements java.lang.CharSequence android.text.GetChars android.text.Spannable {
+  public class SpannableString implements java.lang.CharSequence android.text.GetChars android.text.Spannable {
     ctor public SpannableString(java.lang.CharSequence);
     method public void removeSpan(java.lang.Object);
     method public void setSpan(java.lang.Object, int, int, int);
@@ -42282,18 +42244,6 @@ package android.text {
     method public static android.text.SpannableStringBuilder valueOf(java.lang.CharSequence);
   }
 
-   abstract class SpannableStringInternal {
-    method public final char charAt(int);
-    method public final void getChars(int, int, char[], int);
-    method public int getSpanEnd(java.lang.Object);
-    method public int getSpanFlags(java.lang.Object);
-    method public int getSpanStart(java.lang.Object);
-    method public <T> T[] getSpans(int, int, java.lang.Class<T>);
-    method public final int length();
-    method public int nextSpanTransition(int, int, java.lang.Class);
-    method public final java.lang.String toString();
-  }
-
   public abstract interface Spanned implements java.lang.CharSequence {
     method public abstract int getSpanEnd(java.lang.Object);
     method public abstract int getSpanFlags(java.lang.Object);
@@ -42318,7 +42268,7 @@ package android.text {
     field public static final int SPAN_USER_SHIFT = 24; // 0x18
   }
 
-  public final class SpannedString extends android.text.SpannableStringInternal implements java.lang.CharSequence android.text.GetChars android.text.Spanned {
+  public final class SpannedString implements java.lang.CharSequence android.text.GetChars android.text.Spanned {
     ctor public SpannedString(java.lang.CharSequence);
     method public java.lang.CharSequence subSequence(int, int);
     method public static android.text.SpannedString valueOf(java.lang.CharSequence);
@@ -49340,7 +49290,7 @@ package android.webkit {
     method public abstract void setCookie(java.lang.String, java.lang.String, android.webkit.ValueCallback<java.lang.Boolean>);
   }
 
-  public final deprecated class CookieSyncManager extends android.webkit.WebSyncManager {
+  public final deprecated class CookieSyncManager implements java.lang.Runnable {
     method public static android.webkit.CookieSyncManager createInstance(android.content.Context);
     method public static android.webkit.CookieSyncManager getInstance();
     method public deprecated void resetSync();
@@ -49348,9 +49298,6 @@ package android.webkit {
     method public deprecated void stopSync();
     method public deprecated void sync();
     method protected deprecated void syncFromRamToFlash();
-    field protected static final java.lang.String LOGTAG = "websync";
-    field protected android.webkit.WebViewDatabase mDataBase;
-    field protected android.os.Handler mHandler;
   }
 
   public class DateSorter {
@@ -49796,19 +49743,6 @@ package android.webkit {
     method public abstract void updateQuota(long);
   }
 
-   abstract deprecated class WebSyncManager implements java.lang.Runnable {
-    ctor protected WebSyncManager(android.content.Context, java.lang.String);
-    method protected void onSyncInit();
-    method public void resetSync();
-    method public void run();
-    method public void startSync();
-    method public void stopSync();
-    method public void sync();
-    field protected static final java.lang.String LOGTAG = "websync";
-    field protected android.webkit.WebViewDatabase mDataBase;
-    field protected android.os.Handler mHandler;
-  }
-
   public class WebView extends android.widget.AbsoluteLayout implements android.view.ViewGroup.OnHierarchyChangeListener android.view.ViewTreeObserver.OnGlobalFocusChangeListener {
     ctor public WebView(android.content.Context);
     ctor public WebView(android.content.Context, android.util.AttributeSet);
@@ -50190,7 +50124,6 @@ package android.widget {
     ctor public AbsoluteLayout(android.content.Context, android.util.AttributeSet);
     ctor public AbsoluteLayout(android.content.Context, android.util.AttributeSet, int);
     ctor public AbsoluteLayout(android.content.Context, android.util.AttributeSet, int, int);
-    method protected void onLayout(boolean, int, int, int, int);
   }
 
   public static class AbsoluteLayout.LayoutParams extends android.view.ViewGroup.LayoutParams {
@@ -50269,7 +50202,6 @@ package android.widget {
     method public long getSelectedItemId();
     method public int getSelectedItemPosition();
     method public abstract android.view.View getSelectedView();
-    method protected void onLayout(boolean, int, int, int, int);
     method public boolean performItemClick(android.view.View, int, long);
     method public abstract void setAdapter(T);
     method public void setEmptyView(android.view.View);
@@ -50878,7 +50810,6 @@ package android.widget {
     method public android.widget.FrameLayout.LayoutParams generateLayoutParams(android.util.AttributeSet);
     method public deprecated boolean getConsiderGoneChildrenWhenMeasuring();
     method public boolean getMeasureAllChildren();
-    method protected void onLayout(boolean, int, int, int, int);
     method public void setMeasureAllChildren(boolean);
   }
 
@@ -50932,7 +50863,6 @@ package android.widget {
     method public boolean getUseDefaultMargins();
     method public boolean isColumnOrderPreserved();
     method public boolean isRowOrderPreserved();
-    method protected void onLayout(boolean, int, int, int, int);
     method public void setAlignmentMode(int);
     method public void setColumnCount(int);
     method public void setColumnOrderPreserved(boolean);
@@ -51149,7 +51079,6 @@ package android.widget {
     method public float getWeightSum();
     method public boolean isBaselineAligned();
     method public boolean isMeasureWithLargestChildEnabled();
-    method protected void onLayout(boolean, int, int, int, int);
     method public void setBaselineAligned(boolean);
     method public void setBaselineAlignedChildIndex(int);
     method public void setDividerDrawable(android.graphics.drawable.Drawable);
@@ -51628,7 +51557,6 @@ package android.widget {
     ctor public RelativeLayout(android.content.Context, android.util.AttributeSet, int, int);
     method public android.widget.RelativeLayout.LayoutParams generateLayoutParams(android.util.AttributeSet);
     method public int getGravity();
-    method protected void onLayout(boolean, int, int, int, int);
     method public void setGravity(int);
     method public void setHorizontalGravity(int);
     method public void setIgnoreGravity(int);
@@ -51997,7 +51925,6 @@ package android.widget {
     method public boolean isMoving();
     method public boolean isOpened();
     method public void lock();
-    method protected void onLayout(boolean, int, int, int, int);
     method public void open();
     method public void setOnDrawerCloseListener(android.widget.SlidingDrawer.OnDrawerCloseListener);
     method public void setOnDrawerOpenListener(android.widget.SlidingDrawer.OnDrawerOpenListener);
@@ -52582,7 +52509,6 @@ package android.widget {
     method public boolean hideOverflowMenu();
     method public void inflateMenu(int);
     method public boolean isOverflowMenuShowing();
-    method protected void onLayout(boolean, int, int, int, int);
     method public void setContentInsetEndWithActions(int);
     method public void setContentInsetStartWithNavigation(int);
     method public void setContentInsetsAbsolute(int, int);
@@ -52757,14 +52683,6 @@ package android.widget {
     method public void setOnZoomOutClickListener(android.view.View.OnClickListener);
     method public void setZoomSpeed(long);
     method public void show();
-  }
-
-}
-
-package com.android.internal.util {
-
-  public abstract deprecated interface Predicate<T> {
-    method public abstract boolean apply(T);
   }
 
 }
@@ -53807,9 +53725,6 @@ package java.io {
   public abstract interface ObjectOutput implements java.lang.AutoCloseable java.io.DataOutput {
     method public abstract void close() throws java.io.IOException;
     method public abstract void flush() throws java.io.IOException;
-    method public abstract void write(int) throws java.io.IOException;
-    method public abstract void write(byte[]) throws java.io.IOException;
-    method public abstract void write(byte[], int, int) throws java.io.IOException;
     method public abstract void writeObject(java.lang.Object) throws java.io.IOException;
   }
 
@@ -54148,7 +54063,6 @@ package java.io {
   public abstract class Reader implements java.io.Closeable java.lang.Readable {
     ctor protected Reader();
     ctor protected Reader(java.lang.Object);
-    method public abstract void close() throws java.io.IOException;
     method public void mark(int) throws java.io.IOException;
     method public boolean markSupported();
     method public int read(java.nio.CharBuffer) throws java.io.IOException;
@@ -54272,8 +54186,6 @@ package java.io {
     method public java.io.Writer append(java.lang.CharSequence) throws java.io.IOException;
     method public java.io.Writer append(java.lang.CharSequence, int, int) throws java.io.IOException;
     method public java.io.Writer append(char) throws java.io.IOException;
-    method public abstract void close() throws java.io.IOException;
-    method public abstract void flush() throws java.io.IOException;
     method public void write(int) throws java.io.IOException;
     method public void write(char[]) throws java.io.IOException;
     method public abstract void write(char[], int, int) throws java.io.IOException;
@@ -54289,32 +54201,6 @@ package java.lang {
   public class AbstractMethodError extends java.lang.IncompatibleClassChangeError {
     ctor public AbstractMethodError();
     ctor public AbstractMethodError(java.lang.String);
-  }
-
-   abstract class AbstractStringBuilder implements java.lang.Appendable java.lang.CharSequence {
-    method public java.lang.AbstractStringBuilder append(java.lang.CharSequence);
-    method public java.lang.AbstractStringBuilder append(java.lang.CharSequence, int, int);
-    method public java.lang.AbstractStringBuilder append(char);
-    method public int capacity();
-    method public char charAt(int);
-    method public int codePointAt(int);
-    method public int codePointBefore(int);
-    method public int codePointCount(int, int);
-    method public void ensureCapacity(int);
-    method public void getChars(int, int, char[], int);
-    method public int indexOf(java.lang.String);
-    method public int indexOf(java.lang.String, int);
-    method public int lastIndexOf(java.lang.String);
-    method public int lastIndexOf(java.lang.String, int);
-    method public int length();
-    method public int offsetByCodePoints(int, int);
-    method public void setCharAt(int, char);
-    method public void setLength(int);
-    method public java.lang.CharSequence subSequence(int, int);
-    method public java.lang.String substring(int);
-    method public java.lang.String substring(int, int);
-    method public abstract java.lang.String toString();
-    method public void trimToSize();
   }
 
   public abstract interface Appendable {
@@ -55904,7 +55790,7 @@ package java.lang {
     field public static final java.util.Comparator<java.lang.String> CASE_INSENSITIVE_ORDER;
   }
 
-  public final class StringBuffer extends java.lang.AbstractStringBuilder implements java.lang.CharSequence java.io.Serializable {
+  public final class StringBuffer implements java.lang.Appendable java.lang.CharSequence java.io.Serializable {
     ctor public StringBuffer();
     ctor public StringBuffer(int);
     ctor public StringBuffer(java.lang.String);
@@ -55932,6 +55818,7 @@ package java.lang {
     method public synchronized java.lang.StringBuffer deleteCharAt(int);
     method public synchronized void ensureCapacity(int);
     method public synchronized void getChars(int, int, char[], int);
+    method public int indexOf(java.lang.String);
     method public synchronized int indexOf(java.lang.String, int);
     method public synchronized java.lang.StringBuffer insert(int, char[], int, int);
     method public synchronized java.lang.StringBuffer insert(int, java.lang.Object);
@@ -55945,6 +55832,7 @@ package java.lang {
     method public java.lang.StringBuffer insert(int, long);
     method public java.lang.StringBuffer insert(int, float);
     method public java.lang.StringBuffer insert(int, double);
+    method public int lastIndexOf(java.lang.String);
     method public synchronized int lastIndexOf(java.lang.String, int);
     method public synchronized int length();
     method public synchronized int offsetByCodePoints(int, int);
@@ -55959,7 +55847,7 @@ package java.lang {
     method public synchronized void trimToSize();
   }
 
-  public final class StringBuilder extends java.lang.AbstractStringBuilder implements java.lang.CharSequence java.io.Serializable {
+  public final class StringBuilder implements java.lang.Appendable java.lang.CharSequence java.io.Serializable {
     ctor public StringBuilder();
     ctor public StringBuilder(int);
     ctor public StringBuilder(java.lang.String);
@@ -55980,6 +55868,8 @@ package java.lang {
     method public java.lang.StringBuilder appendCodePoint(int);
     method public java.lang.StringBuilder delete(int, int);
     method public java.lang.StringBuilder deleteCharAt(int);
+    method public int indexOf(java.lang.String);
+    method public int indexOf(java.lang.String, int);
     method public java.lang.StringBuilder insert(int, char[], int, int);
     method public java.lang.StringBuilder insert(int, java.lang.Object);
     method public java.lang.StringBuilder insert(int, java.lang.String);
@@ -55992,9 +55882,10 @@ package java.lang {
     method public java.lang.StringBuilder insert(int, long);
     method public java.lang.StringBuilder insert(int, float);
     method public java.lang.StringBuilder insert(int, double);
+    method public int lastIndexOf(java.lang.String);
+    method public int lastIndexOf(java.lang.String, int);
     method public java.lang.StringBuilder replace(int, int, java.lang.String);
     method public java.lang.StringBuilder reverse();
-    method public java.lang.String toString();
   }
 
   public class StringIndexOutOfBoundsException extends java.lang.IndexOutOfBoundsException {
@@ -56544,17 +56435,13 @@ package java.lang.reflect {
   }
 
   public abstract class Executable extends java.lang.reflect.AccessibleObject implements java.lang.reflect.GenericDeclaration java.lang.reflect.Member {
-    method public abstract java.lang.Class<?> getDeclaringClass();
     method public abstract java.lang.Class<?>[] getExceptionTypes();
     method public java.lang.reflect.Type[] getGenericExceptionTypes();
     method public java.lang.reflect.Type[] getGenericParameterTypes();
-    method public abstract int getModifiers();
-    method public abstract java.lang.String getName();
     method public abstract java.lang.annotation.Annotation[][] getParameterAnnotations();
     method public int getParameterCount();
     method public abstract java.lang.Class<?>[] getParameterTypes();
     method public java.lang.reflect.Parameter[] getParameters();
-    method public abstract java.lang.reflect.TypeVariable<?>[] getTypeParameters();
     method public final boolean isAnnotationPresent(java.lang.Class<? extends java.lang.annotation.Annotation>);
     method public boolean isSynthetic();
     method public boolean isVarArgs();
@@ -57815,7 +57702,6 @@ package java.nio {
     method public abstract short getShort();
     method public abstract short getShort(int);
     method public final boolean hasArray();
-    method public abstract boolean isDirect();
     method public final java.nio.ByteOrder order();
     method public final java.nio.ByteBuffer order(java.nio.ByteOrder);
     method public abstract java.nio.ByteBuffer put(byte);
@@ -57863,7 +57749,6 @@ package java.nio {
     method public java.nio.CharBuffer get(char[], int, int);
     method public java.nio.CharBuffer get(char[]);
     method public final boolean hasArray();
-    method public abstract boolean isDirect();
     method public final int length();
     method public abstract java.nio.ByteOrder order();
     method public abstract java.nio.CharBuffer put(char);
@@ -57895,7 +57780,6 @@ package java.nio {
     method public java.nio.DoubleBuffer get(double[], int, int);
     method public java.nio.DoubleBuffer get(double[]);
     method public final boolean hasArray();
-    method public abstract boolean isDirect();
     method public abstract java.nio.ByteOrder order();
     method public abstract java.nio.DoubleBuffer put(double);
     method public abstract java.nio.DoubleBuffer put(int, double);
@@ -57920,7 +57804,6 @@ package java.nio {
     method public java.nio.FloatBuffer get(float[], int, int);
     method public java.nio.FloatBuffer get(float[]);
     method public final boolean hasArray();
-    method public abstract boolean isDirect();
     method public abstract java.nio.ByteOrder order();
     method public abstract java.nio.FloatBuffer put(float);
     method public abstract java.nio.FloatBuffer put(int, float);
@@ -57945,7 +57828,6 @@ package java.nio {
     method public java.nio.IntBuffer get(int[], int, int);
     method public java.nio.IntBuffer get(int[]);
     method public final boolean hasArray();
-    method public abstract boolean isDirect();
     method public abstract java.nio.ByteOrder order();
     method public abstract java.nio.IntBuffer put(int);
     method public abstract java.nio.IntBuffer put(int, int);
@@ -57974,7 +57856,6 @@ package java.nio {
     method public java.nio.LongBuffer get(long[], int, int);
     method public java.nio.LongBuffer get(long[]);
     method public final boolean hasArray();
-    method public abstract boolean isDirect();
     method public abstract java.nio.ByteOrder order();
     method public abstract java.nio.LongBuffer put(long);
     method public abstract java.nio.LongBuffer put(int, long);
@@ -58009,7 +57890,6 @@ package java.nio {
     method public java.nio.ShortBuffer get(short[], int, int);
     method public java.nio.ShortBuffer get(short[]);
     method public final boolean hasArray();
-    method public abstract boolean isDirect();
     method public abstract java.nio.ByteOrder order();
     method public abstract java.nio.ShortBuffer put(short);
     method public abstract java.nio.ShortBuffer put(int, short);
@@ -58045,7 +57925,6 @@ package java.nio.channels {
   }
 
   public abstract interface AsynchronousChannel implements java.nio.channels.Channel {
-    method public abstract void close() throws java.io.IOException;
   }
 
   public abstract class AsynchronousChannelGroup {
@@ -58090,7 +57969,6 @@ package java.nio.channels {
     method public abstract java.util.concurrent.Future<java.nio.channels.AsynchronousSocketChannel> accept();
     method public final java.nio.channels.AsynchronousServerSocketChannel bind(java.net.SocketAddress) throws java.io.IOException;
     method public abstract java.nio.channels.AsynchronousServerSocketChannel bind(java.net.SocketAddress, int) throws java.io.IOException;
-    method public abstract java.net.SocketAddress getLocalAddress() throws java.io.IOException;
     method public static java.nio.channels.AsynchronousServerSocketChannel open(java.nio.channels.AsynchronousChannelGroup) throws java.io.IOException;
     method public static java.nio.channels.AsynchronousServerSocketChannel open() throws java.io.IOException;
     method public final java.nio.channels.spi.AsynchronousChannelProvider provider();
@@ -58102,21 +57980,18 @@ package java.nio.channels {
     method public abstract java.nio.channels.AsynchronousSocketChannel bind(java.net.SocketAddress) throws java.io.IOException;
     method public abstract <A> void connect(java.net.SocketAddress, A, java.nio.channels.CompletionHandler<java.lang.Void, ? super A>);
     method public abstract java.util.concurrent.Future<java.lang.Void> connect(java.net.SocketAddress);
-    method public abstract java.net.SocketAddress getLocalAddress() throws java.io.IOException;
     method public abstract java.net.SocketAddress getRemoteAddress() throws java.io.IOException;
     method public static java.nio.channels.AsynchronousSocketChannel open(java.nio.channels.AsynchronousChannelGroup) throws java.io.IOException;
     method public static java.nio.channels.AsynchronousSocketChannel open() throws java.io.IOException;
     method public final java.nio.channels.spi.AsynchronousChannelProvider provider();
     method public abstract <A> void read(java.nio.ByteBuffer, long, java.util.concurrent.TimeUnit, A, java.nio.channels.CompletionHandler<java.lang.Integer, ? super A>);
     method public final <A> void read(java.nio.ByteBuffer, A, java.nio.channels.CompletionHandler<java.lang.Integer, ? super A>);
-    method public abstract java.util.concurrent.Future<java.lang.Integer> read(java.nio.ByteBuffer);
     method public abstract <A> void read(java.nio.ByteBuffer[], int, int, long, java.util.concurrent.TimeUnit, A, java.nio.channels.CompletionHandler<java.lang.Long, ? super A>);
     method public abstract <T> java.nio.channels.AsynchronousSocketChannel setOption(java.net.SocketOption<T>, T) throws java.io.IOException;
     method public abstract java.nio.channels.AsynchronousSocketChannel shutdownInput() throws java.io.IOException;
     method public abstract java.nio.channels.AsynchronousSocketChannel shutdownOutput() throws java.io.IOException;
     method public abstract <A> void write(java.nio.ByteBuffer, long, java.util.concurrent.TimeUnit, A, java.nio.channels.CompletionHandler<java.lang.Integer, ? super A>);
     method public final <A> void write(java.nio.ByteBuffer, A, java.nio.channels.CompletionHandler<java.lang.Integer, ? super A>);
-    method public abstract java.util.concurrent.Future<java.lang.Integer> write(java.nio.ByteBuffer);
     method public abstract <A> void write(java.nio.ByteBuffer[], int, int, long, java.util.concurrent.TimeUnit, A, java.nio.channels.CompletionHandler<java.lang.Long, ? super A>);
   }
 
@@ -58128,7 +58003,6 @@ package java.nio.channels {
   }
 
   public abstract interface Channel implements java.io.Closeable {
-    method public abstract void close() throws java.io.IOException;
     method public abstract boolean isOpen();
   }
 
@@ -58171,21 +58045,16 @@ package java.nio.channels {
     method public abstract java.nio.channels.DatagramChannel bind(java.net.SocketAddress) throws java.io.IOException;
     method public abstract java.nio.channels.DatagramChannel connect(java.net.SocketAddress) throws java.io.IOException;
     method public abstract java.nio.channels.DatagramChannel disconnect() throws java.io.IOException;
-    method public abstract java.net.SocketAddress getLocalAddress() throws java.io.IOException;
     method public abstract java.net.SocketAddress getRemoteAddress() throws java.io.IOException;
     method public abstract boolean isConnected();
     method public static java.nio.channels.DatagramChannel open() throws java.io.IOException;
     method public static java.nio.channels.DatagramChannel open(java.net.ProtocolFamily) throws java.io.IOException;
-    method public abstract int read(java.nio.ByteBuffer) throws java.io.IOException;
-    method public abstract long read(java.nio.ByteBuffer[], int, int) throws java.io.IOException;
     method public final long read(java.nio.ByteBuffer[]) throws java.io.IOException;
     method public abstract java.net.SocketAddress receive(java.nio.ByteBuffer) throws java.io.IOException;
     method public abstract int send(java.nio.ByteBuffer, java.net.SocketAddress) throws java.io.IOException;
     method public abstract <T> java.nio.channels.DatagramChannel setOption(java.net.SocketOption<T>, T) throws java.io.IOException;
     method public abstract java.net.DatagramSocket socket();
     method public final int validOps();
-    method public abstract int write(java.nio.ByteBuffer) throws java.io.IOException;
-    method public abstract long write(java.nio.ByteBuffer[], int, int) throws java.io.IOException;
     method public final long write(java.nio.ByteBuffer[]) throws java.io.IOException;
   }
 
@@ -58197,20 +58066,14 @@ package java.nio.channels {
     method public abstract java.nio.MappedByteBuffer map(java.nio.channels.FileChannel.MapMode, long, long) throws java.io.IOException;
     method public static java.nio.channels.FileChannel open(java.nio.file.Path, java.util.Set<? extends java.nio.file.OpenOption>, java.nio.file.attribute.FileAttribute<?>...) throws java.io.IOException;
     method public static java.nio.channels.FileChannel open(java.nio.file.Path, java.nio.file.OpenOption...) throws java.io.IOException;
-    method public abstract long position() throws java.io.IOException;
     method public abstract java.nio.channels.FileChannel position(long) throws java.io.IOException;
-    method public abstract int read(java.nio.ByteBuffer) throws java.io.IOException;
-    method public abstract long read(java.nio.ByteBuffer[], int, int) throws java.io.IOException;
     method public final long read(java.nio.ByteBuffer[]) throws java.io.IOException;
     method public abstract int read(java.nio.ByteBuffer, long) throws java.io.IOException;
-    method public abstract long size() throws java.io.IOException;
     method public abstract long transferFrom(java.nio.channels.ReadableByteChannel, long, long) throws java.io.IOException;
     method public abstract long transferTo(long, long, java.nio.channels.WritableByteChannel) throws java.io.IOException;
     method public abstract java.nio.channels.FileChannel truncate(long) throws java.io.IOException;
     method public abstract java.nio.channels.FileLock tryLock(long, long, boolean) throws java.io.IOException;
     method public final java.nio.channels.FileLock tryLock() throws java.io.IOException;
-    method public abstract int write(java.nio.ByteBuffer) throws java.io.IOException;
-    method public abstract long write(java.nio.ByteBuffer[], int, int) throws java.io.IOException;
     method public final long write(java.nio.ByteBuffer[]) throws java.io.IOException;
     method public abstract int write(java.nio.ByteBuffer, long) throws java.io.IOException;
   }
@@ -58262,7 +58125,6 @@ package java.nio.channels {
   }
 
   public abstract interface InterruptibleChannel implements java.nio.channels.Channel {
-    method public abstract void close() throws java.io.IOException;
   }
 
   public abstract class MembershipKey {
@@ -58278,7 +58140,6 @@ package java.nio.channels {
   }
 
   public abstract interface MulticastChannel implements java.nio.channels.NetworkChannel {
-    method public abstract void close() throws java.io.IOException;
     method public abstract java.nio.channels.MembershipKey join(java.net.InetAddress, java.net.NetworkInterface) throws java.io.IOException;
     method public abstract java.nio.channels.MembershipKey join(java.net.InetAddress, java.net.NetworkInterface, java.net.InetAddress) throws java.io.IOException;
   }
@@ -58348,10 +58209,8 @@ package java.nio.channels {
   public abstract interface SeekableByteChannel implements java.nio.channels.ByteChannel {
     method public abstract long position() throws java.io.IOException;
     method public abstract java.nio.channels.SeekableByteChannel position(long) throws java.io.IOException;
-    method public abstract int read(java.nio.ByteBuffer) throws java.io.IOException;
     method public abstract long size() throws java.io.IOException;
     method public abstract java.nio.channels.SeekableByteChannel truncate(long) throws java.io.IOException;
-    method public abstract int write(java.nio.ByteBuffer) throws java.io.IOException;
   }
 
   public abstract class SelectableChannel extends java.nio.channels.spi.AbstractInterruptibleChannel implements java.nio.channels.Channel {
@@ -58390,7 +58249,6 @@ package java.nio.channels {
 
   public abstract class Selector implements java.io.Closeable {
     ctor protected Selector();
-    method public abstract void close() throws java.io.IOException;
     method public abstract boolean isOpen();
     method public abstract java.util.Set<java.nio.channels.SelectionKey> keys();
     method public static java.nio.channels.Selector open() throws java.io.IOException;
@@ -58407,7 +58265,6 @@ package java.nio.channels {
     method public abstract java.nio.channels.SocketChannel accept() throws java.io.IOException;
     method public final java.nio.channels.ServerSocketChannel bind(java.net.SocketAddress) throws java.io.IOException;
     method public abstract java.nio.channels.ServerSocketChannel bind(java.net.SocketAddress, int) throws java.io.IOException;
-    method public abstract java.net.SocketAddress getLocalAddress() throws java.io.IOException;
     method public static java.nio.channels.ServerSocketChannel open() throws java.io.IOException;
     method public abstract <T> java.nio.channels.ServerSocketChannel setOption(java.net.SocketOption<T>, T) throws java.io.IOException;
     method public abstract java.net.ServerSocket socket();
@@ -58423,22 +58280,17 @@ package java.nio.channels {
     method public abstract java.nio.channels.SocketChannel bind(java.net.SocketAddress) throws java.io.IOException;
     method public abstract boolean connect(java.net.SocketAddress) throws java.io.IOException;
     method public abstract boolean finishConnect() throws java.io.IOException;
-    method public abstract java.net.SocketAddress getLocalAddress() throws java.io.IOException;
     method public abstract java.net.SocketAddress getRemoteAddress() throws java.io.IOException;
     method public abstract boolean isConnected();
     method public abstract boolean isConnectionPending();
     method public static java.nio.channels.SocketChannel open() throws java.io.IOException;
     method public static java.nio.channels.SocketChannel open(java.net.SocketAddress) throws java.io.IOException;
-    method public abstract int read(java.nio.ByteBuffer) throws java.io.IOException;
-    method public abstract long read(java.nio.ByteBuffer[], int, int) throws java.io.IOException;
     method public final long read(java.nio.ByteBuffer[]) throws java.io.IOException;
     method public abstract <T> java.nio.channels.SocketChannel setOption(java.net.SocketOption<T>, T) throws java.io.IOException;
     method public abstract java.nio.channels.SocketChannel shutdownInput() throws java.io.IOException;
     method public abstract java.nio.channels.SocketChannel shutdownOutput() throws java.io.IOException;
     method public abstract java.net.Socket socket();
     method public final int validOps();
-    method public abstract int write(java.nio.ByteBuffer) throws java.io.IOException;
-    method public abstract long write(java.nio.ByteBuffer[], int, int) throws java.io.IOException;
     method public final long write(java.nio.ByteBuffer[]) throws java.io.IOException;
   }
 
@@ -58719,7 +58571,6 @@ package java.nio.file {
   }
 
   public abstract interface DirectoryStream<T> implements java.io.Closeable java.lang.Iterable {
-    method public abstract java.util.Iterator<T> iterator();
   }
 
   public static abstract interface DirectoryStream.Filter<T> {
@@ -58747,7 +58598,6 @@ package java.nio.file {
 
   public abstract class FileSystem implements java.io.Closeable {
     ctor protected FileSystem();
-    method public abstract void close() throws java.io.IOException;
     method public abstract java.lang.Iterable<java.nio.file.FileStore> getFileStores();
     method public abstract java.nio.file.Path getPath(java.lang.String, java.lang.String...);
     method public abstract java.nio.file.PathMatcher getPathMatcher(java.lang.String);
@@ -58932,8 +58782,6 @@ package java.nio.file {
     method public abstract boolean isAbsolute();
     method public abstract java.util.Iterator<java.nio.file.Path> iterator();
     method public abstract java.nio.file.Path normalize();
-    method public abstract java.nio.file.WatchKey register(java.nio.file.WatchService, java.nio.file.WatchEvent.Kind<?>[], java.nio.file.WatchEvent.Modifier...) throws java.io.IOException;
-    method public abstract java.nio.file.WatchKey register(java.nio.file.WatchService, java.nio.file.WatchEvent.Kind<?>...) throws java.io.IOException;
     method public abstract java.nio.file.Path relativize(java.nio.file.Path);
     method public abstract java.nio.file.Path resolve(java.nio.file.Path);
     method public abstract java.nio.file.Path resolve(java.lang.String);
@@ -59044,7 +58892,6 @@ package java.nio.file {
   }
 
   public abstract interface WatchService implements java.io.Closeable {
-    method public abstract void close() throws java.io.IOException;
     method public abstract java.nio.file.WatchKey poll();
     method public abstract java.nio.file.WatchKey poll(long, java.util.concurrent.TimeUnit) throws java.lang.InterruptedException;
     method public abstract java.nio.file.WatchKey take() throws java.lang.InterruptedException;
@@ -59120,7 +58967,6 @@ package java.nio.file.attribute {
 
   public abstract interface AclFileAttributeView implements java.nio.file.attribute.FileOwnerAttributeView {
     method public abstract java.util.List<java.nio.file.attribute.AclEntry> getAcl() throws java.io.IOException;
-    method public abstract java.lang.String name();
     method public abstract void setAcl(java.util.List<java.nio.file.attribute.AclEntry>) throws java.io.IOException;
   }
 
@@ -59129,7 +58975,6 @@ package java.nio.file.attribute {
   }
 
   public abstract interface BasicFileAttributeView implements java.nio.file.attribute.FileAttributeView {
-    method public abstract java.lang.String name();
     method public abstract java.nio.file.attribute.BasicFileAttributes readAttributes() throws java.io.IOException;
     method public abstract void setTimes(java.nio.file.attribute.FileTime, java.nio.file.attribute.FileTime, java.nio.file.attribute.FileTime) throws java.io.IOException;
   }
@@ -59147,7 +58992,6 @@ package java.nio.file.attribute {
   }
 
   public abstract interface DosFileAttributeView implements java.nio.file.attribute.BasicFileAttributeView {
-    method public abstract java.lang.String name();
     method public abstract java.nio.file.attribute.DosFileAttributes readAttributes() throws java.io.IOException;
     method public abstract void setArchive(boolean) throws java.io.IOException;
     method public abstract void setHidden(boolean) throws java.io.IOException;
@@ -59172,7 +59016,6 @@ package java.nio.file.attribute {
 
   public abstract interface FileOwnerAttributeView implements java.nio.file.attribute.FileAttributeView {
     method public abstract java.nio.file.attribute.UserPrincipal getOwner() throws java.io.IOException;
-    method public abstract java.lang.String name();
     method public abstract void setOwner(java.nio.file.attribute.UserPrincipal) throws java.io.IOException;
   }
 
@@ -59193,7 +59036,6 @@ package java.nio.file.attribute {
   }
 
   public abstract interface PosixFileAttributeView implements java.nio.file.attribute.BasicFileAttributeView java.nio.file.attribute.FileOwnerAttributeView {
-    method public abstract java.lang.String name();
     method public abstract java.nio.file.attribute.PosixFileAttributes readAttributes() throws java.io.IOException;
     method public abstract void setGroup(java.nio.file.attribute.GroupPrincipal) throws java.io.IOException;
     method public abstract void setPermissions(java.util.Set<java.nio.file.attribute.PosixFilePermission>) throws java.io.IOException;
@@ -59228,7 +59070,6 @@ package java.nio.file.attribute {
   public abstract interface UserDefinedFileAttributeView implements java.nio.file.attribute.FileAttributeView {
     method public abstract void delete(java.lang.String) throws java.io.IOException;
     method public abstract java.util.List<java.lang.String> list() throws java.io.IOException;
-    method public abstract java.lang.String name();
     method public abstract int read(java.lang.String, java.nio.ByteBuffer) throws java.io.IOException;
     method public abstract int size(java.lang.String) throws java.io.IOException;
     method public abstract int write(java.lang.String, java.nio.ByteBuffer) throws java.io.IOException;
@@ -59906,7 +59747,6 @@ package java.security {
     method public synchronized boolean replace(java.lang.Object, java.lang.Object, java.lang.Object);
     method public synchronized java.lang.Object replace(java.lang.Object, java.lang.Object);
     method public synchronized void replaceAll(java.util.function.BiFunction<? super java.lang.Object, ? super java.lang.Object, ? extends java.lang.Object>);
-    method public java.lang.String toString();
     method public java.util.Collection<java.lang.Object> values();
   }
 
@@ -60443,8 +60283,6 @@ package java.security.cert {
     method public void check(java.security.cert.Certificate) throws java.security.cert.CertPathValidatorException;
     method public java.lang.Object clone();
     method public abstract java.util.Set<java.lang.String> getSupportedExtensions();
-    method public abstract void init(boolean) throws java.security.cert.CertPathValidatorException;
-    method public abstract boolean isForwardCheckingSupported();
   }
 
   public class PKIXCertPathValidatorResult implements java.security.cert.CertPathValidatorResult {
@@ -62690,7 +62528,6 @@ package java.text {
     method public java.text.CollationElementIterator getCollationElementIterator(java.text.CharacterIterator);
     method public synchronized java.text.CollationKey getCollationKey(java.lang.String);
     method public java.lang.String getRules();
-    method public int hashCode();
   }
 
   public class SimpleDateFormat extends java.text.DateFormat {
@@ -63475,20 +63312,9 @@ package java.time.chrono {
     method public static java.util.Comparator<java.time.chrono.ChronoLocalDate> timeLineOrder();
     method public default long toEpochDay();
     method public abstract java.lang.String toString();
-    method public abstract long until(java.time.temporal.Temporal, java.time.temporal.TemporalUnit);
     method public abstract java.time.chrono.ChronoPeriod until(java.time.chrono.ChronoLocalDate);
     method public default java.time.chrono.ChronoLocalDate with(java.time.temporal.TemporalAdjuster);
     method public default java.time.chrono.ChronoLocalDate with(java.time.temporal.TemporalField, long);
-  }
-
-   abstract class ChronoLocalDateImpl<D extends java.time.chrono.ChronoLocalDate> implements java.time.chrono.ChronoLocalDate java.io.Serializable java.time.temporal.Temporal java.time.temporal.TemporalAdjuster {
-    method public D minus(java.time.temporal.TemporalAmount);
-    method public D minus(long, java.time.temporal.TemporalUnit);
-    method public D plus(java.time.temporal.TemporalAmount);
-    method public D plus(long, java.time.temporal.TemporalUnit);
-    method public long until(java.time.temporal.Temporal, java.time.temporal.TemporalUnit);
-    method public D with(java.time.temporal.TemporalAdjuster);
-    method public D with(java.time.temporal.TemporalField, long);
   }
 
   public abstract interface ChronoLocalDateTime<D extends java.time.chrono.ChronoLocalDate> implements java.lang.Comparable java.time.temporal.Temporal java.time.temporal.TemporalAdjuster {
@@ -63503,7 +63329,6 @@ package java.time.chrono {
     method public default boolean isAfter(java.time.chrono.ChronoLocalDateTime<?>);
     method public default boolean isBefore(java.time.chrono.ChronoLocalDateTime<?>);
     method public default boolean isEqual(java.time.chrono.ChronoLocalDateTime<?>);
-    method public abstract boolean isSupported(java.time.temporal.TemporalField);
     method public default boolean isSupported(java.time.temporal.TemporalUnit);
     method public default java.time.chrono.ChronoLocalDateTime<D> minus(java.time.temporal.TemporalAmount);
     method public default java.time.chrono.ChronoLocalDateTime<D> minus(long, java.time.temporal.TemporalUnit);
@@ -63520,12 +63345,9 @@ package java.time.chrono {
   }
 
   public abstract interface ChronoPeriod implements java.time.temporal.TemporalAmount {
-    method public abstract java.time.temporal.Temporal addTo(java.time.temporal.Temporal);
     method public static java.time.chrono.ChronoPeriod between(java.time.chrono.ChronoLocalDate, java.time.chrono.ChronoLocalDate);
     method public abstract boolean equals(java.lang.Object);
-    method public abstract long get(java.time.temporal.TemporalUnit);
     method public abstract java.time.chrono.Chronology getChronology();
-    method public abstract java.util.List<java.time.temporal.TemporalUnit> getUnits();
     method public abstract int hashCode();
     method public default boolean isNegative();
     method public default boolean isZero();
@@ -63534,7 +63356,6 @@ package java.time.chrono {
     method public default java.time.chrono.ChronoPeriod negated();
     method public abstract java.time.chrono.ChronoPeriod normalized();
     method public abstract java.time.chrono.ChronoPeriod plus(java.time.temporal.TemporalAmount);
-    method public abstract java.time.temporal.Temporal subtractFrom(java.time.temporal.Temporal);
     method public abstract java.lang.String toString();
   }
 
@@ -63551,7 +63372,6 @@ package java.time.chrono {
     method public default boolean isAfter(java.time.chrono.ChronoZonedDateTime<?>);
     method public default boolean isBefore(java.time.chrono.ChronoZonedDateTime<?>);
     method public default boolean isEqual(java.time.chrono.ChronoZonedDateTime<?>);
-    method public abstract boolean isSupported(java.time.temporal.TemporalField);
     method public default boolean isSupported(java.time.temporal.TemporalUnit);
     method public default java.time.chrono.ChronoZonedDateTime<D> minus(java.time.temporal.TemporalAmount);
     method public default java.time.chrono.ChronoZonedDateTime<D> minus(long, java.time.temporal.TemporalUnit);
@@ -63637,7 +63457,7 @@ package java.time.chrono {
     field public static final java.time.chrono.HijrahChronology INSTANCE;
   }
 
-  public final class HijrahDate extends java.time.chrono.ChronoLocalDateImpl implements java.time.chrono.ChronoLocalDate java.io.Serializable {
+  public final class HijrahDate implements java.time.chrono.ChronoLocalDate java.io.Serializable java.time.temporal.Temporal java.time.temporal.TemporalAdjuster {
     method public final java.time.chrono.ChronoLocalDateTime<java.time.chrono.HijrahDate> atTime(java.time.LocalTime);
     method public static java.time.chrono.HijrahDate from(java.time.temporal.TemporalAccessor);
     method public java.time.chrono.HijrahChronology getChronology();
@@ -63724,7 +63544,7 @@ package java.time.chrono {
     field public static final java.time.chrono.JapaneseChronology INSTANCE;
   }
 
-  public final class JapaneseDate extends java.time.chrono.ChronoLocalDateImpl implements java.time.chrono.ChronoLocalDate java.io.Serializable {
+  public final class JapaneseDate implements java.time.chrono.ChronoLocalDate java.io.Serializable java.time.temporal.Temporal java.time.temporal.TemporalAdjuster {
     method public final java.time.chrono.ChronoLocalDateTime<java.time.chrono.JapaneseDate> atTime(java.time.LocalTime);
     method public static java.time.chrono.JapaneseDate from(java.time.temporal.TemporalAccessor);
     method public java.time.chrono.JapaneseChronology getChronology();
@@ -63780,7 +63600,7 @@ package java.time.chrono {
     field public static final java.time.chrono.MinguoChronology INSTANCE;
   }
 
-  public final class MinguoDate extends java.time.chrono.ChronoLocalDateImpl implements java.time.chrono.ChronoLocalDate java.io.Serializable {
+  public final class MinguoDate implements java.time.chrono.ChronoLocalDate java.io.Serializable java.time.temporal.Temporal java.time.temporal.TemporalAdjuster {
     method public final java.time.chrono.ChronoLocalDateTime<java.time.chrono.MinguoDate> atTime(java.time.LocalTime);
     method public static java.time.chrono.MinguoDate from(java.time.temporal.TemporalAccessor);
     method public java.time.chrono.MinguoChronology getChronology();
@@ -63833,7 +63653,7 @@ package java.time.chrono {
     field public static final java.time.chrono.ThaiBuddhistChronology INSTANCE;
   }
 
-  public final class ThaiBuddhistDate extends java.time.chrono.ChronoLocalDateImpl implements java.time.chrono.ChronoLocalDate java.io.Serializable {
+  public final class ThaiBuddhistDate implements java.time.chrono.ChronoLocalDate java.io.Serializable java.time.temporal.Temporal java.time.temporal.TemporalAdjuster {
     method public final java.time.chrono.ChronoLocalDateTime<java.time.chrono.ThaiBuddhistDate> atTime(java.time.LocalTime);
     method public static java.time.chrono.ThaiBuddhistDate from(java.time.temporal.TemporalAccessor);
     method public java.time.chrono.ThaiBuddhistChronology getChronology();
@@ -64312,11 +64132,9 @@ package java.util {
     method public boolean contains(java.lang.Object);
     method public boolean containsAll(java.util.Collection<?>);
     method public boolean isEmpty();
-    method public abstract java.util.Iterator<E> iterator();
     method public boolean remove(java.lang.Object);
     method public boolean removeAll(java.util.Collection<?>);
     method public boolean retainAll(java.util.Collection<?>);
-    method public abstract int size();
     method public java.lang.Object[] toArray();
     method public <T> T[] toArray(T[]);
   }
@@ -64325,7 +64143,6 @@ package java.util {
     ctor protected AbstractList();
     method public void add(int, E);
     method public boolean addAll(int, java.util.Collection<? extends E>);
-    method public abstract E get(int);
     method public int indexOf(java.lang.Object);
     method public java.util.Iterator<E> iterator();
     method public int lastIndexOf(java.lang.Object);
@@ -64343,7 +64160,6 @@ package java.util {
     method public void clear();
     method public boolean containsKey(java.lang.Object);
     method public boolean containsValue(java.lang.Object);
-    method public abstract java.util.Set<java.util.Map.Entry<K, V>> entrySet();
     method public V get(java.lang.Object);
     method public boolean isEmpty();
     method public java.util.Set<K> keySet();
@@ -64379,7 +64195,6 @@ package java.util {
   public abstract class AbstractSequentialList<E> extends java.util.AbstractList {
     ctor protected AbstractSequentialList();
     method public E get(int);
-    method public abstract java.util.ListIterator<E> listIterator(int);
   }
 
   public abstract class AbstractSet<E> extends java.util.AbstractCollection implements java.util.Set {
@@ -64951,33 +64766,23 @@ package java.util {
   }
 
   public abstract interface Deque<E> implements java.util.Queue {
-    method public abstract boolean add(E);
     method public abstract void addFirst(E);
     method public abstract void addLast(E);
-    method public abstract boolean contains(java.lang.Object);
     method public abstract java.util.Iterator<E> descendingIterator();
-    method public abstract E element();
     method public abstract E getFirst();
     method public abstract E getLast();
-    method public abstract java.util.Iterator<E> iterator();
-    method public abstract boolean offer(E);
     method public abstract boolean offerFirst(E);
     method public abstract boolean offerLast(E);
-    method public abstract E peek();
     method public abstract E peekFirst();
     method public abstract E peekLast();
-    method public abstract E poll();
     method public abstract E pollFirst();
     method public abstract E pollLast();
     method public abstract E pop();
     method public abstract void push(E);
-    method public abstract E remove();
-    method public abstract boolean remove(java.lang.Object);
     method public abstract E removeFirst();
     method public abstract boolean removeFirstOccurrence(java.lang.Object);
     method public abstract E removeLast();
     method public abstract boolean removeLastOccurrence(java.lang.Object);
-    method public abstract int size();
   }
 
   public abstract class Dictionary<K, V> {
@@ -65286,7 +65091,6 @@ package java.util {
     method public E element();
     method public E getFirst();
     method public E getLast();
-    method public java.util.ListIterator<E> listIterator(int);
     method public boolean offer(E);
     method public boolean offerFirst(E);
     method public boolean offerLast(E);
@@ -65307,40 +65111,23 @@ package java.util {
   }
 
   public abstract interface List<E> implements java.util.Collection {
-    method public abstract boolean add(E);
     method public abstract void add(int, E);
-    method public abstract boolean addAll(java.util.Collection<? extends E>);
     method public abstract boolean addAll(int, java.util.Collection<? extends E>);
-    method public abstract void clear();
-    method public abstract boolean contains(java.lang.Object);
-    method public abstract boolean containsAll(java.util.Collection<?>);
-    method public abstract boolean equals(java.lang.Object);
     method public abstract E get(int);
-    method public abstract int hashCode();
     method public abstract int indexOf(java.lang.Object);
-    method public abstract boolean isEmpty();
-    method public abstract java.util.Iterator<E> iterator();
     method public abstract int lastIndexOf(java.lang.Object);
     method public abstract java.util.ListIterator<E> listIterator();
     method public abstract java.util.ListIterator<E> listIterator(int);
-    method public abstract boolean remove(java.lang.Object);
     method public abstract E remove(int);
-    method public abstract boolean removeAll(java.util.Collection<?>);
     method public default void replaceAll(java.util.function.UnaryOperator<E>);
-    method public abstract boolean retainAll(java.util.Collection<?>);
     method public abstract E set(int, E);
-    method public abstract int size();
     method public default void sort(java.util.Comparator<? super E>);
     method public abstract java.util.List<E> subList(int, int);
-    method public abstract java.lang.Object[] toArray();
-    method public abstract <T> T[] toArray(T[]);
   }
 
   public abstract interface ListIterator<E> implements java.util.Iterator {
     method public abstract void add(E);
-    method public abstract boolean hasNext();
     method public abstract boolean hasPrevious();
-    method public abstract E next();
     method public abstract int nextIndex();
     method public abstract E previous();
     method public abstract int previousIndex();
@@ -65548,7 +65335,6 @@ package java.util {
     method public abstract java.util.Map.Entry<K, V> floorEntry(K);
     method public abstract K floorKey(K);
     method public abstract java.util.NavigableMap<K, V> headMap(K, boolean);
-    method public abstract java.util.SortedMap<K, V> headMap(K);
     method public abstract java.util.Map.Entry<K, V> higherEntry(K);
     method public abstract K higherKey(K);
     method public abstract java.util.Map.Entry<K, V> lastEntry();
@@ -65558,9 +65344,7 @@ package java.util {
     method public abstract java.util.Map.Entry<K, V> pollFirstEntry();
     method public abstract java.util.Map.Entry<K, V> pollLastEntry();
     method public abstract java.util.NavigableMap<K, V> subMap(K, boolean, K, boolean);
-    method public abstract java.util.SortedMap<K, V> subMap(K, K);
     method public abstract java.util.NavigableMap<K, V> tailMap(K, boolean);
-    method public abstract java.util.SortedMap<K, V> tailMap(K);
   }
 
   public abstract interface NavigableSet<E> implements java.util.SortedSet {
@@ -65569,16 +65353,12 @@ package java.util {
     method public abstract java.util.NavigableSet<E> descendingSet();
     method public abstract E floor(E);
     method public abstract java.util.NavigableSet<E> headSet(E, boolean);
-    method public abstract java.util.SortedSet<E> headSet(E);
     method public abstract E higher(E);
-    method public abstract java.util.Iterator<E> iterator();
     method public abstract E lower(E);
     method public abstract E pollFirst();
     method public abstract E pollLast();
     method public abstract java.util.NavigableSet<E> subSet(E, boolean, E, boolean);
-    method public abstract java.util.SortedSet<E> subSet(E, E);
     method public abstract java.util.NavigableSet<E> tailSet(E, boolean);
-    method public abstract java.util.SortedSet<E> tailSet(E);
   }
 
   public class NoSuchElementException extends java.lang.RuntimeException {
@@ -65741,7 +65521,6 @@ package java.util {
   }
 
   public abstract interface Queue<E> implements java.util.Collection {
-    method public abstract boolean add(E);
     method public abstract E element();
     method public abstract boolean offer(E);
     method public abstract E peek();
@@ -65902,21 +65681,6 @@ package java.util {
   }
 
   public abstract interface Set<E> implements java.util.Collection {
-    method public abstract boolean add(E);
-    method public abstract boolean addAll(java.util.Collection<? extends E>);
-    method public abstract void clear();
-    method public abstract boolean contains(java.lang.Object);
-    method public abstract boolean containsAll(java.util.Collection<?>);
-    method public abstract boolean equals(java.lang.Object);
-    method public abstract int hashCode();
-    method public abstract boolean isEmpty();
-    method public abstract java.util.Iterator<E> iterator();
-    method public abstract boolean remove(java.lang.Object);
-    method public abstract boolean removeAll(java.util.Collection<?>);
-    method public abstract boolean retainAll(java.util.Collection<?>);
-    method public abstract int size();
-    method public abstract java.lang.Object[] toArray();
-    method public abstract <T> T[] toArray(T[]);
   }
 
   public class SimpleTimeZone extends java.util.TimeZone {
@@ -65945,14 +65709,11 @@ package java.util {
 
   public abstract interface SortedMap<K, V> implements java.util.Map {
     method public abstract java.util.Comparator<? super K> comparator();
-    method public abstract java.util.Set<java.util.Map.Entry<K, V>> entrySet();
     method public abstract K firstKey();
     method public abstract java.util.SortedMap<K, V> headMap(K);
-    method public abstract java.util.Set<K> keySet();
     method public abstract K lastKey();
     method public abstract java.util.SortedMap<K, V> subMap(K, K);
     method public abstract java.util.SortedMap<K, V> tailMap(K);
-    method public abstract java.util.Collection<V> values();
   }
 
   public abstract interface SortedSet<E> implements java.util.Set {
@@ -66174,7 +65935,6 @@ package java.util {
   public abstract class TimerTask implements java.lang.Runnable {
     ctor protected TimerTask();
     method public boolean cancel();
-    method public abstract void run();
     method public long scheduledExecutionTime();
   }
 
@@ -66366,48 +66126,23 @@ package java.util.concurrent {
   }
 
   public abstract interface BlockingDeque<E> implements java.util.concurrent.BlockingQueue java.util.Deque {
-    method public abstract boolean add(E);
-    method public abstract void addFirst(E);
-    method public abstract void addLast(E);
-    method public abstract boolean contains(java.lang.Object);
-    method public abstract E element();
-    method public abstract java.util.Iterator<E> iterator();
-    method public abstract boolean offer(E);
-    method public abstract boolean offer(E, long, java.util.concurrent.TimeUnit) throws java.lang.InterruptedException;
-    method public abstract boolean offerFirst(E);
     method public abstract boolean offerFirst(E, long, java.util.concurrent.TimeUnit) throws java.lang.InterruptedException;
-    method public abstract boolean offerLast(E);
     method public abstract boolean offerLast(E, long, java.util.concurrent.TimeUnit) throws java.lang.InterruptedException;
-    method public abstract E peek();
-    method public abstract E poll();
-    method public abstract E poll(long, java.util.concurrent.TimeUnit) throws java.lang.InterruptedException;
     method public abstract E pollFirst(long, java.util.concurrent.TimeUnit) throws java.lang.InterruptedException;
     method public abstract E pollLast(long, java.util.concurrent.TimeUnit) throws java.lang.InterruptedException;
-    method public abstract void push(E);
-    method public abstract void put(E) throws java.lang.InterruptedException;
     method public abstract void putFirst(E) throws java.lang.InterruptedException;
     method public abstract void putLast(E) throws java.lang.InterruptedException;
-    method public abstract E remove();
-    method public abstract boolean remove(java.lang.Object);
-    method public abstract boolean removeFirstOccurrence(java.lang.Object);
-    method public abstract boolean removeLastOccurrence(java.lang.Object);
-    method public abstract int size();
-    method public abstract E take() throws java.lang.InterruptedException;
     method public abstract E takeFirst() throws java.lang.InterruptedException;
     method public abstract E takeLast() throws java.lang.InterruptedException;
   }
 
   public abstract interface BlockingQueue<E> implements java.util.Queue {
-    method public abstract boolean add(E);
-    method public abstract boolean contains(java.lang.Object);
     method public abstract int drainTo(java.util.Collection<? super E>);
     method public abstract int drainTo(java.util.Collection<? super E>, int);
-    method public abstract boolean offer(E);
     method public abstract boolean offer(E, long, java.util.concurrent.TimeUnit) throws java.lang.InterruptedException;
     method public abstract E poll(long, java.util.concurrent.TimeUnit) throws java.lang.InterruptedException;
     method public abstract void put(E) throws java.lang.InterruptedException;
     method public abstract int remainingCapacity();
-    method public abstract boolean remove(java.lang.Object);
     method public abstract E take() throws java.lang.InterruptedException;
   }
 
@@ -66593,23 +66328,7 @@ package java.util.concurrent {
     method public <U> U searchValues(long, java.util.function.Function<? super V, ? extends U>);
   }
 
-   static abstract class ConcurrentHashMap.CollectionView<K, V, E> implements java.util.Collection java.io.Serializable {
-    method public final void clear();
-    method public abstract boolean contains(java.lang.Object);
-    method public final boolean containsAll(java.util.Collection<?>);
-    method public java.util.concurrent.ConcurrentHashMap<K, V> getMap();
-    method public final boolean isEmpty();
-    method public abstract java.util.Iterator<E> iterator();
-    method public abstract boolean remove(java.lang.Object);
-    method public final boolean removeAll(java.util.Collection<?>);
-    method public final boolean retainAll(java.util.Collection<?>);
-    method public final int size();
-    method public final java.lang.Object[] toArray();
-    method public final <T> T[] toArray(T[]);
-    method public final java.lang.String toString();
-  }
-
-  public static class ConcurrentHashMap.KeySetView<K, V> extends java.util.concurrent.ConcurrentHashMap.CollectionView implements java.io.Serializable java.util.Set {
+  public static class ConcurrentHashMap.KeySetView<K, V> implements java.util.Collection java.io.Serializable java.util.Set {
     method public boolean add(K);
     method public boolean addAll(java.util.Collection<? extends K>);
     method public boolean contains(java.lang.Object);
@@ -66667,12 +66386,10 @@ package java.util.concurrent {
   }
 
   public abstract interface ConcurrentNavigableMap<K, V> implements java.util.concurrent.ConcurrentMap java.util.NavigableMap {
-    method public abstract java.util.NavigableSet<K> descendingKeySet();
     method public abstract java.util.concurrent.ConcurrentNavigableMap<K, V> descendingMap();
     method public abstract java.util.concurrent.ConcurrentNavigableMap<K, V> headMap(K, boolean);
     method public abstract java.util.concurrent.ConcurrentNavigableMap<K, V> headMap(K);
     method public abstract java.util.NavigableSet<K> keySet();
-    method public abstract java.util.NavigableSet<K> navigableKeySet();
     method public abstract java.util.concurrent.ConcurrentNavigableMap<K, V> subMap(K, boolean, K, boolean);
     method public abstract java.util.concurrent.ConcurrentNavigableMap<K, V> subMap(K, K);
     method public abstract java.util.concurrent.ConcurrentNavigableMap<K, V> tailMap(K, boolean);
@@ -67192,7 +66909,6 @@ package java.util.concurrent {
   }
 
   public abstract interface RunnableFuture<V> implements java.util.concurrent.Future java.lang.Runnable {
-    method public abstract void run();
   }
 
   public abstract interface RunnableScheduledFuture<V> implements java.util.concurrent.RunnableFuture java.util.concurrent.ScheduledFuture {
@@ -67597,7 +67313,7 @@ package java.util.concurrent.atomic {
     method public boolean weakCompareAndSet(V, V, int, int);
   }
 
-  public class DoubleAccumulator extends java.util.concurrent.atomic.Striped64 implements java.io.Serializable {
+  public class DoubleAccumulator extends java.lang.Number implements java.io.Serializable {
     ctor public DoubleAccumulator(java.util.function.DoubleBinaryOperator, double);
     method public void accumulate(double);
     method public double doubleValue();
@@ -67609,7 +67325,7 @@ package java.util.concurrent.atomic {
     method public void reset();
   }
 
-  public class DoubleAdder extends java.util.concurrent.atomic.Striped64 implements java.io.Serializable {
+  public class DoubleAdder extends java.lang.Number implements java.io.Serializable {
     ctor public DoubleAdder();
     method public void add(double);
     method public double doubleValue();
@@ -67621,7 +67337,7 @@ package java.util.concurrent.atomic {
     method public double sumThenReset();
   }
 
-  public class LongAccumulator extends java.util.concurrent.atomic.Striped64 implements java.io.Serializable {
+  public class LongAccumulator extends java.lang.Number implements java.io.Serializable {
     ctor public LongAccumulator(java.util.function.LongBinaryOperator, long);
     method public void accumulate(long);
     method public double doubleValue();
@@ -67633,7 +67349,7 @@ package java.util.concurrent.atomic {
     method public void reset();
   }
 
-  public class LongAdder extends java.util.concurrent.atomic.Striped64 implements java.io.Serializable {
+  public class LongAdder extends java.lang.Number implements java.io.Serializable {
     ctor public LongAdder();
     method public void add(long);
     method public void decrement();
@@ -67645,9 +67361,6 @@ package java.util.concurrent.atomic {
     method public void reset();
     method public long sum();
     method public long sumThenReset();
-  }
-
-   abstract class Striped64 extends java.lang.Number {
   }
 
 }
@@ -68151,6 +67864,46 @@ package java.util.jar {
     method public java.util.jar.Attributes getAttributes() throws java.io.IOException;
     method public java.security.cert.Certificate[] getCertificates();
     method public java.security.CodeSigner[] getCodeSigners();
+    field public static final int CENATT = 36; // 0x24
+    field public static final int CENATX = 38; // 0x26
+    field public static final int CENCOM = 32; // 0x20
+    field public static final int CENCRC = 16; // 0x10
+    field public static final int CENDSK = 34; // 0x22
+    field public static final int CENEXT = 30; // 0x1e
+    field public static final int CENFLG = 8; // 0x8
+    field public static final int CENHDR = 46; // 0x2e
+    field public static final int CENHOW = 10; // 0xa
+    field public static final int CENLEN = 24; // 0x18
+    field public static final int CENNAM = 28; // 0x1c
+    field public static final int CENOFF = 42; // 0x2a
+    field public static final long CENSIG = 33639248L; // 0x2014b50L
+    field public static final int CENSIZ = 20; // 0x14
+    field public static final int CENTIM = 12; // 0xc
+    field public static final int CENVEM = 4; // 0x4
+    field public static final int CENVER = 6; // 0x6
+    field public static final int ENDCOM = 20; // 0x14
+    field public static final int ENDHDR = 22; // 0x16
+    field public static final int ENDOFF = 16; // 0x10
+    field public static final long ENDSIG = 101010256L; // 0x6054b50L
+    field public static final int ENDSIZ = 12; // 0xc
+    field public static final int ENDSUB = 8; // 0x8
+    field public static final int ENDTOT = 10; // 0xa
+    field public static final int EXTCRC = 4; // 0x4
+    field public static final int EXTHDR = 16; // 0x10
+    field public static final int EXTLEN = 12; // 0xc
+    field public static final long EXTSIG = 134695760L; // 0x8074b50L
+    field public static final int EXTSIZ = 8; // 0x8
+    field public static final int LOCCRC = 14; // 0xe
+    field public static final int LOCEXT = 28; // 0x1c
+    field public static final int LOCFLG = 6; // 0x6
+    field public static final int LOCHDR = 30; // 0x1e
+    field public static final int LOCHOW = 8; // 0x8
+    field public static final int LOCLEN = 22; // 0x16
+    field public static final int LOCNAM = 26; // 0x1a
+    field public static final long LOCSIG = 67324752L; // 0x4034b50L
+    field public static final int LOCSIZ = 18; // 0x12
+    field public static final int LOCTIM = 10; // 0xa
+    field public static final int LOCVER = 4; // 0x4
   }
 
   public class JarException extends java.util.zip.ZipException {
@@ -68169,6 +67922,46 @@ package java.util.jar {
     method public java.util.jar.JarEntry getJarEntry(java.lang.String);
     method public java.util.jar.Manifest getManifest() throws java.io.IOException;
     method public java.util.stream.Stream<java.util.jar.JarEntry> stream();
+    field public static final int CENATT = 36; // 0x24
+    field public static final int CENATX = 38; // 0x26
+    field public static final int CENCOM = 32; // 0x20
+    field public static final int CENCRC = 16; // 0x10
+    field public static final int CENDSK = 34; // 0x22
+    field public static final int CENEXT = 30; // 0x1e
+    field public static final int CENFLG = 8; // 0x8
+    field public static final int CENHDR = 46; // 0x2e
+    field public static final int CENHOW = 10; // 0xa
+    field public static final int CENLEN = 24; // 0x18
+    field public static final int CENNAM = 28; // 0x1c
+    field public static final int CENOFF = 42; // 0x2a
+    field public static final long CENSIG = 33639248L; // 0x2014b50L
+    field public static final int CENSIZ = 20; // 0x14
+    field public static final int CENTIM = 12; // 0xc
+    field public static final int CENVEM = 4; // 0x4
+    field public static final int CENVER = 6; // 0x6
+    field public static final int ENDCOM = 20; // 0x14
+    field public static final int ENDHDR = 22; // 0x16
+    field public static final int ENDOFF = 16; // 0x10
+    field public static final long ENDSIG = 101010256L; // 0x6054b50L
+    field public static final int ENDSIZ = 12; // 0xc
+    field public static final int ENDSUB = 8; // 0x8
+    field public static final int ENDTOT = 10; // 0xa
+    field public static final int EXTCRC = 4; // 0x4
+    field public static final int EXTHDR = 16; // 0x10
+    field public static final int EXTLEN = 12; // 0xc
+    field public static final long EXTSIG = 134695760L; // 0x8074b50L
+    field public static final int EXTSIZ = 8; // 0x8
+    field public static final int LOCCRC = 14; // 0xe
+    field public static final int LOCEXT = 28; // 0x1c
+    field public static final int LOCFLG = 6; // 0x6
+    field public static final int LOCHDR = 30; // 0x1e
+    field public static final int LOCHOW = 8; // 0x8
+    field public static final int LOCLEN = 22; // 0x16
+    field public static final int LOCNAM = 26; // 0x1a
+    field public static final long LOCSIG = 67324752L; // 0x4034b50L
+    field public static final int LOCSIZ = 18; // 0x12
+    field public static final int LOCTIM = 10; // 0xa
+    field public static final int LOCVER = 4; // 0x4
     field public static final java.lang.String MANIFEST_NAME = "META-INF/MANIFEST.MF";
   }
 
@@ -68177,11 +67970,91 @@ package java.util.jar {
     ctor public JarInputStream(java.io.InputStream, boolean) throws java.io.IOException;
     method public java.util.jar.Manifest getManifest();
     method public java.util.jar.JarEntry getNextJarEntry() throws java.io.IOException;
+    field public static final int CENATT = 36; // 0x24
+    field public static final int CENATX = 38; // 0x26
+    field public static final int CENCOM = 32; // 0x20
+    field public static final int CENCRC = 16; // 0x10
+    field public static final int CENDSK = 34; // 0x22
+    field public static final int CENEXT = 30; // 0x1e
+    field public static final int CENFLG = 8; // 0x8
+    field public static final int CENHDR = 46; // 0x2e
+    field public static final int CENHOW = 10; // 0xa
+    field public static final int CENLEN = 24; // 0x18
+    field public static final int CENNAM = 28; // 0x1c
+    field public static final int CENOFF = 42; // 0x2a
+    field public static final long CENSIG = 33639248L; // 0x2014b50L
+    field public static final int CENSIZ = 20; // 0x14
+    field public static final int CENTIM = 12; // 0xc
+    field public static final int CENVEM = 4; // 0x4
+    field public static final int CENVER = 6; // 0x6
+    field public static final int ENDCOM = 20; // 0x14
+    field public static final int ENDHDR = 22; // 0x16
+    field public static final int ENDOFF = 16; // 0x10
+    field public static final long ENDSIG = 101010256L; // 0x6054b50L
+    field public static final int ENDSIZ = 12; // 0xc
+    field public static final int ENDSUB = 8; // 0x8
+    field public static final int ENDTOT = 10; // 0xa
+    field public static final int EXTCRC = 4; // 0x4
+    field public static final int EXTHDR = 16; // 0x10
+    field public static final int EXTLEN = 12; // 0xc
+    field public static final long EXTSIG = 134695760L; // 0x8074b50L
+    field public static final int EXTSIZ = 8; // 0x8
+    field public static final int LOCCRC = 14; // 0xe
+    field public static final int LOCEXT = 28; // 0x1c
+    field public static final int LOCFLG = 6; // 0x6
+    field public static final int LOCHDR = 30; // 0x1e
+    field public static final int LOCHOW = 8; // 0x8
+    field public static final int LOCLEN = 22; // 0x16
+    field public static final int LOCNAM = 26; // 0x1a
+    field public static final long LOCSIG = 67324752L; // 0x4034b50L
+    field public static final int LOCSIZ = 18; // 0x12
+    field public static final int LOCTIM = 10; // 0xa
+    field public static final int LOCVER = 4; // 0x4
   }
 
   public class JarOutputStream extends java.util.zip.ZipOutputStream {
     ctor public JarOutputStream(java.io.OutputStream, java.util.jar.Manifest) throws java.io.IOException;
     ctor public JarOutputStream(java.io.OutputStream) throws java.io.IOException;
+    field public static final int CENATT = 36; // 0x24
+    field public static final int CENATX = 38; // 0x26
+    field public static final int CENCOM = 32; // 0x20
+    field public static final int CENCRC = 16; // 0x10
+    field public static final int CENDSK = 34; // 0x22
+    field public static final int CENEXT = 30; // 0x1e
+    field public static final int CENFLG = 8; // 0x8
+    field public static final int CENHDR = 46; // 0x2e
+    field public static final int CENHOW = 10; // 0xa
+    field public static final int CENLEN = 24; // 0x18
+    field public static final int CENNAM = 28; // 0x1c
+    field public static final int CENOFF = 42; // 0x2a
+    field public static final long CENSIG = 33639248L; // 0x2014b50L
+    field public static final int CENSIZ = 20; // 0x14
+    field public static final int CENTIM = 12; // 0xc
+    field public static final int CENVEM = 4; // 0x4
+    field public static final int CENVER = 6; // 0x6
+    field public static final int ENDCOM = 20; // 0x14
+    field public static final int ENDHDR = 22; // 0x16
+    field public static final int ENDOFF = 16; // 0x10
+    field public static final long ENDSIG = 101010256L; // 0x6054b50L
+    field public static final int ENDSIZ = 12; // 0xc
+    field public static final int ENDSUB = 8; // 0x8
+    field public static final int ENDTOT = 10; // 0xa
+    field public static final int EXTCRC = 4; // 0x4
+    field public static final int EXTHDR = 16; // 0x10
+    field public static final int EXTLEN = 12; // 0xc
+    field public static final long EXTSIG = 134695760L; // 0x8074b50L
+    field public static final int EXTSIZ = 8; // 0x8
+    field public static final int LOCCRC = 14; // 0xe
+    field public static final int LOCEXT = 28; // 0x1c
+    field public static final int LOCFLG = 6; // 0x6
+    field public static final int LOCHDR = 30; // 0x1e
+    field public static final int LOCHOW = 8; // 0x8
+    field public static final int LOCLEN = 22; // 0x16
+    field public static final int LOCNAM = 26; // 0x1a
+    field public static final long LOCSIG = 67324752L; // 0x4034b50L
+    field public static final int LOCSIZ = 18; // 0x12
+    field public static final int LOCTIM = 10; // 0xa
+    field public static final int LOCVER = 4; // 0x4
   }
 
   public class Manifest implements java.lang.Cloneable {
@@ -68530,7 +68403,6 @@ package java.util.prefs {
     method protected abstract void removeSpi(java.lang.String);
     method public void sync() throws java.util.prefs.BackingStoreException;
     method protected abstract void syncSpi() throws java.util.prefs.BackingStoreException;
-    method public java.lang.String toString();
     field protected final java.lang.Object lock;
     field protected boolean newNode;
   }
@@ -68816,7 +68688,6 @@ package java.util.stream {
   }
 
   public static abstract interface DoubleStream.Builder implements java.util.function.DoubleConsumer {
-    method public abstract void accept(double);
     method public default java.util.stream.DoubleStream.Builder add(double);
     method public abstract java.util.stream.DoubleStream build();
   }
@@ -68869,7 +68740,6 @@ package java.util.stream {
   }
 
   public static abstract interface IntStream.Builder implements java.util.function.IntConsumer {
-    method public abstract void accept(int);
     method public default java.util.stream.IntStream.Builder add(int);
     method public abstract java.util.stream.IntStream build();
   }
@@ -68921,7 +68791,6 @@ package java.util.stream {
   }
 
   public static abstract interface LongStream.Builder implements java.util.function.LongConsumer {
-    method public abstract void accept(long);
     method public default java.util.stream.LongStream.Builder add(long);
     method public abstract java.util.stream.LongStream build();
   }
@@ -68969,7 +68838,6 @@ package java.util.stream {
   }
 
   public static abstract interface Stream.Builder<T> implements java.util.function.Consumer {
-    method public abstract void accept(T);
     method public default java.util.stream.Stream.Builder<T> add(T);
     method public abstract java.util.stream.Stream<T> build();
   }
@@ -72488,7 +72356,6 @@ package org.apache.http.conn.ssl {
   }
 
   public abstract deprecated interface X509HostnameVerifier implements javax.net.ssl.HostnameVerifier {
-    method public abstract boolean verify(java.lang.String, javax.net.ssl.SSLSession);
     method public abstract void verify(java.lang.String, javax.net.ssl.SSLSocket) throws java.io.IOException;
     method public abstract void verify(java.lang.String, java.security.cert.X509Certificate) throws javax.net.ssl.SSLException;
     method public abstract void verify(java.lang.String, java.lang.String[], java.lang.String[]) throws javax.net.ssl.SSLException;
