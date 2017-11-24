@@ -248,6 +248,7 @@ import dalvik.system.PathClassLoader;
 import com.android.internal.util.cherish.CherishUtils;
 import com.android.internal.util.cherish.DeviceKeysConstants.Action;
 import com.android.internal.util.cherish.ActionUtils;
+import com.android.internal.util.cherish.VolumeKeyHandler;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -715,6 +716,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private PocketManager mPocketManager;
     private PocketLock mPocketLock;
     private boolean mPocketLockShowing;
+    private VolumeKeyHandler mVolumeKeyHandler;
     private boolean mIsDeviceInPocket;
     private final IPocketCallback mPocketCallback = new IPocketCallback.Stub() {
 
@@ -4843,6 +4845,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     // {@link interceptKeyBeforeDispatching()}.
                     result |= ACTION_PASS_TO_USER;
                } else if ((result & ACTION_PASS_TO_USER) == 0 && !mWakeOnVolumeKeyPress) {
+                    if (mVolumeKeyHandler.handleVolumeKey(event, interactive)) {
+                        break;
+                    }
                     // If we aren't passing to the user and no one else
                     // handled it send it to the session manager to
                     // figure out.
@@ -6210,6 +6215,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mKeyguardDelegate.onBootCompleted();
             }
         }
+        mVolumeKeyHandler = new VolumeKeyHandler(mContext);
         mSideFpsEventHandler.onFingerprintSensorReady();
         startedWakingUp(Display.DEFAULT_DISPLAY_GROUP, PowerManager.WAKE_REASON_UNKNOWN);
         finishedWakingUp(Display.DEFAULT_DISPLAY_GROUP, PowerManager.WAKE_REASON_UNKNOWN);
