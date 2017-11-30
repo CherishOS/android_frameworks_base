@@ -343,6 +343,7 @@ package android {
     field public static final int buttonBarNeutralButtonStyle = 16843914; // 0x101048a
     field public static final int buttonBarPositiveButtonStyle = 16843913; // 0x1010489
     field public static final int buttonBarStyle = 16843566; // 0x101032e
+    field public static final int buttonCornerRadius = 16844149; // 0x1010575
     field public static final int buttonGravity = 16844030; // 0x10104fe
     field public static final int buttonStyle = 16842824; // 0x1010048
     field public static final int buttonStyleInset = 16842826; // 0x101004a
@@ -22032,6 +22033,7 @@ package android.media {
     method public android.media.Image acquireLatestImage();
     method public android.media.Image acquireNextImage();
     method public void close();
+    method public void discardFreeBuffers();
     method public int getHeight();
     method public int getImageFormat();
     method public int getMaxImages();
@@ -23256,16 +23258,20 @@ package android.media {
     field public static final int MEDIA_TRACK_TYPE_VIDEO = 1; // 0x1
   }
 
-  public class MediaRecorder {
+  public class MediaRecorder implements android.media.AudioRouting {
     ctor public MediaRecorder();
+    method public void addOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener, android.os.Handler);
     method protected void finalize();
     method public static final int getAudioSourceMax();
     method public int getMaxAmplitude() throws java.lang.IllegalStateException;
     method public android.os.PersistableBundle getMetrics();
+    method public android.media.AudioDeviceInfo getPreferredDevice();
+    method public android.media.AudioDeviceInfo getRoutedDevice();
     method public android.view.Surface getSurface();
     method public void pause() throws java.lang.IllegalStateException;
     method public void prepare() throws java.io.IOException, java.lang.IllegalStateException;
     method public void release();
+    method public void removeOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener);
     method public void reset();
     method public void resume() throws java.lang.IllegalStateException;
     method public void setAudioChannels(int);
@@ -23288,6 +23294,7 @@ package android.media {
     method public void setOutputFile(java.io.File);
     method public void setOutputFile(java.lang.String) throws java.lang.IllegalStateException;
     method public void setOutputFormat(int) throws java.lang.IllegalStateException;
+    method public boolean setPreferredDevice(android.media.AudioDeviceInfo);
     method public void setPreviewDisplay(android.view.Surface);
     method public void setProfile(android.media.CamcorderProfile);
     method public void setVideoEncoder(int) throws java.lang.IllegalStateException;
@@ -47900,6 +47907,7 @@ package android.view.accessibility {
     method public void interrupt();
     method public static boolean isAccessibilityButtonSupported();
     method public boolean isEnabled();
+    method public boolean isObservedEventType(int);
     method public boolean isTouchExplorationEnabled();
     method public void removeAccessibilityRequestPreparer(android.view.accessibility.AccessibilityRequestPreparer);
     method public boolean removeAccessibilityStateChangeListener(android.view.accessibility.AccessibilityManager.AccessibilityStateChangeListener);
@@ -49085,15 +49093,19 @@ package android.view.textclassifier {
 
   public abstract interface TextClassifier {
     method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.view.textclassifier.TextClassification.Options);
+    method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int);
     method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.os.LocaleList);
     method public default android.view.textclassifier.TextLinks generateLinks(java.lang.CharSequence, android.view.textclassifier.TextLinks.Options);
+    method public default android.view.textclassifier.TextLinks generateLinks(java.lang.CharSequence);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.view.textclassifier.TextSelection.Options);
+    method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.os.LocaleList);
     field public static final android.view.textclassifier.TextClassifier NO_OP;
     field public static final java.lang.String TYPE_ADDRESS = "address";
     field public static final java.lang.String TYPE_EMAIL = "email";
     field public static final java.lang.String TYPE_OTHER = "other";
     field public static final java.lang.String TYPE_PHONE = "phone";
+    field public static final java.lang.String TYPE_UNKNOWN = "";
     field public static final java.lang.String TYPE_URL = "url";
   }
 
@@ -49109,13 +49121,9 @@ package android.view.textclassifier {
   }
 
   public static final class TextLinks.Options {
+    ctor public TextLinks.Options();
     method public android.os.LocaleList getDefaultLocales();
-  }
-
-  public static final class TextLinks.Options.Builder {
-    ctor public TextLinks.Options.Builder();
-    method public android.view.textclassifier.TextLinks.Options build();
-    method public android.view.textclassifier.TextLinks.Options.Builder setLocaleList(android.os.LocaleList);
+    method public android.view.textclassifier.TextLinks.Options setDefaultLocales(android.os.LocaleList);
   }
 
   public static final class TextLinks.TextLink {
