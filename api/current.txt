@@ -6465,6 +6465,7 @@ package android.app.admin {
     method public void setShortSupportMessage(android.content.ComponentName, java.lang.CharSequence);
     method public boolean setStatusBarDisabled(android.content.ComponentName, boolean);
     method public int setStorageEncryption(android.content.ComponentName, boolean);
+    method public void setSystemSetting(android.content.ComponentName, java.lang.String, java.lang.String);
     method public void setSystemUpdatePolicy(android.content.ComponentName, android.app.admin.SystemUpdatePolicy);
     method public boolean setTime(android.content.ComponentName, long);
     method public boolean setTimeZone(android.content.ComponentName, java.lang.String);
@@ -26171,6 +26172,7 @@ package android.net {
   public class TrafficStats {
     ctor public TrafficStats();
     method public static void clearThreadStatsTag();
+    method public static void clearThreadStatsUid();
     method public static int getAndSetThreadStatsTag(int);
     method public static long getMobileRxBytes();
     method public static long getMobileRxPackets();
@@ -26196,9 +26198,12 @@ package android.net {
     method public static void incrementOperationCount(int);
     method public static void incrementOperationCount(int, int);
     method public static void setThreadStatsTag(int);
+    method public static void setThreadStatsUidSelf();
     method public static void tagDatagramSocket(java.net.DatagramSocket) throws java.net.SocketException;
+    method public static void tagFileDescriptor(java.io.FileDescriptor) throws java.io.IOException;
     method public static void tagSocket(java.net.Socket) throws java.net.SocketException;
     method public static void untagDatagramSocket(java.net.DatagramSocket) throws java.net.SocketException;
+    method public static void untagFileDescriptor(java.io.FileDescriptor) throws java.io.IOException;
     method public static void untagSocket(java.net.Socket) throws java.net.SocketException;
     field public static final int UNSUPPORTED = -1; // 0xffffffff
   }
@@ -34296,6 +34301,8 @@ package android.provider {
     field public static final java.lang.String IS_READ_ONLY = "is_read_only";
     field public static final java.lang.String IS_SUPER_PRIMARY = "is_super_primary";
     field public static final java.lang.String MIMETYPE = "mimetype";
+    field public static final java.lang.String PREFERRED_PHONE_ACCOUNT_COMPONENT_NAME = "preferred_phone_account_component_name";
+    field public static final java.lang.String PREFERRED_PHONE_ACCOUNT_ID = "preferred_phone_account_id";
     field public static final java.lang.String RAW_CONTACT_ID = "raw_contact_id";
     field public static final java.lang.String RES_PACKAGE = "res_package";
     field public static final java.lang.String SYNC1 = "data_sync1";
@@ -35962,6 +35969,7 @@ package android.provider {
     field public static final java.lang.String DATE = "date";
     field public static final java.lang.String DELETED = "deleted";
     field public static final java.lang.String DIRTY = "dirty";
+    field public static final int DIRTY_RETAIN = -1; // 0xffffffff
     field public static final java.lang.String DIR_TYPE = "vnd.android.cursor.dir/voicemails";
     field public static final java.lang.String DURATION = "duration";
     field public static final java.lang.String HAS_CONTENT = "has_content";
@@ -37478,6 +37486,8 @@ package android.service.autofill {
     method public android.service.autofill.FillResponse.Builder setAuthentication(android.view.autofill.AutofillId[], android.content.IntentSender, android.widget.RemoteViews);
     method public android.service.autofill.FillResponse.Builder setClientState(android.os.Bundle);
     method public android.service.autofill.FillResponse.Builder setFlags(int);
+    method public android.service.autofill.FillResponse.Builder setFooter(android.widget.RemoteViews);
+    method public android.service.autofill.FillResponse.Builder setHeader(android.widget.RemoteViews);
     method public android.service.autofill.FillResponse.Builder setIgnoredIds(android.view.autofill.AutofillId...);
     method public android.service.autofill.FillResponse.Builder setSaveInfo(android.service.autofill.SaveInfo);
   }
@@ -39278,6 +39288,7 @@ package android.telecom {
     field public static final int HANDOVER_FAILURE_DEST_INVALID_PERM = 3; // 0x3
     field public static final int HANDOVER_FAILURE_DEST_NOT_SUPPORTED = 2; // 0x2
     field public static final int HANDOVER_FAILURE_DEST_USER_REJECTED = 4; // 0x4
+    field public static final int HANDOVER_FAILURE_ONGOING_EMERG_CALL = 5; // 0x5
   }
 
   public static class Call.Details {
@@ -49058,31 +49069,32 @@ package android.view.inputmethod {
 package android.view.textclassifier {
 
   public final class TextClassification {
-    method public int getActionCount();
     method public float getConfidenceScore(java.lang.String);
     method public java.lang.String getEntity(int);
     method public int getEntityCount();
-    method public android.graphics.drawable.Drawable getIcon(int);
     method public android.graphics.drawable.Drawable getIcon();
-    method public android.content.Intent getIntent(int);
     method public android.content.Intent getIntent();
-    method public java.lang.CharSequence getLabel(int);
     method public java.lang.CharSequence getLabel();
-    method public android.view.View.OnClickListener getOnClickListener(int);
     method public android.view.View.OnClickListener getOnClickListener();
+    method public int getSecondaryActionsCount();
+    method public android.graphics.drawable.Drawable getSecondaryIcon(int);
+    method public android.content.Intent getSecondaryIntent(int);
+    method public java.lang.CharSequence getSecondaryLabel(int);
+    method public android.view.View.OnClickListener getSecondaryOnClickListener(int);
     method public java.lang.String getText();
   }
 
   public static final class TextClassification.Builder {
     ctor public TextClassification.Builder();
-    method public android.view.textclassifier.TextClassification.Builder addAction(android.content.Intent, java.lang.String, android.graphics.drawable.Drawable, android.view.View.OnClickListener);
+    method public android.view.textclassifier.TextClassification.Builder addSecondaryAction(android.content.Intent, java.lang.String, android.graphics.drawable.Drawable, android.view.View.OnClickListener);
     method public android.view.textclassifier.TextClassification build();
-    method public android.view.textclassifier.TextClassification.Builder clearActions();
+    method public android.view.textclassifier.TextClassification.Builder clearSecondaryActions();
     method public android.view.textclassifier.TextClassification.Builder setEntityType(java.lang.String, float);
     method public android.view.textclassifier.TextClassification.Builder setIcon(android.graphics.drawable.Drawable);
     method public android.view.textclassifier.TextClassification.Builder setIntent(android.content.Intent);
     method public android.view.textclassifier.TextClassification.Builder setLabel(java.lang.String);
     method public android.view.textclassifier.TextClassification.Builder setOnClickListener(android.view.View.OnClickListener);
+    method public android.view.textclassifier.TextClassification.Builder setPrimaryAction(android.content.Intent, java.lang.String, android.graphics.drawable.Drawable, android.view.View.OnClickListener);
     method public android.view.textclassifier.TextClassification.Builder setText(java.lang.String);
   }
 
