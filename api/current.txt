@@ -1470,6 +1470,8 @@ package android {
     field public static final int vendor = 16843751; // 0x10103e7
     field public static final int version = 16844057; // 0x1010519
     field public static final int versionCode = 16843291; // 0x101021b
+    field public static final int versionCodeMajor = 16844150; // 0x1010576
+    field public static final int versionMajor = 16844151; // 0x1010577
     field public static final int versionName = 16843292; // 0x101021c
     field public static final int verticalCorrection = 16843322; // 0x101023a
     field public static final int verticalDivider = 16843054; // 0x101012e
@@ -6388,6 +6390,7 @@ package android.app.admin {
     method public deprecated boolean isCallerApplicationRestrictionsManagingPackage();
     method public boolean isDeviceOwnerApp(java.lang.String);
     method public boolean isLockTaskPermitted(java.lang.String);
+    method public boolean isLogoutButtonEnabled();
     method public boolean isManagedProfile(android.content.ComponentName);
     method public boolean isMasterVolumeMuted(android.content.ComponentName);
     method public boolean isNetworkLoggingEnabled(android.content.ComponentName);
@@ -6430,6 +6433,7 @@ package android.app.admin {
     method public void setKeyguardDisabledFeatures(android.content.ComponentName, int);
     method public void setLockTaskFeatures(android.content.ComponentName, int);
     method public void setLockTaskPackages(android.content.ComponentName, java.lang.String[]) throws java.lang.SecurityException;
+    method public void setLogoutButtonEnabled(android.content.ComponentName, boolean);
     method public void setLongSupportMessage(android.content.ComponentName, java.lang.CharSequence);
     method public void setMasterVolumeMuted(android.content.ComponentName, boolean);
     method public void setMaximumFailedPasswordsForWipe(android.content.ComponentName, int);
@@ -6767,6 +6771,7 @@ package android.app.backup {
     method public void onFullBackup(android.app.backup.FullBackupDataOutput) throws java.io.IOException;
     method public void onQuotaExceeded(long, long);
     method public abstract void onRestore(android.app.backup.BackupDataInput, int, android.os.ParcelFileDescriptor) throws java.io.IOException;
+    method public void onRestore(android.app.backup.BackupDataInput, long, android.os.ParcelFileDescriptor) throws java.io.IOException;
     method public void onRestoreFile(android.os.ParcelFileDescriptor, long, java.io.File, int, long, long) throws java.io.IOException;
     method public void onRestoreFinished();
     field public static final int TYPE_DIRECTORY = 2; // 0x2
@@ -10590,6 +10595,8 @@ package android.content.pm {
   public class PackageInfo implements android.os.Parcelable {
     ctor public PackageInfo();
     method public int describeContents();
+    method public long getLongVersionCode();
+    method public void setLongVersionCode(long);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.PackageInfo> CREATOR;
     field public static final int INSTALL_LOCATION_AUTO = 0; // 0x0
@@ -10619,7 +10626,7 @@ package android.content.pm {
     field public android.content.pm.Signature[] signatures;
     field public java.lang.String[] splitNames;
     field public int[] splitRevisionCodes;
-    field public int versionCode;
+    field public deprecated int versionCode;
     field public java.lang.String versionName;
   }
 
@@ -11134,9 +11141,10 @@ package android.content.pm {
     method public int describeContents();
     method public android.content.pm.VersionedPackage getDeclaringPackage();
     method public java.util.List<android.content.pm.VersionedPackage> getDependentPackages();
+    method public long getLongVersion();
     method public java.lang.String getName();
     method public int getType();
-    method public int getVersion();
+    method public deprecated int getVersion();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.SharedLibraryInfo> CREATOR;
     field public static final int TYPE_BUILTIN = 0; // 0x0
@@ -11230,9 +11238,11 @@ package android.content.pm {
 
   public final class VersionedPackage implements android.os.Parcelable {
     ctor public VersionedPackage(java.lang.String, int);
+    ctor public VersionedPackage(java.lang.String, long);
     method public int describeContents();
+    method public long getLongVersionCode();
     method public java.lang.String getPackageName();
-    method public int getVersionCode();
+    method public deprecated int getVersionCode();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.VersionedPackage> CREATOR;
   }
@@ -15494,6 +15504,8 @@ package android.hardware.camera2 {
     field public static final int CONTROL_AF_MODE_EDOF = 5; // 0x5
     field public static final int CONTROL_AF_MODE_MACRO = 2; // 0x2
     field public static final int CONTROL_AF_MODE_OFF = 0; // 0x0
+    field public static final int CONTROL_AF_SCENE_CHANGE_DETECTED = 1; // 0x1
+    field public static final int CONTROL_AF_SCENE_CHANGE_NOT_DETECTED = 0; // 0x0
     field public static final int CONTROL_AF_STATE_ACTIVE_SCAN = 3; // 0x3
     field public static final int CONTROL_AF_STATE_FOCUSED_LOCKED = 4; // 0x4
     field public static final int CONTROL_AF_STATE_INACTIVE = 0; // 0x0
@@ -15768,6 +15780,7 @@ package android.hardware.camera2 {
     field public static final android.hardware.camera2.CaptureResult.Key<android.util.Range<java.lang.Integer>> CONTROL_AE_TARGET_FPS_RANGE;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_AF_MODE;
     field public static final android.hardware.camera2.CaptureResult.Key<android.hardware.camera2.params.MeteringRectangle[]> CONTROL_AF_REGIONS;
+    field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_AF_SCENE_CHANGE;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_AF_STATE;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_AF_TRIGGER;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Boolean> CONTROL_AWB_LOCK;
@@ -25973,6 +25986,23 @@ package android.net {
     enum_constant public static final android.net.LocalSocketAddress.Namespace ABSTRACT;
     enum_constant public static final android.net.LocalSocketAddress.Namespace FILESYSTEM;
     enum_constant public static final android.net.LocalSocketAddress.Namespace RESERVED;
+  }
+
+  public final class MacAddress implements android.os.Parcelable {
+    method public int addressType();
+    method public int describeContents();
+    method public static android.net.MacAddress fromBytes(byte[]);
+    method public static android.net.MacAddress fromString(java.lang.String);
+    method public boolean isLocallyAssigned();
+    method public byte[] toByteArray();
+    method public java.lang.String toSafeString();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.net.MacAddress BROADCAST_ADDRESS;
+    field public static final android.os.Parcelable.Creator<android.net.MacAddress> CREATOR;
+    field public static final int TYPE_BROADCAST = 3; // 0x3
+    field public static final int TYPE_MULTICAST = 2; // 0x2
+    field public static final int TYPE_UNICAST = 1; // 0x1
+    field public static final int TYPE_UNKNOWN = 0; // 0x0
   }
 
   public class MailTo {
@@ -39468,6 +39498,7 @@ package android.telecom {
     method public final int getState();
     method public final android.telecom.StatusHints getStatusHints();
     method public final android.telecom.Connection.VideoProvider getVideoProvider();
+    method public void handleRttUpgradeResponse(android.telecom.Connection.RttTextStream);
     method public final boolean isRingbackRequested();
     method public void onAbort();
     method public void onAnswer(int);
@@ -39484,8 +39515,10 @@ package android.telecom {
     method public void onReject(java.lang.String);
     method public void onSeparate();
     method public void onShowIncomingCallUi();
+    method public void onStartRtt(android.telecom.Connection.RttTextStream);
     method public void onStateChanged(int);
     method public void onStopDtmfTone();
+    method public void onStopRtt();
     method public void onUnhold();
     method public static java.lang.String propertiesToString(int);
     method public final void putExtras(android.os.Bundle);
@@ -39493,6 +39526,10 @@ package android.telecom {
     method public final void removeExtras(java.lang.String...);
     method public void requestBluetoothAudio(java.lang.String);
     method public void sendConnectionEvent(java.lang.String, android.os.Bundle);
+    method public final void sendRemoteRttRequest();
+    method public final void sendRttInitiationFailure(int);
+    method public final void sendRttInitiationSuccess();
+    method public final void sendRttSessionRemotelyTerminated();
     method public final void setActive();
     method public final void setAddress(android.net.Uri, int);
     method public final void setAudioModeIsVoip(boolean);
@@ -39546,6 +39583,7 @@ package android.telecom {
     field public static final java.lang.String EXTRA_LAST_FORWARDED_NUMBER = "android.telecom.extra.LAST_FORWARDED_NUMBER";
     field public static final int PROPERTY_HAS_CDMA_VOICE_PRIVACY = 32; // 0x20
     field public static final int PROPERTY_IS_EXTERNAL_CALL = 16; // 0x10
+    field public static final int PROPERTY_IS_RTT = 256; // 0x100
     field public static final int PROPERTY_SELF_MANAGED = 128; // 0x80
     field public static final int STATE_ACTIVE = 4; // 0x4
     field public static final int STATE_DIALING = 3; // 0x3
@@ -39563,6 +39601,12 @@ package android.telecom {
     field public static final int SESSION_MODIFY_REQUEST_REJECTED_BY_REMOTE = 5; // 0x5
     field public static final int SESSION_MODIFY_REQUEST_SUCCESS = 1; // 0x1
     field public static final int SESSION_MODIFY_REQUEST_TIMED_OUT = 4; // 0x4
+  }
+
+  public static final class Connection.RttTextStream {
+    method public java.lang.String read() throws java.io.IOException;
+    method public java.lang.String readImmediately() throws java.io.IOException;
+    method public void write(java.lang.String) throws java.io.IOException;
   }
 
   public static abstract class Connection.VideoProvider {
@@ -39605,7 +39649,9 @@ package android.telecom {
     method public android.telecom.PhoneAccountHandle getAccountHandle();
     method public android.net.Uri getAddress();
     method public android.os.Bundle getExtras();
+    method public android.telecom.Connection.RttTextStream getRttTextStream();
     method public int getVideoState();
+    method public boolean isRequestingRtt();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telecom.ConnectionRequest> CREATOR;
   }
@@ -49081,6 +49127,7 @@ package android.view.textclassifier {
     method public android.content.Intent getSecondaryIntent(int);
     method public java.lang.CharSequence getSecondaryLabel(int);
     method public android.view.View.OnClickListener getSecondaryOnClickListener(int);
+    method public java.lang.String getSignature();
     method public java.lang.String getText();
   }
 
@@ -49095,6 +49142,7 @@ package android.view.textclassifier {
     method public android.view.textclassifier.TextClassification.Builder setLabel(java.lang.String);
     method public android.view.textclassifier.TextClassification.Builder setOnClickListener(android.view.View.OnClickListener);
     method public android.view.textclassifier.TextClassification.Builder setPrimaryAction(android.content.Intent, java.lang.String, android.graphics.drawable.Drawable, android.view.View.OnClickListener);
+    method public android.view.textclassifier.TextClassification.Builder setSignature(java.lang.String);
     method public android.view.textclassifier.TextClassification.Builder setText(java.lang.String);
   }
 
@@ -49159,12 +49207,14 @@ package android.view.textclassifier {
     method public int getEntityCount();
     method public int getSelectionEndIndex();
     method public int getSelectionStartIndex();
+    method public java.lang.String getSignature();
   }
 
   public static final class TextSelection.Builder {
     ctor public TextSelection.Builder(int, int);
     method public android.view.textclassifier.TextSelection build();
     method public android.view.textclassifier.TextSelection.Builder setEntityType(java.lang.String, float);
+    method public android.view.textclassifier.TextSelection.Builder setSignature(java.lang.String);
   }
 
   public static final class TextSelection.Options {
@@ -54885,7 +54935,6 @@ package java.lang {
     method public java.lang.Object[] getSigners();
     method public java.lang.String getSimpleName();
     method public java.lang.Class<? super T> getSuperclass();
-    method public java.lang.String getTypeName();
     method public synchronized java.lang.reflect.TypeVariable<java.lang.Class<T>>[] getTypeParameters();
     method public boolean isAnnotation();
     method public boolean isAnonymousClass();
@@ -56546,6 +56595,11 @@ package java.lang.reflect {
     ctor public MalformedParameterizedTypeException();
   }
 
+  public class MalformedParametersException extends java.lang.RuntimeException {
+    ctor public MalformedParametersException();
+    ctor public MalformedParametersException(java.lang.String);
+  }
+
   public abstract interface Member {
     method public abstract java.lang.Class<?> getDeclaringClass();
     method public abstract int getModifiers();
@@ -56643,6 +56697,7 @@ package java.lang.reflect {
   }
 
   public abstract interface Type {
+    method public default java.lang.String getTypeName();
   }
 
   public abstract interface TypeVariable<D extends java.lang.reflect.GenericDeclaration> implements java.lang.reflect.Type {
