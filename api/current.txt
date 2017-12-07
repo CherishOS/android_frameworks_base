@@ -8089,6 +8089,94 @@ package android.bluetooth {
     method public void onHealthChannelStateChange(android.bluetooth.BluetoothHealthAppConfiguration, android.bluetooth.BluetoothDevice, int, int, android.os.ParcelFileDescriptor, int);
   }
 
+  public final class BluetoothHidDevice implements android.bluetooth.BluetoothProfile {
+    method public boolean connect(android.bluetooth.BluetoothDevice);
+    method public boolean disconnect(android.bluetooth.BluetoothDevice);
+    method public java.util.List<android.bluetooth.BluetoothDevice> getConnectedDevices();
+    method public int getConnectionState(android.bluetooth.BluetoothDevice);
+    method public java.util.List<android.bluetooth.BluetoothDevice> getDevicesMatchingConnectionStates(int[]);
+    method public boolean registerApp(android.bluetooth.BluetoothHidDeviceAppSdpSettings, android.bluetooth.BluetoothHidDeviceAppQosSettings, android.bluetooth.BluetoothHidDeviceAppQosSettings, android.bluetooth.BluetoothHidDeviceCallback);
+    method public boolean replyReport(android.bluetooth.BluetoothDevice, byte, byte, byte[]);
+    method public boolean reportError(android.bluetooth.BluetoothDevice, byte);
+    method public boolean sendReport(android.bluetooth.BluetoothDevice, int, byte[]);
+    method public boolean unregisterApp();
+    field public static final java.lang.String ACTION_CONNECTION_STATE_CHANGED = "android.bluetooth.hiddevice.profile.action.CONNECTION_STATE_CHANGED";
+    field public static final byte ERROR_RSP_INVALID_PARAM = 4; // 0x4
+    field public static final byte ERROR_RSP_INVALID_RPT_ID = 2; // 0x2
+    field public static final byte ERROR_RSP_NOT_READY = 1; // 0x1
+    field public static final byte ERROR_RSP_SUCCESS = 0; // 0x0
+    field public static final byte ERROR_RSP_UNKNOWN = 14; // 0xe
+    field public static final byte ERROR_RSP_UNSUPPORTED_REQ = 3; // 0x3
+    field public static final byte PROTOCOL_BOOT_MODE = 0; // 0x0
+    field public static final byte PROTOCOL_REPORT_MODE = 1; // 0x1
+    field public static final byte REPORT_TYPE_FEATURE = 3; // 0x3
+    field public static final byte REPORT_TYPE_INPUT = 1; // 0x1
+    field public static final byte REPORT_TYPE_OUTPUT = 2; // 0x2
+    field public static final byte SUBCLASS1_COMBO = -64; // 0xffffffc0
+    field public static final byte SUBCLASS1_KEYBOARD = 64; // 0x40
+    field public static final byte SUBCLASS1_MOUSE = -128; // 0xffffff80
+    field public static final byte SUBCLASS1_NONE = 0; // 0x0
+    field public static final byte SUBCLASS2_CARD_READER = 6; // 0x6
+    field public static final byte SUBCLASS2_DIGITIZER_TABLET = 5; // 0x5
+    field public static final byte SUBCLASS2_GAMEPAD = 2; // 0x2
+    field public static final byte SUBCLASS2_JOYSTICK = 1; // 0x1
+    field public static final byte SUBCLASS2_REMOTE_CONTROL = 3; // 0x3
+    field public static final byte SUBCLASS2_SENSING_DEVICE = 4; // 0x4
+    field public static final byte SUBCLASS2_UNCATEGORIZED = 0; // 0x0
+  }
+
+  public final class BluetoothHidDeviceAppQosSettings implements android.os.Parcelable {
+    ctor public BluetoothHidDeviceAppQosSettings(int, int, int, int, int, int);
+    method public int describeContents();
+    method public int[] toArray();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.bluetooth.BluetoothHidDeviceAppQosSettings> CREATOR;
+    field public static final int MAX = -1; // 0xffffffff
+    field public static final int SERVICE_BEST_EFFORT = 1; // 0x1
+    field public static final int SERVICE_GUARANTEED = 2; // 0x2
+    field public static final int SERVICE_NO_TRAFFIC = 0; // 0x0
+    field public final int delayVariation;
+    field public final int latency;
+    field public final int peakBandwidth;
+    field public final int serviceType;
+    field public final int tokenBucketSize;
+    field public final int tokenRate;
+  }
+
+  public static class BluetoothHidDeviceAppQosSettings.Builder {
+    ctor public BluetoothHidDeviceAppQosSettings.Builder();
+    method public android.bluetooth.BluetoothHidDeviceAppQosSettings build();
+    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder delayVariation(int);
+    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder latency(int);
+    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder peakBandwidth(int);
+    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder serviceType(int);
+    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder tokenBucketSize(int);
+    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder tokenRate(int);
+  }
+
+  public final class BluetoothHidDeviceAppSdpSettings implements android.os.Parcelable {
+    ctor public BluetoothHidDeviceAppSdpSettings(java.lang.String, java.lang.String, java.lang.String, byte, byte[]);
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.bluetooth.BluetoothHidDeviceAppSdpSettings> CREATOR;
+    field public final java.lang.String description;
+    field public final byte[] descriptors;
+    field public final java.lang.String name;
+    field public final java.lang.String provider;
+    field public final byte subclass;
+  }
+
+  public abstract class BluetoothHidDeviceCallback {
+    ctor public BluetoothHidDeviceCallback();
+    method public void onAppStatusChanged(android.bluetooth.BluetoothDevice, boolean);
+    method public void onConnectionStateChanged(android.bluetooth.BluetoothDevice, int);
+    method public void onGetReport(android.bluetooth.BluetoothDevice, byte, byte, int);
+    method public void onIntrData(android.bluetooth.BluetoothDevice, byte, byte[]);
+    method public void onSetProtocol(android.bluetooth.BluetoothDevice, byte);
+    method public void onSetReport(android.bluetooth.BluetoothDevice, byte, byte, byte[]);
+    method public void onVirtualCableUnplug(android.bluetooth.BluetoothDevice);
+  }
+
   public final class BluetoothManager {
     method public android.bluetooth.BluetoothAdapter getAdapter();
     method public java.util.List<android.bluetooth.BluetoothDevice> getConnectedDevices(int);
@@ -8108,6 +8196,7 @@ package android.bluetooth {
     field public static final int GATT_SERVER = 8; // 0x8
     field public static final int HEADSET = 1; // 0x1
     field public static final int HEALTH = 3; // 0x3
+    field public static final int HID_DEVICE = 19; // 0x13
     field public static final int SAP = 10; // 0xa
     field public static final int STATE_CONNECTED = 2; // 0x2
     field public static final int STATE_CONNECTING = 1; // 0x1
