@@ -1505,6 +1505,7 @@ package android {
     field public static final deprecated int weekSeparatorLineColor = 16843590; // 0x1010346
     field public static final int weightSum = 16843048; // 0x1010128
     field public static final int widgetCategory = 16843716; // 0x10103c4
+    field public static final int widgetFeatures = 16844153; // 0x1010579
     field public static final int widgetLayout = 16843243; // 0x10101eb
     field public static final int width = 16843097; // 0x1010159
     field public static final int windowActionBar = 16843469; // 0x10102cd
@@ -4994,7 +4995,7 @@ package android.app {
   public class KeyguardManager {
     method public android.content.Intent createConfirmDeviceCredentialIntent(java.lang.CharSequence, java.lang.CharSequence);
     method public deprecated void exitKeyguardSecurely(android.app.KeyguardManager.OnKeyguardExitResult);
-    method public boolean inKeyguardRestrictedInputMode();
+    method public deprecated boolean inKeyguardRestrictedInputMode();
     method public boolean isDeviceLocked();
     method public boolean isDeviceSecure();
     method public boolean isKeyguardLocked();
@@ -6370,6 +6371,7 @@ package android.app.admin {
     method public java.util.List<java.lang.String> getPermittedInputMethods(android.content.ComponentName);
     method public long getRequiredStrongAuthTimeout(android.content.ComponentName);
     method public boolean getScreenCaptureDisabled(android.content.ComponentName);
+    method public java.util.List<android.os.UserHandle> getSecondaryUsers(android.content.ComponentName);
     method public java.lang.CharSequence getShortSupportMessage(android.content.ComponentName);
     method public boolean getStorageEncryption(android.content.ComponentName);
     method public int getStorageEncryptionStatus();
@@ -6402,6 +6404,7 @@ package android.app.admin {
     method public boolean isUninstallBlocked(android.content.ComponentName, java.lang.String);
     method public void lockNow();
     method public void lockNow(int);
+    method public boolean logoutUser(android.content.ComponentName);
     method public void reboot(android.content.ComponentName);
     method public void removeActiveAdmin(android.content.ComponentName);
     method public boolean removeCrossProfileWidgetProvider(android.content.ComponentName, java.lang.String);
@@ -6476,6 +6479,7 @@ package android.app.admin {
     method public void setTrustAgentConfiguration(android.content.ComponentName, android.content.ComponentName, android.os.PersistableBundle);
     method public void setUninstallBlocked(android.content.ComponentName, java.lang.String, boolean);
     method public void setUserIcon(android.content.ComponentName, android.graphics.Bitmap);
+    method public boolean stopUser(android.content.ComponentName, android.os.UserHandle);
     method public boolean switchUser(android.content.ComponentName, android.os.UserHandle);
     method public void uninstallAllUserCaCerts(android.content.ComponentName);
     method public void uninstallCaCert(android.content.ComponentName, byte[]);
@@ -7348,6 +7352,8 @@ package android.appwidget {
     field public static final int WIDGET_CATEGORY_HOME_SCREEN = 1; // 0x1
     field public static final int WIDGET_CATEGORY_KEYGUARD = 2; // 0x2
     field public static final int WIDGET_CATEGORY_SEARCHBOX = 4; // 0x4
+    field public static final int WIDGET_FEATURE_HIDE_FROM_PICKER = 2; // 0x2
+    field public static final int WIDGET_FEATURE_RECONFIGURABLE = 1; // 0x1
     field public int autoAdvanceViewId;
     field public android.content.ComponentName configure;
     field public int icon;
@@ -7363,6 +7369,7 @@ package android.appwidget {
     field public int resizeMode;
     field public int updatePeriodMillis;
     field public int widgetCategory;
+    field public int widgetFeatures;
   }
 
 }
@@ -10077,6 +10084,7 @@ package android.content {
 
   public abstract interface ServiceConnection {
     method public default void onBindingDied(android.content.ComponentName);
+    method public default void onNullBinding(android.content.ComponentName);
     method public abstract void onServiceConnected(android.content.ComponentName, android.os.IBinder);
     method public abstract void onServiceDisconnected(android.content.ComponentName);
   }
@@ -11252,6 +11260,8 @@ package android.content.pm {
 package android.content.pm.crossprofile {
 
   public class CrossProfileApps {
+    method public android.graphics.drawable.Drawable getProfileSwitchingIcon(android.os.UserHandle);
+    method public java.lang.CharSequence getProfileSwitchingLabel(android.os.UserHandle);
     method public java.util.List<android.os.UserHandle> getTargetUserProfiles();
     method public void startMainActivity(android.content.ComponentName, android.os.UserHandle, android.graphics.Rect, android.os.Bundle);
   }
@@ -39661,12 +39671,15 @@ package android.telecom {
     method public final void addConference(android.telecom.Conference);
     method public final void addExistingConnection(android.telecom.PhoneAccountHandle, android.telecom.Connection);
     method public final void conferenceRemoteConnections(android.telecom.RemoteConnection, android.telecom.RemoteConnection);
+    method public final void connectionServiceFocusReleased();
     method public final android.telecom.RemoteConnection createRemoteIncomingConnection(android.telecom.PhoneAccountHandle, android.telecom.ConnectionRequest);
     method public final android.telecom.RemoteConnection createRemoteOutgoingConnection(android.telecom.PhoneAccountHandle, android.telecom.ConnectionRequest);
     method public final java.util.Collection<android.telecom.Conference> getAllConferences();
     method public final java.util.Collection<android.telecom.Connection> getAllConnections();
     method public final android.os.IBinder onBind(android.content.Intent);
     method public void onConference(android.telecom.Connection, android.telecom.Connection);
+    method public void onConnectionServiceFocusGained();
+    method public void onConnectionServiceFocusLost();
     method public android.telecom.Connection onCreateIncomingConnection(android.telecom.PhoneAccountHandle, android.telecom.ConnectionRequest);
     method public void onCreateIncomingConnectionFailed(android.telecom.PhoneAccountHandle, android.telecom.ConnectionRequest);
     method public android.telecom.Connection onCreateIncomingHandoverConnection(android.telecom.PhoneAccountHandle, android.telecom.ConnectionRequest);
@@ -47970,7 +47983,6 @@ package android.view.accessibility {
     method public void interrupt();
     method public static boolean isAccessibilityButtonSupported();
     method public boolean isEnabled();
-    method public boolean isObservedEventType(int);
     method public boolean isTouchExplorationEnabled();
     method public void removeAccessibilityRequestPreparer(android.view.accessibility.AccessibilityRequestPreparer);
     method public boolean removeAccessibilityStateChangeListener(android.view.accessibility.AccessibilityManager.AccessibilityStateChangeListener);
