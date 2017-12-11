@@ -7090,6 +7090,20 @@ package android.app.slice {
     field public static final java.lang.String FORMAT_TIMESTAMP = "timestamp";
   }
 
+  public class SliceManager {
+    method public java.util.List<android.app.slice.SliceSpec> getPinnedSpecs(android.net.Uri);
+    method public void pinSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
+    method public void registerSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback, java.util.List<android.app.slice.SliceSpec>);
+    method public void registerSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback, java.util.List<android.app.slice.SliceSpec>, android.os.Handler);
+    method public void registerSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback, java.util.List<android.app.slice.SliceSpec>, java.util.concurrent.Executor);
+    method public void unpinSlice(android.net.Uri);
+    method public void unregisterSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback);
+  }
+
+  public static abstract interface SliceManager.SliceCallback {
+    method public abstract void onSliceUpdated(android.app.slice.Slice);
+  }
+
   public abstract class SliceProvider extends android.content.ContentProvider {
     ctor public SliceProvider();
     method public final int delete(android.net.Uri, java.lang.String, java.lang.String[]);
@@ -7098,6 +7112,8 @@ package android.app.slice {
     method public android.app.slice.Slice onBindSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
     method public deprecated android.app.slice.Slice onBindSlice(android.net.Uri);
     method public android.net.Uri onMapIntentToUri(android.content.Intent);
+    method public void onSlicePinned(android.net.Uri);
+    method public void onSliceUnpinned(android.net.Uri);
     method public final android.database.Cursor query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String);
     method public final android.database.Cursor query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String, android.os.CancellationSignal);
     method public final android.database.Cursor query(android.net.Uri, java.lang.String[], android.os.Bundle, android.os.CancellationSignal);
