@@ -3952,6 +3952,7 @@ package android.app {
     field public static final android.os.Parcelable.Creator<android.app.ActivityManager.RunningAppProcessInfo> CREATOR;
     field public static final deprecated int IMPORTANCE_BACKGROUND = 400; // 0x190
     field public static final int IMPORTANCE_CACHED = 400; // 0x190
+    field public static final int IMPORTANCE_CANT_SAVE_STATE = 270; // 0x10e
     field public static final deprecated int IMPORTANCE_EMPTY = 500; // 0x1f4
     field public static final int IMPORTANCE_FOREGROUND = 100; // 0x64
     field public static final int IMPORTANCE_FOREGROUND_SERVICE = 125; // 0x7d
@@ -6323,6 +6324,7 @@ package android.app.admin {
     method public android.os.UserHandle createAndManageUser(android.content.ComponentName, java.lang.String, android.content.ComponentName, android.os.PersistableBundle, int);
     method public void enableSystemApp(android.content.ComponentName, java.lang.String);
     method public int enableSystemApp(android.content.ComponentName, android.content.Intent);
+    method public android.security.AttestedKeyPair generateKeyPair(android.content.ComponentName, java.lang.String, android.security.keystore.KeyGenParameterSpec);
     method public java.lang.String[] getAccountTypesWithManagementDisabled();
     method public java.util.List<android.content.ComponentName> getActiveAdmins();
     method public java.util.Set<java.lang.String> getAffiliationIds(android.content.ComponentName);
@@ -6392,7 +6394,7 @@ package android.app.admin {
     method public deprecated boolean isCallerApplicationRestrictionsManagingPackage();
     method public boolean isDeviceOwnerApp(java.lang.String);
     method public boolean isLockTaskPermitted(java.lang.String);
-    method public boolean isLogoutButtonEnabled();
+    method public boolean isLogoutEnabled();
     method public boolean isManagedProfile(android.content.ComponentName);
     method public boolean isMasterVolumeMuted(android.content.ComponentName);
     method public boolean isNetworkLoggingEnabled(android.content.ComponentName);
@@ -6436,7 +6438,7 @@ package android.app.admin {
     method public void setKeyguardDisabledFeatures(android.content.ComponentName, int);
     method public void setLockTaskFeatures(android.content.ComponentName, int);
     method public void setLockTaskPackages(android.content.ComponentName, java.lang.String[]) throws java.lang.SecurityException;
-    method public void setLogoutButtonEnabled(android.content.ComponentName, boolean);
+    method public void setLogoutEnabled(android.content.ComponentName, boolean);
     method public void setLongSupportMessage(android.content.ComponentName, java.lang.CharSequence);
     method public void setMasterVolumeMuted(android.content.ComponentName, boolean);
     method public void setMaximumFailedPasswordsForWipe(android.content.ComponentName, int);
@@ -9973,6 +9975,7 @@ package android.content {
   }
 
   public class QuickViewConstants {
+    field public static final java.lang.String FEATURE_DELETE = "android:delete";
     field public static final java.lang.String FEATURE_DOWNLOAD = "android:download";
     field public static final java.lang.String FEATURE_EDIT = "android:edit";
     field public static final java.lang.String FEATURE_PRINT = "android:print";
@@ -20556,6 +20559,7 @@ package android.inputmethodservice {
     method public int getMaxWidth();
     method public java.lang.CharSequence getTextForImeAction(int);
     method public android.app.Dialog getWindow();
+    method public void hideSoftInputFromInputMethod(int);
     method public void hideStatusIcon();
     method public void hideWindow();
     method public boolean isExtractViewShown();
@@ -20611,10 +20615,16 @@ package android.inputmethodservice {
     method public void setCandidatesViewShown(boolean);
     method public void setExtractView(android.view.View);
     method public void setExtractViewShown(boolean);
+    method public void setInputMethod(java.lang.String);
+    method public void setInputMethodAndSubtype(java.lang.String, android.view.inputmethod.InputMethodSubtype);
     method public void setInputView(android.view.View);
+    method public boolean shouldOfferSwitchingToNextInputMethod();
+    method public void showSoftInputFromInputMethod(int);
     method public void showStatusIcon(int);
     method public void showWindow(boolean);
     method public void switchInputMethod(java.lang.String);
+    method public boolean switchToLastInputMethod();
+    method public boolean switchToNextInputMethod(boolean);
     method public void updateFullscreenMode();
     method public void updateInputViewShown();
     field public static final int BACK_DISPOSITION_DEFAULT = 0; // 0x0
@@ -37149,6 +37159,11 @@ package android.sax {
 
 package android.security {
 
+  public final class AttestedKeyPair {
+    method public java.util.List<java.security.cert.Certificate> getAttestationRecord();
+    method public java.security.KeyPair getKeyPair();
+  }
+
   public final class KeyChain {
     ctor public KeyChain();
     method public static void choosePrivateKeyAlias(android.app.Activity, android.security.KeyChainAliasCallback, java.lang.String[], java.security.Principal[], java.lang.String, int, java.lang.String);
@@ -49027,10 +49042,10 @@ package android.view.inputmethod {
     method public java.util.List<android.view.inputmethod.InputMethodInfo> getInputMethodList();
     method public android.view.inputmethod.InputMethodSubtype getLastInputMethodSubtype();
     method public java.util.Map<android.view.inputmethod.InputMethodInfo, java.util.List<android.view.inputmethod.InputMethodSubtype>> getShortcutInputMethodsAndSubtypes();
-    method public void hideSoftInputFromInputMethod(android.os.IBinder, int);
+    method public deprecated void hideSoftInputFromInputMethod(android.os.IBinder, int);
     method public boolean hideSoftInputFromWindow(android.os.IBinder, int);
     method public boolean hideSoftInputFromWindow(android.os.IBinder, int, android.os.ResultReceiver);
-    method public void hideStatusIcon(android.os.IBinder);
+    method public deprecated void hideStatusIcon(android.os.IBinder);
     method public boolean isAcceptingText();
     method public boolean isActive(android.view.View);
     method public boolean isActive();
@@ -49040,17 +49055,17 @@ package android.view.inputmethod {
     method public void sendAppPrivateCommand(android.view.View, java.lang.String, android.os.Bundle);
     method public void setAdditionalInputMethodSubtypes(java.lang.String, android.view.inputmethod.InputMethodSubtype[]);
     method public boolean setCurrentInputMethodSubtype(android.view.inputmethod.InputMethodSubtype);
-    method public void setInputMethod(android.os.IBinder, java.lang.String);
-    method public void setInputMethodAndSubtype(android.os.IBinder, java.lang.String, android.view.inputmethod.InputMethodSubtype);
-    method public boolean shouldOfferSwitchingToNextInputMethod(android.os.IBinder);
+    method public deprecated void setInputMethod(android.os.IBinder, java.lang.String);
+    method public deprecated void setInputMethodAndSubtype(android.os.IBinder, java.lang.String, android.view.inputmethod.InputMethodSubtype);
+    method public deprecated boolean shouldOfferSwitchingToNextInputMethod(android.os.IBinder);
     method public void showInputMethodAndSubtypeEnabler(java.lang.String);
     method public void showInputMethodPicker();
     method public boolean showSoftInput(android.view.View, int);
     method public boolean showSoftInput(android.view.View, int, android.os.ResultReceiver);
-    method public void showSoftInputFromInputMethod(android.os.IBinder, int);
-    method public void showStatusIcon(android.os.IBinder, java.lang.String, int);
-    method public boolean switchToLastInputMethod(android.os.IBinder);
-    method public boolean switchToNextInputMethod(android.os.IBinder, boolean);
+    method public deprecated void showSoftInputFromInputMethod(android.os.IBinder, int);
+    method public deprecated void showStatusIcon(android.os.IBinder, java.lang.String, int);
+    method public deprecated boolean switchToLastInputMethod(android.os.IBinder);
+    method public deprecated boolean switchToNextInputMethod(android.os.IBinder, boolean);
     method public void toggleSoftInput(int, int);
     method public void toggleSoftInputFromWindow(android.os.IBinder, int, int);
     method public deprecated void updateCursor(android.view.View, int, int, int, int);
