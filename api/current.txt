@@ -44343,6 +44343,11 @@ package android.text.util {
     method public static final boolean addLinks(android.text.Spannable, java.util.regex.Pattern, java.lang.String);
     method public static final boolean addLinks(android.text.Spannable, java.util.regex.Pattern, java.lang.String, android.text.util.Linkify.MatchFilter, android.text.util.Linkify.TransformFilter);
     method public static final boolean addLinks(android.text.Spannable, java.util.regex.Pattern, java.lang.String, java.lang.String[], android.text.util.Linkify.MatchFilter, android.text.util.Linkify.TransformFilter);
+    method public static java.util.concurrent.Future<java.lang.Void> addLinksAsync(android.widget.TextView, android.view.textclassifier.TextLinks.Options);
+    method public static java.util.concurrent.Future<java.lang.Void> addLinksAsync(android.widget.TextView, android.view.textclassifier.TextLinks.Options, java.util.concurrent.Executor, java.util.function.Consumer<java.lang.Integer>);
+    method public static java.util.concurrent.Future<java.lang.Void> addLinksAsync(android.text.Spannable, android.view.textclassifier.TextClassifier, android.view.textclassifier.TextLinks.Options);
+    method public static java.util.concurrent.Future<java.lang.Void> addLinksAsync(android.text.Spannable, android.view.textclassifier.TextClassifier, int);
+    method public static java.util.concurrent.Future<java.lang.Void> addLinksAsync(android.text.Spannable, android.view.textclassifier.TextClassifier, android.view.textclassifier.TextLinks.Options, java.util.concurrent.Executor, java.util.function.Consumer<java.lang.Integer>);
     field public static final int ALL = 15; // 0xf
     field public static final int EMAIL_ADDRESSES = 2; // 0x2
     field public static final int MAP_ADDRESSES = 8; // 0x8
@@ -50125,32 +50130,42 @@ package android.view.textclassifier {
   }
 
   public final class TextLinks implements android.os.Parcelable {
-    method public boolean apply(android.text.SpannableString, java.util.function.Function<android.view.textclassifier.TextLinks.TextLink, android.text.style.ClickableSpan>);
     method public int describeContents();
     method public java.util.Collection<android.view.textclassifier.TextLinks.TextLink> getLinks();
     method public void writeToParcel(android.os.Parcel, int);
+    field public static final int APPLY_STRATEGY_IGNORE = 0; // 0x0
+    field public static final int APPLY_STRATEGY_REPLACE = 1; // 0x1
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextLinks> CREATOR;
+    field public static final int STATUS_DIFFERENT_TEXT = 3; // 0x3
+    field public static final int STATUS_LINKS_APPLIED = 0; // 0x0
+    field public static final int STATUS_NO_LINKS_APPLIED = 2; // 0x2
+    field public static final int STATUS_NO_LINKS_FOUND = 1; // 0x1
   }
 
   public static final class TextLinks.Builder {
     ctor public TextLinks.Builder(java.lang.String);
-    method public android.view.textclassifier.TextLinks.Builder addLink(android.view.textclassifier.TextLinks.TextLink);
+    method public android.view.textclassifier.TextLinks.Builder addLink(int, int, java.util.Map<java.lang.String, java.lang.Float>);
     method public android.view.textclassifier.TextLinks build();
+    method public android.view.textclassifier.TextLinks.Builder clearTextLinks();
   }
 
   public static final class TextLinks.Options implements android.os.Parcelable {
     ctor public TextLinks.Options();
     method public int describeContents();
+    method public static android.view.textclassifier.TextLinks.Options fromLinkMask(int);
+    method public int getApplyStrategy();
     method public android.os.LocaleList getDefaultLocales();
     method public android.view.textclassifier.TextClassifier.EntityConfig getEntityConfig();
+    method public java.util.function.Function<android.view.textclassifier.TextLinks.TextLink, android.view.textclassifier.TextLinks.TextLinkSpan> getSpanFactory();
+    method public android.view.textclassifier.TextLinks.Options setApplyStrategy(int);
     method public android.view.textclassifier.TextLinks.Options setDefaultLocales(android.os.LocaleList);
     method public android.view.textclassifier.TextLinks.Options setEntityConfig(android.view.textclassifier.TextClassifier.EntityConfig);
+    method public android.view.textclassifier.TextLinks.Options setSpanFactory(java.util.function.Function<android.view.textclassifier.TextLinks.TextLink, android.view.textclassifier.TextLinks.TextLinkSpan>);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextLinks.Options> CREATOR;
   }
 
   public static final class TextLinks.TextLink implements android.os.Parcelable {
-    ctor public TextLinks.TextLink(java.lang.String, int, int, java.util.Map<java.lang.String, java.lang.Float>);
     method public int describeContents();
     method public float getConfidenceScore(java.lang.String);
     method public int getEnd();
@@ -50159,6 +50174,12 @@ package android.view.textclassifier {
     method public int getStart();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextLinks.TextLink> CREATOR;
+  }
+
+  public static class TextLinks.TextLinkSpan extends android.text.style.ClickableSpan {
+    ctor public TextLinks.TextLinkSpan(android.view.textclassifier.TextLinks.TextLink);
+    method public final android.view.textclassifier.TextLinks.TextLink getTextLink();
+    method public void onClick(android.view.View);
   }
 
   public final class TextSelection implements android.os.Parcelable {
