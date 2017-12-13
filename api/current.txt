@@ -6395,6 +6395,7 @@ package android.app.admin {
     method public boolean isBackupServiceEnabled(android.content.ComponentName);
     method public deprecated boolean isCallerApplicationRestrictionsManagingPackage();
     method public boolean isDeviceOwnerApp(java.lang.String);
+    method public boolean isEphemeralUser(android.content.ComponentName);
     method public boolean isLockTaskPermitted(java.lang.String);
     method public boolean isLogoutEnabled();
     method public boolean isManagedProfile(android.content.ComponentName);
@@ -6561,6 +6562,7 @@ package android.app.admin {
     field public static final int KEYGUARD_DISABLE_TRUST_AGENTS = 16; // 0x10
     field public static final int KEYGUARD_DISABLE_UNREDACTED_NOTIFICATIONS = 8; // 0x8
     field public static final int KEYGUARD_DISABLE_WIDGETS_ALL = 1; // 0x1
+    field public static final int LEAVE_ALL_SYSTEM_APPS_ENABLED = 16; // 0x10
     field public static final int LOCK_TASK_FEATURE_GLOBAL_ACTIONS = 16; // 0x10
     field public static final int LOCK_TASK_FEATURE_HOME = 4; // 0x4
     field public static final int LOCK_TASK_FEATURE_KEYGUARD = 32; // 0x20
@@ -7027,6 +7029,8 @@ package android.app.slice {
     ctor public Slice.Builder(android.app.slice.Slice.Builder);
     method public android.app.slice.Slice.Builder addAction(android.app.PendingIntent, android.app.slice.Slice);
     method public android.app.slice.Slice.Builder addAction(android.app.PendingIntent, android.app.slice.Slice, java.lang.String);
+    method public android.app.slice.Slice.Builder addBundle(android.os.Bundle, java.lang.String, java.lang.String...);
+    method public android.app.slice.Slice.Builder addBundle(android.os.Bundle, java.lang.String, java.util.List<java.lang.String>);
     method public deprecated android.app.slice.Slice.Builder addColor(int, java.lang.String, java.lang.String...);
     method public deprecated android.app.slice.Slice.Builder addColor(int, java.lang.String, java.util.List<java.lang.String>);
     method public android.app.slice.Slice.Builder addHints(java.lang.String...);
@@ -7050,6 +7054,7 @@ package android.app.slice {
   public final class SliceItem implements android.os.Parcelable {
     method public int describeContents();
     method public android.app.PendingIntent getAction();
+    method public android.os.Bundle getBundle();
     method public deprecated int getColor();
     method public java.lang.String getFormat();
     method public java.util.List<java.lang.String> getHints();
@@ -7064,6 +7069,7 @@ package android.app.slice {
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.slice.SliceItem> CREATOR;
     field public static final java.lang.String FORMAT_ACTION = "action";
+    field public static final java.lang.String FORMAT_BUNDLE = "bundle";
     field public static final deprecated java.lang.String FORMAT_COLOR = "color";
     field public static final java.lang.String FORMAT_IMAGE = "image";
     field public static final java.lang.String FORMAT_INT = "int";
@@ -42275,6 +42281,27 @@ package android.text {
 
   public abstract interface ParcelableSpan implements android.os.Parcelable {
     method public abstract int getSpanTypeId();
+  }
+
+  public class PremeasuredText implements android.text.Spanned {
+    method public static android.text.PremeasuredText build(java.lang.CharSequence, android.text.TextPaint, android.text.TextDirectionHeuristic);
+    method public static android.text.PremeasuredText build(java.lang.CharSequence, android.text.TextPaint, android.text.TextDirectionHeuristic, int, int);
+    method public char charAt(int);
+    method public int getEnd();
+    method public android.text.TextPaint getPaint();
+    method public int getParagraphCount();
+    method public int getParagraphEnd(int);
+    method public int getParagraphStart(int);
+    method public int getSpanEnd(java.lang.Object);
+    method public int getSpanFlags(java.lang.Object);
+    method public int getSpanStart(java.lang.Object);
+    method public <T> T[] getSpans(int, int, java.lang.Class<T>);
+    method public int getStart();
+    method public java.lang.CharSequence getText();
+    method public android.text.TextDirectionHeuristic getTextDir();
+    method public int length();
+    method public int nextSpanTransition(int, int, java.lang.Class);
+    method public java.lang.CharSequence subSequence(int, int);
   }
 
   public class Selection {
