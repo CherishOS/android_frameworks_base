@@ -292,6 +292,7 @@ package android {
     field public static final int apduServiceBanner = 16843757; // 0x10103ed
     field public static final int apiKey = 16843281; // 0x1010211
     field public static final int appCategory = 16844101; // 0x1010545
+    field public static final int appComponentFactory = 16844154; // 0x101057a
     field public static final int author = 16843444; // 0x10102b4
     field public static final int authorities = 16842776; // 0x1010018
     field public static final int autoAdvanceViewId = 16843535; // 0x101030f
@@ -4174,6 +4175,15 @@ package android.app {
     ctor public AliasActivity();
   }
 
+  public class AppComponentFactory {
+    ctor public AppComponentFactory();
+    method public android.app.Activity instantiateActivity(java.lang.ClassLoader, java.lang.String, android.content.Intent) throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException;
+    method public android.app.Application instantiateApplication(java.lang.ClassLoader, java.lang.String) throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException;
+    method public android.content.ContentProvider instantiateProvider(java.lang.ClassLoader, java.lang.String) throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException;
+    method public android.content.BroadcastReceiver instantiateReceiver(java.lang.ClassLoader, java.lang.String, android.content.Intent) throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException;
+    method public android.app.Service instantiateService(java.lang.ClassLoader, java.lang.String, android.content.Intent) throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException;
+  }
+
   public class AppOpsManager {
     method public int checkOp(java.lang.String, int, java.lang.String);
     method public int checkOpNoThrow(java.lang.String, int, java.lang.String);
@@ -6313,7 +6323,7 @@ package android.app.admin {
     method public void addPersistentPreferredActivity(android.content.ComponentName, android.content.IntentFilter, android.content.ComponentName);
     method public void addUserRestriction(android.content.ComponentName, java.lang.String);
     method public boolean bindDeviceAdminServiceAsUser(android.content.ComponentName, android.content.Intent, android.content.ServiceConnection, int, android.os.UserHandle);
-    method public boolean clearApplicationUserData(android.content.ComponentName, java.lang.String, android.app.admin.DevicePolicyManager.OnClearApplicationUserDataListener, android.os.Handler);
+    method public boolean clearApplicationUserData(android.content.ComponentName, java.lang.String, android.app.admin.DevicePolicyManager.OnClearApplicationUserDataListener, java.util.concurrent.Executor);
     method public void clearCrossProfileIntentFilters(android.content.ComponentName);
     method public deprecated void clearDeviceOwnerApp(java.lang.String);
     method public void clearPackagePersistentPreferredActivities(android.content.ComponentName, java.lang.String);
@@ -6391,6 +6401,7 @@ package android.app.admin {
     method public boolean installKeyPair(android.content.ComponentName, java.security.PrivateKey, java.security.cert.Certificate[], java.lang.String, boolean, boolean);
     method public boolean isActivePasswordSufficient();
     method public boolean isAdminActive(android.content.ComponentName);
+    method public boolean isAffiliatedUser();
     method public boolean isApplicationHidden(android.content.ComponentName, java.lang.String);
     method public boolean isBackupServiceEnabled(android.content.ComponentName);
     method public deprecated boolean isCallerApplicationRestrictionsManagingPackage();
@@ -9050,6 +9061,7 @@ package android.content {
     method public abstract java.io.File[] getExternalMediaDirs();
     method public abstract java.io.File getFileStreamPath(java.lang.String);
     method public abstract java.io.File getFilesDir();
+    method public java.util.concurrent.Executor getMainExecutor();
     method public abstract android.os.Looper getMainLooper();
     method public abstract java.io.File getNoBackupFilesDir();
     method public abstract java.io.File getObbDir();
@@ -10409,6 +10421,7 @@ package android.content.pm {
     field public static final int FLAG_UPDATED_SYSTEM_APP = 128; // 0x80
     field public static final int FLAG_USES_CLEARTEXT_TRAFFIC = 134217728; // 0x8000000
     field public static final int FLAG_VM_SAFE_MODE = 16384; // 0x4000
+    field public java.lang.String appComponentFactory;
     field public java.lang.String backupAgentName;
     field public int category;
     field public java.lang.String className;
@@ -20992,6 +21005,7 @@ package android.location {
     method public void onGnssMeasurementsReceived(android.location.GnssMeasurementsEvent);
     method public void onStatusChanged(int);
     field public static final int STATUS_LOCATION_DISABLED = 2; // 0x2
+    field public static final int STATUS_NOT_ALLOWED = 3; // 0x3
     field public static final int STATUS_NOT_SUPPORTED = 0; // 0x0
     field public static final int STATUS_READY = 1; // 0x1
   }
@@ -30968,7 +30982,9 @@ package android.os {
     ctor public Build.VERSION();
     field public static final java.lang.String BASE_OS;
     field public static final java.lang.String CODENAME;
+    field public static final int FIRST_SDK_INT;
     field public static final java.lang.String INCREMENTAL;
+    field public static final int MIN_SUPPORTED_TARGET_SDK_INT;
     field public static final int PREVIEW_SDK_INT;
     field public static final java.lang.String RELEASE;
     field public static final deprecated java.lang.String SDK;
@@ -40235,6 +40251,7 @@ package android.telephony {
     field public static final java.lang.String KEY_SHOW_CDMA_CHOICES_BOOL = "show_cdma_choices_bool";
     field public static final java.lang.String KEY_SHOW_ICCID_IN_SIM_STATUS_BOOL = "show_iccid_in_sim_status_bool";
     field public static final java.lang.String KEY_SHOW_ONSCREEN_DIAL_BUTTON_BOOL = "show_onscreen_dial_button_bool";
+    field public static final java.lang.String KEY_SHOW_SIGNAL_STRENGTH_IN_SIM_STATUS_BOOL = "show_signal_strength_in_sim_status_bool";
     field public static final java.lang.String KEY_SIMPLIFIED_NETWORK_SETTINGS_BOOL = "simplified_network_settings_bool";
     field public static final java.lang.String KEY_SIM_NETWORK_UNLOCK_ALLOW_DISMISS_BOOL = "sim_network_unlock_allow_dismiss_bool";
     field public static final java.lang.String KEY_SMS_REQUIRES_DESTINATION_NUMBER_CONVERSION_BOOL = "sms_requires_destination_number_conversion_bool";
@@ -40853,6 +40870,8 @@ package android.telephony {
     method public int getSimState();
     method public int getSimState(int);
     method public java.lang.String getSubscriberId();
+    method public int getSubscriptionCarrierId();
+    method public java.lang.String getSubscriptionCarrierName();
     method public java.lang.String getVisualVoicemailPackageName();
     method public java.lang.String getVoiceMailAlphaTag();
     method public java.lang.String getVoiceMailNumber();
@@ -40886,12 +40905,13 @@ package android.telephony {
     method public boolean setPreferredNetworkTypeToGlobal();
     method public void setVisualVoicemailSmsFilterSettings(android.telephony.VisualVoicemailSmsFilterSettings);
     method public boolean setVoiceMailNumber(java.lang.String, java.lang.String);
-    method public void setVoicemailRingtoneUri(android.telecom.PhoneAccountHandle, android.net.Uri);
-    method public void setVoicemailVibrationEnabled(android.telecom.PhoneAccountHandle, boolean);
+    method public deprecated void setVoicemailRingtoneUri(android.telecom.PhoneAccountHandle, android.net.Uri);
+    method public deprecated void setVoicemailVibrationEnabled(android.telecom.PhoneAccountHandle, boolean);
     field public static final java.lang.String ACTION_CONFIGURE_VOICEMAIL = "android.telephony.action.CONFIGURE_VOICEMAIL";
     field public static final java.lang.String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
     field public static final java.lang.String ACTION_RESPOND_VIA_MESSAGE = "android.intent.action.RESPOND_VIA_MESSAGE";
     field public static final java.lang.String ACTION_SHOW_VOICEMAIL_NOTIFICATION = "android.telephony.action.SHOW_VOICEMAIL_NOTIFICATION";
+    field public static final java.lang.String ACTION_SUBSCRIPTION_CARRIER_IDENTITY_CHANGED = "android.telephony.action.SUBSCRIPTION_CARRIER_IDENTITY_CHANGED";
     field public static final int APPTYPE_CSIM = 4; // 0x4
     field public static final int APPTYPE_ISIM = 5; // 0x5
     field public static final int APPTYPE_RUIM = 3; // 0x3
@@ -40916,6 +40936,8 @@ package android.telephony {
     field public static final int DATA_DISCONNECTED = 0; // 0x0
     field public static final int DATA_SUSPENDED = 3; // 0x3
     field public static final java.lang.String EXTRA_CALL_VOICEMAIL_INTENT = "android.telephony.extra.CALL_VOICEMAIL_INTENT";
+    field public static final java.lang.String EXTRA_CARRIER_ID = "android.telephony.extra.CARRIER_ID";
+    field public static final java.lang.String EXTRA_CARRIER_NAME = "android.telephony.extra.CARRIER_NAME";
     field public static final java.lang.String EXTRA_HIDE_PUBLIC_SETTINGS = "android.telephony.extra.HIDE_PUBLIC_SETTINGS";
     field public static final java.lang.String EXTRA_INCOMING_NUMBER = "incoming_number";
     field public static final java.lang.String EXTRA_IS_REFRESH = "android.telephony.extra.IS_REFRESH";
@@ -40926,6 +40948,7 @@ package android.telephony {
     field public static final java.lang.String EXTRA_STATE_IDLE;
     field public static final java.lang.String EXTRA_STATE_OFFHOOK;
     field public static final java.lang.String EXTRA_STATE_RINGING;
+    field public static final java.lang.String EXTRA_SUBSCRIPTION_ID = "android.telephony.extra.SUBSCRIPTION_ID";
     field public static final java.lang.String EXTRA_VOICEMAIL_NUMBER = "android.telephony.extra.VOICEMAIL_NUMBER";
     field public static final java.lang.String METADATA_HIDE_VOICEMAIL_SETTINGS_MENU = "android.telephony.HIDE_VOICEMAIL_SETTINGS_MENU";
     field public static final int NETWORK_TYPE_1xRTT = 7; // 0x7
@@ -40961,6 +40984,7 @@ package android.telephony {
     field public static final int SIM_STATE_PUK_REQUIRED = 3; // 0x3
     field public static final int SIM_STATE_READY = 5; // 0x5
     field public static final int SIM_STATE_UNKNOWN = 0; // 0x0
+    field public static final int UNKNOWN_CARRIER_ID = -1; // 0xffffffff
     field public static final int USSD_ERROR_SERVICE_UNAVAIL = -2; // 0xfffffffe
     field public static final int USSD_RETURN_FAILURE = -1; // 0xffffffff
     field public static final java.lang.String VVM_TYPE_CVVM = "vvm_type_cvvm";
