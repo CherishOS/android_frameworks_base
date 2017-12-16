@@ -37622,6 +37622,25 @@ package android.service.autofill {
     method public android.service.autofill.Dataset.Builder setValue(android.view.autofill.AutofillId, android.view.autofill.AutofillValue, java.util.regex.Pattern, android.widget.RemoteViews);
   }
 
+  public final class EditDistanceScorer implements android.os.Parcelable android.service.autofill.Scorer {
+    method public int describeContents();
+    method public static android.service.autofill.EditDistanceScorer getInstance();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.EditDistanceScorer> CREATOR;
+  }
+
+  public final class FieldClassification implements android.os.Parcelable {
+    method public int describeContents();
+    method public java.util.List<android.service.autofill.FieldClassification.Match> getMatches();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.FieldClassification> CREATOR;
+  }
+
+  public static final class FieldClassification.Match {
+    method public java.lang.String getRemoteId();
+    method public float getScore();
+  }
+
   public final class FillCallback {
     method public void onFailure(java.lang.CharSequence);
     method public void onSuccess(android.service.autofill.FillResponse);
@@ -37647,6 +37666,7 @@ package android.service.autofill {
     method public java.util.Map<android.view.autofill.AutofillId, java.lang.String> getChangedFields();
     method public android.os.Bundle getClientState();
     method public java.lang.String getDatasetId();
+    method public java.util.Map<android.view.autofill.AutofillId, android.service.autofill.FieldClassification> getFieldsClassification();
     method public java.util.Set<java.lang.String> getIgnoredDatasetIds();
     method public java.util.Map<android.view.autofill.AutofillId, java.util.Set<java.lang.String>> getManuallyEnteredField();
     method public java.util.Set<java.lang.String> getSelectedDatasetIds();
@@ -37684,6 +37704,7 @@ package android.service.autofill {
     method public android.service.autofill.FillResponse.Builder disableAutofill(long);
     method public android.service.autofill.FillResponse.Builder setAuthentication(android.view.autofill.AutofillId[], android.content.IntentSender, android.widget.RemoteViews);
     method public android.service.autofill.FillResponse.Builder setClientState(android.os.Bundle);
+    method public android.service.autofill.FillResponse.Builder setFieldClassificationIds(android.view.autofill.AutofillId...);
     method public android.service.autofill.FillResponse.Builder setFlags(int);
     method public android.service.autofill.FillResponse.Builder setFooter(android.widget.RemoteViews);
     method public android.service.autofill.FillResponse.Builder setHeader(android.widget.RemoteViews);
@@ -37767,6 +37788,9 @@ package android.service.autofill {
     field public static final android.os.Parcelable.Creator<android.service.autofill.SaveRequest> CREATOR;
   }
 
+  public abstract interface Scorer {
+  }
+
   public final class TextValueSanitizer implements android.os.Parcelable android.service.autofill.Sanitizer {
     ctor public TextValueSanitizer(java.util.regex.Pattern, java.lang.String);
     method public int describeContents();
@@ -37775,6 +37799,22 @@ package android.service.autofill {
   }
 
   public abstract interface Transformation {
+  }
+
+  public final class UserData implements android.os.Parcelable {
+    method public int describeContents();
+    method public static int getMaxFieldClassificationIdsSize();
+    method public static int getMaxUserDataSize();
+    method public static int getMaxValueLength();
+    method public static int getMinValueLength();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.UserData> CREATOR;
+  }
+
+  public static final class UserData.Builder {
+    ctor public UserData.Builder(android.service.autofill.Scorer, java.lang.String, java.lang.String);
+    method public android.service.autofill.UserData.Builder add(java.lang.String, java.lang.String);
+    method public android.service.autofill.UserData build();
   }
 
   public abstract interface Validator {
@@ -48586,9 +48626,11 @@ package android.view.autofill {
     method public void cancel();
     method public void commit();
     method public void disableAutofillServices();
+    method public android.service.autofill.UserData getUserData();
     method public boolean hasEnabledAutofillServices();
     method public boolean isAutofillSupported();
     method public boolean isEnabled();
+    method public boolean isFieldClassificationEnabled();
     method public void notifyValueChanged(android.view.View);
     method public void notifyValueChanged(android.view.View, int, android.view.autofill.AutofillValue);
     method public void notifyViewEntered(android.view.View);
@@ -48600,6 +48642,7 @@ package android.view.autofill {
     method public void registerCallback(android.view.autofill.AutofillManager.AutofillCallback);
     method public void requestAutofill(android.view.View);
     method public void requestAutofill(android.view.View, int, android.graphics.Rect);
+    method public void setUserData(android.service.autofill.UserData);
     method public void unregisterCallback(android.view.autofill.AutofillManager.AutofillCallback);
     field public static final java.lang.String EXTRA_ASSIST_STRUCTURE = "android.view.autofill.extra.ASSIST_STRUCTURE";
     field public static final java.lang.String EXTRA_AUTHENTICATION_RESULT = "android.view.autofill.extra.AUTHENTICATION_RESULT";
