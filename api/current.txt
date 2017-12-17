@@ -6418,6 +6418,7 @@ package android.app.admin {
     method public boolean isResetPasswordTokenActive(android.content.ComponentName);
     method public boolean isSecurityLoggingEnabled(android.content.ComponentName);
     method public boolean isUninstallBlocked(android.content.ComponentName, java.lang.String);
+    method public boolean isUsingUnifiedPassword(android.content.ComponentName);
     method public void lockNow();
     method public void lockNow(int);
     method public boolean logoutUser(android.content.ComponentName);
@@ -7019,6 +7020,7 @@ package android.app.slice {
     method public android.net.Uri getUri();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.slice.Slice> CREATOR;
+    field public static final java.lang.String EXTRA_TOGGLE_STATE = "android.app.slice.extra.TOGGLE_STATE";
     field public static final java.lang.String HINT_ACTIONS = "actions";
     field public static final java.lang.String HINT_HORIZONTAL = "horizontal";
     field public static final java.lang.String HINT_LARGE = "large";
@@ -7028,11 +7030,13 @@ package android.app.slice {
     field public static final java.lang.String HINT_NO_TINT = "no_tint";
     field public static final java.lang.String HINT_PARTIAL = "partial";
     field public static final java.lang.String HINT_SELECTED = "selected";
+    field public static final java.lang.String HINT_SUMMARY = "summary";
     field public static final java.lang.String HINT_TITLE = "title";
     field public static final java.lang.String SUBTYPE_COLOR = "color";
     field public static final java.lang.String SUBTYPE_MESSAGE = "message";
     field public static final java.lang.String SUBTYPE_SLIDER = "slider";
     field public static final java.lang.String SUBTYPE_SOURCE = "source";
+    field public static final java.lang.String SUBTYPE_TOGGLE = "toggle";
   }
 
   public static class Slice.Builder {
@@ -7090,6 +7094,20 @@ package android.app.slice {
     field public static final java.lang.String FORMAT_TIMESTAMP = "timestamp";
   }
 
+  public class SliceManager {
+    method public java.util.List<android.app.slice.SliceSpec> getPinnedSpecs(android.net.Uri);
+    method public void pinSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
+    method public void registerSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback, java.util.List<android.app.slice.SliceSpec>);
+    method public void registerSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback, java.util.List<android.app.slice.SliceSpec>, android.os.Handler);
+    method public void registerSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback, java.util.List<android.app.slice.SliceSpec>, java.util.concurrent.Executor);
+    method public void unpinSlice(android.net.Uri);
+    method public void unregisterSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback);
+  }
+
+  public static abstract interface SliceManager.SliceCallback {
+    method public abstract void onSliceUpdated(android.app.slice.Slice);
+  }
+
   public abstract class SliceProvider extends android.content.ContentProvider {
     ctor public SliceProvider();
     method public final int delete(android.net.Uri, java.lang.String, java.lang.String[]);
@@ -7098,6 +7116,8 @@ package android.app.slice {
     method public android.app.slice.Slice onBindSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
     method public deprecated android.app.slice.Slice onBindSlice(android.net.Uri);
     method public android.net.Uri onMapIntentToUri(android.content.Intent);
+    method public void onSlicePinned(android.net.Uri);
+    method public void onSliceUnpinned(android.net.Uri);
     method public final android.database.Cursor query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String);
     method public final android.database.Cursor query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String, android.os.CancellationSignal);
     method public final android.database.Cursor query(android.net.Uri, java.lang.String[], android.os.Bundle, android.os.CancellationSignal);
@@ -8119,6 +8139,94 @@ package android.bluetooth {
     method public void onHealthChannelStateChange(android.bluetooth.BluetoothHealthAppConfiguration, android.bluetooth.BluetoothDevice, int, int, android.os.ParcelFileDescriptor, int);
   }
 
+  public final class BluetoothHidDevice implements android.bluetooth.BluetoothProfile {
+    method public boolean connect(android.bluetooth.BluetoothDevice);
+    method public boolean disconnect(android.bluetooth.BluetoothDevice);
+    method public java.util.List<android.bluetooth.BluetoothDevice> getConnectedDevices();
+    method public int getConnectionState(android.bluetooth.BluetoothDevice);
+    method public java.util.List<android.bluetooth.BluetoothDevice> getDevicesMatchingConnectionStates(int[]);
+    method public boolean registerApp(android.bluetooth.BluetoothHidDeviceAppSdpSettings, android.bluetooth.BluetoothHidDeviceAppQosSettings, android.bluetooth.BluetoothHidDeviceAppQosSettings, android.bluetooth.BluetoothHidDeviceCallback);
+    method public boolean replyReport(android.bluetooth.BluetoothDevice, byte, byte, byte[]);
+    method public boolean reportError(android.bluetooth.BluetoothDevice, byte);
+    method public boolean sendReport(android.bluetooth.BluetoothDevice, int, byte[]);
+    method public boolean unregisterApp();
+    field public static final java.lang.String ACTION_CONNECTION_STATE_CHANGED = "android.bluetooth.hiddevice.profile.action.CONNECTION_STATE_CHANGED";
+    field public static final byte ERROR_RSP_INVALID_PARAM = 4; // 0x4
+    field public static final byte ERROR_RSP_INVALID_RPT_ID = 2; // 0x2
+    field public static final byte ERROR_RSP_NOT_READY = 1; // 0x1
+    field public static final byte ERROR_RSP_SUCCESS = 0; // 0x0
+    field public static final byte ERROR_RSP_UNKNOWN = 14; // 0xe
+    field public static final byte ERROR_RSP_UNSUPPORTED_REQ = 3; // 0x3
+    field public static final byte PROTOCOL_BOOT_MODE = 0; // 0x0
+    field public static final byte PROTOCOL_REPORT_MODE = 1; // 0x1
+    field public static final byte REPORT_TYPE_FEATURE = 3; // 0x3
+    field public static final byte REPORT_TYPE_INPUT = 1; // 0x1
+    field public static final byte REPORT_TYPE_OUTPUT = 2; // 0x2
+    field public static final byte SUBCLASS1_COMBO = -64; // 0xffffffc0
+    field public static final byte SUBCLASS1_KEYBOARD = 64; // 0x40
+    field public static final byte SUBCLASS1_MOUSE = -128; // 0xffffff80
+    field public static final byte SUBCLASS1_NONE = 0; // 0x0
+    field public static final byte SUBCLASS2_CARD_READER = 6; // 0x6
+    field public static final byte SUBCLASS2_DIGITIZER_TABLET = 5; // 0x5
+    field public static final byte SUBCLASS2_GAMEPAD = 2; // 0x2
+    field public static final byte SUBCLASS2_JOYSTICK = 1; // 0x1
+    field public static final byte SUBCLASS2_REMOTE_CONTROL = 3; // 0x3
+    field public static final byte SUBCLASS2_SENSING_DEVICE = 4; // 0x4
+    field public static final byte SUBCLASS2_UNCATEGORIZED = 0; // 0x0
+  }
+
+  public final class BluetoothHidDeviceAppQosSettings implements android.os.Parcelable {
+    ctor public BluetoothHidDeviceAppQosSettings(int, int, int, int, int, int);
+    method public int describeContents();
+    method public int[] toArray();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.bluetooth.BluetoothHidDeviceAppQosSettings> CREATOR;
+    field public static final int MAX = -1; // 0xffffffff
+    field public static final int SERVICE_BEST_EFFORT = 1; // 0x1
+    field public static final int SERVICE_GUARANTEED = 2; // 0x2
+    field public static final int SERVICE_NO_TRAFFIC = 0; // 0x0
+    field public final int delayVariation;
+    field public final int latency;
+    field public final int peakBandwidth;
+    field public final int serviceType;
+    field public final int tokenBucketSize;
+    field public final int tokenRate;
+  }
+
+  public static class BluetoothHidDeviceAppQosSettings.Builder {
+    ctor public BluetoothHidDeviceAppQosSettings.Builder();
+    method public android.bluetooth.BluetoothHidDeviceAppQosSettings build();
+    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder delayVariation(int);
+    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder latency(int);
+    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder peakBandwidth(int);
+    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder serviceType(int);
+    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder tokenBucketSize(int);
+    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder tokenRate(int);
+  }
+
+  public final class BluetoothHidDeviceAppSdpSettings implements android.os.Parcelable {
+    ctor public BluetoothHidDeviceAppSdpSettings(java.lang.String, java.lang.String, java.lang.String, byte, byte[]);
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.bluetooth.BluetoothHidDeviceAppSdpSettings> CREATOR;
+    field public final java.lang.String description;
+    field public final byte[] descriptors;
+    field public final java.lang.String name;
+    field public final java.lang.String provider;
+    field public final byte subclass;
+  }
+
+  public abstract class BluetoothHidDeviceCallback {
+    ctor public BluetoothHidDeviceCallback();
+    method public void onAppStatusChanged(android.bluetooth.BluetoothDevice, boolean);
+    method public void onConnectionStateChanged(android.bluetooth.BluetoothDevice, int);
+    method public void onGetReport(android.bluetooth.BluetoothDevice, byte, byte, int);
+    method public void onIntrData(android.bluetooth.BluetoothDevice, byte, byte[]);
+    method public void onSetProtocol(android.bluetooth.BluetoothDevice, byte);
+    method public void onSetReport(android.bluetooth.BluetoothDevice, byte, byte, byte[]);
+    method public void onVirtualCableUnplug(android.bluetooth.BluetoothDevice);
+  }
+
   public final class BluetoothManager {
     method public android.bluetooth.BluetoothAdapter getAdapter();
     method public java.util.List<android.bluetooth.BluetoothDevice> getConnectedDevices(int);
@@ -8138,6 +8246,7 @@ package android.bluetooth {
     field public static final int GATT_SERVER = 8; // 0x8
     field public static final int HEADSET = 1; // 0x1
     field public static final int HEALTH = 3; // 0x3
+    field public static final int HID_DEVICE = 19; // 0x13
     field public static final int SAP = 10; // 0xa
     field public static final int STATE_CONNECTED = 2; // 0x2
     field public static final int STATE_CONNECTING = 1; // 0x1
@@ -25919,12 +26028,12 @@ package android.net {
   }
 
   public final class IpSecManager {
+    method public android.net.IpSecManager.SecurityParameterIndex allocateSecurityParameterIndex(int, java.net.InetAddress) throws android.net.IpSecManager.ResourceUnavailableException;
+    method public android.net.IpSecManager.SecurityParameterIndex allocateSecurityParameterIndex(int, java.net.InetAddress, int) throws android.net.IpSecManager.ResourceUnavailableException, android.net.IpSecManager.SpiUnavailableException;
     method public void applyTransportModeTransform(java.io.FileDescriptor, android.net.IpSecTransform) throws java.io.IOException;
     method public android.net.IpSecManager.UdpEncapsulationSocket openUdpEncapsulationSocket(int) throws java.io.IOException, android.net.IpSecManager.ResourceUnavailableException;
     method public android.net.IpSecManager.UdpEncapsulationSocket openUdpEncapsulationSocket() throws java.io.IOException, android.net.IpSecManager.ResourceUnavailableException;
     method public void removeTransportModeTransform(java.io.FileDescriptor, android.net.IpSecTransform) throws java.io.IOException;
-    method public android.net.IpSecManager.SecurityParameterIndex reserveSecurityParameterIndex(int, java.net.InetAddress) throws android.net.IpSecManager.ResourceUnavailableException;
-    method public android.net.IpSecManager.SecurityParameterIndex reserveSecurityParameterIndex(int, java.net.InetAddress, int) throws android.net.IpSecManager.ResourceUnavailableException, android.net.IpSecManager.SpiUnavailableException;
   }
 
   public static final class IpSecManager.ResourceUnavailableException extends android.util.AndroidException {
@@ -32123,6 +32232,7 @@ package android.os {
     field public static final java.lang.String DISALLOW_SHARE_LOCATION = "no_share_location";
     field public static final java.lang.String DISALLOW_SMS = "no_sms";
     field public static final java.lang.String DISALLOW_SYSTEM_ERROR_DIALOGS = "no_system_error_dialogs";
+    field public static final java.lang.String DISALLOW_UNIFIED_PASSWORD = "no_unified_password";
     field public static final java.lang.String DISALLOW_UNINSTALL_APPS = "no_uninstall_apps";
     field public static final java.lang.String DISALLOW_UNMUTE_MICROPHONE = "no_unmute_microphone";
     field public static final java.lang.String DISALLOW_USB_FILE_TRANSFER = "no_usb_file_transfer";
@@ -37512,6 +37622,25 @@ package android.service.autofill {
     method public android.service.autofill.Dataset.Builder setValue(android.view.autofill.AutofillId, android.view.autofill.AutofillValue, java.util.regex.Pattern, android.widget.RemoteViews);
   }
 
+  public final class EditDistanceScorer implements android.os.Parcelable android.service.autofill.Scorer {
+    method public int describeContents();
+    method public static android.service.autofill.EditDistanceScorer getInstance();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.EditDistanceScorer> CREATOR;
+  }
+
+  public final class FieldClassification implements android.os.Parcelable {
+    method public int describeContents();
+    method public java.util.List<android.service.autofill.FieldClassification.Match> getMatches();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.FieldClassification> CREATOR;
+  }
+
+  public static final class FieldClassification.Match {
+    method public java.lang.String getRemoteId();
+    method public float getScore();
+  }
+
   public final class FillCallback {
     method public void onFailure(java.lang.CharSequence);
     method public void onSuccess(android.service.autofill.FillResponse);
@@ -37537,6 +37666,7 @@ package android.service.autofill {
     method public java.util.Map<android.view.autofill.AutofillId, java.lang.String> getChangedFields();
     method public android.os.Bundle getClientState();
     method public java.lang.String getDatasetId();
+    method public java.util.Map<android.view.autofill.AutofillId, android.service.autofill.FieldClassification> getFieldsClassification();
     method public java.util.Set<java.lang.String> getIgnoredDatasetIds();
     method public java.util.Map<android.view.autofill.AutofillId, java.util.Set<java.lang.String>> getManuallyEnteredField();
     method public java.util.Set<java.lang.String> getSelectedDatasetIds();
@@ -37574,6 +37704,7 @@ package android.service.autofill {
     method public android.service.autofill.FillResponse.Builder disableAutofill(long);
     method public android.service.autofill.FillResponse.Builder setAuthentication(android.view.autofill.AutofillId[], android.content.IntentSender, android.widget.RemoteViews);
     method public android.service.autofill.FillResponse.Builder setClientState(android.os.Bundle);
+    method public android.service.autofill.FillResponse.Builder setFieldClassificationIds(android.view.autofill.AutofillId...);
     method public android.service.autofill.FillResponse.Builder setFlags(int);
     method public android.service.autofill.FillResponse.Builder setFooter(android.widget.RemoteViews);
     method public android.service.autofill.FillResponse.Builder setHeader(android.widget.RemoteViews);
@@ -37657,6 +37788,9 @@ package android.service.autofill {
     field public static final android.os.Parcelable.Creator<android.service.autofill.SaveRequest> CREATOR;
   }
 
+  public abstract interface Scorer {
+  }
+
   public final class TextValueSanitizer implements android.os.Parcelable android.service.autofill.Sanitizer {
     ctor public TextValueSanitizer(java.util.regex.Pattern, java.lang.String);
     method public int describeContents();
@@ -37665,6 +37799,22 @@ package android.service.autofill {
   }
 
   public abstract interface Transformation {
+  }
+
+  public final class UserData implements android.os.Parcelable {
+    method public int describeContents();
+    method public static int getMaxFieldClassificationIdsSize();
+    method public static int getMaxUserDataSize();
+    method public static int getMaxValueLength();
+    method public static int getMinValueLength();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.autofill.UserData> CREATOR;
+  }
+
+  public static final class UserData.Builder {
+    ctor public UserData.Builder(android.service.autofill.Scorer, java.lang.String, java.lang.String);
+    method public android.service.autofill.UserData.Builder add(java.lang.String, java.lang.String);
+    method public android.service.autofill.UserData build();
   }
 
   public abstract interface Validator {
@@ -41300,41 +41450,6 @@ package android.telephony.mbms {
 
 package android.test {
 
-  public abstract deprecated class ActivityInstrumentationTestCase<T extends android.app.Activity> extends android.test.ActivityTestCase {
-    ctor public ActivityInstrumentationTestCase(java.lang.String, java.lang.Class<T>);
-    ctor public ActivityInstrumentationTestCase(java.lang.String, java.lang.Class<T>, boolean);
-    method public T getActivity();
-    method public void testActivityTestCaseSetUpProperly() throws java.lang.Exception;
-  }
-
-  public abstract deprecated class ActivityInstrumentationTestCase2<T extends android.app.Activity> extends android.test.ActivityTestCase {
-    ctor public deprecated ActivityInstrumentationTestCase2(java.lang.String, java.lang.Class<T>);
-    ctor public ActivityInstrumentationTestCase2(java.lang.Class<T>);
-    method public T getActivity();
-    method public void setActivityInitialTouchMode(boolean);
-    method public void setActivityIntent(android.content.Intent);
-  }
-
-  public abstract deprecated class ActivityTestCase extends android.test.InstrumentationTestCase {
-    ctor public ActivityTestCase();
-    method protected android.app.Activity getActivity();
-    method protected void scrubClass(java.lang.Class<?>) throws java.lang.IllegalAccessException;
-    method protected void setActivity(android.app.Activity);
-  }
-
-  public abstract deprecated class ActivityUnitTestCase<T extends android.app.Activity> extends android.test.ActivityTestCase {
-    ctor public ActivityUnitTestCase(java.lang.Class<T>);
-    method public T getActivity();
-    method public int getFinishedActivityRequest();
-    method public int getRequestedOrientation();
-    method public android.content.Intent getStartedActivityIntent();
-    method public int getStartedActivityRequest();
-    method public boolean isFinishCalled();
-    method public void setActivityContext(android.content.Context);
-    method public void setApplication(android.app.Application);
-    method protected T startActivity(android.content.Intent, android.os.Bundle, java.lang.Object);
-  }
-
   public deprecated class AndroidTestCase extends junit.framework.TestCase {
     ctor public AndroidTestCase();
     method public void assertActivityRequiresPermission(java.lang.String, java.lang.String, java.lang.String);
@@ -41345,46 +41460,6 @@ package android.test {
     method public void setContext(android.content.Context);
     method public void testAndroidTestCaseSetupProperly();
     field protected android.content.Context mContext;
-  }
-
-  public deprecated class AndroidTestRunner extends junit.runner.BaseTestRunner {
-    ctor public AndroidTestRunner();
-    method public void addTestListener(junit.framework.TestListener);
-    method public void clearTestListeners();
-    method protected junit.framework.TestResult createTestResult();
-    method public java.util.List<junit.framework.TestCase> getTestCases();
-    method public java.lang.String getTestClassName();
-    method public junit.framework.TestResult getTestResult();
-    method protected java.lang.Class loadSuiteClass(java.lang.String) throws java.lang.ClassNotFoundException;
-    method protected void runFailed(java.lang.String);
-    method public void runTest();
-    method public void runTest(junit.framework.TestResult);
-    method public void setContext(android.content.Context);
-    method public deprecated void setInstrumentaiton(android.app.Instrumentation);
-    method public void setInstrumentation(android.app.Instrumentation);
-    method public void setTest(junit.framework.Test);
-    method public void setTestClassName(java.lang.String, java.lang.String);
-    method public void testEnded(java.lang.String);
-    method public void testFailed(int, junit.framework.Test, java.lang.Throwable);
-    method public void testStarted(java.lang.String);
-  }
-
-  public abstract deprecated class ApplicationTestCase<T extends android.app.Application> extends android.test.AndroidTestCase {
-    ctor public ApplicationTestCase(java.lang.Class<T>);
-    method protected final void createApplication();
-    method public T getApplication();
-    method public android.content.Context getSystemContext();
-    method protected final void terminateApplication();
-    method public final void testApplicationTestCaseSetUpProperly() throws java.lang.Exception;
-  }
-
-  public deprecated class AssertionFailedError extends java.lang.Error {
-    ctor public AssertionFailedError();
-    ctor public AssertionFailedError(java.lang.String);
-  }
-
-  public deprecated class ComparisonFailure extends android.test.AssertionFailedError {
-    ctor public ComparisonFailure(java.lang.String, java.lang.String, java.lang.String);
   }
 
   public abstract deprecated class FlakyTest implements java.lang.annotation.Annotation {
@@ -41403,79 +41478,11 @@ package android.test {
     method public void sendRepeatedKeys(int...);
   }
 
-  public deprecated class InstrumentationTestRunner extends android.app.Instrumentation implements android.test.TestSuiteProvider {
-    ctor public InstrumentationTestRunner();
-    method public junit.framework.TestSuite getAllTests();
-    method protected android.test.AndroidTestRunner getAndroidTestRunner();
-    method public android.os.Bundle getArguments();
-    method public java.lang.ClassLoader getLoader();
-    method public junit.framework.TestSuite getTestSuite();
-    field public static final java.lang.String REPORT_KEY_NAME_CLASS = "class";
-    field public static final java.lang.String REPORT_KEY_NAME_TEST = "test";
-    field public static final java.lang.String REPORT_KEY_NUM_CURRENT = "current";
-    field public static final java.lang.String REPORT_KEY_NUM_TOTAL = "numtests";
-    field public static final java.lang.String REPORT_KEY_STACK = "stack";
-    field public static final java.lang.String REPORT_VALUE_ID = "InstrumentationTestRunner";
-    field public static final int REPORT_VALUE_RESULT_ERROR = -1; // 0xffffffff
-    field public static final int REPORT_VALUE_RESULT_FAILURE = -2; // 0xfffffffe
-    field public static final int REPORT_VALUE_RESULT_OK = 0; // 0x0
-    field public static final int REPORT_VALUE_RESULT_START = 1; // 0x1
-  }
-
   public deprecated class InstrumentationTestSuite extends junit.framework.TestSuite {
     ctor public InstrumentationTestSuite(android.app.Instrumentation);
     ctor public InstrumentationTestSuite(java.lang.String, android.app.Instrumentation);
     ctor public InstrumentationTestSuite(java.lang.Class, android.app.Instrumentation);
     method public void addTestSuite(java.lang.Class);
-  }
-
-  public deprecated class IsolatedContext extends android.content.ContextWrapper {
-    ctor public IsolatedContext(android.content.ContentResolver, android.content.Context);
-    method public java.util.List<android.content.Intent> getAndClearBroadcastIntents();
-  }
-
-  public class LoaderTestCase extends android.test.AndroidTestCase {
-    ctor public LoaderTestCase();
-    method public <T> T getLoaderResultSynchronously(android.content.Loader<T>);
-  }
-
-  public final deprecated class MoreAsserts {
-    method public static void assertAssignableFrom(java.lang.Class<?>, java.lang.Object);
-    method public static void assertAssignableFrom(java.lang.Class<?>, java.lang.Class<?>);
-    method public static java.util.regex.MatchResult assertContainsRegex(java.lang.String, java.lang.String, java.lang.String);
-    method public static java.util.regex.MatchResult assertContainsRegex(java.lang.String, java.lang.String);
-    method public static void assertContentsInAnyOrder(java.lang.String, java.lang.Iterable<?>, java.lang.Object...);
-    method public static void assertContentsInAnyOrder(java.lang.Iterable<?>, java.lang.Object...);
-    method public static void assertContentsInOrder(java.lang.String, java.lang.Iterable<?>, java.lang.Object...);
-    method public static void assertContentsInOrder(java.lang.Iterable<?>, java.lang.Object...);
-    method public static void assertEmpty(java.lang.String, java.lang.Iterable<?>);
-    method public static void assertEmpty(java.lang.Iterable<?>);
-    method public static void assertEmpty(java.lang.String, java.util.Map<?, ?>);
-    method public static void assertEmpty(java.util.Map<?, ?>);
-    method public static void assertEquals(java.lang.String, byte[], byte[]);
-    method public static void assertEquals(byte[], byte[]);
-    method public static void assertEquals(java.lang.String, int[], int[]);
-    method public static void assertEquals(int[], int[]);
-    method public static void assertEquals(java.lang.String, double[], double[]);
-    method public static void assertEquals(double[], double[]);
-    method public static void assertEquals(java.lang.String, java.lang.Object[], java.lang.Object[]);
-    method public static void assertEquals(java.lang.Object[], java.lang.Object[]);
-    method public static void assertEquals(java.lang.String, java.util.Set<? extends java.lang.Object>, java.util.Set<? extends java.lang.Object>);
-    method public static void assertEquals(java.util.Set<? extends java.lang.Object>, java.util.Set<? extends java.lang.Object>);
-    method public static java.util.regex.MatchResult assertMatchesRegex(java.lang.String, java.lang.String, java.lang.String);
-    method public static java.util.regex.MatchResult assertMatchesRegex(java.lang.String, java.lang.String);
-    method public static void assertNotContainsRegex(java.lang.String, java.lang.String, java.lang.String);
-    method public static void assertNotContainsRegex(java.lang.String, java.lang.String);
-    method public static void assertNotEmpty(java.lang.String, java.lang.Iterable<?>);
-    method public static void assertNotEmpty(java.lang.Iterable<?>);
-    method public static void assertNotEmpty(java.lang.String, java.util.Map<?, ?>);
-    method public static void assertNotEmpty(java.util.Map<?, ?>);
-    method public static void assertNotEqual(java.lang.String, java.lang.Object, java.lang.Object);
-    method public static void assertNotEqual(java.lang.Object, java.lang.Object);
-    method public static void assertNotMatchesRegex(java.lang.String, java.lang.String, java.lang.String);
-    method public static void assertNotMatchesRegex(java.lang.String, java.lang.String);
-    method public static void checkEqualsAndHashCodeMethods(java.lang.String, java.lang.Object, java.lang.Object, boolean);
-    method public static void checkEqualsAndHashCodeMethods(java.lang.Object, java.lang.Object, boolean);
   }
 
   public abstract deprecated interface PerformanceTestCase {
@@ -41491,117 +41498,7 @@ package android.test {
     method public abstract void startTiming(boolean);
   }
 
-  public abstract deprecated class ProviderTestCase<T extends android.content.ContentProvider> extends android.test.InstrumentationTestCase {
-    ctor public ProviderTestCase(java.lang.Class<T>, java.lang.String);
-    method public android.test.mock.MockContentResolver getMockContentResolver();
-    method public android.test.IsolatedContext getMockContext();
-    method public T getProvider();
-    method public static <T extends android.content.ContentProvider> android.content.ContentResolver newResolverWithContentProviderFromSql(android.content.Context, java.lang.Class<T>, java.lang.String, java.lang.String, int, java.lang.String) throws java.lang.IllegalAccessException, java.lang.InstantiationException;
-  }
-
-  public abstract class ProviderTestCase2<T extends android.content.ContentProvider> extends android.test.AndroidTestCase {
-    ctor public ProviderTestCase2(java.lang.Class<T>, java.lang.String);
-    method public android.test.mock.MockContentResolver getMockContentResolver();
-    method public android.test.IsolatedContext getMockContext();
-    method public T getProvider();
-    method public static <T extends android.content.ContentProvider> android.content.ContentResolver newResolverWithContentProviderFromSql(android.content.Context, java.lang.String, java.lang.Class<T>, java.lang.String, java.lang.String, int, java.lang.String) throws java.lang.IllegalAccessException, java.lang.InstantiationException;
-  }
-
-  public deprecated class RenamingDelegatingContext extends android.content.ContextWrapper {
-    ctor public RenamingDelegatingContext(android.content.Context, java.lang.String);
-    ctor public RenamingDelegatingContext(android.content.Context, android.content.Context, java.lang.String);
-    method public java.lang.String getDatabasePrefix();
-    method public void makeExistingFilesAndDbsAccessible();
-    method public static <T extends android.content.ContentProvider> T providerWithRenamedContext(java.lang.Class<T>, android.content.Context, java.lang.String) throws java.lang.IllegalAccessException, java.lang.InstantiationException;
-    method public static <T extends android.content.ContentProvider> T providerWithRenamedContext(java.lang.Class<T>, android.content.Context, java.lang.String, boolean) throws java.lang.IllegalAccessException, java.lang.InstantiationException;
-  }
-
-  public abstract deprecated class ServiceTestCase<T extends android.app.Service> extends android.test.AndroidTestCase {
-    ctor public ServiceTestCase(java.lang.Class<T>);
-    method protected android.os.IBinder bindService(android.content.Intent);
-    method public android.app.Application getApplication();
-    method public T getService();
-    method public android.content.Context getSystemContext();
-    method public void setApplication(android.app.Application);
-    method protected void setupService();
-    method protected void shutdownService();
-    method protected void startService(android.content.Intent);
-    method public void testServiceTestCaseSetUpProperly() throws java.lang.Exception;
-  }
-
-  public abstract deprecated class SingleLaunchActivityTestCase<T extends android.app.Activity> extends android.test.InstrumentationTestCase {
-    ctor public SingleLaunchActivityTestCase(java.lang.String, java.lang.Class<T>);
-    method public T getActivity();
-    method public void testActivityTestCaseSetUpProperly() throws java.lang.Exception;
-  }
-
-  public deprecated class SyncBaseInstrumentation extends android.test.InstrumentationTestCase {
-    ctor public SyncBaseInstrumentation();
-    method protected void cancelSyncsandDisableAutoSync();
-    method protected void syncProvider(android.net.Uri, java.lang.String, java.lang.String) throws java.lang.Exception;
-  }
-
-  public abstract deprecated interface TestSuiteProvider {
-    method public abstract junit.framework.TestSuite getTestSuite();
-  }
-
-  public deprecated class TouchUtils {
-    ctor public TouchUtils();
-    method public static void clickView(android.test.InstrumentationTestCase, android.view.View);
-    method public static deprecated void drag(android.test.ActivityInstrumentationTestCase, float, float, float, float, int);
-    method public static void drag(android.test.InstrumentationTestCase, float, float, float, float, int);
-    method public static deprecated void dragQuarterScreenDown(android.test.ActivityInstrumentationTestCase);
-    method public static void dragQuarterScreenDown(android.test.InstrumentationTestCase, android.app.Activity);
-    method public static deprecated void dragQuarterScreenUp(android.test.ActivityInstrumentationTestCase);
-    method public static void dragQuarterScreenUp(android.test.InstrumentationTestCase, android.app.Activity);
-    method public static deprecated int dragViewBy(android.test.ActivityInstrumentationTestCase, android.view.View, int, int, int);
-    method public static deprecated int dragViewBy(android.test.InstrumentationTestCase, android.view.View, int, int, int);
-    method public static deprecated int dragViewTo(android.test.ActivityInstrumentationTestCase, android.view.View, int, int, int);
-    method public static int dragViewTo(android.test.InstrumentationTestCase, android.view.View, int, int, int);
-    method public static deprecated void dragViewToBottom(android.test.ActivityInstrumentationTestCase, android.view.View);
-    method public static void dragViewToBottom(android.test.InstrumentationTestCase, android.app.Activity, android.view.View);
-    method public static deprecated void dragViewToBottom(android.test.ActivityInstrumentationTestCase, android.view.View, int);
-    method public static void dragViewToBottom(android.test.InstrumentationTestCase, android.app.Activity, android.view.View, int);
-    method public static deprecated void dragViewToTop(android.test.ActivityInstrumentationTestCase, android.view.View);
-    method public static deprecated void dragViewToTop(android.test.ActivityInstrumentationTestCase, android.view.View, int);
-    method public static void dragViewToTop(android.test.InstrumentationTestCase, android.view.View);
-    method public static void dragViewToTop(android.test.InstrumentationTestCase, android.view.View, int);
-    method public static deprecated int dragViewToX(android.test.ActivityInstrumentationTestCase, android.view.View, int, int);
-    method public static int dragViewToX(android.test.InstrumentationTestCase, android.view.View, int, int);
-    method public static deprecated int dragViewToY(android.test.ActivityInstrumentationTestCase, android.view.View, int, int);
-    method public static int dragViewToY(android.test.InstrumentationTestCase, android.view.View, int, int);
-    method public static deprecated void longClickView(android.test.ActivityInstrumentationTestCase, android.view.View);
-    method public static void longClickView(android.test.InstrumentationTestCase, android.view.View);
-    method public static deprecated void scrollToBottom(android.test.ActivityInstrumentationTestCase, android.view.ViewGroup);
-    method public static void scrollToBottom(android.test.InstrumentationTestCase, android.app.Activity, android.view.ViewGroup);
-    method public static deprecated void scrollToTop(android.test.ActivityInstrumentationTestCase, android.view.ViewGroup);
-    method public static void scrollToTop(android.test.InstrumentationTestCase, android.app.Activity, android.view.ViewGroup);
-    method public static void tapView(android.test.InstrumentationTestCase, android.view.View);
-    method public static void touchAndCancelView(android.test.InstrumentationTestCase, android.view.View);
-  }
-
   public abstract deprecated class UiThreadTest implements java.lang.annotation.Annotation {
-  }
-
-  public deprecated class ViewAsserts {
-    method public static void assertBaselineAligned(android.view.View, android.view.View);
-    method public static void assertBottomAligned(android.view.View, android.view.View);
-    method public static void assertBottomAligned(android.view.View, android.view.View, int);
-    method public static void assertGroupContains(android.view.ViewGroup, android.view.View);
-    method public static void assertGroupIntegrity(android.view.ViewGroup);
-    method public static void assertGroupNotContains(android.view.ViewGroup, android.view.View);
-    method public static void assertHasScreenCoordinates(android.view.View, android.view.View, int, int);
-    method public static void assertHorizontalCenterAligned(android.view.View, android.view.View);
-    method public static void assertLeftAligned(android.view.View, android.view.View);
-    method public static void assertLeftAligned(android.view.View, android.view.View, int);
-    method public static void assertOffScreenAbove(android.view.View, android.view.View);
-    method public static void assertOffScreenBelow(android.view.View, android.view.View);
-    method public static void assertOnScreen(android.view.View, android.view.View);
-    method public static void assertRightAligned(android.view.View, android.view.View);
-    method public static void assertRightAligned(android.view.View, android.view.View, int);
-    method public static void assertTopAligned(android.view.View, android.view.View);
-    method public static void assertTopAligned(android.view.View, android.view.View, int);
-    method public static void assertVerticalCenterAligned(android.view.View, android.view.View);
   }
 
 }
@@ -41895,37 +41792,6 @@ package android.test.mock {
     method public android.content.res.ColorStateList getColorStateList(int) throws android.content.res.Resources.NotFoundException;
     method public android.graphics.drawable.Drawable getDrawable(int) throws android.content.res.Resources.NotFoundException;
     method public void updateConfiguration(android.content.res.Configuration, android.util.DisplayMetrics);
-  }
-
-}
-
-package android.test.suitebuilder {
-
-  public deprecated class TestMethod {
-    ctor public TestMethod(java.lang.reflect.Method, java.lang.Class<? extends junit.framework.TestCase>);
-    ctor public TestMethod(java.lang.String, java.lang.Class<? extends junit.framework.TestCase>);
-    ctor public TestMethod(junit.framework.TestCase);
-    method public junit.framework.TestCase createTest() throws java.lang.IllegalAccessException, java.lang.InstantiationException, java.lang.reflect.InvocationTargetException;
-    method public <T extends java.lang.annotation.Annotation> T getAnnotation(java.lang.Class<T>);
-    method public java.lang.Class<? extends junit.framework.TestCase> getEnclosingClass();
-    method public java.lang.String getEnclosingClassname();
-    method public java.lang.String getName();
-  }
-
-  public deprecated class TestSuiteBuilder {
-    ctor public TestSuiteBuilder(java.lang.Class);
-    ctor public TestSuiteBuilder(java.lang.String, java.lang.ClassLoader);
-    method public final junit.framework.TestSuite build();
-    method public android.test.suitebuilder.TestSuiteBuilder excludePackages(java.lang.String...);
-    method protected java.lang.String getSuiteName();
-    method public final android.test.suitebuilder.TestSuiteBuilder includeAllPackagesUnderHere();
-    method public android.test.suitebuilder.TestSuiteBuilder includePackages(java.lang.String...);
-    method public android.test.suitebuilder.TestSuiteBuilder named(java.lang.String);
-  }
-
-  public static deprecated class TestSuiteBuilder.FailedToCreateTests extends junit.framework.TestCase {
-    ctor public TestSuiteBuilder.FailedToCreateTests(java.lang.Exception);
-    method public void testSuiteConstructionFailed();
   }
 
 }
@@ -44574,6 +44440,12 @@ package android.util {
     field public static final int[] WILD_CARD;
   }
 
+  public final class StatsLog {
+    method public static boolean logEvent(int);
+    method public static boolean logStart(int);
+    method public static boolean logStop(int);
+  }
+
   public class StringBuilderPrinter implements android.util.Printer {
     ctor public StringBuilderPrinter(java.lang.StringBuilder);
     method public void println(java.lang.String);
@@ -47067,6 +46939,7 @@ package android.view {
     method public int getScaledEdgeSlop();
     method public int getScaledFadingEdgeLength();
     method public float getScaledHorizontalScrollFactor();
+    method public int getScaledHoverSlop();
     method public int getScaledMaximumDrawingCacheSize();
     method public int getScaledMaximumFlingVelocity();
     method public int getScaledMinimumFlingVelocity();
@@ -48753,9 +48626,11 @@ package android.view.autofill {
     method public void cancel();
     method public void commit();
     method public void disableAutofillServices();
+    method public android.service.autofill.UserData getUserData();
     method public boolean hasEnabledAutofillServices();
     method public boolean isAutofillSupported();
     method public boolean isEnabled();
+    method public boolean isFieldClassificationEnabled();
     method public void notifyValueChanged(android.view.View);
     method public void notifyValueChanged(android.view.View, int, android.view.autofill.AutofillValue);
     method public void notifyViewEntered(android.view.View);
@@ -48767,6 +48642,7 @@ package android.view.autofill {
     method public void registerCallback(android.view.autofill.AutofillManager.AutofillCallback);
     method public void requestAutofill(android.view.View);
     method public void requestAutofill(android.view.View, int, android.graphics.Rect);
+    method public void setUserData(android.service.autofill.UserData);
     method public void unregisterCallback(android.view.autofill.AutofillManager.AutofillCallback);
     field public static final java.lang.String EXTRA_ASSIST_STRUCTURE = "android.view.autofill.extra.ASSIST_STRUCTURE";
     field public static final java.lang.String EXTRA_AUTHENTICATION_RESULT = "android.view.autofill.extra.AUTHENTICATION_RESULT";
@@ -49584,6 +49460,44 @@ package android.webkit {
   public class SslErrorHandler extends android.os.Handler {
     method public void cancel();
     method public void proceed();
+  }
+
+  public class TracingConfig {
+    ctor public TracingConfig(int);
+    ctor public TracingConfig(int, java.lang.String, int);
+    method public java.lang.String getCustomCategoryPattern();
+    method public int getPresetCategories();
+    method public int getTracingMode();
+    field public static final int CATEGORIES_FRAME_VIEWER = 4; // 0x4
+    field public static final int CATEGORIES_INPUT_LATENCY = 1; // 0x1
+    field public static final int CATEGORIES_JAVASCRIPT_AND_RENDERING = 3; // 0x3
+    field public static final int CATEGORIES_NONE = -1; // 0xffffffff
+    field public static final int CATEGORIES_RENDERING = 2; // 0x2
+    field public static final int CATEGORIES_WEB_DEVELOPER = 0; // 0x0
+    field public static final int RECORD_CONTINUOUSLY = 1; // 0x1
+    field public static final int RECORD_TO_CONSOLE = 3; // 0x3
+    field public static final int RECORD_UNTIL_FULL = 0; // 0x0
+    field public static final int RECORD_UNTIL_FULL_LARGE_BUFFER = 2; // 0x2
+  }
+
+  public abstract class TracingController {
+    ctor public TracingController();
+    method public static android.webkit.TracingController getInstance();
+    method public abstract boolean isTracing();
+    method public abstract boolean start(android.webkit.TracingConfig);
+    method public abstract boolean stop();
+    method public abstract boolean stopAndFlush(android.webkit.TracingController.TracingOutputStream, android.os.Handler);
+  }
+
+  public static abstract interface TracingController.TracingOutputStream {
+    method public abstract void complete();
+    method public abstract void write(byte[]);
+  }
+
+  public class TracingFileOutputStream implements android.webkit.TracingController.TracingOutputStream {
+    ctor public TracingFileOutputStream(java.lang.String) throws java.io.FileNotFoundException;
+    method public void complete();
+    method public void write(byte[]);
   }
 
   public final class URLUtil {
