@@ -3961,7 +3961,8 @@ package android.app {
     field public static final int IMPORTANCE_PERCEPTIBLE = 230; // 0xe6
     field public static final int IMPORTANCE_PERCEPTIBLE_PRE_26 = 130; // 0x82
     field public static final int IMPORTANCE_SERVICE = 300; // 0x12c
-    field public static final int IMPORTANCE_TOP_SLEEPING = 150; // 0x96
+    field public static final int IMPORTANCE_TOP_SLEEPING = 325; // 0x145
+    field public static final deprecated int IMPORTANCE_TOP_SLEEPING_PRE_28 = 150; // 0x96
     field public static final int IMPORTANCE_VISIBLE = 200; // 0xc8
     field public static final int REASON_PROVIDER_IN_USE = 1; // 0x1
     field public static final int REASON_SERVICE_IN_USE = 2; // 0x2
@@ -41511,61 +41512,6 @@ package android.telephony.mbms {
 
 }
 
-package android.test {
-
-  public deprecated class AndroidTestCase extends junit.framework.TestCase {
-    ctor public AndroidTestCase();
-    method public void assertActivityRequiresPermission(java.lang.String, java.lang.String, java.lang.String);
-    method public void assertReadingContentUriRequiresPermission(android.net.Uri, java.lang.String);
-    method public void assertWritingContentUriRequiresPermission(android.net.Uri, java.lang.String);
-    method public android.content.Context getContext();
-    method protected void scrubClass(java.lang.Class<?>) throws java.lang.IllegalAccessException;
-    method public void setContext(android.content.Context);
-    method public void testAndroidTestCaseSetupProperly();
-    field protected android.content.Context mContext;
-  }
-
-  public abstract deprecated class FlakyTest implements java.lang.annotation.Annotation {
-  }
-
-  public deprecated class InstrumentationTestCase extends junit.framework.TestCase {
-    ctor public InstrumentationTestCase();
-    method public android.app.Instrumentation getInstrumentation();
-    method public deprecated void injectInsrumentation(android.app.Instrumentation);
-    method public void injectInstrumentation(android.app.Instrumentation);
-    method public final <T extends android.app.Activity> T launchActivity(java.lang.String, java.lang.Class<T>, android.os.Bundle);
-    method public final <T extends android.app.Activity> T launchActivityWithIntent(java.lang.String, java.lang.Class<T>, android.content.Intent);
-    method public void runTestOnUiThread(java.lang.Runnable) throws java.lang.Throwable;
-    method public void sendKeys(java.lang.String);
-    method public void sendKeys(int...);
-    method public void sendRepeatedKeys(int...);
-  }
-
-  public deprecated class InstrumentationTestSuite extends junit.framework.TestSuite {
-    ctor public InstrumentationTestSuite(android.app.Instrumentation);
-    ctor public InstrumentationTestSuite(java.lang.String, android.app.Instrumentation);
-    ctor public InstrumentationTestSuite(java.lang.Class, android.app.Instrumentation);
-    method public void addTestSuite(java.lang.Class);
-  }
-
-  public abstract deprecated interface PerformanceTestCase {
-    method public abstract boolean isPerformanceOnly();
-    method public abstract int startPerformance(android.test.PerformanceTestCase.Intermediates);
-  }
-
-  public static abstract interface PerformanceTestCase.Intermediates {
-    method public abstract void addIntermediate(java.lang.String);
-    method public abstract void addIntermediate(java.lang.String, long);
-    method public abstract void finishTiming(boolean);
-    method public abstract void setInternalIterations(int);
-    method public abstract void startTiming(boolean);
-  }
-
-  public abstract deprecated class UiThreadTest implements java.lang.annotation.Annotation {
-  }
-
-}
-
 package android.test.mock {
 
   public deprecated class MockApplication extends android.app.Application {
@@ -41855,25 +41801,6 @@ package android.test.mock {
     method public android.content.res.ColorStateList getColorStateList(int) throws android.content.res.Resources.NotFoundException;
     method public android.graphics.drawable.Drawable getDrawable(int) throws android.content.res.Resources.NotFoundException;
     method public void updateConfiguration(android.content.res.Configuration, android.util.DisplayMetrics);
-  }
-
-}
-
-package android.test.suitebuilder.annotation {
-
-  public abstract deprecated class LargeTest implements java.lang.annotation.Annotation {
-  }
-
-  public abstract deprecated class MediumTest implements java.lang.annotation.Annotation {
-  }
-
-  public abstract deprecated class SmallTest implements java.lang.annotation.Annotation {
-  }
-
-  public abstract deprecated class Smoke implements java.lang.annotation.Annotation {
-  }
-
-  public abstract deprecated class Suppress implements java.lang.annotation.Annotation {
   }
 
 }
@@ -49193,9 +49120,13 @@ package android.view.textclassifier {
     method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.os.LocaleList);
     method public default android.view.textclassifier.TextLinks generateLinks(java.lang.CharSequence, android.view.textclassifier.TextLinks.Options);
     method public default android.view.textclassifier.TextLinks generateLinks(java.lang.CharSequence);
+    method public default java.util.Collection<java.lang.String> getEntitiesForPreset(int);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.view.textclassifier.TextSelection.Options);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.os.LocaleList);
+    field public static final int ENTITY_PRESET_ALL = 0; // 0x0
+    field public static final int ENTITY_PRESET_BASE = 2; // 0x2
+    field public static final int ENTITY_PRESET_NONE = 1; // 0x1
     field public static final android.view.textclassifier.TextClassifier NO_OP;
     field public static final java.lang.String TYPE_ADDRESS = "address";
     field public static final java.lang.String TYPE_EMAIL = "email";
@@ -49203,6 +49134,13 @@ package android.view.textclassifier {
     field public static final java.lang.String TYPE_PHONE = "phone";
     field public static final java.lang.String TYPE_UNKNOWN = "";
     field public static final java.lang.String TYPE_URL = "url";
+  }
+
+  public static final class TextClassifier.EntityConfig {
+    ctor public TextClassifier.EntityConfig(int);
+    method public android.view.textclassifier.TextClassifier.EntityConfig excludeEntities(java.lang.String...);
+    method public java.util.List<java.lang.String> getEntities(android.view.textclassifier.TextClassifier);
+    method public android.view.textclassifier.TextClassifier.EntityConfig includeEntities(java.lang.String...);
   }
 
   public final class TextLinks {
@@ -49219,7 +49157,9 @@ package android.view.textclassifier {
   public static final class TextLinks.Options {
     ctor public TextLinks.Options();
     method public android.os.LocaleList getDefaultLocales();
+    method public android.view.textclassifier.TextClassifier.EntityConfig getEntityConfig();
     method public android.view.textclassifier.TextLinks.Options setDefaultLocales(android.os.LocaleList);
+    method public android.view.textclassifier.TextLinks.Options setEntityConfig(android.view.textclassifier.TextClassifier.EntityConfig);
   }
 
   public static final class TextLinks.TextLink {
@@ -49920,6 +49860,7 @@ package android.webkit {
     method public android.print.PrintDocumentAdapter createPrintDocumentAdapter(java.lang.String);
     method public android.webkit.WebMessagePort[] createWebMessageChannel();
     method public void destroy();
+    method public static void disableWebView();
     method public void documentHasImages(android.os.Message);
     method public static void enableSlowWholeDocumentDraw();
     method public void evaluateJavascript(java.lang.String, android.webkit.ValueCallback<java.lang.String>);
@@ -49980,6 +49921,7 @@ package android.webkit {
     method public void saveWebArchive(java.lang.String);
     method public void saveWebArchive(java.lang.String, boolean, android.webkit.ValueCallback<java.lang.String>);
     method public deprecated void setCertificate(android.net.http.SslCertificate);
+    method public static void setDataDirectorySuffix(java.lang.String);
     method public void setDownloadListener(android.webkit.DownloadListener);
     method public void setFindListener(android.webkit.WebView.FindListener);
     method public deprecated void setHorizontalScrollbarOverlay(boolean);
