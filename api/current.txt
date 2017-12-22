@@ -15488,6 +15488,7 @@ package android.hardware.camera2 {
     method public <T> T get(android.hardware.camera2.CameraCharacteristics.Key<T>);
     method public java.util.List<android.hardware.camera2.CaptureRequest.Key<?>> getAvailableCaptureRequestKeys();
     method public java.util.List<android.hardware.camera2.CaptureResult.Key<?>> getAvailableCaptureResultKeys();
+    method public java.util.List<android.hardware.camera2.CaptureRequest.Key<?>> getAvailableSessionKeys();
     method public java.util.List<android.hardware.camera2.CameraCharacteristics.Key<?>> getKeys();
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> COLOR_CORRECTION_AVAILABLE_ABERRATION_MODES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AE_AVAILABLE_ANTIBANDING_MODES;
@@ -15586,6 +15587,7 @@ package android.hardware.camera2 {
     method public abstract void close();
     method public abstract android.hardware.camera2.CaptureRequest.Builder createCaptureRequest(int) throws android.hardware.camera2.CameraAccessException;
     method public abstract void createCaptureSession(java.util.List<android.view.Surface>, android.hardware.camera2.CameraCaptureSession.StateCallback, android.os.Handler) throws android.hardware.camera2.CameraAccessException;
+    method public void createCaptureSession(android.hardware.camera2.params.SessionConfiguration) throws android.hardware.camera2.CameraAccessException;
     method public abstract void createCaptureSessionByOutputConfigurations(java.util.List<android.hardware.camera2.params.OutputConfiguration>, android.hardware.camera2.CameraCaptureSession.StateCallback, android.os.Handler) throws android.hardware.camera2.CameraAccessException;
     method public abstract void createConstrainedHighSpeedCaptureSession(java.util.List<android.view.Surface>, android.hardware.camera2.CameraCaptureSession.StateCallback, android.os.Handler) throws android.hardware.camera2.CameraAccessException;
     method public abstract android.hardware.camera2.CaptureRequest.Builder createReprocessCaptureRequest(android.hardware.camera2.TotalCaptureResult) throws android.hardware.camera2.CameraAccessException;
@@ -16127,6 +16129,20 @@ package android.hardware.camera2.params {
     field public static final int GREEN_EVEN = 1; // 0x1
     field public static final int GREEN_ODD = 2; // 0x2
     field public static final int RED = 0; // 0x0
+  }
+
+  public final class SessionConfiguration {
+    ctor public SessionConfiguration(int, java.util.List<android.hardware.camera2.params.OutputConfiguration>, android.hardware.camera2.CameraCaptureSession.StateCallback, android.os.Handler);
+    method public android.os.Handler getHandler();
+    method public android.hardware.camera2.params.InputConfiguration getInputConfiguration();
+    method public java.util.List<android.hardware.camera2.params.OutputConfiguration> getOutputConfigurations();
+    method public android.hardware.camera2.CaptureRequest getSessionParameters();
+    method public int getSessionType();
+    method public android.hardware.camera2.CameraCaptureSession.StateCallback getStateCallback();
+    method public void setInputConfiguration(android.hardware.camera2.params.InputConfiguration);
+    method public void setSessionParameters(android.hardware.camera2.CaptureRequest);
+    field public static final int SESSION_HIGH_SPEED = 1; // 0x1
+    field public static final int SESSION_REGULAR = 0; // 0x0
   }
 
   public final class StreamConfigurationMap {
