@@ -39981,8 +39981,13 @@ package android.telephony {
     field public static final java.lang.String KEY_WORLD_PHONE_BOOL = "world_phone_bool";
   }
 
-  public final class CellIdentityCdma implements android.os.Parcelable {
+  public abstract class CellIdentity implements android.os.Parcelable {
     method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.CellIdentity> CREATOR;
+  }
+
+  public final class CellIdentityCdma extends android.telephony.CellIdentity {
     method public int getBasestationId();
     method public int getLatitude();
     method public int getLongitude();
@@ -39994,8 +39999,7 @@ package android.telephony {
     field public static final android.os.Parcelable.Creator<android.telephony.CellIdentityCdma> CREATOR;
   }
 
-  public final class CellIdentityGsm implements android.os.Parcelable {
-    method public int describeContents();
+  public final class CellIdentityGsm extends android.telephony.CellIdentity {
     method public int getArfcn();
     method public int getBsic();
     method public int getCid();
@@ -40012,8 +40016,7 @@ package android.telephony {
     field public static final android.os.Parcelable.Creator<android.telephony.CellIdentityGsm> CREATOR;
   }
 
-  public final class CellIdentityLte implements android.os.Parcelable {
-    method public int describeContents();
+  public final class CellIdentityLte extends android.telephony.CellIdentity {
     method public int getCi();
     method public int getEarfcn();
     method public deprecated int getMcc();
@@ -40029,8 +40032,17 @@ package android.telephony {
     field public static final android.os.Parcelable.Creator<android.telephony.CellIdentityLte> CREATOR;
   }
 
-  public final class CellIdentityWcdma implements android.os.Parcelable {
-    method public int describeContents();
+  public final class CellIdentityTdscdma extends android.telephony.CellIdentity {
+    method public int getCid();
+    method public int getCpid();
+    method public int getLac();
+    method public java.lang.String getMccStr();
+    method public java.lang.String getMncStr();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.CellIdentityTdscdma> CREATOR;
+  }
+
+  public final class CellIdentityWcdma extends android.telephony.CellIdentity {
     method public int getCid();
     method public int getLac();
     method public deprecated int getMcc();
