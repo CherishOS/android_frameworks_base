@@ -5531,6 +5531,14 @@ public final class Settings {
          * @hide
          */
         public static final String SWIPE_TO_SCREENSHOT = "swipe_to_screenshot";
+		
+		/**
+         * Whether to play notification sound and vibration if screen is ON
+         * 0 - never
+         * 1 - always
+         * @hide
+         */
+        public static final String NOTIFICATION_SOUND_VIB_SCREEN_ON = "notification_sound_vib_screen_on";
 
         /**
          * Whether to wake the display when plugging or unplugging the charger
