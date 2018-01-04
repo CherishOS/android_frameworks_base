@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The Android Open Source Project
+ * Copyright 2017 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-package com.android.internal.net;
+package com.android.dcl;
 
-import android.os.SharedMemory;
-
-/** {@hide} */
-interface INetworkWatchlistManager {
-    boolean startWatchlistLogging();
-    boolean stopWatchlistLogging();
-    void reloadWatchlist();
-    void reportWatchlistIfNecessary();
+/** Dummy class which is built into a jar purely so we can pass it to DexClassLoader. */
+public final class Simple {
+    public Simple() {}
 }
