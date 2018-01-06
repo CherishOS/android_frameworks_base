@@ -25781,12 +25781,18 @@ package android.net {
   }
 
   public final class IpSecManager {
-    method public android.net.IpSecManager.SecurityParameterIndex allocateSecurityParameterIndex(int, java.net.InetAddress) throws android.net.IpSecManager.ResourceUnavailableException;
-    method public android.net.IpSecManager.SecurityParameterIndex allocateSecurityParameterIndex(int, java.net.InetAddress, int) throws android.net.IpSecManager.ResourceUnavailableException, android.net.IpSecManager.SpiUnavailableException;
-    method public void applyTransportModeTransform(java.io.FileDescriptor, android.net.IpSecTransform) throws java.io.IOException;
+    method public android.net.IpSecManager.SecurityParameterIndex allocateSecurityParameterIndex(java.net.InetAddress) throws android.net.IpSecManager.ResourceUnavailableException;
+    method public android.net.IpSecManager.SecurityParameterIndex allocateSecurityParameterIndex(java.net.InetAddress, int) throws android.net.IpSecManager.ResourceUnavailableException, android.net.IpSecManager.SpiUnavailableException;
+    method public void applyTransportModeTransform(java.net.Socket, int, android.net.IpSecTransform) throws java.io.IOException;
+    method public void applyTransportModeTransform(java.net.DatagramSocket, int, android.net.IpSecTransform) throws java.io.IOException;
+    method public void applyTransportModeTransform(java.io.FileDescriptor, int, android.net.IpSecTransform) throws java.io.IOException;
     method public android.net.IpSecManager.UdpEncapsulationSocket openUdpEncapsulationSocket(int) throws java.io.IOException, android.net.IpSecManager.ResourceUnavailableException;
     method public android.net.IpSecManager.UdpEncapsulationSocket openUdpEncapsulationSocket() throws java.io.IOException, android.net.IpSecManager.ResourceUnavailableException;
-    method public void removeTransportModeTransform(java.io.FileDescriptor, android.net.IpSecTransform) throws java.io.IOException;
+    method public void removeTransportModeTransforms(java.net.Socket, android.net.IpSecTransform) throws java.io.IOException;
+    method public void removeTransportModeTransforms(java.net.DatagramSocket, android.net.IpSecTransform) throws java.io.IOException;
+    method public void removeTransportModeTransforms(java.io.FileDescriptor, android.net.IpSecTransform) throws java.io.IOException;
+    field public static final int DIRECTION_IN = 0; // 0x0
+    field public static final int DIRECTION_OUT = 1; // 0x1
   }
 
   public static final class IpSecManager.ResourceUnavailableException extends android.util.AndroidException {
@@ -25809,18 +25815,15 @@ package android.net {
 
   public final class IpSecTransform implements java.lang.AutoCloseable {
     method public void close();
-    field public static final int DIRECTION_IN = 0; // 0x0
-    field public static final int DIRECTION_OUT = 1; // 0x1
   }
 
   public static class IpSecTransform.Builder {
     ctor public IpSecTransform.Builder(android.content.Context);
-    method public android.net.IpSecTransform buildTransportModeTransform(java.net.InetAddress) throws java.io.IOException, android.net.IpSecManager.ResourceUnavailableException, android.net.IpSecManager.SpiUnavailableException;
-    method public android.net.IpSecTransform.Builder setAuthenticatedEncryption(int, android.net.IpSecAlgorithm);
-    method public android.net.IpSecTransform.Builder setAuthentication(int, android.net.IpSecAlgorithm);
-    method public android.net.IpSecTransform.Builder setEncryption(int, android.net.IpSecAlgorithm);
+    method public android.net.IpSecTransform buildTransportModeTransform(java.net.InetAddress, android.net.IpSecManager.SecurityParameterIndex) throws java.io.IOException, android.net.IpSecManager.ResourceUnavailableException, android.net.IpSecManager.SpiUnavailableException;
+    method public android.net.IpSecTransform.Builder setAuthenticatedEncryption(android.net.IpSecAlgorithm);
+    method public android.net.IpSecTransform.Builder setAuthentication(android.net.IpSecAlgorithm);
+    method public android.net.IpSecTransform.Builder setEncryption(android.net.IpSecAlgorithm);
     method public android.net.IpSecTransform.Builder setIpv4Encapsulation(android.net.IpSecManager.UdpEncapsulationSocket, int);
-    method public android.net.IpSecTransform.Builder setSpi(int, android.net.IpSecManager.SecurityParameterIndex);
   }
 
   public class LinkAddress implements android.os.Parcelable {
