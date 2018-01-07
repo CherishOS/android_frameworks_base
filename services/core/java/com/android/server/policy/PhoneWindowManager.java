@@ -4788,6 +4788,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         IDreamManager dreamManager = getDreamManager();
         boolean isDreaming = false;
         try {
+            if (dreamManager != null && dreamManager.isDozing()) {
+                if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
+                    || keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+                    return false;
+                }
+            }
             if (dreamManager != null && dreamManager.isDreaming() && !dreamManager.isDozing()) {
                 isDreaming = true;
             }
