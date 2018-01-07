@@ -579,6 +579,7 @@ package android {
     field public static final int fadingEdge = 16842975; // 0x10100df
     field public static final int fadingEdgeLength = 16842976; // 0x10100e0
     field public static final int fadingMode = 16843745; // 0x10103e1
+    field public static final int fallbackLineSpacing = 16844155; // 0x101057b
     field public static final int fastScrollAlwaysVisible = 16843573; // 0x1010335
     field public static final int fastScrollEnabled = 16843302; // 0x1010226
     field public static final int fastScrollOverlayPosition = 16843578; // 0x101033a
@@ -6338,7 +6339,7 @@ package android.app.admin {
     method public android.os.UserHandle createAndManageUser(android.content.ComponentName, java.lang.String, android.content.ComponentName, android.os.PersistableBundle, int);
     method public void enableSystemApp(android.content.ComponentName, java.lang.String);
     method public int enableSystemApp(android.content.ComponentName, android.content.Intent);
-    method public android.security.AttestedKeyPair generateKeyPair(android.content.ComponentName, java.lang.String, android.security.keystore.KeyGenParameterSpec);
+    method public android.security.AttestedKeyPair generateKeyPair(android.content.ComponentName, java.lang.String, android.security.keystore.KeyGenParameterSpec, int);
     method public java.lang.String[] getAccountTypesWithManagementDisabled();
     method public java.util.List<android.content.ComponentName> getActiveAdmins();
     method public java.util.Set<java.lang.String> getAffiliationIds(android.content.ComponentName);
@@ -6572,6 +6573,10 @@ package android.app.admin {
     field public static final int FLAG_EVICT_CREDENTIAL_ENCRYPTION_KEY = 1; // 0x1
     field public static final int FLAG_MANAGED_CAN_ACCESS_PARENT = 2; // 0x2
     field public static final int FLAG_PARENT_CAN_ACCESS_MANAGED = 1; // 0x1
+    field public static final int ID_TYPE_BASE_INFO = 1; // 0x1
+    field public static final int ID_TYPE_IMEI = 4; // 0x4
+    field public static final int ID_TYPE_MEID = 8; // 0x8
+    field public static final int ID_TYPE_SERIAL = 2; // 0x2
     field public static final int KEYGUARD_DISABLE_FEATURES_ALL = 2147483647; // 0x7fffffff
     field public static final int KEYGUARD_DISABLE_FEATURES_NONE = 0; // 0x0
     field public static final int KEYGUARD_DISABLE_FINGERPRINT = 32; // 0x20
@@ -6749,6 +6754,7 @@ package android.app.assist {
     method public java.lang.CharSequence getText();
     method public int getTextBackgroundColor();
     method public int getTextColor();
+    method public java.lang.String getTextIdEntry();
     method public int[] getTextLineBaselines();
     method public int[] getTextLineCharOffsets();
     method public int getTextSelectionEnd();
@@ -7042,6 +7048,7 @@ package android.app.slice {
     field public static final java.lang.String HINT_SUMMARY = "summary";
     field public static final java.lang.String HINT_TITLE = "title";
     field public static final java.lang.String SUBTYPE_COLOR = "color";
+    field public static final java.lang.String SUBTYPE_CONTENT_DESCRIPTION = "content_description";
     field public static final java.lang.String SUBTYPE_MESSAGE = "message";
     field public static final java.lang.String SUBTYPE_PRIORITY = "priority";
     field public static final java.lang.String SUBTYPE_SLIDER = "slider";
@@ -15513,6 +15520,7 @@ package android.hardware.camera2 {
     field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Boolean> FLASH_INFO_AVAILABLE;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> HOT_PIXEL_AVAILABLE_HOT_PIXEL_MODES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> INFO_SUPPORTED_HARDWARE_LEVEL;
+    field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.String> INFO_VERSION;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<android.util.Size[]> JPEG_AVAILABLE_THUMBNAIL_SIZES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> LENS_FACING;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<float[]> LENS_INFO_AVAILABLE_APERTURES;
@@ -27385,6 +27393,7 @@ package android.net.wifi.aware {
     method public void onMessageSendSucceeded(int);
     method public void onPublishStarted(android.net.wifi.aware.PublishDiscoverySession);
     method public void onServiceDiscovered(android.net.wifi.aware.PeerHandle, byte[], java.util.List<byte[]>);
+    method public void onServiceDiscoveredWithinRange(android.net.wifi.aware.PeerHandle, byte[], java.util.List<byte[]>, int);
     method public void onSessionConfigFailed();
     method public void onSessionConfigUpdated();
     method public void onSessionTerminated();
@@ -27412,6 +27421,7 @@ package android.net.wifi.aware {
     method public android.net.wifi.aware.PublishConfig build();
     method public android.net.wifi.aware.PublishConfig.Builder setMatchFilter(java.util.List<byte[]>);
     method public android.net.wifi.aware.PublishConfig.Builder setPublishType(int);
+    method public android.net.wifi.aware.PublishConfig.Builder setRangingEnabled(boolean);
     method public android.net.wifi.aware.PublishConfig.Builder setServiceName(java.lang.String);
     method public android.net.wifi.aware.PublishConfig.Builder setServiceSpecificInfo(byte[]);
     method public android.net.wifi.aware.PublishConfig.Builder setTerminateNotificationEnabled(boolean);
@@ -27434,6 +27444,8 @@ package android.net.wifi.aware {
     ctor public SubscribeConfig.Builder();
     method public android.net.wifi.aware.SubscribeConfig build();
     method public android.net.wifi.aware.SubscribeConfig.Builder setMatchFilter(java.util.List<byte[]>);
+    method public android.net.wifi.aware.SubscribeConfig.Builder setMaxDistanceMm(int);
+    method public android.net.wifi.aware.SubscribeConfig.Builder setMinDistanceMm(int);
     method public android.net.wifi.aware.SubscribeConfig.Builder setServiceName(java.lang.String);
     method public android.net.wifi.aware.SubscribeConfig.Builder setServiceSpecificInfo(byte[]);
     method public android.net.wifi.aware.SubscribeConfig.Builder setSubscribeType(int);
@@ -37723,18 +37735,12 @@ package android.service.autofill {
     method public android.service.autofill.Dataset.Builder setValue(android.view.autofill.AutofillId, android.view.autofill.AutofillValue, java.util.regex.Pattern, android.widget.RemoteViews);
   }
 
-  public final class EditDistanceScorer implements android.os.Parcelable android.service.autofill.Scorer {
-    method public int describeContents();
-    method public static android.service.autofill.EditDistanceScorer getInstance();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.service.autofill.EditDistanceScorer> CREATOR;
-  }
-
   public final class FieldClassification {
     method public java.util.List<android.service.autofill.FieldClassification.Match> getMatches();
   }
 
   public static final class FieldClassification.Match {
+    method public java.lang.String getAlgorithm();
     method public java.lang.String getRemoteId();
     method public float getScore();
   }
@@ -37886,9 +37892,6 @@ package android.service.autofill {
     field public static final android.os.Parcelable.Creator<android.service.autofill.SaveRequest> CREATOR;
   }
 
-  public abstract interface Scorer {
-  }
-
   public final class TextValueSanitizer implements android.os.Parcelable android.service.autofill.Sanitizer {
     ctor public TextValueSanitizer(java.util.regex.Pattern, java.lang.String);
     method public int describeContents();
@@ -37901,6 +37904,7 @@ package android.service.autofill {
 
   public final class UserData implements android.os.Parcelable {
     method public int describeContents();
+    method public java.lang.String getFieldClassificationAlgorithm();
     method public static int getMaxFieldClassificationIdsSize();
     method public static int getMaxUserDataSize();
     method public static int getMaxValueLength();
@@ -37910,9 +37914,10 @@ package android.service.autofill {
   }
 
   public static final class UserData.Builder {
-    ctor public UserData.Builder(android.service.autofill.Scorer, java.lang.String, java.lang.String);
+    ctor public UserData.Builder(java.lang.String, java.lang.String);
     method public android.service.autofill.UserData.Builder add(java.lang.String, java.lang.String);
     method public android.service.autofill.UserData build();
+    method public android.service.autofill.UserData.Builder setFieldClassificationAlgorithm(java.lang.String, android.os.Bundle);
   }
 
   public abstract interface Validator {
@@ -41196,7 +41201,7 @@ package android.telephony {
 
   public class SubscriptionManager {
     method public void addOnSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnSubscriptionsChangedListener);
-    method public static android.telephony.SubscriptionManager from(android.content.Context);
+    method public static deprecated android.telephony.SubscriptionManager from(android.content.Context);
     method public android.telephony.SubscriptionInfo getActiveSubscriptionInfo(int);
     method public int getActiveSubscriptionInfoCount();
     method public int getActiveSubscriptionInfoCountMax();
@@ -47258,6 +47263,7 @@ package android.view {
     method public abstract void setSelected(boolean);
     method public abstract void setText(java.lang.CharSequence);
     method public abstract void setText(java.lang.CharSequence, int, int);
+    method public void setTextIdEntry(java.lang.String);
     method public abstract void setTextLines(int[], int[]);
     method public abstract void setTextStyle(float, int, int, int);
     method public abstract void setTransformation(android.graphics.Matrix);
@@ -47777,6 +47783,7 @@ package android.view.accessibility {
     method public java.lang.CharSequence getPackageName();
     method public android.view.accessibility.AccessibilityRecord getRecord(int);
     method public int getRecordCount();
+    method public int getWindowChanges();
     method public void initFromParcel(android.os.Parcel);
     method public static android.view.accessibility.AccessibilityEvent obtain(int);
     method public static android.view.accessibility.AccessibilityEvent obtain(android.view.accessibility.AccessibilityEvent);
@@ -47821,6 +47828,17 @@ package android.view.accessibility {
     field public static final int TYPE_WINDOWS_CHANGED = 4194304; // 0x400000
     field public static final int TYPE_WINDOW_CONTENT_CHANGED = 2048; // 0x800
     field public static final int TYPE_WINDOW_STATE_CHANGED = 32; // 0x20
+    field public static final int WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED = 128; // 0x80
+    field public static final int WINDOWS_CHANGE_ACTIVE = 32; // 0x20
+    field public static final int WINDOWS_CHANGE_ADDED = 1; // 0x1
+    field public static final int WINDOWS_CHANGE_BOUNDS = 8; // 0x8
+    field public static final int WINDOWS_CHANGE_CHILDREN = 512; // 0x200
+    field public static final int WINDOWS_CHANGE_FOCUSED = 64; // 0x40
+    field public static final int WINDOWS_CHANGE_LAYER = 16; // 0x10
+    field public static final int WINDOWS_CHANGE_PARENT = 256; // 0x100
+    field public static final int WINDOWS_CHANGE_PIP = 1024; // 0x400
+    field public static final int WINDOWS_CHANGE_REMOVED = 2; // 0x2
+    field public static final int WINDOWS_CHANGE_TITLE = 4; // 0x4
   }
 
   public abstract interface AccessibilityEventSource {
@@ -48532,6 +48550,8 @@ package android.view.autofill {
     method public void commit();
     method public void disableAutofillServices();
     method public android.content.ComponentName getAutofillServiceComponentName();
+    method public java.util.List<java.lang.String> getAvailableFieldClassificationAlgorithms();
+    method public java.lang.String getDefaultFieldClassificationAlgorithm();
     method public android.service.autofill.UserData getUserData();
     method public boolean hasEnabledAutofillServices();
     method public boolean isAutofillSupported();
@@ -52291,6 +52311,7 @@ package android.widget {
     method public boolean isAllCaps();
     method public boolean isCursorVisible();
     method public boolean isElegantTextHeight();
+    method public boolean isFallbackLineSpacing();
     method public boolean isInputMethodTarget();
     method public boolean isSuggestionsEnabled();
     method public boolean isTextSelectable();
@@ -52334,6 +52355,7 @@ package android.widget {
     method public void setError(java.lang.CharSequence);
     method public void setError(java.lang.CharSequence, android.graphics.drawable.Drawable);
     method public void setExtractedText(android.view.inputmethod.ExtractedText);
+    method public void setFallbackLineSpacing(boolean);
     method public void setFilters(android.text.InputFilter[]);
     method public void setFontFeatureSettings(java.lang.String);
     method public boolean setFontVariationSettings(java.lang.String);
