@@ -9340,6 +9340,7 @@ package android.content {
     field public static final java.lang.String WALLPAPER_SERVICE = "wallpaper";
     field public static final java.lang.String WIFI_AWARE_SERVICE = "wifiaware";
     field public static final java.lang.String WIFI_P2P_SERVICE = "wifip2p";
+    field public static final java.lang.String WIFI_RTT_RANGING_SERVICE = "wifirtt";
     field public static final java.lang.String WIFI_SERVICE = "wifi";
     field public static final java.lang.String WINDOW_SERVICE = "window";
   }
@@ -11122,6 +11123,7 @@ package android.content.pm {
     field public static final java.lang.String FEATURE_WIFI_AWARE = "android.hardware.wifi.aware";
     field public static final java.lang.String FEATURE_WIFI_DIRECT = "android.hardware.wifi.direct";
     field public static final java.lang.String FEATURE_WIFI_PASSPOINT = "android.hardware.wifi.passpoint";
+    field public static final java.lang.String FEATURE_WIFI_RTT = "android.hardware.wifi.rtt";
     field public static final int GET_ACTIVITIES = 1; // 0x1
     field public static final int GET_CONFIGURATIONS = 16384; // 0x4000
     field public static final deprecated int GET_DISABLED_COMPONENTS = 512; // 0x200
@@ -27784,6 +27786,55 @@ package android.net.wifi.p2p.nsd {
   public class WifiP2pUpnpServiceRequest extends android.net.wifi.p2p.nsd.WifiP2pServiceRequest {
     method public static android.net.wifi.p2p.nsd.WifiP2pUpnpServiceRequest newInstance();
     method public static android.net.wifi.p2p.nsd.WifiP2pUpnpServiceRequest newInstance(java.lang.String);
+  }
+
+}
+
+package android.net.wifi.rtt {
+
+  public final class RangingRequest implements android.os.Parcelable {
+    method public int describeContents();
+    method public static int getMaxPeers();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.wifi.rtt.RangingRequest> CREATOR;
+  }
+
+  public static final class RangingRequest.Builder {
+    ctor public RangingRequest.Builder();
+    method public android.net.wifi.rtt.RangingRequest.Builder addAccessPoint(android.net.wifi.ScanResult);
+    method public android.net.wifi.rtt.RangingRequest.Builder addAccessPoints(java.util.List<android.net.wifi.ScanResult>);
+    method public android.net.wifi.rtt.RangingRequest.Builder addWifiAwarePeer(android.net.MacAddress);
+    method public android.net.wifi.rtt.RangingRequest.Builder addWifiAwarePeer(android.net.wifi.aware.PeerHandle);
+    method public android.net.wifi.rtt.RangingRequest build();
+  }
+
+  public final class RangingResult implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getDistanceMm();
+    method public int getDistanceStdDevMm();
+    method public android.net.MacAddress getMacAddress();
+    method public android.net.wifi.aware.PeerHandle getPeerHandle();
+    method public long getRangingTimestampUs();
+    method public int getRssi();
+    method public int getStatus();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.wifi.rtt.RangingResult> CREATOR;
+    field public static final int STATUS_FAIL = 1; // 0x1
+    field public static final int STATUS_SUCCESS = 0; // 0x0
+  }
+
+  public abstract class RangingResultCallback {
+    ctor public RangingResultCallback();
+    method public abstract void onRangingFailure(int);
+    method public abstract void onRangingResults(java.util.List<android.net.wifi.rtt.RangingResult>);
+    field public static final int STATUS_CODE_FAIL = 1; // 0x1
+    field public static final int STATUS_CODE_FAIL_RTT_NOT_AVAILABLE = 2; // 0x2
+  }
+
+  public class WifiRttManager {
+    method public boolean isAvailable();
+    method public void startRanging(android.net.wifi.rtt.RangingRequest, android.net.wifi.rtt.RangingResultCallback, android.os.Handler);
+    field public static final java.lang.String ACTION_WIFI_RTT_STATE_CHANGED = "android.net.wifi.rtt.action.WIFI_RTT_STATE_CHANGED";
   }
 
 }
