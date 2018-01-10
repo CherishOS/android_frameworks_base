@@ -9340,6 +9340,7 @@ package android.content {
     field public static final java.lang.String WALLPAPER_SERVICE = "wallpaper";
     field public static final java.lang.String WIFI_AWARE_SERVICE = "wifiaware";
     field public static final java.lang.String WIFI_P2P_SERVICE = "wifip2p";
+    field public static final java.lang.String WIFI_RTT_RANGING_SERVICE = "wifirtt";
     field public static final java.lang.String WIFI_SERVICE = "wifi";
     field public static final java.lang.String WINDOW_SERVICE = "window";
   }
@@ -11122,6 +11123,7 @@ package android.content.pm {
     field public static final java.lang.String FEATURE_WIFI_AWARE = "android.hardware.wifi.aware";
     field public static final java.lang.String FEATURE_WIFI_DIRECT = "android.hardware.wifi.direct";
     field public static final java.lang.String FEATURE_WIFI_PASSPOINT = "android.hardware.wifi.passpoint";
+    field public static final java.lang.String FEATURE_WIFI_RTT = "android.hardware.wifi.rtt";
     field public static final int GET_ACTIVITIES = 1; // 0x1
     field public static final int GET_CONFIGURATIONS = 16384; // 0x4000
     field public static final deprecated int GET_DISABLED_COMPONENTS = 512; // 0x200
@@ -15531,6 +15533,7 @@ package android.hardware.camera2 {
     field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Float> LENS_INFO_HYPERFOCAL_DISTANCE;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Float> LENS_INFO_MINIMUM_FOCUS_DISTANCE;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<float[]> LENS_INTRINSIC_CALIBRATION;
+    field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> LENS_POSE_REFERENCE;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<float[]> LENS_POSE_ROTATION;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<float[]> LENS_POSE_TRANSLATION;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<float[]> LENS_RADIAL_DISTORTION;
@@ -15603,6 +15606,8 @@ package android.hardware.camera2 {
     method public abstract void createReprocessableCaptureSessionByConfigurations(android.hardware.camera2.params.InputConfiguration, java.util.List<android.hardware.camera2.params.OutputConfiguration>, android.hardware.camera2.CameraCaptureSession.StateCallback, android.os.Handler) throws android.hardware.camera2.CameraAccessException;
     method public abstract java.lang.String getId();
     field public static final int TEMPLATE_MANUAL = 6; // 0x6
+    field public static final int TEMPLATE_MOTION_TRACKING_BEST = 8; // 0x8
+    field public static final int TEMPLATE_MOTION_TRACKING_PREVIEW = 7; // 0x7
     field public static final int TEMPLATE_PREVIEW = 1; // 0x1
     field public static final int TEMPLATE_RECORD = 3; // 0x3
     field public static final int TEMPLATE_STILL_CAPTURE = 2; // 0x2
@@ -15705,6 +15710,7 @@ package android.hardware.camera2 {
     field public static final int CONTROL_AWB_STATE_SEARCHING = 1; // 0x1
     field public static final int CONTROL_CAPTURE_INTENT_CUSTOM = 0; // 0x0
     field public static final int CONTROL_CAPTURE_INTENT_MANUAL = 6; // 0x6
+    field public static final int CONTROL_CAPTURE_INTENT_MOTION_TRACKING = 7; // 0x7
     field public static final int CONTROL_CAPTURE_INTENT_PREVIEW = 1; // 0x1
     field public static final int CONTROL_CAPTURE_INTENT_STILL_CAPTURE = 2; // 0x2
     field public static final int CONTROL_CAPTURE_INTENT_VIDEO_RECORD = 3; // 0x3
@@ -15771,6 +15777,8 @@ package android.hardware.camera2 {
     field public static final int LENS_INFO_FOCUS_DISTANCE_CALIBRATION_UNCALIBRATED = 0; // 0x0
     field public static final int LENS_OPTICAL_STABILIZATION_MODE_OFF = 0; // 0x0
     field public static final int LENS_OPTICAL_STABILIZATION_MODE_ON = 1; // 0x1
+    field public static final int LENS_POSE_REFERENCE_GYROSCOPE = 1; // 0x1
+    field public static final int LENS_POSE_REFERENCE_PRIMARY_CAMERA = 0; // 0x0
     field public static final int LENS_STATE_MOVING = 1; // 0x1
     field public static final int LENS_STATE_STATIONARY = 0; // 0x0
     field public static final int NOISE_REDUCTION_MODE_FAST = 1; // 0x1
@@ -15784,6 +15792,7 @@ package android.hardware.camera2 {
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_DEPTH_OUTPUT = 8; // 0x8
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_MANUAL_POST_PROCESSING = 2; // 0x2
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR = 1; // 0x1
+    field public static final int REQUEST_AVAILABLE_CAPABILITIES_MOTION_TRACKING = 10; // 0xa
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_PRIVATE_REPROCESSING = 4; // 0x4
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_RAW = 3; // 0x3
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_READ_SENSOR_SETTINGS = 5; // 0x5
@@ -20179,6 +20188,13 @@ package android.icu.util {
     ctor public ICUUncheckedIOException(java.lang.String);
     ctor public ICUUncheckedIOException(java.lang.Throwable);
     ctor public ICUUncheckedIOException(java.lang.String, java.lang.Throwable);
+  }
+
+  public class IllformedLocaleException extends java.lang.RuntimeException {
+    ctor public IllformedLocaleException();
+    ctor public IllformedLocaleException(java.lang.String);
+    ctor public IllformedLocaleException(java.lang.String, int);
+    method public int getErrorIndex();
   }
 
   public class IndianCalendar extends android.icu.util.Calendar {
@@ -27268,7 +27284,7 @@ package android.net.wifi {
     method public void setTdlsEnabledWithMacAddress(java.lang.String, boolean);
     method public boolean setWifiEnabled(boolean);
     method public void startLocalOnlyHotspot(android.net.wifi.WifiManager.LocalOnlyHotspotCallback, android.os.Handler);
-    method public boolean startScan();
+    method public deprecated boolean startScan();
     method public void startWps(android.net.wifi.WpsInfo, android.net.wifi.WifiManager.WpsCallback);
     method public int updateNetwork(android.net.wifi.WifiConfiguration);
     field public static final java.lang.String ACTION_PICK_WIFI_NETWORK = "android.net.wifi.PICK_WIFI_NETWORK";
@@ -27777,6 +27793,55 @@ package android.net.wifi.p2p.nsd {
   public class WifiP2pUpnpServiceRequest extends android.net.wifi.p2p.nsd.WifiP2pServiceRequest {
     method public static android.net.wifi.p2p.nsd.WifiP2pUpnpServiceRequest newInstance();
     method public static android.net.wifi.p2p.nsd.WifiP2pUpnpServiceRequest newInstance(java.lang.String);
+  }
+
+}
+
+package android.net.wifi.rtt {
+
+  public final class RangingRequest implements android.os.Parcelable {
+    method public int describeContents();
+    method public static int getMaxPeers();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.wifi.rtt.RangingRequest> CREATOR;
+  }
+
+  public static final class RangingRequest.Builder {
+    ctor public RangingRequest.Builder();
+    method public android.net.wifi.rtt.RangingRequest.Builder addAccessPoint(android.net.wifi.ScanResult);
+    method public android.net.wifi.rtt.RangingRequest.Builder addAccessPoints(java.util.List<android.net.wifi.ScanResult>);
+    method public android.net.wifi.rtt.RangingRequest.Builder addWifiAwarePeer(android.net.MacAddress);
+    method public android.net.wifi.rtt.RangingRequest.Builder addWifiAwarePeer(android.net.wifi.aware.PeerHandle);
+    method public android.net.wifi.rtt.RangingRequest build();
+  }
+
+  public final class RangingResult implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getDistanceMm();
+    method public int getDistanceStdDevMm();
+    method public android.net.MacAddress getMacAddress();
+    method public android.net.wifi.aware.PeerHandle getPeerHandle();
+    method public long getRangingTimestampUs();
+    method public int getRssi();
+    method public int getStatus();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.wifi.rtt.RangingResult> CREATOR;
+    field public static final int STATUS_FAIL = 1; // 0x1
+    field public static final int STATUS_SUCCESS = 0; // 0x0
+  }
+
+  public abstract class RangingResultCallback {
+    ctor public RangingResultCallback();
+    method public abstract void onRangingFailure(int);
+    method public abstract void onRangingResults(java.util.List<android.net.wifi.rtt.RangingResult>);
+    field public static final int STATUS_CODE_FAIL = 1; // 0x1
+    field public static final int STATUS_CODE_FAIL_RTT_NOT_AVAILABLE = 2; // 0x2
+  }
+
+  public class WifiRttManager {
+    method public boolean isAvailable();
+    method public void startRanging(android.net.wifi.rtt.RangingRequest, android.net.wifi.rtt.RangingResultCallback, android.os.Handler);
+    field public static final java.lang.String ACTION_WIFI_RTT_STATE_CHANGED = "android.net.wifi.rtt.action.WIFI_RTT_STATE_CHANGED";
   }
 
 }
@@ -40381,6 +40446,113 @@ package android.telecom {
 
 package android.telephony {
 
+  public final class AccessNetworkConstants {
+    ctor public AccessNetworkConstants();
+  }
+
+  public static final class AccessNetworkConstants.AccessNetworkType {
+    ctor public AccessNetworkConstants.AccessNetworkType();
+    field public static final int CDMA2000 = 4; // 0x4
+    field public static final int EUTRAN = 3; // 0x3
+    field public static final int GERAN = 1; // 0x1
+    field public static final int IWLAN = 5; // 0x5
+    field public static final int UTRAN = 2; // 0x2
+  }
+
+  public static final class AccessNetworkConstants.EutranBand {
+    ctor public AccessNetworkConstants.EutranBand();
+    field public static final int BAND_1 = 1; // 0x1
+    field public static final int BAND_10 = 10; // 0xa
+    field public static final int BAND_11 = 11; // 0xb
+    field public static final int BAND_12 = 12; // 0xc
+    field public static final int BAND_13 = 13; // 0xd
+    field public static final int BAND_14 = 14; // 0xe
+    field public static final int BAND_17 = 17; // 0x11
+    field public static final int BAND_18 = 18; // 0x12
+    field public static final int BAND_19 = 19; // 0x13
+    field public static final int BAND_2 = 2; // 0x2
+    field public static final int BAND_20 = 20; // 0x14
+    field public static final int BAND_21 = 21; // 0x15
+    field public static final int BAND_22 = 22; // 0x16
+    field public static final int BAND_23 = 23; // 0x17
+    field public static final int BAND_24 = 24; // 0x18
+    field public static final int BAND_25 = 25; // 0x19
+    field public static final int BAND_26 = 26; // 0x1a
+    field public static final int BAND_27 = 27; // 0x1b
+    field public static final int BAND_28 = 28; // 0x1c
+    field public static final int BAND_3 = 3; // 0x3
+    field public static final int BAND_30 = 30; // 0x1e
+    field public static final int BAND_31 = 31; // 0x1f
+    field public static final int BAND_33 = 33; // 0x21
+    field public static final int BAND_34 = 34; // 0x22
+    field public static final int BAND_35 = 35; // 0x23
+    field public static final int BAND_36 = 36; // 0x24
+    field public static final int BAND_37 = 37; // 0x25
+    field public static final int BAND_38 = 38; // 0x26
+    field public static final int BAND_39 = 39; // 0x27
+    field public static final int BAND_4 = 4; // 0x4
+    field public static final int BAND_40 = 40; // 0x28
+    field public static final int BAND_41 = 41; // 0x29
+    field public static final int BAND_42 = 42; // 0x2a
+    field public static final int BAND_43 = 43; // 0x2b
+    field public static final int BAND_44 = 44; // 0x2c
+    field public static final int BAND_45 = 45; // 0x2d
+    field public static final int BAND_46 = 46; // 0x2e
+    field public static final int BAND_47 = 47; // 0x2f
+    field public static final int BAND_48 = 48; // 0x30
+    field public static final int BAND_5 = 5; // 0x5
+    field public static final int BAND_6 = 6; // 0x6
+    field public static final int BAND_65 = 65; // 0x41
+    field public static final int BAND_66 = 66; // 0x42
+    field public static final int BAND_68 = 68; // 0x44
+    field public static final int BAND_7 = 7; // 0x7
+    field public static final int BAND_70 = 70; // 0x46
+    field public static final int BAND_8 = 8; // 0x8
+    field public static final int BAND_9 = 9; // 0x9
+  }
+
+  public static final class AccessNetworkConstants.GeranBand {
+    ctor public AccessNetworkConstants.GeranBand();
+    field public static final int BAND_450 = 3; // 0x3
+    field public static final int BAND_480 = 4; // 0x4
+    field public static final int BAND_710 = 5; // 0x5
+    field public static final int BAND_750 = 6; // 0x6
+    field public static final int BAND_850 = 8; // 0x8
+    field public static final int BAND_DCS1800 = 12; // 0xc
+    field public static final int BAND_E900 = 10; // 0xa
+    field public static final int BAND_ER900 = 14; // 0xe
+    field public static final int BAND_P900 = 9; // 0x9
+    field public static final int BAND_PCS1900 = 13; // 0xd
+    field public static final int BAND_R900 = 11; // 0xb
+    field public static final int BAND_T380 = 1; // 0x1
+    field public static final int BAND_T410 = 2; // 0x2
+    field public static final int BAND_T810 = 7; // 0x7
+  }
+
+  public static final class AccessNetworkConstants.UtranBand {
+    ctor public AccessNetworkConstants.UtranBand();
+    field public static final int BAND_1 = 1; // 0x1
+    field public static final int BAND_10 = 10; // 0xa
+    field public static final int BAND_11 = 11; // 0xb
+    field public static final int BAND_12 = 12; // 0xc
+    field public static final int BAND_13 = 13; // 0xd
+    field public static final int BAND_14 = 14; // 0xe
+    field public static final int BAND_19 = 19; // 0x13
+    field public static final int BAND_2 = 2; // 0x2
+    field public static final int BAND_20 = 20; // 0x14
+    field public static final int BAND_21 = 21; // 0x15
+    field public static final int BAND_22 = 22; // 0x16
+    field public static final int BAND_25 = 25; // 0x19
+    field public static final int BAND_26 = 26; // 0x1a
+    field public static final int BAND_3 = 3; // 0x3
+    field public static final int BAND_4 = 4; // 0x4
+    field public static final int BAND_5 = 5; // 0x5
+    field public static final int BAND_6 = 6; // 0x6
+    field public static final int BAND_7 = 7; // 0x7
+    field public static final int BAND_8 = 8; // 0x8
+    field public static final int BAND_9 = 9; // 0x9
+  }
+
   public class CarrierConfigManager {
     method public android.os.PersistableBundle getConfig();
     method public android.os.PersistableBundle getConfigForSubId(int);
@@ -40903,111 +41075,6 @@ package android.telephony {
     method public int getRadioAccessNetwork();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.RadioAccessSpecifier> CREATOR;
-  }
-
-  public final class RadioNetworkConstants {
-    ctor public RadioNetworkConstants();
-  }
-
-  public static final class RadioNetworkConstants.EutranBands {
-    ctor public RadioNetworkConstants.EutranBands();
-    field public static final int BAND_1 = 1; // 0x1
-    field public static final int BAND_10 = 10; // 0xa
-    field public static final int BAND_11 = 11; // 0xb
-    field public static final int BAND_12 = 12; // 0xc
-    field public static final int BAND_13 = 13; // 0xd
-    field public static final int BAND_14 = 14; // 0xe
-    field public static final int BAND_17 = 17; // 0x11
-    field public static final int BAND_18 = 18; // 0x12
-    field public static final int BAND_19 = 19; // 0x13
-    field public static final int BAND_2 = 2; // 0x2
-    field public static final int BAND_20 = 20; // 0x14
-    field public static final int BAND_21 = 21; // 0x15
-    field public static final int BAND_22 = 22; // 0x16
-    field public static final int BAND_23 = 23; // 0x17
-    field public static final int BAND_24 = 24; // 0x18
-    field public static final int BAND_25 = 25; // 0x19
-    field public static final int BAND_26 = 26; // 0x1a
-    field public static final int BAND_27 = 27; // 0x1b
-    field public static final int BAND_28 = 28; // 0x1c
-    field public static final int BAND_3 = 3; // 0x3
-    field public static final int BAND_30 = 30; // 0x1e
-    field public static final int BAND_31 = 31; // 0x1f
-    field public static final int BAND_33 = 33; // 0x21
-    field public static final int BAND_34 = 34; // 0x22
-    field public static final int BAND_35 = 35; // 0x23
-    field public static final int BAND_36 = 36; // 0x24
-    field public static final int BAND_37 = 37; // 0x25
-    field public static final int BAND_38 = 38; // 0x26
-    field public static final int BAND_39 = 39; // 0x27
-    field public static final int BAND_4 = 4; // 0x4
-    field public static final int BAND_40 = 40; // 0x28
-    field public static final int BAND_41 = 41; // 0x29
-    field public static final int BAND_42 = 42; // 0x2a
-    field public static final int BAND_43 = 43; // 0x2b
-    field public static final int BAND_44 = 44; // 0x2c
-    field public static final int BAND_45 = 45; // 0x2d
-    field public static final int BAND_46 = 46; // 0x2e
-    field public static final int BAND_47 = 47; // 0x2f
-    field public static final int BAND_48 = 48; // 0x30
-    field public static final int BAND_5 = 5; // 0x5
-    field public static final int BAND_6 = 6; // 0x6
-    field public static final int BAND_65 = 65; // 0x41
-    field public static final int BAND_66 = 66; // 0x42
-    field public static final int BAND_68 = 68; // 0x44
-    field public static final int BAND_7 = 7; // 0x7
-    field public static final int BAND_70 = 70; // 0x46
-    field public static final int BAND_8 = 8; // 0x8
-    field public static final int BAND_9 = 9; // 0x9
-  }
-
-  public static final class RadioNetworkConstants.GeranBands {
-    ctor public RadioNetworkConstants.GeranBands();
-    field public static final int BAND_450 = 3; // 0x3
-    field public static final int BAND_480 = 4; // 0x4
-    field public static final int BAND_710 = 5; // 0x5
-    field public static final int BAND_750 = 6; // 0x6
-    field public static final int BAND_850 = 8; // 0x8
-    field public static final int BAND_DCS1800 = 12; // 0xc
-    field public static final int BAND_E900 = 10; // 0xa
-    field public static final int BAND_ER900 = 14; // 0xe
-    field public static final int BAND_P900 = 9; // 0x9
-    field public static final int BAND_PCS1900 = 13; // 0xd
-    field public static final int BAND_R900 = 11; // 0xb
-    field public static final int BAND_T380 = 1; // 0x1
-    field public static final int BAND_T410 = 2; // 0x2
-    field public static final int BAND_T810 = 7; // 0x7
-  }
-
-  public static final class RadioNetworkConstants.RadioAccessNetworks {
-    ctor public RadioNetworkConstants.RadioAccessNetworks();
-    field public static final int EUTRAN = 3; // 0x3
-    field public static final int GERAN = 1; // 0x1
-    field public static final int UTRAN = 2; // 0x2
-  }
-
-  public static final class RadioNetworkConstants.UtranBands {
-    ctor public RadioNetworkConstants.UtranBands();
-    field public static final int BAND_1 = 1; // 0x1
-    field public static final int BAND_10 = 10; // 0xa
-    field public static final int BAND_11 = 11; // 0xb
-    field public static final int BAND_12 = 12; // 0xc
-    field public static final int BAND_13 = 13; // 0xd
-    field public static final int BAND_14 = 14; // 0xe
-    field public static final int BAND_19 = 19; // 0x13
-    field public static final int BAND_2 = 2; // 0x2
-    field public static final int BAND_20 = 20; // 0x14
-    field public static final int BAND_21 = 21; // 0x15
-    field public static final int BAND_22 = 22; // 0x16
-    field public static final int BAND_25 = 25; // 0x19
-    field public static final int BAND_26 = 26; // 0x1a
-    field public static final int BAND_3 = 3; // 0x3
-    field public static final int BAND_4 = 4; // 0x4
-    field public static final int BAND_5 = 5; // 0x5
-    field public static final int BAND_6 = 6; // 0x6
-    field public static final int BAND_7 = 7; // 0x7
-    field public static final int BAND_8 = 8; // 0x8
-    field public static final int BAND_9 = 9; // 0x9
   }
 
   public class ServiceState implements android.os.Parcelable {
