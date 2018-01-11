@@ -13503,6 +13503,58 @@ package android.graphics {
     ctor public EmbossMaskFilter(float[], float, float, float);
   }
 
+  public final class ImageDecoder implements java.lang.AutoCloseable {
+    method public void close();
+    method public static android.graphics.ImageDecoder.Source createSource(android.content.ContentResolver, android.net.Uri);
+    method public static android.graphics.ImageDecoder.Source createSource(java.nio.ByteBuffer);
+    method public static android.graphics.ImageDecoder.Source createSource(java.io.File);
+    method public static android.graphics.Bitmap decodeBitmap(android.graphics.ImageDecoder.Source, android.graphics.ImageDecoder.OnHeaderDecodedListener) throws java.io.IOException;
+    method public static android.graphics.Bitmap decodeBitmap(android.graphics.ImageDecoder.Source) throws java.io.IOException;
+    method public static android.graphics.drawable.Drawable decodeDrawable(android.graphics.ImageDecoder.Source, android.graphics.ImageDecoder.OnHeaderDecodedListener) throws java.io.IOException;
+    method public static android.graphics.drawable.Drawable decodeDrawable(android.graphics.ImageDecoder.Source) throws java.io.IOException;
+    method public android.util.Size getSampledSize(int);
+    method public void setAllocator(int);
+    method public void setAsAlphaMask(boolean);
+    method public void setCrop(android.graphics.Rect);
+    method public void setMutable(boolean);
+    method public void setOnPartialImageListener(android.graphics.ImageDecoder.OnPartialImageListener);
+    method public void setPostProcessor(android.graphics.PostProcessor);
+    method public void setPreferRamOverQuality(boolean);
+    method public void setRequireUnpremultiplied(boolean);
+    method public void setResize(int, int);
+    method public void setResize(int);
+    field public static final int ALLOCATOR_DEFAULT = 0; // 0x0
+    field public static final int ALLOCATOR_HARDWARE = 3; // 0x3
+    field public static final int ALLOCATOR_SHARED_MEMORY = 2; // 0x2
+    field public static final int ALLOCATOR_SOFTWARE = 1; // 0x1
+    field public static final int ERROR_SOURCE_ERROR = 3; // 0x3
+    field public static final int ERROR_SOURCE_EXCEPTION = 1; // 0x1
+    field public static final int ERROR_SOURCE_INCOMPLETE = 2; // 0x2
+  }
+
+  public static abstract class ImageDecoder.Error implements java.lang.annotation.Annotation {
+  }
+
+  public static class ImageDecoder.ImageInfo {
+    method public java.lang.String getMimeType();
+    method public android.util.Size getSize();
+  }
+
+  public static class ImageDecoder.IncompleteException extends java.io.IOException {
+    ctor public ImageDecoder.IncompleteException();
+  }
+
+  public static abstract interface ImageDecoder.OnHeaderDecodedListener {
+    method public abstract void onHeaderDecoded(android.graphics.ImageDecoder, android.graphics.ImageDecoder.ImageInfo, android.graphics.ImageDecoder.Source);
+  }
+
+  public static abstract interface ImageDecoder.OnPartialImageListener {
+    method public abstract boolean onPartialImage(int, android.graphics.ImageDecoder.Source);
+  }
+
+  public static abstract class ImageDecoder.Source {
+  }
+
   public class ImageFormat {
     ctor public ImageFormat();
     method public static int getBitsPerPixel(int);
@@ -14071,6 +14123,10 @@ package android.graphics {
 
   public class PorterDuffXfermode extends android.graphics.Xfermode {
     ctor public PorterDuffXfermode(android.graphics.PorterDuff.Mode);
+  }
+
+  public abstract interface PostProcessor {
+    method public abstract int onPostProcess(android.graphics.Canvas);
   }
 
   public class RadialGradient extends android.graphics.Shader {
