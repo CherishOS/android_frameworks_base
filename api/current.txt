@@ -5206,15 +5206,17 @@ package android.app {
     field public static final java.lang.String EXTRA_LARGE_ICON_BIG = "android.largeIcon.big";
     field public static final java.lang.String EXTRA_MEDIA_SESSION = "android.mediaSession";
     field public static final java.lang.String EXTRA_MESSAGES = "android.messages";
+    field public static final java.lang.String EXTRA_MESSAGING_PERSON = "android.messagingUser";
     field public static final java.lang.String EXTRA_NOTIFICATION_ID = "android.intent.extra.NOTIFICATION_ID";
     field public static final java.lang.String EXTRA_NOTIFICATION_TAG = "android.intent.extra.NOTIFICATION_TAG";
-    field public static final java.lang.String EXTRA_PEOPLE = "android.people";
+    field public static final deprecated java.lang.String EXTRA_PEOPLE = "android.people";
+    field public static final java.lang.String EXTRA_PEOPLE_LIST = "android.people.list";
     field public static final java.lang.String EXTRA_PICTURE = "android.picture";
     field public static final java.lang.String EXTRA_PROGRESS = "android.progress";
     field public static final java.lang.String EXTRA_PROGRESS_INDETERMINATE = "android.progressIndeterminate";
     field public static final java.lang.String EXTRA_PROGRESS_MAX = "android.progressMax";
     field public static final java.lang.String EXTRA_REMOTE_INPUT_HISTORY = "android.remoteInputHistory";
-    field public static final java.lang.String EXTRA_SELF_DISPLAY_NAME = "android.selfDisplayName";
+    field public static final deprecated java.lang.String EXTRA_SELF_DISPLAY_NAME = "android.selfDisplayName";
     field public static final java.lang.String EXTRA_SHOW_CHRONOMETER = "android.showChronometer";
     field public static final java.lang.String EXTRA_SHOW_WHEN = "android.showWhen";
     field public static final deprecated java.lang.String EXTRA_SMALL_ICON = "android.icon";
@@ -5354,7 +5356,8 @@ package android.app {
     method public deprecated android.app.Notification.Builder addAction(int, java.lang.CharSequence, android.app.PendingIntent);
     method public android.app.Notification.Builder addAction(android.app.Notification.Action);
     method public android.app.Notification.Builder addExtras(android.os.Bundle);
-    method public android.app.Notification.Builder addPerson(java.lang.String);
+    method public deprecated android.app.Notification.Builder addPerson(java.lang.String);
+    method public android.app.Notification.Builder addPerson(android.app.Notification.Person);
     method public android.app.Notification build();
     method public android.widget.RemoteViews createBigContentView();
     method public android.widget.RemoteViews createContentView();
@@ -5477,14 +5480,17 @@ package android.app {
   }
 
   public static class Notification.MessagingStyle extends android.app.Notification.Style {
-    ctor public Notification.MessagingStyle(java.lang.CharSequence);
+    ctor public deprecated Notification.MessagingStyle(java.lang.CharSequence);
+    ctor public Notification.MessagingStyle(android.app.Notification.Person);
     method public android.app.Notification.MessagingStyle addHistoricMessage(android.app.Notification.MessagingStyle.Message);
-    method public android.app.Notification.MessagingStyle addMessage(java.lang.CharSequence, long, java.lang.CharSequence);
+    method public deprecated android.app.Notification.MessagingStyle addMessage(java.lang.CharSequence, long, java.lang.CharSequence);
+    method public android.app.Notification.MessagingStyle addMessage(java.lang.CharSequence, long, android.app.Notification.Person);
     method public android.app.Notification.MessagingStyle addMessage(android.app.Notification.MessagingStyle.Message);
     method public java.lang.CharSequence getConversationTitle();
     method public java.util.List<android.app.Notification.MessagingStyle.Message> getHistoricMessages();
     method public java.util.List<android.app.Notification.MessagingStyle.Message> getMessages();
-    method public java.lang.CharSequence getUserDisplayName();
+    method public android.app.Notification.Person getUser();
+    method public deprecated java.lang.CharSequence getUserDisplayName();
     method public boolean isGroupConversation();
     method public android.app.Notification.MessagingStyle setConversationTitle(java.lang.CharSequence);
     method public android.app.Notification.MessagingStyle setGroupConversation(boolean);
@@ -5492,14 +5498,32 @@ package android.app {
   }
 
   public static final class Notification.MessagingStyle.Message {
-    ctor public Notification.MessagingStyle.Message(java.lang.CharSequence, long, java.lang.CharSequence);
+    ctor public deprecated Notification.MessagingStyle.Message(java.lang.CharSequence, long, java.lang.CharSequence);
+    ctor public Notification.MessagingStyle.Message(java.lang.CharSequence, long, android.app.Notification.Person);
     method public java.lang.String getDataMimeType();
     method public android.net.Uri getDataUri();
     method public android.os.Bundle getExtras();
-    method public java.lang.CharSequence getSender();
+    method public deprecated java.lang.CharSequence getSender();
+    method public android.app.Notification.Person getSenderPerson();
     method public java.lang.CharSequence getText();
     method public long getTimestamp();
     method public android.app.Notification.MessagingStyle.Message setData(java.lang.String, android.net.Uri);
+  }
+
+  public static final class Notification.Person implements android.os.Parcelable {
+    ctor protected Notification.Person(android.os.Parcel);
+    ctor public Notification.Person();
+    method public int describeContents();
+    method public android.graphics.drawable.Icon getIcon();
+    method public java.lang.String getKey();
+    method public java.lang.CharSequence getName();
+    method public java.lang.String getUri();
+    method public android.app.Notification.Person setIcon(android.graphics.drawable.Icon);
+    method public android.app.Notification.Person setKey(java.lang.String);
+    method public android.app.Notification.Person setName(java.lang.CharSequence);
+    method public android.app.Notification.Person setUri(java.lang.String);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.app.Notification.Person> CREATOR;
   }
 
   public static abstract class Notification.Style {
@@ -7362,6 +7386,7 @@ package android.appwidget {
     method public void updateAppWidget(int, android.widget.RemoteViews);
     method public void updateAppWidget(android.content.ComponentName, android.widget.RemoteViews);
     method public void updateAppWidgetOptions(int, android.os.Bundle);
+    method public void updateAppWidgetProviderInfo(android.content.ComponentName, java.lang.String);
     field public static final java.lang.String ACTION_APPWIDGET_BIND = "android.appwidget.action.APPWIDGET_BIND";
     field public static final java.lang.String ACTION_APPWIDGET_CONFIGURE = "android.appwidget.action.APPWIDGET_CONFIGURE";
     field public static final java.lang.String ACTION_APPWIDGET_DELETED = "android.appwidget.action.APPWIDGET_DELETED";
@@ -11354,6 +11379,7 @@ package android.content.pm {
     field public static final int DISABLED_REASON_NOT_DISABLED = 0; // 0x0
     field public static final int DISABLED_REASON_OTHER_RESTORE_ISSUE = 103; // 0x67
     field public static final int DISABLED_REASON_SIGNATURE_MISMATCH = 102; // 0x66
+    field public static final int DISABLED_REASON_UNKNOWN = 3; // 0x3
     field public static final int DISABLED_REASON_VERSION_LOWER = 100; // 0x64
     field public static final java.lang.String SHORTCUT_CATEGORY_CONVERSATION = "android.shortcut.conversation";
   }
@@ -20281,6 +20307,32 @@ package android.icu.util {
     field public static final int TAISHO;
   }
 
+  public final class LocaleData {
+    method public static android.icu.util.VersionInfo getCLDRVersion();
+    method public java.lang.String getDelimiter(int);
+    method public static final android.icu.util.LocaleData getInstance(android.icu.util.ULocale);
+    method public static final android.icu.util.LocaleData getInstance();
+    method public static final android.icu.util.LocaleData.MeasurementSystem getMeasurementSystem(android.icu.util.ULocale);
+    method public boolean getNoSubstitute();
+    method public static final android.icu.util.LocaleData.PaperSize getPaperSize(android.icu.util.ULocale);
+    method public void setNoSubstitute(boolean);
+    field public static final int ALT_QUOTATION_END = 3; // 0x3
+    field public static final int ALT_QUOTATION_START = 2; // 0x2
+    field public static final int QUOTATION_END = 1; // 0x1
+    field public static final int QUOTATION_START = 0; // 0x0
+  }
+
+  public static final class LocaleData.MeasurementSystem {
+    field public static final android.icu.util.LocaleData.MeasurementSystem SI;
+    field public static final android.icu.util.LocaleData.MeasurementSystem UK;
+    field public static final android.icu.util.LocaleData.MeasurementSystem US;
+  }
+
+  public static final class LocaleData.PaperSize {
+    method public int getHeight();
+    method public int getWidth();
+  }
+
   public class Measure {
     ctor public Measure(java.lang.Number, android.icu.util.MeasureUnit);
     method public java.lang.Number getNumber();
@@ -23154,6 +23206,7 @@ package android.media {
     field public static final java.lang.String KEY_MAX_WIDTH = "max-width";
     field public static final java.lang.String KEY_MIME = "mime";
     field public static final java.lang.String KEY_OPERATING_RATE = "operating-rate";
+    field public static final java.lang.String KEY_OUTPUT_REORDER_DEPTH = "output-reorder-depth";
     field public static final java.lang.String KEY_PCM_ENCODING = "pcm-encoding";
     field public static final java.lang.String KEY_PRIORITY = "priority";
     field public static final java.lang.String KEY_PROFILE = "profile";
@@ -27290,7 +27343,7 @@ package android.net.wifi {
     field public static final java.lang.String ACTION_PICK_WIFI_NETWORK = "android.net.wifi.PICK_WIFI_NETWORK";
     field public static final java.lang.String ACTION_REQUEST_SCAN_ALWAYS_AVAILABLE = "android.net.wifi.action.REQUEST_SCAN_ALWAYS_AVAILABLE";
     field public static final int ERROR_AUTHENTICATING = 1; // 0x1
-    field public static final java.lang.String EXTRA_BSSID = "bssid";
+    field public static final deprecated java.lang.String EXTRA_BSSID = "bssid";
     field public static final java.lang.String EXTRA_NETWORK_INFO = "networkInfo";
     field public static final java.lang.String EXTRA_NEW_RSSI = "newRssi";
     field public static final java.lang.String EXTRA_NEW_STATE = "newState";
@@ -27298,7 +27351,7 @@ package android.net.wifi {
     field public static final java.lang.String EXTRA_RESULTS_UPDATED = "resultsUpdated";
     field public static final java.lang.String EXTRA_SUPPLICANT_CONNECTED = "connected";
     field public static final java.lang.String EXTRA_SUPPLICANT_ERROR = "supplicantError";
-    field public static final java.lang.String EXTRA_WIFI_INFO = "wifiInfo";
+    field public static final deprecated java.lang.String EXTRA_WIFI_INFO = "wifiInfo";
     field public static final java.lang.String EXTRA_WIFI_STATE = "wifi_state";
     field public static final java.lang.String NETWORK_IDS_CHANGED_ACTION = "android.net.wifi.NETWORK_IDS_CHANGED";
     field public static final java.lang.String NETWORK_STATE_CHANGED_ACTION = "android.net.wifi.STATE_CHANGE";
@@ -36024,7 +36077,7 @@ package android.provider {
   public static final class Telephony.Carriers implements android.provider.BaseColumns {
     field public static final java.lang.String APN = "apn";
     field public static final java.lang.String AUTH_TYPE = "authtype";
-    field public static final java.lang.String BEARER = "bearer";
+    field public static final deprecated java.lang.String BEARER = "bearer";
     field public static final java.lang.String CARRIER_ENABLED = "carrier_enabled";
     field public static final android.net.Uri CONTENT_URI;
     field public static final java.lang.String CURRENT = "current";
@@ -36037,6 +36090,7 @@ package android.provider {
     field public static final java.lang.String MVNO_MATCH_DATA = "mvno_match_data";
     field public static final java.lang.String MVNO_TYPE = "mvno_type";
     field public static final java.lang.String NAME = "name";
+    field public static final java.lang.String NETWORK_TYPE_BITMASK = "network_type_bitmask";
     field public static final java.lang.String NUMERIC = "numeric";
     field public static final java.lang.String PASSWORD = "password";
     field public static final java.lang.String PORT = "port";
@@ -36350,6 +36404,7 @@ package android.provider {
     field public static final java.lang.String ITEM_TYPE = "vnd.android.cursor.item/voicemail";
     field public static final java.lang.String LAST_MODIFIED = "last_modified";
     field public static final java.lang.String MIME_TYPE = "mime_type";
+    field public static final java.lang.String NEW = "new";
     field public static final java.lang.String NUMBER = "number";
     field public static final java.lang.String PHONE_ACCOUNT_COMPONENT_NAME = "subscription_component_name";
     field public static final java.lang.String PHONE_ACCOUNT_ID = "subscription_id";
@@ -38000,6 +38055,7 @@ package android.service.carrier {
 
   public class CarrierIdentifier implements android.os.Parcelable {
     ctor public CarrierIdentifier(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String);
+    ctor public CarrierIdentifier(byte[], java.lang.String, java.lang.String);
     method public int describeContents();
     method public java.lang.String getGid1();
     method public java.lang.String getGid2();
@@ -40704,8 +40760,13 @@ package android.telephony {
     field public static final java.lang.String KEY_WORLD_PHONE_BOOL = "world_phone_bool";
   }
 
-  public final class CellIdentityCdma implements android.os.Parcelable {
+  public abstract class CellIdentity implements android.os.Parcelable {
     method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.CellIdentity> CREATOR;
+  }
+
+  public final class CellIdentityCdma extends android.telephony.CellIdentity {
     method public int getBasestationId();
     method public int getLatitude();
     method public int getLongitude();
@@ -40717,8 +40778,7 @@ package android.telephony {
     field public static final android.os.Parcelable.Creator<android.telephony.CellIdentityCdma> CREATOR;
   }
 
-  public final class CellIdentityGsm implements android.os.Parcelable {
-    method public int describeContents();
+  public final class CellIdentityGsm extends android.telephony.CellIdentity {
     method public int getArfcn();
     method public int getBsic();
     method public int getCid();
@@ -40735,8 +40795,7 @@ package android.telephony {
     field public static final android.os.Parcelable.Creator<android.telephony.CellIdentityGsm> CREATOR;
   }
 
-  public final class CellIdentityLte implements android.os.Parcelable {
-    method public int describeContents();
+  public final class CellIdentityLte extends android.telephony.CellIdentity {
     method public int getCi();
     method public int getEarfcn();
     method public deprecated int getMcc();
@@ -40752,8 +40811,17 @@ package android.telephony {
     field public static final android.os.Parcelable.Creator<android.telephony.CellIdentityLte> CREATOR;
   }
 
-  public final class CellIdentityWcdma implements android.os.Parcelable {
-    method public int describeContents();
+  public final class CellIdentityTdscdma extends android.telephony.CellIdentity {
+    method public int getCid();
+    method public int getCpid();
+    method public int getLac();
+    method public java.lang.String getMccStr();
+    method public java.lang.String getMncStr();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.CellIdentityTdscdma> CREATOR;
+  }
+
+  public final class CellIdentityWcdma extends android.telephony.CellIdentity {
     method public int getCid();
     method public int getLac();
     method public deprecated int getMcc();
@@ -41084,11 +41152,13 @@ package android.telephony {
     method protected void copyFrom(android.telephony.ServiceState);
     method public int describeContents();
     method public boolean getIsManualSelection();
+    method public int getNetworkId();
     method public java.lang.String getOperatorAlphaLong();
     method public java.lang.String getOperatorAlphaShort();
     method public java.lang.String getOperatorNumeric();
     method public boolean getRoaming();
     method public int getState();
+    method public int getSystemId();
     method public void setIsManualSelection(boolean);
     method public void setOperatorName(java.lang.String, java.lang.String, java.lang.String);
     method public void setRoaming(boolean);
@@ -41101,6 +41171,7 @@ package android.telephony {
     field public static final int STATE_IN_SERVICE = 0; // 0x0
     field public static final int STATE_OUT_OF_SERVICE = 1; // 0x1
     field public static final int STATE_POWER_OFF = 3; // 0x3
+    field public static final int UNKNOWN_ID = -1; // 0xffffffff
   }
 
   public class SignalStrength implements android.os.Parcelable {
