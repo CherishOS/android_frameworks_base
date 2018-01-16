@@ -6544,6 +6544,7 @@ package android.app.admin {
     method public void setTrustAgentConfiguration(android.content.ComponentName, android.content.ComponentName, android.os.PersistableBundle);
     method public void setUninstallBlocked(android.content.ComponentName, java.lang.String, boolean);
     method public void setUserIcon(android.content.ComponentName, android.graphics.Bitmap);
+    method public boolean startUserInBackground(android.content.ComponentName, android.os.UserHandle);
     method public boolean stopUser(android.content.ComponentName, android.os.UserHandle);
     method public boolean switchUser(android.content.ComponentName, android.os.UserHandle);
     method public void transferOwnership(android.content.ComponentName, android.content.ComponentName, android.os.PersistableBundle);
@@ -6656,7 +6657,6 @@ package android.app.admin {
     field public static final int RESET_PASSWORD_DO_NOT_ASK_CREDENTIALS_ON_BOOT = 2; // 0x2
     field public static final int RESET_PASSWORD_REQUIRE_ENTRY = 1; // 0x1
     field public static final int SKIP_SETUP_WIZARD = 1; // 0x1
-    field public static final int START_USER_IN_BACKGROUND = 8; // 0x8
     field public static final int WIPE_EXTERNAL_STORAGE = 1; // 0x1
     field public static final int WIPE_RESET_PROTECTION_DATA = 2; // 0x2
   }
@@ -32449,6 +32449,7 @@ package android.os {
     field public static final java.lang.String DISALLOW_ADD_USER = "no_add_user";
     field public static final java.lang.String DISALLOW_ADJUST_VOLUME = "no_adjust_volume";
     field public static final java.lang.String DISALLOW_AIRPLANE_MODE = "no_airplane_mode";
+    field public static final java.lang.String DISALLOW_AMBIENT_DISPLAY = "no_ambient_display";
     field public static final java.lang.String DISALLOW_APPS_CONTROL = "no_control_apps";
     field public static final java.lang.String DISALLOW_AUTOFILL = "no_autofill";
     field public static final java.lang.String DISALLOW_BLUETOOTH = "no_bluetooth";
@@ -42295,20 +42296,9 @@ package android.text {
     method public boolean isAllowed(char);
   }
 
-  public abstract interface NoCopySpan {
-  }
-
-  public static class NoCopySpan.Concrete implements android.text.NoCopySpan {
-    ctor public NoCopySpan.Concrete();
-  }
-
-  public abstract interface ParcelableSpan implements android.os.Parcelable {
-    method public abstract int getSpanTypeId();
-  }
-
-  public class PremeasuredText implements android.text.Spanned {
-    method public static android.text.PremeasuredText build(java.lang.CharSequence, android.text.TextPaint, android.text.TextDirectionHeuristic);
-    method public static android.text.PremeasuredText build(java.lang.CharSequence, android.text.TextPaint, android.text.TextDirectionHeuristic, int, int);
+  public class MeasuredText implements android.text.Spanned {
+    method public static android.text.MeasuredText build(java.lang.CharSequence, android.text.TextPaint, android.text.TextDirectionHeuristic);
+    method public static android.text.MeasuredText build(java.lang.CharSequence, android.text.TextPaint, android.text.TextDirectionHeuristic, int, int);
     method public char charAt(int);
     method public int getEnd();
     method public android.text.TextPaint getPaint();
@@ -42325,6 +42315,17 @@ package android.text {
     method public int length();
     method public int nextSpanTransition(int, int, java.lang.Class);
     method public java.lang.CharSequence subSequence(int, int);
+  }
+
+  public abstract interface NoCopySpan {
+  }
+
+  public static class NoCopySpan.Concrete implements android.text.NoCopySpan {
+    ctor public NoCopySpan.Concrete();
+  }
+
+  public abstract interface ParcelableSpan implements android.os.Parcelable {
+    method public abstract int getSpanTypeId();
   }
 
   public class Selection {
@@ -49261,14 +49262,13 @@ package android.view.textclassifier {
     method public android.graphics.drawable.Drawable getSecondaryIcon(int);
     method public android.content.Intent getSecondaryIntent(int);
     method public java.lang.CharSequence getSecondaryLabel(int);
-    method public android.view.View.OnClickListener getSecondaryOnClickListener(int);
     method public java.lang.String getSignature();
     method public java.lang.String getText();
   }
 
   public static final class TextClassification.Builder {
     ctor public TextClassification.Builder();
-    method public android.view.textclassifier.TextClassification.Builder addSecondaryAction(android.content.Intent, java.lang.String, android.graphics.drawable.Drawable, android.view.View.OnClickListener);
+    method public android.view.textclassifier.TextClassification.Builder addSecondaryAction(android.content.Intent, java.lang.String, android.graphics.drawable.Drawable);
     method public android.view.textclassifier.TextClassification build();
     method public android.view.textclassifier.TextClassification.Builder clearSecondaryActions();
     method public android.view.textclassifier.TextClassification.Builder setEntityType(java.lang.String, float);
@@ -49276,15 +49276,18 @@ package android.view.textclassifier {
     method public android.view.textclassifier.TextClassification.Builder setIntent(android.content.Intent);
     method public android.view.textclassifier.TextClassification.Builder setLabel(java.lang.String);
     method public android.view.textclassifier.TextClassification.Builder setOnClickListener(android.view.View.OnClickListener);
-    method public android.view.textclassifier.TextClassification.Builder setPrimaryAction(android.content.Intent, java.lang.String, android.graphics.drawable.Drawable, android.view.View.OnClickListener);
+    method public android.view.textclassifier.TextClassification.Builder setPrimaryAction(android.content.Intent, java.lang.String, android.graphics.drawable.Drawable);
     method public android.view.textclassifier.TextClassification.Builder setSignature(java.lang.String);
     method public android.view.textclassifier.TextClassification.Builder setText(java.lang.String);
   }
 
-  public static final class TextClassification.Options {
+  public static final class TextClassification.Options implements android.os.Parcelable {
     ctor public TextClassification.Options();
+    method public int describeContents();
     method public android.os.LocaleList getDefaultLocales();
     method public android.view.textclassifier.TextClassification.Options setDefaultLocales(android.os.LocaleList);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassification.Options> CREATOR;
   }
 
   public final class TextClassificationManager {
@@ -49314,16 +49317,22 @@ package android.view.textclassifier {
     field public static final java.lang.String TYPE_URL = "url";
   }
 
-  public static final class TextClassifier.EntityConfig {
+  public static final class TextClassifier.EntityConfig implements android.os.Parcelable {
     ctor public TextClassifier.EntityConfig(int);
+    method public int describeContents();
     method public android.view.textclassifier.TextClassifier.EntityConfig excludeEntities(java.lang.String...);
     method public java.util.List<java.lang.String> getEntities(android.view.textclassifier.TextClassifier);
     method public android.view.textclassifier.TextClassifier.EntityConfig includeEntities(java.lang.String...);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassifier.EntityConfig> CREATOR;
   }
 
-  public final class TextLinks {
+  public final class TextLinks implements android.os.Parcelable {
     method public boolean apply(android.text.SpannableString, java.util.function.Function<android.view.textclassifier.TextLinks.TextLink, android.text.style.ClickableSpan>);
+    method public int describeContents();
     method public java.util.Collection<android.view.textclassifier.TextLinks.TextLink> getLinks();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextLinks> CREATOR;
   }
 
   public static final class TextLinks.Builder {
@@ -49332,21 +49341,27 @@ package android.view.textclassifier {
     method public android.view.textclassifier.TextLinks build();
   }
 
-  public static final class TextLinks.Options {
+  public static final class TextLinks.Options implements android.os.Parcelable {
     ctor public TextLinks.Options();
+    method public int describeContents();
     method public android.os.LocaleList getDefaultLocales();
     method public android.view.textclassifier.TextClassifier.EntityConfig getEntityConfig();
     method public android.view.textclassifier.TextLinks.Options setDefaultLocales(android.os.LocaleList);
     method public android.view.textclassifier.TextLinks.Options setEntityConfig(android.view.textclassifier.TextClassifier.EntityConfig);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextLinks.Options> CREATOR;
   }
 
-  public static final class TextLinks.TextLink {
+  public static final class TextLinks.TextLink implements android.os.Parcelable {
     ctor public TextLinks.TextLink(java.lang.String, int, int, java.util.Map<java.lang.String, java.lang.Float>);
+    method public int describeContents();
     method public float getConfidenceScore(java.lang.String);
     method public int getEnd();
     method public java.lang.String getEntity(int);
     method public int getEntityCount();
     method public int getStart();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextLinks.TextLink> CREATOR;
   }
 
   public final class TextSelection {
@@ -49365,10 +49380,13 @@ package android.view.textclassifier {
     method public android.view.textclassifier.TextSelection.Builder setSignature(java.lang.String);
   }
 
-  public static final class TextSelection.Options {
+  public static final class TextSelection.Options implements android.os.Parcelable {
     ctor public TextSelection.Options();
+    method public int describeContents();
     method public android.os.LocaleList getDefaultLocales();
     method public android.view.textclassifier.TextSelection.Options setDefaultLocales(android.os.LocaleList);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextSelection.Options> CREATOR;
   }
 
 }
