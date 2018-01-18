@@ -602,6 +602,7 @@ package android {
     field public static final int fingerprintAuthDrawable = 16844008; // 0x10104e8
     field public static final int finishOnCloseSystemDialogs = 16843431; // 0x10102a7
     field public static final int finishOnTaskLaunch = 16842772; // 0x1010014
+    field public static final int firstBaselineToTopHeight = 16844157; // 0x101057d
     field public static final int firstDayOfWeek = 16843581; // 0x101033d
     field public static final int fitsSystemWindows = 16842973; // 0x10100dd
     field public static final int flipInterval = 16843129; // 0x1010179
@@ -798,6 +799,7 @@ package android {
     field public static final int largeHeap = 16843610; // 0x101035a
     field public static final int largeScreens = 16843398; // 0x1010286
     field public static final int largestWidthLimitDp = 16843622; // 0x1010366
+    field public static final int lastBaselineToBottomHeight = 16844158; // 0x101057e
     field public static final int launchMode = 16842781; // 0x101001d
     field public static final int launchTaskBehindSourceAnimation = 16843922; // 0x1010492
     field public static final int launchTaskBehindTargetAnimation = 16843921; // 0x1010491
@@ -855,6 +857,7 @@ package android {
     field public static final int left = 16843181; // 0x10101ad
     field public static final int letterSpacing = 16843958; // 0x10104b6
     field public static final int level = 16844032; // 0x1010500
+    field public static final int lineHeight = 16844159; // 0x101057f
     field public static final int lineSpacingExtra = 16843287; // 0x1010217
     field public static final int lineSpacingMultiplier = 16843288; // 0x1010218
     field public static final int lines = 16843092; // 0x1010154
@@ -6354,6 +6357,7 @@ package android.app.admin {
     field public static final java.lang.String EXTRA_DISABLE_WARNING = "android.app.extra.DISABLE_WARNING";
     field public static final java.lang.String EXTRA_LOCK_TASK_PACKAGE = "android.app.extra.LOCK_TASK_PACKAGE";
     field public static final java.lang.String EXTRA_TRANSFER_OWNER_ADMIN_EXTRAS_BUNDLE = "android.app.extra.TRANSFER_OWNER_ADMIN_EXTRAS_BUNDLE";
+    field public static final java.lang.String SUPPORT_TRANSFER_OWNERSHIP_META_DATA = "android.app.support_transfer_ownership";
   }
 
   public class DeviceAdminService extends android.app.Service {
@@ -6367,7 +6371,7 @@ package android.app.admin {
     method public void addPersistentPreferredActivity(android.content.ComponentName, android.content.IntentFilter, android.content.ComponentName);
     method public void addUserRestriction(android.content.ComponentName, java.lang.String);
     method public boolean bindDeviceAdminServiceAsUser(android.content.ComponentName, android.content.Intent, android.content.ServiceConnection, int, android.os.UserHandle);
-    method public boolean clearApplicationUserData(android.content.ComponentName, java.lang.String, android.app.admin.DevicePolicyManager.OnClearApplicationUserDataListener, java.util.concurrent.Executor);
+    method public boolean clearApplicationUserData(android.content.ComponentName, java.lang.String, java.util.concurrent.Executor, android.app.admin.DevicePolicyManager.OnClearApplicationUserDataListener);
     method public void clearCrossProfileIntentFilters(android.content.ComponentName);
     method public deprecated void clearDeviceOwnerApp(java.lang.String);
     method public void clearPackagePersistentPreferredActivities(android.content.ComponentName, java.lang.String);
@@ -6397,6 +6401,7 @@ package android.app.admin {
     method public java.util.List<java.lang.String> getDelegatePackages(android.content.ComponentName, java.lang.String);
     method public java.util.List<java.lang.String> getDelegatedScopes(android.content.ComponentName, java.lang.String);
     method public java.lang.CharSequence getDeviceOwnerLockScreenInfo();
+    method public java.lang.CharSequence getEndUserSessionMessage(android.content.ComponentName);
     method public java.util.List<byte[]> getInstalledCaCerts(android.content.ComponentName);
     method public java.util.List<java.lang.String> getKeepUninstalledPackages(android.content.ComponentName);
     method public int getKeyguardDisabledFeatures(android.content.ComponentName);
@@ -6432,6 +6437,7 @@ package android.app.admin {
     method public boolean getScreenCaptureDisabled(android.content.ComponentName);
     method public java.util.List<android.os.UserHandle> getSecondaryUsers(android.content.ComponentName);
     method public java.lang.CharSequence getShortSupportMessage(android.content.ComponentName);
+    method public java.lang.CharSequence getStartUserSessionMessage(android.content.ComponentName);
     method public boolean getStorageEncryption(android.content.ComponentName);
     method public int getStorageEncryptionStatus();
     method public android.app.admin.SystemUpdatePolicy getSystemUpdatePolicy();
@@ -6494,6 +6500,7 @@ package android.app.admin {
     method public void setCrossProfileContactsSearchDisabled(android.content.ComponentName, boolean);
     method public void setDelegatedScopes(android.content.ComponentName, java.lang.String, java.util.List<java.lang.String>);
     method public void setDeviceOwnerLockScreenInfo(android.content.ComponentName, java.lang.CharSequence);
+    method public void setEndUserSessionMessage(android.content.ComponentName, java.lang.CharSequence);
     method public void setGlobalSetting(android.content.ComponentName, java.lang.String, java.lang.String);
     method public void setKeepUninstalledPackages(android.content.ComponentName, java.util.List<java.lang.String>);
     method public boolean setKeyPairCertificate(android.content.ComponentName, java.lang.String, java.util.List<java.security.cert.Certificate>, boolean);
@@ -6537,6 +6544,7 @@ package android.app.admin {
     method public void setSecureSetting(android.content.ComponentName, java.lang.String, java.lang.String);
     method public void setSecurityLoggingEnabled(android.content.ComponentName, boolean);
     method public void setShortSupportMessage(android.content.ComponentName, java.lang.CharSequence);
+    method public void setStartUserSessionMessage(android.content.ComponentName, java.lang.CharSequence);
     method public boolean setStatusBarDisabled(android.content.ComponentName, boolean);
     method public int setStorageEncryption(android.content.ComponentName, boolean);
     method public void setSystemSetting(android.content.ComponentName, java.lang.String, java.lang.String);
@@ -7068,8 +7076,8 @@ package android.app.slice {
 
   public final class Slice implements android.os.Parcelable {
     ctor protected Slice(android.os.Parcel);
-    method public static android.app.slice.Slice bindSlice(android.content.ContentResolver, android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
-    method public static android.app.slice.Slice bindSlice(android.content.Context, android.content.Intent, java.util.List<android.app.slice.SliceSpec>);
+    method public static deprecated android.app.slice.Slice bindSlice(android.content.ContentResolver, android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
+    method public static deprecated android.app.slice.Slice bindSlice(android.content.Context, android.content.Intent, java.util.List<android.app.slice.SliceSpec>);
     method public int describeContents();
     method public java.util.List<java.lang.String> getHints();
     method public java.util.List<android.app.slice.SliceItem> getItems();
@@ -7155,7 +7163,10 @@ package android.app.slice {
   }
 
   public class SliceManager {
+    method public android.app.slice.Slice bindSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
+    method public android.app.slice.Slice bindSlice(android.content.Intent, java.util.List<android.app.slice.SliceSpec>);
     method public java.util.List<android.app.slice.SliceSpec> getPinnedSpecs(android.net.Uri);
+    method public java.util.Collection<android.net.Uri> getSliceDescendants(android.net.Uri);
     method public void pinSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
     method public void registerSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback, java.util.List<android.app.slice.SliceSpec>);
     method public void registerSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback, java.util.List<android.app.slice.SliceSpec>, android.os.Handler);
@@ -7174,7 +7185,7 @@ package android.app.slice {
     method public final java.lang.String getType(android.net.Uri);
     method public final android.net.Uri insert(android.net.Uri, android.content.ContentValues);
     method public android.app.slice.Slice onBindSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
-    method public deprecated android.app.slice.Slice onBindSlice(android.net.Uri);
+    method public java.util.Collection<android.net.Uri> onGetSliceDescendants(android.net.Uri);
     method public android.net.Uri onMapIntentToUri(android.content.Intent);
     method public void onSlicePinned(android.net.Uri);
     method public void onSliceUnpinned(android.net.Uri);
@@ -11156,7 +11167,7 @@ package android.content.pm {
     field public static final java.lang.String FEATURE_USB_HOST = "android.hardware.usb.host";
     field public static final java.lang.String FEATURE_VERIFIED_BOOT = "android.software.verified_boot";
     field public static final java.lang.String FEATURE_VR_HEADTRACKING = "android.hardware.vr.headtracking";
-    field public static final java.lang.String FEATURE_VR_MODE = "android.software.vr.mode";
+    field public static final deprecated java.lang.String FEATURE_VR_MODE = "android.software.vr.mode";
     field public static final java.lang.String FEATURE_VR_MODE_HIGH_PERFORMANCE = "android.hardware.vr.high_performance";
     field public static final java.lang.String FEATURE_VULKAN_HARDWARE_COMPUTE = "android.hardware.vulkan.compute";
     field public static final java.lang.String FEATURE_VULKAN_HARDWARE_LEVEL = "android.hardware.vulkan.level";
@@ -26219,12 +26230,18 @@ package android.net {
   }
 
   public final class IpSecManager {
-    method public android.net.IpSecManager.SecurityParameterIndex allocateSecurityParameterIndex(int, java.net.InetAddress) throws android.net.IpSecManager.ResourceUnavailableException;
-    method public android.net.IpSecManager.SecurityParameterIndex allocateSecurityParameterIndex(int, java.net.InetAddress, int) throws android.net.IpSecManager.ResourceUnavailableException, android.net.IpSecManager.SpiUnavailableException;
-    method public void applyTransportModeTransform(java.io.FileDescriptor, android.net.IpSecTransform) throws java.io.IOException;
+    method public android.net.IpSecManager.SecurityParameterIndex allocateSecurityParameterIndex(java.net.InetAddress) throws android.net.IpSecManager.ResourceUnavailableException;
+    method public android.net.IpSecManager.SecurityParameterIndex allocateSecurityParameterIndex(java.net.InetAddress, int) throws android.net.IpSecManager.ResourceUnavailableException, android.net.IpSecManager.SpiUnavailableException;
+    method public void applyTransportModeTransform(java.net.Socket, int, android.net.IpSecTransform) throws java.io.IOException;
+    method public void applyTransportModeTransform(java.net.DatagramSocket, int, android.net.IpSecTransform) throws java.io.IOException;
+    method public void applyTransportModeTransform(java.io.FileDescriptor, int, android.net.IpSecTransform) throws java.io.IOException;
     method public android.net.IpSecManager.UdpEncapsulationSocket openUdpEncapsulationSocket(int) throws java.io.IOException, android.net.IpSecManager.ResourceUnavailableException;
     method public android.net.IpSecManager.UdpEncapsulationSocket openUdpEncapsulationSocket() throws java.io.IOException, android.net.IpSecManager.ResourceUnavailableException;
-    method public void removeTransportModeTransform(java.io.FileDescriptor, android.net.IpSecTransform) throws java.io.IOException;
+    method public void removeTransportModeTransforms(java.net.Socket) throws java.io.IOException;
+    method public void removeTransportModeTransforms(java.net.DatagramSocket) throws java.io.IOException;
+    method public void removeTransportModeTransforms(java.io.FileDescriptor) throws java.io.IOException;
+    field public static final int DIRECTION_IN = 0; // 0x0
+    field public static final int DIRECTION_OUT = 1; // 0x1
   }
 
   public static final class IpSecManager.ResourceUnavailableException extends android.util.AndroidException {
@@ -26247,18 +26264,15 @@ package android.net {
 
   public final class IpSecTransform implements java.lang.AutoCloseable {
     method public void close();
-    field public static final int DIRECTION_IN = 0; // 0x0
-    field public static final int DIRECTION_OUT = 1; // 0x1
   }
 
   public static class IpSecTransform.Builder {
     ctor public IpSecTransform.Builder(android.content.Context);
-    method public android.net.IpSecTransform buildTransportModeTransform(java.net.InetAddress) throws java.io.IOException, android.net.IpSecManager.ResourceUnavailableException, android.net.IpSecManager.SpiUnavailableException;
-    method public android.net.IpSecTransform.Builder setAuthenticatedEncryption(int, android.net.IpSecAlgorithm);
-    method public android.net.IpSecTransform.Builder setAuthentication(int, android.net.IpSecAlgorithm);
-    method public android.net.IpSecTransform.Builder setEncryption(int, android.net.IpSecAlgorithm);
+    method public android.net.IpSecTransform buildTransportModeTransform(java.net.InetAddress, android.net.IpSecManager.SecurityParameterIndex) throws java.io.IOException, android.net.IpSecManager.ResourceUnavailableException, android.net.IpSecManager.SpiUnavailableException;
+    method public android.net.IpSecTransform.Builder setAuthenticatedEncryption(android.net.IpSecAlgorithm);
+    method public android.net.IpSecTransform.Builder setAuthentication(android.net.IpSecAlgorithm);
+    method public android.net.IpSecTransform.Builder setEncryption(android.net.IpSecAlgorithm);
     method public android.net.IpSecTransform.Builder setIpv4Encapsulation(android.net.IpSecManager.UdpEncapsulationSocket, int);
-    method public android.net.IpSecTransform.Builder setSpi(int, android.net.IpSecManager.SecurityParameterIndex);
   }
 
   public class LinkAddress implements android.os.Parcelable {
@@ -26278,7 +26292,9 @@ package android.net {
     method public android.net.ProxyInfo getHttpProxy();
     method public java.lang.String getInterfaceName();
     method public java.util.List<android.net.LinkAddress> getLinkAddresses();
+    method public java.lang.String getPrivateDnsServerName();
     method public java.util.List<android.net.RouteInfo> getRoutes();
+    method public boolean isPrivateDnsActive();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.LinkProperties> CREATOR;
   }
@@ -32206,6 +32222,7 @@ package android.os {
     field public static final int THREAD_PRIORITY_MORE_FAVORABLE = -1; // 0xffffffff
     field public static final int THREAD_PRIORITY_URGENT_AUDIO = -19; // 0xffffffed
     field public static final int THREAD_PRIORITY_URGENT_DISPLAY = -8; // 0xfffffff8
+    field public static final int THREAD_PRIORITY_VIDEO = -10; // 0xfffffff6
   }
 
   public abstract class ProxyFileDescriptorCallback {
@@ -32462,6 +32479,7 @@ package android.os {
     field public static final java.lang.String DISALLOW_CONFIG_LOCALE = "no_config_locale";
     field public static final java.lang.String DISALLOW_CONFIG_LOCATION_MODE = "no_config_location_mode";
     field public static final java.lang.String DISALLOW_CONFIG_MOBILE_NETWORKS = "no_config_mobile_networks";
+    field public static final java.lang.String DISALLOW_CONFIG_SCREEN_TIMEOUT = "no_config_screen_timeout";
     field public static final java.lang.String DISALLOW_CONFIG_TETHERING = "no_config_tethering";
     field public static final java.lang.String DISALLOW_CONFIG_VPN = "no_config_vpn";
     field public static final java.lang.String DISALLOW_CONFIG_WIFI = "no_config_wifi";
@@ -47986,7 +48004,6 @@ package android.view {
     field public float buttonBrightness;
     field public float dimAmount;
     field public int flags;
-    field public long flags2;
     field public int format;
     field public int gravity;
     field public float horizontalMargin;
@@ -48039,6 +48056,8 @@ package android.view.accessibility {
     method public void setPackageName(java.lang.CharSequence);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int CONTENT_CHANGE_TYPE_CONTENT_DESCRIPTION = 4; // 0x4
+    field public static final int CONTENT_CHANGE_TYPE_PANE_APPEARED = 16; // 0x10
+    field public static final int CONTENT_CHANGE_TYPE_PANE_DISAPPEARED = 32; // 0x20
     field public static final int CONTENT_CHANGE_TYPE_PANE_TITLE = 8; // 0x8
     field public static final int CONTENT_CHANGE_TYPE_SUBTREE = 1; // 0x1
     field public static final int CONTENT_CHANGE_TYPE_TEXT = 2; // 0x2
@@ -52507,6 +52526,7 @@ package android.widget {
     method public int getExtendedPaddingBottom();
     method public int getExtendedPaddingTop();
     method public android.text.InputFilter[] getFilters();
+    method public int getFirstBaselineToTopHeight();
     method public java.lang.String getFontFeatureSettings();
     method public java.lang.String getFontVariationSettings();
     method public boolean getFreezesText();
@@ -52524,6 +52544,7 @@ package android.widget {
     method public int getInputType();
     method public int getJustificationMode();
     method public final android.text.method.KeyListener getKeyListener();
+    method public int getLastBaselineToBottomHeight();
     method public final android.text.Layout getLayout();
     method public float getLetterSpacing();
     method public int getLineBounds(int, android.graphics.Rect);
@@ -52620,6 +52641,7 @@ package android.widget {
     method public void setExtractedText(android.view.inputmethod.ExtractedText);
     method public void setFallbackLineSpacing(boolean);
     method public void setFilters(android.text.InputFilter[]);
+    method public void setFirstBaselineToTopHeight(int);
     method public void setFontFeatureSettings(java.lang.String);
     method public boolean setFontVariationSettings(java.lang.String);
     method protected boolean setFrame(int, int, int, int);
@@ -52641,7 +52663,9 @@ package android.widget {
     method public void setInputType(int);
     method public void setJustificationMode(int);
     method public void setKeyListener(android.text.method.KeyListener);
+    method public void setLastBaselineToBottomHeight(int);
     method public void setLetterSpacing(float);
+    method public void setLineHeight(int);
     method public void setLineSpacing(float, float);
     method public void setLines(int);
     method public final void setLinkTextColor(int);
