@@ -211,6 +211,7 @@ package android {
     field public static final int accessibilityEventTypes = 16843648; // 0x1010380
     field public static final int accessibilityFeedbackType = 16843650; // 0x1010382
     field public static final int accessibilityFlags = 16843652; // 0x1010384
+    field public static final int accessibilityHeading = 16844160; // 0x1010580
     field public static final int accessibilityLiveRegion = 16843758; // 0x10103ee
     field public static final int accessibilityPaneTitle = 16844156; // 0x101057c
     field public static final int accessibilityTraversalAfter = 16843986; // 0x10104d2
@@ -1808,6 +1809,7 @@ package android {
   public static final class R.id {
     ctor public R.id();
     field public static final int accessibilityActionContextClick = 16908348; // 0x102003c
+    field public static final int accessibilityActionHideTooltip = 16908357; // 0x1020045
     field public static final int accessibilityActionMoveWindow = 16908354; // 0x1020042
     field public static final int accessibilityActionScrollDown = 16908346; // 0x102003a
     field public static final int accessibilityActionScrollLeft = 16908345; // 0x1020039
@@ -1816,6 +1818,7 @@ package android {
     field public static final int accessibilityActionScrollUp = 16908344; // 0x1020038
     field public static final int accessibilityActionSetProgress = 16908349; // 0x102003d
     field public static final int accessibilityActionShowOnScreen = 16908342; // 0x1020036
+    field public static final int accessibilityActionShowTooltip = 16908356; // 0x1020044
     field public static final int addToDictionary = 16908330; // 0x102002a
     field public static final int autofill = 16908355; // 0x1020043
     field public static final int background = 16908288; // 0x1020000
@@ -2795,6 +2798,7 @@ package android.accessibilityservice {
     field public static final int GLOBAL_ACTION_POWER_DIALOG = 6; // 0x6
     field public static final int GLOBAL_ACTION_QUICK_SETTINGS = 5; // 0x5
     field public static final int GLOBAL_ACTION_RECENTS = 3; // 0x3
+    field public static final int GLOBAL_ACTION_TAKE_SCREENSHOT = 9; // 0x9
     field public static final int GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN = 7; // 0x7
     field public static final java.lang.String SERVICE_INTERFACE = "android.accessibilityservice.AccessibilityService";
     field public static final java.lang.String SERVICE_META_DATA = "android.accessibilityservice";
@@ -5859,11 +5863,15 @@ package android.app {
     method public java.lang.CharSequence getLabel();
     method public java.lang.String getResultKey();
     method public static android.os.Bundle getResultsFromIntent(android.content.Intent);
+    method public static int getResultsSource(android.content.Intent);
     method public boolean isDataOnly();
+    method public static void setResultsSource(android.content.Intent, int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.RemoteInput> CREATOR;
     field public static final java.lang.String EXTRA_RESULTS_DATA = "android.remoteinput.resultsData";
     field public static final java.lang.String RESULTS_CLIP_LABEL = "android.remoteinput.results";
+    field public static final int SOURCE_CHOICE = 1; // 0x1
+    field public static final int SOURCE_FREE_FORM_INPUT = 0; // 0x0
   }
 
   public static final class RemoteInput.Builder {
@@ -6341,6 +6349,9 @@ package android.app.admin {
     method public void onTransferOwnershipComplete(android.content.Context, android.os.PersistableBundle);
     method public void onUserAdded(android.content.Context, android.content.Intent, android.os.UserHandle);
     method public void onUserRemoved(android.content.Context, android.content.Intent, android.os.UserHandle);
+    method public void onUserStarted(android.content.Context, android.content.Intent, android.os.UserHandle);
+    method public void onUserStopped(android.content.Context, android.content.Intent, android.os.UserHandle);
+    method public void onUserSwitched(android.content.Context, android.content.Intent, android.os.UserHandle);
     field public static final java.lang.String ACTION_DEVICE_ADMIN_DISABLED = "android.app.action.DEVICE_ADMIN_DISABLED";
     field public static final java.lang.String ACTION_DEVICE_ADMIN_DISABLE_REQUESTED = "android.app.action.DEVICE_ADMIN_DISABLE_REQUESTED";
     field public static final java.lang.String ACTION_DEVICE_ADMIN_ENABLED = "android.app.action.DEVICE_ADMIN_ENABLED";
@@ -6987,6 +6998,7 @@ package android.app.job {
     method public android.app.job.JobInfo.Builder setEstimatedNetworkBytes(long);
     method public android.app.job.JobInfo.Builder setExtras(android.os.PersistableBundle);
     method public android.app.job.JobInfo.Builder setImportantWhileForeground(boolean);
+    method public android.app.job.JobInfo.Builder setIsPrefetch(boolean);
     method public android.app.job.JobInfo.Builder setMinimumLatency(long);
     method public android.app.job.JobInfo.Builder setOverrideDeadline(long);
     method public android.app.job.JobInfo.Builder setPeriodic(long);
@@ -7094,6 +7106,7 @@ package android.app.slice {
     field public static final java.lang.String HINT_MAX = "max";
     field public static final java.lang.String HINT_NO_TINT = "no_tint";
     field public static final java.lang.String HINT_PARTIAL = "partial";
+    field public static final java.lang.String HINT_SEE_MORE = "see_more";
     field public static final java.lang.String HINT_SELECTED = "selected";
     field public static final java.lang.String HINT_SHORTCUT = "shortcut";
     field public static final java.lang.String HINT_SUMMARY = "summary";
@@ -10682,6 +10695,13 @@ package android.content.pm {
     field public int reqTouchScreen;
   }
 
+  public class CrossProfileApps {
+    method public android.graphics.drawable.Drawable getProfileSwitchingIconDrawable(android.os.UserHandle);
+    method public java.lang.CharSequence getProfileSwitchingLabel(android.os.UserHandle);
+    method public java.util.List<android.os.UserHandle> getTargetUserProfiles();
+    method public void startMainActivity(android.content.ComponentName, android.os.UserHandle);
+  }
+
   public final class FeatureGroupInfo implements android.os.Parcelable {
     ctor public FeatureGroupInfo();
     ctor public FeatureGroupInfo(android.content.pm.FeatureGroupInfo);
@@ -11472,17 +11492,6 @@ package android.content.pm {
     method public deprecated int getVersionCode();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.VersionedPackage> CREATOR;
-  }
-
-}
-
-package android.content.pm.crossprofile {
-
-  public class CrossProfileApps {
-    method public android.graphics.drawable.Drawable getProfileSwitchingIcon(android.os.UserHandle);
-    method public java.lang.CharSequence getProfileSwitchingLabel(android.os.UserHandle);
-    method public java.util.List<android.os.UserHandle> getTargetUserProfiles();
-    method public void startMainActivity(android.content.ComponentName, android.os.UserHandle);
   }
 
 }
@@ -15227,18 +15236,26 @@ package android.hardware {
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int BLOB = 33; // 0x21
     field public static final android.os.Parcelable.Creator<android.hardware.HardwareBuffer> CREATOR;
+    field public static final int DS_24UI8 = 50; // 0x32
+    field public static final int DS_FP32UI8 = 52; // 0x34
+    field public static final int D_16 = 48; // 0x30
+    field public static final int D_24 = 49; // 0x31
+    field public static final int D_FP32 = 51; // 0x33
     field public static final int RGBA_1010102 = 43; // 0x2b
     field public static final int RGBA_8888 = 1; // 0x1
     field public static final int RGBA_FP16 = 22; // 0x16
     field public static final int RGBX_8888 = 2; // 0x2
     field public static final int RGB_565 = 4; // 0x4
     field public static final int RGB_888 = 3; // 0x3
+    field public static final int S_UI8 = 53; // 0x35
     field public static final long USAGE_CPU_READ_OFTEN = 3L; // 0x3L
     field public static final long USAGE_CPU_READ_RARELY = 2L; // 0x2L
     field public static final long USAGE_CPU_WRITE_OFTEN = 48L; // 0x30L
     field public static final long USAGE_CPU_WRITE_RARELY = 32L; // 0x20L
     field public static final long USAGE_GPU_COLOR_OUTPUT = 512L; // 0x200L
+    field public static final long USAGE_GPU_CUBE_MAP = 33554432L; // 0x2000000L
     field public static final long USAGE_GPU_DATA_BUFFER = 16777216L; // 0x1000000L
+    field public static final long USAGE_GPU_MIPMAP_COMPLETE = 67108864L; // 0x4000000L
     field public static final long USAGE_GPU_SAMPLED_IMAGE = 256L; // 0x100L
     field public static final long USAGE_PROTECTED_CONTENT = 16384L; // 0x4000L
     field public static final long USAGE_SENSOR_DIRECT_DATA = 8388608L; // 0x800000L
@@ -15724,6 +15741,7 @@ package android.hardware.camera2 {
     field public static final int CONTROL_AE_MODE_ON_ALWAYS_FLASH = 3; // 0x3
     field public static final int CONTROL_AE_MODE_ON_AUTO_FLASH = 2; // 0x2
     field public static final int CONTROL_AE_MODE_ON_AUTO_FLASH_REDEYE = 4; // 0x4
+    field public static final int CONTROL_AE_MODE_ON_EXTERNAL_FLASH = 5; // 0x5
     field public static final int CONTROL_AE_PRECAPTURE_TRIGGER_CANCEL = 2; // 0x2
     field public static final int CONTROL_AE_PRECAPTURE_TRIGGER_IDLE = 0; // 0x0
     field public static final int CONTROL_AE_PRECAPTURE_TRIGGER_START = 1; // 0x1
@@ -37903,7 +37921,6 @@ package android.service.autofill {
   }
 
   public static final class FieldClassification.Match {
-    method public java.lang.String getAlgorithm();
     method public java.lang.String getRemoteId();
     method public float getScore();
   }
@@ -42315,10 +42332,10 @@ package android.text {
   }
 
   public class MeasuredText implements android.text.Spanned {
-    method public static android.text.MeasuredText build(java.lang.CharSequence, android.text.TextPaint, android.text.TextDirectionHeuristic);
-    method public static android.text.MeasuredText build(java.lang.CharSequence, android.text.TextPaint, android.text.TextDirectionHeuristic, int, int);
     method public char charAt(int);
+    method public int getBreakStrategy();
     method public int getEnd();
+    method public int getHyphenationFrequency();
     method public android.text.TextPaint getPaint();
     method public int getParagraphCount();
     method public int getParagraphEnd(int);
@@ -42333,6 +42350,15 @@ package android.text {
     method public int length();
     method public int nextSpanTransition(int, int, java.lang.Class);
     method public java.lang.CharSequence subSequence(int, int);
+  }
+
+  public static final class MeasuredText.Builder {
+    ctor public MeasuredText.Builder(java.lang.CharSequence, android.text.TextPaint);
+    method public android.text.MeasuredText build();
+    method public android.text.MeasuredText.Builder setBreakStrategy(int);
+    method public android.text.MeasuredText.Builder setHyphenationFrequency(int);
+    method public android.text.MeasuredText.Builder setRange(int, int);
+    method public android.text.MeasuredText.Builder setTextDirection(android.text.TextDirectionHeuristic);
   }
 
   public abstract interface NoCopySpan {
@@ -44069,6 +44095,18 @@ package android.util {
     field public static final deprecated boolean LOGV = false;
     field public static final deprecated boolean PROFILE = false;
     field public static final deprecated boolean RELEASE = true;
+  }
+
+  public class DataUnit extends java.lang.Enum {
+    method public long toBytes(long);
+    method public static android.util.DataUnit valueOf(java.lang.String);
+    method public static final android.util.DataUnit[] values();
+    enum_constant public static final android.util.DataUnit GIBIBYTES;
+    enum_constant public static final android.util.DataUnit GIGABYTES;
+    enum_constant public static final android.util.DataUnit KIBIBYTES;
+    enum_constant public static final android.util.DataUnit KILOBYTES;
+    enum_constant public static final android.util.DataUnit MEBIBYTES;
+    enum_constant public static final android.util.DataUnit MEGABYTES;
   }
 
   public class DebugUtils {
@@ -48175,6 +48213,7 @@ package android.view.accessibility {
     method public java.lang.CharSequence getText();
     method public int getTextSelectionEnd();
     method public int getTextSelectionStart();
+    method public java.lang.CharSequence getTooltipText();
     method public android.view.accessibility.AccessibilityNodeInfo getTraversalAfter();
     method public android.view.accessibility.AccessibilityNodeInfo getTraversalBefore();
     method public java.lang.String getViewIdResourceName();
@@ -48191,6 +48230,7 @@ package android.view.accessibility {
     method public boolean isEnabled();
     method public boolean isFocusable();
     method public boolean isFocused();
+    method public boolean isHeading();
     method public boolean isImportantForAccessibility();
     method public boolean isLongClickable();
     method public boolean isMultiLine();
@@ -48234,6 +48274,7 @@ package android.view.accessibility {
     method public void setError(java.lang.CharSequence);
     method public void setFocusable(boolean);
     method public void setFocused(boolean);
+    method public void setHeading(boolean);
     method public void setHintText(java.lang.CharSequence);
     method public void setImportantForAccessibility(boolean);
     method public void setInputType(int);
@@ -48260,6 +48301,7 @@ package android.view.accessibility {
     method public void setSource(android.view.View, int);
     method public void setText(java.lang.CharSequence);
     method public void setTextSelection(int, int);
+    method public void setTooltipText(java.lang.CharSequence);
     method public void setTraversalAfter(android.view.View);
     method public void setTraversalAfter(android.view.View, int);
     method public void setTraversalBefore(android.view.View);
@@ -48329,6 +48371,7 @@ package android.view.accessibility {
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_DISMISS;
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_EXPAND;
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_FOCUS;
+    field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_HIDE_TOOLTIP;
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_LONG_CLICK;
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_MOVE_WINDOW;
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_NEXT_AT_MOVEMENT_GRANULARITY;
@@ -48348,6 +48391,7 @@ package android.view.accessibility {
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_SET_SELECTION;
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_SET_TEXT;
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_SHOW_ON_SCREEN;
+    field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_SHOW_TOOLTIP;
   }
 
   public static final class AccessibilityNodeInfo.CollectionInfo {
@@ -48367,7 +48411,7 @@ package android.view.accessibility {
     method public int getColumnSpan();
     method public int getRowIndex();
     method public int getRowSpan();
-    method public boolean isHeading();
+    method public deprecated boolean isHeading();
     method public boolean isSelected();
     method public static android.view.accessibility.AccessibilityNodeInfo.CollectionItemInfo obtain(int, int, int, int, boolean);
     method public static android.view.accessibility.AccessibilityNodeInfo.CollectionItemInfo obtain(int, int, int, int, boolean, boolean);
@@ -52592,6 +52636,7 @@ package android.widget {
     method public android.graphics.Typeface getTypeface();
     method public android.text.style.URLSpan[] getUrls();
     method public boolean hasSelection();
+    method public boolean isAccessibilityHeading();
     method public boolean isAllCaps();
     method public boolean isCursorVisible();
     method public boolean isElegantTextHeight();
@@ -52614,6 +52659,7 @@ package android.widget {
     method protected void onTextChanged(java.lang.CharSequence, int, int, int);
     method public boolean onTextContextMenuItem(int);
     method public void removeTextChangedListener(android.text.TextWatcher);
+    method public void setAccessibilityHeading(boolean);
     method public void setAllCaps(boolean);
     method public final void setAutoLinkMask(int);
     method public void setAutoSizeTextTypeUniformWithConfiguration(int, int, int, int);
@@ -72411,197 +72457,6 @@ package javax.xml.xpath {
 
   public abstract interface XPathVariableResolver {
     method public abstract java.lang.Object resolveVariable(javax.xml.namespace.QName);
-  }
-
-}
-
-package junit.framework {
-
-  public class Assert {
-    ctor protected Assert();
-    method public static void assertEquals(java.lang.String, java.lang.Object, java.lang.Object);
-    method public static void assertEquals(java.lang.Object, java.lang.Object);
-    method public static void assertEquals(java.lang.String, java.lang.String, java.lang.String);
-    method public static void assertEquals(java.lang.String, java.lang.String);
-    method public static void assertEquals(java.lang.String, double, double, double);
-    method public static void assertEquals(double, double, double);
-    method public static void assertEquals(java.lang.String, float, float, float);
-    method public static void assertEquals(float, float, float);
-    method public static void assertEquals(java.lang.String, long, long);
-    method public static void assertEquals(long, long);
-    method public static void assertEquals(java.lang.String, boolean, boolean);
-    method public static void assertEquals(boolean, boolean);
-    method public static void assertEquals(java.lang.String, byte, byte);
-    method public static void assertEquals(byte, byte);
-    method public static void assertEquals(java.lang.String, char, char);
-    method public static void assertEquals(char, char);
-    method public static void assertEquals(java.lang.String, short, short);
-    method public static void assertEquals(short, short);
-    method public static void assertEquals(java.lang.String, int, int);
-    method public static void assertEquals(int, int);
-    method public static void assertFalse(java.lang.String, boolean);
-    method public static void assertFalse(boolean);
-    method public static void assertNotNull(java.lang.Object);
-    method public static void assertNotNull(java.lang.String, java.lang.Object);
-    method public static void assertNotSame(java.lang.String, java.lang.Object, java.lang.Object);
-    method public static void assertNotSame(java.lang.Object, java.lang.Object);
-    method public static void assertNull(java.lang.Object);
-    method public static void assertNull(java.lang.String, java.lang.Object);
-    method public static void assertSame(java.lang.String, java.lang.Object, java.lang.Object);
-    method public static void assertSame(java.lang.Object, java.lang.Object);
-    method public static void assertTrue(java.lang.String, boolean);
-    method public static void assertTrue(boolean);
-    method public static void fail(java.lang.String);
-    method public static void fail();
-    method public static void failNotEquals(java.lang.String, java.lang.Object, java.lang.Object);
-    method public static void failNotSame(java.lang.String, java.lang.Object, java.lang.Object);
-    method public static void failSame(java.lang.String);
-    method public static java.lang.String format(java.lang.String, java.lang.Object, java.lang.Object);
-  }
-
-  public class AssertionFailedError extends java.lang.AssertionError {
-    ctor public AssertionFailedError();
-    ctor public AssertionFailedError(java.lang.String);
-  }
-
-  public class ComparisonFailure extends junit.framework.AssertionFailedError {
-    ctor public ComparisonFailure(java.lang.String, java.lang.String, java.lang.String);
-    method public java.lang.String getActual();
-    method public java.lang.String getExpected();
-  }
-
-  public abstract interface Protectable {
-    method public abstract void protect() throws java.lang.Throwable;
-  }
-
-  public abstract interface Test {
-    method public abstract int countTestCases();
-    method public abstract void run(junit.framework.TestResult);
-  }
-
-  public abstract class TestCase extends junit.framework.Assert implements junit.framework.Test {
-    ctor public TestCase();
-    ctor public TestCase(java.lang.String);
-    method public int countTestCases();
-    method protected junit.framework.TestResult createResult();
-    method public java.lang.String getName();
-    method public junit.framework.TestResult run();
-    method public void run(junit.framework.TestResult);
-    method public void runBare() throws java.lang.Throwable;
-    method protected void runTest() throws java.lang.Throwable;
-    method public void setName(java.lang.String);
-    method protected void setUp() throws java.lang.Exception;
-    method protected void tearDown() throws java.lang.Exception;
-  }
-
-  public class TestFailure {
-    ctor public TestFailure(junit.framework.Test, java.lang.Throwable);
-    method public java.lang.String exceptionMessage();
-    method public junit.framework.Test failedTest();
-    method public boolean isFailure();
-    method public java.lang.Throwable thrownException();
-    method public java.lang.String trace();
-    field protected junit.framework.Test fFailedTest;
-    field protected java.lang.Throwable fThrownException;
-  }
-
-  public abstract interface TestListener {
-    method public abstract void addError(junit.framework.Test, java.lang.Throwable);
-    method public abstract void addFailure(junit.framework.Test, junit.framework.AssertionFailedError);
-    method public abstract void endTest(junit.framework.Test);
-    method public abstract void startTest(junit.framework.Test);
-  }
-
-  public class TestResult {
-    ctor public TestResult();
-    method public synchronized void addError(junit.framework.Test, java.lang.Throwable);
-    method public synchronized void addFailure(junit.framework.Test, junit.framework.AssertionFailedError);
-    method public synchronized void addListener(junit.framework.TestListener);
-    method public void endTest(junit.framework.Test);
-    method public synchronized int errorCount();
-    method public synchronized java.util.Enumeration<junit.framework.TestFailure> errors();
-    method public synchronized int failureCount();
-    method public synchronized java.util.Enumeration<junit.framework.TestFailure> failures();
-    method public synchronized void removeListener(junit.framework.TestListener);
-    method protected void run(junit.framework.TestCase);
-    method public synchronized int runCount();
-    method public void runProtected(junit.framework.Test, junit.framework.Protectable);
-    method public synchronized boolean shouldStop();
-    method public void startTest(junit.framework.Test);
-    method public synchronized void stop();
-    method public synchronized boolean wasSuccessful();
-    field protected java.util.Vector<junit.framework.TestFailure> fErrors;
-    field protected java.util.Vector<junit.framework.TestFailure> fFailures;
-    field protected java.util.Vector<junit.framework.TestListener> fListeners;
-    field protected int fRunTests;
-  }
-
-  public class TestSuite implements junit.framework.Test {
-    ctor public TestSuite();
-    ctor public TestSuite(java.lang.Class<?>);
-    ctor public TestSuite(java.lang.Class<? extends junit.framework.TestCase>, java.lang.String);
-    ctor public TestSuite(java.lang.String);
-    ctor public TestSuite(java.lang.Class<?>...);
-    ctor public TestSuite(java.lang.Class<? extends junit.framework.TestCase>[], java.lang.String);
-    method public void addTest(junit.framework.Test);
-    method public void addTestSuite(java.lang.Class<? extends junit.framework.TestCase>);
-    method public int countTestCases();
-    method public static junit.framework.Test createTest(java.lang.Class<?>, java.lang.String);
-    method public java.lang.String getName();
-    method public static java.lang.reflect.Constructor<?> getTestConstructor(java.lang.Class<?>) throws java.lang.NoSuchMethodException;
-    method public void run(junit.framework.TestResult);
-    method public void runTest(junit.framework.Test, junit.framework.TestResult);
-    method public void setName(java.lang.String);
-    method public junit.framework.Test testAt(int);
-    method public int testCount();
-    method public java.util.Enumeration<junit.framework.Test> tests();
-    method public static junit.framework.Test warning(java.lang.String);
-  }
-
-}
-
-package junit.runner {
-
-  public abstract class BaseTestRunner implements junit.framework.TestListener {
-    ctor public BaseTestRunner();
-    method public synchronized void addError(junit.framework.Test, java.lang.Throwable);
-    method public synchronized void addFailure(junit.framework.Test, junit.framework.AssertionFailedError);
-    method protected void clearStatus();
-    method public java.lang.String elapsedTimeAsString(long);
-    method public synchronized void endTest(junit.framework.Test);
-    method public java.lang.String extractClassName(java.lang.String);
-    method public static java.lang.String getFilteredTrace(java.lang.Throwable);
-    method public static java.lang.String getFilteredTrace(java.lang.String);
-    method public deprecated junit.runner.TestSuiteLoader getLoader();
-    method public static java.lang.String getPreference(java.lang.String);
-    method public static int getPreference(java.lang.String, int);
-    method protected static java.util.Properties getPreferences();
-    method public junit.framework.Test getTest(java.lang.String);
-    method public static deprecated boolean inVAJava();
-    method protected java.lang.Class<?> loadSuiteClass(java.lang.String) throws java.lang.ClassNotFoundException;
-    method protected java.lang.String processArguments(java.lang.String[]);
-    method protected abstract void runFailed(java.lang.String);
-    method public static void savePreferences() throws java.io.IOException;
-    method public void setLoading(boolean);
-    method public void setPreference(java.lang.String, java.lang.String);
-    method protected static void setPreferences(java.util.Properties);
-    method protected static boolean showStackRaw();
-    method public synchronized void startTest(junit.framework.Test);
-    method public abstract void testEnded(java.lang.String);
-    method public abstract void testFailed(int, junit.framework.Test, java.lang.Throwable);
-    method public abstract void testStarted(java.lang.String);
-    method public static java.lang.String truncate(java.lang.String);
-    method protected boolean useReloadingTestSuiteLoader();
-    field public static final java.lang.String SUITE_METHODNAME = "suite";
-  }
-
-  public abstract interface TestSuiteLoader {
-    method public abstract java.lang.Class load(java.lang.String) throws java.lang.ClassNotFoundException;
-    method public abstract java.lang.Class reload(java.lang.Class) throws java.lang.ClassNotFoundException;
-  }
-
-  public class Version {
-    method public static java.lang.String id();
   }
 
 }
