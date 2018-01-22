@@ -21751,7 +21751,13 @@ package android.media {
     field public static final int CHANNEL_OUT_STEREO = 12; // 0xc
     field public static final int CHANNEL_OUT_SURROUND = 1052; // 0x41c
     field public static final android.os.Parcelable.Creator<android.media.AudioFormat> CREATOR;
+    field public static final int ENCODING_AAC_ELD = 15; // 0xf
+    field public static final int ENCODING_AAC_HE_V1 = 11; // 0xb
+    field public static final int ENCODING_AAC_HE_V2 = 12; // 0xc
+    field public static final int ENCODING_AAC_LC = 10; // 0xa
+    field public static final int ENCODING_AAC_XHE = 16; // 0x10
     field public static final int ENCODING_AC3 = 5; // 0x5
+    field public static final int ENCODING_AC4 = 17; // 0x11
     field public static final int ENCODING_DEFAULT = 1; // 0x1
     field public static final int ENCODING_DOLBY_TRUEHD = 14; // 0xe
     field public static final int ENCODING_DTS = 7; // 0x7
@@ -21759,6 +21765,7 @@ package android.media {
     field public static final int ENCODING_E_AC3 = 6; // 0x6
     field public static final int ENCODING_IEC61937 = 13; // 0xd
     field public static final int ENCODING_INVALID = 0; // 0x0
+    field public static final int ENCODING_MP3 = 9; // 0x9
     field public static final int ENCODING_PCM_16BIT = 2; // 0x2
     field public static final int ENCODING_PCM_8BIT = 3; // 0x3
     field public static final int ENCODING_PCM_FLOAT = 4; // 0x4
@@ -21801,6 +21808,7 @@ package android.media {
     method public boolean isBluetoothScoOn();
     method public boolean isMicrophoneMute();
     method public boolean isMusicActive();
+    method public boolean isOffloadedPlaybackSupported(android.media.AudioFormat);
     method public boolean isSpeakerphoneOn();
     method public boolean isStreamMute(int);
     method public boolean isVolumeFixed();
@@ -22101,6 +22109,7 @@ package android.media {
     method public int reloadStaticData();
     method public void removeOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener);
     method public deprecated void removeOnRoutingChangedListener(android.media.AudioTrack.OnRoutingChangedListener);
+    method public void removeStreamEventCallback();
     method public int setAuxEffectSendLevel(float);
     method public int setBufferSizeInFrames(int);
     method public int setLoopPoints(int, int, int);
@@ -22114,6 +22123,7 @@ package android.media {
     method public boolean setPreferredDevice(android.media.AudioDeviceInfo);
     method protected deprecated void setState(int);
     method public deprecated int setStereoVolume(float, float);
+    method public void setStreamEventCallback(java.util.concurrent.Executor, android.media.AudioTrack.StreamEventCallback);
     method public int setVolume(float);
     method public void stop() throws java.lang.IllegalStateException;
     method public int write(byte[], int, int);
@@ -22149,6 +22159,7 @@ package android.media {
     method public android.media.AudioTrack.Builder setAudioAttributes(android.media.AudioAttributes) throws java.lang.IllegalArgumentException;
     method public android.media.AudioTrack.Builder setAudioFormat(android.media.AudioFormat) throws java.lang.IllegalArgumentException;
     method public android.media.AudioTrack.Builder setBufferSizeInBytes(int) throws java.lang.IllegalArgumentException;
+    method public android.media.AudioTrack.Builder setOffloadedPlayback(boolean);
     method public android.media.AudioTrack.Builder setPerformanceMode(int);
     method public android.media.AudioTrack.Builder setSessionId(int) throws java.lang.IllegalArgumentException;
     method public android.media.AudioTrack.Builder setTransferMode(int) throws java.lang.IllegalArgumentException;
@@ -22162,6 +22173,12 @@ package android.media {
   public static abstract deprecated interface AudioTrack.OnRoutingChangedListener implements android.media.AudioRouting.OnRoutingChangedListener {
     method public abstract void onRoutingChanged(android.media.AudioTrack);
     method public default void onRoutingChanged(android.media.AudioRouting);
+  }
+
+  public static abstract class AudioTrack.StreamEventCallback {
+    method public void onStreamDataRequest(android.media.AudioTrack);
+    method public void onStreamPresentationEnd(android.media.AudioTrack);
+    method public void onTearDown(android.media.AudioTrack);
   }
 
   public class CamcorderProfile {
