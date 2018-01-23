@@ -6474,6 +6474,7 @@ package android.app.admin {
     method public boolean isMasterVolumeMuted(android.content.ComponentName);
     method public boolean isNetworkLoggingEnabled(android.content.ComponentName);
     method public boolean isPackageSuspended(android.content.ComponentName, java.lang.String) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public boolean isPrintingEnabled();
     method public boolean isProfileOwnerApp(java.lang.String);
     method public boolean isProvisioningAllowed(java.lang.String);
     method public boolean isResetPasswordTokenActive(android.content.ComponentName);
@@ -6543,6 +6544,7 @@ package android.app.admin {
     method public boolean setPermittedAccessibilityServices(android.content.ComponentName, java.util.List<java.lang.String>);
     method public boolean setPermittedCrossProfileNotificationListeners(android.content.ComponentName, java.util.List<java.lang.String>);
     method public boolean setPermittedInputMethods(android.content.ComponentName, java.util.List<java.lang.String>);
+    method public void setPrintingEnabled(android.content.ComponentName, boolean);
     method public void setProfileEnabled(android.content.ComponentName);
     method public void setProfileName(android.content.ComponentName, java.lang.String);
     method public void setRecommendedGlobalProxy(android.content.ComponentName, android.net.ProxyInfo);
@@ -6673,6 +6675,7 @@ package android.app.admin {
     field public static final int PERMISSION_POLICY_PROMPT = 0; // 0x0
     field public static final java.lang.String POLICY_DISABLE_CAMERA = "policy_disable_camera";
     field public static final java.lang.String POLICY_DISABLE_SCREEN_CAPTURE = "policy_disable_screen_capture";
+    field public static final java.lang.String POLICY_MANDATORY_BACKUPS = "policy_mandatory_backups";
     field public static final int RESET_PASSWORD_DO_NOT_ASK_CREDENTIALS_ON_BOOT = 2; // 0x2
     field public static final int RESET_PASSWORD_REQUIRE_ENTRY = 1; // 0x1
     field public static final int SKIP_SETUP_WIZARD = 1; // 0x1
@@ -15572,8 +15575,10 @@ package android.hardware.camera2 {
     method public <T> T get(android.hardware.camera2.CameraCharacteristics.Key<T>);
     method public java.util.List<android.hardware.camera2.CaptureRequest.Key<?>> getAvailableCaptureRequestKeys();
     method public java.util.List<android.hardware.camera2.CaptureResult.Key<?>> getAvailableCaptureResultKeys();
+    method public java.util.List<android.hardware.camera2.CaptureRequest.Key<?>> getAvailablePhysicalCameraRequestKeys();
     method public java.util.List<android.hardware.camera2.CaptureRequest.Key<?>> getAvailableSessionKeys();
     method public java.util.List<android.hardware.camera2.CameraCharacteristics.Key<?>> getKeys();
+    method public java.util.List<java.lang.String> getPhysicalCameraIds();
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> COLOR_CORRECTION_AVAILABLE_ABERRATION_MODES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AE_AVAILABLE_ANTIBANDING_MODES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AE_AVAILABLE_MODES;
@@ -15612,6 +15617,7 @@ package android.hardware.camera2 {
     field public static final android.hardware.camera2.CameraCharacteristics.Key<float[]> LENS_POSE_ROTATION;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<float[]> LENS_POSE_TRANSLATION;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<float[]> LENS_RADIAL_DISTORTION;
+    field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> LOGICAL_MULTI_CAMERA_SENSOR_SYNC_TYPE;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> NOISE_REDUCTION_AVAILABLE_NOISE_REDUCTION_MODES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> REPROCESS_MAX_CAPTURE_STALL;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> REQUEST_AVAILABLE_CAPABILITIES;
@@ -15652,6 +15658,7 @@ package android.hardware.camera2 {
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> STATISTICS_INFO_AVAILABLE_FACE_DETECT_MODES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<boolean[]> STATISTICS_INFO_AVAILABLE_HOT_PIXEL_MAP_MODES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> STATISTICS_INFO_AVAILABLE_LENS_SHADING_MAP_MODES;
+    field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> STATISTICS_INFO_AVAILABLE_OIS_DATA_MODES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> STATISTICS_INFO_MAX_FACE_COUNT;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> SYNC_MAX_LATENCY;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> TONEMAP_AVAILABLE_TONE_MAP_MODES;
@@ -15672,6 +15679,7 @@ package android.hardware.camera2 {
   public abstract class CameraDevice implements java.lang.AutoCloseable {
     method public abstract void close();
     method public abstract android.hardware.camera2.CaptureRequest.Builder createCaptureRequest(int) throws android.hardware.camera2.CameraAccessException;
+    method public android.hardware.camera2.CaptureRequest.Builder createCaptureRequest(int, java.util.Set<java.lang.String>) throws android.hardware.camera2.CameraAccessException;
     method public abstract void createCaptureSession(java.util.List<android.view.Surface>, android.hardware.camera2.CameraCaptureSession.StateCallback, android.os.Handler) throws android.hardware.camera2.CameraAccessException;
     method public void createCaptureSession(android.hardware.camera2.params.SessionConfiguration) throws android.hardware.camera2.CameraAccessException;
     method public abstract void createCaptureSessionByOutputConfigurations(java.util.List<android.hardware.camera2.params.OutputConfiguration>, android.hardware.camera2.CameraCaptureSession.StateCallback, android.os.Handler) throws android.hardware.camera2.CameraAccessException;
@@ -15842,6 +15850,7 @@ package android.hardware.camera2 {
     field public static final int HOT_PIXEL_MODE_HIGH_QUALITY = 2; // 0x2
     field public static final int HOT_PIXEL_MODE_OFF = 0; // 0x0
     field public static final int INFO_SUPPORTED_HARDWARE_LEVEL_3 = 3; // 0x3
+    field public static final int INFO_SUPPORTED_HARDWARE_LEVEL_EXTERNAL = 4; // 0x4
     field public static final int INFO_SUPPORTED_HARDWARE_LEVEL_FULL = 1; // 0x1
     field public static final int INFO_SUPPORTED_HARDWARE_LEVEL_LEGACY = 2; // 0x2
     field public static final int INFO_SUPPORTED_HARDWARE_LEVEL_LIMITED = 0; // 0x0
@@ -15857,6 +15866,8 @@ package android.hardware.camera2 {
     field public static final int LENS_POSE_REFERENCE_PRIMARY_CAMERA = 0; // 0x0
     field public static final int LENS_STATE_MOVING = 1; // 0x1
     field public static final int LENS_STATE_STATIONARY = 0; // 0x0
+    field public static final int LOGICAL_MULTI_CAMERA_SENSOR_SYNC_TYPE_APPROXIMATE = 0; // 0x0
+    field public static final int LOGICAL_MULTI_CAMERA_SENSOR_SYNC_TYPE_CALIBRATED = 1; // 0x1
     field public static final int NOISE_REDUCTION_MODE_FAST = 1; // 0x1
     field public static final int NOISE_REDUCTION_MODE_HIGH_QUALITY = 2; // 0x2
     field public static final int NOISE_REDUCTION_MODE_MINIMAL = 3; // 0x3
@@ -15866,6 +15877,7 @@ package android.hardware.camera2 {
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_BURST_CAPTURE = 6; // 0x6
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_CONSTRAINED_HIGH_SPEED_VIDEO = 9; // 0x9
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_DEPTH_OUTPUT = 8; // 0x8
+    field public static final int REQUEST_AVAILABLE_CAPABILITIES_LOGICAL_MULTI_CAMERA = 11; // 0xb
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_MANUAL_POST_PROCESSING = 2; // 0x2
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR = 1; // 0x1
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_MOTION_TRACKING = 10; // 0xa
@@ -15915,6 +15927,8 @@ package android.hardware.camera2 {
     field public static final int STATISTICS_FACE_DETECT_MODE_SIMPLE = 1; // 0x1
     field public static final int STATISTICS_LENS_SHADING_MAP_MODE_OFF = 0; // 0x0
     field public static final int STATISTICS_LENS_SHADING_MAP_MODE_ON = 1; // 0x1
+    field public static final int STATISTICS_OIS_DATA_MODE_OFF = 0; // 0x0
+    field public static final int STATISTICS_OIS_DATA_MODE_ON = 1; // 0x1
     field public static final int STATISTICS_SCENE_FLICKER_50HZ = 1; // 0x1
     field public static final int STATISTICS_SCENE_FLICKER_60HZ = 2; // 0x2
     field public static final int STATISTICS_SCENE_FLICKER_NONE = 0; // 0x0
@@ -15997,6 +16011,7 @@ package android.hardware.camera2 {
     field public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> STATISTICS_FACE_DETECT_MODE;
     field public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Boolean> STATISTICS_HOT_PIXEL_MAP_MODE;
     field public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> STATISTICS_LENS_SHADING_MAP_MODE;
+    field public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> STATISTICS_OIS_DATA_MODE;
     field public static final android.hardware.camera2.CaptureRequest.Key<android.hardware.camera2.params.TonemapCurve> TONEMAP_CURVE;
     field public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Float> TONEMAP_GAMMA;
     field public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> TONEMAP_MODE;
@@ -16007,8 +16022,10 @@ package android.hardware.camera2 {
     method public void addTarget(android.view.Surface);
     method public android.hardware.camera2.CaptureRequest build();
     method public <T> T get(android.hardware.camera2.CaptureRequest.Key<T>);
+    method public <T> T getPhysicalCameraKey(android.hardware.camera2.CaptureRequest.Key<T>, java.lang.String);
     method public void removeTarget(android.view.Surface);
     method public <T> void set(android.hardware.camera2.CaptureRequest.Key<T>, T);
+    method public <T> android.hardware.camera2.CaptureRequest.Builder setPhysicalCameraKey(android.hardware.camera2.CaptureRequest.Key<T>, T, java.lang.String);
     method public void setTag(java.lang.Object);
   }
 
@@ -16096,6 +16113,10 @@ package android.hardware.camera2 {
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Boolean> STATISTICS_HOT_PIXEL_MAP_MODE;
     field public static final android.hardware.camera2.CaptureResult.Key<android.hardware.camera2.params.LensShadingMap> STATISTICS_LENS_SHADING_CORRECTION_MAP;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> STATISTICS_LENS_SHADING_MAP_MODE;
+    field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> STATISTICS_OIS_DATA_MODE;
+    field public static final android.hardware.camera2.CaptureResult.Key<long[]> STATISTICS_OIS_TIMESTAMPS;
+    field public static final android.hardware.camera2.CaptureResult.Key<float[]> STATISTICS_OIS_X_SHIFTS;
+    field public static final android.hardware.camera2.CaptureResult.Key<float[]> STATISTICS_OIS_Y_SHIFTS;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> STATISTICS_SCENE_FLICKER;
     field public static final android.hardware.camera2.CaptureResult.Key<android.hardware.camera2.params.TonemapCurve> TONEMAP_CURVE;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Float> TONEMAP_GAMMA;
@@ -16204,6 +16225,7 @@ package android.hardware.camera2.params {
     method public int getSurfaceGroupId();
     method public java.util.List<android.view.Surface> getSurfaces();
     method public void removeSurface(android.view.Surface);
+    method public void setPhysicalCameraId(java.lang.String);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.hardware.camera2.params.OutputConfiguration> CREATOR;
     field public static final int SURFACE_GROUP_ID_NONE = -1; // 0xffffffff
@@ -21750,7 +21772,13 @@ package android.media {
     field public static final int CHANNEL_OUT_STEREO = 12; // 0xc
     field public static final int CHANNEL_OUT_SURROUND = 1052; // 0x41c
     field public static final android.os.Parcelable.Creator<android.media.AudioFormat> CREATOR;
+    field public static final int ENCODING_AAC_ELD = 15; // 0xf
+    field public static final int ENCODING_AAC_HE_V1 = 11; // 0xb
+    field public static final int ENCODING_AAC_HE_V2 = 12; // 0xc
+    field public static final int ENCODING_AAC_LC = 10; // 0xa
+    field public static final int ENCODING_AAC_XHE = 16; // 0x10
     field public static final int ENCODING_AC3 = 5; // 0x5
+    field public static final int ENCODING_AC4 = 17; // 0x11
     field public static final int ENCODING_DEFAULT = 1; // 0x1
     field public static final int ENCODING_DOLBY_TRUEHD = 14; // 0xe
     field public static final int ENCODING_DTS = 7; // 0x7
@@ -21758,6 +21786,7 @@ package android.media {
     field public static final int ENCODING_E_AC3 = 6; // 0x6
     field public static final int ENCODING_IEC61937 = 13; // 0xd
     field public static final int ENCODING_INVALID = 0; // 0x0
+    field public static final int ENCODING_MP3 = 9; // 0x9
     field public static final int ENCODING_PCM_16BIT = 2; // 0x2
     field public static final int ENCODING_PCM_8BIT = 3; // 0x3
     field public static final int ENCODING_PCM_FLOAT = 4; // 0x4
@@ -21800,6 +21829,7 @@ package android.media {
     method public boolean isBluetoothScoOn();
     method public boolean isMicrophoneMute();
     method public boolean isMusicActive();
+    method public boolean isOffloadedPlaybackSupported(android.media.AudioFormat);
     method public boolean isSpeakerphoneOn();
     method public boolean isStreamMute(int);
     method public boolean isVolumeFixed();
@@ -22100,6 +22130,7 @@ package android.media {
     method public int reloadStaticData();
     method public void removeOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener);
     method public deprecated void removeOnRoutingChangedListener(android.media.AudioTrack.OnRoutingChangedListener);
+    method public void removeStreamEventCallback();
     method public int setAuxEffectSendLevel(float);
     method public int setBufferSizeInFrames(int);
     method public int setLoopPoints(int, int, int);
@@ -22113,6 +22144,7 @@ package android.media {
     method public boolean setPreferredDevice(android.media.AudioDeviceInfo);
     method protected deprecated void setState(int);
     method public deprecated int setStereoVolume(float, float);
+    method public void setStreamEventCallback(java.util.concurrent.Executor, android.media.AudioTrack.StreamEventCallback);
     method public int setVolume(float);
     method public void stop() throws java.lang.IllegalStateException;
     method public int write(byte[], int, int);
@@ -22148,6 +22180,7 @@ package android.media {
     method public android.media.AudioTrack.Builder setAudioAttributes(android.media.AudioAttributes) throws java.lang.IllegalArgumentException;
     method public android.media.AudioTrack.Builder setAudioFormat(android.media.AudioFormat) throws java.lang.IllegalArgumentException;
     method public android.media.AudioTrack.Builder setBufferSizeInBytes(int) throws java.lang.IllegalArgumentException;
+    method public android.media.AudioTrack.Builder setOffloadedPlayback(boolean);
     method public android.media.AudioTrack.Builder setPerformanceMode(int);
     method public android.media.AudioTrack.Builder setSessionId(int) throws java.lang.IllegalArgumentException;
     method public android.media.AudioTrack.Builder setTransferMode(int) throws java.lang.IllegalArgumentException;
@@ -22161,6 +22194,12 @@ package android.media {
   public static abstract deprecated interface AudioTrack.OnRoutingChangedListener implements android.media.AudioRouting.OnRoutingChangedListener {
     method public abstract void onRoutingChanged(android.media.AudioTrack);
     method public default void onRoutingChanged(android.media.AudioRouting);
+  }
+
+  public static abstract class AudioTrack.StreamEventCallback {
+    method public void onStreamDataRequest(android.media.AudioTrack);
+    method public void onStreamPresentationEnd(android.media.AudioTrack);
+    method public void onTearDown(android.media.AudioTrack);
   }
 
   public class CamcorderProfile {
@@ -27358,7 +27397,7 @@ package android.net.wifi {
     method public int addNetwork(android.net.wifi.WifiConfiguration);
     method public void addOrUpdatePasspointConfiguration(android.net.wifi.hotspot2.PasspointConfiguration);
     method public static int calculateSignalLevel(int, int);
-    method public void cancelWps(android.net.wifi.WifiManager.WpsCallback);
+    method public deprecated void cancelWps(android.net.wifi.WifiManager.WpsCallback);
     method public static int compareSignalLevel(int, int);
     method public android.net.wifi.WifiManager.MulticastLock createMulticastLock(java.lang.String);
     method public android.net.wifi.WifiManager.WifiLock createWifiLock(int, java.lang.String);
@@ -27391,7 +27430,7 @@ package android.net.wifi {
     method public boolean setWifiEnabled(boolean);
     method public void startLocalOnlyHotspot(android.net.wifi.WifiManager.LocalOnlyHotspotCallback, android.os.Handler);
     method public deprecated boolean startScan();
-    method public void startWps(android.net.wifi.WpsInfo, android.net.wifi.WifiManager.WpsCallback);
+    method public deprecated void startWps(android.net.wifi.WpsInfo, android.net.wifi.WifiManager.WpsCallback);
     method public int updateNetwork(android.net.wifi.WifiConfiguration);
     field public static final java.lang.String ACTION_PICK_WIFI_NETWORK = "android.net.wifi.PICK_WIFI_NETWORK";
     field public static final java.lang.String ACTION_REQUEST_SCAN_ALWAYS_AVAILABLE = "android.net.wifi.action.REQUEST_SCAN_ALWAYS_AVAILABLE";
@@ -27421,11 +27460,11 @@ package android.net.wifi {
     field public static final int WIFI_STATE_ENABLED = 3; // 0x3
     field public static final int WIFI_STATE_ENABLING = 2; // 0x2
     field public static final int WIFI_STATE_UNKNOWN = 4; // 0x4
-    field public static final int WPS_AUTH_FAILURE = 6; // 0x6
-    field public static final int WPS_OVERLAP_ERROR = 3; // 0x3
-    field public static final int WPS_TIMED_OUT = 7; // 0x7
-    field public static final int WPS_TKIP_ONLY_PROHIBITED = 5; // 0x5
-    field public static final int WPS_WEP_PROHIBITED = 4; // 0x4
+    field public static final deprecated int WPS_AUTH_FAILURE = 6; // 0x6
+    field public static final deprecated int WPS_OVERLAP_ERROR = 3; // 0x3
+    field public static final deprecated int WPS_TIMED_OUT = 7; // 0x7
+    field public static final deprecated int WPS_TKIP_ONLY_PROHIBITED = 5; // 0x5
+    field public static final deprecated int WPS_WEP_PROHIBITED = 4; // 0x4
   }
 
   public static class WifiManager.LocalOnlyHotspotCallback {
@@ -27459,11 +27498,11 @@ package android.net.wifi {
     method public void setWorkSource(android.os.WorkSource);
   }
 
-  public static abstract class WifiManager.WpsCallback {
+  public static abstract deprecated class WifiManager.WpsCallback {
     ctor public WifiManager.WpsCallback();
-    method public abstract void onFailed(int);
-    method public abstract void onStarted(java.lang.String);
-    method public abstract void onSucceeded();
+    method public abstract deprecated void onFailed(int);
+    method public abstract deprecated void onStarted(java.lang.String);
+    method public abstract deprecated void onSucceeded();
   }
 
   public class WpsInfo implements android.os.Parcelable {
@@ -27905,6 +27944,29 @@ package android.net.wifi.p2p.nsd {
 
 package android.net.wifi.rtt {
 
+  public final class LocationCivic implements android.os.Parcelable {
+    method public int describeContents();
+    method public byte[] getData();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.wifi.rtt.LocationCivic> CREATOR;
+  }
+
+  public final class LocationConfigurationInformation implements android.os.Parcelable {
+    method public int describeContents();
+    method public double getAltitude();
+    method public int getAltitudeType();
+    method public double getAltitudeUncertainty();
+    method public double getLatitude();
+    method public double getLatitudeUncertainty();
+    method public double getLongitude();
+    method public double getLongitudeUncertainty();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final int ALTITUDE_IN_FLOORS = 2; // 0x2
+    field public static final int ALTITUDE_IN_METERS = 1; // 0x1
+    field public static final int ALTITUDE_UNKNOWN = 0; // 0x0
+    field public static final android.os.Parcelable.Creator<android.net.wifi.rtt.LocationConfigurationInformation> CREATOR;
+  }
+
   public final class RangingRequest implements android.os.Parcelable {
     method public int describeContents();
     method public static int getMaxPeers();
@@ -27928,6 +27990,8 @@ package android.net.wifi.rtt {
     method public android.net.MacAddress getMacAddress();
     method public android.net.wifi.aware.PeerHandle getPeerHandle();
     method public long getRangingTimestampUs();
+    method public android.net.wifi.rtt.LocationCivic getReportedLocationCivic();
+    method public android.net.wifi.rtt.LocationConfigurationInformation getReportedLocationConfigurationInformation();
     method public int getRssi();
     method public int getStatus();
     method public void writeToParcel(android.os.Parcel, int);
@@ -31529,7 +31593,7 @@ package android.os {
   }
 
   public final class Debug {
-    method public static void attachJvmtiAgent(java.lang.String, java.lang.String) throws java.io.IOException;
+    method public static void attachJvmtiAgent(java.lang.String, java.lang.String, java.lang.ClassLoader) throws java.io.IOException;
     method public static deprecated void changeDebugPort(int);
     method public static void dumpHprofData(java.lang.String) throws java.io.IOException;
     method public static boolean dumpService(java.lang.String, java.io.FileDescriptor, java.lang.String[]);
@@ -34006,9 +34070,10 @@ package android.provider {
     field public static final java.lang.String DURATION = "duration";
     field public static final java.lang.String EXTRA_CALL_TYPE_FILTER = "android.provider.extra.CALL_TYPE_FILTER";
     field public static final java.lang.String FEATURES = "features";
+    field public static final int FEATURES_ASSISTED_DIALING_USED = 16; // 0x10
     field public static final int FEATURES_HD_CALL = 4; // 0x4
     field public static final int FEATURES_PULLED_EXTERNALLY = 2; // 0x2
-    field public static final int FEATURES_RTT = 16; // 0x10
+    field public static final int FEATURES_RTT = 32; // 0x20
     field public static final int FEATURES_VIDEO = 1; // 0x1
     field public static final int FEATURES_WIFI = 8; // 0x8
     field public static final java.lang.String GEOCODED_LOCATION = "geocoded_location";
@@ -39856,6 +39921,7 @@ package android.telecom {
     field public static final int CAPABILITY_SUPPORTS_VT_REMOTE_TX = 2048; // 0x800
     field public static final int CAPABILITY_SUPPORT_HOLD = 2; // 0x2
     field public static final int CAPABILITY_SWAP_CONFERENCE = 8; // 0x8
+    field public static final int PROPERTY_ASSISTED_DIALING_USED = 512; // 0x200
     field public static final int PROPERTY_CONFERENCE = 1; // 0x1
     field public static final int PROPERTY_EMERGENCY_CALLBACK_MODE = 4; // 0x4
     field public static final int PROPERTY_ENTERPRISE_CALL = 32; // 0x20
@@ -40076,6 +40142,7 @@ package android.telecom {
     field public static final java.lang.String EXTRA_CALL_SUBJECT = "android.telecom.extra.CALL_SUBJECT";
     field public static final java.lang.String EXTRA_CHILD_ADDRESS = "android.telecom.extra.CHILD_ADDRESS";
     field public static final java.lang.String EXTRA_LAST_FORWARDED_NUMBER = "android.telecom.extra.LAST_FORWARDED_NUMBER";
+    field public static final int PROPERTY_ASSISTED_DIALING_USED = 512; // 0x200
     field public static final int PROPERTY_HAS_CDMA_VOICE_PRIVACY = 32; // 0x20
     field public static final int PROPERTY_IS_EXTERNAL_CALL = 16; // 0x10
     field public static final int PROPERTY_IS_RTT = 256; // 0x100
@@ -40498,6 +40565,7 @@ package android.telecom {
     field public static final java.lang.String ACTION_SHOW_RESPOND_VIA_SMS_SETTINGS = "android.telecom.action.SHOW_RESPOND_VIA_SMS_SETTINGS";
     field public static final char DTMF_CHARACTER_PAUSE = 44; // 0x002c ','
     field public static final char DTMF_CHARACTER_WAIT = 59; // 0x003b ';'
+    field public static final java.lang.String EXTRA_ASSISTED_DIALING_TRANSFORMATION_INFO = "android.telecom.extra.ASSISTED_DIALING_TRANSFORMATION_INFO";
     field public static final java.lang.String EXTRA_CALL_BACK_NUMBER = "android.telecom.extra.CALL_BACK_NUMBER";
     field public static final java.lang.String EXTRA_CALL_DISCONNECT_CAUSE = "android.telecom.extra.CALL_DISCONNECT_CAUSE";
     field public static final java.lang.String EXTRA_CALL_DISCONNECT_MESSAGE = "android.telecom.extra.CALL_DISCONNECT_MESSAGE";
@@ -40513,6 +40581,7 @@ package android.telecom {
     field public static final java.lang.String EXTRA_START_CALL_WITH_RTT = "android.telecom.extra.START_CALL_WITH_RTT";
     field public static final java.lang.String EXTRA_START_CALL_WITH_SPEAKERPHONE = "android.telecom.extra.START_CALL_WITH_SPEAKERPHONE";
     field public static final java.lang.String EXTRA_START_CALL_WITH_VIDEO_STATE = "android.telecom.extra.START_CALL_WITH_VIDEO_STATE";
+    field public static final java.lang.String EXTRA_USE_ASSISTED_DIALING = "android.telecom.extra.USE_ASSISTED_DIALING";
     field public static final java.lang.String GATEWAY_ORIGINAL_ADDRESS = "android.telecom.extra.GATEWAY_ORIGINAL_ADDRESS";
     field public static final java.lang.String GATEWAY_PROVIDER_PACKAGE = "android.telecom.extra.GATEWAY_PROVIDER_PACKAGE";
     field public static final java.lang.String METADATA_INCLUDE_EXTERNAL_CALLS = "android.telecom.INCLUDE_EXTERNAL_CALLS";
@@ -40523,6 +40592,18 @@ package android.telecom {
     field public static final int PRESENTATION_PAYPHONE = 4; // 0x4
     field public static final int PRESENTATION_RESTRICTED = 2; // 0x2
     field public static final int PRESENTATION_UNKNOWN = 3; // 0x3
+  }
+
+  public final class TransformationInfo implements android.os.Parcelable {
+    ctor public TransformationInfo(java.lang.String, java.lang.String, java.lang.String, java.lang.String, int);
+    method public int describeContents();
+    method public java.lang.String getOriginalNumber();
+    method public java.lang.String getTransformedNumber();
+    method public int getTransformedNumberCountryCallingCode();
+    method public java.lang.String getUserHomeCountryCode();
+    method public java.lang.String getUserRoamingCountryCode();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telecom.TransformationInfo> CREATOR;
   }
 
   public class VideoProfile implements android.os.Parcelable {
@@ -40688,6 +40769,7 @@ package android.telephony {
     field public static final java.lang.String KEY_ALLOW_NON_EMERGENCY_CALLS_IN_ECM_BOOL = "allow_non_emergency_calls_in_ecm_bool";
     field public static final java.lang.String KEY_ALWAYS_SHOW_EMERGENCY_ALERT_ONOFF_BOOL = "always_show_emergency_alert_onoff_bool";
     field public static final java.lang.String KEY_APN_EXPAND_BOOL = "apn_expand_bool";
+    field public static final java.lang.String KEY_ASSISTED_DIALING_ENABLED_BOOL = "assisted_dialing_enabled_bool";
     field public static final java.lang.String KEY_AUTO_RETRY_ENABLED_BOOL = "auto_retry_enabled_bool";
     field public static final java.lang.String KEY_CALL_FORWARDING_BLOCKS_WHILE_ROAMING_STRING_ARRAY = "call_forwarding_blocks_while_roaming_string_array";
     field public static final java.lang.String KEY_CARRIER_ALLOW_TURNOFF_IMS_BOOL = "carrier_allow_turnoff_ims_bool";
@@ -41433,6 +41515,8 @@ package android.telephony {
     method public android.telephony.TelephonyManager createForPhoneAccountHandle(android.telecom.PhoneAccountHandle);
     method public android.telephony.TelephonyManager createForSubscriptionId(int);
     method public java.util.List<android.telephony.CellInfo> getAllCellInfo();
+    method public int getAndroidCarrierIdForSubscription();
+    method public java.lang.CharSequence getAndroidCarrierNameForSubscription();
     method public int getCallState();
     method public android.os.PersistableBundle getCarrierConfig();
     method public deprecated android.telephony.CellLocation getCellLocation();
@@ -41470,8 +41554,6 @@ package android.telephony {
     method public int getSimState();
     method public int getSimState(int);
     method public java.lang.String getSubscriberId();
-    method public int getSubscriptionCarrierId();
-    method public java.lang.String getSubscriptionCarrierName();
     method public java.lang.String getVisualVoicemailPackageName();
     method public java.lang.String getVoiceMailAlphaTag();
     method public java.lang.String getVoiceMailNumber();
@@ -41689,6 +41771,7 @@ package android.telephony.data {
     method public java.net.InetAddress getMmsProxy();
     method public java.net.URL getMmsc();
     method public java.lang.String getMvnoType();
+    method public int getNetworkTypeBitmask();
     method public java.lang.String getOperatorNumeric();
     method public java.lang.String getPassword();
     method public int getPort();
@@ -41732,11 +41815,11 @@ package android.telephony.data {
     method public android.telephony.data.ApnSetting.Builder setAuthType(int);
     method public android.telephony.data.ApnSetting.Builder setCarrierEnabled(boolean);
     method public android.telephony.data.ApnSetting.Builder setEntryName(java.lang.String);
-    method public android.telephony.data.ApnSetting.Builder setId(int);
     method public android.telephony.data.ApnSetting.Builder setMmsPort(int);
     method public android.telephony.data.ApnSetting.Builder setMmsProxy(java.net.InetAddress);
     method public android.telephony.data.ApnSetting.Builder setMmsc(java.net.URL);
     method public android.telephony.data.ApnSetting.Builder setMvnoType(java.lang.String);
+    method public android.telephony.data.ApnSetting.Builder setNetworkTypeBitmask(int);
     method public android.telephony.data.ApnSetting.Builder setOperatorNumeric(java.lang.String);
     method public android.telephony.data.ApnSetting.Builder setPassword(java.lang.String);
     method public android.telephony.data.ApnSetting.Builder setPort(int);
@@ -50147,6 +50230,7 @@ package android.webkit {
     method public java.lang.String getTitle();
     method public java.lang.String getUrl();
     method public android.webkit.WebChromeClient getWebChromeClient();
+    method public static java.lang.ClassLoader getWebViewClassLoader();
     method public android.webkit.WebViewClient getWebViewClient();
     method public void goBack();
     method public void goBackOrForward(int);
