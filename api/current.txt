@@ -23137,24 +23137,29 @@ package android.media {
     method public android.media.MediaDescription.Builder setTitle(java.lang.CharSequence);
   }
 
-  public final class MediaDrm {
+  public final class MediaDrm implements java.lang.AutoCloseable {
     ctor public MediaDrm(java.util.UUID) throws android.media.UnsupportedSchemeException;
+    method public void close();
     method public void closeSession(byte[]);
-    method protected void finalize();
+    method public int getConnectedHdcpLevel();
     method public android.media.MediaDrm.CryptoSession getCryptoSession(byte[], java.lang.String, java.lang.String);
     method public android.media.MediaDrm.KeyRequest getKeyRequest(byte[], byte[], java.lang.String, int, java.util.HashMap<java.lang.String, java.lang.String>) throws android.media.NotProvisionedException;
+    method public int getMaxHdcpLevel();
+    method public int getMaxSessionCount();
+    method public int getOpenSessionCount();
     method public byte[] getPropertyByteArray(java.lang.String);
     method public java.lang.String getPropertyString(java.lang.String);
     method public android.media.MediaDrm.ProvisionRequest getProvisionRequest();
     method public byte[] getSecureStop(byte[]);
     method public java.util.List<byte[]> getSecureStops();
+    method public int getSecurityLevel(byte[]);
     method public static final boolean isCryptoSchemeSupported(java.util.UUID);
     method public static final boolean isCryptoSchemeSupported(java.util.UUID, java.lang.String);
     method public byte[] openSession() throws android.media.NotProvisionedException, android.media.ResourceBusyException;
     method public byte[] provideKeyResponse(byte[], byte[]) throws android.media.DeniedByServerException, android.media.NotProvisionedException;
     method public void provideProvisionResponse(byte[]) throws android.media.DeniedByServerException;
     method public java.util.HashMap<java.lang.String, java.lang.String> queryKeyStatus(byte[]);
-    method public final void release();
+    method public deprecated void release();
     method public void releaseAllSecureStops();
     method public void releaseSecureStops(byte[]);
     method public void removeKeys(byte[]);
@@ -23164,11 +23169,22 @@ package android.media {
     method public void setOnKeyStatusChangeListener(android.media.MediaDrm.OnKeyStatusChangeListener, android.os.Handler);
     method public void setPropertyByteArray(java.lang.String, byte[]);
     method public void setPropertyString(java.lang.String, java.lang.String);
+    method public void setSecurityLevel(byte[], int);
     field public static final deprecated int EVENT_KEY_EXPIRED = 3; // 0x3
     field public static final int EVENT_KEY_REQUIRED = 2; // 0x2
     field public static final deprecated int EVENT_PROVISION_REQUIRED = 1; // 0x1
     field public static final int EVENT_SESSION_RECLAIMED = 5; // 0x5
     field public static final int EVENT_VENDOR_DEFINED = 4; // 0x4
+    field public static final int HDCP_LEVEL_UNKNOWN = 0; // 0x0
+    field public static final int HDCP_NONE = 1; // 0x1
+    field public static final int HDCP_NO_DIGITAL_OUTPUT = 2147483647; // 0x7fffffff
+    field public static final int HDCP_V1 = 2; // 0x2
+    field public static final int HDCP_V2 = 3; // 0x3
+    field public static final int HDCP_V2_1 = 4; // 0x4
+    field public static final int HDCP_V2_2 = 5; // 0x5
+    field public static final int HW_SECURE_ALL = 5; // 0x5
+    field public static final int HW_SECURE_CRYPTO = 3; // 0x3
+    field public static final int HW_SECURE_DECODE = 4; // 0x4
     field public static final int KEY_TYPE_OFFLINE = 2; // 0x2
     field public static final int KEY_TYPE_RELEASE = 3; // 0x3
     field public static final int KEY_TYPE_STREAMING = 1; // 0x1
@@ -23177,6 +23193,9 @@ package android.media {
     field public static final java.lang.String PROPERTY_DEVICE_UNIQUE_ID = "deviceUniqueId";
     field public static final java.lang.String PROPERTY_VENDOR = "vendor";
     field public static final java.lang.String PROPERTY_VERSION = "version";
+    field public static final int SECURITY_LEVEL_UNKNOWN = 0; // 0x0
+    field public static final int SW_SECURE_CRYPTO = 1; // 0x1
+    field public static final int SW_SECURE_DECODE = 2; // 0x2
   }
 
   public final class MediaDrm.CryptoSession {
@@ -23184,6 +23203,9 @@ package android.media {
     method public byte[] encrypt(byte[], byte[], byte[]);
     method public byte[] sign(byte[], byte[]);
     method public boolean verify(byte[], byte[], byte[]);
+  }
+
+  public static abstract class MediaDrm.HdcpLevel implements java.lang.annotation.Annotation {
   }
 
   public static final class MediaDrm.KeyRequest {
@@ -23224,6 +23246,9 @@ package android.media {
   public static final class MediaDrm.ProvisionRequest {
     method public byte[] getData();
     method public java.lang.String getDefaultUrl();
+  }
+
+  public static abstract class MediaDrm.SecurityLevel implements java.lang.annotation.Annotation {
   }
 
   public class MediaDrmException extends java.lang.Exception {
