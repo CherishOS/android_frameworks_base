@@ -37856,6 +37856,7 @@ package android.security.keystore {
     method public boolean isDigestsSpecified();
     method public boolean isInvalidatedByBiometricEnrollment();
     method public boolean isRandomizedEncryptionRequired();
+    method public boolean isStrongBoxBacked();
     method public boolean isUserAuthenticationRequired();
     method public boolean isUserAuthenticationValidWhileOnBody();
   }
@@ -37873,6 +37874,7 @@ package android.security.keystore {
     method public android.security.keystore.KeyGenParameterSpec.Builder setDigests(java.lang.String...);
     method public android.security.keystore.KeyGenParameterSpec.Builder setEncryptionPaddings(java.lang.String...);
     method public android.security.keystore.KeyGenParameterSpec.Builder setInvalidatedByBiometricEnrollment(boolean);
+    method public android.security.keystore.KeyGenParameterSpec.Builder setIsStrongBoxBacked(boolean);
     method public android.security.keystore.KeyGenParameterSpec.Builder setKeySize(int);
     method public android.security.keystore.KeyGenParameterSpec.Builder setKeyValidityEnd(java.util.Date);
     method public android.security.keystore.KeyGenParameterSpec.Builder setKeyValidityForConsumptionEnd(java.util.Date);
@@ -37933,6 +37935,7 @@ package android.security.keystore {
     field public static final java.lang.String ENCRYPTION_PADDING_PKCS7 = "PKCS7Padding";
     field public static final java.lang.String ENCRYPTION_PADDING_RSA_OAEP = "OAEPPadding";
     field public static final java.lang.String ENCRYPTION_PADDING_RSA_PKCS1 = "PKCS1Padding";
+    field public static final deprecated java.lang.String KEY_ALGORITHM_3DES = "DESede";
     field public static final java.lang.String KEY_ALGORITHM_AES = "AES";
     field public static final java.lang.String KEY_ALGORITHM_EC = "EC";
     field public static final java.lang.String KEY_ALGORITHM_HMAC_SHA1 = "HmacSHA1";
@@ -37943,11 +37946,13 @@ package android.security.keystore {
     field public static final java.lang.String KEY_ALGORITHM_RSA = "RSA";
     field public static final int ORIGIN_GENERATED = 1; // 0x1
     field public static final int ORIGIN_IMPORTED = 2; // 0x2
+    field public static final int ORIGIN_SECURELY_IMPORTED = 8; // 0x8
     field public static final int ORIGIN_UNKNOWN = 4; // 0x4
     field public static final int PURPOSE_DECRYPT = 2; // 0x2
     field public static final int PURPOSE_ENCRYPT = 1; // 0x1
     field public static final int PURPOSE_SIGN = 4; // 0x4
     field public static final int PURPOSE_VERIFY = 8; // 0x8
+    field public static final int PURPOSE_WRAP_KEY = 32; // 0x20
     field public static final java.lang.String SIGNATURE_PADDING_RSA_PKCS1 = "PKCS1";
     field public static final java.lang.String SIGNATURE_PADDING_RSA_PSS = "PSS";
   }
@@ -37987,10 +37992,22 @@ package android.security.keystore {
     method public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidityDurationSeconds(int);
   }
 
+  public class StrongBoxUnavailableException extends java.security.ProviderException {
+    ctor public StrongBoxUnavailableException();
+  }
+
   public class UserNotAuthenticatedException extends java.security.InvalidKeyException {
     ctor public UserNotAuthenticatedException();
     ctor public UserNotAuthenticatedException(java.lang.String);
     ctor public UserNotAuthenticatedException(java.lang.String, java.lang.Throwable);
+  }
+
+  public class WrappedKeyEntry implements java.security.KeyStore.Entry {
+    ctor public WrappedKeyEntry(byte[], java.lang.String, java.lang.String, java.security.spec.AlgorithmParameterSpec);
+    method public java.security.spec.AlgorithmParameterSpec getAlgorithmParameterSpec();
+    method public java.lang.String getTransformation();
+    method public byte[] getWrappedKeyBytes();
+    method public java.lang.String getWrappingKeyAlias();
   }
 
 }
