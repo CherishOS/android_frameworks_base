@@ -6377,6 +6377,7 @@ package android.app.admin {
   public class DevicePolicyManager {
     method public void addCrossProfileIntentFilter(android.content.ComponentName, android.content.IntentFilter, int);
     method public boolean addCrossProfileWidgetProvider(android.content.ComponentName, java.lang.String);
+    method public int addOverrideApn(android.content.ComponentName, android.telephony.data.ApnSetting);
     method public void addPersistentPreferredActivity(android.content.ComponentName, android.content.IntentFilter, android.content.ComponentName);
     method public void addUserRestriction(android.content.ComponentName, java.lang.String);
     method public boolean bindDeviceAdminServiceAsUser(android.content.ComponentName, android.content.Intent, android.content.ServiceConnection, int, android.os.UserHandle);
@@ -6420,8 +6421,10 @@ package android.app.admin {
     method public android.content.ComponentName getMandatoryBackupTransport();
     method public int getMaximumFailedPasswordsForWipe(android.content.ComponentName);
     method public long getMaximumTimeToLock(android.content.ComponentName);
+    method public java.util.List<java.lang.String> getMeteredDataDisabled(android.content.ComponentName);
     method public int getOrganizationColor(android.content.ComponentName);
     method public java.lang.CharSequence getOrganizationName(android.content.ComponentName);
+    method public java.util.List<android.telephony.data.ApnSetting> getOverrideApns(android.content.ComponentName);
     method public android.app.admin.DevicePolicyManager getParentProfileInstance(android.content.ComponentName);
     method public java.lang.String getPasswordBlacklistName(android.content.ComponentName);
     method public long getPasswordExpiration(android.content.ComponentName);
@@ -6473,6 +6476,7 @@ package android.app.admin {
     method public boolean isManagedProfile(android.content.ComponentName);
     method public boolean isMasterVolumeMuted(android.content.ComponentName);
     method public boolean isNetworkLoggingEnabled(android.content.ComponentName);
+    method public boolean isOverrideApnEnabled(android.content.ComponentName);
     method public boolean isPackageSuspended(android.content.ComponentName, java.lang.String) throws android.content.pm.PackageManager.NameNotFoundException;
     method public boolean isPrintingEnabled();
     method public boolean isProfileOwnerApp(java.lang.String);
@@ -6488,6 +6492,7 @@ package android.app.admin {
     method public void removeActiveAdmin(android.content.ComponentName);
     method public boolean removeCrossProfileWidgetProvider(android.content.ComponentName, java.lang.String);
     method public boolean removeKeyPair(android.content.ComponentName, java.lang.String);
+    method public boolean removeOverrideApn(android.content.ComponentName, int);
     method public boolean removeUser(android.content.ComponentName, android.os.UserHandle);
     method public boolean requestBugreport(android.content.ComponentName);
     method public boolean resetPassword(java.lang.String, int);
@@ -6524,9 +6529,11 @@ package android.app.admin {
     method public void setMasterVolumeMuted(android.content.ComponentName, boolean);
     method public void setMaximumFailedPasswordsForWipe(android.content.ComponentName, int);
     method public void setMaximumTimeToLock(android.content.ComponentName, long);
+    method public java.util.List<java.lang.String> setMeteredDataDisabled(android.content.ComponentName, java.util.List<java.lang.String>);
     method public void setNetworkLoggingEnabled(android.content.ComponentName, boolean);
     method public void setOrganizationColor(android.content.ComponentName, int);
     method public void setOrganizationName(android.content.ComponentName, java.lang.CharSequence);
+    method public void setOverrideApnsEnabled(android.content.ComponentName, boolean);
     method public java.lang.String[] setPackagesSuspended(android.content.ComponentName, java.lang.String[], boolean);
     method public boolean setPasswordBlacklist(android.content.ComponentName, java.lang.String, java.util.List<java.lang.String>);
     method public void setPasswordExpirationTimeout(android.content.ComponentName, long);
@@ -6571,6 +6578,7 @@ package android.app.admin {
     method public void transferOwnership(android.content.ComponentName, android.content.ComponentName, android.os.PersistableBundle);
     method public void uninstallAllUserCaCerts(android.content.ComponentName);
     method public void uninstallCaCert(android.content.ComponentName, byte[]);
+    method public boolean updateOverrideApn(android.content.ComponentName, int, android.telephony.data.ApnSetting);
     method public void wipeData(int);
     method public void wipeDataWithReason(int, java.lang.CharSequence);
     field public static final java.lang.String ACTION_ADD_DEVICE_ADMIN = "android.app.action.ADD_DEVICE_ADMIN";
@@ -7100,6 +7108,7 @@ package android.app.slice {
     field public static final android.os.Parcelable.Creator<android.app.slice.Slice> CREATOR;
     field public static final java.lang.String EXTRA_TOGGLE_STATE = "android.app.slice.extra.TOGGLE_STATE";
     field public static final java.lang.String HINT_ACTIONS = "actions";
+    field public static final java.lang.String HINT_CALLER_NEEDED = "caller_needed";
     field public static final java.lang.String HINT_HORIZONTAL = "horizontal";
     field public static final java.lang.String HINT_LARGE = "large";
     field public static final java.lang.String HINT_LIST = "list";
@@ -7128,8 +7137,6 @@ package android.app.slice {
     method public android.app.slice.Slice.Builder addAction(android.app.PendingIntent, android.app.slice.Slice, java.lang.String);
     method public android.app.slice.Slice.Builder addBundle(android.os.Bundle, java.lang.String, java.lang.String...);
     method public android.app.slice.Slice.Builder addBundle(android.os.Bundle, java.lang.String, java.util.List<java.lang.String>);
-    method public deprecated android.app.slice.Slice.Builder addColor(int, java.lang.String, java.lang.String...);
-    method public deprecated android.app.slice.Slice.Builder addColor(int, java.lang.String, java.util.List<java.lang.String>);
     method public android.app.slice.Slice.Builder addHints(java.lang.String...);
     method public android.app.slice.Slice.Builder addHints(java.util.List<java.lang.String>);
     method public android.app.slice.Slice.Builder addIcon(android.graphics.drawable.Icon, java.lang.String, java.lang.String...);
@@ -7152,7 +7159,6 @@ package android.app.slice {
     method public int describeContents();
     method public android.app.PendingIntent getAction();
     method public android.os.Bundle getBundle();
-    method public deprecated int getColor();
     method public java.lang.String getFormat();
     method public java.util.List<java.lang.String> getHints();
     method public android.graphics.drawable.Icon getIcon();
@@ -7167,7 +7173,6 @@ package android.app.slice {
     field public static final android.os.Parcelable.Creator<android.app.slice.SliceItem> CREATOR;
     field public static final java.lang.String FORMAT_ACTION = "action";
     field public static final java.lang.String FORMAT_BUNDLE = "bundle";
-    field public static final deprecated java.lang.String FORMAT_COLOR = "color";
     field public static final java.lang.String FORMAT_IMAGE = "image";
     field public static final java.lang.String FORMAT_INT = "int";
     field public static final java.lang.String FORMAT_REMOTE_INPUT = "input";
@@ -7182,9 +7187,10 @@ package android.app.slice {
     method public java.util.List<android.app.slice.SliceSpec> getPinnedSpecs(android.net.Uri);
     method public java.util.Collection<android.net.Uri> getSliceDescendants(android.net.Uri);
     method public void pinSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
-    method public void registerSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback, java.util.List<android.app.slice.SliceSpec>);
-    method public void registerSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback, java.util.List<android.app.slice.SliceSpec>, android.os.Handler);
-    method public void registerSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback, java.util.List<android.app.slice.SliceSpec>, java.util.concurrent.Executor);
+    method public deprecated void registerSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback, java.util.List<android.app.slice.SliceSpec>);
+    method public deprecated void registerSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback, java.util.List<android.app.slice.SliceSpec>, java.util.concurrent.Executor);
+    method public void registerSliceCallback(android.net.Uri, java.util.List<android.app.slice.SliceSpec>, android.app.slice.SliceManager.SliceCallback);
+    method public void registerSliceCallback(android.net.Uri, java.util.List<android.app.slice.SliceSpec>, java.util.concurrent.Executor, android.app.slice.SliceManager.SliceCallback);
     method public void unpinSlice(android.net.Uri);
     method public void unregisterSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback);
   }
@@ -7196,6 +7202,7 @@ package android.app.slice {
   public abstract class SliceProvider extends android.content.ContentProvider {
     ctor public SliceProvider();
     method public final int delete(android.net.Uri, java.lang.String, java.lang.String[]);
+    method public final java.lang.String getBindingPackage();
     method public final java.lang.String getType(android.net.Uri);
     method public final android.net.Uri insert(android.net.Uri, android.content.ContentValues);
     method public android.app.slice.Slice onBindSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
@@ -10872,7 +10879,8 @@ package android.content.pm {
     field public android.content.pm.ServiceInfo[] services;
     field public java.lang.String sharedUserId;
     field public int sharedUserLabel;
-    field public android.content.pm.Signature[] signatures;
+    field public deprecated android.content.pm.Signature[] signatures;
+    field public android.content.pm.Signature[][] signingCertificateHistory;
     field public java.lang.String[] splitNames;
     field public int[] splitRevisionCodes;
     field public deprecated int versionCode;
@@ -11075,6 +11083,8 @@ package android.content.pm {
     method public abstract android.graphics.drawable.Drawable getUserBadgedIcon(android.graphics.drawable.Drawable, android.os.UserHandle);
     method public abstract java.lang.CharSequence getUserBadgedLabel(java.lang.CharSequence, android.os.UserHandle);
     method public abstract android.content.res.XmlResourceParser getXml(java.lang.String, int, android.content.pm.ApplicationInfo);
+    method public boolean hasSigningCertificate(java.lang.String, byte[], int);
+    method public boolean hasSigningCertificate(int, byte[], int);
     method public abstract boolean hasSystemFeature(java.lang.String);
     method public abstract boolean hasSystemFeature(java.lang.String, int);
     method public abstract boolean isInstantApp();
@@ -11100,6 +11110,8 @@ package android.content.pm {
     method public abstract void setInstallerPackageName(java.lang.String, java.lang.String);
     method public abstract void updateInstantAppCookie(byte[]);
     method public abstract void verifyPendingInstall(int, int);
+    field public static final int CERT_INPUT_RAW_X509 = 0; // 0x0
+    field public static final int CERT_INPUT_SHA256 = 1; // 0x1
     field public static final int COMPONENT_ENABLED_STATE_DEFAULT = 0; // 0x0
     field public static final int COMPONENT_ENABLED_STATE_DISABLED = 2; // 0x2
     field public static final int COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED = 4; // 0x4
@@ -11218,7 +11230,8 @@ package android.content.pm {
     field public static final int GET_RESOLVED_FILTER = 64; // 0x40
     field public static final int GET_SERVICES = 4; // 0x4
     field public static final int GET_SHARED_LIBRARY_FILES = 1024; // 0x400
-    field public static final int GET_SIGNATURES = 64; // 0x40
+    field public static final deprecated int GET_SIGNATURES = 64; // 0x40
+    field public static final int GET_SIGNING_CERTIFICATES = 134217728; // 0x8000000
     field public static final deprecated int GET_UNINSTALLED_PACKAGES = 8192; // 0x2000
     field public static final int GET_URI_PERMISSION_PATTERNS = 2048; // 0x800
     field public static final int INSTALL_REASON_DEVICE_RESTORE = 2; // 0x2
@@ -11532,15 +11545,15 @@ package android.content.res {
 
   public final class AssetManager implements java.lang.AutoCloseable {
     method public void close();
-    method public final java.lang.String[] getLocales();
-    method public final java.lang.String[] list(java.lang.String) throws java.io.IOException;
-    method public final java.io.InputStream open(java.lang.String) throws java.io.IOException;
-    method public final java.io.InputStream open(java.lang.String, int) throws java.io.IOException;
-    method public final android.content.res.AssetFileDescriptor openFd(java.lang.String) throws java.io.IOException;
-    method public final android.content.res.AssetFileDescriptor openNonAssetFd(java.lang.String) throws java.io.IOException;
-    method public final android.content.res.AssetFileDescriptor openNonAssetFd(int, java.lang.String) throws java.io.IOException;
-    method public final android.content.res.XmlResourceParser openXmlResourceParser(java.lang.String) throws java.io.IOException;
-    method public final android.content.res.XmlResourceParser openXmlResourceParser(int, java.lang.String) throws java.io.IOException;
+    method public java.lang.String[] getLocales();
+    method public java.lang.String[] list(java.lang.String) throws java.io.IOException;
+    method public java.io.InputStream open(java.lang.String) throws java.io.IOException;
+    method public java.io.InputStream open(java.lang.String, int) throws java.io.IOException;
+    method public android.content.res.AssetFileDescriptor openFd(java.lang.String) throws java.io.IOException;
+    method public android.content.res.AssetFileDescriptor openNonAssetFd(java.lang.String) throws java.io.IOException;
+    method public android.content.res.AssetFileDescriptor openNonAssetFd(int, java.lang.String) throws java.io.IOException;
+    method public android.content.res.XmlResourceParser openXmlResourceParser(java.lang.String) throws java.io.IOException;
+    method public android.content.res.XmlResourceParser openXmlResourceParser(int, java.lang.String) throws java.io.IOException;
     field public static final int ACCESS_BUFFER = 3; // 0x3
     field public static final int ACCESS_RANDOM = 1; // 0x1
     field public static final int ACCESS_STREAMING = 2; // 0x2
@@ -13505,6 +13518,58 @@ package android.graphics {
     ctor public EmbossMaskFilter(float[], float, float, float);
   }
 
+  public final class ImageDecoder implements java.lang.AutoCloseable {
+    method public void close();
+    method public static android.graphics.ImageDecoder.Source createSource(android.content.ContentResolver, android.net.Uri);
+    method public static android.graphics.ImageDecoder.Source createSource(java.nio.ByteBuffer);
+    method public static android.graphics.ImageDecoder.Source createSource(java.io.File);
+    method public static android.graphics.Bitmap decodeBitmap(android.graphics.ImageDecoder.Source, android.graphics.ImageDecoder.OnHeaderDecodedListener) throws java.io.IOException;
+    method public static android.graphics.Bitmap decodeBitmap(android.graphics.ImageDecoder.Source) throws java.io.IOException;
+    method public static android.graphics.drawable.Drawable decodeDrawable(android.graphics.ImageDecoder.Source, android.graphics.ImageDecoder.OnHeaderDecodedListener) throws java.io.IOException;
+    method public static android.graphics.drawable.Drawable decodeDrawable(android.graphics.ImageDecoder.Source) throws java.io.IOException;
+    method public android.util.Size getSampledSize(int);
+    method public void setAllocator(int);
+    method public void setAsAlphaMask(boolean);
+    method public void setCrop(android.graphics.Rect);
+    method public void setMutable(boolean);
+    method public void setOnPartialImageListener(android.graphics.ImageDecoder.OnPartialImageListener);
+    method public void setPostProcessor(android.graphics.PostProcessor);
+    method public void setPreferRamOverQuality(boolean);
+    method public void setRequireUnpremultiplied(boolean);
+    method public void setResize(int, int);
+    method public void setResize(int);
+    field public static final int ALLOCATOR_DEFAULT = 0; // 0x0
+    field public static final int ALLOCATOR_HARDWARE = 3; // 0x3
+    field public static final int ALLOCATOR_SHARED_MEMORY = 2; // 0x2
+    field public static final int ALLOCATOR_SOFTWARE = 1; // 0x1
+    field public static final int ERROR_SOURCE_ERROR = 3; // 0x3
+    field public static final int ERROR_SOURCE_EXCEPTION = 1; // 0x1
+    field public static final int ERROR_SOURCE_INCOMPLETE = 2; // 0x2
+  }
+
+  public static abstract class ImageDecoder.Error implements java.lang.annotation.Annotation {
+  }
+
+  public static class ImageDecoder.ImageInfo {
+    method public java.lang.String getMimeType();
+    method public android.util.Size getSize();
+  }
+
+  public static class ImageDecoder.IncompleteException extends java.io.IOException {
+    ctor public ImageDecoder.IncompleteException();
+  }
+
+  public static abstract interface ImageDecoder.OnHeaderDecodedListener {
+    method public abstract void onHeaderDecoded(android.graphics.ImageDecoder, android.graphics.ImageDecoder.ImageInfo, android.graphics.ImageDecoder.Source);
+  }
+
+  public static abstract interface ImageDecoder.OnPartialImageListener {
+    method public abstract boolean onPartialImage(int, android.graphics.ImageDecoder.Source);
+  }
+
+  public static abstract class ImageDecoder.Source {
+  }
+
   public class ImageFormat {
     ctor public ImageFormat();
     method public static int getBitsPerPixel(int);
@@ -14073,6 +14138,10 @@ package android.graphics {
 
   public class PorterDuffXfermode extends android.graphics.Xfermode {
     ctor public PorterDuffXfermode(android.graphics.PorterDuff.Mode);
+  }
+
+  public abstract interface PostProcessor {
+    method public abstract int onPostProcess(android.graphics.Canvas);
   }
 
   public class RadialGradient extends android.graphics.Shader {
@@ -16338,6 +16407,20 @@ package android.hardware.display {
 }
 
 package android.hardware.fingerprint {
+
+  public class FingerprintDialog {
+    method public void authenticate(android.hardware.fingerprint.FingerprintManager.CryptoObject, android.os.CancellationSignal, java.util.concurrent.Executor, android.hardware.fingerprint.FingerprintManager.AuthenticationCallback);
+    method public void authenticate(android.os.CancellationSignal, java.util.concurrent.Executor, android.hardware.fingerprint.FingerprintManager.AuthenticationCallback);
+  }
+
+  public static class FingerprintDialog.Builder {
+    ctor public FingerprintDialog.Builder();
+    method public android.hardware.fingerprint.FingerprintDialog build(android.content.Context);
+    method public android.hardware.fingerprint.FingerprintDialog.Builder setDescription(java.lang.CharSequence);
+    method public android.hardware.fingerprint.FingerprintDialog.Builder setNegativeButton(java.lang.CharSequence, java.util.concurrent.Executor, android.content.DialogInterface.OnClickListener);
+    method public android.hardware.fingerprint.FingerprintDialog.Builder setSubtitle(java.lang.CharSequence);
+    method public android.hardware.fingerprint.FingerprintDialog.Builder setTitle(java.lang.CharSequence);
+  }
 
   public class FingerprintManager {
     method public void authenticate(android.hardware.fingerprint.FingerprintManager.CryptoObject, android.os.CancellationSignal, int, android.hardware.fingerprint.FingerprintManager.AuthenticationCallback, android.os.Handler);
@@ -21530,6 +21613,7 @@ package android.location {
     method public android.location.LocationProvider getProvider(java.lang.String);
     method public java.util.List<java.lang.String> getProviders(boolean);
     method public java.util.List<java.lang.String> getProviders(android.location.Criteria, boolean);
+    method public boolean isLocationEnabled();
     method public boolean isProviderEnabled(java.lang.String);
     method public boolean registerGnssMeasurementsCallback(android.location.GnssMeasurementsEvent.Callback);
     method public boolean registerGnssMeasurementsCallback(android.location.GnssMeasurementsEvent.Callback, android.os.Handler);
@@ -21717,6 +21801,7 @@ package android.media {
     method public android.media.AudioFocusRequest.Builder setAcceptsDelayedFocusGain(boolean);
     method public android.media.AudioFocusRequest.Builder setAudioAttributes(android.media.AudioAttributes);
     method public android.media.AudioFocusRequest.Builder setFocusGain(int);
+    method public android.media.AudioFocusRequest.Builder setForceDucking(boolean);
     method public android.media.AudioFocusRequest.Builder setOnAudioFocusChangeListener(android.media.AudioManager.OnAudioFocusChangeListener);
     method public android.media.AudioFocusRequest.Builder setOnAudioFocusChangeListener(android.media.AudioManager.OnAudioFocusChangeListener, android.os.Handler);
     method public android.media.AudioFocusRequest.Builder setWillPauseWhenDucked(boolean);
@@ -23079,24 +23164,29 @@ package android.media {
     method public android.media.MediaDescription.Builder setTitle(java.lang.CharSequence);
   }
 
-  public final class MediaDrm {
+  public final class MediaDrm implements java.lang.AutoCloseable {
     ctor public MediaDrm(java.util.UUID) throws android.media.UnsupportedSchemeException;
+    method public void close();
     method public void closeSession(byte[]);
-    method protected void finalize();
+    method public int getConnectedHdcpLevel();
     method public android.media.MediaDrm.CryptoSession getCryptoSession(byte[], java.lang.String, java.lang.String);
     method public android.media.MediaDrm.KeyRequest getKeyRequest(byte[], byte[], java.lang.String, int, java.util.HashMap<java.lang.String, java.lang.String>) throws android.media.NotProvisionedException;
+    method public int getMaxHdcpLevel();
+    method public int getMaxSessionCount();
+    method public int getOpenSessionCount();
     method public byte[] getPropertyByteArray(java.lang.String);
     method public java.lang.String getPropertyString(java.lang.String);
     method public android.media.MediaDrm.ProvisionRequest getProvisionRequest();
     method public byte[] getSecureStop(byte[]);
     method public java.util.List<byte[]> getSecureStops();
+    method public int getSecurityLevel(byte[]);
     method public static final boolean isCryptoSchemeSupported(java.util.UUID);
     method public static final boolean isCryptoSchemeSupported(java.util.UUID, java.lang.String);
     method public byte[] openSession() throws android.media.NotProvisionedException, android.media.ResourceBusyException;
     method public byte[] provideKeyResponse(byte[], byte[]) throws android.media.DeniedByServerException, android.media.NotProvisionedException;
     method public void provideProvisionResponse(byte[]) throws android.media.DeniedByServerException;
     method public java.util.HashMap<java.lang.String, java.lang.String> queryKeyStatus(byte[]);
-    method public final void release();
+    method public deprecated void release();
     method public void releaseAllSecureStops();
     method public void releaseSecureStops(byte[]);
     method public void removeKeys(byte[]);
@@ -23106,11 +23196,22 @@ package android.media {
     method public void setOnKeyStatusChangeListener(android.media.MediaDrm.OnKeyStatusChangeListener, android.os.Handler);
     method public void setPropertyByteArray(java.lang.String, byte[]);
     method public void setPropertyString(java.lang.String, java.lang.String);
+    method public void setSecurityLevel(byte[], int);
     field public static final deprecated int EVENT_KEY_EXPIRED = 3; // 0x3
     field public static final int EVENT_KEY_REQUIRED = 2; // 0x2
     field public static final deprecated int EVENT_PROVISION_REQUIRED = 1; // 0x1
     field public static final int EVENT_SESSION_RECLAIMED = 5; // 0x5
     field public static final int EVENT_VENDOR_DEFINED = 4; // 0x4
+    field public static final int HDCP_LEVEL_UNKNOWN = 0; // 0x0
+    field public static final int HDCP_NONE = 1; // 0x1
+    field public static final int HDCP_NO_DIGITAL_OUTPUT = 2147483647; // 0x7fffffff
+    field public static final int HDCP_V1 = 2; // 0x2
+    field public static final int HDCP_V2 = 3; // 0x3
+    field public static final int HDCP_V2_1 = 4; // 0x4
+    field public static final int HDCP_V2_2 = 5; // 0x5
+    field public static final int HW_SECURE_ALL = 5; // 0x5
+    field public static final int HW_SECURE_CRYPTO = 3; // 0x3
+    field public static final int HW_SECURE_DECODE = 4; // 0x4
     field public static final int KEY_TYPE_OFFLINE = 2; // 0x2
     field public static final int KEY_TYPE_RELEASE = 3; // 0x3
     field public static final int KEY_TYPE_STREAMING = 1; // 0x1
@@ -23119,6 +23220,9 @@ package android.media {
     field public static final java.lang.String PROPERTY_DEVICE_UNIQUE_ID = "deviceUniqueId";
     field public static final java.lang.String PROPERTY_VENDOR = "vendor";
     field public static final java.lang.String PROPERTY_VERSION = "version";
+    field public static final int SECURITY_LEVEL_UNKNOWN = 0; // 0x0
+    field public static final int SW_SECURE_CRYPTO = 1; // 0x1
+    field public static final int SW_SECURE_DECODE = 2; // 0x2
   }
 
   public final class MediaDrm.CryptoSession {
@@ -23126,6 +23230,9 @@ package android.media {
     method public byte[] encrypt(byte[], byte[], byte[]);
     method public byte[] sign(byte[], byte[]);
     method public boolean verify(byte[], byte[], byte[]);
+  }
+
+  public static abstract class MediaDrm.HdcpLevel implements java.lang.annotation.Annotation {
   }
 
   public static final class MediaDrm.KeyRequest {
@@ -23166,6 +23273,9 @@ package android.media {
   public static final class MediaDrm.ProvisionRequest {
     method public byte[] getData();
     method public java.lang.String getDefaultUrl();
+  }
+
+  public static abstract class MediaDrm.SecurityLevel implements java.lang.annotation.Annotation {
   }
 
   public class MediaDrmException extends java.lang.Exception {
@@ -26167,6 +26277,7 @@ package android.net {
     method public deprecated android.net.NetworkInfo getNetworkInfo(int);
     method public android.net.NetworkInfo getNetworkInfo(android.net.Network);
     method public deprecated int getNetworkPreference();
+    method public byte[] getNetworkWatchlistConfigHash();
     method public static deprecated android.net.Network getProcessDefaultNetwork();
     method public int getRestrictBackgroundStatus();
     method public boolean isActiveNetworkMetered();
@@ -35779,7 +35890,6 @@ package android.provider {
     field public static final java.lang.String ACTION_BLUETOOTH_SETTINGS = "android.settings.BLUETOOTH_SETTINGS";
     field public static final java.lang.String ACTION_CAPTIONING_SETTINGS = "android.settings.CAPTIONING_SETTINGS";
     field public static final java.lang.String ACTION_CAST_SETTINGS = "android.settings.CAST_SETTINGS";
-    field public static final java.lang.String ACTION_CHANNEL_GROUP_NOTIFICATION_SETTINGS = "android.settings.CHANNEL_GROUP_NOTIFICATION_SETTINGS";
     field public static final java.lang.String ACTION_CHANNEL_NOTIFICATION_SETTINGS = "android.settings.CHANNEL_NOTIFICATION_SETTINGS";
     field public static final java.lang.String ACTION_DATA_ROAMING_SETTINGS = "android.settings.DATA_ROAMING_SETTINGS";
     field public static final java.lang.String ACTION_DATE_SETTINGS = "android.settings.DATE_SETTINGS";
@@ -35820,6 +35930,7 @@ package android.provider {
     field public static final java.lang.String ACTION_SETTINGS = "android.settings.SETTINGS";
     field public static final java.lang.String ACTION_SHOW_REGULATORY_INFO = "android.settings.SHOW_REGULATORY_INFO";
     field public static final java.lang.String ACTION_SOUND_SETTINGS = "android.settings.SOUND_SETTINGS";
+    field public static final java.lang.String ACTION_STORAGE_VOLUME_ACCESS_SETTINGS = "android.settings.STORAGE_VOLUME_ACCESS_SETTINGS";
     field public static final java.lang.String ACTION_SYNC_SETTINGS = "android.settings.SYNC_SETTINGS";
     field public static final java.lang.String ACTION_USAGE_ACCESS_SETTINGS = "android.settings.USAGE_ACCESS_SETTINGS";
     field public static final java.lang.String ACTION_USER_DICTIONARY_SETTINGS = "android.settings.USER_DICTIONARY_SETTINGS";
@@ -35840,7 +35951,6 @@ package android.provider {
     field public static final java.lang.String EXTRA_APP_PACKAGE = "android.provider.extra.APP_PACKAGE";
     field public static final java.lang.String EXTRA_AUTHORITIES = "authorities";
     field public static final java.lang.String EXTRA_BATTERY_SAVER_MODE_ENABLED = "android.settings.extra.battery_saver_mode_enabled";
-    field public static final java.lang.String EXTRA_CHANNEL_GROUP_ID = "android.provider.extra.CHANNEL_GROUP_ID";
     field public static final java.lang.String EXTRA_CHANNEL_ID = "android.provider.extra.CHANNEL_ID";
     field public static final java.lang.String EXTRA_DO_NOT_DISTURB_MODE_ENABLED = "android.settings.extra.do_not_disturb_mode_enabled";
     field public static final java.lang.String EXTRA_DO_NOT_DISTURB_MODE_MINUTES = "android.settings.extra.do_not_disturb_mode_minutes";
@@ -35952,11 +36062,11 @@ package android.provider {
     field public static final deprecated java.lang.String HTTP_PROXY = "http_proxy";
     field public static final java.lang.String INPUT_METHOD_SELECTOR_VISIBILITY = "input_method_selector_visibility";
     field public static final deprecated java.lang.String INSTALL_NON_MARKET_APPS = "install_non_market_apps";
-    field public static final java.lang.String LOCATION_MODE = "location_mode";
-    field public static final int LOCATION_MODE_BATTERY_SAVING = 2; // 0x2
-    field public static final int LOCATION_MODE_HIGH_ACCURACY = 3; // 0x3
-    field public static final int LOCATION_MODE_OFF = 0; // 0x0
-    field public static final int LOCATION_MODE_SENSORS_ONLY = 1; // 0x1
+    field public static final deprecated java.lang.String LOCATION_MODE = "location_mode";
+    field public static final deprecated int LOCATION_MODE_BATTERY_SAVING = 2; // 0x2
+    field public static final deprecated int LOCATION_MODE_HIGH_ACCURACY = 3; // 0x3
+    field public static final deprecated int LOCATION_MODE_OFF = 0; // 0x0
+    field public static final deprecated int LOCATION_MODE_SENSORS_ONLY = 1; // 0x1
     field public static final deprecated java.lang.String LOCATION_PROVIDERS_ALLOWED = "location_providers_allowed";
     field public static final deprecated java.lang.String LOCK_PATTERN_ENABLED = "lock_pattern_autolock";
     field public static final deprecated java.lang.String LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED = "lock_pattern_tactile_feedback_enabled";
@@ -37774,6 +37884,7 @@ package android.security.keystore {
     method public boolean isDigestsSpecified();
     method public boolean isInvalidatedByBiometricEnrollment();
     method public boolean isRandomizedEncryptionRequired();
+    method public boolean isStrongBoxBacked();
     method public boolean isUserAuthenticationRequired();
     method public boolean isUserAuthenticationValidWhileOnBody();
   }
@@ -37791,6 +37902,7 @@ package android.security.keystore {
     method public android.security.keystore.KeyGenParameterSpec.Builder setDigests(java.lang.String...);
     method public android.security.keystore.KeyGenParameterSpec.Builder setEncryptionPaddings(java.lang.String...);
     method public android.security.keystore.KeyGenParameterSpec.Builder setInvalidatedByBiometricEnrollment(boolean);
+    method public android.security.keystore.KeyGenParameterSpec.Builder setIsStrongBoxBacked(boolean);
     method public android.security.keystore.KeyGenParameterSpec.Builder setKeySize(int);
     method public android.security.keystore.KeyGenParameterSpec.Builder setKeyValidityEnd(java.util.Date);
     method public android.security.keystore.KeyGenParameterSpec.Builder setKeyValidityForConsumptionEnd(java.util.Date);
@@ -37851,6 +37963,7 @@ package android.security.keystore {
     field public static final java.lang.String ENCRYPTION_PADDING_PKCS7 = "PKCS7Padding";
     field public static final java.lang.String ENCRYPTION_PADDING_RSA_OAEP = "OAEPPadding";
     field public static final java.lang.String ENCRYPTION_PADDING_RSA_PKCS1 = "PKCS1Padding";
+    field public static final deprecated java.lang.String KEY_ALGORITHM_3DES = "DESede";
     field public static final java.lang.String KEY_ALGORITHM_AES = "AES";
     field public static final java.lang.String KEY_ALGORITHM_EC = "EC";
     field public static final java.lang.String KEY_ALGORITHM_HMAC_SHA1 = "HmacSHA1";
@@ -37861,11 +37974,13 @@ package android.security.keystore {
     field public static final java.lang.String KEY_ALGORITHM_RSA = "RSA";
     field public static final int ORIGIN_GENERATED = 1; // 0x1
     field public static final int ORIGIN_IMPORTED = 2; // 0x2
+    field public static final int ORIGIN_SECURELY_IMPORTED = 8; // 0x8
     field public static final int ORIGIN_UNKNOWN = 4; // 0x4
     field public static final int PURPOSE_DECRYPT = 2; // 0x2
     field public static final int PURPOSE_ENCRYPT = 1; // 0x1
     field public static final int PURPOSE_SIGN = 4; // 0x4
     field public static final int PURPOSE_VERIFY = 8; // 0x8
+    field public static final int PURPOSE_WRAP_KEY = 32; // 0x20
     field public static final java.lang.String SIGNATURE_PADDING_RSA_PKCS1 = "PKCS1";
     field public static final java.lang.String SIGNATURE_PADDING_RSA_PSS = "PSS";
   }
@@ -37905,10 +38020,22 @@ package android.security.keystore {
     method public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidityDurationSeconds(int);
   }
 
+  public class StrongBoxUnavailableException extends java.security.ProviderException {
+    ctor public StrongBoxUnavailableException();
+  }
+
   public class UserNotAuthenticatedException extends java.security.InvalidKeyException {
     ctor public UserNotAuthenticatedException();
     ctor public UserNotAuthenticatedException(java.lang.String);
     ctor public UserNotAuthenticatedException(java.lang.String, java.lang.Throwable);
+  }
+
+  public class WrappedKeyEntry implements java.security.KeyStore.Entry {
+    ctor public WrappedKeyEntry(byte[], java.lang.String, java.lang.String, java.security.spec.AlgorithmParameterSpec);
+    method public java.security.spec.AlgorithmParameterSpec getAlgorithmParameterSpec();
+    method public java.lang.String getTransformation();
+    method public byte[] getWrappedKeyBytes();
+    method public java.lang.String getWrappingKeyAlias();
   }
 
 }
@@ -40802,6 +40929,7 @@ package android.telephony {
     field public static final java.lang.String KEY_CI_ACTION_ON_SYS_UPDATE_EXTRA_VAL_STRING = "ci_action_on_sys_update_extra_val_string";
     field public static final java.lang.String KEY_CI_ACTION_ON_SYS_UPDATE_INTENT_STRING = "ci_action_on_sys_update_intent_string";
     field public static final java.lang.String KEY_CONFIG_IMS_PACKAGE_OVERRIDE_STRING = "config_ims_package_override_string";
+    field public static final java.lang.String KEY_CONFIG_PLANS_PACKAGE_OVERRIDE_STRING = "config_plans_package_override_string";
     field public static final java.lang.String KEY_CONFIG_TELEPHONY_USE_OWN_NUMBER_FOR_VOICEMAIL_BOOL = "config_telephony_use_own_number_for_voicemail_bool";
     field public static final java.lang.String KEY_CSP_ENABLED_BOOL = "csp_enabled_bool";
     field public static final java.lang.String KEY_DATA_LIMIT_THRESHOLD_BYTES_LONG = "data_limit_threshold_bytes_long";
@@ -41495,10 +41623,16 @@ package android.telephony {
     method public static int getDefaultSmsSubscriptionId();
     method public static int getDefaultSubscriptionId();
     method public static int getDefaultVoiceSubscriptionId();
+    method public java.util.List<android.telephony.SubscriptionPlan> getSubscriptionPlans(int);
     method public boolean isNetworkRoaming(int);
     method public void removeOnSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnSubscriptionsChangedListener);
+    method public void setSubscriptionOverrideCongested(int, boolean, long);
+    method public void setSubscriptionOverrideUnmetered(int, boolean, long);
+    method public void setSubscriptionPlans(int, java.util.List<android.telephony.SubscriptionPlan>);
     field public static final java.lang.String ACTION_DEFAULT_SMS_SUBSCRIPTION_CHANGED = "android.telephony.action.DEFAULT_SMS_SUBSCRIPTION_CHANGED";
     field public static final java.lang.String ACTION_DEFAULT_SUBSCRIPTION_CHANGED = "android.telephony.action.DEFAULT_SUBSCRIPTION_CHANGED";
+    field public static final java.lang.String ACTION_MANAGE_SUBSCRIPTION_PLANS = "android.telephony.action.MANAGE_SUBSCRIPTION_PLANS";
+    field public static final java.lang.String ACTION_REFRESH_SUBSCRIPTION_PLANS = "android.telephony.action.REFRESH_SUBSCRIPTION_PLANS";
     field public static final int DATA_ROAMING_DISABLE = 0; // 0x0
     field public static final int DATA_ROAMING_ENABLE = 1; // 0x1
     field public static final java.lang.String EXTRA_SUBSCRIPTION_INDEX = "android.telephony.extra.SUBSCRIPTION_INDEX";
@@ -41508,6 +41642,38 @@ package android.telephony {
   public static class SubscriptionManager.OnSubscriptionsChangedListener {
     ctor public SubscriptionManager.OnSubscriptionsChangedListener();
     method public void onSubscriptionsChanged();
+  }
+
+  public final class SubscriptionPlan implements android.os.Parcelable {
+    method public java.util.Iterator<android.util.Pair<java.time.ZonedDateTime, java.time.ZonedDateTime>> cycleIterator();
+    method public int describeContents();
+    method public int getDataLimitBehavior();
+    method public long getDataLimitBytes();
+    method public long getDataUsageBytes();
+    method public long getDataUsageTime();
+    method public java.lang.CharSequence getSummary();
+    method public java.lang.CharSequence getTitle();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final long BYTES_UNKNOWN = -1L; // 0xffffffffffffffffL
+    field public static final long BYTES_UNLIMITED = 9223372036854775807L; // 0x7fffffffffffffffL
+    field public static final android.os.Parcelable.Creator<android.telephony.SubscriptionPlan> CREATOR;
+    field public static final int LIMIT_BEHAVIOR_BILLED = 1; // 0x1
+    field public static final int LIMIT_BEHAVIOR_DISABLED = 0; // 0x0
+    field public static final int LIMIT_BEHAVIOR_THROTTLED = 2; // 0x2
+    field public static final int LIMIT_BEHAVIOR_UNKNOWN = -1; // 0xffffffff
+    field public static final long TIME_UNKNOWN = -1L; // 0xffffffffffffffffL
+  }
+
+  public static class SubscriptionPlan.Builder {
+    method public android.telephony.SubscriptionPlan build();
+    method public static android.telephony.SubscriptionPlan.Builder createNonrecurring(java.time.ZonedDateTime, java.time.ZonedDateTime);
+    method public static android.telephony.SubscriptionPlan.Builder createRecurringDaily(java.time.ZonedDateTime);
+    method public static android.telephony.SubscriptionPlan.Builder createRecurringMonthly(java.time.ZonedDateTime);
+    method public static android.telephony.SubscriptionPlan.Builder createRecurringWeekly(java.time.ZonedDateTime);
+    method public android.telephony.SubscriptionPlan.Builder setDataLimit(long, int);
+    method public android.telephony.SubscriptionPlan.Builder setDataUsage(long, long);
+    method public android.telephony.SubscriptionPlan.Builder setSummary(java.lang.CharSequence);
+    method public android.telephony.SubscriptionPlan.Builder setTitle(java.lang.CharSequence);
   }
 
   public class TelephonyManager {
@@ -43156,9 +43322,13 @@ package android.text.style {
     ctor public BulletSpan();
     ctor public BulletSpan(int);
     ctor public BulletSpan(int, int);
+    ctor public BulletSpan(int, int, int);
     ctor public BulletSpan(android.os.Parcel);
     method public int describeContents();
     method public void drawLeadingMargin(android.graphics.Canvas, android.graphics.Paint, int, int, int, int, int, java.lang.CharSequence, int, int, boolean, android.text.Layout);
+    method public int getBulletRadius();
+    method public int getColor();
+    method public int getGapWidth();
     method public int getLeadingMargin(boolean);
     method public int getSpanTypeId();
     method public void writeToParcel(android.os.Parcel, int);
@@ -45601,6 +45771,7 @@ package android.view {
     field public static final int KEYCODE_PROG_YELLOW = 185; // 0xb9
     field public static final int KEYCODE_Q = 45; // 0x2d
     field public static final int KEYCODE_R = 46; // 0x2e
+    field public static final int KEYCODE_REFRESH = 285; // 0x11d
     field public static final int KEYCODE_RIGHT_BRACKET = 72; // 0x48
     field public static final int KEYCODE_RO = 217; // 0xd9
     field public static final int KEYCODE_S = 47; // 0x2f
@@ -47769,6 +47940,7 @@ package android.view {
     method protected final int getLocalFeatures();
     method public android.media.session.MediaController getMediaController();
     method public abstract int getNavigationBarColor();
+    method public int getNavigationBarDividerColor();
     method public android.transition.Transition getReenterTransition();
     method public android.transition.Transition getReturnTransition();
     method public android.transition.Transition getSharedElementEnterTransition();
@@ -47837,6 +48009,7 @@ package android.view {
     method public void setLogo(int);
     method public void setMediaController(android.media.session.MediaController);
     method public abstract void setNavigationBarColor(int);
+    method public void setNavigationBarDividerColor(int);
     method public void setReenterTransition(android.transition.Transition);
     method public abstract void setResizingCaptionDrawable(android.graphics.drawable.Drawable);
     method public final void setRestrictedCaptionAreaListener(android.view.Window.OnRestrictedCaptionAreaChangedListener);
