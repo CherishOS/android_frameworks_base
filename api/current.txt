@@ -37013,6 +37013,59 @@ package android.sax {
 
 }
 
+package android.se.omapi {
+
+  public class Channel {
+    method public void close();
+    method public byte[] getSelectResponse();
+    method public android.se.omapi.Session getSession();
+    method public boolean isBasicChannel();
+    method public boolean isClosed();
+    method public boolean selectNext() throws java.io.IOException;
+    method public byte[] transmit(byte[]) throws java.io.IOException;
+  }
+
+  public abstract interface ISecureElementListener implements android.os.IInterface {
+    method public abstract void serviceConnected() throws android.os.RemoteException;
+  }
+
+  public static abstract class ISecureElementListener.Stub extends android.os.Binder implements android.se.omapi.ISecureElementListener {
+    ctor public ISecureElementListener.Stub();
+    method public android.os.IBinder asBinder();
+    method public static android.se.omapi.ISecureElementListener asInterface(android.os.IBinder);
+    method public boolean onTransact(int, android.os.Parcel, android.os.Parcel, int) throws android.os.RemoteException;
+  }
+
+  public class Reader {
+    method public void closeSessions();
+    method public java.lang.String getName();
+    method public android.se.omapi.SEService getSEService();
+    method public boolean isSecureElementPresent();
+    method public android.se.omapi.Session openSession() throws java.io.IOException;
+  }
+
+  public class SEService {
+    ctor public SEService(android.content.Context, android.se.omapi.ISecureElementListener);
+    method public android.se.omapi.Reader[] getReaders();
+    method public java.lang.String getVersion();
+    method public boolean isConnected();
+    method public void shutdown();
+  }
+
+  public class Session {
+    method public void close();
+    method public void closeChannels();
+    method public byte[] getATR();
+    method public android.se.omapi.Reader getReader();
+    method public boolean isClosed();
+    method public android.se.omapi.Channel openBasicChannel(byte[], byte) throws java.io.IOException;
+    method public android.se.omapi.Channel openBasicChannel(byte[]) throws java.io.IOException;
+    method public android.se.omapi.Channel openLogicalChannel(byte[], byte) throws java.io.IOException;
+    method public android.se.omapi.Channel openLogicalChannel(byte[]) throws java.io.IOException;
+  }
+
+}
+
 package android.security {
 
   public final class KeyChain {
