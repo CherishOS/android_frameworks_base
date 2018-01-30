@@ -94,6 +94,7 @@ package android {
     field public static final java.lang.String MOUNT_FORMAT_FILESYSTEMS = "android.permission.MOUNT_FORMAT_FILESYSTEMS";
     field public static final java.lang.String MOUNT_UNMOUNT_FILESYSTEMS = "android.permission.MOUNT_UNMOUNT_FILESYSTEMS";
     field public static final java.lang.String NFC = "android.permission.NFC";
+    field public static final java.lang.String NFC_TRANSACTION_EVENT = "android.permission.NFC_TRANSACTION_EVENT";
     field public static final java.lang.String PACKAGE_USAGE_STATS = "android.permission.PACKAGE_USAGE_STATS";
     field public static final deprecated java.lang.String PERSISTENT_ACTIVITY = "android.permission.PERSISTENT_ACTIVITY";
     field public static final java.lang.String PROCESS_OUTGOING_CALLS = "android.permission.PROCESS_OUTGOING_CALLS";
@@ -6390,7 +6391,7 @@ package android.app.admin {
     method public void addPersistentPreferredActivity(android.content.ComponentName, android.content.IntentFilter, android.content.ComponentName);
     method public void addUserRestriction(android.content.ComponentName, java.lang.String);
     method public boolean bindDeviceAdminServiceAsUser(android.content.ComponentName, android.content.Intent, android.content.ServiceConnection, int, android.os.UserHandle);
-    method public boolean clearApplicationUserData(android.content.ComponentName, java.lang.String, java.util.concurrent.Executor, android.app.admin.DevicePolicyManager.OnClearApplicationUserDataListener);
+    method public void clearApplicationUserData(android.content.ComponentName, java.lang.String, java.util.concurrent.Executor, android.app.admin.DevicePolicyManager.OnClearApplicationUserDataListener);
     method public void clearCrossProfileIntentFilters(android.content.ComponentName);
     method public deprecated void clearDeviceOwnerApp(java.lang.String);
     method public void clearPackagePersistentPreferredActivities(android.content.ComponentName, java.lang.String);
@@ -6723,20 +6724,46 @@ package android.app.admin {
 
   public class SecurityLog {
     ctor public SecurityLog();
+    field public static final int LEVEL_ERROR = 3; // 0x3
+    field public static final int LEVEL_INFO = 1; // 0x1
+    field public static final int LEVEL_WARNING = 2; // 0x2
     field public static final int TAG_ADB_SHELL_CMD = 210002; // 0x33452
     field public static final int TAG_ADB_SHELL_INTERACTIVE = 210001; // 0x33451
     field public static final int TAG_APP_PROCESS_START = 210005; // 0x33455
+    field public static final int TAG_CERT_AUTHORITY_INSTALLED = 210029; // 0x3346d
+    field public static final int TAG_CERT_AUTHORITY_REMOVED = 210030; // 0x3346e
+    field public static final int TAG_KEYGUARD_DISABLED_FEATURES_SET = 210021; // 0x33465
     field public static final int TAG_KEYGUARD_DISMISSED = 210006; // 0x33456
     field public static final int TAG_KEYGUARD_DISMISS_AUTH_ATTEMPT = 210007; // 0x33457
     field public static final int TAG_KEYGUARD_SECURED = 210008; // 0x33458
+    field public static final int TAG_KEY_DESTRUCTION = 210026; // 0x3346a
+    field public static final int TAG_KEY_GENERATED = 210024; // 0x33468
+    field public static final int TAG_KEY_IMPORT = 210025; // 0x33469
+    field public static final int TAG_LOGGING_STARTED = 210011; // 0x3345b
+    field public static final int TAG_LOGGING_STOPPED = 210012; // 0x3345c
+    field public static final int TAG_LOG_BUFFER_SIZE_CRITICAL = 210015; // 0x3345f
+    field public static final int TAG_MAX_PASSWORD_ATTEMPTS_SET = 210020; // 0x33464
+    field public static final int TAG_MAX_SCREEN_LOCK_TIMEOUT_SET = 210019; // 0x33463
+    field public static final int TAG_MEDIA_MOUNT = 210013; // 0x3345d
+    field public static final int TAG_MEDIA_UNMOUNT = 210014; // 0x3345e
+    field public static final int TAG_OS_SHUTDOWN = 210010; // 0x3345a
+    field public static final int TAG_OS_STARTUP = 210009; // 0x33459
+    field public static final int TAG_PASSWORD_COMPLEXITY_SET = 210017; // 0x33461
+    field public static final int TAG_PASSWORD_EXPIRATION_SET = 210016; // 0x33460
+    field public static final int TAG_PASSWORD_HISTORY_LENGTH_SET = 210018; // 0x33462
+    field public static final int TAG_REMOTE_LOCK = 210022; // 0x33466
     field public static final int TAG_SYNC_RECV_FILE = 210003; // 0x33453
     field public static final int TAG_SYNC_SEND_FILE = 210004; // 0x33454
+    field public static final int TAG_USER_RESTRICTION_ADDED = 210027; // 0x3346b
+    field public static final int TAG_USER_RESTRICTION_REMOVED = 210028; // 0x3346c
+    field public static final int TAG_WIPE_FAILURE = 210023; // 0x33467
   }
 
   public static final class SecurityLog.SecurityEvent implements android.os.Parcelable {
     method public int describeContents();
     method public java.lang.Object getData();
     method public long getId();
+    method public int getLogLevel();
     method public int getTag();
     method public long getTimeNanos();
     method public void writeToParcel(android.os.Parcel, int);
@@ -7134,6 +7161,7 @@ package android.app.slice {
     method public android.net.Uri getUri();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.slice.Slice> CREATOR;
+    field public static final java.lang.String EXTRA_SLIDER_VALUE = "android.app.slice.extra.SLIDER_VALUE";
     field public static final java.lang.String EXTRA_TOGGLE_STATE = "android.app.slice.extra.TOGGLE_STATE";
     field public static final java.lang.String HINT_ACTIONS = "actions";
     field public static final java.lang.String HINT_CALLER_NEEDED = "caller_needed";
@@ -7141,7 +7169,6 @@ package android.app.slice {
     field public static final java.lang.String HINT_LARGE = "large";
     field public static final java.lang.String HINT_LIST = "list";
     field public static final java.lang.String HINT_LIST_ITEM = "list_item";
-    field public static final java.lang.String HINT_MAX = "max";
     field public static final java.lang.String HINT_NO_TINT = "no_tint";
     field public static final java.lang.String HINT_PARTIAL = "partial";
     field public static final java.lang.String HINT_SEE_MORE = "see_more";
@@ -7151,11 +7178,13 @@ package android.app.slice {
     field public static final java.lang.String HINT_TITLE = "title";
     field public static final java.lang.String SUBTYPE_COLOR = "color";
     field public static final java.lang.String SUBTYPE_CONTENT_DESCRIPTION = "content_description";
+    field public static final java.lang.String SUBTYPE_MAX = "max";
     field public static final java.lang.String SUBTYPE_MESSAGE = "message";
     field public static final java.lang.String SUBTYPE_PRIORITY = "priority";
     field public static final java.lang.String SUBTYPE_SLIDER = "slider";
     field public static final java.lang.String SUBTYPE_SOURCE = "source";
     field public static final java.lang.String SUBTYPE_TOGGLE = "toggle";
+    field public static final java.lang.String SUBTYPE_VALUE = "value";
   }
 
   public static class Slice.Builder {
@@ -10014,6 +10043,7 @@ package android.content {
     field public static final int FLAG_ACTIVITY_FORWARD_RESULT = 33554432; // 0x2000000
     field public static final int FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY = 1048576; // 0x100000
     field public static final int FLAG_ACTIVITY_LAUNCH_ADJACENT = 4096; // 0x1000
+    field public static final int FLAG_ACTIVITY_MATCH_EXTERNAL = 2048; // 0x800
     field public static final int FLAG_ACTIVITY_MULTIPLE_TASK = 134217728; // 0x8000000
     field public static final int FLAG_ACTIVITY_NEW_DOCUMENT = 524288; // 0x80000
     field public static final int FLAG_ACTIVITY_NEW_TASK = 268435456; // 0x10000000
@@ -23287,6 +23317,7 @@ package android.media {
     method public java.lang.String getPropertyString(java.lang.String);
     method public android.media.MediaDrm.ProvisionRequest getProvisionRequest();
     method public byte[] getSecureStop(byte[]);
+    method public java.util.List<byte[]> getSecureStopIds();
     method public java.util.List<byte[]> getSecureStops();
     method public int getSecurityLevel(byte[]);
     method public static final boolean isCryptoSchemeSupported(java.util.UUID);
@@ -23296,9 +23327,11 @@ package android.media {
     method public void provideProvisionResponse(byte[]) throws android.media.DeniedByServerException;
     method public java.util.HashMap<java.lang.String, java.lang.String> queryKeyStatus(byte[]);
     method public deprecated void release();
-    method public void releaseAllSecureStops();
+    method public deprecated void releaseAllSecureStops();
     method public void releaseSecureStops(byte[]);
+    method public void removeAllSecureStops();
     method public void removeKeys(byte[]);
+    method public void removeSecureStop(byte[]);
     method public void restoreKeys(byte[], byte[]);
     method public void setOnEventListener(android.media.MediaDrm.OnEventListener);
     method public void setOnExpirationUpdateListener(android.media.MediaDrm.OnExpirationUpdateListener, android.os.Handler);
@@ -38266,6 +38299,7 @@ package android.security.keystore {
     method public boolean isRandomizedEncryptionRequired();
     method public boolean isStrongBoxBacked();
     method public boolean isTrustedUserPresenceRequired();
+    method public boolean isUnlockedDeviceRequired();
     method public boolean isUserAuthenticationRequired();
     method public boolean isUserAuthenticationValidWhileOnBody();
   }
@@ -38292,6 +38326,7 @@ package android.security.keystore {
     method public android.security.keystore.KeyGenParameterSpec.Builder setRandomizedEncryptionRequired(boolean);
     method public android.security.keystore.KeyGenParameterSpec.Builder setSignaturePaddings(java.lang.String...);
     method public android.security.keystore.KeyGenParameterSpec.Builder setTrustedUserPresenceRequired(boolean);
+    method public android.security.keystore.KeyGenParameterSpec.Builder setUnlockedDeviceRequired(boolean);
     method public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationRequired(boolean);
     method public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationValidWhileOnBody(boolean);
     method public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationValidityDurationSeconds(int);
@@ -38381,6 +38416,8 @@ package android.security.keystore {
     method public boolean isDigestsSpecified();
     method public boolean isInvalidatedByBiometricEnrollment();
     method public boolean isRandomizedEncryptionRequired();
+    method public boolean isTrustedUserPresenceRequired();
+    method public boolean isUnlockedDeviceRequired();
     method public boolean isUserAuthenticationRequired();
     method public boolean isUserAuthenticationValidWhileOnBody();
   }
@@ -38398,6 +38435,8 @@ package android.security.keystore {
     method public android.security.keystore.KeyProtection.Builder setKeyValidityStart(java.util.Date);
     method public android.security.keystore.KeyProtection.Builder setRandomizedEncryptionRequired(boolean);
     method public android.security.keystore.KeyProtection.Builder setSignaturePaddings(java.lang.String...);
+    method public android.security.keystore.KeyProtection.Builder setTrustedUserPresenceRequired(boolean);
+    method public android.security.keystore.KeyProtection.Builder setUnlockedDeviceRequired(boolean);
     method public android.security.keystore.KeyProtection.Builder setUserAuthenticationRequired(boolean);
     method public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidWhileOnBody(boolean);
     method public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidityDurationSeconds(int);
