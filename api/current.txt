@@ -38198,6 +38198,37 @@ package android.security {
     method public java.security.KeyPair getKeyPair();
   }
 
+  public class ConfirmationAlreadyPresentingException extends java.lang.Exception {
+    ctor public ConfirmationAlreadyPresentingException();
+    ctor public ConfirmationAlreadyPresentingException(java.lang.String);
+  }
+
+  public abstract class ConfirmationCallback {
+    ctor public ConfirmationCallback();
+    method public void onConfirmedByUser(byte[]);
+    method public void onDismissedByApplication();
+    method public void onDismissedByUser();
+    method public void onError(java.lang.Exception);
+  }
+
+  public class ConfirmationDialog {
+    method public void cancelPrompt();
+    method public static boolean isSupported();
+    method public void presentPrompt(java.util.concurrent.Executor, android.security.ConfirmationCallback) throws android.security.ConfirmationAlreadyPresentingException, android.security.ConfirmationNotAvailableException;
+  }
+
+  public static class ConfirmationDialog.Builder {
+    ctor public ConfirmationDialog.Builder();
+    method public android.security.ConfirmationDialog build(android.content.Context);
+    method public android.security.ConfirmationDialog.Builder setExtraData(byte[]);
+    method public android.security.ConfirmationDialog.Builder setPromptText(java.lang.CharSequence);
+  }
+
+  public class ConfirmationNotAvailableException extends java.lang.Exception {
+    ctor public ConfirmationNotAvailableException();
+    ctor public ConfirmationNotAvailableException(java.lang.String);
+  }
+
   public final class KeyChain {
     ctor public KeyChain();
     method public static void choosePrivateKeyAlias(android.app.Activity, android.security.KeyChainAliasCallback, java.lang.String[], java.security.Principal[], java.lang.String, int, java.lang.String);
@@ -38307,6 +38338,7 @@ package android.security.keystore {
     method public boolean isTrustedUserPresenceRequired();
     method public boolean isUserAuthenticationRequired();
     method public boolean isUserAuthenticationValidWhileOnBody();
+    method public boolean isUserConfirmationRequired();
   }
 
   public static final class KeyGenParameterSpec.Builder {
@@ -38334,6 +38366,7 @@ package android.security.keystore {
     method public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationRequired(boolean);
     method public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationValidWhileOnBody(boolean);
     method public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationValidityDurationSeconds(int);
+    method public android.security.keystore.KeyGenParameterSpec.Builder setUserConfirmationRequired(boolean);
   }
 
   public class KeyInfo implements java.security.spec.KeySpec {
@@ -38355,6 +38388,7 @@ package android.security.keystore {
     method public boolean isUserAuthenticationRequired();
     method public boolean isUserAuthenticationRequirementEnforcedBySecureHardware();
     method public boolean isUserAuthenticationValidWhileOnBody();
+    method public boolean isUserConfirmationRequired();
   }
 
   public class KeyNotYetValidException extends java.security.InvalidKeyException {
@@ -38422,6 +38456,7 @@ package android.security.keystore {
     method public boolean isRandomizedEncryptionRequired();
     method public boolean isUserAuthenticationRequired();
     method public boolean isUserAuthenticationValidWhileOnBody();
+    method public boolean isUserConfirmationRequired();
   }
 
   public static final class KeyProtection.Builder {
@@ -38440,6 +38475,7 @@ package android.security.keystore {
     method public android.security.keystore.KeyProtection.Builder setUserAuthenticationRequired(boolean);
     method public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidWhileOnBody(boolean);
     method public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidityDurationSeconds(int);
+    method public android.security.keystore.KeyProtection.Builder setUserConfirmationRequired(boolean);
   }
 
   public class StrongBoxUnavailableException extends java.security.ProviderException {
