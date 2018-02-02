@@ -13839,6 +13839,7 @@ package android.graphics {
     method public int breakText(java.lang.String, boolean, float, float[]);
     method public void clearShadowLayer();
     method public float descent();
+    method public boolean equalsForTextMeasurement(android.graphics.Paint);
     method public int getAlpha();
     method public int getColor();
     method public android.graphics.ColorFilter getColorFilter();
@@ -43241,36 +43242,6 @@ package android.text {
     method public boolean isAllowed(char);
   }
 
-  public class MeasuredText implements android.text.Spanned {
-    method public char charAt(int);
-    method public int getBreakStrategy();
-    method public int getEnd();
-    method public int getHyphenationFrequency();
-    method public android.text.TextPaint getPaint();
-    method public int getParagraphCount();
-    method public int getParagraphEnd(int);
-    method public int getParagraphStart(int);
-    method public int getSpanEnd(java.lang.Object);
-    method public int getSpanFlags(java.lang.Object);
-    method public int getSpanStart(java.lang.Object);
-    method public <T> T[] getSpans(int, int, java.lang.Class<T>);
-    method public int getStart();
-    method public java.lang.CharSequence getText();
-    method public android.text.TextDirectionHeuristic getTextDir();
-    method public int length();
-    method public int nextSpanTransition(int, int, java.lang.Class);
-    method public java.lang.CharSequence subSequence(int, int);
-  }
-
-  public static final class MeasuredText.Builder {
-    ctor public MeasuredText.Builder(java.lang.CharSequence, android.text.TextPaint);
-    method public android.text.MeasuredText build();
-    method public android.text.MeasuredText.Builder setBreakStrategy(int);
-    method public android.text.MeasuredText.Builder setHyphenationFrequency(int);
-    method public android.text.MeasuredText.Builder setRange(int, int);
-    method public android.text.MeasuredText.Builder setTextDirection(android.text.TextDirectionHeuristic);
-  }
-
   public abstract interface NoCopySpan {
   }
 
@@ -43280,6 +43251,38 @@ package android.text {
 
   public abstract interface ParcelableSpan implements android.os.Parcelable {
     method public abstract int getSpanTypeId();
+  }
+
+  public class PrecomputedText implements android.text.Spanned {
+    method public char charAt(int);
+    method public static android.text.PrecomputedText create(java.lang.CharSequence, android.text.PrecomputedText.Params);
+    method public int getParagraphCount();
+    method public int getParagraphEnd(int);
+    method public int getParagraphStart(int);
+    method public android.text.PrecomputedText.Params getParams();
+    method public int getSpanEnd(java.lang.Object);
+    method public int getSpanFlags(java.lang.Object);
+    method public int getSpanStart(java.lang.Object);
+    method public <T> T[] getSpans(int, int, java.lang.Class<T>);
+    method public java.lang.CharSequence getText();
+    method public int length();
+    method public int nextSpanTransition(int, int, java.lang.Class);
+    method public java.lang.CharSequence subSequence(int, int);
+  }
+
+  public static final class PrecomputedText.Params {
+    method public int getBreakStrategy();
+    method public int getHyphenationFrequency();
+    method public android.text.TextDirectionHeuristic getTextDirection();
+    method public android.text.TextPaint getTextPaint();
+  }
+
+  public static class PrecomputedText.Params.Builder {
+    ctor public PrecomputedText.Params.Builder(android.text.TextPaint);
+    method public android.text.PrecomputedText.Params build();
+    method public android.text.PrecomputedText.Params.Builder setBreakStrategy(int);
+    method public android.text.PrecomputedText.Params.Builder setHyphenationFrequency(int);
+    method public android.text.PrecomputedText.Params.Builder setTextDirection(android.text.TextDirectionHeuristic);
   }
 
   public class Selection {
@@ -53665,6 +53668,7 @@ package android.widget {
     method public final android.content.res.ColorStateList getTextColors();
     method public java.util.Locale getTextLocale();
     method public android.os.LocaleList getTextLocales();
+    method public android.text.PrecomputedText.Params getTextMetricsParams();
     method public float getTextScaleX();
     method public float getTextSize();
     method public int getTotalPaddingBottom();
@@ -53794,6 +53798,7 @@ package android.widget {
     method public final void setTextKeepState(java.lang.CharSequence, android.widget.TextView.BufferType);
     method public void setTextLocale(java.util.Locale);
     method public void setTextLocales(android.os.LocaleList);
+    method public void setTextMetricsParams(android.text.PrecomputedText.Params);
     method public void setTextScaleX(float);
     method public void setTextSize(float);
     method public void setTextSize(int, float);
