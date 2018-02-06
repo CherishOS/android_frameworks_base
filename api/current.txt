@@ -40397,12 +40397,12 @@ package android.telephony {
   public class MbmsDownloadSession implements java.lang.AutoCloseable {
     method public int cancelDownload(android.telephony.mbms.DownloadRequest);
     method public void close();
-    method public static android.telephony.MbmsDownloadSession create(android.content.Context, android.telephony.mbms.MbmsDownloadSessionCallback, android.os.Handler);
-    method public static android.telephony.MbmsDownloadSession create(android.content.Context, android.telephony.mbms.MbmsDownloadSessionCallback, int, android.os.Handler);
+    method public static android.telephony.MbmsDownloadSession create(android.content.Context, java.util.concurrent.Executor, android.telephony.mbms.MbmsDownloadSessionCallback);
+    method public static android.telephony.MbmsDownloadSession create(android.content.Context, java.util.concurrent.Executor, int, android.telephony.mbms.MbmsDownloadSessionCallback);
     method public int download(android.telephony.mbms.DownloadRequest);
     method public java.io.File getTempFileRootDirectory();
     method public java.util.List<android.telephony.mbms.DownloadRequest> listPendingDownloads();
-    method public int registerStateCallback(android.telephony.mbms.DownloadRequest, android.telephony.mbms.DownloadStateCallback, android.os.Handler);
+    method public int registerStateCallback(android.telephony.mbms.DownloadRequest, java.util.concurrent.Executor, android.telephony.mbms.DownloadStateCallback);
     method public void requestDownloadState(android.telephony.mbms.DownloadRequest, android.telephony.mbms.FileInfo);
     method public void requestUpdateFileServices(java.util.List<java.lang.String>);
     method public void resetDownloadKnowledge(android.telephony.mbms.DownloadRequest);
@@ -40430,10 +40430,10 @@ package android.telephony {
 
   public class MbmsStreamingSession implements java.lang.AutoCloseable {
     method public void close();
-    method public static android.telephony.MbmsStreamingSession create(android.content.Context, android.telephony.mbms.MbmsStreamingSessionCallback, int, android.os.Handler);
-    method public static android.telephony.MbmsStreamingSession create(android.content.Context, android.telephony.mbms.MbmsStreamingSessionCallback, android.os.Handler);
+    method public static android.telephony.MbmsStreamingSession create(android.content.Context, java.util.concurrent.Executor, int, android.telephony.mbms.MbmsStreamingSessionCallback);
+    method public static android.telephony.MbmsStreamingSession create(android.content.Context, java.util.concurrent.Executor, android.telephony.mbms.MbmsStreamingSessionCallback);
     method public void requestUpdateStreamingServices(java.util.List<java.lang.String>);
-    method public android.telephony.mbms.StreamingService startStreaming(android.telephony.mbms.StreamingServiceInfo, android.telephony.mbms.StreamingServiceCallback, android.os.Handler);
+    method public android.telephony.mbms.StreamingService startStreaming(android.telephony.mbms.StreamingServiceInfo, java.util.concurrent.Executor, android.telephony.mbms.StreamingServiceCallback);
   }
 
   public class NeighboringCellInfo implements android.os.Parcelable {
@@ -41261,20 +41261,23 @@ package android.telephony.gsm {
 package android.telephony.mbms {
 
   public final class DownloadRequest implements android.os.Parcelable {
-    method public static android.telephony.mbms.DownloadRequest copy(android.telephony.mbms.DownloadRequest);
     method public int describeContents();
+    method public android.net.Uri getDestinationUri();
     method public java.lang.String getFileServiceId();
     method public static int getMaxAppIntentSize();
     method public static int getMaxDestinationUriSize();
     method public android.net.Uri getSourceUri();
     method public int getSubscriptionId();
+    method public byte[] toByteArray();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.mbms.DownloadRequest> CREATOR;
   }
 
   public static class DownloadRequest.Builder {
-    ctor public DownloadRequest.Builder(android.net.Uri);
+    ctor public DownloadRequest.Builder(android.net.Uri, android.net.Uri);
     method public android.telephony.mbms.DownloadRequest build();
+    method public static android.telephony.mbms.DownloadRequest.Builder fromDownloadRequest(android.telephony.mbms.DownloadRequest);
+    method public static android.telephony.mbms.DownloadRequest.Builder fromSerializedRequest(byte[]);
     method public android.telephony.mbms.DownloadRequest.Builder setAppIntent(android.content.Intent);
     method public android.telephony.mbms.DownloadRequest.Builder setServiceInfo(android.telephony.mbms.FileServiceInfo);
     method public android.telephony.mbms.DownloadRequest.Builder setSubscriptionId(int);
@@ -41370,10 +41373,10 @@ package android.telephony.mbms {
     method public java.util.Date getSessionStartTime();
   }
 
-  public class StreamingService {
+  public class StreamingService implements java.lang.AutoCloseable {
+    method public void close();
     method public android.telephony.mbms.StreamingServiceInfo getInfo();
     method public android.net.Uri getPlaybackUri();
-    method public void stopStreaming();
     field public static final int BROADCAST_METHOD = 1; // 0x1
     field public static final int REASON_BY_USER_REQUEST = 1; // 0x1
     field public static final int REASON_END_OF_SESSION = 2; // 0x2
