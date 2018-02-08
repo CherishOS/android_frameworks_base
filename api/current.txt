@@ -6705,6 +6705,7 @@ package android.app.admin {
     field public static final int USER_OPERATION_ERROR_MAX_RUNNING_USERS = 3; // 0x3
     field public static final int USER_OPERATION_ERROR_UNKNOWN = 1; // 0x1
     field public static final int USER_OPERATION_SUCCESS = 0; // 0x0
+    field public static final int WIPE_EUICC = 4; // 0x4
     field public static final int WIPE_EXTERNAL_STORAGE = 1; // 0x1
     field public static final int WIPE_RESET_PROTECTION_DATA = 2; // 0x2
   }
@@ -9439,6 +9440,7 @@ package android.content {
     field public static final java.lang.String DISPLAY_SERVICE = "display";
     field public static final java.lang.String DOWNLOAD_SERVICE = "download";
     field public static final java.lang.String DROPBOX_SERVICE = "dropbox";
+    field public static final java.lang.String EUICC_SERVICE = "euicc";
     field public static final java.lang.String FINGERPRINT_SERVICE = "fingerprint";
     field public static final java.lang.String HARDWARE_PROPERTIES_SERVICE = "hardware_properties";
     field public static final java.lang.String INPUT_METHOD_SERVICE = "input_method";
@@ -11264,6 +11266,7 @@ package android.content.pm {
     field public static final java.lang.String FEATURE_STRONGBOX_KEYSTORE = "android.hardware.strongbox_keystore";
     field public static final java.lang.String FEATURE_TELEPHONY = "android.hardware.telephony";
     field public static final java.lang.String FEATURE_TELEPHONY_CDMA = "android.hardware.telephony.cdma";
+    field public static final java.lang.String FEATURE_TELEPHONY_EUICC = "android.hardware.telephony.euicc";
     field public static final java.lang.String FEATURE_TELEPHONY_GSM = "android.hardware.telephony.gsm";
     field public static final java.lang.String FEATURE_TELEPHONY_MBMS = "android.hardware.telephony.mbms";
     field public static final deprecated java.lang.String FEATURE_TELEVISION = "android.hardware.type.television";
@@ -14603,7 +14606,7 @@ package android.graphics.drawable {
     method public final android.graphics.Rect copyBounds();
     method public static android.graphics.drawable.Drawable createFromPath(java.lang.String);
     method public static android.graphics.drawable.Drawable createFromResourceStream(android.content.res.Resources, android.util.TypedValue, java.io.InputStream, java.lang.String);
-    method public static android.graphics.drawable.Drawable createFromResourceStream(android.content.res.Resources, android.util.TypedValue, java.io.InputStream, java.lang.String, android.graphics.BitmapFactory.Options);
+    method public static deprecated android.graphics.drawable.Drawable createFromResourceStream(android.content.res.Resources, android.util.TypedValue, java.io.InputStream, java.lang.String, android.graphics.BitmapFactory.Options);
     method public static android.graphics.drawable.Drawable createFromStream(java.io.InputStream, java.lang.String);
     method public static android.graphics.drawable.Drawable createFromXml(android.content.res.Resources, org.xmlpull.v1.XmlPullParser) throws java.io.IOException, org.xmlpull.v1.XmlPullParserException;
     method public static android.graphics.drawable.Drawable createFromXml(android.content.res.Resources, org.xmlpull.v1.XmlPullParser, android.content.res.Resources.Theme) throws java.io.IOException, org.xmlpull.v1.XmlPullParserException;
@@ -40504,6 +40507,7 @@ package android.telecom {
   public final class Call {
     method public void answer(int);
     method public void conference(android.telecom.Call);
+    method public void deflect(android.net.Uri);
     method public void disconnect();
     method public java.util.List<java.lang.String> getCannedTextResponses();
     method public java.util.List<android.telecom.Call> getChildren();
@@ -40614,6 +40618,7 @@ package android.telecom {
     field public static final int CAPABILITY_SUPPORTS_VT_REMOTE_BIDIRECTIONAL = 3072; // 0xc00
     field public static final int CAPABILITY_SUPPORTS_VT_REMOTE_RX = 1024; // 0x400
     field public static final int CAPABILITY_SUPPORTS_VT_REMOTE_TX = 2048; // 0x800
+    field public static final int CAPABILITY_SUPPORT_DEFLECT = 16777216; // 0x1000000
     field public static final int CAPABILITY_SUPPORT_HOLD = 2; // 0x2
     field public static final int CAPABILITY_SWAP_CONFERENCE = 8; // 0x8
     field public static final int PROPERTY_ASSISTED_DIALING_USED = 512; // 0x200
@@ -40761,6 +40766,7 @@ package android.telecom {
     method public void onAnswer();
     method public void onCallAudioStateChanged(android.telecom.CallAudioState);
     method public void onCallEvent(java.lang.String, android.os.Bundle);
+    method public void onDeflect(android.net.Uri);
     method public void onDisconnect();
     method public void onExtrasChanged(android.os.Bundle);
     method public void onHandoverComplete();
@@ -40829,6 +40835,7 @@ package android.telecom {
     field public static final int CAPABILITY_SUPPORTS_VT_REMOTE_BIDIRECTIONAL = 3072; // 0xc00
     field public static final int CAPABILITY_SUPPORTS_VT_REMOTE_RX = 1024; // 0x400
     field public static final int CAPABILITY_SUPPORTS_VT_REMOTE_TX = 2048; // 0x800
+    field public static final int CAPABILITY_SUPPORT_DEFLECT = 33554432; // 0x2000000
     field public static final int CAPABILITY_SUPPORT_HOLD = 2; // 0x2
     field public static final int CAPABILITY_SWAP_CONFERENCE = 8; // 0x8
     field public static final java.lang.String EVENT_CALL_MERGE_FAILED = "android.telecom.event.CALL_MERGE_FAILED";
@@ -42192,13 +42199,16 @@ package android.telephony {
     method public java.lang.String getNumber();
     method public int getSimSlotIndex();
     method public int getSubscriptionId();
+    method public boolean isEmbedded();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.SubscriptionInfo> CREATOR;
   }
 
   public class SubscriptionManager {
     method public void addOnSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnSubscriptionsChangedListener);
+    method public boolean canManageSubscription(android.telephony.SubscriptionInfo);
     method public static deprecated android.telephony.SubscriptionManager from(android.content.Context);
+    method public java.util.List<android.telephony.SubscriptionInfo> getAccessibleSubscriptionInfoList();
     method public android.telephony.SubscriptionInfo getActiveSubscriptionInfo(int);
     method public int getActiveSubscriptionInfoCount();
     method public int getActiveSubscriptionInfoCountMax();
@@ -42579,6 +42589,44 @@ package android.telephony.data {
     method public android.telephony.data.ApnSetting.Builder setRoamingProtocol(java.lang.String);
     method public android.telephony.data.ApnSetting.Builder setTypes(java.util.List<java.lang.String>);
     method public android.telephony.data.ApnSetting.Builder setUser(java.lang.String);
+  }
+
+}
+
+package android.telephony.euicc {
+
+  public final class DownloadableSubscription implements android.os.Parcelable {
+    method public int describeContents();
+    method public static android.telephony.euicc.DownloadableSubscription forActivationCode(java.lang.String);
+    method public java.lang.String getConfirmationCode();
+    method public java.lang.String getEncodedActivationCode();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.euicc.DownloadableSubscription> CREATOR;
+  }
+
+  public final class EuiccInfo implements android.os.Parcelable {
+    ctor public EuiccInfo(java.lang.String);
+    method public int describeContents();
+    method public java.lang.String getOsVersion();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.euicc.EuiccInfo> CREATOR;
+  }
+
+  public class EuiccManager {
+    method public void deleteSubscription(int, android.app.PendingIntent);
+    method public void downloadSubscription(android.telephony.euicc.DownloadableSubscription, boolean, android.app.PendingIntent);
+    method public java.lang.String getEid();
+    method public android.telephony.euicc.EuiccInfo getEuiccInfo();
+    method public boolean isEnabled();
+    method public void startResolutionActivity(android.app.Activity, int, android.content.Intent, android.app.PendingIntent) throws android.content.IntentSender.SendIntentException;
+    method public void switchToSubscription(int, android.app.PendingIntent);
+    field public static final java.lang.String ACTION_MANAGE_EMBEDDED_SUBSCRIPTIONS = "android.telephony.euicc.action.MANAGE_EMBEDDED_SUBSCRIPTIONS";
+    field public static final java.lang.String ACTION_NOTIFY_CARRIER_SETUP_INCOMPLETE = "android.telephony.euicc.action.NOTIFY_CARRIER_SETUP_INCOMPLETE";
+    field public static final int EMBEDDED_SUBSCRIPTION_RESULT_ERROR = 2; // 0x2
+    field public static final int EMBEDDED_SUBSCRIPTION_RESULT_OK = 0; // 0x0
+    field public static final int EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR = 1; // 0x1
+    field public static final java.lang.String EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE = "android.telephony.euicc.extra.EMBEDDED_SUBSCRIPTION_DETAILED_CODE";
+    field public static final java.lang.String META_DATA_CARRIER_ICON = "android.telephony.euicc.carriericon";
   }
 
 }
