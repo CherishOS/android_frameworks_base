@@ -73,6 +73,7 @@ package android {
     field public static final java.lang.String DUMP = "android.permission.DUMP";
     field public static final java.lang.String EXPAND_STATUS_BAR = "android.permission.EXPAND_STATUS_BAR";
     field public static final java.lang.String FACTORY_TEST = "android.permission.FACTORY_TEST";
+    field public static final java.lang.String FOREGROUND_SERVICE = "android.permission.FOREGROUND_SERVICE";
     field public static final java.lang.String GET_ACCOUNTS = "android.permission.GET_ACCOUNTS";
     field public static final java.lang.String GET_ACCOUNTS_PRIVILEGED = "android.permission.GET_ACCOUNTS_PRIVILEGED";
     field public static final java.lang.String GET_PACKAGE_SIZE = "android.permission.GET_PACKAGE_SIZE";
@@ -6739,6 +6740,7 @@ package android.app.admin {
     field public static final int TAG_APP_PROCESS_START = 210005; // 0x33455
     field public static final int TAG_CERT_AUTHORITY_INSTALLED = 210029; // 0x3346d
     field public static final int TAG_CERT_AUTHORITY_REMOVED = 210030; // 0x3346e
+    field public static final int TAG_CRYPTO_SELF_TEST_COMPLETED = 210031; // 0x3346f
     field public static final int TAG_KEYGUARD_DISABLED_FEATURES_SET = 210021; // 0x33465
     field public static final int TAG_KEYGUARD_DISMISSED = 210006; // 0x33456
     field public static final int TAG_KEYGUARD_DISMISS_AUTH_ATTEMPT = 210007; // 0x33457
@@ -23369,6 +23371,7 @@ package android.media {
     method public android.media.MediaDrm.CryptoSession getCryptoSession(byte[], java.lang.String, java.lang.String);
     method public android.media.MediaDrm.KeyRequest getKeyRequest(byte[], byte[], java.lang.String, int, java.util.HashMap<java.lang.String, java.lang.String>) throws android.media.NotProvisionedException;
     method public int getMaxHdcpLevel();
+    method public static int getMaxSecurityLevel();
     method public int getMaxSessionCount();
     method public android.os.PersistableBundle getMetrics();
     method public int getOpenSessionCount();
@@ -23382,6 +23385,7 @@ package android.media {
     method public static boolean isCryptoSchemeSupported(java.util.UUID);
     method public static boolean isCryptoSchemeSupported(java.util.UUID, java.lang.String);
     method public byte[] openSession() throws android.media.NotProvisionedException, android.media.ResourceBusyException;
+    method public byte[] openSession(int) throws android.media.NotProvisionedException, android.media.ResourceBusyException;
     method public byte[] provideKeyResponse(byte[], byte[]) throws android.media.DeniedByServerException, android.media.NotProvisionedException;
     method public void provideProvisionResponse(byte[]) throws android.media.DeniedByServerException;
     method public java.util.HashMap<java.lang.String, java.lang.String> queryKeyStatus(byte[]);
@@ -23397,7 +23401,6 @@ package android.media {
     method public void setOnKeyStatusChangeListener(android.media.MediaDrm.OnKeyStatusChangeListener, android.os.Handler);
     method public void setPropertyByteArray(java.lang.String, byte[]);
     method public void setPropertyString(java.lang.String, java.lang.String);
-    method public void setSecurityLevel(byte[], int);
     field public static final deprecated int EVENT_KEY_EXPIRED = 3; // 0x3
     field public static final int EVENT_KEY_REQUIRED = 2; // 0x2
     field public static final deprecated int EVENT_PROVISION_REQUIRED = 1; // 0x1
@@ -36772,6 +36775,13 @@ package android.provider {
     field public static final java.lang.String ADDRESS = "address";
   }
 
+  public static final class Telephony.CarrierIdentification implements android.provider.BaseColumns {
+    method public static android.net.Uri getUriForSubscriptionId(int);
+    field public static final java.lang.String CID = "carrier_id";
+    field public static final android.net.Uri CONTENT_URI;
+    field public static final java.lang.String NAME = "carrier_name";
+  }
+
   public static final class Telephony.Carriers implements android.provider.BaseColumns {
     field public static final java.lang.String APN = "apn";
     field public static final java.lang.String AUTH_TYPE = "authtype";
@@ -44901,6 +44911,7 @@ package android.util {
     method public abstract int getAttributeListValue(int, java.lang.String[], int);
     method public abstract java.lang.String getAttributeName(int);
     method public abstract int getAttributeNameResource(int);
+    method public default java.lang.String getAttributeNamespace(int);
     method public abstract int getAttributeResourceValue(java.lang.String, java.lang.String, int);
     method public abstract int getAttributeResourceValue(int, int);
     method public abstract int getAttributeUnsignedIntValue(java.lang.String, java.lang.String, int);
