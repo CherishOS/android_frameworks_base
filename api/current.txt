@@ -6705,6 +6705,7 @@ package android.app.admin {
     field public static final int USER_OPERATION_ERROR_MAX_RUNNING_USERS = 3; // 0x3
     field public static final int USER_OPERATION_ERROR_UNKNOWN = 1; // 0x1
     field public static final int USER_OPERATION_SUCCESS = 0; // 0x0
+    field public static final int WIPE_EUICC = 4; // 0x4
     field public static final int WIPE_EXTERNAL_STORAGE = 1; // 0x1
     field public static final int WIPE_RESET_PROTECTION_DATA = 2; // 0x2
   }
@@ -6873,6 +6874,7 @@ package android.app.assist {
     method public java.lang.String getIdEntry();
     method public java.lang.String getIdPackage();
     method public java.lang.String getIdType();
+    method public int getImportantForAutofill();
     method public int getInputType();
     method public int getLeft();
     method public android.os.LocaleList getLocaleList();
@@ -9440,6 +9442,7 @@ package android.content {
     field public static final java.lang.String DISPLAY_SERVICE = "display";
     field public static final java.lang.String DOWNLOAD_SERVICE = "download";
     field public static final java.lang.String DROPBOX_SERVICE = "dropbox";
+    field public static final java.lang.String EUICC_SERVICE = "euicc";
     field public static final java.lang.String FINGERPRINT_SERVICE = "fingerprint";
     field public static final java.lang.String HARDWARE_PROPERTIES_SERVICE = "hardware_properties";
     field public static final java.lang.String INPUT_METHOD_SERVICE = "input_method";
@@ -11265,6 +11268,7 @@ package android.content.pm {
     field public static final java.lang.String FEATURE_STRONGBOX_KEYSTORE = "android.hardware.strongbox_keystore";
     field public static final java.lang.String FEATURE_TELEPHONY = "android.hardware.telephony";
     field public static final java.lang.String FEATURE_TELEPHONY_CDMA = "android.hardware.telephony.cdma";
+    field public static final java.lang.String FEATURE_TELEPHONY_EUICC = "android.hardware.telephony.euicc";
     field public static final java.lang.String FEATURE_TELEPHONY_GSM = "android.hardware.telephony.gsm";
     field public static final java.lang.String FEATURE_TELEPHONY_MBMS = "android.hardware.telephony.mbms";
     field public static final deprecated java.lang.String FEATURE_TELEVISION = "android.hardware.type.television";
@@ -15842,8 +15846,6 @@ package android.hardware.camera2 {
     method public abstract void createReprocessableCaptureSessionByConfigurations(android.hardware.camera2.params.InputConfiguration, java.util.List<android.hardware.camera2.params.OutputConfiguration>, android.hardware.camera2.CameraCaptureSession.StateCallback, android.os.Handler) throws android.hardware.camera2.CameraAccessException;
     method public abstract java.lang.String getId();
     field public static final int TEMPLATE_MANUAL = 6; // 0x6
-    field public static final int TEMPLATE_MOTION_TRACKING_BEST = 8; // 0x8
-    field public static final int TEMPLATE_MOTION_TRACKING_PREVIEW = 7; // 0x7
     field public static final int TEMPLATE_PREVIEW = 1; // 0x1
     field public static final int TEMPLATE_RECORD = 3; // 0x3
     field public static final int TEMPLATE_STILL_CAPTURE = 2; // 0x2
@@ -23370,6 +23372,7 @@ package android.media {
     method public android.media.MediaDrm.CryptoSession getCryptoSession(byte[], java.lang.String, java.lang.String);
     method public android.media.MediaDrm.KeyRequest getKeyRequest(byte[], byte[], java.lang.String, int, java.util.HashMap<java.lang.String, java.lang.String>) throws android.media.NotProvisionedException;
     method public int getMaxHdcpLevel();
+    method public static int getMaxSecurityLevel();
     method public int getMaxSessionCount();
     method public android.os.PersistableBundle getMetrics();
     method public int getOpenSessionCount();
@@ -23383,6 +23386,7 @@ package android.media {
     method public static boolean isCryptoSchemeSupported(java.util.UUID);
     method public static boolean isCryptoSchemeSupported(java.util.UUID, java.lang.String);
     method public byte[] openSession() throws android.media.NotProvisionedException, android.media.ResourceBusyException;
+    method public byte[] openSession(int) throws android.media.NotProvisionedException, android.media.ResourceBusyException;
     method public byte[] provideKeyResponse(byte[], byte[]) throws android.media.DeniedByServerException, android.media.NotProvisionedException;
     method public void provideProvisionResponse(byte[]) throws android.media.DeniedByServerException;
     method public java.util.HashMap<java.lang.String, java.lang.String> queryKeyStatus(byte[]);
@@ -23398,7 +23402,6 @@ package android.media {
     method public void setOnKeyStatusChangeListener(android.media.MediaDrm.OnKeyStatusChangeListener, android.os.Handler);
     method public void setPropertyByteArray(java.lang.String, byte[]);
     method public void setPropertyString(java.lang.String, java.lang.String);
-    method public void setSecurityLevel(byte[], int);
     field public static final deprecated int EVENT_KEY_EXPIRED = 3; // 0x3
     field public static final int EVENT_KEY_REQUIRED = 2; // 0x2
     field public static final deprecated int EVENT_PROVISION_REQUIRED = 1; // 0x1
@@ -42204,13 +42207,16 @@ package android.telephony {
     method public java.lang.String getNumber();
     method public int getSimSlotIndex();
     method public int getSubscriptionId();
+    method public boolean isEmbedded();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.SubscriptionInfo> CREATOR;
   }
 
   public class SubscriptionManager {
     method public void addOnSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnSubscriptionsChangedListener);
+    method public boolean canManageSubscription(android.telephony.SubscriptionInfo);
     method public static deprecated android.telephony.SubscriptionManager from(android.content.Context);
+    method public java.util.List<android.telephony.SubscriptionInfo> getAccessibleSubscriptionInfoList();
     method public android.telephony.SubscriptionInfo getActiveSubscriptionInfo(int);
     method public int getActiveSubscriptionInfoCount();
     method public int getActiveSubscriptionInfoCountMax();
@@ -42591,6 +42597,44 @@ package android.telephony.data {
     method public android.telephony.data.ApnSetting.Builder setRoamingProtocol(java.lang.String);
     method public android.telephony.data.ApnSetting.Builder setTypes(java.util.List<java.lang.String>);
     method public android.telephony.data.ApnSetting.Builder setUser(java.lang.String);
+  }
+
+}
+
+package android.telephony.euicc {
+
+  public final class DownloadableSubscription implements android.os.Parcelable {
+    method public int describeContents();
+    method public static android.telephony.euicc.DownloadableSubscription forActivationCode(java.lang.String);
+    method public java.lang.String getConfirmationCode();
+    method public java.lang.String getEncodedActivationCode();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.euicc.DownloadableSubscription> CREATOR;
+  }
+
+  public final class EuiccInfo implements android.os.Parcelable {
+    ctor public EuiccInfo(java.lang.String);
+    method public int describeContents();
+    method public java.lang.String getOsVersion();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.euicc.EuiccInfo> CREATOR;
+  }
+
+  public class EuiccManager {
+    method public void deleteSubscription(int, android.app.PendingIntent);
+    method public void downloadSubscription(android.telephony.euicc.DownloadableSubscription, boolean, android.app.PendingIntent);
+    method public java.lang.String getEid();
+    method public android.telephony.euicc.EuiccInfo getEuiccInfo();
+    method public boolean isEnabled();
+    method public void startResolutionActivity(android.app.Activity, int, android.content.Intent, android.app.PendingIntent) throws android.content.IntentSender.SendIntentException;
+    method public void switchToSubscription(int, android.app.PendingIntent);
+    field public static final java.lang.String ACTION_MANAGE_EMBEDDED_SUBSCRIPTIONS = "android.telephony.euicc.action.MANAGE_EMBEDDED_SUBSCRIPTIONS";
+    field public static final java.lang.String ACTION_NOTIFY_CARRIER_SETUP_INCOMPLETE = "android.telephony.euicc.action.NOTIFY_CARRIER_SETUP_INCOMPLETE";
+    field public static final int EMBEDDED_SUBSCRIPTION_RESULT_ERROR = 2; // 0x2
+    field public static final int EMBEDDED_SUBSCRIPTION_RESULT_OK = 0; // 0x0
+    field public static final int EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR = 1; // 0x1
+    field public static final java.lang.String EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE = "android.telephony.euicc.extra.EMBEDDED_SUBSCRIPTION_DETAILED_CODE";
+    field public static final java.lang.String META_DATA_CARRIER_ICON = "android.telephony.euicc.carriericon";
   }
 
 }
@@ -48419,6 +48463,7 @@ package android.view {
     method public abstract void setHint(java.lang.CharSequence);
     method public abstract void setHtmlInfo(android.view.ViewStructure.HtmlInfo);
     method public abstract void setId(int, java.lang.String, java.lang.String, java.lang.String);
+    method public void setImportantForAutofill(int);
     method public abstract void setInputType(int);
     method public abstract void setLocaleList(android.os.LocaleList);
     method public abstract void setLongClickable(boolean);
@@ -50371,7 +50416,7 @@ package android.view.textclassifier.logging {
     method public final void logSelectionModifiedEvent(int, int);
     method public final void logSelectionModifiedEvent(int, int, android.view.textclassifier.TextClassification);
     method public final void logSelectionModifiedEvent(int, int, android.view.textclassifier.TextSelection);
-    method public final void logSelectionStartedEvent(int);
+    method public final void logSelectionStartedEvent(int, int);
     method public abstract void writeEvent(android.view.textclassifier.logging.SelectionEvent);
     field public static final int OUT_OF_BOUNDS = 2147483647; // 0x7fffffff
     field public static final int OUT_OF_BOUNDS_NEGATIVE = -2147483648; // 0x80000000
@@ -50401,6 +50446,7 @@ package android.view.textclassifier.logging {
     method public int getEventIndex();
     method public long getEventTime();
     method public int getEventType();
+    method public int getInvocationMethod();
     method public java.lang.String getPackageName();
     method public java.lang.String getSessionId();
     method public java.lang.String getSignature();
@@ -50425,6 +50471,8 @@ package android.view.textclassifier.logging {
     field public static final int EVENT_SELECTION_STARTED = 1; // 0x1
     field public static final int EVENT_SMART_SELECTION_MULTI = 4; // 0x4
     field public static final int EVENT_SMART_SELECTION_SINGLE = 3; // 0x3
+    field public static final int INVOCATION_LINK = 2; // 0x2
+    field public static final int INVOCATION_MANUAL = 1; // 0x1
   }
 
 }
