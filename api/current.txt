@@ -50766,41 +50766,37 @@ package android.webkit {
   }
 
   public class TracingConfig {
-    ctor public TracingConfig(int);
-    ctor public TracingConfig(int, java.lang.String, int);
-    method public java.lang.String getCustomCategoryPattern();
-    method public int getPresetCategories();
+    method public java.util.List<java.lang.String> getCustomIncludedCategories();
+    method public int getPredefinedCategories();
     method public int getTracingMode();
-    field public static final int CATEGORIES_FRAME_VIEWER = 4; // 0x4
-    field public static final int CATEGORIES_INPUT_LATENCY = 1; // 0x1
-    field public static final int CATEGORIES_JAVASCRIPT_AND_RENDERING = 3; // 0x3
-    field public static final int CATEGORIES_NONE = -1; // 0xffffffff
-    field public static final int CATEGORIES_RENDERING = 2; // 0x2
-    field public static final int CATEGORIES_WEB_DEVELOPER = 0; // 0x0
+    field public static final int CATEGORIES_ALL = 1; // 0x1
+    field public static final int CATEGORIES_ANDROID_WEBVIEW = 2; // 0x2
+    field public static final int CATEGORIES_FRAME_VIEWER = 64; // 0x40
+    field public static final int CATEGORIES_INPUT_LATENCY = 8; // 0x8
+    field public static final int CATEGORIES_JAVASCRIPT_AND_RENDERING = 32; // 0x20
+    field public static final int CATEGORIES_NONE = 0; // 0x0
+    field public static final int CATEGORIES_RENDERING = 16; // 0x10
+    field public static final int CATEGORIES_WEB_DEVELOPER = 4; // 0x4
     field public static final int RECORD_CONTINUOUSLY = 1; // 0x1
-    field public static final int RECORD_TO_CONSOLE = 3; // 0x3
     field public static final int RECORD_UNTIL_FULL = 0; // 0x0
     field public static final int RECORD_UNTIL_FULL_LARGE_BUFFER = 2; // 0x2
+  }
+
+  public static class TracingConfig.Builder {
+    ctor public TracingConfig.Builder();
+    method public android.webkit.TracingConfig.Builder addCategories(int...);
+    method public android.webkit.TracingConfig.Builder addCategories(java.lang.String...);
+    method public android.webkit.TracingConfig.Builder addCategories(java.util.Collection<java.lang.String>);
+    method public android.webkit.TracingConfig build();
+    method public android.webkit.TracingConfig.Builder setTracingMode(int);
   }
 
   public abstract class TracingController {
     ctor public TracingController();
     method public static android.webkit.TracingController getInstance();
     method public abstract boolean isTracing();
-    method public abstract boolean start(android.webkit.TracingConfig);
-    method public abstract boolean stop();
-    method public abstract boolean stopAndFlush(android.webkit.TracingController.TracingOutputStream, android.os.Handler);
-  }
-
-  public static abstract interface TracingController.TracingOutputStream {
-    method public abstract void complete();
-    method public abstract void write(byte[]);
-  }
-
-  public class TracingFileOutputStream implements android.webkit.TracingController.TracingOutputStream {
-    ctor public TracingFileOutputStream(java.lang.String) throws java.io.FileNotFoundException;
-    method public void complete();
-    method public void write(byte[]);
+    method public abstract void start(android.webkit.TracingConfig);
+    method public abstract boolean stop(java.io.OutputStream, java.util.concurrent.Executor);
   }
 
   public final class URLUtil {
