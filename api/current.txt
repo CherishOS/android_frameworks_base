@@ -11389,6 +11389,8 @@ package android.content.pm {
     ctor public PermissionInfo();
     ctor public PermissionInfo(android.content.pm.PermissionInfo);
     method public int describeContents();
+    method public int getProtection();
+    method public int getProtectionFlags();
     method public java.lang.CharSequence loadDescription(android.content.pm.PackageManager);
     field public static final android.os.Parcelable.Creator<android.content.pm.PermissionInfo> CREATOR;
     field public static final int FLAG_COSTS_MONEY = 1; // 0x1
@@ -11405,8 +11407,8 @@ package android.content.pm {
     field public static final int PROTECTION_FLAG_SETUP = 2048; // 0x800
     field public static final deprecated int PROTECTION_FLAG_SYSTEM = 16; // 0x10
     field public static final int PROTECTION_FLAG_VERIFIER = 512; // 0x200
-    field public static final int PROTECTION_MASK_BASE = 15; // 0xf
-    field public static final int PROTECTION_MASK_FLAGS = 65520; // 0xfff0
+    field public static final deprecated int PROTECTION_MASK_BASE = 15; // 0xf
+    field public static final deprecated int PROTECTION_MASK_FLAGS = 65520; // 0xfff0
     field public static final int PROTECTION_NORMAL = 0; // 0x0
     field public static final int PROTECTION_SIGNATURE = 2; // 0x2
     field public static final deprecated int PROTECTION_SIGNATURE_OR_SYSTEM = 3; // 0x3
@@ -11414,7 +11416,7 @@ package android.content.pm {
     field public int flags;
     field public java.lang.String group;
     field public java.lang.CharSequence nonLocalizedDescription;
-    field public int protectionLevel;
+    field public deprecated int protectionLevel;
   }
 
   public final class ProviderInfo extends android.content.pm.ComponentInfo implements android.os.Parcelable {
@@ -21903,6 +21905,7 @@ package android.media {
     field public static final int TYPE_FM_TUNER = 16; // 0x10
     field public static final int TYPE_HDMI = 9; // 0x9
     field public static final int TYPE_HDMI_ARC = 10; // 0xa
+    field public static final int TYPE_HEARING_AID = 23; // 0x17
     field public static final int TYPE_IP = 20; // 0x14
     field public static final int TYPE_LINE_ANALOG = 5; // 0x5
     field public static final int TYPE_LINE_DIGITAL = 6; // 0x6
@@ -50293,15 +50296,13 @@ package android.view.textclassifier {
     method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.os.LocaleList);
     method public default android.view.textclassifier.TextLinks generateLinks(java.lang.CharSequence, android.view.textclassifier.TextLinks.Options);
     method public default android.view.textclassifier.TextLinks generateLinks(java.lang.CharSequence);
-    method public default java.util.Collection<java.lang.String> getEntitiesForPreset(int);
     method public default android.view.textclassifier.logging.Logger getLogger(android.view.textclassifier.logging.Logger.Config);
     method public default int getMaxGenerateLinksTextLength();
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.view.textclassifier.TextSelection.Options);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.os.LocaleList);
-    field public static final int ENTITY_PRESET_ALL = 0; // 0x0
-    field public static final int ENTITY_PRESET_BASE = 2; // 0x2
-    field public static final int ENTITY_PRESET_NONE = 1; // 0x1
+    field public static final java.lang.String HINT_TEXT_IS_EDITABLE = "android.text_is_editable";
+    field public static final java.lang.String HINT_TEXT_IS_NOT_EDITABLE = "android.text_is_not_editable";
     field public static final android.view.textclassifier.TextClassifier NO_OP;
     field public static final java.lang.String TYPE_ADDRESS = "address";
     field public static final java.lang.String TYPE_DATE = "date";
@@ -50315,11 +50316,12 @@ package android.view.textclassifier {
   }
 
   public static final class TextClassifier.EntityConfig implements android.os.Parcelable {
-    ctor public TextClassifier.EntityConfig(int);
+    method public static android.view.textclassifier.TextClassifier.EntityConfig create(java.util.Collection<java.lang.String>);
+    method public static android.view.textclassifier.TextClassifier.EntityConfig create(java.util.Collection<java.lang.String>, java.util.Collection<java.lang.String>, java.util.Collection<java.lang.String>);
+    method public static android.view.textclassifier.TextClassifier.EntityConfig createWithEntityList(java.util.Collection<java.lang.String>);
     method public int describeContents();
-    method public android.view.textclassifier.TextClassifier.EntityConfig excludeEntities(java.lang.String...);
-    method public java.util.List<java.lang.String> getEntities(android.view.textclassifier.TextClassifier);
-    method public android.view.textclassifier.TextClassifier.EntityConfig includeEntities(java.lang.String...);
+    method public java.util.Collection<java.lang.String> getHints();
+    method public java.util.List<java.lang.String> resolveEntityListModifications(java.util.Collection<java.lang.String>);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassifier.EntityConfig> CREATOR;
   }
