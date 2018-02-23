@@ -24076,13 +24076,14 @@ package android.media {
     method public static final android.media.MediaPlayer2 create();
     method public abstract void deselectTrack(int);
     method public abstract android.media.DataSourceDesc editPlaylistItem(int, android.media.DataSourceDesc);
+    method public abstract android.media.AudioAttributes getAudioAttributes();
     method public abstract int getAudioSessionId();
     method public abstract android.media.DataSourceDesc getCurrentDataSource();
     method public abstract int getCurrentPlaylistItemIndex();
-    method public abstract int getCurrentPosition();
+    method public abstract long getCurrentPosition();
     method public abstract android.media.MediaPlayer2.DrmInfo getDrmInfo();
     method public abstract java.lang.String getDrmPropertyString(java.lang.String) throws android.media.MediaPlayer2.NoDrmSchemeException;
-    method public abstract int getDuration();
+    method public abstract long getDuration();
     method public abstract android.media.MediaDrm.KeyRequest getKeyRequest(byte[], byte[], java.lang.String, int, java.util.Map<java.lang.String, java.lang.String>) throws android.media.MediaPlayer2.NoDrmSchemeException;
     method public abstract int getLoopingMode();
     method public abstract android.os.PersistableBundle getMetrics();
@@ -24168,8 +24169,8 @@ package android.media {
 
   public static abstract class MediaPlayer2.DrmEventCallback {
     ctor public MediaPlayer2.DrmEventCallback();
-    method public void onDrmInfo(android.media.MediaPlayer2, android.media.MediaPlayer2.DrmInfo);
-    method public void onDrmPrepared(android.media.MediaPlayer2, int);
+    method public void onDrmInfo(android.media.MediaPlayer2, long, android.media.MediaPlayer2.DrmInfo);
+    method public void onDrmPrepared(android.media.MediaPlayer2, long, int);
   }
 
   public static abstract class MediaPlayer2.DrmInfo {
@@ -24207,7 +24208,7 @@ package android.media {
   }
 
   public static abstract interface MediaPlayer2.OnDrmConfigHelper {
-    method public abstract void onDrmConfig(android.media.MediaPlayer2);
+    method public abstract void onDrmConfig(android.media.MediaPlayer2, long);
   }
 
   public static abstract class MediaPlayer2.ProvisioningNetworkErrorException extends android.media.MediaDrmException {
