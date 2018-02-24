@@ -37032,17 +37032,6 @@ package android.se.omapi {
     method public byte[] transmit(byte[]) throws java.io.IOException;
   }
 
-  public abstract interface ISecureElementListener implements android.os.IInterface {
-    method public abstract void serviceConnected() throws android.os.RemoteException;
-  }
-
-  public static abstract class ISecureElementListener.Stub extends android.os.Binder implements android.se.omapi.ISecureElementListener {
-    ctor public ISecureElementListener.Stub();
-    method public android.os.IBinder asBinder();
-    method public static android.se.omapi.ISecureElementListener asInterface(android.os.IBinder);
-    method public boolean onTransact(int, android.os.Parcel, android.os.Parcel, int) throws android.os.RemoteException;
-  }
-
   public class Reader {
     method public void closeSessions();
     method public java.lang.String getName();
@@ -37052,11 +37041,17 @@ package android.se.omapi {
   }
 
   public class SEService {
-    ctor public SEService(android.content.Context, android.se.omapi.ISecureElementListener);
+    ctor public SEService(android.content.Context, android.se.omapi.SEService.SecureElementListener);
     method public android.se.omapi.Reader[] getReaders();
     method public java.lang.String getVersion();
     method public boolean isConnected();
     method public void shutdown();
+  }
+
+  public static abstract class SEService.SecureElementListener extends android.os.Binder {
+    ctor public SEService.SecureElementListener();
+    method public android.os.IBinder asBinder();
+    method public void serviceConnected();
   }
 
   public class Session {
