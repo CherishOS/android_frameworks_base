@@ -1378,6 +1378,7 @@ package android {
     field public static final int textEditSidePasteWindowLayout = 16843614; // 0x101035e
     field public static final int textEditSuggestionItemLayout = 16843636; // 0x1010374
     field public static final int textFilterEnabled = 16843007; // 0x10100ff
+    field public static final int textFontWeight = 16844166; // 0x1010586
     field public static final int textIsSelectable = 16843542; // 0x1010316
     field public static final int textOff = 16843045; // 0x1010125
     field public static final int textOn = 16843044; // 0x1010124
@@ -6702,11 +6703,6 @@ package android.app.admin {
     field public static final int RESET_PASSWORD_DO_NOT_ASK_CREDENTIALS_ON_BOOT = 2; // 0x2
     field public static final int RESET_PASSWORD_REQUIRE_ENTRY = 1; // 0x1
     field public static final int SKIP_SETUP_WIZARD = 1; // 0x1
-    field public static final int USER_OPERATION_ERROR_CURRENT_USER = 4; // 0x4
-    field public static final int USER_OPERATION_ERROR_MANAGED_PROFILE = 2; // 0x2
-    field public static final int USER_OPERATION_ERROR_MAX_RUNNING_USERS = 3; // 0x3
-    field public static final int USER_OPERATION_ERROR_UNKNOWN = 1; // 0x1
-    field public static final int USER_OPERATION_SUCCESS = 0; // 0x0
     field public static final int WIPE_EUICC = 4; // 0x4
     field public static final int WIPE_EXTERNAL_STORAGE = 1; // 0x1
     field public static final int WIPE_RESET_PROTECTION_DATA = 2; // 0x2
@@ -8972,6 +8968,7 @@ package android.content {
 
   public class ClipboardManager extends android.text.ClipboardManager {
     method public void addPrimaryClipChangedListener(android.content.ClipboardManager.OnPrimaryClipChangedListener);
+    method public void clearPrimaryClip();
     method public android.content.ClipData getPrimaryClip();
     method public android.content.ClipDescription getPrimaryClipDescription();
     method public deprecated java.lang.CharSequence getText();
@@ -25519,6 +25516,7 @@ package android.media.audiofx {
     field public static final java.util.UUID EFFECT_TYPE_AEC;
     field public static final java.util.UUID EFFECT_TYPE_AGC;
     field public static final java.util.UUID EFFECT_TYPE_BASS_BOOST;
+    field public static final java.util.UUID EFFECT_TYPE_DYNAMICS_PROCESSING;
     field public static final java.util.UUID EFFECT_TYPE_ENV_REVERB;
     field public static final java.util.UUID EFFECT_TYPE_EQUALIZER;
     field public static final java.util.UUID EFFECT_TYPE_LOUDNESS_ENHANCER;
@@ -25580,6 +25578,201 @@ package android.media.audiofx {
     ctor public BassBoost.Settings();
     ctor public BassBoost.Settings(java.lang.String);
     field public short strength;
+  }
+
+  public final class DynamicsProcessing extends android.media.audiofx.AudioEffect {
+    ctor public DynamicsProcessing(int);
+    ctor public DynamicsProcessing(int, int, android.media.audiofx.DynamicsProcessing.Config);
+    method public android.media.audiofx.DynamicsProcessing.Channel getChannelByChannelIndex(int);
+    method public int getChannelCount();
+    method public android.media.audiofx.DynamicsProcessing.Config getConfig();
+    method public float getInputGainByChannelIndex(int);
+    method public android.media.audiofx.DynamicsProcessing.Limiter getLimiterByChannelIndex(int);
+    method public android.media.audiofx.DynamicsProcessing.MbcBand getMbcBandByChannelIndex(int, int);
+    method public android.media.audiofx.DynamicsProcessing.Mbc getMbcByChannelIndex(int);
+    method public android.media.audiofx.DynamicsProcessing.EqBand getPostEqBandByChannelIndex(int, int);
+    method public android.media.audiofx.DynamicsProcessing.Eq getPostEqByChannelIndex(int);
+    method public android.media.audiofx.DynamicsProcessing.EqBand getPreEqBandByChannelIndex(int, int);
+    method public android.media.audiofx.DynamicsProcessing.Eq getPreEqByChannelIndex(int);
+    method public void setAllChannelsTo(android.media.audiofx.DynamicsProcessing.Channel);
+    method public void setChannelTo(int, android.media.audiofx.DynamicsProcessing.Channel);
+    method public void setInputGainAllChannelsTo(float);
+    method public void setInputGainbyChannel(int, float);
+    method public void setLimiterAllChannelsTo(android.media.audiofx.DynamicsProcessing.Limiter);
+    method public void setLimiterByChannelIndex(int, android.media.audiofx.DynamicsProcessing.Limiter);
+    method public void setMbcAllChannelsTo(android.media.audiofx.DynamicsProcessing.Mbc);
+    method public void setMbcBandAllChannelsTo(int, android.media.audiofx.DynamicsProcessing.MbcBand);
+    method public void setMbcBandByChannelIndex(int, int, android.media.audiofx.DynamicsProcessing.MbcBand);
+    method public void setMbcByChannelIndex(int, android.media.audiofx.DynamicsProcessing.Mbc);
+    method public void setPostEqAllChannelsTo(android.media.audiofx.DynamicsProcessing.Eq);
+    method public void setPostEqBandAllChannelsTo(int, android.media.audiofx.DynamicsProcessing.EqBand);
+    method public void setPostEqBandByChannelIndex(int, int, android.media.audiofx.DynamicsProcessing.EqBand);
+    method public void setPostEqByChannelIndex(int, android.media.audiofx.DynamicsProcessing.Eq);
+    method public void setPreEqAllChannelsTo(android.media.audiofx.DynamicsProcessing.Eq);
+    method public void setPreEqBandAllChannelsTo(int, android.media.audiofx.DynamicsProcessing.EqBand);
+    method public void setPreEqBandByChannelIndex(int, int, android.media.audiofx.DynamicsProcessing.EqBand);
+    method public void setPreEqByChannelIndex(int, android.media.audiofx.DynamicsProcessing.Eq);
+    field public static final int VARIANT_FAVOR_FREQUENCY_RESOLUTION = 0; // 0x0
+    field public static final int VARIANT_FAVOR_TIME_RESOLUTION = 1; // 0x1
+  }
+
+  public static class DynamicsProcessing.BandBase {
+    ctor public DynamicsProcessing.BandBase(boolean, float);
+    method public float getCutoffFrequency();
+    method public boolean isEnabled();
+    method public void setCutoffFrequency(float);
+    method public void setEnabled(boolean);
+  }
+
+  public static class DynamicsProcessing.BandStage extends android.media.audiofx.DynamicsProcessing.Stage {
+    ctor public DynamicsProcessing.BandStage(boolean, boolean, int);
+    method public int getBandCount();
+  }
+
+  public static final class DynamicsProcessing.Channel {
+    ctor public DynamicsProcessing.Channel(float, boolean, int, boolean, int, boolean, int, boolean);
+    ctor public DynamicsProcessing.Channel(android.media.audiofx.DynamicsProcessing.Channel);
+    method public float getInputGain();
+    method public android.media.audiofx.DynamicsProcessing.Limiter getLimiter();
+    method public android.media.audiofx.DynamicsProcessing.Mbc getMbc();
+    method public android.media.audiofx.DynamicsProcessing.MbcBand getMbcBand(int);
+    method public android.media.audiofx.DynamicsProcessing.Eq getPostEq();
+    method public android.media.audiofx.DynamicsProcessing.EqBand getPostEqBand(int);
+    method public android.media.audiofx.DynamicsProcessing.Eq getPreEq();
+    method public android.media.audiofx.DynamicsProcessing.EqBand getPreEqBand(int);
+    method public void setInputGain(float);
+    method public void setLimiter(android.media.audiofx.DynamicsProcessing.Limiter);
+    method public void setMbc(android.media.audiofx.DynamicsProcessing.Mbc);
+    method public void setMbcBand(int, android.media.audiofx.DynamicsProcessing.MbcBand);
+    method public void setPostEq(android.media.audiofx.DynamicsProcessing.Eq);
+    method public void setPostEqBand(int, android.media.audiofx.DynamicsProcessing.EqBand);
+    method public void setPreEq(android.media.audiofx.DynamicsProcessing.Eq);
+    method public void setPreEqBand(int, android.media.audiofx.DynamicsProcessing.EqBand);
+  }
+
+  public static final class DynamicsProcessing.Config {
+    method public android.media.audiofx.DynamicsProcessing.Channel getChannelByChannelIndex(int);
+    method public float getInputGainByChannelIndex(int);
+    method public android.media.audiofx.DynamicsProcessing.Limiter getLimiterByChannelIndex(int);
+    method public android.media.audiofx.DynamicsProcessing.MbcBand getMbcBandByChannelIndex(int, int);
+    method public int getMbcBandCount();
+    method public android.media.audiofx.DynamicsProcessing.Mbc getMbcByChannelIndex(int);
+    method public android.media.audiofx.DynamicsProcessing.EqBand getPostEqBandByChannelIndex(int, int);
+    method public int getPostEqBandCount();
+    method public android.media.audiofx.DynamicsProcessing.Eq getPostEqByChannelIndex(int);
+    method public android.media.audiofx.DynamicsProcessing.EqBand getPreEqBandByChannelIndex(int, int);
+    method public int getPreEqBandCount();
+    method public android.media.audiofx.DynamicsProcessing.Eq getPreEqByChannelIndex(int);
+    method public float getPreferredFrameDuration();
+    method public int getVariant();
+    method public boolean isLimiterInUse();
+    method public boolean isMbcInUse();
+    method public boolean isPostEqInUse();
+    method public boolean isPreEqInUse();
+    method public void setAllChannelsTo(android.media.audiofx.DynamicsProcessing.Channel);
+    method public void setChannelTo(int, android.media.audiofx.DynamicsProcessing.Channel);
+    method public void setInputGainAllChannelsTo(float);
+    method public void setInputGainByChannelIndex(int, float);
+    method public void setLimiterAllChannelsTo(android.media.audiofx.DynamicsProcessing.Limiter);
+    method public void setLimiterByChannelIndex(int, android.media.audiofx.DynamicsProcessing.Limiter);
+    method public void setMbcAllChannelsTo(android.media.audiofx.DynamicsProcessing.Mbc);
+    method public void setMbcBandAllChannelsTo(int, android.media.audiofx.DynamicsProcessing.MbcBand);
+    method public void setMbcBandByChannelIndex(int, int, android.media.audiofx.DynamicsProcessing.MbcBand);
+    method public void setMbcByChannelIndex(int, android.media.audiofx.DynamicsProcessing.Mbc);
+    method public void setPostEqAllChannelsTo(android.media.audiofx.DynamicsProcessing.Eq);
+    method public void setPostEqBandAllChannelsTo(int, android.media.audiofx.DynamicsProcessing.EqBand);
+    method public void setPostEqBandByChannelIndex(int, int, android.media.audiofx.DynamicsProcessing.EqBand);
+    method public void setPostEqByChannelIndex(int, android.media.audiofx.DynamicsProcessing.Eq);
+    method public void setPreEqAllChannelsTo(android.media.audiofx.DynamicsProcessing.Eq);
+    method public void setPreEqBandAllChannelsTo(int, android.media.audiofx.DynamicsProcessing.EqBand);
+    method public void setPreEqBandByChannelIndex(int, int, android.media.audiofx.DynamicsProcessing.EqBand);
+    method public void setPreEqByChannelIndex(int, android.media.audiofx.DynamicsProcessing.Eq);
+  }
+
+  public static final class DynamicsProcessing.Config.Builder {
+    ctor public DynamicsProcessing.Config.Builder(int, int, boolean, int, boolean, int, boolean, int, boolean);
+    method public android.media.audiofx.DynamicsProcessing.Config build();
+    method public android.media.audiofx.DynamicsProcessing.Config.Builder setAllChannelsTo(android.media.audiofx.DynamicsProcessing.Channel);
+    method public android.media.audiofx.DynamicsProcessing.Config.Builder setChannelTo(int, android.media.audiofx.DynamicsProcessing.Channel);
+    method public android.media.audiofx.DynamicsProcessing.Config.Builder setInputGainAllChannelsTo(float);
+    method public android.media.audiofx.DynamicsProcessing.Config.Builder setInputGainByChannelIndex(int, float);
+    method public android.media.audiofx.DynamicsProcessing.Config.Builder setLimiterAllChannelsTo(android.media.audiofx.DynamicsProcessing.Limiter);
+    method public android.media.audiofx.DynamicsProcessing.Config.Builder setLimiterByChannelIndex(int, android.media.audiofx.DynamicsProcessing.Limiter);
+    method public android.media.audiofx.DynamicsProcessing.Config.Builder setMbcAllChannelsTo(android.media.audiofx.DynamicsProcessing.Mbc);
+    method public android.media.audiofx.DynamicsProcessing.Config.Builder setMbcByChannelIndex(int, android.media.audiofx.DynamicsProcessing.Mbc);
+    method public android.media.audiofx.DynamicsProcessing.Config.Builder setPostEqAllChannelsTo(android.media.audiofx.DynamicsProcessing.Eq);
+    method public android.media.audiofx.DynamicsProcessing.Config.Builder setPostEqByChannelIndex(int, android.media.audiofx.DynamicsProcessing.Eq);
+    method public android.media.audiofx.DynamicsProcessing.Config.Builder setPreEqAllChannelsTo(android.media.audiofx.DynamicsProcessing.Eq);
+    method public android.media.audiofx.DynamicsProcessing.Config.Builder setPreEqByChannelIndex(int, android.media.audiofx.DynamicsProcessing.Eq);
+    method public android.media.audiofx.DynamicsProcessing.Config.Builder setPreferredFrameDuration(float);
+  }
+
+  public static final class DynamicsProcessing.Eq extends android.media.audiofx.DynamicsProcessing.BandStage {
+    ctor public DynamicsProcessing.Eq(boolean, boolean, int);
+    ctor public DynamicsProcessing.Eq(android.media.audiofx.DynamicsProcessing.Eq);
+    method public android.media.audiofx.DynamicsProcessing.EqBand getBand(int);
+    method public void setBand(int, android.media.audiofx.DynamicsProcessing.EqBand);
+  }
+
+  public static final class DynamicsProcessing.EqBand extends android.media.audiofx.DynamicsProcessing.BandBase {
+    ctor public DynamicsProcessing.EqBand(boolean, float, float);
+    ctor public DynamicsProcessing.EqBand(android.media.audiofx.DynamicsProcessing.EqBand);
+    method public float getGain();
+    method public void setGain(float);
+  }
+
+  public static final class DynamicsProcessing.Limiter extends android.media.audiofx.DynamicsProcessing.Stage {
+    ctor public DynamicsProcessing.Limiter(boolean, boolean, int, float, float, float, float, float);
+    ctor public DynamicsProcessing.Limiter(android.media.audiofx.DynamicsProcessing.Limiter);
+    method public float getAttackTime();
+    method public int getLinkGroup();
+    method public float getPostGain();
+    method public float getRatio();
+    method public float getReleaseTime();
+    method public float getThreshold();
+    method public void setAttackTime(float);
+    method public void setLinkGroup(int);
+    method public void setPostGain(float);
+    method public void setRatio(float);
+    method public void setReleaseTime(float);
+    method public void setThreshold(float);
+  }
+
+  public static final class DynamicsProcessing.Mbc extends android.media.audiofx.DynamicsProcessing.BandStage {
+    ctor public DynamicsProcessing.Mbc(boolean, boolean, int);
+    ctor public DynamicsProcessing.Mbc(android.media.audiofx.DynamicsProcessing.Mbc);
+    method public android.media.audiofx.DynamicsProcessing.MbcBand getBand(int);
+    method public void setBand(int, android.media.audiofx.DynamicsProcessing.MbcBand);
+  }
+
+  public static final class DynamicsProcessing.MbcBand extends android.media.audiofx.DynamicsProcessing.BandBase {
+    ctor public DynamicsProcessing.MbcBand(boolean, float, float, float, float, float, float, float, float, float, float);
+    ctor public DynamicsProcessing.MbcBand(android.media.audiofx.DynamicsProcessing.MbcBand);
+    method public float getAttackTime();
+    method public float getExpanderRatio();
+    method public float getKneeWidth();
+    method public float getNoiseGateThreshold();
+    method public float getPostGain();
+    method public float getPreGain();
+    method public float getRatio();
+    method public float getReleaseTime();
+    method public float getThreshold();
+    method public void setAttackTime(float);
+    method public void setExpanderRatio(float);
+    method public void setKneeWidth(float);
+    method public void setNoiseGateThreshold(float);
+    method public void setPostGain(float);
+    method public void setPreGain(float);
+    method public void setRatio(float);
+    method public void setReleaseTime(float);
+    method public void setThreshold(float);
+  }
+
+  public static class DynamicsProcessing.Stage {
+    ctor public DynamicsProcessing.Stage(boolean, boolean);
+    method public boolean isEnabled();
+    method public boolean isInUse();
+    method public void setEnabled(boolean);
   }
 
   public class EnvironmentalReverb extends android.media.audiofx.AudioEffect {
@@ -33629,6 +33822,17 @@ package android.os {
     field public static final java.lang.String KEY_RESTRICTIONS_PENDING = "restrictions_pending";
     field public static final int USER_CREATION_FAILED_NOT_PERMITTED = 1; // 0x1
     field public static final int USER_CREATION_FAILED_NO_MORE_USERS = 2; // 0x2
+    field public static final int USER_OPERATION_ERROR_CURRENT_USER = 4; // 0x4
+    field public static final int USER_OPERATION_ERROR_LOW_STORAGE = 5; // 0x5
+    field public static final int USER_OPERATION_ERROR_MANAGED_PROFILE = 2; // 0x2
+    field public static final int USER_OPERATION_ERROR_MAX_RUNNING_USERS = 3; // 0x3
+    field public static final int USER_OPERATION_ERROR_MAX_USERS = 6; // 0x6
+    field public static final int USER_OPERATION_ERROR_UNKNOWN = 1; // 0x1
+    field public static final int USER_OPERATION_SUCCESS = 0; // 0x0
+  }
+
+  public static class UserManager.UserOperationException extends java.lang.RuntimeException {
+    method public int getUserOperationResult();
   }
 
   public abstract class VibrationEffect implements android.os.Parcelable {
@@ -35103,7 +35307,7 @@ package android.provider {
     field public static final java.lang.String FEATURES = "features";
     field public static final int FEATURES_HD_CALL = 4; // 0x4
     field public static final int FEATURES_PULLED_EXTERNALLY = 2; // 0x2
-    field public static final int FEATURES_RTT = 16; // 0x10
+    field public static final int FEATURES_RTT = 32; // 0x20
     field public static final int FEATURES_VIDEO = 1; // 0x1
     field public static final int FEATURES_WIFI = 8; // 0x8
     field public static final java.lang.String GEOCODED_LOCATION = "geocoded_location";
