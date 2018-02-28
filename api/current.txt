@@ -23339,7 +23339,7 @@ package android.media {
     field public static final int REGULAR_CODECS = 0; // 0x0
   }
 
-  public class MediaController2 implements java.lang.AutoCloseable {
+  public class MediaController2 implements java.lang.AutoCloseable android.media.MediaPlaylistController {
     ctor public MediaController2(android.content.Context, android.media.SessionToken2, java.util.concurrent.Executor, android.media.MediaController2.ControllerCallback);
     method public void addPlaylistItem(int, android.media.MediaItem2);
     method public void adjustVolume(int, int);
@@ -23366,6 +23366,7 @@ package android.media {
     method public void prepareFromSearch(java.lang.String, android.os.Bundle);
     method public void prepareFromUri(android.net.Uri, android.os.Bundle);
     method public void removePlaylistItem(android.media.MediaItem2);
+    method public void replacePlaylistItem(int, android.media.MediaItem2);
     method public void rewind();
     method public void seekTo(long);
     method public void sendCustomCommand(android.media.MediaSession2.Command, android.os.Bundle, android.os.ResultReceiver);
@@ -24466,14 +24467,56 @@ package android.media {
   public abstract class MediaPlayerBase implements java.lang.AutoCloseable {
     ctor public MediaPlayerBase();
     method public abstract android.media.AudioAttributes getAudioAttributes();
+    method public long getBufferedPosition();
+    method public abstract int getBufferingState();
+    method public abstract android.media.DataSourceDesc getCurrentDataSource();
+    method public long getCurrentPosition();
+    method public long getDuration();
+    method public float getMaxPlayerVolume();
+    method public float getPlaybackSpeed();
     method public abstract int getPlayerState();
+    method public abstract float getPlayerVolume();
+    method public boolean isReversePlaybackSupported();
+    method public abstract void loopCurrent(boolean);
     method public abstract void pause();
     method public abstract void play();
+    method public abstract void prepare();
+    method public abstract void registerPlayerEventCallback(java.util.concurrent.Executor, android.media.MediaPlayerBase.PlayerEventCallback);
+    method public abstract void seekTo(long);
     method public abstract void setAudioAttributes(android.media.AudioAttributes);
-    field public static final int STATE_ERROR = 0; // 0x0
-    field public static final int STATE_IDLE = 0; // 0x0
-    field public static final int STATE_PAUSED = 0; // 0x0
-    field public static final int STATE_PLAYING = 0; // 0x0
+    method public abstract void setDataSource(android.media.DataSourceDesc);
+    method public abstract void setNextDataSource(android.media.DataSourceDesc);
+    method public abstract void setNextDataSources(java.util.List<android.media.DataSourceDesc>);
+    method public abstract void setPlaybackSpeed(float);
+    method public abstract void setVolume(float);
+    method public abstract void skipToNext();
+    method public abstract void unregisterPlayerEventCallback(android.media.MediaPlayerBase.PlayerEventCallback);
+    field public static final int BUFFERING_STATE_BUFFERING_AND_PLAYABLE = 1; // 0x1
+    field public static final int BUFFERING_STATE_BUFFERING_AND_STARVED = 2; // 0x2
+    field public static final int BUFFERING_STATE_BUFFERING_COMPLETE = 3; // 0x3
+    field public static final int BUFFERING_STATE_UNKNOWN = 0; // 0x0
+    field public static final int PLAYER_STATE_ERROR = 3; // 0x3
+    field public static final int PLAYER_STATE_IDLE = 0; // 0x0
+    field public static final int PLAYER_STATE_PAUSED = 1; // 0x1
+    field public static final int PLAYER_STATE_PLAYING = 2; // 0x2
+    field public static final long UNKNOWN_TIME = -1L; // 0xffffffffffffffffL
+  }
+
+  public static abstract class MediaPlayerBase.PlayerEventCallback {
+    ctor public MediaPlayerBase.PlayerEventCallback();
+    method public void onBufferingStateChanged(android.media.MediaPlayerBase, android.media.DataSourceDesc, int);
+    method public void onCurrentDataSourceChanged(android.media.MediaPlayerBase, android.media.DataSourceDesc);
+    method public void onMediaPrepared(android.media.MediaPlayerBase, android.media.DataSourceDesc);
+    method public void onPlayerStateChanged(android.media.MediaPlayerBase, int);
+  }
+
+  public abstract interface MediaPlaylistController {
+    method public abstract void addPlaylistItem(int, android.media.MediaItem2);
+    method public abstract android.media.MediaItem2 getCurrentPlaylistItem();
+    method public abstract java.util.List<android.media.MediaItem2> getPlaylist();
+    method public abstract void removePlaylistItem(android.media.MediaItem2);
+    method public abstract void replacePlaylistItem(int, android.media.MediaItem2);
+    method public abstract void skipToPlaylistItem(android.media.MediaItem2);
   }
 
   public class MediaRecorder implements android.media.AudioRouting {
@@ -24752,7 +24795,7 @@ package android.media {
     method public abstract void onScanCompleted(java.lang.String, android.net.Uri);
   }
 
-  public class MediaSession2 implements java.lang.AutoCloseable {
+  public class MediaSession2 implements java.lang.AutoCloseable android.media.MediaPlaylistController {
     method public void addPlaylistItem(int, android.media.MediaItem2);
     method public void close();
     method public void editPlaylistItem(android.media.MediaItem2);
@@ -24768,6 +24811,7 @@ package android.media {
     method public void play();
     method public void prepare();
     method public void removePlaylistItem(android.media.MediaItem2);
+    method public void replacePlaylistItem(int, android.media.MediaItem2);
     method public void rewind();
     method public void seekTo(long);
     method public void sendCustomCommand(android.media.MediaSession2.Command, android.os.Bundle);
@@ -24822,6 +24866,7 @@ package android.media {
 
   public static final class MediaSession2.Builder {
     ctor public MediaSession2.Builder(android.content.Context, android.media.MediaPlayerBase);
+    ctor public MediaSession2.Builder(android.content.Context, android.media.MediaPlayerBase, android.media.MediaPlaylistController);
     method public android.media.MediaSession2 build();
     method public android.media.MediaSession2.Builder setId(java.lang.String);
     method public android.media.MediaSession2.Builder setSessionActivity(android.app.PendingIntent);
