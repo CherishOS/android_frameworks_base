@@ -23378,6 +23378,7 @@ package android.media {
     method public void rewind();
     method public void seekTo(long);
     method public void sendCustomCommand(android.media.MediaSession2.Command, android.os.Bundle, android.os.ResultReceiver);
+    method public void setPlaybackSpeed(float);
     method public void setPlaylistParams(android.media.MediaSession2.PlaylistParams);
     method public void setRating(java.lang.String, android.media.Rating2);
     method public void setVolumeTo(int, int);
@@ -23396,13 +23397,13 @@ package android.media {
     method public void onCustomCommand(android.media.MediaSession2.Command, android.os.Bundle, android.os.ResultReceiver);
     method public void onCustomLayoutChanged(java.util.List<android.media.MediaSession2.CommandButton>);
     method public void onDisconnected();
-    method public void onError(int, int);
+    method public void onError(int, android.os.Bundle);
     method public void onPlaybackInfoChanged(android.media.MediaController2.PlaybackInfo);
     method public void onPlaybackSpeedChanged(float);
     method public void onPlayerStateChanged(int);
     method public void onPlaylistChanged(java.util.List<android.media.MediaItem2>);
     method public void onPlaylistParamsChanged(android.media.MediaSession2.PlaylistParams);
-    method public void onPositionUpdated(long, long);
+    method public void onPositionChanged(long, long);
   }
 
   public static final class MediaController2.PlaybackInfo {
@@ -23854,9 +23855,11 @@ package android.media {
   }
 
   public static final class MediaLibraryService2.MediaLibrarySession.Builder {
-    ctor public MediaLibraryService2.MediaLibrarySession.Builder(android.media.MediaLibraryService2, android.media.MediaPlayerBase, java.util.concurrent.Executor, android.media.MediaLibraryService2.MediaLibrarySession.MediaLibrarySessionCallback);
+    ctor public MediaLibraryService2.MediaLibrarySession.Builder(android.media.MediaLibraryService2, java.util.concurrent.Executor, android.media.MediaLibraryService2.MediaLibrarySession.MediaLibrarySessionCallback);
     method public android.media.MediaLibraryService2.MediaLibrarySession build();
     method public android.media.MediaLibraryService2.MediaLibrarySession.Builder setId(java.lang.String);
+    method public android.media.MediaLibraryService2.MediaLibrarySession.Builder setPlayer(android.media.MediaPlayerBase);
+    method public android.media.MediaLibraryService2.MediaLibrarySession.Builder setPlaylistController(android.media.MediaPlaylistController);
     method public android.media.MediaLibraryService2.MediaLibrarySession.Builder setSessionActivity(android.app.PendingIntent);
     method public android.media.MediaLibraryService2.MediaLibrarySession.Builder setSessionCallback(java.util.concurrent.Executor, android.media.MediaLibraryService2.MediaLibrarySession.MediaLibrarySessionCallback);
     method public android.media.MediaLibraryService2.MediaLibrarySession.Builder setVolumeProvider(android.media.VolumeProvider2);
@@ -24806,15 +24809,17 @@ package android.media {
   public class MediaSession2 implements java.lang.AutoCloseable android.media.MediaPlaylistController {
     method public void addPlaylistItem(int, android.media.MediaItem2);
     method public void close();
-    method public void editPlaylistItem(android.media.MediaItem2);
     method public void fastForward();
     method public java.util.List<android.media.MediaSession2.ControllerInfo> getConnectedControllers();
     method public android.media.MediaItem2 getCurrentPlaylistItem();
+    method public android.media.MediaPlaylistController getMediaPlaylistController();
+    method public float getPlaybackSpeed();
     method public android.media.MediaPlayerBase getPlayer();
     method public java.util.List<android.media.MediaItem2> getPlaylist();
     method public android.media.MediaSession2.PlaylistParams getPlaylistParams();
     method public android.media.SessionToken2 getToken();
-    method public void notifyError(int, int);
+    method public android.media.VolumeProvider2 getVolumeProvider();
+    method public void notifyError(int, android.os.Bundle);
     method public void pause();
     method public void play();
     method public void prepare();
@@ -24826,14 +24831,14 @@ package android.media {
     method public void sendCustomCommand(android.media.MediaSession2.ControllerInfo, android.media.MediaSession2.Command, android.os.Bundle, android.os.ResultReceiver);
     method public void setAllowedCommands(android.media.MediaSession2.ControllerInfo, android.media.MediaSession2.CommandGroup);
     method public void setCustomLayout(android.media.MediaSession2.ControllerInfo, java.util.List<android.media.MediaSession2.CommandButton>);
-    method public void setPlayer(android.media.MediaPlayerBase);
-    method public void setPlayer(android.media.MediaPlayerBase, android.media.VolumeProvider2);
+    method public void setPlaybackSpeed(float);
     method public void setPlaylist(java.util.List<android.media.MediaItem2>);
     method public void setPlaylistParams(android.media.MediaSession2.PlaylistParams);
     method public void skipToNext();
     method public void skipToPlaylistItem(android.media.MediaItem2);
     method public void skipToPrevious();
     method public void stop();
+    method public void updatePlayer(android.media.MediaPlayerBase, android.media.MediaPlaylistController, android.media.VolumeProvider2);
     field public static final int COMMAND_CODE_BROWSER = 22; // 0x16
     field public static final int COMMAND_CODE_CUSTOM = 0; // 0x0
     field public static final int COMMAND_CODE_PLAYBACK_FAST_FORWARD = 7; // 0x7
@@ -24842,10 +24847,10 @@ package android.media {
     field public static final int COMMAND_CODE_PLAYBACK_PREPARE = 6; // 0x6
     field public static final int COMMAND_CODE_PLAYBACK_REWIND = 8; // 0x8
     field public static final int COMMAND_CODE_PLAYBACK_SEEK_TO = 9; // 0x9
-    field public static final int COMMAND_CODE_PLAYBACK_SET_CURRENT_PLAYLIST_ITEM = 10; // 0xa
     field public static final int COMMAND_CODE_PLAYBACK_SET_PLAYLIST_PARAMS = 11; // 0xb
     field public static final int COMMAND_CODE_PLAYBACK_SKIP_NEXT_ITEM = 4; // 0x4
     field public static final int COMMAND_CODE_PLAYBACK_SKIP_PREV_ITEM = 5; // 0x5
+    field public static final int COMMAND_CODE_PLAYBACK_SKIP_TO_PLAYLIST_ITEM = 10; // 0xa
     field public static final int COMMAND_CODE_PLAYBACK_STOP = 3; // 0x3
     field public static final int COMMAND_CODE_PLAYLIST_ADD = 12; // 0xc
     field public static final int COMMAND_CODE_PLAYLIST_GET = 14; // 0xe
@@ -24873,10 +24878,11 @@ package android.media {
   }
 
   public static final class MediaSession2.Builder {
-    ctor public MediaSession2.Builder(android.content.Context, android.media.MediaPlayerBase);
-    ctor public MediaSession2.Builder(android.content.Context, android.media.MediaPlayerBase, android.media.MediaPlaylistController);
+    ctor public MediaSession2.Builder(android.content.Context);
     method public android.media.MediaSession2 build();
     method public android.media.MediaSession2.Builder setId(java.lang.String);
+    method public android.media.MediaSession2.Builder setPlayer(android.media.MediaPlayerBase);
+    method public android.media.MediaSession2.Builder setPlaylistController(android.media.MediaPlaylistController);
     method public android.media.MediaSession2.Builder setSessionActivity(android.app.PendingIntent);
     method public android.media.MediaSession2.Builder setSessionCallback(java.util.concurrent.Executor, android.media.MediaSession2.SessionCallback);
     method public android.media.MediaSession2.Builder setVolumeProvider(android.media.VolumeProvider2);
@@ -24887,13 +24893,13 @@ package android.media {
     ctor public MediaSession2.Command(android.content.Context, java.lang.String, android.os.Bundle);
     method public int getCommandCode();
     method public java.lang.String getCustomCommand();
-    method public android.os.Bundle getExtra();
+    method public android.os.Bundle getExtras();
   }
 
   public static final class MediaSession2.CommandButton {
     method public android.media.MediaSession2.Command getCommand();
     method public java.lang.String getDisplayName();
-    method public android.os.Bundle getExtra();
+    method public android.os.Bundle getExtras();
     method public int getIconResId();
     method public boolean isEnabled();
   }
@@ -24904,7 +24910,7 @@ package android.media {
     method public android.media.MediaSession2.CommandButton.Builder setCommand(android.media.MediaSession2.Command);
     method public android.media.MediaSession2.CommandButton.Builder setDisplayName(java.lang.String);
     method public android.media.MediaSession2.CommandButton.Builder setEnabled(boolean);
-    method public android.media.MediaSession2.CommandButton.Builder setExtra(android.os.Bundle);
+    method public android.media.MediaSession2.CommandButton.Builder setExtras(android.os.Bundle);
     method public android.media.MediaSession2.CommandButton.Builder setIconResId(int);
   }
 
@@ -24913,6 +24919,7 @@ package android.media {
     ctor public MediaSession2.CommandGroup(android.content.Context, android.media.MediaSession2.CommandGroup);
     method public void addAllPredefinedCommands();
     method public void addCommand(android.media.MediaSession2.Command);
+    method public java.util.List<android.media.MediaSession2.Command> getCommands();
     method public boolean hasCommand(android.media.MediaSession2.Command);
     method public boolean hasCommand(int);
     method public void removeCommand(android.media.MediaSession2.Command);
