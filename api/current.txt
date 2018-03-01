@@ -3883,6 +3883,7 @@ package android.app {
     method public android.app.PendingIntent getRunningServiceControlPanel(android.content.ComponentName) throws java.lang.SecurityException;
     method public deprecated java.util.List<android.app.ActivityManager.RunningServiceInfo> getRunningServices(int) throws java.lang.SecurityException;
     method public deprecated java.util.List<android.app.ActivityManager.RunningTaskInfo> getRunningTasks(int) throws java.lang.SecurityException;
+    method public boolean isBackgroundRestricted();
     method public deprecated boolean isInLockTaskMode();
     method public boolean isLowRamDevice();
     method public static boolean isRunningInTestHarness();
@@ -13592,7 +13593,7 @@ package android.graphics {
   }
 
   public class EmbossMaskFilter extends android.graphics.MaskFilter {
-    ctor public EmbossMaskFilter(float[], float, float, float);
+    ctor public deprecated EmbossMaskFilter(float[], float, float, float);
   }
 
   public final class ImageDecoder implements java.lang.AutoCloseable {
@@ -13605,16 +13606,16 @@ package android.graphics {
     method public static android.graphics.drawable.Drawable decodeDrawable(android.graphics.ImageDecoder.Source, android.graphics.ImageDecoder.OnHeaderDecodedListener) throws java.io.IOException;
     method public static android.graphics.drawable.Drawable decodeDrawable(android.graphics.ImageDecoder.Source) throws java.io.IOException;
     method public android.util.Size getSampledSize(int);
-    method public void setAllocator(int);
-    method public void setAsAlphaMask(boolean);
-    method public void setCrop(android.graphics.Rect);
-    method public void setMutable(boolean);
-    method public void setOnPartialImageListener(android.graphics.ImageDecoder.OnPartialImageListener);
-    method public void setPostProcessor(android.graphics.PostProcessor);
-    method public void setPreferRamOverQuality(boolean);
-    method public void setRequireUnpremultiplied(boolean);
-    method public void setResize(int, int);
-    method public void setResize(int);
+    method public android.graphics.ImageDecoder setAllocator(int);
+    method public android.graphics.ImageDecoder setAsAlphaMask(boolean);
+    method public android.graphics.ImageDecoder setConserveMemory(boolean);
+    method public android.graphics.ImageDecoder setCrop(android.graphics.Rect);
+    method public android.graphics.ImageDecoder setMutable(boolean);
+    method public android.graphics.ImageDecoder setOnPartialImageListener(android.graphics.ImageDecoder.OnPartialImageListener);
+    method public android.graphics.ImageDecoder setPostProcessor(android.graphics.PostProcessor);
+    method public android.graphics.ImageDecoder setRequireUnpremultiplied(boolean);
+    method public android.graphics.ImageDecoder setResize(int, int);
+    method public android.graphics.ImageDecoder setResize(int);
     field public static final int ALLOCATOR_DEFAULT = 0; // 0x0
     field public static final int ALLOCATOR_HARDWARE = 3; // 0x3
     field public static final int ALLOCATOR_SHARED_MEMORY = 2; // 0x2
@@ -14816,6 +14817,10 @@ package android.graphics.drawable {
     method public static android.graphics.drawable.Icon createWithResource(android.content.Context, int);
     method public static android.graphics.drawable.Icon createWithResource(java.lang.String, int);
     method public int describeContents();
+    method public int getResId();
+    method public java.lang.String getResPackage();
+    method public int getType();
+    method public android.net.Uri getUri();
     method public android.graphics.drawable.Drawable loadDrawable(android.content.Context);
     method public void loadDrawableAsync(android.content.Context, android.os.Message);
     method public void loadDrawableAsync(android.content.Context, android.graphics.drawable.Icon.OnDrawableLoadedListener, android.os.Handler);
@@ -14824,6 +14829,11 @@ package android.graphics.drawable {
     method public android.graphics.drawable.Icon setTintMode(android.graphics.PorterDuff.Mode);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.graphics.drawable.Icon> CREATOR;
+    field public static final int TYPE_ADAPTIVE_BITMAP = 5; // 0x5
+    field public static final int TYPE_BITMAP = 1; // 0x1
+    field public static final int TYPE_DATA = 3; // 0x3
+    field public static final int TYPE_RESOURCE = 2; // 0x2
+    field public static final int TYPE_URI = 4; // 0x4
   }
 
   public static abstract interface Icon.OnDrawableLoadedListener {
@@ -22747,6 +22757,7 @@ package android.media {
     method public abstract void close();
     method public android.graphics.Rect getCropRect();
     method public abstract int getFormat();
+    method public android.hardware.HardwareBuffer getHardwareBuffer();
     method public abstract int getHeight();
     method public abstract android.media.Image.Plane[] getPlanes();
     method public abstract long getTimestamp();
@@ -23336,7 +23347,7 @@ package android.media {
     field public static final int REGULAR_CODECS = 0; // 0x0
   }
 
-  public class MediaController2 implements java.lang.AutoCloseable {
+  public class MediaController2 implements java.lang.AutoCloseable android.media.MediaPlaylistController {
     ctor public MediaController2(android.content.Context, android.media.SessionToken2, java.util.concurrent.Executor, android.media.MediaController2.ControllerCallback);
     method public void addPlaylistItem(int, android.media.MediaItem2);
     method public void adjustVolume(int, int);
@@ -23363,9 +23374,11 @@ package android.media {
     method public void prepareFromSearch(java.lang.String, android.os.Bundle);
     method public void prepareFromUri(android.net.Uri, android.os.Bundle);
     method public void removePlaylistItem(android.media.MediaItem2);
+    method public void replacePlaylistItem(int, android.media.MediaItem2);
     method public void rewind();
     method public void seekTo(long);
     method public void sendCustomCommand(android.media.MediaSession2.Command, android.os.Bundle, android.os.ResultReceiver);
+    method public void setPlaybackSpeed(float);
     method public void setPlaylistParams(android.media.MediaSession2.PlaylistParams);
     method public void setRating(java.lang.String, android.media.Rating2);
     method public void setVolumeTo(int, int);
@@ -23384,13 +23397,13 @@ package android.media {
     method public void onCustomCommand(android.media.MediaSession2.Command, android.os.Bundle, android.os.ResultReceiver);
     method public void onCustomLayoutChanged(java.util.List<android.media.MediaSession2.CommandButton>);
     method public void onDisconnected();
-    method public void onError(int, int);
+    method public void onError(int, android.os.Bundle);
     method public void onPlaybackInfoChanged(android.media.MediaController2.PlaybackInfo);
     method public void onPlaybackSpeedChanged(float);
     method public void onPlayerStateChanged(int);
     method public void onPlaylistChanged(java.util.List<android.media.MediaItem2>);
     method public void onPlaylistParamsChanged(android.media.MediaSession2.PlaylistParams);
-    method public void onPositionUpdated(long, long);
+    method public void onPositionChanged(long, long);
   }
 
   public static final class MediaController2.PlaybackInfo {
@@ -23842,9 +23855,11 @@ package android.media {
   }
 
   public static final class MediaLibraryService2.MediaLibrarySession.Builder {
-    ctor public MediaLibraryService2.MediaLibrarySession.Builder(android.media.MediaLibraryService2, android.media.MediaPlayerBase, java.util.concurrent.Executor, android.media.MediaLibraryService2.MediaLibrarySession.MediaLibrarySessionCallback);
+    ctor public MediaLibraryService2.MediaLibrarySession.Builder(android.media.MediaLibraryService2, java.util.concurrent.Executor, android.media.MediaLibraryService2.MediaLibrarySession.MediaLibrarySessionCallback);
     method public android.media.MediaLibraryService2.MediaLibrarySession build();
     method public android.media.MediaLibraryService2.MediaLibrarySession.Builder setId(java.lang.String);
+    method public android.media.MediaLibraryService2.MediaLibrarySession.Builder setPlayer(android.media.MediaPlayerBase);
+    method public android.media.MediaLibraryService2.MediaLibrarySession.Builder setPlaylistController(android.media.MediaPlaylistController);
     method public android.media.MediaLibraryService2.MediaLibrarySession.Builder setSessionActivity(android.app.PendingIntent);
     method public android.media.MediaLibraryService2.MediaLibrarySession.Builder setSessionCallback(java.util.concurrent.Executor, android.media.MediaLibraryService2.MediaLibrarySession.MediaLibrarySessionCallback);
     method public android.media.MediaLibraryService2.MediaLibrarySession.Builder setVolumeProvider(android.media.VolumeProvider2);
@@ -24463,14 +24478,56 @@ package android.media {
   public abstract class MediaPlayerBase implements java.lang.AutoCloseable {
     ctor public MediaPlayerBase();
     method public abstract android.media.AudioAttributes getAudioAttributes();
+    method public long getBufferedPosition();
+    method public abstract int getBufferingState();
+    method public abstract android.media.DataSourceDesc getCurrentDataSource();
+    method public long getCurrentPosition();
+    method public long getDuration();
+    method public float getMaxPlayerVolume();
+    method public float getPlaybackSpeed();
     method public abstract int getPlayerState();
+    method public abstract float getPlayerVolume();
+    method public boolean isReversePlaybackSupported();
+    method public abstract void loopCurrent(boolean);
     method public abstract void pause();
     method public abstract void play();
+    method public abstract void prepare();
+    method public abstract void registerPlayerEventCallback(java.util.concurrent.Executor, android.media.MediaPlayerBase.PlayerEventCallback);
+    method public abstract void seekTo(long);
     method public abstract void setAudioAttributes(android.media.AudioAttributes);
-    field public static final int STATE_ERROR = 0; // 0x0
-    field public static final int STATE_IDLE = 0; // 0x0
-    field public static final int STATE_PAUSED = 0; // 0x0
-    field public static final int STATE_PLAYING = 0; // 0x0
+    method public abstract void setDataSource(android.media.DataSourceDesc);
+    method public abstract void setNextDataSource(android.media.DataSourceDesc);
+    method public abstract void setNextDataSources(java.util.List<android.media.DataSourceDesc>);
+    method public abstract void setPlaybackSpeed(float);
+    method public abstract void setVolume(float);
+    method public abstract void skipToNext();
+    method public abstract void unregisterPlayerEventCallback(android.media.MediaPlayerBase.PlayerEventCallback);
+    field public static final int BUFFERING_STATE_BUFFERING_AND_PLAYABLE = 1; // 0x1
+    field public static final int BUFFERING_STATE_BUFFERING_AND_STARVED = 2; // 0x2
+    field public static final int BUFFERING_STATE_BUFFERING_COMPLETE = 3; // 0x3
+    field public static final int BUFFERING_STATE_UNKNOWN = 0; // 0x0
+    field public static final int PLAYER_STATE_ERROR = 3; // 0x3
+    field public static final int PLAYER_STATE_IDLE = 0; // 0x0
+    field public static final int PLAYER_STATE_PAUSED = 1; // 0x1
+    field public static final int PLAYER_STATE_PLAYING = 2; // 0x2
+    field public static final long UNKNOWN_TIME = -1L; // 0xffffffffffffffffL
+  }
+
+  public static abstract class MediaPlayerBase.PlayerEventCallback {
+    ctor public MediaPlayerBase.PlayerEventCallback();
+    method public void onBufferingStateChanged(android.media.MediaPlayerBase, android.media.DataSourceDesc, int);
+    method public void onCurrentDataSourceChanged(android.media.MediaPlayerBase, android.media.DataSourceDesc);
+    method public void onMediaPrepared(android.media.MediaPlayerBase, android.media.DataSourceDesc);
+    method public void onPlayerStateChanged(android.media.MediaPlayerBase, int);
+  }
+
+  public abstract interface MediaPlaylistController {
+    method public abstract void addPlaylistItem(int, android.media.MediaItem2);
+    method public abstract android.media.MediaItem2 getCurrentPlaylistItem();
+    method public abstract java.util.List<android.media.MediaItem2> getPlaylist();
+    method public abstract void removePlaylistItem(android.media.MediaItem2);
+    method public abstract void replacePlaylistItem(int, android.media.MediaItem2);
+    method public abstract void skipToPlaylistItem(android.media.MediaItem2);
   }
 
   public class MediaRecorder implements android.media.AudioRouting {
@@ -24749,36 +24806,40 @@ package android.media {
     method public abstract void onScanCompleted(java.lang.String, android.net.Uri);
   }
 
-  public class MediaSession2 implements java.lang.AutoCloseable {
+  public class MediaSession2 implements java.lang.AutoCloseable android.media.MediaPlaylistController {
     method public void addPlaylistItem(int, android.media.MediaItem2);
     method public void close();
-    method public void editPlaylistItem(android.media.MediaItem2);
     method public void fastForward();
     method public java.util.List<android.media.MediaSession2.ControllerInfo> getConnectedControllers();
     method public android.media.MediaItem2 getCurrentPlaylistItem();
+    method public android.media.MediaPlaylistController getMediaPlaylistController();
+    method public float getPlaybackSpeed();
     method public android.media.MediaPlayerBase getPlayer();
     method public java.util.List<android.media.MediaItem2> getPlaylist();
     method public android.media.MediaSession2.PlaylistParams getPlaylistParams();
     method public android.media.SessionToken2 getToken();
-    method public void notifyError(int, int);
+    method public android.media.VolumeProvider2 getVolumeProvider();
+    method public void notifyError(int, android.os.Bundle);
     method public void pause();
     method public void play();
     method public void prepare();
     method public void removePlaylistItem(android.media.MediaItem2);
+    method public void replacePlaylistItem(int, android.media.MediaItem2);
     method public void rewind();
     method public void seekTo(long);
     method public void sendCustomCommand(android.media.MediaSession2.Command, android.os.Bundle);
     method public void sendCustomCommand(android.media.MediaSession2.ControllerInfo, android.media.MediaSession2.Command, android.os.Bundle, android.os.ResultReceiver);
     method public void setAllowedCommands(android.media.MediaSession2.ControllerInfo, android.media.MediaSession2.CommandGroup);
+    method public void setAudioFocusRequest(android.media.AudioFocusRequest);
     method public void setCustomLayout(android.media.MediaSession2.ControllerInfo, java.util.List<android.media.MediaSession2.CommandButton>);
-    method public void setPlayer(android.media.MediaPlayerBase);
-    method public void setPlayer(android.media.MediaPlayerBase, android.media.VolumeProvider2);
+    method public void setPlaybackSpeed(float);
     method public void setPlaylist(java.util.List<android.media.MediaItem2>);
     method public void setPlaylistParams(android.media.MediaSession2.PlaylistParams);
     method public void skipToNext();
     method public void skipToPlaylistItem(android.media.MediaItem2);
     method public void skipToPrevious();
     method public void stop();
+    method public void updatePlayer(android.media.MediaPlayerBase, android.media.MediaPlaylistController, android.media.VolumeProvider2);
     field public static final int COMMAND_CODE_BROWSER = 22; // 0x16
     field public static final int COMMAND_CODE_CUSTOM = 0; // 0x0
     field public static final int COMMAND_CODE_PLAYBACK_FAST_FORWARD = 7; // 0x7
@@ -24787,10 +24848,10 @@ package android.media {
     field public static final int COMMAND_CODE_PLAYBACK_PREPARE = 6; // 0x6
     field public static final int COMMAND_CODE_PLAYBACK_REWIND = 8; // 0x8
     field public static final int COMMAND_CODE_PLAYBACK_SEEK_TO = 9; // 0x9
-    field public static final int COMMAND_CODE_PLAYBACK_SET_CURRENT_PLAYLIST_ITEM = 10; // 0xa
     field public static final int COMMAND_CODE_PLAYBACK_SET_PLAYLIST_PARAMS = 11; // 0xb
     field public static final int COMMAND_CODE_PLAYBACK_SKIP_NEXT_ITEM = 4; // 0x4
     field public static final int COMMAND_CODE_PLAYBACK_SKIP_PREV_ITEM = 5; // 0x5
+    field public static final int COMMAND_CODE_PLAYBACK_SKIP_TO_PLAYLIST_ITEM = 10; // 0xa
     field public static final int COMMAND_CODE_PLAYBACK_STOP = 3; // 0x3
     field public static final int COMMAND_CODE_PLAYLIST_ADD = 12; // 0xc
     field public static final int COMMAND_CODE_PLAYLIST_GET = 14; // 0xe
@@ -24818,9 +24879,11 @@ package android.media {
   }
 
   public static final class MediaSession2.Builder {
-    ctor public MediaSession2.Builder(android.content.Context, android.media.MediaPlayerBase);
+    ctor public MediaSession2.Builder(android.content.Context);
     method public android.media.MediaSession2 build();
     method public android.media.MediaSession2.Builder setId(java.lang.String);
+    method public android.media.MediaSession2.Builder setPlayer(android.media.MediaPlayerBase);
+    method public android.media.MediaSession2.Builder setPlaylistController(android.media.MediaPlaylistController);
     method public android.media.MediaSession2.Builder setSessionActivity(android.app.PendingIntent);
     method public android.media.MediaSession2.Builder setSessionCallback(java.util.concurrent.Executor, android.media.MediaSession2.SessionCallback);
     method public android.media.MediaSession2.Builder setVolumeProvider(android.media.VolumeProvider2);
@@ -24831,13 +24894,13 @@ package android.media {
     ctor public MediaSession2.Command(android.content.Context, java.lang.String, android.os.Bundle);
     method public int getCommandCode();
     method public java.lang.String getCustomCommand();
-    method public android.os.Bundle getExtra();
+    method public android.os.Bundle getExtras();
   }
 
   public static final class MediaSession2.CommandButton {
     method public android.media.MediaSession2.Command getCommand();
     method public java.lang.String getDisplayName();
-    method public android.os.Bundle getExtra();
+    method public android.os.Bundle getExtras();
     method public int getIconResId();
     method public boolean isEnabled();
   }
@@ -24848,7 +24911,7 @@ package android.media {
     method public android.media.MediaSession2.CommandButton.Builder setCommand(android.media.MediaSession2.Command);
     method public android.media.MediaSession2.CommandButton.Builder setDisplayName(java.lang.String);
     method public android.media.MediaSession2.CommandButton.Builder setEnabled(boolean);
-    method public android.media.MediaSession2.CommandButton.Builder setExtra(android.os.Bundle);
+    method public android.media.MediaSession2.CommandButton.Builder setExtras(android.os.Bundle);
     method public android.media.MediaSession2.CommandButton.Builder setIconResId(int);
   }
 
@@ -24857,6 +24920,7 @@ package android.media {
     ctor public MediaSession2.CommandGroup(android.content.Context, android.media.MediaSession2.CommandGroup);
     method public void addAllPredefinedCommands();
     method public void addCommand(android.media.MediaSession2.Command);
+    method public java.util.List<android.media.MediaSession2.Command> getCommands();
     method public boolean hasCommand(android.media.MediaSession2.Command);
     method public boolean hasCommand(int);
     method public void removeCommand(android.media.MediaSession2.Command);
@@ -25157,10 +25221,14 @@ package android.media {
     method public android.media.AudioAttributes getAudioAttributes();
     method public deprecated int getStreamType();
     method public java.lang.String getTitle(android.content.Context);
+    method public float getVolume();
+    method public boolean isLooping();
     method public boolean isPlaying();
     method public void play();
     method public void setAudioAttributes(android.media.AudioAttributes) throws java.lang.IllegalArgumentException;
+    method public void setLooping(boolean);
     method public deprecated void setStreamType(int);
+    method public void setVolume(float);
     method public void stop();
   }
 
@@ -53262,6 +53330,20 @@ package android.widget {
     method public void update();
   }
 
+  public class MediaControlView2 extends android.view.ViewGroup {
+    ctor public MediaControlView2(android.content.Context);
+    ctor public MediaControlView2(android.content.Context, android.util.AttributeSet);
+    ctor public MediaControlView2(android.content.Context, android.util.AttributeSet, int);
+    ctor public MediaControlView2(android.content.Context, android.util.AttributeSet, int, int);
+    method public void requestPlayButtonFocus();
+    method public void setMediaSessionToken(android.media.SessionToken2);
+    method public void setOnFullScreenListener(android.widget.MediaControlView2.OnFullScreenListener);
+  }
+
+  public static abstract interface MediaControlView2.OnFullScreenListener {
+    method public abstract void onFullScreen(android.view.View, boolean);
+  }
+
   public class MediaController extends android.widget.FrameLayout {
     ctor public MediaController(android.content.Context, android.util.AttributeSet);
     ctor public MediaController(android.content.Context, boolean);
@@ -54650,6 +54732,27 @@ package android.widget {
     method public void start();
     method public void stopPlayback();
     method public void suspend();
+  }
+
+  public class VideoView2 extends android.view.ViewGroup {
+    ctor public VideoView2(android.content.Context);
+    ctor public VideoView2(android.content.Context, android.util.AttributeSet);
+    ctor public VideoView2(android.content.Context, android.util.AttributeSet, int);
+    ctor public VideoView2(android.content.Context, android.util.AttributeSet, int, int);
+    method public android.widget.MediaControlView2 getMediaControlView2();
+    method public android.media.SessionToken2 getMediaSessionToken();
+    method public int getViewType();
+    method public boolean isSubtitleEnabled();
+    method public void setAudioAttributes(android.media.AudioAttributes);
+    method public void setAudioFocusRequest(int);
+    method public void setDataSource(android.media.DataSourceDesc);
+    method public void setMediaControlView2(android.widget.MediaControlView2, long);
+    method public void setMediaItem(android.media.MediaItem2);
+    method public void setSpeed(float);
+    method public void setSubtitleEnabled(boolean);
+    method public void setViewType(int);
+    field public static final int VIEW_TYPE_SURFACEVIEW = 1; // 0x1
+    field public static final int VIEW_TYPE_TEXTUREVIEW = 2; // 0x2
   }
 
   public class ViewAnimator extends android.widget.FrameLayout {
