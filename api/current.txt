@@ -51036,6 +51036,74 @@ package android.view.inputmethod {
 
 package android.view.textclassifier {
 
+  public abstract class Logger {
+    ctor public Logger(android.view.textclassifier.Logger.Config);
+    method public java.text.BreakIterator getTokenIterator(java.util.Locale);
+    method public boolean isSmartSelection(java.lang.String);
+    method public final void logSelectionActionEvent(int, int, int);
+    method public final void logSelectionActionEvent(int, int, int, android.view.textclassifier.TextClassification);
+    method public final void logSelectionModifiedEvent(int, int);
+    method public final void logSelectionModifiedEvent(int, int, android.view.textclassifier.TextClassification);
+    method public final void logSelectionModifiedEvent(int, int, android.view.textclassifier.TextSelection);
+    method public final void logSelectionStartedEvent(int, int);
+    method public abstract void writeEvent(android.view.textclassifier.SelectionEvent);
+    field public static final int OUT_OF_BOUNDS = 2147483647; // 0x7fffffff
+    field public static final int OUT_OF_BOUNDS_NEGATIVE = -2147483648; // 0x80000000
+    field public static final java.lang.String WIDGET_CUSTOM_EDITTEXT = "customedit";
+    field public static final java.lang.String WIDGET_CUSTOM_TEXTVIEW = "customview";
+    field public static final java.lang.String WIDGET_CUSTOM_UNSELECTABLE_TEXTVIEW = "nosel-customview";
+    field public static final java.lang.String WIDGET_EDITTEXT = "edittext";
+    field public static final java.lang.String WIDGET_EDIT_WEBVIEW = "edit-webview";
+    field public static final java.lang.String WIDGET_TEXTVIEW = "textview";
+    field public static final java.lang.String WIDGET_UNKNOWN = "unknown";
+    field public static final java.lang.String WIDGET_UNSELECTABLE_TEXTVIEW = "nosel-textview";
+    field public static final java.lang.String WIDGET_WEBVIEW = "webview";
+  }
+
+  public static final class Logger.Config {
+    ctor public Logger.Config(android.content.Context, java.lang.String, java.lang.String);
+    method public java.lang.String getPackageName();
+    method public java.lang.String getWidgetType();
+    method public java.lang.String getWidgetVersion();
+  }
+
+  public final class SelectionEvent {
+    method public long getDurationSincePreviousEvent();
+    method public long getDurationSinceSessionStart();
+    method public int getEnd();
+    method public java.lang.String getEntityType();
+    method public int getEventIndex();
+    method public long getEventTime();
+    method public int getEventType();
+    method public int getInvocationMethod();
+    method public java.lang.String getPackageName();
+    method public java.lang.String getSessionId();
+    method public java.lang.String getSignature();
+    method public int getSmartEnd();
+    method public int getSmartStart();
+    method public int getStart();
+    method public java.lang.String getWidgetType();
+    method public java.lang.String getWidgetVersion();
+    field public static final int ACTION_ABANDON = 107; // 0x6b
+    field public static final int ACTION_COPY = 101; // 0x65
+    field public static final int ACTION_CUT = 103; // 0x67
+    field public static final int ACTION_DRAG = 106; // 0x6a
+    field public static final int ACTION_OTHER = 108; // 0x6c
+    field public static final int ACTION_OVERTYPE = 100; // 0x64
+    field public static final int ACTION_PASTE = 102; // 0x66
+    field public static final int ACTION_RESET = 201; // 0xc9
+    field public static final int ACTION_SELECT_ALL = 200; // 0xc8
+    field public static final int ACTION_SHARE = 104; // 0x68
+    field public static final int ACTION_SMART_SHARE = 105; // 0x69
+    field public static final int EVENT_AUTO_SELECTION = 5; // 0x5
+    field public static final int EVENT_SELECTION_MODIFIED = 2; // 0x2
+    field public static final int EVENT_SELECTION_STARTED = 1; // 0x1
+    field public static final int EVENT_SMART_SELECTION_MULTI = 4; // 0x4
+    field public static final int EVENT_SMART_SELECTION_SINGLE = 3; // 0x3
+    field public static final int INVOCATION_LINK = 2; // 0x2
+    field public static final int INVOCATION_MANUAL = 1; // 0x1
+  }
+
   public final class TextClassification implements android.os.Parcelable {
     method public int describeContents();
     method public float getConfidenceScore(java.lang.String);
@@ -51092,7 +51160,7 @@ package android.view.textclassifier {
     method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.os.LocaleList);
     method public default android.view.textclassifier.TextLinks generateLinks(java.lang.CharSequence, android.view.textclassifier.TextLinks.Options);
     method public default android.view.textclassifier.TextLinks generateLinks(java.lang.CharSequence);
-    method public default android.view.textclassifier.logging.Logger getLogger(android.view.textclassifier.logging.Logger.Config);
+    method public default android.view.textclassifier.Logger getLogger(android.view.textclassifier.Logger.Config);
     method public default int getMaxGenerateLinksTextLength();
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.view.textclassifier.TextSelection.Options);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int);
@@ -51201,78 +51269,6 @@ package android.view.textclassifier {
     method public android.view.textclassifier.TextSelection.Options setDefaultLocales(android.os.LocaleList);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextSelection.Options> CREATOR;
-  }
-
-}
-
-package android.view.textclassifier.logging {
-
-  public abstract class Logger {
-    ctor public Logger(android.view.textclassifier.logging.Logger.Config);
-    method public java.text.BreakIterator getTokenIterator(java.util.Locale);
-    method public boolean isSmartSelection(java.lang.String);
-    method public final void logSelectionActionEvent(int, int, int);
-    method public final void logSelectionActionEvent(int, int, int, android.view.textclassifier.TextClassification);
-    method public final void logSelectionModifiedEvent(int, int);
-    method public final void logSelectionModifiedEvent(int, int, android.view.textclassifier.TextClassification);
-    method public final void logSelectionModifiedEvent(int, int, android.view.textclassifier.TextSelection);
-    method public final void logSelectionStartedEvent(int, int);
-    method public abstract void writeEvent(android.view.textclassifier.logging.SelectionEvent);
-    field public static final int OUT_OF_BOUNDS = 2147483647; // 0x7fffffff
-    field public static final int OUT_OF_BOUNDS_NEGATIVE = -2147483648; // 0x80000000
-    field public static final java.lang.String WIDGET_CUSTOM_EDITTEXT = "customedit";
-    field public static final java.lang.String WIDGET_CUSTOM_TEXTVIEW = "customview";
-    field public static final java.lang.String WIDGET_CUSTOM_UNSELECTABLE_TEXTVIEW = "nosel-customview";
-    field public static final java.lang.String WIDGET_EDITTEXT = "edittext";
-    field public static final java.lang.String WIDGET_EDIT_WEBVIEW = "edit-webview";
-    field public static final java.lang.String WIDGET_TEXTVIEW = "textview";
-    field public static final java.lang.String WIDGET_UNKNOWN = "unknown";
-    field public static final java.lang.String WIDGET_UNSELECTABLE_TEXTVIEW = "nosel-textview";
-    field public static final java.lang.String WIDGET_WEBVIEW = "webview";
-  }
-
-  public static final class Logger.Config {
-    ctor public Logger.Config(android.content.Context, java.lang.String, java.lang.String);
-    method public java.lang.String getPackageName();
-    method public java.lang.String getWidgetType();
-    method public java.lang.String getWidgetVersion();
-  }
-
-  public final class SelectionEvent {
-    method public long getDurationSincePreviousEvent();
-    method public long getDurationSinceSessionStart();
-    method public int getEnd();
-    method public java.lang.String getEntityType();
-    method public int getEventIndex();
-    method public long getEventTime();
-    method public int getEventType();
-    method public int getInvocationMethod();
-    method public java.lang.String getPackageName();
-    method public java.lang.String getSessionId();
-    method public java.lang.String getSignature();
-    method public int getSmartEnd();
-    method public int getSmartStart();
-    method public int getStart();
-    method public java.lang.String getWidgetType();
-    method public java.lang.String getWidgetVersion();
-    field public static final int ACTION_ABANDON = 107; // 0x6b
-    field public static final int ACTION_COPY = 101; // 0x65
-    field public static final int ACTION_CUT = 103; // 0x67
-    field public static final int ACTION_DRAG = 106; // 0x6a
-    field public static final int ACTION_OTHER = 108; // 0x6c
-    field public static final int ACTION_OVERTYPE = 100; // 0x64
-    field public static final int ACTION_PASTE = 102; // 0x66
-    field public static final int ACTION_RESET = 201; // 0xc9
-    field public static final int ACTION_SELECT_ALL = 200; // 0xc8
-    field public static final int ACTION_SHARE = 104; // 0x68
-    field public static final int ACTION_SMART_SHARE = 105; // 0x69
-    field public static final int EVENT_AUTO_SELECTION = 5; // 0x5
-    field public static final int EVENT_SELECTION_MODIFIED = 2; // 0x2
-    field public static final int EVENT_SELECTION_STARTED = 1; // 0x1
-    field public static final int EVENT_SMART_SELECTION_MULTI = 4; // 0x4
-    field public static final int EVENT_SMART_SELECTION_SINGLE = 3; // 0x3
-    field public static final int INVOCATION_LINK = 2; // 0x2
-    field public static final int INVOCATION_MANUAL = 1; // 0x1
   }
 
 }
