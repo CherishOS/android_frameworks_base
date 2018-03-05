@@ -23362,10 +23362,12 @@ package android.media {
     method public float getPlaybackSpeed();
     method public int getPlayerState();
     method public java.util.List<android.media.MediaItem2> getPlaylist();
-    method public android.media.MediaSession2.PlaylistParams getPlaylistParams();
+    method public android.media.MediaMetadata2 getPlaylistMetadata();
     method public long getPosition();
+    method public int getRepeatMode();
     method public android.app.PendingIntent getSessionActivity();
     method public android.media.SessionToken2 getSessionToken();
+    method public int getShuffleMode();
     method public boolean isConnected();
     method public void pause();
     method public void play();
@@ -23376,19 +23378,24 @@ package android.media {
     method public void prepareFromMediaId(java.lang.String, android.os.Bundle);
     method public void prepareFromSearch(java.lang.String, android.os.Bundle);
     method public void prepareFromUri(android.net.Uri, android.os.Bundle);
+    method public void registerPlaylistControllerCallback(java.util.concurrent.Executor, android.media.MediaPlaylistController.PlaylistEventCallback);
     method public void removePlaylistItem(android.media.MediaItem2);
     method public void replacePlaylistItem(int, android.media.MediaItem2);
     method public void rewind();
     method public void seekTo(long);
     method public void sendCustomCommand(android.media.MediaSession2.Command, android.os.Bundle, android.os.ResultReceiver);
     method public void setPlaybackSpeed(float);
-    method public void setPlaylistParams(android.media.MediaSession2.PlaylistParams);
+    method public void setPlaylist(java.util.List<android.media.MediaItem2>, android.media.MediaMetadata2);
     method public void setRating(java.lang.String, android.media.Rating2);
+    method public void setRepeatMode(int);
+    method public void setShuffleMode(int);
     method public void setVolumeTo(int, int);
     method public void skipToNext();
     method public void skipToPlaylistItem(android.media.MediaItem2);
     method public void skipToPrevious();
     method public void stop();
+    method public void unregisterPlaylistControllerCallback(android.media.MediaPlaylistController.PlaylistEventCallback);
+    method public void updatePlaylistMetadata(android.media.MediaMetadata2);
   }
 
   public static abstract class MediaController2.ControllerCallback {
@@ -23404,8 +23411,6 @@ package android.media {
     method public void onPlaybackInfoChanged(android.media.MediaController2, android.media.MediaController2.PlaybackInfo);
     method public void onPlaybackSpeedChanged(android.media.MediaController2, float);
     method public void onPlayerStateChanged(android.media.MediaController2, int);
-    method public void onPlaylistChanged(android.media.MediaController2, java.util.List<android.media.MediaItem2>);
-    method public void onPlaylistParamsChanged(android.media.MediaController2, android.media.MediaSession2.PlaylistParams);
     method public void onPositionChanged(android.media.MediaController2, long, long);
   }
 
@@ -24544,9 +24549,33 @@ package android.media {
     method public abstract void addPlaylistItem(int, android.media.MediaItem2);
     method public abstract android.media.MediaItem2 getCurrentPlaylistItem();
     method public abstract java.util.List<android.media.MediaItem2> getPlaylist();
+    method public abstract android.media.MediaMetadata2 getPlaylistMetadata();
+    method public abstract int getRepeatMode();
+    method public abstract int getShuffleMode();
+    method public abstract void registerPlaylistControllerCallback(java.util.concurrent.Executor, android.media.MediaPlaylistController.PlaylistEventCallback);
     method public abstract void removePlaylistItem(android.media.MediaItem2);
     method public abstract void replacePlaylistItem(int, android.media.MediaItem2);
+    method public abstract void setPlaylist(java.util.List<android.media.MediaItem2>, android.media.MediaMetadata2);
+    method public abstract void setRepeatMode(int);
+    method public abstract void setShuffleMode(int);
     method public abstract void skipToPlaylistItem(android.media.MediaItem2);
+    method public abstract void unregisterPlaylistControllerCallback(android.media.MediaPlaylistController.PlaylistEventCallback);
+    method public abstract void updatePlaylistMetadata(android.media.MediaMetadata2);
+    field public static final int REPEAT_MODE_ALL = 2; // 0x2
+    field public static final int REPEAT_MODE_GROUP = 3; // 0x3
+    field public static final int REPEAT_MODE_NONE = 0; // 0x0
+    field public static final int REPEAT_MODE_ONE = 1; // 0x1
+    field public static final int SHUFFLE_MODE_ALL = 1; // 0x1
+    field public static final int SHUFFLE_MODE_GROUP = 2; // 0x2
+    field public static final int SHUFFLE_MODE_NONE = 0; // 0x0
+  }
+
+  public static abstract class MediaPlaylistController.PlaylistEventCallback {
+    ctor public MediaPlaylistController.PlaylistEventCallback();
+    method public void onPlaylistChanged(android.media.MediaPlaylistController, java.util.List<android.media.MediaItem2>, android.media.MediaMetadata2);
+    method public void onPlaylistMetadataChanged(android.media.MediaPlaylistController, android.media.MediaMetadata2);
+    method public void onRepeatModeChanged(android.media.MediaPlaylistController, int);
+    method public void onShuffleModeChanged(android.media.MediaPlaylistController, int);
   }
 
   public class MediaRecorder implements android.media.AudioRouting {
@@ -24835,13 +24864,16 @@ package android.media {
     method public float getPlaybackSpeed();
     method public android.media.MediaPlayerBase getPlayer();
     method public java.util.List<android.media.MediaItem2> getPlaylist();
-    method public android.media.MediaSession2.PlaylistParams getPlaylistParams();
+    method public android.media.MediaMetadata2 getPlaylistMetadata();
+    method public int getRepeatMode();
+    method public int getShuffleMode();
     method public android.media.SessionToken2 getToken();
     method public android.media.VolumeProvider2 getVolumeProvider();
     method public void notifyError(int, android.os.Bundle);
     method public void pause();
     method public void play();
     method public void prepare();
+    method public void registerPlaylistControllerCallback(java.util.concurrent.Executor, android.media.MediaPlaylistController.PlaylistEventCallback);
     method public void removePlaylistItem(android.media.MediaItem2);
     method public void replacePlaylistItem(int, android.media.MediaItem2);
     method public void rewind();
@@ -24852,36 +24884,45 @@ package android.media {
     method public void setAudioFocusRequest(android.media.AudioFocusRequest);
     method public void setCustomLayout(android.media.MediaSession2.ControllerInfo, java.util.List<android.media.MediaSession2.CommandButton>);
     method public void setPlaybackSpeed(float);
-    method public void setPlaylist(java.util.List<android.media.MediaItem2>);
-    method public void setPlaylistParams(android.media.MediaSession2.PlaylistParams);
+    method public void setPlaylist(java.util.List<android.media.MediaItem2>, android.media.MediaMetadata2);
+    method public void setRepeatMode(int);
+    method public void setShuffleMode(int);
     method public void skipToNext();
     method public void skipToPlaylistItem(android.media.MediaItem2);
     method public void skipToPrevious();
     method public void stop();
+    method public void unregisterPlaylistControllerCallback(android.media.MediaPlaylistController.PlaylistEventCallback);
     method public void updatePlayer(android.media.MediaPlayerBase, android.media.MediaPlaylistController, android.media.VolumeProvider2);
-    field public static final int COMMAND_CODE_BROWSER = 22; // 0x16
+    method public void updatePlaylistMetadata(android.media.MediaMetadata2);
+    field public static final int COMMAND_CODE_BROWSER = 28; // 0x1c
     field public static final int COMMAND_CODE_CUSTOM = 0; // 0x0
+    field public static final int COMMAND_CODE_PLAYBACK_ADJUST_VOLUME = 11; // 0xb
     field public static final int COMMAND_CODE_PLAYBACK_FAST_FORWARD = 7; // 0x7
     field public static final int COMMAND_CODE_PLAYBACK_PAUSE = 2; // 0x2
     field public static final int COMMAND_CODE_PLAYBACK_PLAY = 1; // 0x1
     field public static final int COMMAND_CODE_PLAYBACK_PREPARE = 6; // 0x6
     field public static final int COMMAND_CODE_PLAYBACK_REWIND = 8; // 0x8
     field public static final int COMMAND_CODE_PLAYBACK_SEEK_TO = 9; // 0x9
-    field public static final int COMMAND_CODE_PLAYBACK_SET_PLAYLIST_PARAMS = 11; // 0xb
+    field public static final int COMMAND_CODE_PLAYBACK_SET_VOLUME = 10; // 0xa
     field public static final int COMMAND_CODE_PLAYBACK_SKIP_NEXT_ITEM = 4; // 0x4
     field public static final int COMMAND_CODE_PLAYBACK_SKIP_PREV_ITEM = 5; // 0x5
-    field public static final int COMMAND_CODE_PLAYBACK_SKIP_TO_PLAYLIST_ITEM = 10; // 0xa
     field public static final int COMMAND_CODE_PLAYBACK_STOP = 3; // 0x3
-    field public static final int COMMAND_CODE_PLAYLIST_ADD = 12; // 0xc
-    field public static final int COMMAND_CODE_PLAYLIST_GET = 14; // 0xe
-    field public static final int COMMAND_CODE_PLAYLIST_REMOVE = 13; // 0xd
-    field public static final int COMMAND_CODE_PLAY_FROM_MEDIA_ID = 16; // 0x10
-    field public static final int COMMAND_CODE_PLAY_FROM_SEARCH = 18; // 0x12
-    field public static final int COMMAND_CODE_PLAY_FROM_URI = 17; // 0x11
-    field public static final int COMMAND_CODE_PREPARE_FROM_MEDIA_ID = 19; // 0x13
-    field public static final int COMMAND_CODE_PREPARE_FROM_SEARCH = 21; // 0x15
-    field public static final int COMMAND_CODE_PREPARE_FROM_URI = 20; // 0x14
-    field public static final int COMMAND_CODE_SET_VOLUME = 15; // 0xf
+    field public static final int COMMAND_CODE_PLAYLIST_ADD_ITEM = 15; // 0xf
+    field public static final int COMMAND_CODE_PLAYLIST_GET_LIST = 18; // 0x12
+    field public static final int COMMAND_CODE_PLAYLIST_GET_LIST_METADATA = 20; // 0x14
+    field public static final int COMMAND_CODE_PLAYLIST_REMOVE_ITEM = 16; // 0x10
+    field public static final int COMMAND_CODE_PLAYLIST_REPLACE_ITEM = 17; // 0x11
+    field public static final int COMMAND_CODE_PLAYLIST_SET_LIST = 19; // 0x13
+    field public static final int COMMAND_CODE_PLAYLIST_SET_LIST_METADATA = 21; // 0x15
+    field public static final int COMMAND_CODE_PLAYLIST_SET_REPEAT_MODE = 14; // 0xe
+    field public static final int COMMAND_CODE_PLAYLIST_SET_SHUFFLE_MODE = 13; // 0xd
+    field public static final int COMMAND_CODE_PLAYLIST_SKIP_TO_PLAYLIST_ITEM = 12; // 0xc
+    field public static final int COMMAND_CODE_PLAY_FROM_MEDIA_ID = 22; // 0x16
+    field public static final int COMMAND_CODE_PLAY_FROM_SEARCH = 24; // 0x18
+    field public static final int COMMAND_CODE_PLAY_FROM_URI = 23; // 0x17
+    field public static final int COMMAND_CODE_PREPARE_FROM_MEDIA_ID = 25; // 0x19
+    field public static final int COMMAND_CODE_PREPARE_FROM_SEARCH = 27; // 0x1b
+    field public static final int COMMAND_CODE_PREPARE_FROM_URI = 26; // 0x1a
     field public static final int ERROR_CODE_ACTION_ABORTED = 10; // 0xa
     field public static final int ERROR_CODE_APP_ERROR = 1; // 0x1
     field public static final int ERROR_CODE_AUTHENTICATION_EXPIRED = 3; // 0x3
@@ -24951,31 +24992,18 @@ package android.media {
     method public boolean isTrusted();
   }
 
-  public static final class MediaSession2.PlaylistParams {
-    ctor public MediaSession2.PlaylistParams(android.content.Context, int, int, android.media.MediaMetadata2);
-    method public static android.media.MediaSession2.PlaylistParams fromBundle(android.content.Context, android.os.Bundle);
-    method public android.media.MediaMetadata2 getPlaylistMetadata();
-    method public int getRepeatMode();
-    method public int getShuffleMode();
-    method public android.os.Bundle toBundle();
-    field public static final int REPEAT_MODE_ALL = 2; // 0x2
-    field public static final int REPEAT_MODE_GROUP = 3; // 0x3
-    field public static final int REPEAT_MODE_NONE = 0; // 0x0
-    field public static final int REPEAT_MODE_ONE = 1; // 0x1
-    field public static final int SHUFFLE_MODE_ALL = 1; // 0x1
-    field public static final int SHUFFLE_MODE_GROUP = 2; // 0x2
-    field public static final int SHUFFLE_MODE_NONE = 0; // 0x0
-  }
-
   public static abstract class MediaSession2.SessionCallback {
     ctor public MediaSession2.SessionCallback(android.content.Context);
+    method public void onBufferingStateChanged(android.media.MediaSession2, android.media.MediaItem2, int);
     method public boolean onCommandRequest(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo, android.media.MediaSession2.Command);
     method public android.media.MediaSession2.CommandGroup onConnect(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo);
     method public void onCustomCommand(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo, android.media.MediaSession2.Command, android.os.Bundle, android.os.ResultReceiver);
     method public void onDisconnected(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo);
+    method public void onMediaPrepared(android.media.MediaSession2, android.media.MediaItem2);
     method public void onPlayFromMediaId(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo, java.lang.String, android.os.Bundle);
     method public void onPlayFromSearch(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo, java.lang.String, android.os.Bundle);
     method public void onPlayFromUri(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo, android.net.Uri, android.os.Bundle);
+    method public void onPlayerStateChanged(android.media.MediaSession2, int);
     method public void onPrepareFromMediaId(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo, java.lang.String, android.os.Bundle);
     method public void onPrepareFromSearch(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo, java.lang.String, android.os.Bundle);
     method public void onPrepareFromUri(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo, android.net.Uri, android.os.Bundle);
