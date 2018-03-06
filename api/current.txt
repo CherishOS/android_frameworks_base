@@ -24349,7 +24349,6 @@ package android.media {
     method public abstract android.media.MediaDrm.KeyRequest getDrmKeyRequest(byte[], byte[], java.lang.String, int, java.util.Map<java.lang.String, java.lang.String>) throws android.media.MediaPlayer2.NoDrmSchemeException;
     method public abstract java.lang.String getDrmPropertyString(java.lang.String) throws android.media.MediaPlayer2.NoDrmSchemeException;
     method public abstract long getDuration();
-    method public abstract int getMediaPlayer2State();
     method public abstract android.os.PersistableBundle getMetrics();
     method public abstract android.media.PlaybackParams getPlaybackParams();
     method public abstract int getSelectedTrack(int);
@@ -24375,33 +24374,35 @@ package android.media {
     method public abstract void setPlaybackParams(android.media.PlaybackParams);
     method public abstract void setSurface(android.view.Surface);
     method public abstract void setSyncParams(android.media.SyncParams);
-    field public static final int MEDIAPLAYER2_STATE_ERROR = 5; // 0x5
-    field public static final int MEDIAPLAYER2_STATE_IDLE = 1; // 0x1
-    field public static final int MEDIAPLAYER2_STATE_PAUSED = 3; // 0x3
-    field public static final int MEDIAPLAYER2_STATE_PLAYING = 4; // 0x4
-    field public static final int MEDIAPLAYER2_STATE_PREPARED = 2; // 0x2
-    field public static final int MEDIA_CALL_ATTACH_AUX_EFFECT = 1; // 0x1
-    field public static final int MEDIA_CALL_DESELECT_TRACK = 2; // 0x2
-    field public static final int MEDIA_CALL_LOOP_CURRENT = 3; // 0x3
-    field public static final int MEDIA_CALL_PAUSE = 4; // 0x4
-    field public static final int MEDIA_CALL_PLAY = 5; // 0x5
-    field public static final int MEDIA_CALL_PREPARE = 6; // 0x6
-    field public static final int MEDIA_CALL_RELEASE_DRM = 12; // 0xc
-    field public static final int MEDIA_CALL_RESTORE_DRM_KEYS = 13; // 0xd
-    field public static final int MEDIA_CALL_SEEK_TO = 14; // 0xe
-    field public static final int MEDIA_CALL_SELECT_TRACK = 15; // 0xf
-    field public static final int MEDIA_CALL_SET_AUDIO_ATTRIBUTES = 16; // 0x10
-    field public static final int MEDIA_CALL_SET_AUDIO_SESSION_ID = 17; // 0x11
-    field public static final int MEDIA_CALL_SET_AUX_EFFECT_SEND_LEVEL = 18; // 0x12
-    field public static final int MEDIA_CALL_SET_DATA_SOURCE = 19; // 0x13
-    field public static final int MEDIA_CALL_SET_NEXT_DATA_SOURCE = 22; // 0x16
-    field public static final int MEDIA_CALL_SET_NEXT_DATA_SOURCES = 23; // 0x17
-    field public static final int MEDIA_CALL_SET_PLAYBACK_PARAMS = 24; // 0x18
-    field public static final int MEDIA_CALL_SET_PLAYBACK_SPEED = 25; // 0x19
-    field public static final int MEDIA_CALL_SET_PLAYER_VOLUME = 26; // 0x1a
-    field public static final int MEDIA_CALL_SET_SURFACE = 27; // 0x1b
-    field public static final int MEDIA_CALL_SET_SYNC_PARAMS = 28; // 0x1c
-    field public static final int MEDIA_CALL_SKIP_TO_NEXT = 29; // 0x1d
+    field public static final int CALL_COMPLETED_ATTACH_AUX_EFFECT = 1; // 0x1
+    field public static final int CALL_COMPLETED_DESELECT_TRACK = 2; // 0x2
+    field public static final int CALL_COMPLETED_LOOP_CURRENT = 3; // 0x3
+    field public static final int CALL_COMPLETED_PAUSE = 4; // 0x4
+    field public static final int CALL_COMPLETED_PLAY = 5; // 0x5
+    field public static final int CALL_COMPLETED_PREPARE = 6; // 0x6
+    field public static final int CALL_COMPLETED_RELEASE_DRM = 12; // 0xc
+    field public static final int CALL_COMPLETED_RESTORE_DRM_KEYS = 13; // 0xd
+    field public static final int CALL_COMPLETED_SEEK_TO = 14; // 0xe
+    field public static final int CALL_COMPLETED_SELECT_TRACK = 15; // 0xf
+    field public static final int CALL_COMPLETED_SET_AUDIO_ATTRIBUTES = 16; // 0x10
+    field public static final int CALL_COMPLETED_SET_AUDIO_SESSION_ID = 17; // 0x11
+    field public static final int CALL_COMPLETED_SET_AUX_EFFECT_SEND_LEVEL = 18; // 0x12
+    field public static final int CALL_COMPLETED_SET_DATA_SOURCE = 19; // 0x13
+    field public static final int CALL_COMPLETED_SET_NEXT_DATA_SOURCE = 22; // 0x16
+    field public static final int CALL_COMPLETED_SET_NEXT_DATA_SOURCES = 23; // 0x17
+    field public static final int CALL_COMPLETED_SET_PLAYBACK_PARAMS = 24; // 0x18
+    field public static final int CALL_COMPLETED_SET_PLAYBACK_SPEED = 25; // 0x19
+    field public static final int CALL_COMPLETED_SET_PLAYER_VOLUME = 26; // 0x1a
+    field public static final int CALL_COMPLETED_SET_SURFACE = 27; // 0x1b
+    field public static final int CALL_COMPLETED_SET_SYNC_PARAMS = 28; // 0x1c
+    field public static final int CALL_COMPLETED_SKIP_TO_NEXT = 29; // 0x1d
+    field public static final int CALL_STATUS_BAD_VALUE = 2; // 0x2
+    field public static final int CALL_STATUS_ERROR_IO = 4; // 0x4
+    field public static final int CALL_STATUS_ERROR_UNKNOWN = -2147483648; // 0x80000000
+    field public static final int CALL_STATUS_INVALID_OPERATION = 1; // 0x1
+    field public static final int CALL_STATUS_NO_DRM_SCHEME = 5; // 0x5
+    field public static final int CALL_STATUS_NO_ERROR = 0; // 0x0
+    field public static final int CALL_STATUS_PERMISSION_DENIED = 3; // 0x3
     field public static final int MEDIA_ERROR_IO = -1004; // 0xfffffc14
     field public static final int MEDIA_ERROR_MALFORMED = -1007; // 0xfffffc11
     field public static final int MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK = 200; // 0xc8
@@ -24451,7 +24452,7 @@ package android.media {
 
   public static abstract class MediaPlayer2.MediaPlayer2EventCallback {
     ctor public MediaPlayer2.MediaPlayer2EventCallback();
-    method public void onCallComplete(android.media.MediaPlayer2, android.media.DataSourceDesc, int, int);
+    method public void onCallCompleted(android.media.MediaPlayer2, android.media.DataSourceDesc, int, int);
     method public void onCommandLabelReached(android.media.MediaPlayer2, java.lang.Object);
     method public void onError(android.media.MediaPlayer2, android.media.DataSourceDesc, int, int);
     method public void onInfo(android.media.MediaPlayer2, android.media.DataSourceDesc, int, int);
