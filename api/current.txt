@@ -5752,8 +5752,15 @@ package android.app {
     field public static final int PRIORITY_SENDERS_ANY = 0; // 0x0
     field public static final int PRIORITY_SENDERS_CONTACTS = 1; // 0x1
     field public static final int PRIORITY_SENDERS_STARRED = 2; // 0x2
-    field public static final int SUPPRESSED_EFFECT_SCREEN_OFF = 1; // 0x1
-    field public static final int SUPPRESSED_EFFECT_SCREEN_ON = 2; // 0x2
+    field public static final int SUPPRESSED_EFFECT_AMBIENT = 128; // 0x80
+    field public static final int SUPPRESSED_EFFECT_BADGE = 64; // 0x40
+    field public static final int SUPPRESSED_EFFECT_FULL_SCREEN_INTENT = 4; // 0x4
+    field public static final int SUPPRESSED_EFFECT_LIGHTS = 8; // 0x8
+    field public static final int SUPPRESSED_EFFECT_NOTIFICATION_LIST = 256; // 0x100
+    field public static final int SUPPRESSED_EFFECT_PEEK = 16; // 0x10
+    field public static final deprecated int SUPPRESSED_EFFECT_SCREEN_OFF = 1; // 0x1
+    field public static final deprecated int SUPPRESSED_EFFECT_SCREEN_ON = 2; // 0x2
+    field public static final int SUPPRESSED_EFFECT_STATUS_BAR = 32; // 0x20
     field public final int priorityCallSenders;
     field public final int priorityCategories;
     field public final int priorityMessageSenders;
@@ -7172,13 +7179,13 @@ package android.app.slice {
     method public java.util.List<android.app.slice.SliceItem> getItems();
     method public android.app.slice.SliceSpec getSpec();
     method public android.net.Uri getUri();
+    method public boolean isCallerNeeded();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.slice.Slice> CREATOR;
     field public static final java.lang.String EXTRA_RANGE_VALUE = "android.app.slice.extra.RANGE_VALUE";
     field public static final deprecated java.lang.String EXTRA_SLIDER_VALUE = "android.app.slice.extra.SLIDER_VALUE";
     field public static final java.lang.String EXTRA_TOGGLE_STATE = "android.app.slice.extra.TOGGLE_STATE";
     field public static final java.lang.String HINT_ACTIONS = "actions";
-    field public static final java.lang.String HINT_CALLER_NEEDED = "caller_needed";
     field public static final java.lang.String HINT_HORIZONTAL = "horizontal";
     field public static final java.lang.String HINT_KEY_WORDS = "key_words";
     field public static final java.lang.String HINT_LARGE = "large";
@@ -7225,6 +7232,7 @@ package android.app.slice {
     method public android.app.slice.Slice.Builder addTimestamp(long, java.lang.String, java.lang.String...);
     method public android.app.slice.Slice.Builder addTimestamp(long, java.lang.String, java.util.List<java.lang.String>);
     method public android.app.slice.Slice build();
+    method public android.app.slice.Slice.Builder setCallerNeeded(boolean);
     method public android.app.slice.Slice.Builder setSpec(android.app.slice.SliceSpec);
   }
 
@@ -7261,17 +7269,9 @@ package android.app.slice {
     method public java.util.Collection<android.net.Uri> getSliceDescendants(android.net.Uri);
     method public android.net.Uri mapIntentToUri(android.content.Intent);
     method public void pinSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
-    method public deprecated void registerSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback, java.util.List<android.app.slice.SliceSpec>);
-    method public deprecated void registerSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback, java.util.List<android.app.slice.SliceSpec>, java.util.concurrent.Executor);
-    method public void registerSliceCallback(android.net.Uri, java.util.List<android.app.slice.SliceSpec>, android.app.slice.SliceManager.SliceCallback);
-    method public void registerSliceCallback(android.net.Uri, java.util.List<android.app.slice.SliceSpec>, java.util.concurrent.Executor, android.app.slice.SliceManager.SliceCallback);
     method public void unpinSlice(android.net.Uri);
-    method public void unregisterSliceCallback(android.net.Uri, android.app.slice.SliceManager.SliceCallback);
+    field public static final java.lang.String CATEGORY_SLICE = "android.app.slice.category.SLICE";
     field public static final java.lang.String SLICE_METADATA_KEY = "android.metadata.SLICE_URI";
-  }
-
-  public static abstract interface SliceManager.SliceCallback {
-    method public abstract void onSliceUpdated(android.app.slice.Slice);
   }
 
   public abstract class SliceProvider extends android.content.ContentProvider {
@@ -13609,11 +13609,19 @@ package android.graphics {
     method public static android.graphics.Bitmap decodeBitmap(android.graphics.ImageDecoder.Source) throws java.io.IOException;
     method public static android.graphics.drawable.Drawable decodeDrawable(android.graphics.ImageDecoder.Source, android.graphics.ImageDecoder.OnHeaderDecodedListener) throws java.io.IOException;
     method public static android.graphics.drawable.Drawable decodeDrawable(android.graphics.ImageDecoder.Source) throws java.io.IOException;
+    method public int getAllocator();
+    method public boolean getConserveMemory();
+    method public android.graphics.Rect getCrop();
+    method public boolean getDecodeAsAlphaMask();
+    method public boolean getMutable();
+    method public android.graphics.ImageDecoder.OnPartialImageListener getOnPartialImageListener();
+    method public android.graphics.PostProcessor getPostProcessor();
+    method public boolean getRequireUnpremultiplied();
     method public android.util.Size getSampledSize(int);
     method public android.graphics.ImageDecoder setAllocator(int);
-    method public android.graphics.ImageDecoder setAsAlphaMask(boolean);
     method public android.graphics.ImageDecoder setConserveMemory(boolean);
     method public android.graphics.ImageDecoder setCrop(android.graphics.Rect);
+    method public android.graphics.ImageDecoder setDecodeAsAlphaMask(boolean);
     method public android.graphics.ImageDecoder setMutable(boolean);
     method public android.graphics.ImageDecoder setOnPartialImageListener(android.graphics.ImageDecoder.OnPartialImageListener);
     method public android.graphics.ImageDecoder setPostProcessor(android.graphics.PostProcessor);
@@ -21217,7 +21225,7 @@ package android.inputmethodservice {
     method public void onWindowHidden();
     method public void onWindowShown();
     method public void requestHideSelf(int);
-    method public void requestShowSelf(int);
+    method public final void requestShowSelf(int);
     method public boolean sendDefaultEditorAction(boolean);
     method public void sendDownUpKeyEvents(int);
     method public void sendKeyChar(char);
@@ -21227,13 +21235,13 @@ package android.inputmethodservice {
     method public void setExtractView(android.view.View);
     method public void setExtractViewShown(boolean);
     method public void setInputView(android.view.View);
-    method public boolean shouldOfferSwitchingToNextInputMethod();
+    method public final boolean shouldOfferSwitchingToNextInputMethod();
     method public void showStatusIcon(int);
     method public void showWindow(boolean);
     method public void switchInputMethod(java.lang.String);
-    method public void switchInputMethod(java.lang.String, android.view.inputmethod.InputMethodSubtype);
-    method public boolean switchToNextInputMethod(boolean);
-    method public boolean switchToPreviousInputMethod();
+    method public final void switchInputMethod(java.lang.String, android.view.inputmethod.InputMethodSubtype);
+    method public final boolean switchToNextInputMethod(boolean);
+    method public final boolean switchToPreviousInputMethod();
     method public void updateFullscreenMode();
     method public void updateInputViewShown();
     field public static final int BACK_DISPOSITION_DEFAULT = 0; // 0x0
@@ -27581,17 +27589,17 @@ package android.net {
     field public static final int RESTRICT_BACKGROUND_STATUS_DISABLED = 1; // 0x1
     field public static final int RESTRICT_BACKGROUND_STATUS_ENABLED = 3; // 0x3
     field public static final int RESTRICT_BACKGROUND_STATUS_WHITELISTED = 2; // 0x2
-    field public static final int TYPE_BLUETOOTH = 7; // 0x7
-    field public static final int TYPE_DUMMY = 8; // 0x8
-    field public static final int TYPE_ETHERNET = 9; // 0x9
-    field public static final int TYPE_MOBILE = 0; // 0x0
-    field public static final int TYPE_MOBILE_DUN = 4; // 0x4
+    field public static final deprecated int TYPE_BLUETOOTH = 7; // 0x7
+    field public static final deprecated int TYPE_DUMMY = 8; // 0x8
+    field public static final deprecated int TYPE_ETHERNET = 9; // 0x9
+    field public static final deprecated int TYPE_MOBILE = 0; // 0x0
+    field public static final deprecated int TYPE_MOBILE_DUN = 4; // 0x4
     field public static final deprecated int TYPE_MOBILE_HIPRI = 5; // 0x5
     field public static final deprecated int TYPE_MOBILE_MMS = 2; // 0x2
     field public static final deprecated int TYPE_MOBILE_SUPL = 3; // 0x3
-    field public static final int TYPE_VPN = 17; // 0x11
-    field public static final int TYPE_WIFI = 1; // 0x1
-    field public static final int TYPE_WIMAX = 6; // 0x6
+    field public static final deprecated int TYPE_VPN = 17; // 0x11
+    field public static final deprecated int TYPE_WIFI = 1; // 0x1
+    field public static final deprecated int TYPE_WIMAX = 6; // 0x6
   }
 
   public static class ConnectivityManager.NetworkCallback {
@@ -27868,16 +27876,16 @@ package android.net {
     method public int describeContents();
     method public android.net.NetworkInfo.DetailedState getDetailedState();
     method public java.lang.String getExtraInfo();
-    method public java.lang.String getReason();
-    method public android.net.NetworkInfo.State getState();
+    method public deprecated java.lang.String getReason();
+    method public deprecated android.net.NetworkInfo.State getState();
     method public int getSubtype();
     method public java.lang.String getSubtypeName();
-    method public int getType();
-    method public java.lang.String getTypeName();
-    method public boolean isAvailable();
+    method public deprecated int getType();
+    method public deprecated java.lang.String getTypeName();
+    method public deprecated boolean isAvailable();
     method public boolean isConnected();
-    method public boolean isConnectedOrConnecting();
-    method public boolean isFailover();
+    method public deprecated boolean isConnectedOrConnecting();
+    method public deprecated boolean isFailover();
     method public deprecated boolean isRoaming();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.NetworkInfo> CREATOR;
@@ -37144,6 +37152,7 @@ package android.provider {
     field public static final java.lang.String ACTION_CAST_SETTINGS = "android.settings.CAST_SETTINGS";
     field public static final java.lang.String ACTION_CHANNEL_NOTIFICATION_SETTINGS = "android.settings.CHANNEL_NOTIFICATION_SETTINGS";
     field public static final java.lang.String ACTION_DATA_ROAMING_SETTINGS = "android.settings.DATA_ROAMING_SETTINGS";
+    field public static final java.lang.String ACTION_DATA_USAGE_SETTINGS = "android.settings.DATA_USAGE_SETTINGS";
     field public static final java.lang.String ACTION_DATE_SETTINGS = "android.settings.DATE_SETTINGS";
     field public static final java.lang.String ACTION_DEVICE_INFO_SETTINGS = "android.settings.DEVICE_INFO_SETTINGS";
     field public static final java.lang.String ACTION_DISPLAY_SETTINGS = "android.settings.DISPLAY_SETTINGS";
@@ -40000,8 +40009,8 @@ package android.service.notification {
     field public static final int REASON_UNAUTOBUNDLED = 16; // 0x10
     field public static final int REASON_USER_STOPPED = 6; // 0x6
     field public static final java.lang.String SERVICE_INTERFACE = "android.service.notification.NotificationListenerService";
-    field public static final int SUPPRESSED_EFFECT_SCREEN_OFF = 1; // 0x1
-    field public static final int SUPPRESSED_EFFECT_SCREEN_ON = 2; // 0x2
+    field public static final deprecated int SUPPRESSED_EFFECT_SCREEN_OFF = 1; // 0x1
+    field public static final deprecated int SUPPRESSED_EFFECT_SCREEN_ON = 2; // 0x2
   }
 
   public static class NotificationListenerService.Ranking {
@@ -41379,10 +41388,10 @@ package android.telecom {
     method public void onStateChanged(android.telecom.Call, int);
     method public void onVideoCallChanged(android.telecom.Call, android.telecom.InCallService.VideoCall);
     field public static final int HANDOVER_FAILURE_DEST_APP_REJECTED = 1; // 0x1
-    field public static final int HANDOVER_FAILURE_DEST_INVALID_PERM = 3; // 0x3
-    field public static final int HANDOVER_FAILURE_DEST_NOT_SUPPORTED = 2; // 0x2
-    field public static final int HANDOVER_FAILURE_DEST_USER_REJECTED = 4; // 0x4
-    field public static final int HANDOVER_FAILURE_ONGOING_EMERG_CALL = 5; // 0x5
+    field public static final int HANDOVER_FAILURE_NOT_SUPPORTED = 2; // 0x2
+    field public static final int HANDOVER_FAILURE_ONGOING_EMERG_CALL = 4; // 0x4
+    field public static final int HANDOVER_FAILURE_UNKNOWN = 5; // 0x5
+    field public static final int HANDOVER_FAILURE_USER_REJECTED = 3; // 0x3
   }
 
   public static class Call.Details {
@@ -42139,11 +42148,9 @@ package android.telecom {
 package android.telephony {
 
   public final class AccessNetworkConstants {
-    ctor public AccessNetworkConstants();
   }
 
   public static final class AccessNetworkConstants.AccessNetworkType {
-    ctor public AccessNetworkConstants.AccessNetworkType();
     field public static final int CDMA2000 = 4; // 0x4
     field public static final int EUTRAN = 3; // 0x3
     field public static final int GERAN = 1; // 0x1
@@ -42153,7 +42160,6 @@ package android.telephony {
   }
 
   public static final class AccessNetworkConstants.EutranBand {
-    ctor public AccessNetworkConstants.EutranBand();
     field public static final int BAND_1 = 1; // 0x1
     field public static final int BAND_10 = 10; // 0xa
     field public static final int BAND_11 = 11; // 0xb
@@ -42205,7 +42211,6 @@ package android.telephony {
   }
 
   public static final class AccessNetworkConstants.GeranBand {
-    ctor public AccessNetworkConstants.GeranBand();
     field public static final int BAND_450 = 3; // 0x3
     field public static final int BAND_480 = 4; // 0x4
     field public static final int BAND_710 = 5; // 0x5
@@ -42223,7 +42228,6 @@ package android.telephony {
   }
 
   public static final class AccessNetworkConstants.UtranBand {
-    ctor public AccessNetworkConstants.UtranBand();
     field public static final int BAND_1 = 1; // 0x1
     field public static final int BAND_10 = 10; // 0xa
     field public static final int BAND_11 = 11; // 0xb
@@ -42664,7 +42668,8 @@ package android.telephony {
   }
 
   public class NetworkScan {
-    method public void stop() throws android.os.RemoteException;
+    method public deprecated void stop() throws android.os.RemoteException;
+    method public void stopScan();
     field public static final int ERROR_INTERRUPTED = 10002; // 0x2712
     field public static final int ERROR_INVALID_SCAN = 2; // 0x2
     field public static final int ERROR_INVALID_SCANID = 10001; // 0x2711
@@ -43129,7 +43134,8 @@ package android.telephony {
     method public boolean isVoicemailVibrationEnabled(android.telecom.PhoneAccountHandle);
     method public boolean isWorldPhone();
     method public void listen(android.telephony.PhoneStateListener, int);
-    method public android.telephony.NetworkScan requestNetworkScan(android.telephony.NetworkScanRequest, android.telephony.TelephonyScanManager.NetworkScanCallback);
+    method public android.telephony.NetworkScan requestNetworkScan(android.telephony.NetworkScanRequest, java.util.concurrent.Executor, android.telephony.TelephonyScanManager.NetworkScanCallback);
+    method public deprecated android.telephony.NetworkScan requestNetworkScan(android.telephony.NetworkScanRequest, android.telephony.TelephonyScanManager.NetworkScanCallback);
     method public void sendDialerSpecialCode(java.lang.String);
     method public java.lang.String sendEnvelopeWithStatus(java.lang.String);
     method public void sendUssdRequest(java.lang.String, android.telephony.TelephonyManager.UssdResponseCallback, android.os.Handler);
@@ -53390,6 +53396,9 @@ package android.widget {
   public final class Magnifier {
     ctor public Magnifier(android.view.View);
     method public void dismiss();
+    method public int getHeight();
+    method public int getWidth();
+    method public float getZoom();
     method public void show(float, float);
     method public void update();
   }
