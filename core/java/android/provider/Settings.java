@@ -4983,6 +4983,12 @@ public final class Settings {
          * @hide
          */
         public static final String POCKET_JUDGE = "pocket_judge";
+		
+		/**
+         * Whether to show battery percent on ambient bottom
+         * @hide
+         */
+        public static final String AMBIENT_BATTERY_PERCENT = "ambient_battery_percent";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
