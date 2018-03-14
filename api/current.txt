@@ -4265,6 +4265,7 @@ package android.app {
 
   public class Application extends android.content.ContextWrapper implements android.content.ComponentCallbacks2 {
     ctor public Application();
+    method public static java.lang.String getProcessName();
     method public void onConfigurationChanged(android.content.res.Configuration);
     method public void onCreate();
     method public void onLowMemory();
@@ -7277,7 +7278,6 @@ package android.app.slice {
   public abstract class SliceProvider extends android.content.ContentProvider {
     ctor public SliceProvider();
     method public final int delete(android.net.Uri, java.lang.String, java.lang.String[]);
-    method public final java.lang.String getBindingPackage();
     method public final java.lang.String getType(android.net.Uri);
     method public final android.net.Uri insert(android.net.Uri, android.content.ContentValues);
     method public android.app.slice.Slice onBindSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
@@ -14434,6 +14434,7 @@ package android.graphics {
     method public static android.graphics.Typeface createFromFile(java.lang.String);
     method public static android.graphics.Typeface defaultFromStyle(int);
     method public int getStyle();
+    method public int getWeight();
     method public final boolean isBold();
     method public final boolean isItalic();
     field public static final int BOLD = 1; // 0x1
@@ -23255,6 +23256,7 @@ package android.media {
     field public static final int HEVCProfileMain = 1; // 0x1
     field public static final int HEVCProfileMain10 = 2; // 0x2
     field public static final int HEVCProfileMain10HDR10 = 4096; // 0x1000
+    field public static final int HEVCProfileMainStill = 4; // 0x4
     field public static final int MPEG2LevelH14 = 2; // 0x2
     field public static final int MPEG2LevelHL = 3; // 0x3
     field public static final int MPEG2LevelHP = 4; // 0x4
@@ -24048,13 +24050,13 @@ package android.media {
     ctor public MediaMetadataRetriever();
     method public java.lang.String extractMetadata(int);
     method public byte[] getEmbeddedPicture();
-    method public android.graphics.Bitmap getFrameAtIndex(int);
+    method public android.graphics.Bitmap getFrameAtIndex(int, android.media.MediaMetadataRetriever.BitmapParams);
     method public android.graphics.Bitmap getFrameAtTime(long, int);
     method public android.graphics.Bitmap getFrameAtTime(long);
     method public android.graphics.Bitmap getFrameAtTime();
-    method public android.graphics.Bitmap[] getFramesAtIndex(int, int);
-    method public android.graphics.Bitmap getImageAtIndex(int);
-    method public android.graphics.Bitmap getPrimaryImage();
+    method public java.util.List<android.graphics.Bitmap> getFramesAtIndex(int, int, android.media.MediaMetadataRetriever.BitmapParams);
+    method public android.graphics.Bitmap getImageAtIndex(int, android.media.MediaMetadataRetriever.BitmapParams);
+    method public android.graphics.Bitmap getPrimaryImage(android.media.MediaMetadataRetriever.BitmapParams);
     method public android.graphics.Bitmap getScaledFrameAtTime(long, int, int, int);
     method public void release();
     method public void setDataSource(java.lang.String) throws java.lang.IllegalArgumentException;
@@ -24098,6 +24100,13 @@ package android.media {
     field public static final int OPTION_CLOSEST_SYNC = 2; // 0x2
     field public static final int OPTION_NEXT_SYNC = 1; // 0x1
     field public static final int OPTION_PREVIOUS_SYNC = 0; // 0x0
+  }
+
+  public static final class MediaMetadataRetriever.BitmapParams {
+    ctor public MediaMetadataRetriever.BitmapParams();
+    method public android.graphics.Bitmap.Config getActualConfig();
+    method public android.graphics.Bitmap.Config getPreferredConfig();
+    method public void setPreferredConfig(android.graphics.Bitmap.Config);
   }
 
   public final class MediaMuxer {
@@ -24347,7 +24356,6 @@ package android.media {
     method public abstract android.media.MediaDrm.KeyRequest getDrmKeyRequest(byte[], byte[], java.lang.String, int, java.util.Map<java.lang.String, java.lang.String>) throws android.media.MediaPlayer2.NoDrmSchemeException;
     method public abstract java.lang.String getDrmPropertyString(java.lang.String) throws android.media.MediaPlayer2.NoDrmSchemeException;
     method public abstract long getDuration();
-    method public abstract int getMediaPlayer2State();
     method public abstract android.os.PersistableBundle getMetrics();
     method public abstract android.media.PlaybackParams getPlaybackParams();
     method public abstract int getSelectedTrack(int);
@@ -24373,33 +24381,35 @@ package android.media {
     method public abstract void setPlaybackParams(android.media.PlaybackParams);
     method public abstract void setSurface(android.view.Surface);
     method public abstract void setSyncParams(android.media.SyncParams);
-    field public static final int MEDIAPLAYER2_STATE_ERROR = 5; // 0x5
-    field public static final int MEDIAPLAYER2_STATE_IDLE = 1; // 0x1
-    field public static final int MEDIAPLAYER2_STATE_PAUSED = 3; // 0x3
-    field public static final int MEDIAPLAYER2_STATE_PLAYING = 4; // 0x4
-    field public static final int MEDIAPLAYER2_STATE_PREPARED = 2; // 0x2
-    field public static final int MEDIA_CALL_ATTACH_AUX_EFFECT = 1; // 0x1
-    field public static final int MEDIA_CALL_DESELECT_TRACK = 2; // 0x2
-    field public static final int MEDIA_CALL_LOOP_CURRENT = 3; // 0x3
-    field public static final int MEDIA_CALL_PAUSE = 4; // 0x4
-    field public static final int MEDIA_CALL_PLAY = 5; // 0x5
-    field public static final int MEDIA_CALL_PREPARE = 6; // 0x6
-    field public static final int MEDIA_CALL_RELEASE_DRM = 12; // 0xc
-    field public static final int MEDIA_CALL_RESTORE_DRM_KEYS = 13; // 0xd
-    field public static final int MEDIA_CALL_SEEK_TO = 14; // 0xe
-    field public static final int MEDIA_CALL_SELECT_TRACK = 15; // 0xf
-    field public static final int MEDIA_CALL_SET_AUDIO_ATTRIBUTES = 16; // 0x10
-    field public static final int MEDIA_CALL_SET_AUDIO_SESSION_ID = 17; // 0x11
-    field public static final int MEDIA_CALL_SET_AUX_EFFECT_SEND_LEVEL = 18; // 0x12
-    field public static final int MEDIA_CALL_SET_DATA_SOURCE = 19; // 0x13
-    field public static final int MEDIA_CALL_SET_NEXT_DATA_SOURCE = 22; // 0x16
-    field public static final int MEDIA_CALL_SET_NEXT_DATA_SOURCES = 23; // 0x17
-    field public static final int MEDIA_CALL_SET_PLAYBACK_PARAMS = 24; // 0x18
-    field public static final int MEDIA_CALL_SET_PLAYBACK_SPEED = 25; // 0x19
-    field public static final int MEDIA_CALL_SET_PLAYER_VOLUME = 26; // 0x1a
-    field public static final int MEDIA_CALL_SET_SURFACE = 27; // 0x1b
-    field public static final int MEDIA_CALL_SET_SYNC_PARAMS = 28; // 0x1c
-    field public static final int MEDIA_CALL_SKIP_TO_NEXT = 29; // 0x1d
+    field public static final int CALL_COMPLETED_ATTACH_AUX_EFFECT = 1; // 0x1
+    field public static final int CALL_COMPLETED_DESELECT_TRACK = 2; // 0x2
+    field public static final int CALL_COMPLETED_LOOP_CURRENT = 3; // 0x3
+    field public static final int CALL_COMPLETED_PAUSE = 4; // 0x4
+    field public static final int CALL_COMPLETED_PLAY = 5; // 0x5
+    field public static final int CALL_COMPLETED_PREPARE = 6; // 0x6
+    field public static final int CALL_COMPLETED_RELEASE_DRM = 12; // 0xc
+    field public static final int CALL_COMPLETED_RESTORE_DRM_KEYS = 13; // 0xd
+    field public static final int CALL_COMPLETED_SEEK_TO = 14; // 0xe
+    field public static final int CALL_COMPLETED_SELECT_TRACK = 15; // 0xf
+    field public static final int CALL_COMPLETED_SET_AUDIO_ATTRIBUTES = 16; // 0x10
+    field public static final int CALL_COMPLETED_SET_AUDIO_SESSION_ID = 17; // 0x11
+    field public static final int CALL_COMPLETED_SET_AUX_EFFECT_SEND_LEVEL = 18; // 0x12
+    field public static final int CALL_COMPLETED_SET_DATA_SOURCE = 19; // 0x13
+    field public static final int CALL_COMPLETED_SET_NEXT_DATA_SOURCE = 22; // 0x16
+    field public static final int CALL_COMPLETED_SET_NEXT_DATA_SOURCES = 23; // 0x17
+    field public static final int CALL_COMPLETED_SET_PLAYBACK_PARAMS = 24; // 0x18
+    field public static final int CALL_COMPLETED_SET_PLAYBACK_SPEED = 25; // 0x19
+    field public static final int CALL_COMPLETED_SET_PLAYER_VOLUME = 26; // 0x1a
+    field public static final int CALL_COMPLETED_SET_SURFACE = 27; // 0x1b
+    field public static final int CALL_COMPLETED_SET_SYNC_PARAMS = 28; // 0x1c
+    field public static final int CALL_COMPLETED_SKIP_TO_NEXT = 29; // 0x1d
+    field public static final int CALL_STATUS_BAD_VALUE = 2; // 0x2
+    field public static final int CALL_STATUS_ERROR_IO = 4; // 0x4
+    field public static final int CALL_STATUS_ERROR_UNKNOWN = -2147483648; // 0x80000000
+    field public static final int CALL_STATUS_INVALID_OPERATION = 1; // 0x1
+    field public static final int CALL_STATUS_NO_DRM_SCHEME = 5; // 0x5
+    field public static final int CALL_STATUS_NO_ERROR = 0; // 0x0
+    field public static final int CALL_STATUS_PERMISSION_DENIED = 3; // 0x3
     field public static final int MEDIA_ERROR_IO = -1004; // 0xfffffc14
     field public static final int MEDIA_ERROR_MALFORMED = -1007; // 0xfffffc11
     field public static final int MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK = 200; // 0xc8
@@ -24449,7 +24459,7 @@ package android.media {
 
   public static abstract class MediaPlayer2.MediaPlayer2EventCallback {
     ctor public MediaPlayer2.MediaPlayer2EventCallback();
-    method public void onCallComplete(android.media.MediaPlayer2, android.media.DataSourceDesc, int, int);
+    method public void onCallCompleted(android.media.MediaPlayer2, android.media.DataSourceDesc, int, int);
     method public void onCommandLabelReached(android.media.MediaPlayer2, java.lang.Object);
     method public void onError(android.media.MediaPlayer2, android.media.DataSourceDesc, int, int);
     method public void onInfo(android.media.MediaPlayer2, android.media.DataSourceDesc, int, int);
@@ -43069,8 +43079,6 @@ package android.telephony {
     method public android.telephony.TelephonyManager createForPhoneAccountHandle(android.telecom.PhoneAccountHandle);
     method public android.telephony.TelephonyManager createForSubscriptionId(int);
     method public java.util.List<android.telephony.CellInfo> getAllCellInfo();
-    method public int getAndroidCarrierIdForSubscription();
-    method public java.lang.CharSequence getAndroidCarrierNameForSubscription();
     method public int getCallState();
     method public android.os.PersistableBundle getCarrierConfig();
     method public deprecated android.telephony.CellLocation getCellLocation();
@@ -43101,6 +43109,8 @@ package android.telephony {
     method public int getPhoneType();
     method public android.telephony.ServiceState getServiceState();
     method public android.telephony.SignalStrength getSignalStrength();
+    method public int getSimCarrierId();
+    method public java.lang.CharSequence getSimCarrierIdName();
     method public java.lang.String getSimCountryIso();
     method public java.lang.String getSimOperator();
     method public java.lang.String getSimOperatorName();
@@ -46621,8 +46631,8 @@ package android.view {
   }
 
   public final class DisplayCutout {
-    ctor public DisplayCutout(android.graphics.Rect, android.graphics.Region);
-    method public android.graphics.Region getBounds();
+    ctor public DisplayCutout(android.graphics.Rect, java.util.List<android.graphics.Rect>);
+    method public java.util.List<android.graphics.Rect> getBoundingRects();
     method public int getSafeInsetBottom();
     method public int getSafeInsetLeft();
     method public int getSafeInsetRight();
@@ -49696,9 +49706,9 @@ package android.view {
     field public static final int LAST_SUB_WINDOW = 1999; // 0x7cf
     field public static final int LAST_SYSTEM_WINDOW = 2999; // 0xbb7
     field public static final int LAYOUT_CHANGED = 1; // 0x1
-    field public static final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS = 1; // 0x1
     field public static final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT = 0; // 0x0
     field public static final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER = 2; // 0x2
+    field public static final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES = 1; // 0x1
     field public static final int MEMORY_TYPE_CHANGED = 256; // 0x100
     field public static final deprecated int MEMORY_TYPE_GPU = 2; // 0x2
     field public static final deprecated int MEMORY_TYPE_HARDWARE = 1; // 0x1
