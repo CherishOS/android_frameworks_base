@@ -13655,7 +13655,9 @@ package android.graphics {
     field public static final int ERROR_SOURCE_INCOMPLETE = 2; // 0x2
   }
 
-  public static abstract class ImageDecoder.Error implements java.lang.annotation.Annotation {
+  public static final class ImageDecoder.DecodeException extends java.io.IOException {
+    method public int getError();
+    method public android.graphics.ImageDecoder.Source getSource();
   }
 
   public static class ImageDecoder.ImageInfo {
@@ -13664,16 +13666,12 @@ package android.graphics {
     method public boolean isAnimated();
   }
 
-  public static class ImageDecoder.IncompleteException extends java.io.IOException {
-    ctor public ImageDecoder.IncompleteException();
-  }
-
   public static abstract interface ImageDecoder.OnHeaderDecodedListener {
     method public abstract void onHeaderDecoded(android.graphics.ImageDecoder, android.graphics.ImageDecoder.ImageInfo, android.graphics.ImageDecoder.Source);
   }
 
   public static abstract interface ImageDecoder.OnPartialImageListener {
-    method public abstract boolean onPartialImage(int, android.graphics.ImageDecoder.Source);
+    method public abstract boolean onPartialImage(android.graphics.ImageDecoder.DecodeException);
   }
 
   public static abstract class ImageDecoder.Source {
