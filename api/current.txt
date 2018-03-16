@@ -5196,6 +5196,7 @@ package android.app {
     field public static final java.lang.String CATEGORY_ERROR = "err";
     field public static final java.lang.String CATEGORY_EVENT = "event";
     field public static final java.lang.String CATEGORY_MESSAGE = "msg";
+    field public static final java.lang.String CATEGORY_NAVIGATION = "navigation";
     field public static final java.lang.String CATEGORY_PROGRESS = "progress";
     field public static final java.lang.String CATEGORY_PROMO = "promo";
     field public static final java.lang.String CATEGORY_RECOMMENDATION = "recommendation";
@@ -6330,6 +6331,7 @@ package android.app.admin {
     method public java.lang.CharSequence loadDescription(android.content.pm.PackageManager) throws android.content.res.Resources.NotFoundException;
     method public android.graphics.drawable.Drawable loadIcon(android.content.pm.PackageManager);
     method public java.lang.CharSequence loadLabel(android.content.pm.PackageManager);
+    method public boolean supportsTransferOwnership();
     method public boolean usesPolicy(int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.admin.DeviceAdminInfo> CREATOR;
@@ -6394,7 +6396,6 @@ package android.app.admin {
     field public static final java.lang.String EXTRA_DISABLE_WARNING = "android.app.extra.DISABLE_WARNING";
     field public static final java.lang.String EXTRA_LOCK_TASK_PACKAGE = "android.app.extra.LOCK_TASK_PACKAGE";
     field public static final java.lang.String EXTRA_TRANSFER_OWNERSHIP_ADMIN_EXTRAS_BUNDLE = "android.app.extra.TRANSFER_OWNERSHIP_ADMIN_EXTRAS_BUNDLE";
-    field public static final java.lang.String SUPPORT_TRANSFER_OWNERSHIP_META_DATA = "android.app.support_transfer_ownership";
   }
 
   public class DeviceAdminService extends android.app.Service {
@@ -7266,6 +7267,7 @@ package android.app.slice {
   public class SliceManager {
     method public android.app.slice.Slice bindSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
     method public android.app.slice.Slice bindSlice(android.content.Intent, java.util.List<android.app.slice.SliceSpec>);
+    method public java.util.List<android.net.Uri> getPinnedSlices();
     method public java.util.List<android.app.slice.SliceSpec> getPinnedSpecs(android.net.Uri);
     method public java.util.Collection<android.net.Uri> getSliceDescendants(android.net.Uri);
     method public android.net.Uri mapIntentToUri(android.content.Intent);
@@ -7418,12 +7420,14 @@ package android.app.usage {
     method public int getEventType();
     method public java.lang.String getPackageName();
     method public java.lang.String getShortcutId();
+    method public int getStandbyBucket();
     method public long getTimeStamp();
     field public static final int CONFIGURATION_CHANGE = 5; // 0x5
     field public static final int MOVE_TO_BACKGROUND = 2; // 0x2
     field public static final int MOVE_TO_FOREGROUND = 1; // 0x1
     field public static final int NONE = 0; // 0x0
     field public static final int SHORTCUT_INVOCATION = 8; // 0x8
+    field public static final int STANDBY_BUCKET_CHANGED = 11; // 0xb
     field public static final int USER_INTERACTION = 7; // 0x7
   }
 
@@ -21243,9 +21247,10 @@ package android.inputmethodservice {
     method public final boolean switchToPreviousInputMethod();
     method public void updateFullscreenMode();
     method public void updateInputViewShown();
+    field public static final int BACK_DISPOSITION_ADJUST_NOTHING = 3; // 0x3
     field public static final int BACK_DISPOSITION_DEFAULT = 0; // 0x0
-    field public static final int BACK_DISPOSITION_WILL_DISMISS = 2; // 0x2
-    field public static final int BACK_DISPOSITION_WILL_NOT_DISMISS = 1; // 0x1
+    field public static final deprecated int BACK_DISPOSITION_WILL_DISMISS = 2; // 0x2
+    field public static final deprecated int BACK_DISPOSITION_WILL_NOT_DISMISS = 1; // 0x1
   }
 
   public class InputMethodService.InputMethodImpl extends android.inputmethodservice.AbstractInputMethodService.AbstractInputMethodImpl {
@@ -28675,7 +28680,7 @@ package android.net.wifi {
     field public static final int IEEE8021X = 3; // 0x3
     field public static final int NONE = 0; // 0x0
     field public static final int WPA_EAP = 2; // 0x2
-    field public static final deprecated int WPA_PSK = 1; // 0x1
+    field public static final int WPA_PSK = 1; // 0x1
     field public static final java.lang.String[] strings;
     field public static final java.lang.String varName = "key_mgmt";
   }
@@ -39373,6 +39378,7 @@ package android.security.keystore {
     method public boolean isDigestsSpecified();
     method public boolean isInvalidatedByBiometricEnrollment();
     method public boolean isRandomizedEncryptionRequired();
+    method public boolean isTrustedUserPresenceRequired();
     method public boolean isUserAuthenticationRequired();
     method public boolean isUserAuthenticationValidWhileOnBody();
     method public boolean isUserConfirmationRequired();
@@ -39391,6 +39397,7 @@ package android.security.keystore {
     method public android.security.keystore.KeyProtection.Builder setKeyValidityStart(java.util.Date);
     method public android.security.keystore.KeyProtection.Builder setRandomizedEncryptionRequired(boolean);
     method public android.security.keystore.KeyProtection.Builder setSignaturePaddings(java.lang.String...);
+    method public android.security.keystore.KeyProtection.Builder setTrustedUserPresenceRequired(boolean);
     method public android.security.keystore.KeyProtection.Builder setUserAuthenticationRequired(boolean);
     method public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidWhileOnBody(boolean);
     method public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidityDurationSeconds(int);
