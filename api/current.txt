@@ -5554,7 +5554,11 @@ package android.app {
     method public java.lang.String getKey();
     method public java.lang.CharSequence getName();
     method public java.lang.String getUri();
+    method public boolean isBot();
+    method public boolean isImportant();
+    method public android.app.Notification.Person setBot(boolean);
     method public android.app.Notification.Person setIcon(android.graphics.drawable.Icon);
+    method public android.app.Notification.Person setImportant(boolean);
     method public android.app.Notification.Person setKey(java.lang.String);
     method public android.app.Notification.Person setName(java.lang.CharSequence);
     method public android.app.Notification.Person setUri(java.lang.String);
@@ -6331,6 +6335,7 @@ package android.app.admin {
     method public java.lang.CharSequence loadDescription(android.content.pm.PackageManager) throws android.content.res.Resources.NotFoundException;
     method public android.graphics.drawable.Drawable loadIcon(android.content.pm.PackageManager);
     method public java.lang.CharSequence loadLabel(android.content.pm.PackageManager);
+    method public boolean supportsTransferOwnership();
     method public boolean usesPolicy(int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.admin.DeviceAdminInfo> CREATOR;
@@ -6395,7 +6400,6 @@ package android.app.admin {
     field public static final java.lang.String EXTRA_DISABLE_WARNING = "android.app.extra.DISABLE_WARNING";
     field public static final java.lang.String EXTRA_LOCK_TASK_PACKAGE = "android.app.extra.LOCK_TASK_PACKAGE";
     field public static final java.lang.String EXTRA_TRANSFER_OWNERSHIP_ADMIN_EXTRAS_BUNDLE = "android.app.extra.TRANSFER_OWNERSHIP_ADMIN_EXTRAS_BUNDLE";
-    field public static final java.lang.String SUPPORT_TRANSFER_OWNERSHIP_META_DATA = "android.app.support_transfer_ownership";
   }
 
   public class DeviceAdminService extends android.app.Service {
@@ -21249,9 +21253,10 @@ package android.inputmethodservice {
     method public final boolean switchToPreviousInputMethod();
     method public void updateFullscreenMode();
     method public void updateInputViewShown();
+    field public static final int BACK_DISPOSITION_ADJUST_NOTHING = 3; // 0x3
     field public static final int BACK_DISPOSITION_DEFAULT = 0; // 0x0
-    field public static final int BACK_DISPOSITION_WILL_DISMISS = 2; // 0x2
-    field public static final int BACK_DISPOSITION_WILL_NOT_DISMISS = 1; // 0x1
+    field public static final deprecated int BACK_DISPOSITION_WILL_DISMISS = 2; // 0x2
+    field public static final deprecated int BACK_DISPOSITION_WILL_NOT_DISMISS = 1; // 0x1
   }
 
   public class InputMethodService.InputMethodImpl extends android.inputmethodservice.AbstractInputMethodService.AbstractInputMethodImpl {
@@ -42820,17 +42825,17 @@ package android.telephony {
     ctor public ServiceState(android.os.Parcel);
     method protected void copyFrom(android.telephony.ServiceState);
     method public int describeContents();
+    method public int getCdmaNetworkId();
+    method public int getCdmaSystemId();
     method public int[] getCellBandwidths();
     method public int getChannelNumber();
     method public int getDuplexMode();
     method public boolean getIsManualSelection();
-    method public int getNetworkId();
     method public java.lang.String getOperatorAlphaLong();
     method public java.lang.String getOperatorAlphaShort();
     method public java.lang.String getOperatorNumeric();
     method public boolean getRoaming();
     method public int getState();
-    method public int getSystemId();
     method public void setIsManualSelection(boolean);
     method public void setOperatorName(java.lang.String, java.lang.String, java.lang.String);
     method public void setRoaming(boolean);
@@ -44040,7 +44045,7 @@ package android.text {
     method public abstract int getSpanTypeId();
   }
 
-  public class PrecomputedText implements android.text.Spanned {
+  public class PrecomputedText implements android.text.Spannable {
     method public char charAt(int);
     method public static android.text.PrecomputedText create(java.lang.CharSequence, android.text.PrecomputedText.Params);
     method public int getParagraphCount();
@@ -44054,6 +44059,8 @@ package android.text {
     method public java.lang.CharSequence getText();
     method public int length();
     method public int nextSpanTransition(int, int, java.lang.Class);
+    method public void removeSpan(java.lang.Object);
+    method public void setSpan(java.lang.Object, int, int, int);
     method public java.lang.CharSequence subSequence(int, int);
   }
 
