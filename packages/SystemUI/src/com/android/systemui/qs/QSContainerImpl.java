@@ -29,6 +29,7 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,6 +98,9 @@ public class QSContainerImpl extends FrameLayout implements
     private int mHeaderShadow = 0;
 
     private int mHeaderImageHeight;
+	
+	private Drawable mQsBackGround;
+    private int mQsBackGroundAlpha;
 
     public QSContainerImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -132,8 +136,10 @@ public class QSContainerImpl extends FrameLayout implements
             }
         });
 
+        mQsBackGround = getContext().getDrawable(R.drawable.qs_background_primary);
 
         setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
+        updateSettings();
     }
 
     private void setBackgroundBottom(int value) {
@@ -175,6 +181,13 @@ public class QSContainerImpl extends FrameLayout implements
         updateResources();
         updateSettings();
         mSizePoint.set(0, 0); // Will be retrieved on next measure pass.
+    }
+
+    private void setQsBackground() {
+        if (mQsBackGround != null) {
+            mQsBackGround.setAlpha(mQsBackGroundAlpha);
+            mBackground.setBackground(mQsBackGround);
+        }
     }
 
     @Override
@@ -460,15 +473,26 @@ public class QSContainerImpl extends FrameLayout implements
             getContext().getContentResolver().registerContentObserver(Settings.System
                             .getUriFor(Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT), false,
                     this, UserHandle.USER_ALL);
+			getContext().getContentResolver().registerContentObserver(Settings.System
+                            .getUriFor(Settings.System.QS_PANEL_BG_ALPHA), false,
+                    this, UserHandle.USER_ALL);
         }
 
         @Override
-        public void onChange(boolean selfChange) {
+        public void onChange(boolean selfChange, Uri uri) {
+			if (uri.equals(Settings.System.getUriFor(Settings.System.QS_PANEL_BG_ALPHA))) {
+                mQsBackGroundAlpha = Settings.System.getIntForUser(getContext().getContentResolver(),
+                        Settings.System.QS_PANEL_BG_ALPHA, 255, UserHandle.USER_CURRENT);
+                setQsBackground();
+            }
             updateSettings();
         }
     }
 
     private void updateSettings() {
+		mQsBackGroundAlpha = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.QS_PANEL_BG_ALPHA, 255, UserHandle.USER_CURRENT);
+        setQsBackground();
         updateHeaderImageHeight();
         updateResources();
     }
