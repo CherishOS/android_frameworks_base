@@ -42603,6 +42603,8 @@ package android.telephony {
   }
 
   public class MbmsDownloadSession implements java.lang.AutoCloseable {
+    method public int addProgressListener(android.telephony.mbms.DownloadRequest, java.util.concurrent.Executor, android.telephony.mbms.DownloadProgressListener);
+    method public int addStatusListener(android.telephony.mbms.DownloadRequest, java.util.concurrent.Executor, android.telephony.mbms.DownloadStatusListener);
     method public int cancelDownload(android.telephony.mbms.DownloadRequest);
     method public void close();
     method public static android.telephony.MbmsDownloadSession create(android.content.Context, java.util.concurrent.Executor, android.telephony.mbms.MbmsDownloadSessionCallback);
@@ -42610,12 +42612,12 @@ package android.telephony {
     method public int download(android.telephony.mbms.DownloadRequest);
     method public java.io.File getTempFileRootDirectory();
     method public java.util.List<android.telephony.mbms.DownloadRequest> listPendingDownloads();
-    method public int registerStateCallback(android.telephony.mbms.DownloadRequest, java.util.concurrent.Executor, android.telephony.mbms.DownloadStateCallback);
+    method public int removeProgressListener(android.telephony.mbms.DownloadRequest, android.telephony.mbms.DownloadProgressListener);
+    method public int removeStatusListener(android.telephony.mbms.DownloadRequest, android.telephony.mbms.DownloadStatusListener);
     method public void requestDownloadState(android.telephony.mbms.DownloadRequest, android.telephony.mbms.FileInfo);
     method public void requestUpdateFileServices(java.util.List<java.lang.String>);
     method public void resetDownloadKnowledge(android.telephony.mbms.DownloadRequest);
     method public void setTempFileRootDirectory(java.io.File);
-    method public int unregisterStateCallback(android.telephony.mbms.DownloadRequest, android.telephony.mbms.DownloadStateCallback);
     field public static final java.lang.String DEFAULT_TOP_LEVEL_TEMP_DIRECTORY = "androidMbmsTempFileRoot";
     field public static final java.lang.String EXTRA_MBMS_COMPLETED_FILE_URI = "android.telephony.extra.MBMS_COMPLETED_FILE_URI";
     field public static final java.lang.String EXTRA_MBMS_DOWNLOAD_REQUEST = "android.telephony.extra.MBMS_DOWNLOAD_REQUEST";
@@ -43513,6 +43515,11 @@ package android.telephony.gsm {
 
 package android.telephony.mbms {
 
+  public class DownloadProgressListener {
+    ctor public DownloadProgressListener();
+    method public void onProgressUpdated(android.telephony.mbms.DownloadRequest, android.telephony.mbms.FileInfo, int, int, int, int);
+  }
+
   public final class DownloadRequest implements android.os.Parcelable {
     method public int describeContents();
     method public android.net.Uri getDestinationUri();
@@ -43536,15 +43543,9 @@ package android.telephony.mbms {
     method public android.telephony.mbms.DownloadRequest.Builder setSubscriptionId(int);
   }
 
-  public class DownloadStateCallback {
-    ctor public DownloadStateCallback();
-    ctor public DownloadStateCallback(int);
-    method public final boolean isFilterFlagSet(int);
-    method public void onProgressUpdated(android.telephony.mbms.DownloadRequest, android.telephony.mbms.FileInfo, int, int, int, int);
-    method public void onStateUpdated(android.telephony.mbms.DownloadRequest, android.telephony.mbms.FileInfo, int);
-    field public static final int ALL_UPDATES = 0; // 0x0
-    field public static final int PROGRESS_UPDATES = 1; // 0x1
-    field public static final int STATE_UPDATES = 2; // 0x2
+  public class DownloadStatusListener {
+    ctor public DownloadStatusListener();
+    method public void onStatusUpdated(android.telephony.mbms.DownloadRequest, android.telephony.mbms.FileInfo, int);
   }
 
   public final class FileInfo implements android.os.Parcelable {
