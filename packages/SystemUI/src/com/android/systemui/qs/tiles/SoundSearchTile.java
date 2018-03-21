@@ -16,13 +16,17 @@
 
 package com.android.systemui.qs.tiles;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.service.quicksettings.Tile;
+import android.widget.Toast;
 
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.internal.util.cherish.CherishUtils;
 import com.android.systemui.Dependency;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.plugins.qs.QSTile.BooleanState;
@@ -47,8 +51,6 @@ import javax.inject.Inject;
 
 public class SoundSearchTile extends QSTileImpl<BooleanState> {
 
-    private final String soundSearchApp = "com.google.android.googlequicksearchbox";
-
     @Inject
     public SoundSearchTile(QSHost host,
             @Background Looper backgroundLooper,
@@ -71,25 +73,27 @@ public class SoundSearchTile extends QSTileImpl<BooleanState> {
     @Override
     public void handleClick(@Nullable View view) {
         mHost.collapsePanels();
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.setAction("com.google.android.googlequicksearchbox.MUSIC_SEARCH");
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        mContext.startActivity(intent);
-    }
-
-    @Override
-    public boolean isAvailable() {
-        return isPackageInstalled();
-    }
-
-    private boolean isPackageInstalled(){
-        try {
-            PackageInfo info = mContext.getPackageManager()
-                    .getPackageInfo(soundSearchApp,PackageManager.GET_META_DATA);
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
+        // Shazam
+        if (CherishUtils.isPackageInstalled(mContext, "com.shazam.android")
+                    || CherishUtils.isPackageInstalled(mContext, "com.shazam.encore.android")) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setAction("com.shazam.android.intent.actions.START_TAGGING");
+            mContext.startActivity(intent);
+        // Soundhound
+        } else if (CherishUtils.isPackageInstalled(mContext, "com.melodis.midomiMusicIdentifier.freemium")
+                    || CherishUtils.isPackageInstalled(mContext, "com.melodis.midomiMusicIdentifier")) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setAction("com.soundhound.android.ID_NOW_EXTERNAL");
+            mContext.startActivity(intent);
+        // Google Search Music
+        } else if (CherishUtils.isPackageInstalled(mContext, "com.google.android.googlequicksearchbox")) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setAction("com.google.android.googlequicksearchbox.MUSIC_SEARCH");
+            mContext.startActivity(intent);
+        } else {
+            Toast.makeText(mContext, mContext.getString(
+                    R.string.quick_settings_sound_search_no_app), Toast.LENGTH_LONG).show();
         }
-        return true;
     }
 
     @Override
