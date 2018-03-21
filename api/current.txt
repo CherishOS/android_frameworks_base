@@ -142,7 +142,8 @@ package android {
     field public static final java.lang.String TRANSMIT_IR = "android.permission.TRANSMIT_IR";
     field public static final java.lang.String UNINSTALL_SHORTCUT = "com.android.launcher.permission.UNINSTALL_SHORTCUT";
     field public static final java.lang.String UPDATE_DEVICE_STATS = "android.permission.UPDATE_DEVICE_STATS";
-    field public static final java.lang.String USE_FINGERPRINT = "android.permission.USE_FINGERPRINT";
+    field public static final java.lang.String USE_BIOMETRIC = "android.permission.USE_BIOMETRIC";
+    field public static final deprecated java.lang.String USE_FINGERPRINT = "android.permission.USE_FINGERPRINT";
     field public static final java.lang.String USE_SIP = "android.permission.USE_SIP";
     field public static final java.lang.String VIBRATE = "android.permission.VIBRATE";
     field public static final java.lang.String WAKE_LOCK = "android.permission.WAKE_LOCK";
@@ -6680,9 +6681,12 @@ package android.app.admin {
     field public static final int ID_TYPE_IMEI = 4; // 0x4
     field public static final int ID_TYPE_MEID = 8; // 0x8
     field public static final int ID_TYPE_SERIAL = 2; // 0x2
+    field public static final int KEYGUARD_DISABLE_BIOMETRICS = 416; // 0x1a0
+    field public static final int KEYGUARD_DISABLE_FACE = 128; // 0x80
     field public static final int KEYGUARD_DISABLE_FEATURES_ALL = 2147483647; // 0x7fffffff
     field public static final int KEYGUARD_DISABLE_FEATURES_NONE = 0; // 0x0
     field public static final int KEYGUARD_DISABLE_FINGERPRINT = 32; // 0x20
+    field public static final int KEYGUARD_DISABLE_IRIS = 256; // 0x100
     field public static final int KEYGUARD_DISABLE_REMOTE_INPUT = 64; // 0x40
     field public static final int KEYGUARD_DISABLE_SECURE_CAMERA = 2; // 0x2
     field public static final int KEYGUARD_DISABLE_SECURE_NOTIFICATIONS = 4; // 0x4
@@ -15701,6 +15705,62 @@ package android.hardware {
 
 }
 
+package android.hardware.biometrics {
+
+  public class BiometricDialog {
+    method public void authenticate(android.hardware.biometrics.BiometricDialog.CryptoObject, android.os.CancellationSignal, java.util.concurrent.Executor, android.hardware.biometrics.BiometricDialog.AuthenticationCallback);
+    method public void authenticate(android.os.CancellationSignal, java.util.concurrent.Executor, android.hardware.biometrics.BiometricDialog.AuthenticationCallback);
+    field public static final int BIOMETRIC_ACQUIRED_GOOD = 0; // 0x0
+    field public static final int BIOMETRIC_ACQUIRED_IMAGER_DIRTY = 3; // 0x3
+    field public static final int BIOMETRIC_ACQUIRED_INSUFFICIENT = 2; // 0x2
+    field public static final int BIOMETRIC_ACQUIRED_PARTIAL = 1; // 0x1
+    field public static final int BIOMETRIC_ACQUIRED_TOO_FAST = 5; // 0x5
+    field public static final int BIOMETRIC_ACQUIRED_TOO_SLOW = 4; // 0x4
+    field public static final int BIOMETRIC_ERROR_CANCELED = 5; // 0x5
+    field public static final int BIOMETRIC_ERROR_HW_NOT_PRESENT = 12; // 0xc
+    field public static final int BIOMETRIC_ERROR_HW_UNAVAILABLE = 1; // 0x1
+    field public static final int BIOMETRIC_ERROR_LOCKOUT = 7; // 0x7
+    field public static final int BIOMETRIC_ERROR_LOCKOUT_PERMANENT = 9; // 0x9
+    field public static final int BIOMETRIC_ERROR_NO_BIOMETRICS = 11; // 0xb
+    field public static final int BIOMETRIC_ERROR_NO_SPACE = 4; // 0x4
+    field public static final int BIOMETRIC_ERROR_TIMEOUT = 3; // 0x3
+    field public static final int BIOMETRIC_ERROR_UNABLE_TO_PROCESS = 2; // 0x2
+    field public static final int BIOMETRIC_ERROR_USER_CANCELED = 10; // 0xa
+    field public static final int BIOMETRIC_ERROR_VENDOR = 8; // 0x8
+  }
+
+  public static abstract class BiometricDialog.AuthenticationCallback {
+    ctor public BiometricDialog.AuthenticationCallback();
+    method public void onAuthenticationError(int, java.lang.CharSequence);
+    method public void onAuthenticationFailed();
+    method public void onAuthenticationHelp(int, java.lang.CharSequence);
+    method public void onAuthenticationSucceeded(android.hardware.biometrics.BiometricDialog.AuthenticationResult);
+  }
+
+  public static class BiometricDialog.AuthenticationResult {
+    method public android.hardware.biometrics.BiometricDialog.CryptoObject getCryptoObject();
+  }
+
+  public static class BiometricDialog.Builder {
+    ctor public BiometricDialog.Builder(android.content.Context);
+    method public android.hardware.biometrics.BiometricDialog build();
+    method public android.hardware.biometrics.BiometricDialog.Builder setDescription(java.lang.CharSequence);
+    method public android.hardware.biometrics.BiometricDialog.Builder setNegativeButton(java.lang.CharSequence, java.util.concurrent.Executor, android.content.DialogInterface.OnClickListener);
+    method public android.hardware.biometrics.BiometricDialog.Builder setSubtitle(java.lang.CharSequence);
+    method public android.hardware.biometrics.BiometricDialog.Builder setTitle(java.lang.CharSequence);
+  }
+
+  public static final class BiometricDialog.CryptoObject {
+    ctor public BiometricDialog.CryptoObject(java.security.Signature);
+    ctor public BiometricDialog.CryptoObject(javax.crypto.Cipher);
+    ctor public BiometricDialog.CryptoObject(javax.crypto.Mac);
+    method public javax.crypto.Cipher getCipher();
+    method public javax.crypto.Mac getMac();
+    method public java.security.Signature getSignature();
+  }
+
+}
+
 package android.hardware.camera2 {
 
   public class CameraAccessException extends android.util.AndroidException {
@@ -16529,58 +16589,6 @@ package android.hardware.display {
 }
 
 package android.hardware.fingerprint {
-
-  public class FingerprintDialog {
-    method public void authenticate(android.hardware.fingerprint.FingerprintDialog.CryptoObject, android.os.CancellationSignal, java.util.concurrent.Executor, android.hardware.fingerprint.FingerprintDialog.AuthenticationCallback);
-    method public void authenticate(android.os.CancellationSignal, java.util.concurrent.Executor, android.hardware.fingerprint.FingerprintDialog.AuthenticationCallback);
-    field public static final int FINGERPRINT_ACQUIRED_GOOD = 0; // 0x0
-    field public static final int FINGERPRINT_ACQUIRED_IMAGER_DIRTY = 3; // 0x3
-    field public static final int FINGERPRINT_ACQUIRED_INSUFFICIENT = 2; // 0x2
-    field public static final int FINGERPRINT_ACQUIRED_PARTIAL = 1; // 0x1
-    field public static final int FINGERPRINT_ACQUIRED_TOO_FAST = 5; // 0x5
-    field public static final int FINGERPRINT_ACQUIRED_TOO_SLOW = 4; // 0x4
-    field public static final int FINGERPRINT_ERROR_CANCELED = 5; // 0x5
-    field public static final int FINGERPRINT_ERROR_HW_NOT_PRESENT = 12; // 0xc
-    field public static final int FINGERPRINT_ERROR_HW_UNAVAILABLE = 1; // 0x1
-    field public static final int FINGERPRINT_ERROR_LOCKOUT = 7; // 0x7
-    field public static final int FINGERPRINT_ERROR_LOCKOUT_PERMANENT = 9; // 0x9
-    field public static final int FINGERPRINT_ERROR_NO_FINGERPRINTS = 11; // 0xb
-    field public static final int FINGERPRINT_ERROR_NO_SPACE = 4; // 0x4
-    field public static final int FINGERPRINT_ERROR_TIMEOUT = 3; // 0x3
-    field public static final int FINGERPRINT_ERROR_UNABLE_TO_PROCESS = 2; // 0x2
-    field public static final int FINGERPRINT_ERROR_USER_CANCELED = 10; // 0xa
-    field public static final int FINGERPRINT_ERROR_VENDOR = 8; // 0x8
-  }
-
-  public static abstract class FingerprintDialog.AuthenticationCallback {
-    ctor public FingerprintDialog.AuthenticationCallback();
-    method public void onAuthenticationError(int, java.lang.CharSequence);
-    method public void onAuthenticationFailed();
-    method public void onAuthenticationHelp(int, java.lang.CharSequence);
-    method public void onAuthenticationSucceeded(android.hardware.fingerprint.FingerprintDialog.AuthenticationResult);
-  }
-
-  public static class FingerprintDialog.AuthenticationResult {
-    method public android.hardware.fingerprint.FingerprintDialog.CryptoObject getCryptoObject();
-  }
-
-  public static class FingerprintDialog.Builder {
-    ctor public FingerprintDialog.Builder();
-    method public android.hardware.fingerprint.FingerprintDialog build(android.content.Context);
-    method public android.hardware.fingerprint.FingerprintDialog.Builder setDescription(java.lang.CharSequence);
-    method public android.hardware.fingerprint.FingerprintDialog.Builder setNegativeButton(java.lang.CharSequence, java.util.concurrent.Executor, android.content.DialogInterface.OnClickListener);
-    method public android.hardware.fingerprint.FingerprintDialog.Builder setSubtitle(java.lang.CharSequence);
-    method public android.hardware.fingerprint.FingerprintDialog.Builder setTitle(java.lang.CharSequence);
-  }
-
-  public static final class FingerprintDialog.CryptoObject {
-    ctor public FingerprintDialog.CryptoObject(java.security.Signature);
-    ctor public FingerprintDialog.CryptoObject(javax.crypto.Cipher);
-    ctor public FingerprintDialog.CryptoObject(javax.crypto.Mac);
-    method public javax.crypto.Cipher getCipher();
-    method public javax.crypto.Mac getMac();
-    method public java.security.Signature getSignature();
-  }
 
   public deprecated class FingerprintManager {
     method public deprecated void authenticate(android.hardware.fingerprint.FingerprintManager.CryptoObject, android.os.CancellationSignal, int, android.hardware.fingerprint.FingerprintManager.AuthenticationCallback, android.os.Handler);
