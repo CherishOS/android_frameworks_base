@@ -5401,6 +5401,7 @@ package android.app {
     method public android.app.Notification.Builder extend(android.app.Notification.Extender);
     method public android.os.Bundle getExtras();
     method public deprecated android.app.Notification getNotification();
+    method public android.app.Notification.Style getStyle();
     method public static android.app.Notification.Builder recoverBuilder(android.content.Context, android.app.Notification);
     method public android.app.Notification.Builder setActions(android.app.Notification.Action...);
     method public android.app.Notification.Builder setAutoCancel(boolean);
@@ -7279,6 +7280,13 @@ package android.app.slice {
     method public void unpinSlice(android.net.Uri);
     field public static final java.lang.String CATEGORY_SLICE = "android.app.slice.category.SLICE";
     field public static final java.lang.String SLICE_METADATA_KEY = "android.metadata.SLICE_URI";
+  }
+
+  public class SliceMetrics {
+    ctor public SliceMetrics(android.content.Context, android.net.Uri);
+    method public void logHidden();
+    method public void logTouch(android.net.Uri);
+    method public void logVisible();
   }
 
   public abstract class SliceProvider extends android.content.ContentProvider {
@@ -13612,6 +13620,7 @@ package android.graphics {
     method public void close();
     method public static android.graphics.ImageDecoder.Source createSource(android.content.res.Resources, int);
     method public static android.graphics.ImageDecoder.Source createSource(android.content.ContentResolver, android.net.Uri);
+    method public static android.graphics.ImageDecoder.Source createSource(android.content.res.AssetManager, java.lang.String);
     method public static android.graphics.ImageDecoder.Source createSource(java.nio.ByteBuffer);
     method public static android.graphics.ImageDecoder.Source createSource(java.io.File);
     method public static android.graphics.Bitmap decodeBitmap(android.graphics.ImageDecoder.Source, android.graphics.ImageDecoder.OnHeaderDecodedListener) throws java.io.IOException;
@@ -15803,6 +15812,7 @@ package android.hardware.camera2 {
     field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> INFO_SUPPORTED_HARDWARE_LEVEL;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.String> INFO_VERSION;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<android.util.Size[]> JPEG_AVAILABLE_THUMBNAIL_SIZES;
+    field public static final android.hardware.camera2.CameraCharacteristics.Key<float[]> LENS_DISTORTION;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> LENS_FACING;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<float[]> LENS_INFO_AVAILABLE_APERTURES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<float[]> LENS_INFO_AVAILABLE_FILTER_DENSITIES;
@@ -15815,7 +15825,7 @@ package android.hardware.camera2 {
     field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> LENS_POSE_REFERENCE;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<float[]> LENS_POSE_ROTATION;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<float[]> LENS_POSE_TRANSLATION;
-    field public static final android.hardware.camera2.CameraCharacteristics.Key<float[]> LENS_RADIAL_DISTORTION;
+    field public static final deprecated android.hardware.camera2.CameraCharacteristics.Key<float[]> LENS_RADIAL_DISTORTION;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> LOGICAL_MULTI_CAMERA_SENSOR_SYNC_TYPE;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> NOISE_REDUCTION_AVAILABLE_NOISE_REDUCTION_MODES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> REPROCESS_MAX_CAPTURE_STALL;
@@ -16273,6 +16283,7 @@ package android.hardware.camera2 {
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Byte> JPEG_THUMBNAIL_QUALITY;
     field public static final android.hardware.camera2.CaptureResult.Key<android.util.Size> JPEG_THUMBNAIL_SIZE;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Float> LENS_APERTURE;
+    field public static final android.hardware.camera2.CaptureResult.Key<float[]> LENS_DISTORTION;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Float> LENS_FILTER_DENSITY;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Float> LENS_FOCAL_LENGTH;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Float> LENS_FOCUS_DISTANCE;
@@ -16281,7 +16292,7 @@ package android.hardware.camera2 {
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> LENS_OPTICAL_STABILIZATION_MODE;
     field public static final android.hardware.camera2.CaptureResult.Key<float[]> LENS_POSE_ROTATION;
     field public static final android.hardware.camera2.CaptureResult.Key<float[]> LENS_POSE_TRANSLATION;
-    field public static final android.hardware.camera2.CaptureResult.Key<float[]> LENS_RADIAL_DISTORTION;
+    field public static final deprecated android.hardware.camera2.CaptureResult.Key<float[]> LENS_RADIAL_DISTORTION;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> LENS_STATE;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> NOISE_REDUCTION_MODE;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Float> REPROCESS_EFFECTIVE_EXPOSURE_FACTOR;
@@ -23782,10 +23793,8 @@ package android.media {
     field public static final java.lang.String KEY_DURATION = "durationUs";
     field public static final java.lang.String KEY_FLAC_COMPRESSION_LEVEL = "flac-compression-level";
     field public static final java.lang.String KEY_FRAME_RATE = "frame-rate";
-    field public static final java.lang.String KEY_GRID_COLS = "grid-cols";
-    field public static final java.lang.String KEY_GRID_HEIGHT = "grid-height";
+    field public static final java.lang.String KEY_GRID_COLUMNS = "grid-cols";
     field public static final java.lang.String KEY_GRID_ROWS = "grid-rows";
-    field public static final java.lang.String KEY_GRID_WIDTH = "grid-width";
     field public static final java.lang.String KEY_HDR_STATIC_INFO = "hdr-static-info";
     field public static final java.lang.String KEY_HEIGHT = "height";
     field public static final java.lang.String KEY_INTRA_REFRESH_PERIOD = "intra-refresh-period";
@@ -23814,6 +23823,8 @@ package android.media {
     field public static final java.lang.String KEY_SLICE_HEIGHT = "slice-height";
     field public static final java.lang.String KEY_STRIDE = "stride";
     field public static final java.lang.String KEY_TEMPORAL_LAYERING = "ts-schema";
+    field public static final java.lang.String KEY_TILE_HEIGHT = "tile-height";
+    field public static final java.lang.String KEY_TILE_WIDTH = "tile-width";
     field public static final java.lang.String KEY_TRACK_ID = "track-id";
     field public static final java.lang.String KEY_WIDTH = "width";
     field public static final java.lang.String MIMETYPE_AUDIO_AAC = "audio/mp4a-latm";
@@ -24063,12 +24074,16 @@ package android.media {
     method public java.lang.String extractMetadata(int);
     method public byte[] getEmbeddedPicture();
     method public android.graphics.Bitmap getFrameAtIndex(int, android.media.MediaMetadataRetriever.BitmapParams);
+    method public android.graphics.Bitmap getFrameAtIndex(int);
     method public android.graphics.Bitmap getFrameAtTime(long, int);
     method public android.graphics.Bitmap getFrameAtTime(long);
     method public android.graphics.Bitmap getFrameAtTime();
     method public java.util.List<android.graphics.Bitmap> getFramesAtIndex(int, int, android.media.MediaMetadataRetriever.BitmapParams);
+    method public java.util.List<android.graphics.Bitmap> getFramesAtIndex(int, int);
     method public android.graphics.Bitmap getImageAtIndex(int, android.media.MediaMetadataRetriever.BitmapParams);
+    method public android.graphics.Bitmap getImageAtIndex(int);
     method public android.graphics.Bitmap getPrimaryImage(android.media.MediaMetadataRetriever.BitmapParams);
+    method public android.graphics.Bitmap getPrimaryImage();
     method public android.graphics.Bitmap getScaledFrameAtTime(long, int, int, int);
     method public void release();
     method public void setDataSource(java.lang.String) throws java.lang.IllegalArgumentException;
@@ -29474,7 +29489,7 @@ package android.nfc {
     field public static final java.lang.String EXTRA_ID = "android.nfc.extra.ID";
     field public static final java.lang.String EXTRA_NDEF_MESSAGES = "android.nfc.extra.NDEF_MESSAGES";
     field public static final java.lang.String EXTRA_READER_PRESENCE_CHECK_DELAY = "presence";
-    field public static final java.lang.String EXTRA_SE_NAME = "android.nfc.extra.SE_NAME";
+    field public static final java.lang.String EXTRA_SECURE_ELEMENT_NAME = "android.nfc.extra.SECURE_ELEMENT_NAME";
     field public static final java.lang.String EXTRA_TAG = "android.nfc.extra.TAG";
     field public static final int FLAG_READER_NFC_A = 1; // 0x1
     field public static final int FLAG_READER_NFC_B = 2; // 0x2
@@ -40047,6 +40062,7 @@ package android.service.notification {
     method public int getSuppressedVisualEffects();
     method public int getUserSentiment();
     method public boolean isAmbient();
+    method public boolean isSuspended();
     method public boolean matchesInterruptionFilter();
     field public static final int USER_SENTIMENT_NEGATIVE = -1; // 0xffffffff
     field public static final int USER_SENTIMENT_NEUTRAL = 0; // 0x0
@@ -43343,21 +43359,21 @@ package android.telephony.data {
   public class ApnSetting implements android.os.Parcelable {
     method public int describeContents();
     method public java.lang.String getApnName();
+    method public int getApnTypeBitmask();
     method public int getAuthType();
     method public java.lang.String getEntryName();
     method public int getId();
-    method public int getMmsPort();
-    method public java.net.InetAddress getMmsProxy();
-    method public java.net.URL getMmsc();
-    method public java.lang.String getMvnoType();
+    method public java.net.InetAddress getMmsProxyAddress();
+    method public int getMmsProxyPort();
+    method public android.net.Uri getMmsc();
+    method public int getMvnoType();
     method public int getNetworkTypeBitmask();
     method public java.lang.String getOperatorNumeric();
     method public java.lang.String getPassword();
-    method public int getPort();
-    method public java.lang.String getProtocol();
-    method public java.net.InetAddress getProxy();
-    method public java.lang.String getRoamingProtocol();
-    method public java.util.List<java.lang.String> getTypes();
+    method public int getProtocol();
+    method public java.net.InetAddress getProxyAddress();
+    method public int getProxyPort();
+    method public int getRoamingProtocol();
     method public java.lang.String getUser();
     method public boolean isEnabled();
     method public void writeToParcel(android.os.Parcel, int);
@@ -43366,46 +43382,45 @@ package android.telephony.data {
     field public static final int AUTH_TYPE_PAP = 1; // 0x1
     field public static final int AUTH_TYPE_PAP_OR_CHAP = 3; // 0x3
     field public static final android.os.Parcelable.Creator<android.telephony.data.ApnSetting> CREATOR;
-    field public static final java.lang.String MVNO_TYPE_GID = "gid";
-    field public static final java.lang.String MVNO_TYPE_ICCID = "iccid";
-    field public static final java.lang.String MVNO_TYPE_IMSI = "imsi";
-    field public static final java.lang.String MVNO_TYPE_SPN = "spn";
-    field public static final java.lang.String PROTOCOL_IP = "IP";
-    field public static final java.lang.String PROTOCOL_IPV4V6 = "IPV4V6";
-    field public static final java.lang.String PROTOCOL_IPV6 = "IPV6";
-    field public static final java.lang.String PROTOCOL_PPP = "PPP";
-    field public static final java.lang.String TYPE_ALL = "*";
-    field public static final java.lang.String TYPE_CBS = "cbs";
-    field public static final java.lang.String TYPE_DEFAULT = "default";
-    field public static final java.lang.String TYPE_DUN = "dun";
-    field public static final java.lang.String TYPE_EMERGENCY = "emergency";
-    field public static final java.lang.String TYPE_FOTA = "fota";
-    field public static final java.lang.String TYPE_HIPRI = "hipri";
-    field public static final java.lang.String TYPE_IA = "ia";
-    field public static final java.lang.String TYPE_IMS = "ims";
-    field public static final java.lang.String TYPE_MMS = "mms";
-    field public static final java.lang.String TYPE_SUPL = "supl";
+    field public static final int MVNO_TYPE_GID = 2; // 0x2
+    field public static final int MVNO_TYPE_ICCID = 3; // 0x3
+    field public static final int MVNO_TYPE_IMSI = 1; // 0x1
+    field public static final int MVNO_TYPE_SPN = 0; // 0x0
+    field public static final int PROTOCOL_IP = 0; // 0x0
+    field public static final int PROTOCOL_IPV4V6 = 2; // 0x2
+    field public static final int PROTOCOL_IPV6 = 1; // 0x1
+    field public static final int PROTOCOL_PPP = 3; // 0x3
+    field public static final int TYPE_CBS = 128; // 0x80
+    field public static final int TYPE_DEFAULT = 17; // 0x11
+    field public static final int TYPE_DUN = 8; // 0x8
+    field public static final int TYPE_EMERGENCY = 512; // 0x200
+    field public static final int TYPE_FOTA = 32; // 0x20
+    field public static final int TYPE_HIPRI = 16; // 0x10
+    field public static final int TYPE_IA = 256; // 0x100
+    field public static final int TYPE_IMS = 64; // 0x40
+    field public static final int TYPE_MMS = 2; // 0x2
+    field public static final int TYPE_SUPL = 4; // 0x4
   }
 
   public static class ApnSetting.Builder {
     ctor public ApnSetting.Builder();
     method public android.telephony.data.ApnSetting build();
     method public android.telephony.data.ApnSetting.Builder setApnName(java.lang.String);
+    method public android.telephony.data.ApnSetting.Builder setApnTypeBitmask(int);
     method public android.telephony.data.ApnSetting.Builder setAuthType(int);
     method public android.telephony.data.ApnSetting.Builder setCarrierEnabled(boolean);
     method public android.telephony.data.ApnSetting.Builder setEntryName(java.lang.String);
-    method public android.telephony.data.ApnSetting.Builder setMmsPort(int);
-    method public android.telephony.data.ApnSetting.Builder setMmsProxy(java.net.InetAddress);
-    method public android.telephony.data.ApnSetting.Builder setMmsc(java.net.URL);
-    method public android.telephony.data.ApnSetting.Builder setMvnoType(java.lang.String);
+    method public android.telephony.data.ApnSetting.Builder setMmsProxyAddress(java.net.InetAddress);
+    method public android.telephony.data.ApnSetting.Builder setMmsProxyPort(int);
+    method public android.telephony.data.ApnSetting.Builder setMmsc(android.net.Uri);
+    method public android.telephony.data.ApnSetting.Builder setMvnoType(int);
     method public android.telephony.data.ApnSetting.Builder setNetworkTypeBitmask(int);
     method public android.telephony.data.ApnSetting.Builder setOperatorNumeric(java.lang.String);
     method public android.telephony.data.ApnSetting.Builder setPassword(java.lang.String);
-    method public android.telephony.data.ApnSetting.Builder setPort(int);
-    method public android.telephony.data.ApnSetting.Builder setProtocol(java.lang.String);
-    method public android.telephony.data.ApnSetting.Builder setProxy(java.net.InetAddress);
-    method public android.telephony.data.ApnSetting.Builder setRoamingProtocol(java.lang.String);
-    method public android.telephony.data.ApnSetting.Builder setTypes(java.util.List<java.lang.String>);
+    method public android.telephony.data.ApnSetting.Builder setProtocol(int);
+    method public android.telephony.data.ApnSetting.Builder setProxyAddress(java.net.InetAddress);
+    method public android.telephony.data.ApnSetting.Builder setProxyPort(int);
+    method public android.telephony.data.ApnSetting.Builder setRoamingProtocol(int);
     method public android.telephony.data.ApnSetting.Builder setUser(java.lang.String);
   }
 
