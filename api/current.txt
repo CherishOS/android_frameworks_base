@@ -8329,7 +8329,7 @@ package android.bluetooth {
     method public java.util.List<android.bluetooth.BluetoothDevice> getConnectedDevices();
     method public int getConnectionState(android.bluetooth.BluetoothDevice);
     method public java.util.List<android.bluetooth.BluetoothDevice> getDevicesMatchingConnectionStates(int[]);
-    method public boolean registerApp(android.bluetooth.BluetoothHidDeviceAppSdpSettings, android.bluetooth.BluetoothHidDeviceAppQosSettings, android.bluetooth.BluetoothHidDeviceAppQosSettings, android.bluetooth.BluetoothHidDeviceCallback);
+    method public boolean registerApp(android.bluetooth.BluetoothHidDeviceAppSdpSettings, android.bluetooth.BluetoothHidDeviceAppQosSettings, android.bluetooth.BluetoothHidDeviceAppQosSettings, java.util.concurrent.Executor, android.bluetooth.BluetoothHidDevice.Callback);
     method public boolean replyReport(android.bluetooth.BluetoothDevice, byte, byte, byte[]);
     method public boolean reportError(android.bluetooth.BluetoothDevice, byte);
     method public boolean sendReport(android.bluetooth.BluetoothDevice, int, byte[]);
@@ -8359,49 +8359,8 @@ package android.bluetooth {
     field public static final byte SUBCLASS2_UNCATEGORIZED = 0; // 0x0
   }
 
-  public final class BluetoothHidDeviceAppQosSettings implements android.os.Parcelable {
-    ctor public BluetoothHidDeviceAppQosSettings(int, int, int, int, int, int);
-    method public int describeContents();
-    method public int[] toArray();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.bluetooth.BluetoothHidDeviceAppQosSettings> CREATOR;
-    field public static final int MAX = -1; // 0xffffffff
-    field public static final int SERVICE_BEST_EFFORT = 1; // 0x1
-    field public static final int SERVICE_GUARANTEED = 2; // 0x2
-    field public static final int SERVICE_NO_TRAFFIC = 0; // 0x0
-    field public final int delayVariation;
-    field public final int latency;
-    field public final int peakBandwidth;
-    field public final int serviceType;
-    field public final int tokenBucketSize;
-    field public final int tokenRate;
-  }
-
-  public static class BluetoothHidDeviceAppQosSettings.Builder {
-    ctor public BluetoothHidDeviceAppQosSettings.Builder();
-    method public android.bluetooth.BluetoothHidDeviceAppQosSettings build();
-    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder delayVariation(int);
-    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder latency(int);
-    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder peakBandwidth(int);
-    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder serviceType(int);
-    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder tokenBucketSize(int);
-    method public android.bluetooth.BluetoothHidDeviceAppQosSettings.Builder tokenRate(int);
-  }
-
-  public final class BluetoothHidDeviceAppSdpSettings implements android.os.Parcelable {
-    ctor public BluetoothHidDeviceAppSdpSettings(java.lang.String, java.lang.String, java.lang.String, byte, byte[]);
-    method public int describeContents();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.bluetooth.BluetoothHidDeviceAppSdpSettings> CREATOR;
-    field public final java.lang.String description;
-    field public final byte[] descriptors;
-    field public final java.lang.String name;
-    field public final java.lang.String provider;
-    field public final byte subclass;
-  }
-
-  public abstract class BluetoothHidDeviceCallback {
-    ctor public BluetoothHidDeviceCallback();
+  public static abstract class BluetoothHidDevice.Callback {
+    ctor public BluetoothHidDevice.Callback();
     method public void onAppStatusChanged(android.bluetooth.BluetoothDevice, boolean);
     method public void onConnectionStateChanged(android.bluetooth.BluetoothDevice, int);
     method public void onGetReport(android.bluetooth.BluetoothDevice, byte, byte, int);
@@ -8409,6 +8368,35 @@ package android.bluetooth {
     method public void onSetProtocol(android.bluetooth.BluetoothDevice, byte);
     method public void onSetReport(android.bluetooth.BluetoothDevice, byte, byte, byte[]);
     method public void onVirtualCableUnplug(android.bluetooth.BluetoothDevice);
+  }
+
+  public final class BluetoothHidDeviceAppQosSettings implements android.os.Parcelable {
+    ctor public BluetoothHidDeviceAppQosSettings(int, int, int, int, int, int);
+    method public int describeContents();
+    method public int getDelayVariation();
+    method public int getLatency();
+    method public int getPeakBandwidth();
+    method public int getServiceType();
+    method public int getTokenBucketSize();
+    method public int getTokenRate();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.bluetooth.BluetoothHidDeviceAppQosSettings> CREATOR;
+    field public static final int MAX = -1; // 0xffffffff
+    field public static final int SERVICE_BEST_EFFORT = 1; // 0x1
+    field public static final int SERVICE_GUARANTEED = 2; // 0x2
+    field public static final int SERVICE_NO_TRAFFIC = 0; // 0x0
+  }
+
+  public final class BluetoothHidDeviceAppSdpSettings implements android.os.Parcelable {
+    ctor public BluetoothHidDeviceAppSdpSettings(java.lang.String, java.lang.String, java.lang.String, byte, byte[]);
+    method public int describeContents();
+    method public java.lang.String getDescription();
+    method public byte[] getDescriptors();
+    method public java.lang.String getName();
+    method public java.lang.String getProvider();
+    method public byte getSubclass();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.bluetooth.BluetoothHidDeviceAppSdpSettings> CREATOR;
   }
 
   public final class BluetoothManager {
