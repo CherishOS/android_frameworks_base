@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The Android Open Source Project
+ * Copyright (C) 2018 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +24,14 @@ import java.util.concurrent.Executor;
 /**
  * @hide
  */
-public class InternalDownloadStateCallback extends IDownloadStateCallback.Stub {
+public class InternalDownloadProgressListener extends IDownloadProgressListener.Stub {
     private final Executor mExecutor;
-    private final DownloadStateCallback mAppCallback;
+    private final DownloadProgressListener mAppListener;
     private volatile boolean mIsStopped = false;
 
-    public InternalDownloadStateCallback(DownloadStateCallback appCallback, Executor executor) {
-        mAppCallback = appCallback;
+    public InternalDownloadProgressListener(DownloadProgressListener appListener,
+            Executor executor) {
+        mAppListener = appListener;
         mExecutor = executor;
     }
 
@@ -47,28 +48,8 @@ public class InternalDownloadStateCallback extends IDownloadStateCallback.Stub {
             public void run() {
                 long token = Binder.clearCallingIdentity();
                 try {
-                    mAppCallback.onProgressUpdated(request, fileInfo, currentDownloadSize,
+                    mAppListener.onProgressUpdated(request, fileInfo, currentDownloadSize,
                             fullDownloadSize, currentDecodedSize, fullDecodedSize);
-                } finally {
-                    Binder.restoreCallingIdentity(token);
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onStateUpdated(final DownloadRequest request, final FileInfo fileInfo,
-            final int state) throws RemoteException {
-        if (mIsStopped) {
-            return;
-        }
-
-        mExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                long token = Binder.clearCallingIdentity();
-                try {
-                    mAppCallback.onStateUpdated(request, fileInfo, state);
                 } finally {
                     Binder.restoreCallingIdentity(token);
                 }
