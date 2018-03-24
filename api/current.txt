@@ -16435,8 +16435,8 @@ package android.hardware.camera2.params {
   }
 
   public final class SessionConfiguration {
-    ctor public SessionConfiguration(int, java.util.List<android.hardware.camera2.params.OutputConfiguration>, android.hardware.camera2.CameraCaptureSession.StateCallback, android.os.Handler);
-    method public android.os.Handler getHandler();
+    ctor public SessionConfiguration(int, java.util.List<android.hardware.camera2.params.OutputConfiguration>, java.util.concurrent.Executor, android.hardware.camera2.CameraCaptureSession.StateCallback);
+    method public java.util.concurrent.Executor getExecutor();
     method public android.hardware.camera2.params.InputConfiguration getInputConfiguration();
     method public java.util.List<android.hardware.camera2.params.OutputConfiguration> getOutputConfigurations();
     method public android.hardware.camera2.CaptureRequest getSessionParameters();
@@ -21531,10 +21531,10 @@ package android.location {
     method public int getAccumulatedDeltaRangeState();
     method public double getAccumulatedDeltaRangeUncertaintyMeters();
     method public double getAutomaticGainControlLevelDb();
-    method public long getCarrierCycles();
+    method public deprecated long getCarrierCycles();
     method public float getCarrierFrequencyHz();
-    method public double getCarrierPhase();
-    method public double getCarrierPhaseUncertainty();
+    method public deprecated double getCarrierPhase();
+    method public deprecated double getCarrierPhaseUncertainty();
     method public double getCn0DbHz();
     method public int getConstellationType();
     method public int getMultipathIndicator();
@@ -21547,13 +21547,15 @@ package android.location {
     method public int getSvid();
     method public double getTimeOffsetNanos();
     method public boolean hasAutomaticGainControlLevelDb();
-    method public boolean hasCarrierCycles();
+    method public deprecated boolean hasCarrierCycles();
     method public boolean hasCarrierFrequencyHz();
-    method public boolean hasCarrierPhase();
-    method public boolean hasCarrierPhaseUncertainty();
+    method public deprecated boolean hasCarrierPhase();
+    method public deprecated boolean hasCarrierPhaseUncertainty();
     method public boolean hasSnrInDb();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int ADR_STATE_CYCLE_SLIP = 4; // 0x4
+    field public static final int ADR_STATE_HALF_CYCLE_REPORTED = 16; // 0x10
+    field public static final int ADR_STATE_HALF_CYCLE_RESOLVED = 8; // 0x8
     field public static final int ADR_STATE_RESET = 2; // 0x2
     field public static final int ADR_STATE_UNKNOWN = 0; // 0x0
     field public static final int ADR_STATE_VALID = 1; // 0x1
@@ -41865,6 +41867,8 @@ package android.telephony {
   }
 
   public class MbmsDownloadSession implements java.lang.AutoCloseable {
+    method public int addProgressListener(android.telephony.mbms.DownloadRequest, java.util.concurrent.Executor, android.telephony.mbms.DownloadProgressListener);
+    method public int addStatusListener(android.telephony.mbms.DownloadRequest, java.util.concurrent.Executor, android.telephony.mbms.DownloadStatusListener);
     method public int cancelDownload(android.telephony.mbms.DownloadRequest);
     method public void close();
     method public static android.telephony.MbmsDownloadSession create(android.content.Context, java.util.concurrent.Executor, android.telephony.mbms.MbmsDownloadSessionCallback);
@@ -41872,12 +41876,12 @@ package android.telephony {
     method public int download(android.telephony.mbms.DownloadRequest);
     method public java.io.File getTempFileRootDirectory();
     method public java.util.List<android.telephony.mbms.DownloadRequest> listPendingDownloads();
-    method public int registerStateCallback(android.telephony.mbms.DownloadRequest, java.util.concurrent.Executor, android.telephony.mbms.DownloadStateCallback);
+    method public int removeProgressListener(android.telephony.mbms.DownloadRequest, android.telephony.mbms.DownloadProgressListener);
+    method public int removeStatusListener(android.telephony.mbms.DownloadRequest, android.telephony.mbms.DownloadStatusListener);
     method public void requestDownloadState(android.telephony.mbms.DownloadRequest, android.telephony.mbms.FileInfo);
     method public void requestUpdateFileServices(java.util.List<java.lang.String>);
     method public void resetDownloadKnowledge(android.telephony.mbms.DownloadRequest);
     method public void setTempFileRootDirectory(java.io.File);
-    method public int unregisterStateCallback(android.telephony.mbms.DownloadRequest, android.telephony.mbms.DownloadStateCallback);
     field public static final java.lang.String DEFAULT_TOP_LEVEL_TEMP_DIRECTORY = "androidMbmsTempFileRoot";
     field public static final java.lang.String EXTRA_MBMS_COMPLETED_FILE_URI = "android.telephony.extra.MBMS_COMPLETED_FILE_URI";
     field public static final java.lang.String EXTRA_MBMS_DOWNLOAD_REQUEST = "android.telephony.extra.MBMS_DOWNLOAD_REQUEST";
@@ -42776,6 +42780,11 @@ package android.telephony.gsm {
 
 package android.telephony.mbms {
 
+  public class DownloadProgressListener {
+    ctor public DownloadProgressListener();
+    method public void onProgressUpdated(android.telephony.mbms.DownloadRequest, android.telephony.mbms.FileInfo, int, int, int, int);
+  }
+
   public final class DownloadRequest implements android.os.Parcelable {
     method public int describeContents();
     method public android.net.Uri getDestinationUri();
@@ -42799,15 +42808,9 @@ package android.telephony.mbms {
     method public android.telephony.mbms.DownloadRequest.Builder setSubscriptionId(int);
   }
 
-  public class DownloadStateCallback {
-    ctor public DownloadStateCallback();
-    ctor public DownloadStateCallback(int);
-    method public final boolean isFilterFlagSet(int);
-    method public void onProgressUpdated(android.telephony.mbms.DownloadRequest, android.telephony.mbms.FileInfo, int, int, int, int);
-    method public void onStateUpdated(android.telephony.mbms.DownloadRequest, android.telephony.mbms.FileInfo, int);
-    field public static final int ALL_UPDATES = 0; // 0x0
-    field public static final int PROGRESS_UPDATES = 1; // 0x1
-    field public static final int STATE_UPDATES = 2; // 0x2
+  public class DownloadStatusListener {
+    ctor public DownloadStatusListener();
+    method public void onStatusUpdated(android.telephony.mbms.DownloadRequest, android.telephony.mbms.FileInfo, int);
   }
 
   public final class FileInfo implements android.os.Parcelable {
@@ -47534,6 +47537,7 @@ package android.view {
     method public boolean isOpaque();
     method protected boolean isPaddingOffsetRequired();
     method public boolean isPaddingRelative();
+    method public boolean isPivotSet();
     method public boolean isPressed();
     method public boolean isSaveEnabled();
     method public boolean isSaveFromParentEnabled();
@@ -47652,6 +47656,7 @@ package android.view {
     method public boolean requestRectangleOnScreen(android.graphics.Rect, boolean);
     method public final void requestUnbufferedDispatch(android.view.MotionEvent);
     method public final <T extends android.view.View> T requireViewById(int);
+    method public void resetPivot();
     method public static int resolveSize(int, int);
     method public static int resolveSizeAndState(int, int, int);
     method public boolean restoreDefaultFocus();
