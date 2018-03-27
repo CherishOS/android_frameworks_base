@@ -7041,7 +7041,8 @@ package android.app.job {
     method public int getBackoffPolicy();
     method public android.content.ClipData getClipData();
     method public int getClipGrantFlags();
-    method public long getEstimatedNetworkBytes();
+    method public long getEstimatedNetworkDownloadBytes();
+    method public long getEstimatedNetworkUploadBytes();
     method public android.os.PersistableBundle getExtras();
     method public long getFlexMillis();
     method public int getId();
@@ -7058,8 +7059,10 @@ package android.app.job {
     method public long getTriggerContentMaxDelay();
     method public long getTriggerContentUpdateDelay();
     method public android.app.job.JobInfo.TriggerContentUri[] getTriggerContentUris();
+    method public boolean isImportantWhileForeground();
     method public boolean isPeriodic();
     method public boolean isPersisted();
+    method public boolean isPrefetch();
     method public boolean isRequireBatteryNotLow();
     method public boolean isRequireCharging();
     method public boolean isRequireDeviceIdle();
@@ -7085,15 +7088,15 @@ package android.app.job {
     method public android.app.job.JobInfo build();
     method public android.app.job.JobInfo.Builder setBackoffCriteria(long, int);
     method public android.app.job.JobInfo.Builder setClipData(android.content.ClipData, int);
-    method public android.app.job.JobInfo.Builder setEstimatedNetworkBytes(long);
+    method public android.app.job.JobInfo.Builder setEstimatedNetworkBytes(long, long);
     method public android.app.job.JobInfo.Builder setExtras(android.os.PersistableBundle);
     method public android.app.job.JobInfo.Builder setImportantWhileForeground(boolean);
-    method public android.app.job.JobInfo.Builder setIsPrefetch(boolean);
     method public android.app.job.JobInfo.Builder setMinimumLatency(long);
     method public android.app.job.JobInfo.Builder setOverrideDeadline(long);
     method public android.app.job.JobInfo.Builder setPeriodic(long);
     method public android.app.job.JobInfo.Builder setPeriodic(long, long);
     method public android.app.job.JobInfo.Builder setPersisted(boolean);
+    method public android.app.job.JobInfo.Builder setPrefetch(boolean);
     method public android.app.job.JobInfo.Builder setRequiredNetwork(android.net.NetworkRequest);
     method public android.app.job.JobInfo.Builder setRequiredNetworkType(int);
     method public android.app.job.JobInfo.Builder setRequiresBatteryNotLow(boolean);
@@ -7163,10 +7166,11 @@ package android.app.job {
 
   public final class JobWorkItem implements android.os.Parcelable {
     ctor public JobWorkItem(android.content.Intent);
-    ctor public JobWorkItem(android.content.Intent, long);
+    ctor public JobWorkItem(android.content.Intent, long, long);
     method public int describeContents();
     method public int getDeliveryCount();
-    method public long getEstimatedNetworkBytes();
+    method public long getEstimatedNetworkDownloadBytes();
+    method public long getEstimatedNetworkUploadBytes();
     method public android.content.Intent getIntent();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.job.JobWorkItem> CREATOR;
