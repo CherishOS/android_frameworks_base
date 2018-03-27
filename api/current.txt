@@ -7289,6 +7289,7 @@ package android.app.slice {
     method public final java.lang.String getType(android.net.Uri);
     method public final android.net.Uri insert(android.net.Uri, android.content.ContentValues);
     method public android.app.slice.Slice onBindSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
+    method public android.app.PendingIntent onCreatePermissionRequest(android.net.Uri);
     method public java.util.Collection<android.net.Uri> onGetSliceDescendants(android.net.Uri);
     method public android.net.Uri onMapIntentToUri(android.content.Intent);
     method public void onSlicePinned(android.net.Uri);
@@ -15727,6 +15728,8 @@ package android.hardware.camera2 {
     method public abstract void abortCaptures() throws android.hardware.camera2.CameraAccessException;
     method public abstract int capture(android.hardware.camera2.CaptureRequest, android.hardware.camera2.CameraCaptureSession.CaptureCallback, android.os.Handler) throws android.hardware.camera2.CameraAccessException;
     method public abstract int captureBurst(java.util.List<android.hardware.camera2.CaptureRequest>, android.hardware.camera2.CameraCaptureSession.CaptureCallback, android.os.Handler) throws android.hardware.camera2.CameraAccessException;
+    method public int captureBurstRequests(java.util.List<android.hardware.camera2.CaptureRequest>, java.util.concurrent.Executor, android.hardware.camera2.CameraCaptureSession.CaptureCallback) throws android.hardware.camera2.CameraAccessException;
+    method public int captureSingleRequest(android.hardware.camera2.CaptureRequest, java.util.concurrent.Executor, android.hardware.camera2.CameraCaptureSession.CaptureCallback) throws android.hardware.camera2.CameraAccessException;
     method public abstract void close();
     method public abstract void finalizeOutputConfigurations(java.util.List<android.hardware.camera2.params.OutputConfiguration>) throws android.hardware.camera2.CameraAccessException;
     method public abstract android.hardware.camera2.CameraDevice getDevice();
@@ -15734,7 +15737,9 @@ package android.hardware.camera2 {
     method public abstract boolean isReprocessable();
     method public abstract void prepare(android.view.Surface) throws android.hardware.camera2.CameraAccessException;
     method public abstract int setRepeatingBurst(java.util.List<android.hardware.camera2.CaptureRequest>, android.hardware.camera2.CameraCaptureSession.CaptureCallback, android.os.Handler) throws android.hardware.camera2.CameraAccessException;
+    method public int setRepeatingBurstRequests(java.util.List<android.hardware.camera2.CaptureRequest>, java.util.concurrent.Executor, android.hardware.camera2.CameraCaptureSession.CaptureCallback) throws android.hardware.camera2.CameraAccessException;
     method public abstract int setRepeatingRequest(android.hardware.camera2.CaptureRequest, android.hardware.camera2.CameraCaptureSession.CaptureCallback, android.os.Handler) throws android.hardware.camera2.CameraAccessException;
+    method public int setSingleRepeatingRequest(android.hardware.camera2.CaptureRequest, java.util.concurrent.Executor, android.hardware.camera2.CameraCaptureSession.CaptureCallback) throws android.hardware.camera2.CameraAccessException;
     method public abstract void stopRepeating() throws android.hardware.camera2.CameraAccessException;
     method public void updateOutputConfiguration(android.hardware.camera2.params.OutputConfiguration) throws android.hardware.camera2.CameraAccessException;
   }
@@ -15902,8 +15907,11 @@ package android.hardware.camera2 {
     method public android.hardware.camera2.CameraCharacteristics getCameraCharacteristics(java.lang.String) throws android.hardware.camera2.CameraAccessException;
     method public java.lang.String[] getCameraIdList() throws android.hardware.camera2.CameraAccessException;
     method public void openCamera(java.lang.String, android.hardware.camera2.CameraDevice.StateCallback, android.os.Handler) throws android.hardware.camera2.CameraAccessException;
+    method public void openCamera(java.lang.String, java.util.concurrent.Executor, android.hardware.camera2.CameraDevice.StateCallback) throws android.hardware.camera2.CameraAccessException;
     method public void registerAvailabilityCallback(android.hardware.camera2.CameraManager.AvailabilityCallback, android.os.Handler);
+    method public void registerAvailabilityCallback(java.util.concurrent.Executor, android.hardware.camera2.CameraManager.AvailabilityCallback);
     method public void registerTorchCallback(android.hardware.camera2.CameraManager.TorchCallback, android.os.Handler);
+    method public void registerTorchCallback(java.util.concurrent.Executor, android.hardware.camera2.CameraManager.TorchCallback);
     method public void setTorchMode(java.lang.String, boolean) throws android.hardware.camera2.CameraAccessException;
     method public void unregisterAvailabilityCallback(android.hardware.camera2.CameraManager.AvailabilityCallback);
     method public void unregisterTorchCallback(android.hardware.camera2.CameraManager.TorchCallback);
@@ -24472,29 +24480,6 @@ package android.media {
     field public static final int RATING_THUMB_UP_DOWN = 2; // 0x2
   }
 
-  public final class Rating2 {
-    method public static android.media.Rating2 fromBundle(android.content.Context, android.os.Bundle);
-    method public float getPercentRating();
-    method public int getRatingStyle();
-    method public float getStarRating();
-    method public boolean hasHeart();
-    method public boolean isRated();
-    method public boolean isThumbUp();
-    method public static android.media.Rating2 newHeartRating(android.content.Context, boolean);
-    method public static android.media.Rating2 newPercentageRating(android.content.Context, float);
-    method public static android.media.Rating2 newStarRating(android.content.Context, int, float);
-    method public static android.media.Rating2 newThumbRating(android.content.Context, boolean);
-    method public static android.media.Rating2 newUnratedRating(android.content.Context, int);
-    method public android.os.Bundle toBundle();
-    field public static final int RATING_3_STARS = 3; // 0x3
-    field public static final int RATING_4_STARS = 4; // 0x4
-    field public static final int RATING_5_STARS = 5; // 0x5
-    field public static final int RATING_HEART = 1; // 0x1
-    field public static final int RATING_NONE = 0; // 0x0
-    field public static final int RATING_PERCENTAGE = 6; // 0x6
-    field public static final int RATING_THUMB_UP_DOWN = 2; // 0x2
-  }
-
   public deprecated class RemoteControlClient {
     ctor public RemoteControlClient(android.app.PendingIntent);
     ctor public RemoteControlClient(android.app.PendingIntent, android.os.Looper);
@@ -27270,6 +27255,7 @@ package android.net {
     method public static long getMobileTxBytes();
     method public static long getMobileTxPackets();
     method public static int getThreadStatsTag();
+    method public static int getThreadStatsUid();
     method public static long getTotalRxBytes();
     method public static long getTotalRxPackets();
     method public static long getTotalTxBytes();
@@ -27289,7 +27275,7 @@ package android.net {
     method public static void incrementOperationCount(int);
     method public static void incrementOperationCount(int, int);
     method public static void setThreadStatsTag(int);
-    method public static void setThreadStatsUidSelf();
+    method public static void setThreadStatsUid(int);
     method public static void tagDatagramSocket(java.net.DatagramSocket) throws java.net.SocketException;
     method public static void tagFileDescriptor(java.io.FileDescriptor) throws java.io.IOException;
     method public static void tagSocket(java.net.Socket) throws java.net.SocketException;
@@ -32050,7 +32036,6 @@ package android.os {
     ctor public Build.VERSION();
     field public static final java.lang.String BASE_OS;
     field public static final java.lang.String CODENAME;
-    field public static final int FIRST_SDK_INT;
     field public static final java.lang.String INCREMENTAL;
     field public static final int MIN_SUPPORTED_TARGET_SDK_INT;
     field public static final int PREVIEW_SDK_INT;
@@ -33086,8 +33071,6 @@ package android.os {
   }
 
   public final class SystemClock {
-    method public static java.time.Clock currentNetworkTimeClock();
-    method public static long currentNetworkTimeMillis();
     method public static long currentThreadTimeMillis();
     method public static long elapsedRealtime();
     method public static long elapsedRealtimeNanos();
@@ -45061,18 +45044,6 @@ package android.util {
     field public static final deprecated boolean LOGV = false;
     field public static final deprecated boolean PROFILE = false;
     field public static final deprecated boolean RELEASE = true;
-  }
-
-  public class DataUnit extends java.lang.Enum {
-    method public long toBytes(long);
-    method public static android.util.DataUnit valueOf(java.lang.String);
-    method public static final android.util.DataUnit[] values();
-    enum_constant public static final android.util.DataUnit GIBIBYTES;
-    enum_constant public static final android.util.DataUnit GIGABYTES;
-    enum_constant public static final android.util.DataUnit KIBIBYTES;
-    enum_constant public static final android.util.DataUnit KILOBYTES;
-    enum_constant public static final android.util.DataUnit MEBIBYTES;
-    enum_constant public static final android.util.DataUnit MEGABYTES;
   }
 
   public class DebugUtils {
