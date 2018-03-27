@@ -23706,6 +23706,8 @@ package android.media {
     field public static final java.lang.String MIMETYPE_AUDIO_VORBIS = "audio/vorbis";
     field public static final java.lang.String MIMETYPE_IMAGE_ANDROID_HEIC = "image/vnd.android.heic";
     field public static final java.lang.String MIMETYPE_TEXT_CEA_608 = "text/cea-608";
+    field public static final java.lang.String MIMETYPE_TEXT_CEA_708 = "text/cea-708";
+    field public static final java.lang.String MIMETYPE_TEXT_SUBRIP = "application/x-subrip";
     field public static final java.lang.String MIMETYPE_TEXT_VTT = "text/vtt";
     field public static final java.lang.String MIMETYPE_VIDEO_AVC = "video/avc";
     field public static final java.lang.String MIMETYPE_VIDEO_DOLBY_VISION = "video/dolby-vision";
@@ -23887,6 +23889,8 @@ package android.media {
     method public void addTimedTextSource(java.io.FileDescriptor, java.lang.String) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException;
     method public void addTimedTextSource(java.io.FileDescriptor, long, long, java.lang.String) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException;
     method public void attachAuxEffect(int);
+    method public void clearOnMediaTimeDiscontinuityListener();
+    method public void clearOnSubtitleDataListener();
     method public static android.media.MediaPlayer create(android.content.Context, android.net.Uri);
     method public static android.media.MediaPlayer create(android.content.Context, android.net.Uri, android.view.SurfaceHolder);
     method public static android.media.MediaPlayer create(android.content.Context, android.net.Uri, android.view.SurfaceHolder, android.media.AudioAttributes, int);
@@ -23951,8 +23955,12 @@ package android.media {
     method public void setOnDrmPreparedListener(android.media.MediaPlayer.OnDrmPreparedListener, android.os.Handler);
     method public void setOnErrorListener(android.media.MediaPlayer.OnErrorListener);
     method public void setOnInfoListener(android.media.MediaPlayer.OnInfoListener);
+    method public void setOnMediaTimeDiscontinuityListener(android.media.MediaPlayer.OnMediaTimeDiscontinuityListener, android.os.Handler);
+    method public void setOnMediaTimeDiscontinuityListener(android.media.MediaPlayer.OnMediaTimeDiscontinuityListener);
     method public void setOnPreparedListener(android.media.MediaPlayer.OnPreparedListener);
     method public void setOnSeekCompleteListener(android.media.MediaPlayer.OnSeekCompleteListener);
+    method public void setOnSubtitleDataListener(android.media.MediaPlayer.OnSubtitleDataListener, android.os.Handler);
+    method public void setOnSubtitleDataListener(android.media.MediaPlayer.OnSubtitleDataListener);
     method public void setOnTimedMetaDataAvailableListener(android.media.MediaPlayer.OnTimedMetaDataAvailableListener);
     method public void setOnTimedTextListener(android.media.MediaPlayer.OnTimedTextListener);
     method public void setOnVideoSizeChangedListener(android.media.MediaPlayer.OnVideoSizeChangedListener);
@@ -23985,7 +23993,7 @@ package android.media {
     field public static final int MEDIA_INFO_VIDEO_NOT_PLAYING = 805; // 0x325
     field public static final int MEDIA_INFO_VIDEO_RENDERING_START = 3; // 0x3
     field public static final int MEDIA_INFO_VIDEO_TRACK_LAGGING = 700; // 0x2bc
-    field public static final java.lang.String MEDIA_MIMETYPE_TEXT_SUBRIP = "application/x-subrip";
+    field public static final deprecated java.lang.String MEDIA_MIMETYPE_TEXT_SUBRIP = "application/x-subrip";
     field public static final int PREPARE_DRM_STATUS_PREPARATION_ERROR = 3; // 0x3
     field public static final int PREPARE_DRM_STATUS_PROVISIONING_NETWORK_ERROR = 1; // 0x1
     field public static final int PREPARE_DRM_STATUS_PROVISIONING_SERVER_ERROR = 2; // 0x2
@@ -24050,12 +24058,20 @@ package android.media {
     method public abstract boolean onInfo(android.media.MediaPlayer, int, int);
   }
 
+  public static abstract interface MediaPlayer.OnMediaTimeDiscontinuityListener {
+    method public abstract void onMediaTimeDiscontinuity(android.media.MediaPlayer, android.media.MediaTimestamp);
+  }
+
   public static abstract interface MediaPlayer.OnPreparedListener {
     method public abstract void onPrepared(android.media.MediaPlayer);
   }
 
   public static abstract interface MediaPlayer.OnSeekCompleteListener {
     method public abstract void onSeekComplete(android.media.MediaPlayer);
+  }
+
+  public static abstract interface MediaPlayer.OnSubtitleDataListener {
+    method public abstract void onSubtitleData(android.media.MediaPlayer, android.media.SubtitleData);
   }
 
   public static abstract interface MediaPlayer.OnTimedMetaDataAvailableListener {
@@ -24410,6 +24426,7 @@ package android.media {
     method public long getAnchorMediaTimeUs();
     method public long getAnchorSytemNanoTime();
     method public float getMediaClockRate();
+    field public static final android.media.MediaTimestamp TIMESTAMP_UNKNOWN;
   }
 
   public final class MicrophoneInfo {
@@ -24668,6 +24685,13 @@ package android.media {
 
   public static abstract interface SoundPool.OnLoadCompleteListener {
     method public abstract void onLoadComplete(android.media.SoundPool, int, int);
+  }
+
+  public final class SubtitleData {
+    method public byte[] getData();
+    method public long getDurationUs();
+    method public long getStartTimeUs();
+    method public int getTrackIndex();
   }
 
   public final class SyncParams {
