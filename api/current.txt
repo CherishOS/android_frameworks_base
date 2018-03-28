@@ -6261,6 +6261,7 @@ package android.app {
     method public void addOnColorsChangedListener(android.app.WallpaperManager.OnColorsChangedListener, android.os.Handler);
     method public void clear() throws java.io.IOException;
     method public void clear(int) throws java.io.IOException;
+    method public void clearWallpaper();
     method public void clearWallpaperOffsets(android.os.IBinder);
     method public void forgetLoadedWallpaper();
     method public android.graphics.drawable.Drawable getBuiltInDrawable();
@@ -6287,6 +6288,7 @@ package android.app {
     method public void setBitmap(android.graphics.Bitmap) throws java.io.IOException;
     method public int setBitmap(android.graphics.Bitmap, android.graphics.Rect, boolean) throws java.io.IOException;
     method public int setBitmap(android.graphics.Bitmap, android.graphics.Rect, boolean, int) throws java.io.IOException;
+    method public void setDisplayPadding(android.graphics.Rect);
     method public void setResource(int) throws java.io.IOException;
     method public int setResource(int, int) throws java.io.IOException;
     method public void setStream(java.io.InputStream) throws java.io.IOException;
@@ -7041,7 +7043,8 @@ package android.app.job {
     method public int getBackoffPolicy();
     method public android.content.ClipData getClipData();
     method public int getClipGrantFlags();
-    method public long getEstimatedNetworkBytes();
+    method public long getEstimatedNetworkDownloadBytes();
+    method public long getEstimatedNetworkUploadBytes();
     method public android.os.PersistableBundle getExtras();
     method public long getFlexMillis();
     method public int getId();
@@ -7058,8 +7061,10 @@ package android.app.job {
     method public long getTriggerContentMaxDelay();
     method public long getTriggerContentUpdateDelay();
     method public android.app.job.JobInfo.TriggerContentUri[] getTriggerContentUris();
+    method public boolean isImportantWhileForeground();
     method public boolean isPeriodic();
     method public boolean isPersisted();
+    method public boolean isPrefetch();
     method public boolean isRequireBatteryNotLow();
     method public boolean isRequireCharging();
     method public boolean isRequireDeviceIdle();
@@ -7085,15 +7090,15 @@ package android.app.job {
     method public android.app.job.JobInfo build();
     method public android.app.job.JobInfo.Builder setBackoffCriteria(long, int);
     method public android.app.job.JobInfo.Builder setClipData(android.content.ClipData, int);
-    method public android.app.job.JobInfo.Builder setEstimatedNetworkBytes(long);
+    method public android.app.job.JobInfo.Builder setEstimatedNetworkBytes(long, long);
     method public android.app.job.JobInfo.Builder setExtras(android.os.PersistableBundle);
     method public android.app.job.JobInfo.Builder setImportantWhileForeground(boolean);
-    method public android.app.job.JobInfo.Builder setIsPrefetch(boolean);
     method public android.app.job.JobInfo.Builder setMinimumLatency(long);
     method public android.app.job.JobInfo.Builder setOverrideDeadline(long);
     method public android.app.job.JobInfo.Builder setPeriodic(long);
     method public android.app.job.JobInfo.Builder setPeriodic(long, long);
     method public android.app.job.JobInfo.Builder setPersisted(boolean);
+    method public android.app.job.JobInfo.Builder setPrefetch(boolean);
     method public android.app.job.JobInfo.Builder setRequiredNetwork(android.net.NetworkRequest);
     method public android.app.job.JobInfo.Builder setRequiredNetworkType(int);
     method public android.app.job.JobInfo.Builder setRequiresBatteryNotLow(boolean);
@@ -7163,10 +7168,11 @@ package android.app.job {
 
   public final class JobWorkItem implements android.os.Parcelable {
     ctor public JobWorkItem(android.content.Intent);
-    ctor public JobWorkItem(android.content.Intent, long);
+    ctor public JobWorkItem(android.content.Intent, long, long);
     method public int describeContents();
     method public int getDeliveryCount();
-    method public long getEstimatedNetworkBytes();
+    method public long getEstimatedNetworkDownloadBytes();
+    method public long getEstimatedNetworkUploadBytes();
     method public android.content.Intent getIntent();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.job.JobWorkItem> CREATOR;
@@ -7328,6 +7334,20 @@ package android.app.usage {
     field public static final android.os.Parcelable.Creator<android.app.usage.ConfigurationStats> CREATOR;
   }
 
+  public final class EventStats implements android.os.Parcelable {
+    ctor public EventStats(android.app.usage.EventStats);
+    method public void add(android.app.usage.EventStats);
+    method public int describeContents();
+    method public int getCount();
+    method public int getEventType();
+    method public long getFirstTimeStamp();
+    method public long getLastTimeStamp();
+    method public long getLastTimeUsed();
+    method public long getTotalTime();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.app.usage.EventStats> CREATOR;
+  }
+
   public final class ExternalStorageStats implements android.os.Parcelable {
     method public int describeContents();
     method public long getAppBytes();
@@ -7433,6 +7453,8 @@ package android.app.usage {
     field public static final int MOVE_TO_BACKGROUND = 2; // 0x2
     field public static final int MOVE_TO_FOREGROUND = 1; // 0x1
     field public static final int NONE = 0; // 0x0
+    field public static final int SCREEN_INTERACTIVE = 15; // 0xf
+    field public static final int SCREEN_NON_INTERACTIVE = 16; // 0x10
     field public static final int SHORTCUT_INVOCATION = 8; // 0x8
     field public static final int STANDBY_BUCKET_CHANGED = 11; // 0xb
     field public static final int USER_INTERACTION = 7; // 0x7
@@ -7456,6 +7478,7 @@ package android.app.usage {
     method public boolean isAppInactive(java.lang.String);
     method public java.util.Map<java.lang.String, android.app.usage.UsageStats> queryAndAggregateUsageStats(long, long);
     method public java.util.List<android.app.usage.ConfigurationStats> queryConfigurations(int, long, long);
+    method public java.util.List<android.app.usage.EventStats> queryEventStats(int, long, long);
     method public android.app.usage.UsageEvents queryEvents(long, long);
     method public android.app.usage.UsageEvents queryEventsForSelf(long, long);
     method public java.util.List<android.app.usage.UsageStats> queryUsageStats(int, long, long);
@@ -9882,6 +9905,8 @@ package android.content {
     field public static final java.lang.String ACTION_MEDIA_UNMOUNTABLE = "android.intent.action.MEDIA_UNMOUNTABLE";
     field public static final java.lang.String ACTION_MEDIA_UNMOUNTED = "android.intent.action.MEDIA_UNMOUNTED";
     field public static final java.lang.String ACTION_MY_PACKAGE_REPLACED = "android.intent.action.MY_PACKAGE_REPLACED";
+    field public static final java.lang.String ACTION_MY_PACKAGE_SUSPENDED = "android.intent.action.MY_PACKAGE_SUSPENDED";
+    field public static final java.lang.String ACTION_MY_PACKAGE_UNSUSPENDED = "android.intent.action.MY_PACKAGE_UNSUSPENDED";
     field public static final java.lang.String ACTION_NEW_OUTGOING_CALL = "android.intent.action.NEW_OUTGOING_CALL";
     field public static final java.lang.String ACTION_OPEN_DOCUMENT = "android.intent.action.OPEN_DOCUMENT";
     field public static final java.lang.String ACTION_OPEN_DOCUMENT_TREE = "android.intent.action.OPEN_DOCUMENT_TREE";
@@ -10042,6 +10067,7 @@ package android.content {
     field public static final java.lang.String EXTRA_SPLIT_NAME = "android.intent.extra.SPLIT_NAME";
     field public static final java.lang.String EXTRA_STREAM = "android.intent.extra.STREAM";
     field public static final java.lang.String EXTRA_SUBJECT = "android.intent.extra.SUBJECT";
+    field public static final java.lang.String EXTRA_SUSPENDED_PACKAGE_EXTRAS = "android.intent.extra.SUSPENDED_PACKAGE_EXTRAS";
     field public static final java.lang.String EXTRA_TEMPLATE = "android.intent.extra.TEMPLATE";
     field public static final java.lang.String EXTRA_TEXT = "android.intent.extra.TEXT";
     field public static final java.lang.String EXTRA_TITLE = "android.intent.extra.TITLE";
@@ -11155,7 +11181,7 @@ package android.content.pm {
     method public abstract android.content.res.Resources getResourcesForApplication(java.lang.String) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract android.content.pm.ServiceInfo getServiceInfo(android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract java.util.List<android.content.pm.SharedLibraryInfo> getSharedLibraries(int);
-    method public android.os.PersistableBundle getSuspendedPackageAppExtras();
+    method public android.os.Bundle getSuspendedPackageAppExtras();
     method public abstract android.content.pm.FeatureInfo[] getSystemAvailableFeatures();
     method public abstract java.lang.String[] getSystemSharedLibraryNames();
     method public abstract java.lang.CharSequence getText(java.lang.String, int, android.content.pm.ApplicationInfo);
@@ -13302,14 +13328,9 @@ package android.graphics {
     method public void rotate(float);
     method public final void rotate(float, float, float);
     method public int save();
-    method public deprecated int save(int);
-    method public deprecated int saveLayer(android.graphics.RectF, android.graphics.Paint, int);
     method public int saveLayer(android.graphics.RectF, android.graphics.Paint);
-    method public deprecated int saveLayer(float, float, float, float, android.graphics.Paint, int);
     method public int saveLayer(float, float, float, float, android.graphics.Paint);
-    method public deprecated int saveLayerAlpha(android.graphics.RectF, int, int);
     method public int saveLayerAlpha(android.graphics.RectF, int);
-    method public deprecated int saveLayerAlpha(float, float, float, float, int, int);
     method public int saveLayerAlpha(float, float, float, float, int);
     method public void scale(float, float);
     method public final void scale(float, float, float, float);
@@ -13319,12 +13340,6 @@ package android.graphics {
     method public void setMatrix(android.graphics.Matrix);
     method public void skew(float, float);
     method public void translate(float, float);
-    field public static final int ALL_SAVE_FLAG = 31; // 0x1f
-    field public static final deprecated int CLIP_SAVE_FLAG = 2; // 0x2
-    field public static final deprecated int CLIP_TO_LAYER_SAVE_FLAG = 16; // 0x10
-    field public static final deprecated int FULL_COLOR_LAYER_SAVE_FLAG = 8; // 0x8
-    field public static final deprecated int HAS_ALPHA_LAYER_SAVE_FLAG = 4; // 0x4
-    field public static final deprecated int MATRIX_SAVE_FLAG = 1; // 0x1
   }
 
   public static final class Canvas.EdgeType extends java.lang.Enum {
@@ -15793,6 +15808,7 @@ package android.hardware.camera2 {
     field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> CONTROL_MAX_REGIONS_AWB;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<android.util.Range<java.lang.Integer>> CONTROL_POST_RAW_SENSITIVITY_BOOST_RANGE;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Boolean> DEPTH_DEPTH_IS_EXCLUSIVE;
+    field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> DISTORTION_CORRECTION_AVAILABLE_MODES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> EDGE_AVAILABLE_EDGE_MODES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Boolean> FLASH_INFO_AVAILABLE;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> HOT_PIXEL_AVAILABLE_HOT_PIXEL_MODES;
@@ -16029,6 +16045,9 @@ package android.hardware.camera2 {
     field public static final int CONTROL_SCENE_MODE_THEATRE = 7; // 0x7
     field public static final int CONTROL_VIDEO_STABILIZATION_MODE_OFF = 0; // 0x0
     field public static final int CONTROL_VIDEO_STABILIZATION_MODE_ON = 1; // 0x1
+    field public static final int DISTORTION_CORRECTION_MODE_FAST = 1; // 0x1
+    field public static final int DISTORTION_CORRECTION_MODE_HIGH_QUALITY = 2; // 0x2
+    field public static final int DISTORTION_CORRECTION_MODE_OFF = 0; // 0x0
     field public static final int EDGE_MODE_FAST = 1; // 0x1
     field public static final int EDGE_MODE_HIGH_QUALITY = 2; // 0x2
     field public static final int EDGE_MODE_OFF = 0; // 0x0
@@ -16181,6 +16200,7 @@ package android.hardware.camera2 {
     field public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> CONTROL_SCENE_MODE;
     field public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> CONTROL_VIDEO_STABILIZATION_MODE;
     field public static final android.os.Parcelable.Creator<android.hardware.camera2.CaptureRequest> CREATOR;
+    field public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> DISTORTION_CORRECTION_MODE;
     field public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> EDGE_MODE;
     field public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> FLASH_MODE;
     field public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> HOT_PIXEL_MODE;
@@ -16263,6 +16283,7 @@ package android.hardware.camera2 {
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_POST_RAW_SENSITIVITY_BOOST;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_SCENE_MODE;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_VIDEO_STABILIZATION_MODE;
+    field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> DISTORTION_CORRECTION_MODE;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> EDGE_MODE;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> FLASH_MODE;
     field public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> FLASH_STATE;
@@ -38324,10 +38345,8 @@ package android.se.omapi {
     method public void shutdown();
   }
 
-  public static abstract class SEService.SecureElementListener extends android.os.Binder {
-    ctor public SEService.SecureElementListener();
-    method public android.os.IBinder asBinder();
-    method public void serviceConnected();
+  public static abstract interface SEService.SecureElementListener {
+    method public abstract void onServiceConnected();
   }
 
   public class Session {
@@ -38337,9 +38356,7 @@ package android.se.omapi {
     method public android.se.omapi.Reader getReader();
     method public boolean isClosed();
     method public android.se.omapi.Channel openBasicChannel(byte[], byte) throws java.io.IOException;
-    method public android.se.omapi.Channel openBasicChannel(byte[]) throws java.io.IOException;
     method public android.se.omapi.Channel openLogicalChannel(byte[], byte) throws java.io.IOException;
-    method public android.se.omapi.Channel openLogicalChannel(byte[]) throws java.io.IOException;
   }
 
 }
@@ -38607,6 +38624,7 @@ package android.security.keystore {
     method public boolean isDigestsSpecified();
     method public boolean isInvalidatedByBiometricEnrollment();
     method public boolean isRandomizedEncryptionRequired();
+    method public boolean isTrustedUserPresenceRequired();
     method public boolean isUserAuthenticationRequired();
     method public boolean isUserAuthenticationValidWhileOnBody();
     method public boolean isUserConfirmationRequired();
@@ -38625,6 +38643,7 @@ package android.security.keystore {
     method public android.security.keystore.KeyProtection.Builder setKeyValidityStart(java.util.Date);
     method public android.security.keystore.KeyProtection.Builder setRandomizedEncryptionRequired(boolean);
     method public android.security.keystore.KeyProtection.Builder setSignaturePaddings(java.lang.String...);
+    method public android.security.keystore.KeyProtection.Builder setTrustedUserPresenceRequired(boolean);
     method public android.security.keystore.KeyProtection.Builder setUserAuthenticationRequired(boolean);
     method public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidWhileOnBody(boolean);
     method public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidityDurationSeconds(int);
@@ -41562,7 +41581,6 @@ package android.telephony {
     field public static final java.lang.String KEY_EDITABLE_ENHANCED_4G_LTE_BOOL = "editable_enhanced_4g_lte_bool";
     field public static final java.lang.String KEY_EDITABLE_VOICEMAIL_NUMBER_BOOL = "editable_voicemail_number_bool";
     field public static final java.lang.String KEY_EDITABLE_VOICEMAIL_NUMBER_SETTING_BOOL = "editable_voicemail_number_setting_bool";
-    field public static final java.lang.String KEY_ENABLE_APPS_STRING_ARRAY = "enable_apps_string_array";
     field public static final java.lang.String KEY_ENABLE_DIALER_KEY_VIBRATION_BOOL = "enable_dialer_key_vibration_bool";
     field public static final java.lang.String KEY_FORCE_HOME_NETWORK_BOOL = "force_home_network_bool";
     field public static final java.lang.String KEY_GSM_DTMF_TONE_DELAY_INT = "gsm_dtmf_tone_delay_int";
@@ -41651,6 +41669,8 @@ package android.telephony {
 
   public abstract class CellIdentity implements android.os.Parcelable {
     method public int describeContents();
+    method public java.lang.CharSequence getOperatorAlphaLong();
+    method public java.lang.CharSequence getOperatorAlphaShort();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.CellIdentity> CREATOR;
   }
@@ -41660,8 +41680,6 @@ package android.telephony {
     method public int getLatitude();
     method public int getLongitude();
     method public int getNetworkId();
-    method public java.lang.CharSequence getOperatorAlphaLong();
-    method public java.lang.CharSequence getOperatorAlphaShort();
     method public int getSystemId();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.CellIdentityCdma> CREATOR;
@@ -41677,8 +41695,6 @@ package android.telephony {
     method public deprecated int getMnc();
     method public java.lang.String getMncString();
     method public java.lang.String getMobileNetworkOperator();
-    method public java.lang.CharSequence getOperatorAlphaLong();
-    method public java.lang.CharSequence getOperatorAlphaShort();
     method public deprecated int getPsc();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.CellIdentityGsm> CREATOR;
@@ -41693,8 +41709,6 @@ package android.telephony {
     method public deprecated int getMnc();
     method public java.lang.String getMncString();
     method public java.lang.String getMobileNetworkOperator();
-    method public java.lang.CharSequence getOperatorAlphaLong();
-    method public java.lang.CharSequence getOperatorAlphaShort();
     method public int getPci();
     method public int getTac();
     method public void writeToParcel(android.os.Parcel, int);
@@ -41719,8 +41733,6 @@ package android.telephony {
     method public deprecated int getMnc();
     method public java.lang.String getMncString();
     method public java.lang.String getMobileNetworkOperator();
-    method public java.lang.CharSequence getOperatorAlphaLong();
-    method public java.lang.CharSequence getOperatorAlphaShort();
     method public int getPsc();
     method public int getUarfcn();
     method public void writeToParcel(android.os.Parcel, int);
@@ -42369,12 +42381,11 @@ package android.telephony {
     method public java.lang.String iccTransmitApduBasicChannel(int, int, int, int, int, java.lang.String);
     method public java.lang.String iccTransmitApduLogicalChannel(int, int, int, int, int, int, java.lang.String);
     method public boolean isConcurrentVoiceAndDataSupported();
-    method public deprecated boolean isDataEnabled();
+    method public boolean isDataEnabled();
     method public boolean isHearingAidCompatibilitySupported();
     method public boolean isNetworkRoaming();
     method public boolean isSmsCapable();
     method public deprecated boolean isTtyModeSupported();
-    method public boolean isUserMobileDataEnabled();
     method public boolean isVoiceCapable();
     method public boolean isVoicemailVibrationEnabled(android.telecom.PhoneAccountHandle);
     method public boolean isWorldPhone();
@@ -42385,13 +42396,12 @@ package android.telephony {
     method public java.lang.String sendEnvelopeWithStatus(java.lang.String);
     method public void sendUssdRequest(java.lang.String, android.telephony.TelephonyManager.UssdResponseCallback, android.os.Handler);
     method public void sendVisualVoicemailSms(java.lang.String, int, java.lang.String, android.app.PendingIntent);
-    method public deprecated void setDataEnabled(boolean);
+    method public void setDataEnabled(boolean);
     method public boolean setLine1NumberForDisplay(java.lang.String, java.lang.String);
     method public void setNetworkSelectionModeAutomatic();
     method public boolean setNetworkSelectionModeManual(java.lang.String, boolean);
     method public boolean setOperatorBrandOverride(java.lang.String);
     method public boolean setPreferredNetworkTypeToGlobal();
-    method public void setUserMobileDataEnabled(boolean);
     method public void setVisualVoicemailSmsFilterSettings(android.telephony.VisualVoicemailSmsFilterSettings);
     method public boolean setVoiceMailNumber(java.lang.String, java.lang.String);
     method public deprecated void setVoicemailRingtoneUri(android.telecom.PhoneAccountHandle, android.net.Uri);
@@ -42666,6 +42676,7 @@ package android.telephony.euicc {
     field public static final int EMBEDDED_SUBSCRIPTION_RESULT_OK = 0; // 0x0
     field public static final int EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR = 1; // 0x1
     field public static final java.lang.String EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE = "android.telephony.euicc.extra.EMBEDDED_SUBSCRIPTION_DETAILED_CODE";
+    field public static final java.lang.String EXTRA_EMBEDDED_SUBSCRIPTION_DOWNLOADABLE_SUBSCRIPTION = "android.telephony.euicc.extra.EMBEDDED_SUBSCRIPTION_DOWNLOADABLE_SUBSCRIPTION";
     field public static final java.lang.String META_DATA_CARRIER_ICON = "android.telephony.euicc.carriericon";
   }
 
