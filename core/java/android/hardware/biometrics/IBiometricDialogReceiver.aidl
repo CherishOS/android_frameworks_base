@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package android.hardware.fingerprint;
+package android.hardware.biometrics;
 
-import android.hardware.fingerprint.Fingerprint;
 import android.os.Bundle;
 import android.os.UserHandle;
 
 /**
- * Communication channel from the FingerprintDialog (SysUI) back to AuthenticationClient.
+ * Communication channel from the BiometricDialog (SysUI) back to AuthenticationClient.
  * @hide
  */
-oneway interface IFingerprintDialogReceiver {
+oneway interface IBiometricDialogReceiver {
     void onDialogDismissed(int reason);
 }
