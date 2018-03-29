@@ -25756,6 +25756,7 @@ package android.media.session {
   public final class MediaSession {
     ctor public MediaSession(android.content.Context, java.lang.String);
     method public android.media.session.MediaController getController();
+    method public android.media.session.MediaSessionManager.RemoteUserInfo getCurrentControllerInfo();
     method public android.media.session.MediaSession.Token getSessionToken();
     method public boolean isActive();
     method public void release();
@@ -25822,11 +25823,19 @@ package android.media.session {
     method public void addOnActiveSessionsChangedListener(android.media.session.MediaSessionManager.OnActiveSessionsChangedListener, android.content.ComponentName);
     method public void addOnActiveSessionsChangedListener(android.media.session.MediaSessionManager.OnActiveSessionsChangedListener, android.content.ComponentName, android.os.Handler);
     method public java.util.List<android.media.session.MediaController> getActiveSessions(android.content.ComponentName);
+    method public boolean isTrustedForMediaControl(android.media.session.MediaSessionManager.RemoteUserInfo);
     method public void removeOnActiveSessionsChangedListener(android.media.session.MediaSessionManager.OnActiveSessionsChangedListener);
   }
 
   public static abstract interface MediaSessionManager.OnActiveSessionsChangedListener {
     method public abstract void onActiveSessionsChanged(java.util.List<android.media.session.MediaController>);
+  }
+
+  public static final class MediaSessionManager.RemoteUserInfo {
+    ctor public MediaSessionManager.RemoteUserInfo(java.lang.String, int, int);
+    method public java.lang.String getPackageName();
+    method public int getPid();
+    method public int getUid();
   }
 
   public final class PlaybackState implements android.os.Parcelable {
@@ -39170,6 +39179,7 @@ package android.service.media {
     ctor public MediaBrowserService();
     method public void dump(java.io.FileDescriptor, java.io.PrintWriter, java.lang.String[]);
     method public final android.os.Bundle getBrowserRootHints();
+    method public final android.media.session.MediaSessionManager.RemoteUserInfo getCurrentBrowserInfo();
     method public android.media.session.MediaSession.Token getSessionToken();
     method public void notifyChildrenChanged(java.lang.String);
     method public void notifyChildrenChanged(java.lang.String, android.os.Bundle);
