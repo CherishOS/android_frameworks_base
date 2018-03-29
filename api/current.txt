@@ -142,7 +142,8 @@ package android {
     field public static final java.lang.String TRANSMIT_IR = "android.permission.TRANSMIT_IR";
     field public static final java.lang.String UNINSTALL_SHORTCUT = "com.android.launcher.permission.UNINSTALL_SHORTCUT";
     field public static final java.lang.String UPDATE_DEVICE_STATS = "android.permission.UPDATE_DEVICE_STATS";
-    field public static final java.lang.String USE_FINGERPRINT = "android.permission.USE_FINGERPRINT";
+    field public static final java.lang.String USE_BIOMETRIC = "android.permission.USE_BIOMETRIC";
+    field public static final deprecated java.lang.String USE_FINGERPRINT = "android.permission.USE_FINGERPRINT";
     field public static final java.lang.String USE_SIP = "android.permission.USE_SIP";
     field public static final java.lang.String VIBRATE = "android.permission.VIBRATE";
     field public static final java.lang.String WAKE_LOCK = "android.permission.WAKE_LOCK";
@@ -5877,6 +5878,8 @@ package android.app {
     method public java.lang.CharSequence getTitle();
     method public boolean isEnabled();
     method public void setEnabled(boolean);
+    method public void setShouldShowIcon(boolean);
+    method public boolean shouldShowIcon();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.RemoteAction> CREATOR;
   }
@@ -6456,7 +6459,7 @@ package android.app.admin {
     method public android.content.ComponentName getMandatoryBackupTransport();
     method public int getMaximumFailedPasswordsForWipe(android.content.ComponentName);
     method public long getMaximumTimeToLock(android.content.ComponentName);
-    method public java.util.List<java.lang.String> getMeteredDataDisabled(android.content.ComponentName);
+    method public java.util.List<java.lang.String> getMeteredDataDisabledPackages(android.content.ComponentName);
     method public int getOrganizationColor(android.content.ComponentName);
     method public java.lang.CharSequence getOrganizationName(android.content.ComponentName);
     method public java.util.List<android.telephony.data.ApnSetting> getOverrideApns(android.content.ComponentName);
@@ -6564,7 +6567,7 @@ package android.app.admin {
     method public void setMasterVolumeMuted(android.content.ComponentName, boolean);
     method public void setMaximumFailedPasswordsForWipe(android.content.ComponentName, int);
     method public void setMaximumTimeToLock(android.content.ComponentName, long);
-    method public java.util.List<java.lang.String> setMeteredDataDisabled(android.content.ComponentName, java.util.List<java.lang.String>);
+    method public java.util.List<java.lang.String> setMeteredDataDisabledPackages(android.content.ComponentName, java.util.List<java.lang.String>);
     method public void setNetworkLoggingEnabled(android.content.ComponentName, boolean);
     method public void setOrganizationColor(android.content.ComponentName, int);
     method public void setOrganizationName(android.content.ComponentName, java.lang.CharSequence);
@@ -6682,9 +6685,12 @@ package android.app.admin {
     field public static final int ID_TYPE_IMEI = 4; // 0x4
     field public static final int ID_TYPE_MEID = 8; // 0x8
     field public static final int ID_TYPE_SERIAL = 2; // 0x2
+    field public static final int KEYGUARD_DISABLE_BIOMETRICS = 416; // 0x1a0
+    field public static final int KEYGUARD_DISABLE_FACE = 128; // 0x80
     field public static final int KEYGUARD_DISABLE_FEATURES_ALL = 2147483647; // 0x7fffffff
     field public static final int KEYGUARD_DISABLE_FEATURES_NONE = 0; // 0x0
     field public static final int KEYGUARD_DISABLE_FINGERPRINT = 32; // 0x20
+    field public static final int KEYGUARD_DISABLE_IRIS = 256; // 0x100
     field public static final int KEYGUARD_DISABLE_REMOTE_INPUT = 64; // 0x40
     field public static final int KEYGUARD_DISABLE_SECURE_CAMERA = 2; // 0x2
     field public static final int KEYGUARD_DISABLE_SECURE_NOTIFICATIONS = 4; // 0x4
@@ -7200,8 +7206,9 @@ package android.app.slice {
     field public static final java.lang.String HINT_ACTIONS = "actions";
     field public static final java.lang.String HINT_ERROR = "error";
     field public static final java.lang.String HINT_HORIZONTAL = "horizontal";
-    field public static final java.lang.String HINT_KEY_WORDS = "key_words";
+    field public static final java.lang.String HINT_KEYWORDS = "keywords";
     field public static final java.lang.String HINT_LARGE = "large";
+    field public static final java.lang.String HINT_LAST_UPDATED = "last_updated";
     field public static final java.lang.String HINT_LIST = "list";
     field public static final java.lang.String HINT_LIST_ITEM = "list_item";
     field public static final java.lang.String HINT_NO_TINT = "no_tint";
@@ -7211,10 +7218,12 @@ package android.app.slice {
     field public static final java.lang.String HINT_SHORTCUT = "shortcut";
     field public static final java.lang.String HINT_SUMMARY = "summary";
     field public static final java.lang.String HINT_TITLE = "title";
+    field public static final java.lang.String HINT_TTL = "ttl";
     field public static final java.lang.String SUBTYPE_COLOR = "color";
     field public static final java.lang.String SUBTYPE_CONTENT_DESCRIPTION = "content_description";
     field public static final java.lang.String SUBTYPE_MAX = "max";
     field public static final java.lang.String SUBTYPE_MESSAGE = "message";
+    field public static final java.lang.String SUBTYPE_MILLIS = "millis";
     field public static final java.lang.String SUBTYPE_PRIORITY = "priority";
     field public static final java.lang.String SUBTYPE_RANGE = "range";
     field public static final deprecated java.lang.String SUBTYPE_SLIDER = "slider";
@@ -7285,7 +7294,7 @@ package android.app.slice {
   public class SliceMetrics {
     ctor public SliceMetrics(android.content.Context, android.net.Uri);
     method public void logHidden();
-    method public void logTouch(android.net.Uri);
+    method public void logTouch(int, android.net.Uri);
     method public void logVisible();
   }
 
@@ -15723,6 +15732,62 @@ package android.hardware {
 
 }
 
+package android.hardware.biometrics {
+
+  public class BiometricDialog {
+    method public void authenticate(android.hardware.biometrics.BiometricDialog.CryptoObject, android.os.CancellationSignal, java.util.concurrent.Executor, android.hardware.biometrics.BiometricDialog.AuthenticationCallback);
+    method public void authenticate(android.os.CancellationSignal, java.util.concurrent.Executor, android.hardware.biometrics.BiometricDialog.AuthenticationCallback);
+    field public static final int BIOMETRIC_ACQUIRED_GOOD = 0; // 0x0
+    field public static final int BIOMETRIC_ACQUIRED_IMAGER_DIRTY = 3; // 0x3
+    field public static final int BIOMETRIC_ACQUIRED_INSUFFICIENT = 2; // 0x2
+    field public static final int BIOMETRIC_ACQUIRED_PARTIAL = 1; // 0x1
+    field public static final int BIOMETRIC_ACQUIRED_TOO_FAST = 5; // 0x5
+    field public static final int BIOMETRIC_ACQUIRED_TOO_SLOW = 4; // 0x4
+    field public static final int BIOMETRIC_ERROR_CANCELED = 5; // 0x5
+    field public static final int BIOMETRIC_ERROR_HW_NOT_PRESENT = 12; // 0xc
+    field public static final int BIOMETRIC_ERROR_HW_UNAVAILABLE = 1; // 0x1
+    field public static final int BIOMETRIC_ERROR_LOCKOUT = 7; // 0x7
+    field public static final int BIOMETRIC_ERROR_LOCKOUT_PERMANENT = 9; // 0x9
+    field public static final int BIOMETRIC_ERROR_NO_BIOMETRICS = 11; // 0xb
+    field public static final int BIOMETRIC_ERROR_NO_SPACE = 4; // 0x4
+    field public static final int BIOMETRIC_ERROR_TIMEOUT = 3; // 0x3
+    field public static final int BIOMETRIC_ERROR_UNABLE_TO_PROCESS = 2; // 0x2
+    field public static final int BIOMETRIC_ERROR_USER_CANCELED = 10; // 0xa
+    field public static final int BIOMETRIC_ERROR_VENDOR = 8; // 0x8
+  }
+
+  public static abstract class BiometricDialog.AuthenticationCallback {
+    ctor public BiometricDialog.AuthenticationCallback();
+    method public void onAuthenticationError(int, java.lang.CharSequence);
+    method public void onAuthenticationFailed();
+    method public void onAuthenticationHelp(int, java.lang.CharSequence);
+    method public void onAuthenticationSucceeded(android.hardware.biometrics.BiometricDialog.AuthenticationResult);
+  }
+
+  public static class BiometricDialog.AuthenticationResult {
+    method public android.hardware.biometrics.BiometricDialog.CryptoObject getCryptoObject();
+  }
+
+  public static class BiometricDialog.Builder {
+    ctor public BiometricDialog.Builder(android.content.Context);
+    method public android.hardware.biometrics.BiometricDialog build();
+    method public android.hardware.biometrics.BiometricDialog.Builder setDescription(java.lang.CharSequence);
+    method public android.hardware.biometrics.BiometricDialog.Builder setNegativeButton(java.lang.CharSequence, java.util.concurrent.Executor, android.content.DialogInterface.OnClickListener);
+    method public android.hardware.biometrics.BiometricDialog.Builder setSubtitle(java.lang.CharSequence);
+    method public android.hardware.biometrics.BiometricDialog.Builder setTitle(java.lang.CharSequence);
+  }
+
+  public static final class BiometricDialog.CryptoObject {
+    ctor public BiometricDialog.CryptoObject(java.security.Signature);
+    ctor public BiometricDialog.CryptoObject(javax.crypto.Cipher);
+    ctor public BiometricDialog.CryptoObject(javax.crypto.Mac);
+    method public javax.crypto.Cipher getCipher();
+    method public javax.crypto.Mac getMac();
+    method public java.security.Signature getSignature();
+  }
+
+}
+
 package android.hardware.camera2 {
 
   public class CameraAccessException extends android.util.AndroidException {
@@ -16094,6 +16159,7 @@ package android.hardware.camera2 {
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_LOGICAL_MULTI_CAMERA = 11; // 0xb
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_MANUAL_POST_PROCESSING = 2; // 0x2
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR = 1; // 0x1
+    field public static final int REQUEST_AVAILABLE_CAPABILITIES_MONOCHROME = 12; // 0xc
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_MOTION_TRACKING = 10; // 0xa
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_PRIVATE_REPROCESSING = 4; // 0x4
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_RAW = 3; // 0x3
@@ -16557,58 +16623,6 @@ package android.hardware.display {
 }
 
 package android.hardware.fingerprint {
-
-  public class FingerprintDialog {
-    method public void authenticate(android.hardware.fingerprint.FingerprintDialog.CryptoObject, android.os.CancellationSignal, java.util.concurrent.Executor, android.hardware.fingerprint.FingerprintDialog.AuthenticationCallback);
-    method public void authenticate(android.os.CancellationSignal, java.util.concurrent.Executor, android.hardware.fingerprint.FingerprintDialog.AuthenticationCallback);
-    field public static final int FINGERPRINT_ACQUIRED_GOOD = 0; // 0x0
-    field public static final int FINGERPRINT_ACQUIRED_IMAGER_DIRTY = 3; // 0x3
-    field public static final int FINGERPRINT_ACQUIRED_INSUFFICIENT = 2; // 0x2
-    field public static final int FINGERPRINT_ACQUIRED_PARTIAL = 1; // 0x1
-    field public static final int FINGERPRINT_ACQUIRED_TOO_FAST = 5; // 0x5
-    field public static final int FINGERPRINT_ACQUIRED_TOO_SLOW = 4; // 0x4
-    field public static final int FINGERPRINT_ERROR_CANCELED = 5; // 0x5
-    field public static final int FINGERPRINT_ERROR_HW_NOT_PRESENT = 12; // 0xc
-    field public static final int FINGERPRINT_ERROR_HW_UNAVAILABLE = 1; // 0x1
-    field public static final int FINGERPRINT_ERROR_LOCKOUT = 7; // 0x7
-    field public static final int FINGERPRINT_ERROR_LOCKOUT_PERMANENT = 9; // 0x9
-    field public static final int FINGERPRINT_ERROR_NO_FINGERPRINTS = 11; // 0xb
-    field public static final int FINGERPRINT_ERROR_NO_SPACE = 4; // 0x4
-    field public static final int FINGERPRINT_ERROR_TIMEOUT = 3; // 0x3
-    field public static final int FINGERPRINT_ERROR_UNABLE_TO_PROCESS = 2; // 0x2
-    field public static final int FINGERPRINT_ERROR_USER_CANCELED = 10; // 0xa
-    field public static final int FINGERPRINT_ERROR_VENDOR = 8; // 0x8
-  }
-
-  public static abstract class FingerprintDialog.AuthenticationCallback {
-    ctor public FingerprintDialog.AuthenticationCallback();
-    method public void onAuthenticationError(int, java.lang.CharSequence);
-    method public void onAuthenticationFailed();
-    method public void onAuthenticationHelp(int, java.lang.CharSequence);
-    method public void onAuthenticationSucceeded(android.hardware.fingerprint.FingerprintDialog.AuthenticationResult);
-  }
-
-  public static class FingerprintDialog.AuthenticationResult {
-    method public android.hardware.fingerprint.FingerprintDialog.CryptoObject getCryptoObject();
-  }
-
-  public static class FingerprintDialog.Builder {
-    ctor public FingerprintDialog.Builder();
-    method public android.hardware.fingerprint.FingerprintDialog build(android.content.Context);
-    method public android.hardware.fingerprint.FingerprintDialog.Builder setDescription(java.lang.CharSequence);
-    method public android.hardware.fingerprint.FingerprintDialog.Builder setNegativeButton(java.lang.CharSequence, java.util.concurrent.Executor, android.content.DialogInterface.OnClickListener);
-    method public android.hardware.fingerprint.FingerprintDialog.Builder setSubtitle(java.lang.CharSequence);
-    method public android.hardware.fingerprint.FingerprintDialog.Builder setTitle(java.lang.CharSequence);
-  }
-
-  public static final class FingerprintDialog.CryptoObject {
-    ctor public FingerprintDialog.CryptoObject(java.security.Signature);
-    ctor public FingerprintDialog.CryptoObject(javax.crypto.Cipher);
-    ctor public FingerprintDialog.CryptoObject(javax.crypto.Mac);
-    method public javax.crypto.Cipher getCipher();
-    method public javax.crypto.Mac getMac();
-    method public java.security.Signature getSignature();
-  }
 
   public deprecated class FingerprintManager {
     method public deprecated void authenticate(android.hardware.fingerprint.FingerprintManager.CryptoObject, android.os.CancellationSignal, int, android.hardware.fingerprint.FingerprintManager.AuthenticationCallback, android.os.Handler);
@@ -23440,9 +23454,6 @@ package android.media {
     field public static final int HDCP_V2 = 3; // 0x3
     field public static final int HDCP_V2_1 = 4; // 0x4
     field public static final int HDCP_V2_2 = 5; // 0x5
-    field public static final int HW_SECURE_ALL = 5; // 0x5
-    field public static final int HW_SECURE_CRYPTO = 3; // 0x3
-    field public static final int HW_SECURE_DECODE = 4; // 0x4
     field public static final int KEY_TYPE_OFFLINE = 2; // 0x2
     field public static final int KEY_TYPE_RELEASE = 3; // 0x3
     field public static final int KEY_TYPE_STREAMING = 1; // 0x1
@@ -23451,9 +23462,12 @@ package android.media {
     field public static final java.lang.String PROPERTY_DEVICE_UNIQUE_ID = "deviceUniqueId";
     field public static final java.lang.String PROPERTY_VENDOR = "vendor";
     field public static final java.lang.String PROPERTY_VERSION = "version";
+    field public static final int SECURITY_LEVEL_HW_SECURE_ALL = 5; // 0x5
+    field public static final int SECURITY_LEVEL_HW_SECURE_CRYPTO = 3; // 0x3
+    field public static final int SECURITY_LEVEL_HW_SECURE_DECODE = 4; // 0x4
+    field public static final int SECURITY_LEVEL_SW_SECURE_CRYPTO = 1; // 0x1
+    field public static final int SECURITY_LEVEL_SW_SECURE_DECODE = 2; // 0x2
     field public static final int SECURITY_LEVEL_UNKNOWN = 0; // 0x0
-    field public static final int SW_SECURE_CRYPTO = 1; // 0x1
-    field public static final int SW_SECURE_DECODE = 2; // 0x2
   }
 
   public final class MediaDrm.CryptoSession {
@@ -23709,6 +23723,8 @@ package android.media {
     field public static final java.lang.String MIMETYPE_AUDIO_VORBIS = "audio/vorbis";
     field public static final java.lang.String MIMETYPE_IMAGE_ANDROID_HEIC = "image/vnd.android.heic";
     field public static final java.lang.String MIMETYPE_TEXT_CEA_608 = "text/cea-608";
+    field public static final java.lang.String MIMETYPE_TEXT_CEA_708 = "text/cea-708";
+    field public static final java.lang.String MIMETYPE_TEXT_SUBRIP = "application/x-subrip";
     field public static final java.lang.String MIMETYPE_TEXT_VTT = "text/vtt";
     field public static final java.lang.String MIMETYPE_VIDEO_AVC = "video/avc";
     field public static final java.lang.String MIMETYPE_VIDEO_DOLBY_VISION = "video/dolby-vision";
@@ -23890,6 +23906,8 @@ package android.media {
     method public void addTimedTextSource(java.io.FileDescriptor, java.lang.String) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException;
     method public void addTimedTextSource(java.io.FileDescriptor, long, long, java.lang.String) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException;
     method public void attachAuxEffect(int);
+    method public void clearOnMediaTimeDiscontinuityListener();
+    method public void clearOnSubtitleDataListener();
     method public static android.media.MediaPlayer create(android.content.Context, android.net.Uri);
     method public static android.media.MediaPlayer create(android.content.Context, android.net.Uri, android.view.SurfaceHolder);
     method public static android.media.MediaPlayer create(android.content.Context, android.net.Uri, android.view.SurfaceHolder, android.media.AudioAttributes, int);
@@ -23954,8 +23972,12 @@ package android.media {
     method public void setOnDrmPreparedListener(android.media.MediaPlayer.OnDrmPreparedListener, android.os.Handler);
     method public void setOnErrorListener(android.media.MediaPlayer.OnErrorListener);
     method public void setOnInfoListener(android.media.MediaPlayer.OnInfoListener);
+    method public void setOnMediaTimeDiscontinuityListener(android.media.MediaPlayer.OnMediaTimeDiscontinuityListener, android.os.Handler);
+    method public void setOnMediaTimeDiscontinuityListener(android.media.MediaPlayer.OnMediaTimeDiscontinuityListener);
     method public void setOnPreparedListener(android.media.MediaPlayer.OnPreparedListener);
     method public void setOnSeekCompleteListener(android.media.MediaPlayer.OnSeekCompleteListener);
+    method public void setOnSubtitleDataListener(android.media.MediaPlayer.OnSubtitleDataListener, android.os.Handler);
+    method public void setOnSubtitleDataListener(android.media.MediaPlayer.OnSubtitleDataListener);
     method public void setOnTimedMetaDataAvailableListener(android.media.MediaPlayer.OnTimedMetaDataAvailableListener);
     method public void setOnTimedTextListener(android.media.MediaPlayer.OnTimedTextListener);
     method public void setOnVideoSizeChangedListener(android.media.MediaPlayer.OnVideoSizeChangedListener);
@@ -23988,7 +24010,7 @@ package android.media {
     field public static final int MEDIA_INFO_VIDEO_NOT_PLAYING = 805; // 0x325
     field public static final int MEDIA_INFO_VIDEO_RENDERING_START = 3; // 0x3
     field public static final int MEDIA_INFO_VIDEO_TRACK_LAGGING = 700; // 0x2bc
-    field public static final java.lang.String MEDIA_MIMETYPE_TEXT_SUBRIP = "application/x-subrip";
+    field public static final deprecated java.lang.String MEDIA_MIMETYPE_TEXT_SUBRIP = "application/x-subrip";
     field public static final int PREPARE_DRM_STATUS_PREPARATION_ERROR = 3; // 0x3
     field public static final int PREPARE_DRM_STATUS_PROVISIONING_NETWORK_ERROR = 1; // 0x1
     field public static final int PREPARE_DRM_STATUS_PROVISIONING_SERVER_ERROR = 2; // 0x2
@@ -24053,12 +24075,20 @@ package android.media {
     method public abstract boolean onInfo(android.media.MediaPlayer, int, int);
   }
 
+  public static abstract interface MediaPlayer.OnMediaTimeDiscontinuityListener {
+    method public abstract void onMediaTimeDiscontinuity(android.media.MediaPlayer, android.media.MediaTimestamp);
+  }
+
   public static abstract interface MediaPlayer.OnPreparedListener {
     method public abstract void onPrepared(android.media.MediaPlayer);
   }
 
   public static abstract interface MediaPlayer.OnSeekCompleteListener {
     method public abstract void onSeekComplete(android.media.MediaPlayer);
+  }
+
+  public static abstract interface MediaPlayer.OnSubtitleDataListener {
+    method public abstract void onSubtitleData(android.media.MediaPlayer, android.media.SubtitleData);
   }
 
   public static abstract interface MediaPlayer.OnTimedMetaDataAvailableListener {
@@ -24413,6 +24443,7 @@ package android.media {
     method public long getAnchorMediaTimeUs();
     method public long getAnchorSytemNanoTime();
     method public float getMediaClockRate();
+    field public static final android.media.MediaTimestamp TIMESTAMP_UNKNOWN;
   }
 
   public final class MicrophoneInfo {
@@ -24671,6 +24702,13 @@ package android.media {
 
   public static abstract interface SoundPool.OnLoadCompleteListener {
     method public abstract void onLoadComplete(android.media.SoundPool, int, int);
+  }
+
+  public final class SubtitleData {
+    method public byte[] getData();
+    method public long getDurationUs();
+    method public long getStartTimeUs();
+    method public int getTrackIndex();
   }
 
   public final class SyncParams {
@@ -25720,6 +25758,7 @@ package android.media.session {
   public final class MediaSession {
     ctor public MediaSession(android.content.Context, java.lang.String);
     method public android.media.session.MediaController getController();
+    method public android.media.session.MediaSessionManager.RemoteUserInfo getCurrentControllerInfo();
     method public android.media.session.MediaSession.Token getSessionToken();
     method public boolean isActive();
     method public void release();
@@ -25786,11 +25825,19 @@ package android.media.session {
     method public void addOnActiveSessionsChangedListener(android.media.session.MediaSessionManager.OnActiveSessionsChangedListener, android.content.ComponentName);
     method public void addOnActiveSessionsChangedListener(android.media.session.MediaSessionManager.OnActiveSessionsChangedListener, android.content.ComponentName, android.os.Handler);
     method public java.util.List<android.media.session.MediaController> getActiveSessions(android.content.ComponentName);
+    method public boolean isTrustedForMediaControl(android.media.session.MediaSessionManager.RemoteUserInfo);
     method public void removeOnActiveSessionsChangedListener(android.media.session.MediaSessionManager.OnActiveSessionsChangedListener);
   }
 
   public static abstract interface MediaSessionManager.OnActiveSessionsChangedListener {
     method public abstract void onActiveSessionsChanged(java.util.List<android.media.session.MediaController>);
+  }
+
+  public static final class MediaSessionManager.RemoteUserInfo {
+    ctor public MediaSessionManager.RemoteUserInfo(java.lang.String, int, int);
+    method public java.lang.String getPackageName();
+    method public int getPid();
+    method public int getUid();
   }
 
   public final class PlaybackState implements android.os.Parcelable {
@@ -28608,6 +28655,8 @@ package android.net.wifi.rtt {
     method public int getDistanceMm();
     method public int getDistanceStdDevMm();
     method public android.net.MacAddress getMacAddress();
+    method public int getNumAttemptedMeasurements();
+    method public int getNumSuccessfulMeasurements();
     method public android.net.wifi.aware.PeerHandle getPeerHandle();
     method public long getRangingTimestampMillis();
     method public int getRssi();
@@ -32058,7 +32107,6 @@ package android.os {
     field public static final java.lang.String BASE_OS;
     field public static final java.lang.String CODENAME;
     field public static final java.lang.String INCREMENTAL;
-    field public static final int MIN_SUPPORTED_TARGET_SDK_INT;
     field public static final int PREVIEW_SDK_INT;
     field public static final java.lang.String RELEASE;
     field public static final deprecated java.lang.String SDK;
@@ -39129,6 +39177,7 @@ package android.service.media {
     ctor public MediaBrowserService();
     method public void dump(java.io.FileDescriptor, java.io.PrintWriter, java.lang.String[]);
     method public final android.os.Bundle getBrowserRootHints();
+    method public final android.media.session.MediaSessionManager.RemoteUserInfo getCurrentBrowserInfo();
     method public android.media.session.MediaSession.Token getSessionToken();
     method public void notifyChildrenChanged(java.lang.String);
     method public void notifyChildrenChanged(java.lang.String, android.os.Bundle);
@@ -50282,38 +50331,13 @@ package android.view.inputmethod {
 
 package android.view.textclassifier {
 
-  public abstract class Logger {
-    ctor public Logger(android.view.textclassifier.Logger.Config);
-    method public java.text.BreakIterator getTokenIterator(java.util.Locale);
-    method public boolean isSmartSelection(java.lang.String);
-    method public final void logSelectionActionEvent(int, int, int);
-    method public final void logSelectionActionEvent(int, int, int, android.view.textclassifier.TextClassification);
-    method public final void logSelectionModifiedEvent(int, int);
-    method public final void logSelectionModifiedEvent(int, int, android.view.textclassifier.TextClassification);
-    method public final void logSelectionModifiedEvent(int, int, android.view.textclassifier.TextSelection);
-    method public final void logSelectionStartedEvent(int, int);
-    method public abstract void writeEvent(android.view.textclassifier.SelectionEvent);
-    field public static final int OUT_OF_BOUNDS = 2147483647; // 0x7fffffff
-    field public static final int OUT_OF_BOUNDS_NEGATIVE = -2147483648; // 0x80000000
-    field public static final java.lang.String WIDGET_CUSTOM_EDITTEXT = "customedit";
-    field public static final java.lang.String WIDGET_CUSTOM_TEXTVIEW = "customview";
-    field public static final java.lang.String WIDGET_CUSTOM_UNSELECTABLE_TEXTVIEW = "nosel-customview";
-    field public static final java.lang.String WIDGET_EDITTEXT = "edittext";
-    field public static final java.lang.String WIDGET_EDIT_WEBVIEW = "edit-webview";
-    field public static final java.lang.String WIDGET_TEXTVIEW = "textview";
-    field public static final java.lang.String WIDGET_UNKNOWN = "unknown";
-    field public static final java.lang.String WIDGET_UNSELECTABLE_TEXTVIEW = "nosel-textview";
-    field public static final java.lang.String WIDGET_WEBVIEW = "webview";
-  }
-
-  public static final class Logger.Config {
-    ctor public Logger.Config(android.content.Context, java.lang.String, java.lang.String);
-    method public java.lang.String getPackageName();
-    method public java.lang.String getWidgetType();
-    method public java.lang.String getWidgetVersion();
-  }
-
   public final class SelectionEvent implements android.os.Parcelable {
+    method public static android.view.textclassifier.SelectionEvent createSelectionActionEvent(int, int, int);
+    method public static android.view.textclassifier.SelectionEvent createSelectionActionEvent(int, int, int, android.view.textclassifier.TextClassification);
+    method public static android.view.textclassifier.SelectionEvent createSelectionModifiedEvent(int, int);
+    method public static android.view.textclassifier.SelectionEvent createSelectionModifiedEvent(int, int, android.view.textclassifier.TextClassification);
+    method public static android.view.textclassifier.SelectionEvent createSelectionModifiedEvent(int, int, android.view.textclassifier.TextSelection);
+    method public static android.view.textclassifier.SelectionEvent createSelectionStartedEvent(int, int);
     method public int describeContents();
     method public long getDurationSincePreviousEvent();
     method public long getDurationSinceSessionStart();
@@ -50324,13 +50348,14 @@ package android.view.textclassifier {
     method public int getEventType();
     method public int getInvocationMethod();
     method public java.lang.String getPackageName();
-    method public java.lang.String getSessionId();
+    method public android.view.textclassifier.TextClassificationSessionId getSessionId();
     method public java.lang.String getSignature();
     method public int getSmartEnd();
     method public int getSmartStart();
     method public int getStart();
     method public java.lang.String getWidgetType();
     method public java.lang.String getWidgetVersion();
+    method public static boolean isTerminal(int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int ACTION_ABANDON = 107; // 0x6b
     field public static final int ACTION_COPY = 101; // 0x65
@@ -50351,21 +50376,19 @@ package android.view.textclassifier {
     field public static final int EVENT_SMART_SELECTION_SINGLE = 3; // 0x3
     field public static final int INVOCATION_LINK = 2; // 0x2
     field public static final int INVOCATION_MANUAL = 1; // 0x1
+    field public static final int INVOCATION_UNKNOWN = 0; // 0x0
   }
 
   public final class TextClassification implements android.os.Parcelable {
     method public int describeContents();
+    method public java.util.List<android.app.RemoteAction> getActions();
     method public float getConfidenceScore(java.lang.String);
     method public java.lang.String getEntity(int);
     method public int getEntityCount();
-    method public android.graphics.drawable.Drawable getIcon();
-    method public android.content.Intent getIntent();
-    method public java.lang.CharSequence getLabel();
-    method public android.view.View.OnClickListener getOnClickListener();
-    method public int getSecondaryActionsCount();
-    method public android.graphics.drawable.Drawable getSecondaryIcon(int);
-    method public android.content.Intent getSecondaryIntent(int);
-    method public java.lang.CharSequence getSecondaryLabel(int);
+    method public deprecated android.graphics.drawable.Drawable getIcon();
+    method public deprecated android.content.Intent getIntent();
+    method public deprecated java.lang.CharSequence getLabel();
+    method public deprecated android.view.View.OnClickListener getOnClickListener();
     method public java.lang.String getSignature();
     method public java.lang.String getText();
     method public void writeToParcel(android.os.Parcel, int);
@@ -50374,15 +50397,13 @@ package android.view.textclassifier {
 
   public static final class TextClassification.Builder {
     ctor public TextClassification.Builder();
-    method public android.view.textclassifier.TextClassification.Builder addSecondaryAction(android.content.Intent, java.lang.String, android.graphics.drawable.Drawable);
+    method public android.view.textclassifier.TextClassification.Builder addAction(android.app.RemoteAction);
     method public android.view.textclassifier.TextClassification build();
-    method public android.view.textclassifier.TextClassification.Builder clearSecondaryActions();
     method public android.view.textclassifier.TextClassification.Builder setEntityType(java.lang.String, float);
-    method public android.view.textclassifier.TextClassification.Builder setIcon(android.graphics.drawable.Drawable);
-    method public android.view.textclassifier.TextClassification.Builder setIntent(android.content.Intent);
-    method public android.view.textclassifier.TextClassification.Builder setLabel(java.lang.String);
-    method public android.view.textclassifier.TextClassification.Builder setOnClickListener(android.view.View.OnClickListener);
-    method public android.view.textclassifier.TextClassification.Builder setPrimaryAction(android.content.Intent, java.lang.String, android.graphics.drawable.Drawable);
+    method public deprecated android.view.textclassifier.TextClassification.Builder setIcon(android.graphics.drawable.Drawable);
+    method public deprecated android.view.textclassifier.TextClassification.Builder setIntent(android.content.Intent);
+    method public deprecated android.view.textclassifier.TextClassification.Builder setLabel(java.lang.String);
+    method public deprecated android.view.textclassifier.TextClassification.Builder setOnClickListener(android.view.View.OnClickListener);
     method public android.view.textclassifier.TextClassification.Builder setSignature(java.lang.String);
     method public android.view.textclassifier.TextClassification.Builder setText(java.lang.String);
   }
@@ -50398,19 +50419,45 @@ package android.view.textclassifier {
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassification.Options> CREATOR;
   }
 
+  public final class TextClassificationContext {
+    method public java.lang.String getPackageName();
+    method public java.lang.String getWidgetType();
+    method public java.lang.String getWidgetVersion();
+  }
+
+  public static final class TextClassificationContext.Builder {
+    ctor public TextClassificationContext.Builder(java.lang.String, java.lang.String);
+    method public android.view.textclassifier.TextClassificationContext build();
+    method public android.view.textclassifier.TextClassificationContext.Builder setWidgetVersion(java.lang.String);
+  }
+
   public final class TextClassificationManager {
+    method public android.view.textclassifier.TextClassifier createTextClassificationSession(android.view.textclassifier.TextClassificationContext);
     method public android.view.textclassifier.TextClassifier getTextClassifier();
+    method public void setTextClassificationSessionFactory(android.view.textclassifier.TextClassificationSessionFactory);
     method public void setTextClassifier(android.view.textclassifier.TextClassifier);
+  }
+
+  public abstract interface TextClassificationSessionFactory {
+    method public abstract android.view.textclassifier.TextClassifier createTextClassificationSession(android.view.textclassifier.TextClassificationContext);
+  }
+
+  public final class TextClassificationSessionId implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassificationSessionId> CREATOR;
   }
 
   public abstract interface TextClassifier {
     method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.view.textclassifier.TextClassification.Options);
     method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int);
     method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.os.LocaleList);
+    method public default void destroy();
     method public default android.view.textclassifier.TextLinks generateLinks(java.lang.CharSequence, android.view.textclassifier.TextLinks.Options);
     method public default android.view.textclassifier.TextLinks generateLinks(java.lang.CharSequence);
-    method public default android.view.textclassifier.Logger getLogger(android.view.textclassifier.Logger.Config);
     method public default int getMaxGenerateLinksTextLength();
+    method public default boolean isDestroyed();
+    method public default void onSelectionEvent(android.view.textclassifier.SelectionEvent);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.view.textclassifier.TextSelection.Options);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.os.LocaleList);
@@ -50426,6 +50473,15 @@ package android.view.textclassifier {
     field public static final java.lang.String TYPE_PHONE = "phone";
     field public static final java.lang.String TYPE_UNKNOWN = "";
     field public static final java.lang.String TYPE_URL = "url";
+    field public static final java.lang.String WIDGET_TYPE_CUSTOM_EDITTEXT = "customedit";
+    field public static final java.lang.String WIDGET_TYPE_CUSTOM_TEXTVIEW = "customview";
+    field public static final java.lang.String WIDGET_TYPE_CUSTOM_UNSELECTABLE_TEXTVIEW = "nosel-customview";
+    field public static final java.lang.String WIDGET_TYPE_EDITTEXT = "edittext";
+    field public static final java.lang.String WIDGET_TYPE_EDIT_WEBVIEW = "edit-webview";
+    field public static final java.lang.String WIDGET_TYPE_TEXTVIEW = "textview";
+    field public static final java.lang.String WIDGET_TYPE_UNKNOWN = "unknown";
+    field public static final java.lang.String WIDGET_TYPE_UNSELECTABLE_TEXTVIEW = "nosel-textview";
+    field public static final java.lang.String WIDGET_TYPE_WEBVIEW = "webview";
   }
 
   public static final class TextClassifier.EntityConfig implements android.os.Parcelable {
