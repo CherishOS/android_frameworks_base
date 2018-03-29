@@ -50317,38 +50317,13 @@ package android.view.inputmethod {
 
 package android.view.textclassifier {
 
-  public abstract class Logger {
-    ctor public Logger(android.view.textclassifier.Logger.Config);
-    method public java.text.BreakIterator getTokenIterator(java.util.Locale);
-    method public boolean isSmartSelection(java.lang.String);
-    method public final void logSelectionActionEvent(int, int, int);
-    method public final void logSelectionActionEvent(int, int, int, android.view.textclassifier.TextClassification);
-    method public final void logSelectionModifiedEvent(int, int);
-    method public final void logSelectionModifiedEvent(int, int, android.view.textclassifier.TextClassification);
-    method public final void logSelectionModifiedEvent(int, int, android.view.textclassifier.TextSelection);
-    method public final void logSelectionStartedEvent(int, int);
-    method public abstract void writeEvent(android.view.textclassifier.SelectionEvent);
-    field public static final int OUT_OF_BOUNDS = 2147483647; // 0x7fffffff
-    field public static final int OUT_OF_BOUNDS_NEGATIVE = -2147483648; // 0x80000000
-    field public static final java.lang.String WIDGET_CUSTOM_EDITTEXT = "customedit";
-    field public static final java.lang.String WIDGET_CUSTOM_TEXTVIEW = "customview";
-    field public static final java.lang.String WIDGET_CUSTOM_UNSELECTABLE_TEXTVIEW = "nosel-customview";
-    field public static final java.lang.String WIDGET_EDITTEXT = "edittext";
-    field public static final java.lang.String WIDGET_EDIT_WEBVIEW = "edit-webview";
-    field public static final java.lang.String WIDGET_TEXTVIEW = "textview";
-    field public static final java.lang.String WIDGET_UNKNOWN = "unknown";
-    field public static final java.lang.String WIDGET_UNSELECTABLE_TEXTVIEW = "nosel-textview";
-    field public static final java.lang.String WIDGET_WEBVIEW = "webview";
-  }
-
-  public static final class Logger.Config {
-    ctor public Logger.Config(android.content.Context, java.lang.String, java.lang.String);
-    method public java.lang.String getPackageName();
-    method public java.lang.String getWidgetType();
-    method public java.lang.String getWidgetVersion();
-  }
-
   public final class SelectionEvent implements android.os.Parcelable {
+    method public static android.view.textclassifier.SelectionEvent createSelectionActionEvent(int, int, int);
+    method public static android.view.textclassifier.SelectionEvent createSelectionActionEvent(int, int, int, android.view.textclassifier.TextClassification);
+    method public static android.view.textclassifier.SelectionEvent createSelectionModifiedEvent(int, int);
+    method public static android.view.textclassifier.SelectionEvent createSelectionModifiedEvent(int, int, android.view.textclassifier.TextClassification);
+    method public static android.view.textclassifier.SelectionEvent createSelectionModifiedEvent(int, int, android.view.textclassifier.TextSelection);
+    method public static android.view.textclassifier.SelectionEvent createSelectionStartedEvent(int, int);
     method public int describeContents();
     method public long getDurationSincePreviousEvent();
     method public long getDurationSinceSessionStart();
@@ -50359,13 +50334,14 @@ package android.view.textclassifier {
     method public int getEventType();
     method public int getInvocationMethod();
     method public java.lang.String getPackageName();
-    method public java.lang.String getSessionId();
+    method public android.view.textclassifier.TextClassificationSessionId getSessionId();
     method public java.lang.String getSignature();
     method public int getSmartEnd();
     method public int getSmartStart();
     method public int getStart();
     method public java.lang.String getWidgetType();
     method public java.lang.String getWidgetVersion();
+    method public static boolean isTerminal(int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int ACTION_ABANDON = 107; // 0x6b
     field public static final int ACTION_COPY = 101; // 0x65
@@ -50386,6 +50362,7 @@ package android.view.textclassifier {
     field public static final int EVENT_SMART_SELECTION_SINGLE = 3; // 0x3
     field public static final int INVOCATION_LINK = 2; // 0x2
     field public static final int INVOCATION_MANUAL = 1; // 0x1
+    field public static final int INVOCATION_UNKNOWN = 0; // 0x0
   }
 
   public final class TextClassification implements android.os.Parcelable {
@@ -50428,19 +50405,45 @@ package android.view.textclassifier {
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassification.Options> CREATOR;
   }
 
+  public final class TextClassificationContext {
+    method public java.lang.String getPackageName();
+    method public java.lang.String getWidgetType();
+    method public java.lang.String getWidgetVersion();
+  }
+
+  public static final class TextClassificationContext.Builder {
+    ctor public TextClassificationContext.Builder(java.lang.String, java.lang.String);
+    method public android.view.textclassifier.TextClassificationContext build();
+    method public android.view.textclassifier.TextClassificationContext.Builder setWidgetVersion(java.lang.String);
+  }
+
   public final class TextClassificationManager {
+    method public android.view.textclassifier.TextClassifier createTextClassificationSession(android.view.textclassifier.TextClassificationContext);
     method public android.view.textclassifier.TextClassifier getTextClassifier();
+    method public void setTextClassificationSessionFactory(android.view.textclassifier.TextClassificationSessionFactory);
     method public void setTextClassifier(android.view.textclassifier.TextClassifier);
+  }
+
+  public abstract interface TextClassificationSessionFactory {
+    method public abstract android.view.textclassifier.TextClassifier createTextClassificationSession(android.view.textclassifier.TextClassificationContext);
+  }
+
+  public final class TextClassificationSessionId implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassificationSessionId> CREATOR;
   }
 
   public abstract interface TextClassifier {
     method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.view.textclassifier.TextClassification.Options);
     method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int);
     method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.os.LocaleList);
+    method public default void destroy();
     method public default android.view.textclassifier.TextLinks generateLinks(java.lang.CharSequence, android.view.textclassifier.TextLinks.Options);
     method public default android.view.textclassifier.TextLinks generateLinks(java.lang.CharSequence);
-    method public default android.view.textclassifier.Logger getLogger(android.view.textclassifier.Logger.Config);
     method public default int getMaxGenerateLinksTextLength();
+    method public default boolean isDestroyed();
+    method public default void onSelectionEvent(android.view.textclassifier.SelectionEvent);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.view.textclassifier.TextSelection.Options);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.os.LocaleList);
@@ -50456,6 +50459,15 @@ package android.view.textclassifier {
     field public static final java.lang.String TYPE_PHONE = "phone";
     field public static final java.lang.String TYPE_UNKNOWN = "";
     field public static final java.lang.String TYPE_URL = "url";
+    field public static final java.lang.String WIDGET_TYPE_CUSTOM_EDITTEXT = "customedit";
+    field public static final java.lang.String WIDGET_TYPE_CUSTOM_TEXTVIEW = "customview";
+    field public static final java.lang.String WIDGET_TYPE_CUSTOM_UNSELECTABLE_TEXTVIEW = "nosel-customview";
+    field public static final java.lang.String WIDGET_TYPE_EDITTEXT = "edittext";
+    field public static final java.lang.String WIDGET_TYPE_EDIT_WEBVIEW = "edit-webview";
+    field public static final java.lang.String WIDGET_TYPE_TEXTVIEW = "textview";
+    field public static final java.lang.String WIDGET_TYPE_UNKNOWN = "unknown";
+    field public static final java.lang.String WIDGET_TYPE_UNSELECTABLE_TEXTVIEW = "nosel-textview";
+    field public static final java.lang.String WIDGET_TYPE_WEBVIEW = "webview";
   }
 
   public static final class TextClassifier.EntityConfig implements android.os.Parcelable {
