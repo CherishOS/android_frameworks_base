@@ -38382,17 +38382,17 @@ package android.sax {
 
 package android.se.omapi {
 
-  public class Channel {
+  public final class Channel implements java.nio.channels.Channel {
     method public void close();
     method public byte[] getSelectResponse();
     method public android.se.omapi.Session getSession();
     method public boolean isBasicChannel();
-    method public boolean isClosed();
+    method public boolean isOpen();
     method public boolean selectNext() throws java.io.IOException;
     method public byte[] transmit(byte[]) throws java.io.IOException;
   }
 
-  public class Reader {
+  public final class Reader {
     method public void closeSessions();
     method public java.lang.String getName();
     method public android.se.omapi.SEService getSEService();
@@ -38400,26 +38400,28 @@ package android.se.omapi {
     method public android.se.omapi.Session openSession() throws java.io.IOException;
   }
 
-  public class SEService {
-    ctor public SEService(android.content.Context, android.se.omapi.SEService.SecureElementListener);
+  public final class SEService {
+    ctor public SEService(android.content.Context, android.se.omapi.SEService.OnConnectedListener);
     method public android.se.omapi.Reader[] getReaders();
     method public java.lang.String getVersion();
     method public boolean isConnected();
     method public void shutdown();
   }
 
-  public static abstract interface SEService.SecureElementListener {
+  public static abstract interface SEService.OnConnectedListener {
     method public abstract void onServiceConnected();
   }
 
-  public class Session {
+  public final class Session {
     method public void close();
     method public void closeChannels();
     method public byte[] getATR();
     method public android.se.omapi.Reader getReader();
     method public boolean isClosed();
     method public android.se.omapi.Channel openBasicChannel(byte[], byte) throws java.io.IOException;
+    method public android.se.omapi.Channel openBasicChannel(byte[]) throws java.io.IOException;
     method public android.se.omapi.Channel openLogicalChannel(byte[], byte) throws java.io.IOException;
+    method public android.se.omapi.Channel openLogicalChannel(byte[]) throws java.io.IOException;
   }
 
 }
