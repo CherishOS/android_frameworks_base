@@ -1605,17 +1605,17 @@ package android {
     field public static final int holo_purple = 17170458; // 0x106001a
     field public static final int holo_red_dark = 17170455; // 0x1060017
     field public static final int holo_red_light = 17170454; // 0x1060016
-    field public static final int primary_text_dark = 17170433; // 0x1060001
-    field public static final int primary_text_dark_nodisable = 17170434; // 0x1060002
-    field public static final int primary_text_light = 17170435; // 0x1060003
-    field public static final int primary_text_light_nodisable = 17170436; // 0x1060004
-    field public static final int secondary_text_dark = 17170437; // 0x1060005
-    field public static final int secondary_text_dark_nodisable = 17170438; // 0x1060006
-    field public static final int secondary_text_light = 17170439; // 0x1060007
-    field public static final int secondary_text_light_nodisable = 17170440; // 0x1060008
+    field public static final deprecated int primary_text_dark = 17170433; // 0x1060001
+    field public static final deprecated int primary_text_dark_nodisable = 17170434; // 0x1060002
+    field public static final deprecated int primary_text_light = 17170435; // 0x1060003
+    field public static final deprecated int primary_text_light_nodisable = 17170436; // 0x1060004
+    field public static final deprecated int secondary_text_dark = 17170437; // 0x1060005
+    field public static final deprecated int secondary_text_dark_nodisable = 17170438; // 0x1060006
+    field public static final deprecated int secondary_text_light = 17170439; // 0x1060007
+    field public static final deprecated int secondary_text_light_nodisable = 17170440; // 0x1060008
     field public static final int tab_indicator_text = 17170441; // 0x1060009
-    field public static final int tertiary_text_dark = 17170448; // 0x1060010
-    field public static final int tertiary_text_light = 17170449; // 0x1060011
+    field public static final deprecated int tertiary_text_dark = 17170448; // 0x1060010
+    field public static final deprecated int tertiary_text_light = 17170449; // 0x1060011
     field public static final int transparent = 17170445; // 0x106000d
     field public static final int white = 17170443; // 0x106000b
     field public static final int widget_edittext_dark = 17170442; // 0x106000a
@@ -6115,8 +6115,12 @@ package android.app {
     method public android.view.WindowAnimationFrameStats getWindowAnimationFrameStats();
     method public android.view.WindowContentFrameStats getWindowContentFrameStats(int);
     method public java.util.List<android.view.accessibility.AccessibilityWindowInfo> getWindows();
+    method public void grantRuntimePermission(java.lang.String, java.lang.String);
+    method public void grantRuntimePermissionAsUser(java.lang.String, java.lang.String, android.os.UserHandle);
     method public boolean injectInputEvent(android.view.InputEvent, boolean);
     method public boolean performGlobalAction(int);
+    method public void revokeRuntimePermission(java.lang.String, java.lang.String);
+    method public void revokeRuntimePermissionAsUser(java.lang.String, java.lang.String, android.os.UserHandle);
     method public void setOnAccessibilityEventListener(android.app.UiAutomation.OnAccessibilityEventListener);
     method public boolean setRotation(int);
     method public void setRunAsMonkey(boolean);
@@ -6464,7 +6468,6 @@ package android.app.admin {
     method public java.lang.CharSequence getOrganizationName(android.content.ComponentName);
     method public java.util.List<android.telephony.data.ApnSetting> getOverrideApns(android.content.ComponentName);
     method public android.app.admin.DevicePolicyManager getParentProfileInstance(android.content.ComponentName);
-    method public java.lang.String getPasswordBlacklistName(android.content.ComponentName);
     method public long getPasswordExpiration(android.content.ComponentName);
     method public long getPasswordExpirationTimeout(android.content.ComponentName);
     method public int getPasswordHistoryLength(android.content.ComponentName);
@@ -6501,7 +6504,7 @@ package android.app.admin {
     method public boolean installExistingPackage(android.content.ComponentName, java.lang.String);
     method public boolean installKeyPair(android.content.ComponentName, java.security.PrivateKey, java.security.cert.Certificate, java.lang.String);
     method public boolean installKeyPair(android.content.ComponentName, java.security.PrivateKey, java.security.cert.Certificate[], java.lang.String, boolean);
-    method public boolean installKeyPair(android.content.ComponentName, java.security.PrivateKey, java.security.cert.Certificate[], java.lang.String, boolean, boolean);
+    method public boolean installKeyPair(android.content.ComponentName, java.security.PrivateKey, java.security.cert.Certificate[], java.lang.String, int);
     method public boolean isActivePasswordSufficient();
     method public boolean isAdminActive(android.content.ComponentName);
     method public boolean isAffiliatedUser();
@@ -6573,7 +6576,6 @@ package android.app.admin {
     method public void setOrganizationName(android.content.ComponentName, java.lang.CharSequence);
     method public void setOverrideApnsEnabled(android.content.ComponentName, boolean);
     method public java.lang.String[] setPackagesSuspended(android.content.ComponentName, java.lang.String[], boolean);
-    method public boolean setPasswordBlacklist(android.content.ComponentName, java.lang.String, java.util.List<java.lang.String>);
     method public void setPasswordExpirationTimeout(android.content.ComponentName, long);
     method public void setPasswordHistoryLength(android.content.ComponentName, int);
     method public void setPasswordMinimumLength(android.content.ComponentName, int);
@@ -6685,6 +6687,8 @@ package android.app.admin {
     field public static final int ID_TYPE_IMEI = 4; // 0x4
     field public static final int ID_TYPE_MEID = 8; // 0x8
     field public static final int ID_TYPE_SERIAL = 2; // 0x2
+    field public static final int INSTALLKEY_REQUEST_CREDENTIALS_ACCESS = 1; // 0x1
+    field public static final int INSTALLKEY_SET_USER_SELECTABLE = 2; // 0x2
     field public static final int KEYGUARD_DISABLE_BIOMETRICS = 416; // 0x1a0
     field public static final int KEYGUARD_DISABLE_FACE = 128; // 0x80
     field public static final int KEYGUARD_DISABLE_FEATURES_ALL = 2147483647; // 0x7fffffff
@@ -7213,6 +7217,7 @@ package android.app.slice {
     field public static final java.lang.String HINT_LIST_ITEM = "list_item";
     field public static final java.lang.String HINT_NO_TINT = "no_tint";
     field public static final java.lang.String HINT_PARTIAL = "partial";
+    field public static final java.lang.String HINT_PERMISSION_REQUEST = "permission_request";
     field public static final java.lang.String HINT_SEE_MORE = "see_more";
     field public static final java.lang.String HINT_SELECTED = "selected";
     field public static final java.lang.String HINT_SHORTCUT = "shortcut";
@@ -7221,6 +7226,7 @@ package android.app.slice {
     field public static final java.lang.String HINT_TTL = "ttl";
     field public static final java.lang.String SUBTYPE_COLOR = "color";
     field public static final java.lang.String SUBTYPE_CONTENT_DESCRIPTION = "content_description";
+    field public static final java.lang.String SUBTYPE_LAYOUT_DIRECTION = "layout_direction";
     field public static final java.lang.String SUBTYPE_MAX = "max";
     field public static final java.lang.String SUBTYPE_MESSAGE = "message";
     field public static final java.lang.String SUBTYPE_MILLIS = "millis";
@@ -7281,11 +7287,14 @@ package android.app.slice {
   public class SliceManager {
     method public android.app.slice.Slice bindSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
     method public android.app.slice.Slice bindSlice(android.content.Intent, java.util.List<android.app.slice.SliceSpec>);
+    method public int checkSlicePermission(android.net.Uri, int, int);
     method public java.util.List<android.net.Uri> getPinnedSlices();
     method public java.util.List<android.app.slice.SliceSpec> getPinnedSpecs(android.net.Uri);
     method public java.util.Collection<android.net.Uri> getSliceDescendants(android.net.Uri);
+    method public void grantSlicePermission(java.lang.String, android.net.Uri);
     method public android.net.Uri mapIntentToUri(android.content.Intent);
     method public void pinSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
+    method public void revokeSlicePermission(java.lang.String, android.net.Uri);
     method public void unpinSlice(android.net.Uri);
     field public static final java.lang.String CATEGORY_SLICE = "android.app.slice.category.SLICE";
     field public static final java.lang.String SLICE_METADATA_KEY = "android.metadata.SLICE_URI";
@@ -7299,6 +7308,7 @@ package android.app.slice {
   }
 
   public abstract class SliceProvider extends android.content.ContentProvider {
+    ctor public SliceProvider(java.lang.String...);
     ctor public SliceProvider();
     method public final int delete(android.net.Uri, java.lang.String, java.lang.String[]);
     method public final java.lang.String getType(android.net.Uri);
@@ -10904,6 +10914,7 @@ package android.content.pm {
     method public java.util.List<android.content.pm.LauncherActivityInfo> getShortcutConfigActivityList(java.lang.String, android.os.UserHandle);
     method public android.graphics.drawable.Drawable getShortcutIconDrawable(android.content.pm.ShortcutInfo, int);
     method public java.util.List<android.content.pm.ShortcutInfo> getShortcuts(android.content.pm.LauncherApps.ShortcutQuery, android.os.UserHandle);
+    method public android.os.Bundle getSuspendedPackageLauncherExtras(java.lang.String, android.os.UserHandle);
     method public boolean hasShortcutHostPermission();
     method public boolean isActivityEnabled(android.content.ComponentName, android.os.UserHandle);
     method public boolean isPackageEnabled(java.lang.String, android.os.UserHandle);
@@ -10928,6 +10939,7 @@ package android.content.pm {
     method public abstract void onPackageRemoved(java.lang.String, android.os.UserHandle);
     method public abstract void onPackagesAvailable(java.lang.String[], android.os.UserHandle, boolean);
     method public void onPackagesSuspended(java.lang.String[], android.os.UserHandle);
+    method public void onPackagesSuspended(java.lang.String[], android.os.Bundle, android.os.UserHandle);
     method public abstract void onPackagesUnavailable(java.lang.String[], android.os.UserHandle, boolean);
     method public void onPackagesUnsuspended(java.lang.String[], android.os.UserHandle);
     method public void onShortcutsChanged(java.lang.String, java.util.List<android.content.pm.ShortcutInfo>, android.os.UserHandle);
@@ -13639,22 +13651,22 @@ package android.graphics {
     method public int getAllocator();
     method public boolean getConserveMemory();
     method public android.graphics.Rect getCrop();
-    method public boolean getDecodeAsAlphaMask();
-    method public boolean getMutable();
     method public android.graphics.ImageDecoder.OnPartialImageListener getOnPartialImageListener();
     method public android.graphics.PostProcessor getPostProcessor();
-    method public boolean getRequireUnpremultiplied();
-    method public android.util.Size getSampledSize(int);
-    method public android.graphics.ImageDecoder setAllocator(int);
-    method public android.graphics.ImageDecoder setConserveMemory(boolean);
-    method public android.graphics.ImageDecoder setCrop(android.graphics.Rect);
-    method public android.graphics.ImageDecoder setDecodeAsAlphaMask(boolean);
-    method public android.graphics.ImageDecoder setMutable(boolean);
-    method public android.graphics.ImageDecoder setOnPartialImageListener(android.graphics.ImageDecoder.OnPartialImageListener);
-    method public android.graphics.ImageDecoder setPostProcessor(android.graphics.PostProcessor);
-    method public android.graphics.ImageDecoder setRequireUnpremultiplied(boolean);
-    method public android.graphics.ImageDecoder setResize(int, int);
-    method public android.graphics.ImageDecoder setResize(int);
+    method public boolean isDecodeAsAlphaMaskEnabled();
+    method public boolean isMutableRequired();
+    method public boolean isUnpremultipliedRequired();
+    method public void setAllocator(int);
+    method public void setConserveMemory(boolean);
+    method public void setCrop(android.graphics.Rect);
+    method public void setDecodeAsAlphaMaskEnabled(boolean);
+    method public void setMutableRequired(boolean);
+    method public void setOnPartialImageListener(android.graphics.ImageDecoder.OnPartialImageListener);
+    method public void setPostProcessor(android.graphics.PostProcessor);
+    method public void setTargetColorSpace(android.graphics.ColorSpace);
+    method public void setTargetSampleSize(int);
+    method public void setTargetSize(int, int);
+    method public void setUnpremultipliedRequired(boolean);
     field public static final int ALLOCATOR_DEFAULT = 0; // 0x0
     field public static final int ALLOCATOR_HARDWARE = 3; // 0x3
     field public static final int ALLOCATOR_SHARED_MEMORY = 2; // 0x2
@@ -13670,6 +13682,7 @@ package android.graphics {
   }
 
   public static class ImageDecoder.ImageInfo {
+    method public android.graphics.ColorSpace getColorSpace();
     method public java.lang.String getMimeType();
     method public android.util.Size getSize();
     method public boolean isAnimated();
@@ -21957,6 +21970,7 @@ package android.media {
   }
 
   public final class AudioDeviceInfo {
+    method public java.lang.String getAddress();
     method public int[] getChannelCounts();
     method public int[] getChannelIndexMasks();
     method public int[] getChannelMasks();
@@ -24004,6 +24018,7 @@ package android.media {
     field public static final int MEDIA_INFO_BUFFERING_START = 701; // 0x2bd
     field public static final int MEDIA_INFO_METADATA_UPDATE = 802; // 0x322
     field public static final int MEDIA_INFO_NOT_SEEKABLE = 801; // 0x321
+    field public static final int MEDIA_INFO_STARTED_AS_NEXT = 2; // 0x2
     field public static final int MEDIA_INFO_SUBTITLE_TIMED_OUT = 902; // 0x386
     field public static final int MEDIA_INFO_UNKNOWN = 1; // 0x1
     field public static final int MEDIA_INFO_UNSUPPORTED_SUBTITLE = 901; // 0x385
@@ -24447,6 +24462,7 @@ package android.media {
   }
 
   public final class MicrophoneInfo {
+    method public java.lang.String getAddress();
     method public java.util.List<android.util.Pair<java.lang.Integer, java.lang.Integer>> getChannelMapping();
     method public java.lang.String getDescription();
     method public int getDirectionality();
@@ -27003,8 +27019,8 @@ package android.net {
 
   public static final class IpSecManager.UdpEncapsulationSocket implements java.lang.AutoCloseable {
     method public void close() throws java.io.IOException;
+    method public java.io.FileDescriptor getFileDescriptor();
     method public int getPort();
-    method public java.io.FileDescriptor getSocket();
   }
 
   public final class IpSecTransform implements java.lang.AutoCloseable {
@@ -27133,6 +27149,7 @@ package android.net {
     method public void bindSocket(java.net.Socket) throws java.io.IOException;
     method public void bindSocket(java.io.FileDescriptor) throws java.io.IOException;
     method public int describeContents();
+    method public static android.net.Network fromNetworkHandle(long);
     method public java.net.InetAddress[] getAllByName(java.lang.String) throws java.net.UnknownHostException;
     method public java.net.InetAddress getByName(java.lang.String) throws java.net.UnknownHostException;
     method public long getNetworkHandle();
@@ -27232,6 +27249,8 @@ package android.net {
 
   public class NetworkRequest implements android.os.Parcelable {
     method public int describeContents();
+    method public boolean hasCapability(int);
+    method public boolean hasTransport(int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.NetworkRequest> CREATOR;
   }
@@ -38554,6 +38573,7 @@ package android.security.keystore {
     method public boolean isRandomizedEncryptionRequired();
     method public boolean isStrongBoxBacked();
     method public boolean isTrustedUserPresenceRequired();
+    method public boolean isUnlockedDeviceRequired();
     method public boolean isUserAuthenticationRequired();
     method public boolean isUserAuthenticationValidWhileOnBody();
     method public boolean isUserConfirmationRequired();
@@ -38581,6 +38601,7 @@ package android.security.keystore {
     method public android.security.keystore.KeyGenParameterSpec.Builder setRandomizedEncryptionRequired(boolean);
     method public android.security.keystore.KeyGenParameterSpec.Builder setSignaturePaddings(java.lang.String...);
     method public android.security.keystore.KeyGenParameterSpec.Builder setTrustedUserPresenceRequired(boolean);
+    method public android.security.keystore.KeyGenParameterSpec.Builder setUnlockedDeviceRequired(boolean);
     method public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationRequired(boolean);
     method public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationValidWhileOnBody(boolean);
     method public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationValidityDurationSeconds(int);
@@ -38673,6 +38694,7 @@ package android.security.keystore {
     method public boolean isInvalidatedByBiometricEnrollment();
     method public boolean isRandomizedEncryptionRequired();
     method public boolean isTrustedUserPresenceRequired();
+    method public boolean isUnlockedDeviceRequired();
     method public boolean isUserAuthenticationRequired();
     method public boolean isUserAuthenticationValidWhileOnBody();
     method public boolean isUserConfirmationRequired();
@@ -38692,6 +38714,7 @@ package android.security.keystore {
     method public android.security.keystore.KeyProtection.Builder setRandomizedEncryptionRequired(boolean);
     method public android.security.keystore.KeyProtection.Builder setSignaturePaddings(java.lang.String...);
     method public android.security.keystore.KeyProtection.Builder setTrustedUserPresenceRequired(boolean);
+    method public android.security.keystore.KeyProtection.Builder setUnlockedDeviceRequired(boolean);
     method public android.security.keystore.KeyProtection.Builder setUserAuthenticationRequired(boolean);
     method public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidWhileOnBody(boolean);
     method public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidityDurationSeconds(int);
@@ -41911,17 +41934,17 @@ package android.telephony {
   }
 
   public class MbmsDownloadSession implements java.lang.AutoCloseable {
-    method public int addProgressListener(android.telephony.mbms.DownloadRequest, java.util.concurrent.Executor, android.telephony.mbms.DownloadProgressListener);
-    method public int addStatusListener(android.telephony.mbms.DownloadRequest, java.util.concurrent.Executor, android.telephony.mbms.DownloadStatusListener);
-    method public int cancelDownload(android.telephony.mbms.DownloadRequest);
+    method public void addProgressListener(android.telephony.mbms.DownloadRequest, java.util.concurrent.Executor, android.telephony.mbms.DownloadProgressListener);
+    method public void addStatusListener(android.telephony.mbms.DownloadRequest, java.util.concurrent.Executor, android.telephony.mbms.DownloadStatusListener);
+    method public void cancelDownload(android.telephony.mbms.DownloadRequest);
     method public void close();
     method public static android.telephony.MbmsDownloadSession create(android.content.Context, java.util.concurrent.Executor, android.telephony.mbms.MbmsDownloadSessionCallback);
     method public static android.telephony.MbmsDownloadSession create(android.content.Context, java.util.concurrent.Executor, int, android.telephony.mbms.MbmsDownloadSessionCallback);
-    method public int download(android.telephony.mbms.DownloadRequest);
+    method public void download(android.telephony.mbms.DownloadRequest);
     method public java.io.File getTempFileRootDirectory();
     method public java.util.List<android.telephony.mbms.DownloadRequest> listPendingDownloads();
-    method public int removeProgressListener(android.telephony.mbms.DownloadRequest, android.telephony.mbms.DownloadProgressListener);
-    method public int removeStatusListener(android.telephony.mbms.DownloadRequest, android.telephony.mbms.DownloadStatusListener);
+    method public void removeProgressListener(android.telephony.mbms.DownloadRequest, android.telephony.mbms.DownloadProgressListener);
+    method public void removeStatusListener(android.telephony.mbms.DownloadRequest, android.telephony.mbms.DownloadStatusListener);
     method public void requestDownloadState(android.telephony.mbms.DownloadRequest, android.telephony.mbms.FileInfo);
     method public void requestUpdateFileServices(java.util.List<java.lang.String>);
     method public void resetDownloadKnowledge(android.telephony.mbms.DownloadRequest);
@@ -42888,6 +42911,7 @@ package android.telephony.mbms {
     field public static final int ERROR_MIDDLEWARE_NOT_BOUND = 2; // 0x2
     field public static final int ERROR_NO_UNIQUE_MIDDLEWARE = 1; // 0x1
     field public static final int SUCCESS = 0; // 0x0
+    field public static final int UNKNOWN = -1; // 0xffffffff
   }
 
   public static class MbmsErrors.DownloadErrors {
@@ -47277,10 +47301,10 @@ package android.view {
     method public void addExtraDataToAccessibilityNodeInfo(android.view.accessibility.AccessibilityNodeInfo, java.lang.String, android.os.Bundle);
     method public void addFocusables(java.util.ArrayList<android.view.View>, int);
     method public void addFocusables(java.util.ArrayList<android.view.View>, int, int);
-    method public void addKeyFallbackListener(android.view.View.OnKeyFallbackListener);
     method public void addKeyboardNavigationClusters(java.util.Collection<android.view.View>, int);
     method public void addOnAttachStateChangeListener(android.view.View.OnAttachStateChangeListener);
     method public void addOnLayoutChangeListener(android.view.View.OnLayoutChangeListener);
+    method public void addOnUnhandledKeyEventListener(android.view.View.OnUnhandledKeyEventListener);
     method public void addTouchables(java.util.ArrayList<android.view.View>);
     method public android.view.ViewPropertyAnimator animate();
     method public void announceForAccessibility(java.lang.CharSequence);
@@ -47618,7 +47642,6 @@ package android.view {
     method public void onInitializeAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
     method public void onInitializeAccessibilityNodeInfo(android.view.accessibility.AccessibilityNodeInfo);
     method public boolean onKeyDown(int, android.view.KeyEvent);
-    method public boolean onKeyFallback(android.view.KeyEvent);
     method public boolean onKeyLongPress(int, android.view.KeyEvent);
     method public boolean onKeyMultiple(int, int, android.view.KeyEvent);
     method public boolean onKeyPreIme(int, android.view.KeyEvent);
@@ -47672,9 +47695,9 @@ package android.view {
     method public void refreshDrawableState();
     method public void releasePointerCapture();
     method public boolean removeCallbacks(java.lang.Runnable);
-    method public void removeKeyFallbackListener(android.view.View.OnKeyFallbackListener);
     method public void removeOnAttachStateChangeListener(android.view.View.OnAttachStateChangeListener);
     method public void removeOnLayoutChangeListener(android.view.View.OnLayoutChangeListener);
+    method public void removeOnUnhandledKeyEventListener(android.view.View.OnUnhandledKeyEventListener);
     method public void requestApplyInsets();
     method public deprecated void requestFitSystemWindows();
     method public final boolean requestFocus();
@@ -48098,10 +48121,6 @@ package android.view {
     method public abstract boolean onHover(android.view.View, android.view.MotionEvent);
   }
 
-  public static abstract interface View.OnKeyFallbackListener {
-    method public abstract boolean onKeyFallback(android.view.View, android.view.KeyEvent);
-  }
-
   public static abstract interface View.OnKeyListener {
     method public abstract boolean onKey(android.view.View, int, android.view.KeyEvent);
   }
@@ -48124,6 +48143,10 @@ package android.view {
 
   public static abstract interface View.OnTouchListener {
     method public abstract boolean onTouch(android.view.View, android.view.MotionEvent);
+  }
+
+  public static abstract interface View.OnUnhandledKeyEventListener {
+    method public abstract boolean onUnhandledKeyEvent(android.view.View, android.view.KeyEvent);
   }
 
   public final class ViewAnimationUtils {
@@ -50412,9 +50435,9 @@ package android.view.textclassifier {
     ctor public TextClassification.Options();
     method public int describeContents();
     method public android.os.LocaleList getDefaultLocales();
-    method public java.util.Calendar getReferenceTime();
+    method public java.time.ZonedDateTime getReferenceTime();
     method public android.view.textclassifier.TextClassification.Options setDefaultLocales(android.os.LocaleList);
-    method public android.view.textclassifier.TextClassification.Options setReferenceTime(java.util.Calendar);
+    method public android.view.textclassifier.TextClassification.Options setReferenceTime(java.time.ZonedDateTime);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassification.Options> CREATOR;
   }
