@@ -7226,6 +7226,7 @@ package android.app.slice {
     field public static final java.lang.String HINT_TTL = "ttl";
     field public static final java.lang.String SUBTYPE_COLOR = "color";
     field public static final java.lang.String SUBTYPE_CONTENT_DESCRIPTION = "content_description";
+    field public static final java.lang.String SUBTYPE_LAYOUT_DIRECTION = "layout_direction";
     field public static final java.lang.String SUBTYPE_MAX = "max";
     field public static final java.lang.String SUBTYPE_MESSAGE = "message";
     field public static final java.lang.String SUBTYPE_MILLIS = "millis";
@@ -47304,10 +47305,10 @@ package android.view {
     method public void addExtraDataToAccessibilityNodeInfo(android.view.accessibility.AccessibilityNodeInfo, java.lang.String, android.os.Bundle);
     method public void addFocusables(java.util.ArrayList<android.view.View>, int);
     method public void addFocusables(java.util.ArrayList<android.view.View>, int, int);
-    method public void addKeyFallbackListener(android.view.View.OnKeyFallbackListener);
     method public void addKeyboardNavigationClusters(java.util.Collection<android.view.View>, int);
     method public void addOnAttachStateChangeListener(android.view.View.OnAttachStateChangeListener);
     method public void addOnLayoutChangeListener(android.view.View.OnLayoutChangeListener);
+    method public void addOnUnhandledKeyEventListener(android.view.View.OnUnhandledKeyEventListener);
     method public void addTouchables(java.util.ArrayList<android.view.View>);
     method public android.view.ViewPropertyAnimator animate();
     method public void announceForAccessibility(java.lang.CharSequence);
@@ -47645,7 +47646,6 @@ package android.view {
     method public void onInitializeAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
     method public void onInitializeAccessibilityNodeInfo(android.view.accessibility.AccessibilityNodeInfo);
     method public boolean onKeyDown(int, android.view.KeyEvent);
-    method public boolean onKeyFallback(android.view.KeyEvent);
     method public boolean onKeyLongPress(int, android.view.KeyEvent);
     method public boolean onKeyMultiple(int, int, android.view.KeyEvent);
     method public boolean onKeyPreIme(int, android.view.KeyEvent);
@@ -47699,9 +47699,9 @@ package android.view {
     method public void refreshDrawableState();
     method public void releasePointerCapture();
     method public boolean removeCallbacks(java.lang.Runnable);
-    method public void removeKeyFallbackListener(android.view.View.OnKeyFallbackListener);
     method public void removeOnAttachStateChangeListener(android.view.View.OnAttachStateChangeListener);
     method public void removeOnLayoutChangeListener(android.view.View.OnLayoutChangeListener);
+    method public void removeOnUnhandledKeyEventListener(android.view.View.OnUnhandledKeyEventListener);
     method public void requestApplyInsets();
     method public deprecated void requestFitSystemWindows();
     method public final boolean requestFocus();
@@ -48125,10 +48125,6 @@ package android.view {
     method public abstract boolean onHover(android.view.View, android.view.MotionEvent);
   }
 
-  public static abstract interface View.OnKeyFallbackListener {
-    method public abstract boolean onKeyFallback(android.view.View, android.view.KeyEvent);
-  }
-
   public static abstract interface View.OnKeyListener {
     method public abstract boolean onKey(android.view.View, int, android.view.KeyEvent);
   }
@@ -48151,6 +48147,10 @@ package android.view {
 
   public static abstract interface View.OnTouchListener {
     method public abstract boolean onTouch(android.view.View, android.view.MotionEvent);
+  }
+
+  public static abstract interface View.OnUnhandledKeyEventListener {
+    method public abstract boolean onUnhandledKeyEvent(android.view.View, android.view.KeyEvent);
   }
 
   public final class ViewAnimationUtils {
