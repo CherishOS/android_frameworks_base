@@ -16,5 +16,4 @@
 
 package android.view.textclassifier;
 
-parcelable TextLinks;
-parcelable TextLinks.Request;
+parcelable TextClassificationContext;
