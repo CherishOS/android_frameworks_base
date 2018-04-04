@@ -38395,17 +38395,17 @@ package android.sax {
 
 package android.se.omapi {
 
-  public class Channel {
+  public final class Channel implements java.nio.channels.Channel {
     method public void close();
     method public byte[] getSelectResponse();
     method public android.se.omapi.Session getSession();
     method public boolean isBasicChannel();
-    method public boolean isClosed();
+    method public boolean isOpen();
     method public boolean selectNext() throws java.io.IOException;
     method public byte[] transmit(byte[]) throws java.io.IOException;
   }
 
-  public class Reader {
+  public final class Reader {
     method public void closeSessions();
     method public java.lang.String getName();
     method public android.se.omapi.SEService getSEService();
@@ -38413,26 +38413,28 @@ package android.se.omapi {
     method public android.se.omapi.Session openSession() throws java.io.IOException;
   }
 
-  public class SEService {
-    ctor public SEService(android.content.Context, android.se.omapi.SEService.SecureElementListener);
+  public final class SEService {
+    ctor public SEService(android.content.Context, java.util.concurrent.Executor, android.se.omapi.SEService.OnConnectedListener);
     method public android.se.omapi.Reader[] getReaders();
     method public java.lang.String getVersion();
     method public boolean isConnected();
     method public void shutdown();
   }
 
-  public static abstract interface SEService.SecureElementListener {
-    method public abstract void onServiceConnected();
+  public static abstract interface SEService.OnConnectedListener {
+    method public abstract void onConnected();
   }
 
-  public class Session {
+  public final class Session {
     method public void close();
     method public void closeChannels();
     method public byte[] getATR();
     method public android.se.omapi.Reader getReader();
     method public boolean isClosed();
     method public android.se.omapi.Channel openBasicChannel(byte[], byte) throws java.io.IOException;
+    method public android.se.omapi.Channel openBasicChannel(byte[]) throws java.io.IOException;
     method public android.se.omapi.Channel openLogicalChannel(byte[], byte) throws java.io.IOException;
+    method public android.se.omapi.Channel openLogicalChannel(byte[]) throws java.io.IOException;
   }
 
 }
@@ -40955,7 +40957,7 @@ package android.telecom {
     method public final void putExtras(android.os.Bundle);
     method public final void removeExtras(java.util.List<java.lang.String>);
     method public final void removeExtras(java.lang.String...);
-    method public void requestBluetoothAudio(java.lang.String);
+    method public void requestBluetoothAudio(android.bluetooth.BluetoothDevice);
     method public void sendConnectionEvent(java.lang.String, android.os.Bundle);
     method public final void sendRemoteRttRequest();
     method public final void sendRttInitiationFailure(int);
@@ -41166,7 +41168,7 @@ package android.telecom {
     method public void onCanAddCallChanged(boolean);
     method public void onConnectionEvent(android.telecom.Call, java.lang.String, android.os.Bundle);
     method public void onSilenceRinger();
-    method public final void requestBluetoothAudio(java.lang.String);
+    method public final void requestBluetoothAudio(android.bluetooth.BluetoothDevice);
     method public final void setAudioRoute(int);
     method public final void setMuted(boolean);
     field public static final java.lang.String SERVICE_INTERFACE = "android.telecom.InCallService";
@@ -43376,6 +43378,7 @@ package android.text {
   public class PrecomputedText implements android.text.Spannable {
     method public char charAt(int);
     method public static android.text.PrecomputedText create(java.lang.CharSequence, android.text.PrecomputedText.Params);
+    method public void getBounds(int, int, android.graphics.Rect);
     method public int getParagraphCount();
     method public int getParagraphEnd(int);
     method public int getParagraphStart(int);
@@ -43384,7 +43387,7 @@ package android.text {
     method public int getSpanFlags(java.lang.Object);
     method public int getSpanStart(java.lang.Object);
     method public <T> T[] getSpans(int, int, java.lang.Class<T>);
-    method public java.lang.CharSequence getText();
+    method public float getWidth(int, int);
     method public int length();
     method public int nextSpanTransition(int, int, java.lang.Class);
     method public void removeSpan(java.lang.Object);
