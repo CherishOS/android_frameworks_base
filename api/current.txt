@@ -38461,28 +38461,28 @@ package android.security {
 
   public abstract class ConfirmationCallback {
     ctor public ConfirmationCallback();
-    method public void onConfirmedByUser(byte[]);
-    method public void onDismissedByApplication();
-    method public void onDismissedByUser();
-    method public void onError(java.lang.Exception);
-  }
-
-  public class ConfirmationDialog {
-    method public void cancelPrompt();
-    method public static boolean isSupported();
-    method public void presentPrompt(java.util.concurrent.Executor, android.security.ConfirmationCallback) throws android.security.ConfirmationAlreadyPresentingException, android.security.ConfirmationNotAvailableException;
-  }
-
-  public static class ConfirmationDialog.Builder {
-    ctor public ConfirmationDialog.Builder();
-    method public android.security.ConfirmationDialog build(android.content.Context);
-    method public android.security.ConfirmationDialog.Builder setExtraData(byte[]);
-    method public android.security.ConfirmationDialog.Builder setPromptText(java.lang.CharSequence);
+    method public void onCanceled();
+    method public void onConfirmed(byte[]);
+    method public void onDismissed();
+    method public void onError(java.lang.Throwable);
   }
 
   public class ConfirmationNotAvailableException extends java.lang.Exception {
     ctor public ConfirmationNotAvailableException();
     ctor public ConfirmationNotAvailableException(java.lang.String);
+  }
+
+  public class ConfirmationPrompt {
+    method public void cancelPrompt();
+    method public static boolean isSupported(android.content.Context);
+    method public void presentPrompt(java.util.concurrent.Executor, android.security.ConfirmationCallback) throws android.security.ConfirmationAlreadyPresentingException, android.security.ConfirmationNotAvailableException;
+  }
+
+  public static final class ConfirmationPrompt.Builder {
+    ctor public ConfirmationPrompt.Builder(android.content.Context);
+    method public android.security.ConfirmationPrompt build();
+    method public android.security.ConfirmationPrompt.Builder setExtraData(byte[]);
+    method public android.security.ConfirmationPrompt.Builder setPromptText(java.lang.CharSequence);
   }
 
   public final class KeyChain {
