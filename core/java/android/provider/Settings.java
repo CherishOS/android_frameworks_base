@@ -6697,6 +6697,34 @@ public final class Settings {
          * @hide
          */
         public static final String QS_FOOTER_SHOW_DATAUSAGE = "qs_footer_show_datausage";
+		
+		/**
+         * Show Settings icon in QS Footer
+         *
+         * @hide
+         */
+        public static final String QS_FOOTER_SHOW_SETTINGS = "qs_footer_show_settings";
+
+        /**
+         * Show Running Services icon in QS Footer.
+         *
+         * @hide
+         */
+        public static final String QS_FOOTER_SHOW_SERVICES = "qs_footer_show_services";
+
+        /**
+         * Show Edit icon in QS Footer.
+         *
+         * @hide
+         */
+        public static final String QS_FOOTER_SHOW_EDIT = "qs_footer_show_edit";
+
+        /**
+         * Show User switcher icon in QS Footer.
+         *
+         * @hide
+         */
+        public static final String QS_FOOTER_SHOW_USER = "qs_footer_show_user";
 
        /**
          * toggle clock location

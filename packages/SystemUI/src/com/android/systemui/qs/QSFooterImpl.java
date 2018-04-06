@@ -61,7 +61,6 @@ import com.android.systemui.statusbar.phone.SettingsButton;
 import com.android.systemui.statusbar.policy.DeviceProvisionedController;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.UserInfoController.OnUserInfoChangedListener;
-import com.android.systemui.tuner.TunerService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -336,15 +335,15 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     }
 
     private void updateVisibilities() {
-        mSettingsContainer.setVisibility(mQsDisabled ? View.GONE : View.VISIBLE);
+        mSettingsContainer.setVisibility(!isSettingsEnabled() || mQsDisabled ? View.GONE : View.VISIBLE);
         final boolean isDemo = UserManager.isDeviceInDemoMode(mContext);
-        mMultiUserSwitch.setVisibility(showUserSwitcher() ? View.VISIBLE : View.INVISIBLE);
+        mMultiUserSwitch.setVisibility(isUserEnabled() ? (showUserSwitcher() ? View.VISIBLE : View.INVISIBLE) : View.GONE);
+        mEdit.setVisibility(isEditEnabled() ? (isDemo || !mExpanded ? View.INVISIBLE : View.VISIBLE) : View.GONE);
         mEditContainer.setVisibility(isDemo || !mExpanded ? View.INVISIBLE : View.VISIBLE);
         mEdit.setVisibility(isEditEnabled() ? View.VISIBLE : View.GONE);
-        mSettingsButton.setVisibility(isDemo || !mExpanded ? View.INVISIBLE : View.VISIBLE);
-
+        mSettingsButton.setVisibility(isSettingsEnabled() ? (isDemo || !mExpanded ? View.INVISIBLE : View.VISIBLE) : View.GONE);
+        mRunningServicesButton.setVisibility(isServicesEnabled() ? (!isDemo && mExpanded ? View.VISIBLE : View.INVISIBLE) : View.GONE);
         mBuildText.setVisibility(mExpanded && mShouldShowBuildText ? View.VISIBLE : View.GONE);
-        mRunningServicesButton.setVisibility(!isDemo && mExpanded ? View.VISIBLE : View.INVISIBLE);
     }
 
     private boolean showUserSwitcher() {
@@ -371,6 +370,26 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     public boolean isEditEnabled() {
         return Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.QS_EDIT_TOGGLE, 1) == 1;
+    }
+	
+	public boolean isSettingsEnabled() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.QS_FOOTER_SHOW_SETTINGS, 1) == 1;
+    }
+
+    public boolean isServicesEnabled() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.QS_FOOTER_SHOW_SERVICES, 0) == 1;
+    }
+
+    public boolean isEditEnabled() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.QS_FOOTER_SHOW_EDIT, 1) == 1;
+    }
+
+    public boolean isUserEnabled() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.QS_FOOTER_SHOW_USER, 1) == 1;
     }
 
     @Override
