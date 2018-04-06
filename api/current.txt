@@ -6511,6 +6511,7 @@ package android.app.admin {
     method public boolean isApplicationHidden(android.content.ComponentName, java.lang.String);
     method public boolean isBackupServiceEnabled(android.content.ComponentName);
     method public deprecated boolean isCallerApplicationRestrictionsManagingPackage();
+    method public boolean isDeviceIdAttestationSupported();
     method public boolean isDeviceOwnerApp(java.lang.String);
     method public boolean isEphemeralUser(android.content.ComponentName);
     method public boolean isLockTaskPermitted(java.lang.String);
@@ -13657,17 +13658,17 @@ package android.graphics {
     method public static android.graphics.drawable.Drawable decodeDrawable(android.graphics.ImageDecoder.Source, android.graphics.ImageDecoder.OnHeaderDecodedListener) throws java.io.IOException;
     method public static android.graphics.drawable.Drawable decodeDrawable(android.graphics.ImageDecoder.Source) throws java.io.IOException;
     method public int getAllocator();
-    method public boolean getConserveMemory();
     method public android.graphics.Rect getCrop();
+    method public int getMemorySizePolicy();
     method public android.graphics.ImageDecoder.OnPartialImageListener getOnPartialImageListener();
     method public android.graphics.PostProcessor getPostProcessor();
     method public boolean isDecodeAsAlphaMaskEnabled();
     method public boolean isMutableRequired();
     method public boolean isUnpremultipliedRequired();
     method public void setAllocator(int);
-    method public void setConserveMemory(boolean);
     method public void setCrop(android.graphics.Rect);
     method public void setDecodeAsAlphaMaskEnabled(boolean);
+    method public void setMemorySizePolicy(int);
     method public void setMutableRequired(boolean);
     method public void setOnPartialImageListener(android.graphics.ImageDecoder.OnPartialImageListener);
     method public void setPostProcessor(android.graphics.PostProcessor);
@@ -13679,6 +13680,8 @@ package android.graphics {
     field public static final int ALLOCATOR_HARDWARE = 3; // 0x3
     field public static final int ALLOCATOR_SHARED_MEMORY = 2; // 0x2
     field public static final int ALLOCATOR_SOFTWARE = 1; // 0x1
+    field public static final int MEMORY_POLICY_DEFAULT = 1; // 0x1
+    field public static final int MEMORY_POLICY_LOW_RAM = 0; // 0x0
   }
 
   public static final class ImageDecoder.DecodeException extends java.io.IOException {
@@ -15753,9 +15756,9 @@ package android.hardware {
 
 package android.hardware.biometrics {
 
-  public class BiometricDialog {
-    method public void authenticate(android.hardware.biometrics.BiometricDialog.CryptoObject, android.os.CancellationSignal, java.util.concurrent.Executor, android.hardware.biometrics.BiometricDialog.AuthenticationCallback);
-    method public void authenticate(android.os.CancellationSignal, java.util.concurrent.Executor, android.hardware.biometrics.BiometricDialog.AuthenticationCallback);
+  public class BiometricPrompt {
+    method public void authenticate(android.hardware.biometrics.BiometricPrompt.CryptoObject, android.os.CancellationSignal, java.util.concurrent.Executor, android.hardware.biometrics.BiometricPrompt.AuthenticationCallback);
+    method public void authenticate(android.os.CancellationSignal, java.util.concurrent.Executor, android.hardware.biometrics.BiometricPrompt.AuthenticationCallback);
     field public static final int BIOMETRIC_ACQUIRED_GOOD = 0; // 0x0
     field public static final int BIOMETRIC_ACQUIRED_IMAGER_DIRTY = 3; // 0x3
     field public static final int BIOMETRIC_ACQUIRED_INSUFFICIENT = 2; // 0x2
@@ -15775,31 +15778,31 @@ package android.hardware.biometrics {
     field public static final int BIOMETRIC_ERROR_VENDOR = 8; // 0x8
   }
 
-  public static abstract class BiometricDialog.AuthenticationCallback {
-    ctor public BiometricDialog.AuthenticationCallback();
+  public static abstract class BiometricPrompt.AuthenticationCallback {
+    ctor public BiometricPrompt.AuthenticationCallback();
     method public void onAuthenticationError(int, java.lang.CharSequence);
     method public void onAuthenticationFailed();
     method public void onAuthenticationHelp(int, java.lang.CharSequence);
-    method public void onAuthenticationSucceeded(android.hardware.biometrics.BiometricDialog.AuthenticationResult);
+    method public void onAuthenticationSucceeded(android.hardware.biometrics.BiometricPrompt.AuthenticationResult);
   }
 
-  public static class BiometricDialog.AuthenticationResult {
-    method public android.hardware.biometrics.BiometricDialog.CryptoObject getCryptoObject();
+  public static class BiometricPrompt.AuthenticationResult {
+    method public android.hardware.biometrics.BiometricPrompt.CryptoObject getCryptoObject();
   }
 
-  public static class BiometricDialog.Builder {
-    ctor public BiometricDialog.Builder(android.content.Context);
-    method public android.hardware.biometrics.BiometricDialog build();
-    method public android.hardware.biometrics.BiometricDialog.Builder setDescription(java.lang.CharSequence);
-    method public android.hardware.biometrics.BiometricDialog.Builder setNegativeButton(java.lang.CharSequence, java.util.concurrent.Executor, android.content.DialogInterface.OnClickListener);
-    method public android.hardware.biometrics.BiometricDialog.Builder setSubtitle(java.lang.CharSequence);
-    method public android.hardware.biometrics.BiometricDialog.Builder setTitle(java.lang.CharSequence);
+  public static class BiometricPrompt.Builder {
+    ctor public BiometricPrompt.Builder(android.content.Context);
+    method public android.hardware.biometrics.BiometricPrompt build();
+    method public android.hardware.biometrics.BiometricPrompt.Builder setDescription(java.lang.CharSequence);
+    method public android.hardware.biometrics.BiometricPrompt.Builder setNegativeButton(java.lang.CharSequence, java.util.concurrent.Executor, android.content.DialogInterface.OnClickListener);
+    method public android.hardware.biometrics.BiometricPrompt.Builder setSubtitle(java.lang.CharSequence);
+    method public android.hardware.biometrics.BiometricPrompt.Builder setTitle(java.lang.CharSequence);
   }
 
-  public static final class BiometricDialog.CryptoObject {
-    ctor public BiometricDialog.CryptoObject(java.security.Signature);
-    ctor public BiometricDialog.CryptoObject(javax.crypto.Cipher);
-    ctor public BiometricDialog.CryptoObject(javax.crypto.Mac);
+  public static final class BiometricPrompt.CryptoObject {
+    ctor public BiometricPrompt.CryptoObject(java.security.Signature);
+    ctor public BiometricPrompt.CryptoObject(javax.crypto.Cipher);
+    ctor public BiometricPrompt.CryptoObject(javax.crypto.Mac);
     method public javax.crypto.Cipher getCipher();
     method public javax.crypto.Mac getMac();
     method public java.security.Signature getSignature();
@@ -23163,6 +23166,7 @@ package android.media {
     field public static final int AACObjectMain = 1; // 0x1
     field public static final int AACObjectSSR = 3; // 0x3
     field public static final int AACObjectScalable = 6; // 0x6
+    field public static final int AACObjectXHE = 42; // 0x2a
     field public static final int AVCLevel1 = 1; // 0x1
     field public static final int AVCLevel11 = 4; // 0x4
     field public static final int AVCLevel12 = 8; // 0x8
@@ -27261,6 +27265,7 @@ package android.net {
     method public int describeContents();
     method public boolean hasCapability(int);
     method public boolean hasTransport(int);
+    method public boolean hasUnwantedCapability(int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.NetworkRequest> CREATOR;
   }
@@ -33159,6 +33164,7 @@ package android.os {
     method public android.os.StrictMode.VmPolicy.Builder detectLeakedClosableObjects();
     method public android.os.StrictMode.VmPolicy.Builder detectLeakedRegistrationObjects();
     method public android.os.StrictMode.VmPolicy.Builder detectLeakedSqlLiteObjects();
+    method public android.os.StrictMode.VmPolicy.Builder detectNonSdkApiUsage();
     method public android.os.StrictMode.VmPolicy.Builder detectUntaggedSockets();
     method public android.os.StrictMode.VmPolicy.Builder penaltyDeath();
     method public android.os.StrictMode.VmPolicy.Builder penaltyDeathOnCleartextNetwork();
@@ -33166,6 +33172,7 @@ package android.os {
     method public android.os.StrictMode.VmPolicy.Builder penaltyDropBox();
     method public android.os.StrictMode.VmPolicy.Builder penaltyListener(java.util.concurrent.Executor, android.os.StrictMode.OnVmViolationListener);
     method public android.os.StrictMode.VmPolicy.Builder penaltyLog();
+    method public android.os.StrictMode.VmPolicy.Builder permitNonSdkApiUsage();
     method public android.os.StrictMode.VmPolicy.Builder setClassInstanceLimit(java.lang.Class, int);
   }
 
@@ -33578,6 +33585,9 @@ package android.os.strictmode {
   }
 
   public final class NetworkViolation extends android.os.strictmode.Violation {
+  }
+
+  public final class NonSdkApiUsedViolation extends android.os.strictmode.Violation {
   }
 
   public final class ResourceMismatchViolation extends android.os.strictmode.Violation {
@@ -36678,6 +36688,7 @@ package android.provider {
     field public static final java.lang.String PARENTAL_CONTROL_ENABLED = "parental_control_enabled";
     field public static final java.lang.String PARENTAL_CONTROL_LAST_UPDATE = "parental_control_last_update";
     field public static final java.lang.String PARENTAL_CONTROL_REDIRECT_URL = "parental_control_redirect_url";
+    field public static final java.lang.String RTT_CALLING_MODE = "rtt_calling_mode";
     field public static final java.lang.String SELECTED_INPUT_METHOD_SUBTYPE = "selected_input_method_subtype";
     field public static final java.lang.String SETTINGS_CLASSNAME = "settings_classname";
     field public static final java.lang.String SKIP_FIRST_USE_HINTS = "skip_first_use_hints";
@@ -36783,7 +36794,6 @@ package android.provider {
     field public static final deprecated java.lang.String RADIO_NFC = "nfc";
     field public static final deprecated java.lang.String RADIO_WIFI = "wifi";
     field public static final java.lang.String RINGTONE = "ringtone";
-    field public static final java.lang.String RTT_CALLING_MODE = "rtt_calling_mode";
     field public static final java.lang.String SCREEN_BRIGHTNESS = "screen_brightness";
     field public static final java.lang.String SCREEN_BRIGHTNESS_MODE = "screen_brightness_mode";
     field public static final int SCREEN_BRIGHTNESS_MODE_AUTOMATIC = 1; // 0x1
@@ -38416,7 +38426,7 @@ package android.se.omapi {
   }
 
   public final class SEService {
-    ctor public SEService(android.content.Context, android.se.omapi.SEService.OnConnectedListener);
+    ctor public SEService(android.content.Context, java.util.concurrent.Executor, android.se.omapi.SEService.OnConnectedListener);
     method public android.se.omapi.Reader[] getReaders();
     method public java.lang.String getVersion();
     method public boolean isConnected();
@@ -38424,7 +38434,7 @@ package android.se.omapi {
   }
 
   public static abstract interface SEService.OnConnectedListener {
-    method public abstract void onServiceConnected();
+    method public abstract void onConnected();
   }
 
   public final class Session {
@@ -38455,28 +38465,28 @@ package android.security {
 
   public abstract class ConfirmationCallback {
     ctor public ConfirmationCallback();
-    method public void onConfirmedByUser(byte[]);
-    method public void onDismissedByApplication();
-    method public void onDismissedByUser();
-    method public void onError(java.lang.Exception);
-  }
-
-  public class ConfirmationDialog {
-    method public void cancelPrompt();
-    method public static boolean isSupported();
-    method public void presentPrompt(java.util.concurrent.Executor, android.security.ConfirmationCallback) throws android.security.ConfirmationAlreadyPresentingException, android.security.ConfirmationNotAvailableException;
-  }
-
-  public static class ConfirmationDialog.Builder {
-    ctor public ConfirmationDialog.Builder();
-    method public android.security.ConfirmationDialog build(android.content.Context);
-    method public android.security.ConfirmationDialog.Builder setExtraData(byte[]);
-    method public android.security.ConfirmationDialog.Builder setPromptText(java.lang.CharSequence);
+    method public void onCanceled();
+    method public void onConfirmed(byte[]);
+    method public void onDismissed();
+    method public void onError(java.lang.Throwable);
   }
 
   public class ConfirmationNotAvailableException extends java.lang.Exception {
     ctor public ConfirmationNotAvailableException();
     ctor public ConfirmationNotAvailableException(java.lang.String);
+  }
+
+  public class ConfirmationPrompt {
+    method public void cancelPrompt();
+    method public static boolean isSupported(android.content.Context);
+    method public void presentPrompt(java.util.concurrent.Executor, android.security.ConfirmationCallback) throws android.security.ConfirmationAlreadyPresentingException, android.security.ConfirmationNotAvailableException;
+  }
+
+  public static final class ConfirmationPrompt.Builder {
+    ctor public ConfirmationPrompt.Builder(android.content.Context);
+    method public android.security.ConfirmationPrompt build();
+    method public android.security.ConfirmationPrompt.Builder setExtraData(byte[]);
+    method public android.security.ConfirmationPrompt.Builder setPromptText(java.lang.CharSequence);
   }
 
   public final class KeyChain {
@@ -38754,7 +38764,7 @@ package android.security.keystore {
     ctor public UserNotAuthenticatedException(java.lang.String, java.lang.Throwable);
   }
 
-  public class UserPresenceUnavailableException extends java.security.InvalidAlgorithmParameterException {
+  public class UserPresenceUnavailableException extends java.security.InvalidKeyException {
     ctor public UserPresenceUnavailableException();
     ctor public UserPresenceUnavailableException(java.lang.String);
     ctor public UserPresenceUnavailableException(java.lang.String, java.lang.Throwable);
@@ -43380,6 +43390,7 @@ package android.text {
   public class PrecomputedText implements android.text.Spannable {
     method public char charAt(int);
     method public static android.text.PrecomputedText create(java.lang.CharSequence, android.text.PrecomputedText.Params);
+    method public void getBounds(int, int, android.graphics.Rect);
     method public int getParagraphCount();
     method public int getParagraphEnd(int);
     method public int getParagraphStart(int);
@@ -43388,7 +43399,7 @@ package android.text {
     method public int getSpanFlags(java.lang.Object);
     method public int getSpanStart(java.lang.Object);
     method public <T> T[] getSpans(int, int, java.lang.Class<T>);
-    method public java.lang.CharSequence getText();
+    method public float getWidth(int, int);
     method public int length();
     method public int nextSpanTransition(int, int, java.lang.Class);
     method public void removeSpan(java.lang.Object);
@@ -50539,7 +50550,7 @@ package android.view.textclassifier {
     method public static android.view.textclassifier.TextClassifier.EntityConfig createWithHints(java.util.Collection<java.lang.String>);
     method public int describeContents();
     method public java.util.Collection<java.lang.String> getHints();
-    method public java.util.List<java.lang.String> resolveEntityListModifications(java.util.Collection<java.lang.String>);
+    method public java.util.Collection<java.lang.String> resolveEntityListModifications(java.util.Collection<java.lang.String>);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassifier.EntityConfig> CREATOR;
   }
