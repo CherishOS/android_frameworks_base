@@ -6749,6 +6749,12 @@ package android.app.admin {
     field public static final android.os.Parcelable.Creator<android.app.admin.DnsEvent> CREATOR;
   }
 
+  public class FreezePeriod {
+    ctor public FreezePeriod(java.time.MonthDay, java.time.MonthDay);
+    method public java.time.MonthDay getEnd();
+    method public java.time.MonthDay getStart();
+  }
+
   public abstract class NetworkEvent implements android.os.Parcelable {
     method public int describeContents();
     method public long getId();
@@ -6819,16 +6825,16 @@ package android.app.admin {
     field public static final int SECURITY_PATCH_STATE_UNKNOWN = 0; // 0x0
   }
 
-  public class SystemUpdatePolicy implements android.os.Parcelable {
+  public final class SystemUpdatePolicy implements android.os.Parcelable {
     method public static android.app.admin.SystemUpdatePolicy createAutomaticInstallPolicy();
     method public static android.app.admin.SystemUpdatePolicy createPostponeInstallPolicy();
     method public static android.app.admin.SystemUpdatePolicy createWindowedInstallPolicy(int, int);
     method public int describeContents();
-    method public java.util.List<android.util.Pair<java.lang.Integer, java.lang.Integer>> getFreezePeriods();
+    method public java.util.List<android.app.admin.FreezePeriod> getFreezePeriods();
     method public int getInstallWindowEnd();
     method public int getInstallWindowStart();
     method public int getPolicyType();
-    method public android.app.admin.SystemUpdatePolicy setFreezePeriods(java.util.List<android.util.Pair<java.lang.Integer, java.lang.Integer>>);
+    method public android.app.admin.SystemUpdatePolicy setFreezePeriods(java.util.List<android.app.admin.FreezePeriod>);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.admin.SystemUpdatePolicy> CREATOR;
     field public static final int TYPE_INSTALL_AUTOMATIC = 1; // 0x1
@@ -6841,11 +6847,12 @@ package android.app.admin {
     method public int getErrorCode();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.admin.SystemUpdatePolicy.ValidationFailedException> CREATOR;
-    field public static final int ERROR_COMBINED_FREEZE_PERIOD_TOO_CLOSE = 5; // 0x5
-    field public static final int ERROR_COMBINED_FREEZE_PERIOD_TOO_LONG = 4; // 0x4
-    field public static final int ERROR_DUPLICATE_OR_OVERLAP = 1; // 0x1
-    field public static final int ERROR_NEW_FREEZE_PERIOD_TOO_CLOSE = 3; // 0x3
-    field public static final int ERROR_NEW_FREEZE_PERIOD_TOO_LONG = 2; // 0x2
+    field public static final int ERROR_COMBINED_FREEZE_PERIOD_TOO_CLOSE = 6; // 0x6
+    field public static final int ERROR_COMBINED_FREEZE_PERIOD_TOO_LONG = 5; // 0x5
+    field public static final int ERROR_DUPLICATE_OR_OVERLAP = 2; // 0x2
+    field public static final int ERROR_NEW_FREEZE_PERIOD_TOO_CLOSE = 4; // 0x4
+    field public static final int ERROR_NEW_FREEZE_PERIOD_TOO_LONG = 3; // 0x3
+    field public static final int ERROR_UNKNOWN = 1; // 0x1
   }
 
 }
