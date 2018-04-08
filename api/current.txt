@@ -5393,7 +5393,7 @@ package android.app {
     method public android.app.Notification.Builder addAction(android.app.Notification.Action);
     method public android.app.Notification.Builder addExtras(android.os.Bundle);
     method public deprecated android.app.Notification.Builder addPerson(java.lang.String);
-    method public android.app.Notification.Builder addPerson(android.app.Notification.Person);
+    method public android.app.Notification.Builder addPerson(android.app.Person);
     method public android.app.Notification build();
     method public android.widget.RemoteViews createBigContentView();
     method public android.widget.RemoteViews createContentView();
@@ -5518,15 +5518,15 @@ package android.app {
 
   public static class Notification.MessagingStyle extends android.app.Notification.Style {
     ctor public deprecated Notification.MessagingStyle(java.lang.CharSequence);
-    ctor public Notification.MessagingStyle(android.app.Notification.Person);
+    ctor public Notification.MessagingStyle(android.app.Person);
     method public android.app.Notification.MessagingStyle addHistoricMessage(android.app.Notification.MessagingStyle.Message);
     method public deprecated android.app.Notification.MessagingStyle addMessage(java.lang.CharSequence, long, java.lang.CharSequence);
-    method public android.app.Notification.MessagingStyle addMessage(java.lang.CharSequence, long, android.app.Notification.Person);
+    method public android.app.Notification.MessagingStyle addMessage(java.lang.CharSequence, long, android.app.Person);
     method public android.app.Notification.MessagingStyle addMessage(android.app.Notification.MessagingStyle.Message);
     method public java.lang.CharSequence getConversationTitle();
     method public java.util.List<android.app.Notification.MessagingStyle.Message> getHistoricMessages();
     method public java.util.List<android.app.Notification.MessagingStyle.Message> getMessages();
-    method public android.app.Notification.Person getUser();
+    method public android.app.Person getUser();
     method public deprecated java.lang.CharSequence getUserDisplayName();
     method public boolean isGroupConversation();
     method public android.app.Notification.MessagingStyle setConversationTitle(java.lang.CharSequence);
@@ -5536,35 +5536,15 @@ package android.app {
 
   public static final class Notification.MessagingStyle.Message {
     ctor public deprecated Notification.MessagingStyle.Message(java.lang.CharSequence, long, java.lang.CharSequence);
-    ctor public Notification.MessagingStyle.Message(java.lang.CharSequence, long, android.app.Notification.Person);
+    ctor public Notification.MessagingStyle.Message(java.lang.CharSequence, long, android.app.Person);
     method public java.lang.String getDataMimeType();
     method public android.net.Uri getDataUri();
     method public android.os.Bundle getExtras();
     method public deprecated java.lang.CharSequence getSender();
-    method public android.app.Notification.Person getSenderPerson();
+    method public android.app.Person getSenderPerson();
     method public java.lang.CharSequence getText();
     method public long getTimestamp();
     method public android.app.Notification.MessagingStyle.Message setData(java.lang.String, android.net.Uri);
-  }
-
-  public static final class Notification.Person implements android.os.Parcelable {
-    ctor protected Notification.Person(android.os.Parcel);
-    ctor public Notification.Person();
-    method public int describeContents();
-    method public android.graphics.drawable.Icon getIcon();
-    method public java.lang.String getKey();
-    method public java.lang.CharSequence getName();
-    method public java.lang.String getUri();
-    method public boolean isBot();
-    method public boolean isImportant();
-    method public android.app.Notification.Person setBot(boolean);
-    method public android.app.Notification.Person setIcon(android.graphics.drawable.Icon);
-    method public android.app.Notification.Person setImportant(boolean);
-    method public android.app.Notification.Person setKey(java.lang.String);
-    method public android.app.Notification.Person setName(java.lang.CharSequence);
-    method public android.app.Notification.Person setUri(java.lang.String);
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.app.Notification.Person> CREATOR;
   }
 
   public static abstract class Notification.Style {
@@ -5815,6 +5795,30 @@ package android.app {
 
   public static abstract interface PendingIntent.OnFinished {
     method public abstract void onSendFinished(android.app.PendingIntent, android.content.Intent, int, java.lang.String, android.os.Bundle);
+  }
+
+  public final class Person implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.graphics.drawable.Icon getIcon();
+    method public java.lang.String getKey();
+    method public java.lang.CharSequence getName();
+    method public java.lang.String getUri();
+    method public boolean isBot();
+    method public boolean isImportant();
+    method public android.app.Person.Builder toBuilder();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.app.Person> CREATOR;
+  }
+
+  public static class Person.Builder {
+    ctor public Person.Builder();
+    method public android.app.Person build();
+    method public android.app.Person.Builder setBot(boolean);
+    method public android.app.Person.Builder setIcon(android.graphics.drawable.Icon);
+    method public android.app.Person.Builder setImportant(boolean);
+    method public android.app.Person.Builder setKey(java.lang.String);
+    method public android.app.Person.Builder setName(java.lang.CharSequence);
+    method public android.app.Person.Builder setUri(java.lang.String);
   }
 
   public final class PictureInPictureParams implements android.os.Parcelable {
@@ -6749,6 +6753,12 @@ package android.app.admin {
     field public static final android.os.Parcelable.Creator<android.app.admin.DnsEvent> CREATOR;
   }
 
+  public class FreezePeriod {
+    ctor public FreezePeriod(java.time.MonthDay, java.time.MonthDay);
+    method public java.time.MonthDay getEnd();
+    method public java.time.MonthDay getStart();
+  }
+
   public abstract class NetworkEvent implements android.os.Parcelable {
     method public int describeContents();
     method public long getId();
@@ -6819,16 +6829,16 @@ package android.app.admin {
     field public static final int SECURITY_PATCH_STATE_UNKNOWN = 0; // 0x0
   }
 
-  public class SystemUpdatePolicy implements android.os.Parcelable {
+  public final class SystemUpdatePolicy implements android.os.Parcelable {
     method public static android.app.admin.SystemUpdatePolicy createAutomaticInstallPolicy();
     method public static android.app.admin.SystemUpdatePolicy createPostponeInstallPolicy();
     method public static android.app.admin.SystemUpdatePolicy createWindowedInstallPolicy(int, int);
     method public int describeContents();
-    method public java.util.List<android.util.Pair<java.lang.Integer, java.lang.Integer>> getFreezePeriods();
+    method public java.util.List<android.app.admin.FreezePeriod> getFreezePeriods();
     method public int getInstallWindowEnd();
     method public int getInstallWindowStart();
     method public int getPolicyType();
-    method public android.app.admin.SystemUpdatePolicy setFreezePeriods(java.util.List<android.util.Pair<java.lang.Integer, java.lang.Integer>>);
+    method public android.app.admin.SystemUpdatePolicy setFreezePeriods(java.util.List<android.app.admin.FreezePeriod>);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.admin.SystemUpdatePolicy> CREATOR;
     field public static final int TYPE_INSTALL_AUTOMATIC = 1; // 0x1
@@ -6841,11 +6851,12 @@ package android.app.admin {
     method public int getErrorCode();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.admin.SystemUpdatePolicy.ValidationFailedException> CREATOR;
-    field public static final int ERROR_COMBINED_FREEZE_PERIOD_TOO_CLOSE = 5; // 0x5
-    field public static final int ERROR_COMBINED_FREEZE_PERIOD_TOO_LONG = 4; // 0x4
-    field public static final int ERROR_DUPLICATE_OR_OVERLAP = 1; // 0x1
-    field public static final int ERROR_NEW_FREEZE_PERIOD_TOO_CLOSE = 3; // 0x3
-    field public static final int ERROR_NEW_FREEZE_PERIOD_TOO_LONG = 2; // 0x2
+    field public static final int ERROR_COMBINED_FREEZE_PERIOD_TOO_CLOSE = 6; // 0x6
+    field public static final int ERROR_COMBINED_FREEZE_PERIOD_TOO_LONG = 5; // 0x5
+    field public static final int ERROR_DUPLICATE_OR_OVERLAP = 2; // 0x2
+    field public static final int ERROR_NEW_FREEZE_PERIOD_TOO_CLOSE = 4; // 0x4
+    field public static final int ERROR_NEW_FREEZE_PERIOD_TOO_LONG = 3; // 0x3
+    field public static final int ERROR_UNKNOWN = 1; // 0x1
   }
 
 }
@@ -27265,7 +27276,6 @@ package android.net {
     method public int describeContents();
     method public boolean hasCapability(int);
     method public boolean hasTransport(int);
-    method public boolean hasUnwantedCapability(int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.NetworkRequest> CREATOR;
   }
@@ -27274,7 +27284,6 @@ package android.net {
     ctor public NetworkRequest.Builder();
     method public android.net.NetworkRequest.Builder addCapability(int);
     method public android.net.NetworkRequest.Builder addTransportType(int);
-    method public android.net.NetworkRequest.Builder addUnwantedCapability(int);
     method public android.net.NetworkRequest build();
     method public android.net.NetworkRequest.Builder removeCapability(int);
     method public android.net.NetworkRequest.Builder removeTransportType(int);
@@ -44691,7 +44700,7 @@ package android.text.util {
     method public static final boolean addLinks(android.text.Spannable, java.util.regex.Pattern, java.lang.String, java.lang.String[], android.text.util.Linkify.MatchFilter, android.text.util.Linkify.TransformFilter);
     field public static final int ALL = 15; // 0xf
     field public static final int EMAIL_ADDRESSES = 2; // 0x2
-    field public static final int MAP_ADDRESSES = 8; // 0x8
+    field public static final deprecated int MAP_ADDRESSES = 8; // 0x8
     field public static final int PHONE_NUMBERS = 4; // 0x4
     field public static final int WEB_URLS = 1; // 0x1
     field public static final android.text.util.Linkify.MatchFilter sPhoneNumberMatchFilter;
@@ -47882,7 +47891,7 @@ package android.view {
     method public void setVerticalScrollBarEnabled(boolean);
     method public void setVerticalScrollbarPosition(int);
     method public void setVisibility(int);
-    method public void setWillNotCacheDrawing(boolean);
+    method public deprecated void setWillNotCacheDrawing(boolean);
     method public void setWillNotDraw(boolean);
     method public void setX(float);
     method public void setY(float);
@@ -47900,7 +47909,7 @@ package android.view {
     method public void unscheduleDrawable(android.graphics.drawable.Drawable);
     method public final void updateDragShadow(android.view.View.DragShadowBuilder);
     method protected boolean verifyDrawable(android.graphics.drawable.Drawable);
-    method public boolean willNotCacheDrawing();
+    method public deprecated boolean willNotCacheDrawing();
     method public boolean willNotDraw();
     field public static final int ACCESSIBILITY_LIVE_REGION_ASSERTIVE = 2; // 0x2
     field public static final int ACCESSIBILITY_LIVE_REGION_NONE = 0; // 0x0
@@ -51310,7 +51319,7 @@ package android.webkit {
     method public void documentHasImages(android.os.Message);
     method public static void enableSlowWholeDocumentDraw();
     method public void evaluateJavascript(java.lang.String, android.webkit.ValueCallback<java.lang.String>);
-    method public static java.lang.String findAddress(java.lang.String);
+    method public static deprecated java.lang.String findAddress(java.lang.String);
     method public deprecated int findAll(java.lang.String);
     method public void findAllAsync(java.lang.String);
     method public void findNext(boolean);
@@ -51322,7 +51331,6 @@ package android.webkit {
     method public android.graphics.Bitmap getFavicon();
     method public android.webkit.WebView.HitTestResult getHitTestResult();
     method public deprecated java.lang.String[] getHttpAuthUsernamePassword(java.lang.String, java.lang.String);
-    method public android.os.Looper getLooper();
     method public java.lang.String getOriginalUrl();
     method public int getProgress();
     method public boolean getRendererPriorityWaivedWhenNotVisible();
