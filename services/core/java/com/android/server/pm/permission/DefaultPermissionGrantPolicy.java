@@ -1014,6 +1014,37 @@ final class DefaultPermissionGrantPolicy {
         // MIUI Gallery
         grantSystemFixedPermissionsToSystemPackage(pm, "com.miui.gallery", userId,
                 STORAGE_PERMISSIONS);
+
+        // Google Wallpapers
+        grantSystemFixedPermissionsToSystemPackage(pm,"com.google.android.apps.wallpaper", userId, PHONE_PERMISSIONS,
+                STORAGE_PERMISSIONS);
+
+        // Pixel Launcher
+        grantSystemFixedPermissionsToSystemPackage(pm,"com.google.android.apps.nexuslauncher", userId, PHONE_PERMISSIONS,
+                STORAGE_PERMISSIONS);
+
+        // Pixel Live Wallpapers
+        grantSystemFixedPermissionsToSystemPackage(pm,"com.google.pixel.livewallpaper", userId, ALWAYS_LOCATION_PERMISSIONS);
+
+        // Google Markup
+        grantSystemFixedPermissionsToSystemPackage(pm,"com.google.android.markup", userId, STORAGE_PERMISSIONS);
+
+        // Google Photos
+        grantSystemFixedPermissionsToSystemPackage(pm,"com.google.android.apps.photos", userId, CONTACTS_PERMISSIONS,
+                PHONE_PERMISSIONS, STORAGE_PERMISSIONS, ALWAYS_LOCATION_PERMISSIONS);
+
+        // Google Recorder
+        grantSystemFixedPermissionsToSystemPackage(pm,"com.google.android.apps.recorder", userId, MICROPHONE_PERMISSIONS,
+                ALWAYS_LOCATION_PERMISSIONS);
+
+        // SafetyHub
+        grantSystemFixedPermissionsToSystemPackage(pm,"com.google.android.apps.safetyhub", userId, SENSORS_PERMISSIONS,
+                CONTACTS_PERMISSIONS, ALWAYS_LOCATION_PERMISSIONS, MICROPHONE_PERMISSIONS, PHONE_PERMISSIONS);
+
+        // Settings Services
+        grantSystemFixedPermissionsToSystemPackage(pm,"com.google.android.settings.intelligence", userId, PHONE_PERMISSIONS,
+                ALWAYS_LOCATION_PERMISSIONS);
+        
     }
 
     private String getDefaultSystemHandlerActivityPackageForCategory(PackageManagerWrapper pm,
