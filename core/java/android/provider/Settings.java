@@ -4989,6 +4989,12 @@ public final class Settings {
          * @hide
          */
         public static final String AMBIENT_BATTERY_PERCENT = "ambient_battery_percent";
+		
+		/**
+         * Whether to change the transparency of the qs panel
+         * @hide
+         */
+        public static final String QS_PANEL_BG_ALPHA = "qs_panel_bg_alpha";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
