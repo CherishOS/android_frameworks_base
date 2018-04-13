@@ -6464,7 +6464,6 @@ package android.app.admin {
     method public int getLockTaskFeatures(android.content.ComponentName);
     method public java.lang.String[] getLockTaskPackages(android.content.ComponentName);
     method public java.lang.CharSequence getLongSupportMessage(android.content.ComponentName);
-    method public android.content.ComponentName getMandatoryBackupTransport();
     method public int getMaximumFailedPasswordsForWipe(android.content.ComponentName);
     method public long getMaximumTimeToLock(android.content.ComponentName);
     method public java.util.List<java.lang.String> getMeteredDataDisabledPackages(android.content.ComponentName);
@@ -6571,7 +6570,6 @@ package android.app.admin {
     method public void setLockTaskPackages(android.content.ComponentName, java.lang.String[]) throws java.lang.SecurityException;
     method public void setLogoutEnabled(android.content.ComponentName, boolean);
     method public void setLongSupportMessage(android.content.ComponentName, java.lang.CharSequence);
-    method public boolean setMandatoryBackupTransport(android.content.ComponentName, android.content.ComponentName);
     method public void setMasterVolumeMuted(android.content.ComponentName, boolean);
     method public void setMaximumFailedPasswordsForWipe(android.content.ComponentName, int);
     method public void setMaximumTimeToLock(android.content.ComponentName, long);
@@ -6732,7 +6730,6 @@ package android.app.admin {
     field public static final int PERMISSION_POLICY_PROMPT = 0; // 0x0
     field public static final java.lang.String POLICY_DISABLE_CAMERA = "policy_disable_camera";
     field public static final java.lang.String POLICY_DISABLE_SCREEN_CAPTURE = "policy_disable_screen_capture";
-    field public static final java.lang.String POLICY_MANDATORY_BACKUPS = "policy_mandatory_backups";
     field public static final int RESET_PASSWORD_DO_NOT_ASK_CREDENTIALS_ON_BOOT = 2; // 0x2
     field public static final int RESET_PASSWORD_REQUIRE_ENTRY = 1; // 0x1
     field public static final int SKIP_SETUP_WIZARD = 1; // 0x1
@@ -7206,8 +7203,6 @@ package android.app.slice {
 
   public final class Slice implements android.os.Parcelable {
     ctor protected Slice(android.os.Parcel);
-    method public static deprecated android.app.slice.Slice bindSlice(android.content.ContentResolver, android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
-    method public static deprecated android.app.slice.Slice bindSlice(android.content.Context, android.content.Intent, java.util.List<android.app.slice.SliceSpec>);
     method public int describeContents();
     method public java.util.List<java.lang.String> getHints();
     method public java.util.List<android.app.slice.SliceItem> getItems();
@@ -7217,7 +7212,6 @@ package android.app.slice {
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.slice.Slice> CREATOR;
     field public static final java.lang.String EXTRA_RANGE_VALUE = "android.app.slice.extra.RANGE_VALUE";
-    field public static final deprecated java.lang.String EXTRA_SLIDER_VALUE = "android.app.slice.extra.SLIDER_VALUE";
     field public static final java.lang.String EXTRA_TOGGLE_STATE = "android.app.slice.extra.TOGGLE_STATE";
     field public static final java.lang.String HINT_ACTIONS = "actions";
     field public static final java.lang.String HINT_ERROR = "error";
@@ -7244,14 +7238,12 @@ package android.app.slice {
     field public static final java.lang.String SUBTYPE_MILLIS = "millis";
     field public static final java.lang.String SUBTYPE_PRIORITY = "priority";
     field public static final java.lang.String SUBTYPE_RANGE = "range";
-    field public static final deprecated java.lang.String SUBTYPE_SLIDER = "slider";
     field public static final java.lang.String SUBTYPE_SOURCE = "source";
     field public static final java.lang.String SUBTYPE_TOGGLE = "toggle";
     field public static final java.lang.String SUBTYPE_VALUE = "value";
   }
 
   public static class Slice.Builder {
-    ctor public deprecated Slice.Builder(android.net.Uri);
     ctor public Slice.Builder(android.net.Uri, android.app.slice.SliceSpec);
     ctor public Slice.Builder(android.app.slice.Slice.Builder);
     method public android.app.slice.Slice.Builder addAction(android.app.PendingIntent, android.app.slice.Slice, java.lang.String);
@@ -7263,10 +7255,8 @@ package android.app.slice {
     method public android.app.slice.Slice.Builder addRemoteInput(android.app.RemoteInput, java.lang.String, java.util.List<java.lang.String>);
     method public android.app.slice.Slice.Builder addSubSlice(android.app.slice.Slice, java.lang.String);
     method public android.app.slice.Slice.Builder addText(java.lang.CharSequence, java.lang.String, java.util.List<java.lang.String>);
-    method public deprecated android.app.slice.Slice.Builder addTimestamp(long, java.lang.String, java.util.List<java.lang.String>);
     method public android.app.slice.Slice build();
     method public android.app.slice.Slice.Builder setCallerNeeded(boolean);
-    method public deprecated android.app.slice.Slice.Builder setSpec(android.app.slice.SliceSpec);
   }
 
   public final class SliceItem implements android.os.Parcelable {
@@ -7277,11 +7267,11 @@ package android.app.slice {
     method public java.util.List<java.lang.String> getHints();
     method public android.graphics.drawable.Icon getIcon();
     method public int getInt();
+    method public long getLong();
     method public android.app.RemoteInput getRemoteInput();
     method public android.app.slice.Slice getSlice();
     method public java.lang.String getSubType();
     method public java.lang.CharSequence getText();
-    method public long getTimestamp();
     method public boolean hasHint(java.lang.String);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.slice.SliceItem> CREATOR;
@@ -7293,19 +7283,18 @@ package android.app.slice {
     field public static final java.lang.String FORMAT_REMOTE_INPUT = "input";
     field public static final java.lang.String FORMAT_SLICE = "slice";
     field public static final java.lang.String FORMAT_TEXT = "text";
-    field public static final deprecated java.lang.String FORMAT_TIMESTAMP = "long";
   }
 
   public class SliceManager {
-    method public android.app.slice.Slice bindSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
-    method public android.app.slice.Slice bindSlice(android.content.Intent, java.util.List<android.app.slice.SliceSpec>);
+    method public android.app.slice.Slice bindSlice(android.net.Uri, java.util.Set<android.app.slice.SliceSpec>);
+    method public android.app.slice.Slice bindSlice(android.content.Intent, java.util.Set<android.app.slice.SliceSpec>);
     method public int checkSlicePermission(android.net.Uri, int, int);
     method public java.util.List<android.net.Uri> getPinnedSlices();
-    method public java.util.List<android.app.slice.SliceSpec> getPinnedSpecs(android.net.Uri);
+    method public java.util.Set<android.app.slice.SliceSpec> getPinnedSpecs(android.net.Uri);
     method public java.util.Collection<android.net.Uri> getSliceDescendants(android.net.Uri);
     method public void grantSlicePermission(java.lang.String, android.net.Uri);
     method public android.net.Uri mapIntentToUri(android.content.Intent);
-    method public void pinSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
+    method public void pinSlice(android.net.Uri, java.util.Set<android.app.slice.SliceSpec>);
     method public void revokeSlicePermission(java.lang.String, android.net.Uri);
     method public void unpinSlice(android.net.Uri);
     field public static final java.lang.String CATEGORY_SLICE = "android.app.slice.category.SLICE";
@@ -7325,7 +7314,7 @@ package android.app.slice {
     method public final int delete(android.net.Uri, java.lang.String, java.lang.String[]);
     method public final java.lang.String getType(android.net.Uri);
     method public final android.net.Uri insert(android.net.Uri, android.content.ContentValues);
-    method public android.app.slice.Slice onBindSlice(android.net.Uri, java.util.List<android.app.slice.SliceSpec>);
+    method public android.app.slice.Slice onBindSlice(android.net.Uri, java.util.Set<android.app.slice.SliceSpec>);
     method public android.app.PendingIntent onCreatePermissionRequest(android.net.Uri);
     method public java.util.Collection<android.net.Uri> onGetSliceDescendants(android.net.Uri);
     method public android.net.Uri onMapIntentToUri(android.content.Intent);
@@ -7398,7 +7387,7 @@ package android.app.usage {
 
   public static class NetworkStats.Bucket {
     ctor public NetworkStats.Bucket();
-    method public int getDefaultNetwork();
+    method public int getDefaultNetworkStatus();
     method public long getEndTimeStamp();
     method public int getMetered();
     method public int getRoaming();
@@ -7474,12 +7463,12 @@ package android.app.usage {
 
   public static final class UsageEvents.Event {
     ctor public UsageEvents.Event();
+    method public int getAppStandbyBucket();
     method public java.lang.String getClassName();
     method public android.content.res.Configuration getConfiguration();
     method public int getEventType();
     method public java.lang.String getPackageName();
     method public java.lang.String getShortcutId();
-    method public int getStandbyBucket();
     method public long getTimeStamp();
     field public static final int CONFIGURATION_CHANGE = 5; // 0x5
     field public static final int KEYGUARD_HIDDEN = 18; // 0x12
@@ -10954,7 +10943,7 @@ package android.content.pm {
     method public abstract void onPackageRemoved(java.lang.String, android.os.UserHandle);
     method public abstract void onPackagesAvailable(java.lang.String[], android.os.UserHandle, boolean);
     method public void onPackagesSuspended(java.lang.String[], android.os.UserHandle);
-    method public void onPackagesSuspended(java.lang.String[], android.os.Bundle, android.os.UserHandle);
+    method public void onPackagesSuspended(java.lang.String[], android.os.UserHandle, android.os.Bundle);
     method public abstract void onPackagesUnavailable(java.lang.String[], android.os.UserHandle, boolean);
     method public void onPackagesUnsuspended(java.lang.String[], android.os.UserHandle);
     method public void onShortcutsChanged(java.lang.String, java.util.List<android.content.pm.ShortcutInfo>, android.os.UserHandle);
@@ -11021,7 +11010,7 @@ package android.content.pm {
     field public java.lang.String sharedUserId;
     field public int sharedUserLabel;
     field public deprecated android.content.pm.Signature[] signatures;
-    field public android.content.pm.Signature[][] signingCertificateHistory;
+    field public android.content.pm.SigningInfo signingInfo;
     field public java.lang.String[] splitNames;
     field public int[] splitRevisionCodes;
     field public deprecated int versionCode;
@@ -11647,6 +11636,18 @@ package android.content.pm {
     method public java.lang.String toCharsString();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.Signature> CREATOR;
+  }
+
+  public final class SigningInfo implements android.os.Parcelable {
+    ctor public SigningInfo();
+    ctor public SigningInfo(android.content.pm.SigningInfo);
+    method public int describeContents();
+    method public android.content.pm.Signature[] getApkContentsSigners();
+    method public android.content.pm.Signature[] getSigningCertificateHistory();
+    method public boolean hasMultipleSigners();
+    method public boolean hasPastSigningCertificates();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.content.pm.SigningInfo> CREATOR;
   }
 
   public final class VersionedPackage implements android.os.Parcelable {
@@ -27204,6 +27205,7 @@ package android.net {
     field public static final int NET_CAPABILITY_IMS = 4; // 0x4
     field public static final int NET_CAPABILITY_INTERNET = 12; // 0xc
     field public static final int NET_CAPABILITY_MMS = 0; // 0x0
+    field public static final int NET_CAPABILITY_NOT_CONGESTED = 20; // 0x14
     field public static final int NET_CAPABILITY_NOT_METERED = 11; // 0xb
     field public static final int NET_CAPABILITY_NOT_RESTRICTED = 13; // 0xd
     field public static final int NET_CAPABILITY_NOT_ROAMING = 18; // 0x12
@@ -32055,6 +32057,7 @@ package android.os {
   }
 
   public class BatteryManager {
+    method public long computeChargeTimeRemaining();
     method public int getIntProperty(int);
     method public long getLongProperty(int);
     method public boolean isCharging();
@@ -42041,7 +42044,6 @@ package android.telephony {
   }
 
   public class NetworkScan {
-    method public deprecated void stop() throws android.os.RemoteException;
     method public void stopScan();
     field public static final int ERROR_INTERRUPTED = 10002; // 0x2712
     field public static final int ERROR_INVALID_SCAN = 2; // 0x2
@@ -42505,7 +42507,6 @@ package android.telephony {
     method public boolean isWorldPhone();
     method public void listen(android.telephony.PhoneStateListener, int);
     method public android.telephony.NetworkScan requestNetworkScan(android.telephony.NetworkScanRequest, java.util.concurrent.Executor, android.telephony.TelephonyScanManager.NetworkScanCallback);
-    method public deprecated android.telephony.NetworkScan requestNetworkScan(android.telephony.NetworkScanRequest, android.telephony.TelephonyScanManager.NetworkScanCallback);
     method public void sendDialerSpecialCode(java.lang.String);
     method public java.lang.String sendEnvelopeWithStatus(java.lang.String);
     method public void sendUssdRequest(java.lang.String, android.telephony.TelephonyManager.UssdResponseCallback, android.os.Handler);
@@ -47599,6 +47600,7 @@ package android.view {
     method public void invalidateDrawable(android.graphics.drawable.Drawable);
     method public void invalidateOutline();
     method public boolean isAccessibilityFocused();
+    method public boolean isAccessibilityHeading();
     method public boolean isActivated();
     method public boolean isAttachedToWindow();
     method public boolean isClickable();
@@ -47760,6 +47762,7 @@ package android.view {
     method public void sendAccessibilityEvent(int);
     method public void sendAccessibilityEventUnchecked(android.view.accessibility.AccessibilityEvent);
     method public void setAccessibilityDelegate(android.view.View.AccessibilityDelegate);
+    method public void setAccessibilityHeading(boolean);
     method public void setAccessibilityLiveRegion(int);
     method public void setAccessibilityPaneTitle(java.lang.CharSequence);
     method public void setAccessibilityTraversalAfter(int);
@@ -53835,7 +53838,6 @@ package android.widget {
     method public android.graphics.Typeface getTypeface();
     method public android.text.style.URLSpan[] getUrls();
     method public boolean hasSelection();
-    method public boolean isAccessibilityHeading();
     method public boolean isAllCaps();
     method public boolean isCursorVisible();
     method public boolean isElegantTextHeight();
@@ -53858,7 +53860,6 @@ package android.widget {
     method protected void onTextChanged(java.lang.CharSequence, int, int, int);
     method public boolean onTextContextMenuItem(int);
     method public void removeTextChangedListener(android.text.TextWatcher);
-    method public void setAccessibilityHeading(boolean);
     method public void setAllCaps(boolean);
     method public final void setAutoLinkMask(int);
     method public void setAutoSizeTextTypeUniformWithConfiguration(int, int, int, int);
