@@ -343,10 +343,16 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
 
         mBuildText.setVisibility(mExpanded && mShouldShowBuildText ? View.VISIBLE : View.GONE);
         mRunningServicesButton.setVisibility(!isDemo && mExpanded ? View.VISIBLE : View.INVISIBLE);
+        mRunningServicesButton.setVisibility(isRunningServicesEnabled() ? !isDemo && mExpanded ? View.VISIBLE : View.INVISIBLE : View.GONE);
     }
 
     private boolean showUserSwitcher() {
         return mExpanded && mMultiUserSwitch.isMultiUserEnabled();
+    }
+	
+	public boolean isRunningServicesEnabled() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.QS_RUNNING_SERVICES_TOGGLE, 0) == 1;
     }
 
     private void updateListeners() {
@@ -365,7 +371,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
             mQsPanel.setFooterPageIndicator(mPageIndicator);
         }
     }
-
+	
     public boolean isEditEnabled() {
         return Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.QS_EDIT_TOGGLE, 1) == 1;
