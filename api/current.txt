@@ -4211,8 +4211,8 @@ package android.app {
   }
 
   public class AppOpsManager {
-    method public int checkOp(java.lang.String, int, java.lang.String);
-    method public int checkOpNoThrow(java.lang.String, int, java.lang.String);
+    method public deprecated int checkOp(java.lang.String, int, java.lang.String);
+    method public deprecated int checkOpNoThrow(java.lang.String, int, java.lang.String);
     method public void checkPackage(int, java.lang.String);
     method public void finishOp(java.lang.String, int, java.lang.String);
     method public int noteOp(java.lang.String, int, java.lang.String);
@@ -4223,10 +4223,15 @@ package android.app {
     method public int startOp(java.lang.String, int, java.lang.String);
     method public int startOpNoThrow(java.lang.String, int, java.lang.String);
     method public void startWatchingMode(java.lang.String, java.lang.String, android.app.AppOpsManager.OnOpChangedListener);
+    method public void startWatchingMode(java.lang.String, java.lang.String, int, android.app.AppOpsManager.OnOpChangedListener);
     method public void stopWatchingMode(android.app.AppOpsManager.OnOpChangedListener);
+    method public int unsafeCheckOp(java.lang.String, int, java.lang.String);
+    method public int unsafeCheckOpNoThrow(java.lang.String, int, java.lang.String);
+    method public int unsafeCheckOpRaw(java.lang.String, int, java.lang.String);
     field public static final int MODE_ALLOWED = 0; // 0x0
     field public static final int MODE_DEFAULT = 3; // 0x3
     field public static final int MODE_ERRORED = 2; // 0x2
+    field public static final int MODE_FOREGROUND = 4; // 0x4
     field public static final int MODE_IGNORED = 1; // 0x1
     field public static final java.lang.String OPSTR_ADD_VOICEMAIL = "android:add_voicemail";
     field public static final java.lang.String OPSTR_ANSWER_PHONE_CALLS = "android:answer_phone_calls";
@@ -4262,6 +4267,7 @@ package android.app {
     field public static final java.lang.String OPSTR_WRITE_CONTACTS = "android:write_contacts";
     field public static final java.lang.String OPSTR_WRITE_EXTERNAL_STORAGE = "android:write_external_storage";
     field public static final java.lang.String OPSTR_WRITE_SETTINGS = "android:write_settings";
+    field public static final int WATCH_FOREGROUND_CHANGES = 1; // 0x1
   }
 
   public static abstract interface AppOpsManager.OnOpChangedListener {
@@ -42723,7 +42729,8 @@ package android.telephony.data {
     method public int getAuthType();
     method public java.lang.String getEntryName();
     method public int getId();
-    method public java.net.InetAddress getMmsProxyAddress();
+    method public deprecated java.net.InetAddress getMmsProxyAddress();
+    method public java.lang.String getMmsProxyAddressAsString();
     method public int getMmsProxyPort();
     method public android.net.Uri getMmsc();
     method public int getMvnoType();
@@ -42731,7 +42738,8 @@ package android.telephony.data {
     method public java.lang.String getOperatorNumeric();
     method public java.lang.String getPassword();
     method public int getProtocol();
-    method public java.net.InetAddress getProxyAddress();
+    method public deprecated java.net.InetAddress getProxyAddress();
+    method public java.lang.String getProxyAddressAsString();
     method public int getProxyPort();
     method public int getRoamingProtocol();
     method public java.lang.String getUser();
@@ -42751,7 +42759,7 @@ package android.telephony.data {
     field public static final int PROTOCOL_IPV6 = 1; // 0x1
     field public static final int PROTOCOL_PPP = 3; // 0x3
     field public static final int TYPE_CBS = 128; // 0x80
-    field public static final int TYPE_DEFAULT = 17; // 0x11
+    field public static final int TYPE_DEFAULT = 1; // 0x1
     field public static final int TYPE_DUN = 8; // 0x8
     field public static final int TYPE_EMERGENCY = 512; // 0x200
     field public static final int TYPE_FOTA = 32; // 0x20
@@ -42770,7 +42778,8 @@ package android.telephony.data {
     method public android.telephony.data.ApnSetting.Builder setAuthType(int);
     method public android.telephony.data.ApnSetting.Builder setCarrierEnabled(boolean);
     method public android.telephony.data.ApnSetting.Builder setEntryName(java.lang.String);
-    method public android.telephony.data.ApnSetting.Builder setMmsProxyAddress(java.net.InetAddress);
+    method public deprecated android.telephony.data.ApnSetting.Builder setMmsProxyAddress(java.net.InetAddress);
+    method public android.telephony.data.ApnSetting.Builder setMmsProxyAddress(java.lang.String);
     method public android.telephony.data.ApnSetting.Builder setMmsProxyPort(int);
     method public android.telephony.data.ApnSetting.Builder setMmsc(android.net.Uri);
     method public android.telephony.data.ApnSetting.Builder setMvnoType(int);
@@ -42778,7 +42787,8 @@ package android.telephony.data {
     method public android.telephony.data.ApnSetting.Builder setOperatorNumeric(java.lang.String);
     method public android.telephony.data.ApnSetting.Builder setPassword(java.lang.String);
     method public android.telephony.data.ApnSetting.Builder setProtocol(int);
-    method public android.telephony.data.ApnSetting.Builder setProxyAddress(java.net.InetAddress);
+    method public deprecated android.telephony.data.ApnSetting.Builder setProxyAddress(java.net.InetAddress);
+    method public android.telephony.data.ApnSetting.Builder setProxyAddress(java.lang.String);
     method public android.telephony.data.ApnSetting.Builder setProxyPort(int);
     method public android.telephony.data.ApnSetting.Builder setRoamingProtocol(int);
     method public android.telephony.data.ApnSetting.Builder setUser(java.lang.String);
@@ -45942,8 +45952,8 @@ package android.view {
 
   public final class Display {
     method public long getAppVsyncOffsetNanos();
-    method public android.view.DisplayCutout getCutout();
     method public void getCurrentSizeRange(android.graphics.Point, android.graphics.Point);
+    method public android.view.DisplayCutout getCutout();
     method public int getDisplayId();
     method public int getFlags();
     method public android.view.Display.HdrCapabilities getHdrCapabilities();
