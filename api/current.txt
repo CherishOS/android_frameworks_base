@@ -9137,6 +9137,7 @@ package android.content {
     method public android.os.Bundle call(java.lang.String, java.lang.String, android.os.Bundle) throws android.os.RemoteException;
     method public final android.net.Uri canonicalize(android.net.Uri) throws android.os.RemoteException;
     method public void close();
+    method public static void closeQuietly(android.content.ContentProviderClient);
     method public int delete(android.net.Uri, java.lang.String, java.lang.String[]) throws android.os.RemoteException;
     method public android.content.ContentProvider getLocalContentProvider();
     method public java.lang.String[] getStreamTypes(android.net.Uri, java.lang.String) throws android.os.RemoteException;
@@ -32547,6 +32548,21 @@ package android.os {
     ctor public FileUriExposedException(java.lang.String);
   }
 
+  public class FileUtils {
+    method public static void closeQuietly(java.lang.AutoCloseable);
+    method public static void closeQuietly(java.io.FileDescriptor);
+    method public static long copy(java.io.File, java.io.File) throws java.io.IOException;
+    method public static long copy(java.io.File, java.io.File, android.os.CancellationSignal, java.util.concurrent.Executor, android.os.FileUtils.ProgressListener) throws java.io.IOException;
+    method public static long copy(java.io.InputStream, java.io.OutputStream) throws java.io.IOException;
+    method public static long copy(java.io.InputStream, java.io.OutputStream, android.os.CancellationSignal, java.util.concurrent.Executor, android.os.FileUtils.ProgressListener) throws java.io.IOException;
+    method public static long copy(java.io.FileDescriptor, java.io.FileDescriptor) throws java.io.IOException;
+    method public static long copy(java.io.FileDescriptor, java.io.FileDescriptor, android.os.CancellationSignal, java.util.concurrent.Executor, android.os.FileUtils.ProgressListener) throws java.io.IOException;
+  }
+
+  public static abstract interface FileUtils.ProgressListener {
+    method public abstract void onProgress(long);
+  }
+
   public class Handler {
     ctor public Handler();
     ctor public Handler(android.os.Handler.Callback);
@@ -42510,13 +42526,11 @@ package android.telephony {
     method public java.lang.String getIccAuthentication(int, int, java.lang.String);
     method public java.lang.String getImei();
     method public java.lang.String getImei(int);
-    method public java.lang.String getTypeAllocationCode();
-    method public java.lang.String getTypeAllocationCode(int);
     method public java.lang.String getLine1Number();
-    method public java.lang.String getMeid();
-    method public java.lang.String getMeid(int);
     method public java.lang.String getManufacturerCode();
     method public java.lang.String getManufacturerCode(int);
+    method public java.lang.String getMeid();
+    method public java.lang.String getMeid(int);
     method public java.lang.String getMmsUAProfUrl();
     method public java.lang.String getMmsUserAgent();
     method public java.lang.String getNai();
@@ -42539,6 +42553,8 @@ package android.telephony {
     method public int getSimState();
     method public int getSimState(int);
     method public java.lang.String getSubscriberId();
+    method public java.lang.String getTypeAllocationCode();
+    method public java.lang.String getTypeAllocationCode(int);
     method public java.lang.String getVisualVoicemailPackageName();
     method public java.lang.String getVoiceMailAlphaTag();
     method public java.lang.String getVoiceMailNumber();
