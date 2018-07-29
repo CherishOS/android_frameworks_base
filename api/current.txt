@@ -272,6 +272,7 @@ package android {
     field public static final int allowBackup = 16843392; // 0x1010280
     field public static final int allowClearUserData = 16842757; // 0x1010005
     field public static final int allowEmbedded = 16843765; // 0x10103f5
+    field public static final int allowForceDark = 16844171; // 0x101058b
     field public static final int allowParallelSyncs = 16843570; // 0x1010332
     field public static final int allowSingleTap = 16843353; // 0x1010259
     field public static final int allowTaskReparenting = 16843268; // 0x1010204
@@ -2818,6 +2819,7 @@ package android.accessibilityservice {
     field public static final java.lang.String SERVICE_META_DATA = "android.accessibilityservice";
     field public static final int SHOW_MODE_AUTO = 0; // 0x0
     field public static final int SHOW_MODE_HIDDEN = 1; // 0x1
+    field public static final int SHOW_MODE_WITH_HARD_KEYBOARD = 2; // 0x2
   }
 
   public static abstract class AccessibilityService.GestureResultCallback {
@@ -3951,22 +3953,16 @@ package android.app {
     field public int uid;
   }
 
-  public static class ActivityManager.RecentTaskInfo implements android.os.Parcelable {
+  public static class ActivityManager.RecentTaskInfo extends android.app.TaskInfo implements android.os.Parcelable {
     ctor public ActivityManager.RecentTaskInfo();
     method public int describeContents();
     method public void readFromParcel(android.os.Parcel);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.ActivityManager.RecentTaskInfo> CREATOR;
-    field public int affiliatedTaskId;
-    field public android.content.ComponentName baseActivity;
-    field public android.content.Intent baseIntent;
-    field public java.lang.CharSequence description;
-    field public int id;
-    field public int numActivities;
-    field public android.content.ComponentName origActivity;
-    field public int persistentId;
-    field public android.app.ActivityManager.TaskDescription taskDescription;
-    field public android.content.ComponentName topActivity;
+    field public deprecated int affiliatedTaskId;
+    field public deprecated java.lang.CharSequence description;
+    field public deprecated int id;
+    field public deprecated int persistentId;
   }
 
   public static class ActivityManager.RunningAppProcessInfo implements android.os.Parcelable {
@@ -4030,19 +4026,16 @@ package android.app {
     field public int uid;
   }
 
-  public static class ActivityManager.RunningTaskInfo implements android.os.Parcelable {
+  public static class ActivityManager.RunningTaskInfo extends android.app.TaskInfo implements android.os.Parcelable {
     ctor public ActivityManager.RunningTaskInfo();
     method public int describeContents();
     method public void readFromParcel(android.os.Parcel);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.ActivityManager.RunningTaskInfo> CREATOR;
-    field public android.content.ComponentName baseActivity;
-    field public java.lang.CharSequence description;
-    field public int id;
-    field public int numActivities;
-    field public int numRunning;
-    field public android.graphics.Bitmap thumbnail;
-    field public android.content.ComponentName topActivity;
+    field public deprecated java.lang.CharSequence description;
+    field public deprecated int id;
+    field public deprecated int numRunning;
+    field public deprecated android.graphics.Bitmap thumbnail;
   }
 
   public static class ActivityManager.TaskDescription implements android.os.Parcelable {
@@ -6089,6 +6082,17 @@ package android.app {
     method public android.widget.TabWidget getTabWidget();
     method public void setDefaultTab(java.lang.String);
     method public void setDefaultTab(int);
+  }
+
+  public class TaskInfo {
+    field public android.content.ComponentName baseActivity;
+    field public android.content.Intent baseIntent;
+    field public boolean isRunning;
+    field public int numActivities;
+    field public android.content.ComponentName origActivity;
+    field public android.app.ActivityManager.TaskDescription taskDescription;
+    field public int taskId;
+    field public android.content.ComponentName topActivity;
   }
 
   public class TaskStackBuilder {
@@ -12671,12 +12675,14 @@ package android.database.sqlite {
     method public static void appendColumns(java.lang.StringBuilder, java.lang.String[]);
     method public void appendWhere(java.lang.CharSequence);
     method public void appendWhereEscapeString(java.lang.String);
+    method public void appendWhereStandalone(java.lang.CharSequence);
     method public java.lang.String buildQuery(java.lang.String[], java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String);
     method public deprecated java.lang.String buildQuery(java.lang.String[], java.lang.String, java.lang.String[], java.lang.String, java.lang.String, java.lang.String, java.lang.String);
     method public static java.lang.String buildQueryString(boolean, java.lang.String, java.lang.String[], java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String);
     method public java.lang.String buildUnionQuery(java.lang.String[], java.lang.String, java.lang.String);
     method public java.lang.String buildUnionSubQuery(java.lang.String, java.lang.String[], java.util.Set<java.lang.String>, int, java.lang.String, java.lang.String, java.lang.String, java.lang.String);
     method public deprecated java.lang.String buildUnionSubQuery(java.lang.String, java.lang.String[], java.util.Set<java.lang.String>, int, java.lang.String, java.lang.String, java.lang.String[], java.lang.String, java.lang.String);
+    method public int delete(android.database.sqlite.SQLiteDatabase, java.lang.String, java.lang.String[]);
     method public java.lang.String getTables();
     method public android.database.Cursor query(android.database.sqlite.SQLiteDatabase, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String, java.lang.String, java.lang.String);
     method public android.database.Cursor query(android.database.sqlite.SQLiteDatabase, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String, java.lang.String, java.lang.String, java.lang.String);
@@ -12686,6 +12692,7 @@ package android.database.sqlite {
     method public void setProjectionMap(java.util.Map<java.lang.String, java.lang.String>);
     method public void setStrict(boolean);
     method public void setTables(java.lang.String);
+    method public int update(android.database.sqlite.SQLiteDatabase, android.content.ContentValues, java.lang.String, java.lang.String[]);
   }
 
   public class SQLiteReadOnlyDatabaseException extends android.database.sqlite.SQLiteException {
@@ -48817,6 +48824,7 @@ package android.view {
     method public void dispatchOnGlobalLayout();
     method public boolean dispatchOnPreDraw();
     method public boolean isAlive();
+    method public void registerFrameCommitCallback(java.lang.Runnable);
     method public deprecated void removeGlobalOnLayoutListener(android.view.ViewTreeObserver.OnGlobalLayoutListener);
     method public void removeOnDrawListener(android.view.ViewTreeObserver.OnDrawListener);
     method public void removeOnGlobalFocusChangeListener(android.view.ViewTreeObserver.OnGlobalFocusChangeListener);
@@ -48826,6 +48834,7 @@ package android.view {
     method public void removeOnTouchModeChangeListener(android.view.ViewTreeObserver.OnTouchModeChangeListener);
     method public void removeOnWindowAttachListener(android.view.ViewTreeObserver.OnWindowAttachListener);
     method public void removeOnWindowFocusChangeListener(android.view.ViewTreeObserver.OnWindowFocusChangeListener);
+    method public boolean unregisterFrameCommitCallback(java.lang.Runnable);
   }
 
   public static abstract interface ViewTreeObserver.OnDrawListener {
