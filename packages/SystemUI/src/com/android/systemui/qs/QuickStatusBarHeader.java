@@ -36,6 +36,7 @@ import android.os.Vibrator;
 import android.provider.Settings;
 import android.provider.AlarmClock;
 import android.provider.CalendarContract;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.DisplayCutout;
@@ -72,6 +73,12 @@ import java.util.List;
  */
 public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tunable,
         View.OnClickListener, View.OnLongClickListener {
+
+    private static final int CLOCK_POSITION_LEFT = 2;
+    private static final int CLOCK_POSITION_HIDE = 3;
+
+    private static final String STATUS_BAR_CLOCK =
+            "system:" + Settings.System.STATUS_BAR_CLOCK;
 
     private boolean mExpanded;
     private boolean mQsDisabled;
@@ -195,7 +202,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                 .build();
 
         Dependency.get(TunerService.class).addTunable(this,
-                StatusBarIconController.ICON_HIDE_LIST);
+                STATUS_BAR_CLOCK);
     }
 
     void onAttach(TintedIconManager iconManager,
@@ -679,7 +686,14 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        mClockView.setClockVisibleByUser(!StatusBarIconController.getIconHideList(
-                mContext, newValue).contains("clock"));
+        switch (key) {
+            case STATUS_BAR_CLOCK:
+                int showClock =
+                        TunerService.parseInteger(newValue, CLOCK_POSITION_LEFT);
+                mClockView.setClockVisibleByUser(showClock != CLOCK_POSITION_HIDE);
+                break;
+            default:
+                break;
+        }
     }
 }
