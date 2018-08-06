@@ -4433,11 +4433,12 @@ package android.app {
   }
 
   public final class AutomaticZenRule implements android.os.Parcelable {
-    ctor public AutomaticZenRule(java.lang.String, android.content.ComponentName, android.net.Uri, int, boolean);
-    ctor public AutomaticZenRule(java.lang.String, android.content.ComponentName, android.net.Uri, android.service.notification.ZenPolicy, boolean);
+    ctor public deprecated AutomaticZenRule(java.lang.String, android.content.ComponentName, android.net.Uri, int, boolean);
+    ctor public AutomaticZenRule(java.lang.String, android.content.ComponentName, android.content.ComponentName, android.net.Uri, android.service.notification.ZenPolicy, int, boolean);
     ctor public AutomaticZenRule(android.os.Parcel);
     method public int describeContents();
     method public android.net.Uri getConditionId();
+    method public android.content.ComponentName getConfigurationActivity();
     method public long getCreationTime();
     method public int getInterruptionFilter();
     method public java.lang.String getName();
@@ -4445,6 +4446,7 @@ package android.app {
     method public android.service.notification.ZenPolicy getZenPolicy();
     method public boolean isEnabled();
     method public void setConditionId(android.net.Uri);
+    method public void setConfigurationActivity(android.content.ComponentName);
     method public void setEnabled(boolean);
     method public void setInterruptionFilter(int);
     method public void setName(java.lang.String);
@@ -5773,16 +5775,19 @@ package android.app {
     method public void notifyAsPackage(java.lang.String, java.lang.String, int, android.app.Notification);
     method public boolean removeAutomaticZenRule(java.lang.String);
     method public void revokeNotificationDelegate();
+    method public void setAutomaticZenRuleState(java.lang.String, android.service.notification.Condition);
     method public final void setInterruptionFilter(int);
     method public void setNotificationDelegate(java.lang.String);
     method public void setNotificationPolicy(android.app.NotificationManager.Policy);
     method public boolean updateAutomaticZenRule(java.lang.String, android.app.AutomaticZenRule);
     field public static final java.lang.String ACTION_APP_BLOCK_STATE_CHANGED = "android.app.action.APP_BLOCK_STATE_CHANGED";
+    field public static final java.lang.String ACTION_AUTOMATIC_ZEN_RULE = "android.app.action.AUTOMATIC_ZEN_RULE";
     field public static final java.lang.String ACTION_INTERRUPTION_FILTER_CHANGED = "android.app.action.INTERRUPTION_FILTER_CHANGED";
     field public static final java.lang.String ACTION_NOTIFICATION_CHANNEL_BLOCK_STATE_CHANGED = "android.app.action.NOTIFICATION_CHANNEL_BLOCK_STATE_CHANGED";
     field public static final java.lang.String ACTION_NOTIFICATION_CHANNEL_GROUP_BLOCK_STATE_CHANGED = "android.app.action.NOTIFICATION_CHANNEL_GROUP_BLOCK_STATE_CHANGED";
     field public static final java.lang.String ACTION_NOTIFICATION_POLICY_ACCESS_GRANTED_CHANGED = "android.app.action.NOTIFICATION_POLICY_ACCESS_GRANTED_CHANGED";
     field public static final java.lang.String ACTION_NOTIFICATION_POLICY_CHANGED = "android.app.action.NOTIFICATION_POLICY_CHANGED";
+    field public static final java.lang.String EXTRA_AUTOMATIC_RULE_ID = "android.app.extra.AUTOMATIC_RULE_ID";
     field public static final java.lang.String EXTRA_BLOCKED_STATE = "android.app.extra.BLOCKED_STATE";
     field public static final java.lang.String EXTRA_NOTIFICATION_CHANNEL_GROUP_ID = "android.app.extra.NOTIFICATION_CHANNEL_GROUP_ID";
     field public static final java.lang.String EXTRA_NOTIFICATION_CHANNEL_ID = "android.app.extra.NOTIFICATION_CHANNEL_ID";
@@ -5798,6 +5803,8 @@ package android.app {
     field public static final int INTERRUPTION_FILTER_NONE = 3; // 0x3
     field public static final int INTERRUPTION_FILTER_PRIORITY = 2; // 0x2
     field public static final int INTERRUPTION_FILTER_UNKNOWN = 0; // 0x0
+    field public static final java.lang.String META_DATA_AUTOMATIC_RULE_TYPE = "android.app.automatic.ruleType";
+    field public static final java.lang.String META_DATA_RULE_INSTANCE_LIMIT = "android.app.zen.automatic.ruleInstanceLimit";
   }
 
   public static class NotificationManager.Policy implements android.os.Parcelable {
@@ -41009,10 +41016,10 @@ package android.service.notification {
     field public final java.lang.String summary;
   }
 
-  public abstract class ConditionProviderService extends android.app.Service {
+  public abstract deprecated class ConditionProviderService extends android.app.Service {
     ctor public ConditionProviderService();
-    method public final void notifyCondition(android.service.notification.Condition);
-    method public final void notifyConditions(android.service.notification.Condition...);
+    method public final deprecated void notifyCondition(android.service.notification.Condition);
+    method public final deprecated void notifyConditions(android.service.notification.Condition...);
     method public android.os.IBinder onBind(android.content.Intent);
     method public abstract void onConnected();
     method public void onRequestConditions(int);
@@ -41020,10 +41027,10 @@ package android.service.notification {
     method public abstract void onUnsubscribe(android.net.Uri);
     method public static final void requestRebind(android.content.ComponentName);
     method public final void requestUnbind();
-    field public static final java.lang.String EXTRA_RULE_ID = "android.service.notification.extra.RULE_ID";
-    field public static final java.lang.String META_DATA_CONFIGURATION_ACTIVITY = "android.service.zen.automatic.configurationActivity";
-    field public static final java.lang.String META_DATA_RULE_INSTANCE_LIMIT = "android.service.zen.automatic.ruleInstanceLimit";
-    field public static final java.lang.String META_DATA_RULE_TYPE = "android.service.zen.automatic.ruleType";
+    field public static final deprecated java.lang.String EXTRA_RULE_ID = "android.service.notification.extra.RULE_ID";
+    field public static final deprecated java.lang.String META_DATA_CONFIGURATION_ACTIVITY = "android.service.zen.automatic.configurationActivity";
+    field public static final deprecated java.lang.String META_DATA_RULE_INSTANCE_LIMIT = "android.service.zen.automatic.ruleInstanceLimit";
+    field public static final deprecated java.lang.String META_DATA_RULE_TYPE = "android.service.zen.automatic.ruleType";
     field public static final java.lang.String SERVICE_INTERFACE = "android.service.notification.ConditionProviderService";
   }
 
