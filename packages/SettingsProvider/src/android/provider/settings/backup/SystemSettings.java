@@ -94,5 +94,6 @@ public class SystemSettings {
         Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD,
         Settings.System.USE_OLD_MOBILETYPE,
         Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL,
+        Settings.System.LOCKSCREEN_BATTERY_INFO,
     };
 }
