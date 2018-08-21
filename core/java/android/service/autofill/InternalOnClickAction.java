@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The Android Open Source Project
+ * Copyright (C) 2018 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,19 @@ package android.service.autofill;
 import android.annotation.NonNull;
 import android.annotation.TestApi;
 import android.os.Parcelable;
+import android.view.ViewGroup;
 
 /**
- * Superclass of all validators the system understands. As this is not public all public subclasses
- * have to implement {@link Validator} again.
+ * Superclass of all {@link OnClickAction} the system understands. As this is not public, all public
+ * subclasses have to implement {@link OnClickAction} again.
  *
  * @hide
  */
 @TestApi
-public abstract class InternalValidator implements Validator, Parcelable {
+public abstract class InternalOnClickAction implements OnClickAction, Parcelable {
 
     /**
-     * Decides whether the contents of the screen are valid.
-     *
-     * @param finder object used to find the value of a field in the screen.
-     * @return {@code true} if the contents are valid, {@code false} otherwise.
+     * Applies the action to the children of the {@rootView} when clicked.
      */
-    public abstract boolean isValid(@NonNull ValueFinder finder);
+    public abstract void onClick(@NonNull ViewGroup rootView);
 }
