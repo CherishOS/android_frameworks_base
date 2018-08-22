@@ -4382,6 +4382,7 @@ package android.app {
 
   public final class AutomaticZenRule implements android.os.Parcelable {
     ctor public AutomaticZenRule(java.lang.String, android.content.ComponentName, android.net.Uri, int, boolean);
+    ctor public AutomaticZenRule(java.lang.String, android.content.ComponentName, android.net.Uri, android.service.notification.ZenPolicy, boolean);
     ctor public AutomaticZenRule(android.os.Parcel);
     method public int describeContents();
     method public android.net.Uri getConditionId();
@@ -4389,11 +4390,13 @@ package android.app {
     method public int getInterruptionFilter();
     method public java.lang.String getName();
     method public android.content.ComponentName getOwner();
+    method public android.service.notification.ZenPolicy getZenPolicy();
     method public boolean isEnabled();
     method public void setConditionId(android.net.Uri);
     method public void setEnabled(boolean);
     method public void setInterruptionFilter(int);
     method public void setName(java.lang.String);
+    method public void setZenPolicy(android.service.notification.ZenPolicy);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.AutomaticZenRule> CREATOR;
   }
@@ -39656,6 +39659,61 @@ package android.service.notification {
     method public void setOverrideGroupKey(java.lang.String);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.notification.StatusBarNotification> CREATOR;
+  }
+
+  public final class ZenPolicy implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getPriorityCallSenders();
+    method public int getPriorityCategoryAlarms();
+    method public int getPriorityCategoryCalls();
+    method public int getPriorityCategoryEvents();
+    method public int getPriorityCategoryMedia();
+    method public int getPriorityCategoryMessages();
+    method public int getPriorityCategoryReminders();
+    method public int getPriorityCategoryRepeatCallers();
+    method public int getPriorityCategorySystem();
+    method public int getPriorityMessageSenders();
+    method public int getVisualEffectAmbient();
+    method public int getVisualEffectBadge();
+    method public int getVisualEffectFullScreenIntent();
+    method public int getVisualEffectLights();
+    method public int getVisualEffectNotificationList();
+    method public int getVisualEffectPeek();
+    method public int getVisualEffectStatusBar();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.notification.ZenPolicy> CREATOR;
+    field public static final int PEOPLE_TYPE_ANYONE = 1; // 0x1
+    field public static final int PEOPLE_TYPE_CONTACTS = 2; // 0x2
+    field public static final int PEOPLE_TYPE_NONE = 4; // 0x4
+    field public static final int PEOPLE_TYPE_STARRED = 3; // 0x3
+    field public static final int PEOPLE_TYPE_UNSET = 0; // 0x0
+    field public static final int STATE_ALLOW = 1; // 0x1
+    field public static final int STATE_DISALLOW = 2; // 0x2
+    field public static final int STATE_UNSET = 0; // 0x0
+  }
+
+  public static class ZenPolicy.Builder {
+    ctor public ZenPolicy.Builder();
+    method public android.service.notification.ZenPolicy.Builder allowAlarms(boolean);
+    method public android.service.notification.ZenPolicy.Builder allowAllSounds();
+    method public android.service.notification.ZenPolicy.Builder allowCalls(int);
+    method public android.service.notification.ZenPolicy.Builder allowEvents(boolean);
+    method public android.service.notification.ZenPolicy.Builder allowMedia(boolean);
+    method public android.service.notification.ZenPolicy.Builder allowMessages(int);
+    method public android.service.notification.ZenPolicy.Builder allowReminders(boolean);
+    method public android.service.notification.ZenPolicy.Builder allowRepeatCallers(boolean);
+    method public android.service.notification.ZenPolicy.Builder allowSystem(boolean);
+    method public android.service.notification.ZenPolicy build();
+    method public android.service.notification.ZenPolicy.Builder disallowAllSounds();
+    method public android.service.notification.ZenPolicy.Builder hideAllVisualEffects();
+    method public android.service.notification.ZenPolicy.Builder showAllVisualEffects();
+    method public android.service.notification.ZenPolicy.Builder showBadges(boolean);
+    method public android.service.notification.ZenPolicy.Builder showFullScreenIntent(boolean);
+    method public android.service.notification.ZenPolicy.Builder showInAmbientDisplay(boolean);
+    method public android.service.notification.ZenPolicy.Builder showInNotificationList(boolean);
+    method public android.service.notification.ZenPolicy.Builder showLights(boolean);
+    method public android.service.notification.ZenPolicy.Builder showPeeking(boolean);
+    method public android.service.notification.ZenPolicy.Builder showStatusBarIcons(boolean);
   }
 
 }
