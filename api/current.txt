@@ -57,8 +57,6 @@ package android {
     field public static final java.lang.String CALL_PRIVILEGED = "android.permission.CALL_PRIVILEGED";
     field public static final java.lang.String CAMERA = "android.permission.CAMERA";
     field public static final java.lang.String CAPTURE_AUDIO_OUTPUT = "android.permission.CAPTURE_AUDIO_OUTPUT";
-    field public static final java.lang.String CAPTURE_SECURE_VIDEO_OUTPUT = "android.permission.CAPTURE_SECURE_VIDEO_OUTPUT";
-    field public static final java.lang.String CAPTURE_VIDEO_OUTPUT = "android.permission.CAPTURE_VIDEO_OUTPUT";
     field public static final java.lang.String CHANGE_COMPONENT_ENABLED_STATE = "android.permission.CHANGE_COMPONENT_ENABLED_STATE";
     field public static final java.lang.String CHANGE_CONFIGURATION = "android.permission.CHANGE_CONFIGURATION";
     field public static final java.lang.String CHANGE_NETWORK_STATE = "android.permission.CHANGE_NETWORK_STATE";
@@ -103,7 +101,6 @@ package android {
     field public static final java.lang.String READ_CALL_LOG = "android.permission.READ_CALL_LOG";
     field public static final java.lang.String READ_CONTACTS = "android.permission.READ_CONTACTS";
     field public static final deprecated java.lang.String READ_EXTERNAL_STORAGE = "android.permission.READ_EXTERNAL_STORAGE";
-    field public static final java.lang.String READ_FRAME_BUFFER = "android.permission.READ_FRAME_BUFFER";
     field public static final deprecated java.lang.String READ_INPUT_STATE = "android.permission.READ_INPUT_STATE";
     field public static final java.lang.String READ_LOGS = "android.permission.READ_LOGS";
     field public static final java.lang.String READ_MEDIA_AUDIO = "android.permission.READ_MEDIA_AUDIO";
@@ -41061,8 +41058,9 @@ package android.telecom {
   public abstract class CallRedirectionService extends android.app.Service {
     ctor public CallRedirectionService();
     method public final void cancelCall();
-    method public android.os.IBinder onBind(android.content.Intent);
+    method public final android.os.IBinder onBind(android.content.Intent);
     method public abstract void onPlaceCall(android.net.Uri, android.telecom.PhoneAccountHandle);
+    method public final boolean onUnbind(android.content.Intent);
     method public final void placeCallUnmodified();
     method public final void redirectCall(android.net.Uri, android.telecom.PhoneAccountHandle);
     field public static final java.lang.String SERVICE_INTERFACE = "android.telecom.CallRedirectionService";
@@ -42722,6 +42720,7 @@ package android.telephony {
     method public java.lang.String iccTransmitApduLogicalChannel(int, int, int, int, int, int, java.lang.String);
     method public boolean isConcurrentVoiceAndDataSupported();
     method public boolean isDataEnabled();
+    method public boolean isDataRoamingEnabled();
     method public boolean isHearingAidCompatibilitySupported();
     method public boolean isNetworkRoaming();
     method public boolean isSmsCapable();
