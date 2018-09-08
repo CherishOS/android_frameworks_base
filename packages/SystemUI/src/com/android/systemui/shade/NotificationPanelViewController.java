@@ -341,6 +341,8 @@ public final class NotificationPanelViewController extends PanelViewController {
             "system:" + Settings.System.RETICKER_COLORED;
     private static final String DOUBLE_TAP_SLEEP_GESTURE =
             "system:" + Settings.System.DOUBLE_TAP_SLEEP_GESTURE;
+    private static final String DOUBLE_TAP_SLEEP_LOCKSCREEN =
+            "system:" + Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN;
 
     private static final Rect M_DUMMY_DIRTY_RECT = new Rect(0, 0, 1, 1);
     private static final Rect EMPTY_RECT = new Rect();
@@ -568,6 +570,8 @@ public final class NotificationPanelViewController extends PanelViewController {
     private final int mDisplayId;
     private boolean mDoubleTapToSleepEnabled;
     private GestureDetector mDoubleTapGesture;
+
+    private boolean mIsLockscreenDoubleTapEnabled;
 
     private KeyguardIndicationController mKeyguardIndicationController;
     private int mHeadsUpInset;
@@ -4564,7 +4568,10 @@ public final class NotificationPanelViewController extends PanelViewController {
                     return false;
                 }
 
-                if (mDoubleTapToSleepEnabled && !mPulsing && !mDozing) {
+                if ((mIsLockscreenDoubleTapEnabled && !mPulsing && !mDozing
+                        && mBarState == StatusBarState.KEYGUARD) ||
+                        (!mQsExpanded && mDoubleTapToSleepEnabled
+                        && event.getY() < mStatusBarHeaderHeightKeyguard)) {
                     mDoubleTapGesture.onTouchEvent(event);
                 }
 
@@ -5123,6 +5130,7 @@ public final class NotificationPanelViewController extends PanelViewController {
             mTunerService.addTunable(this, RETICKER_STATUS);
             mTunerService.addTunable(this, RETICKER_COLORED);
             mTunerService.addTunable(this, DOUBLE_TAP_SLEEP_GESTURE);
+            mTunerService.addTunable(this, DOUBLE_TAP_SLEEP_LOCKSCREEN);
             // Theme might have changed between inflating this view and attaching it to the
             // window, so
             // force a call to onThemeChanged
@@ -5162,6 +5170,10 @@ public final class NotificationPanelViewController extends PanelViewController {
 		    mDoubleTapToSleepEnabled =
 			    TunerService.parseIntegerSwitch(newValue, true);
 		    break;
+                case DOUBLE_TAP_SLEEP_LOCKSCREEN:
+                    mIsLockscreenDoubleTapEnabled =
+                            TunerService.parseIntegerSwitch(newValue, true);
+                    break;
                 default:
                     break;
             }
