@@ -2826,7 +2826,7 @@ package android.accessibilityservice {
     field public static final java.lang.String SERVICE_META_DATA = "android.accessibilityservice";
     field public static final int SHOW_MODE_AUTO = 0; // 0x0
     field public static final int SHOW_MODE_HIDDEN = 1; // 0x1
-    field public static final int SHOW_MODE_WITH_HARD_KEYBOARD = 2; // 0x2
+    field public static final int SHOW_MODE_IGNORE_HARD_KEYBOARD = 2; // 0x2
   }
 
   public static abstract class AccessibilityService.GestureResultCallback {
@@ -15218,6 +15218,9 @@ package android.graphics.fonts {
 
   public final class Font {
     method public android.graphics.fonts.FontVariationAxis[] getAxes();
+    method public java.nio.ByteBuffer getBuffer();
+    method public java.io.File getFile();
+    method public android.os.LocaleList getLocaleList();
     method public int getTtcIndex();
     method public int getWeight();
     method public boolean isItalic();
@@ -15264,6 +15267,10 @@ package android.graphics.fonts {
     method public float getStyleValue();
     method public java.lang.String getTag();
     method public static java.lang.String toFontVariationSettings(android.graphics.fonts.FontVariationAxis[]);
+  }
+
+  public class SystemFonts {
+    method public static java.util.Set<android.graphics.fonts.Font> getAvailableFonts();
   }
 
 }
@@ -42610,6 +42617,7 @@ package android.telephony {
   }
 
   public class SubscriptionManager {
+    method public void addOnOpportunisticSubscriptionsChangedListener(java.util.concurrent.Executor, android.telephony.SubscriptionManager.OnOpportunisticSubscriptionsChangedListener);
     method public void addOnSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnSubscriptionsChangedListener);
     method public boolean canManageSubscription(android.telephony.SubscriptionInfo);
     method public static deprecated android.telephony.SubscriptionManager from(android.content.Context);
@@ -42623,8 +42631,11 @@ package android.telephony {
     method public static int getDefaultSmsSubscriptionId();
     method public static int getDefaultSubscriptionId();
     method public static int getDefaultVoiceSubscriptionId();
+    method public java.util.List<android.telephony.SubscriptionInfo> getOpportunisticSubscriptions(int);
+    method public static int[] getSubscriptionIds(int);
     method public java.util.List<android.telephony.SubscriptionPlan> getSubscriptionPlans(int);
     method public boolean isNetworkRoaming(int);
+    method public void removeOnOpportunisticSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnOpportunisticSubscriptionsChangedListener);
     method public void removeOnSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnSubscriptionsChangedListener);
     method public void setSubscriptionOverrideCongested(int, boolean, long);
     method public void setSubscriptionOverrideUnmetered(int, boolean, long);
@@ -42638,6 +42649,11 @@ package android.telephony {
     field public static final int DATA_ROAMING_ENABLE = 1; // 0x1
     field public static final java.lang.String EXTRA_SUBSCRIPTION_INDEX = "android.telephony.extra.SUBSCRIPTION_INDEX";
     field public static final int INVALID_SUBSCRIPTION_ID = -1; // 0xffffffff
+  }
+
+  public static class SubscriptionManager.OnOpportunisticSubscriptionsChangedListener {
+    ctor public SubscriptionManager.OnOpportunisticSubscriptionsChangedListener();
+    method public void onOpportunisticSubscriptionsChanged();
   }
 
   public static class SubscriptionManager.OnSubscriptionsChangedListener {
@@ -45992,6 +46008,7 @@ package android.util {
     method public float getDimension(android.util.DisplayMetrics);
     method public final float getFloat();
     method public float getFraction(float, float);
+    method public boolean isColorType();
     method public void setTo(android.util.TypedValue);
     field public static final int COMPLEX_MANTISSA_MASK = 16777215; // 0xffffff
     field public static final int COMPLEX_MANTISSA_SHIFT = 8; // 0x8
