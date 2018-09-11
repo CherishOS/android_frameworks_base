@@ -30,6 +30,7 @@ import android.os.SystemProperties;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.format.Time;
+import android.content.res.Resources;
 import android.view.IWindowManager;
 import android.view.WindowManagerGlobal;
 import android.view.InputDevice;
@@ -45,7 +46,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 
 import com.android.internal.statusbar.IStatusBarService;
-
+import java.util.Locale;
 public class CherishUtils {
     private static OverlayManager mOverlayService;
 	
@@ -69,6 +70,12 @@ public class CherishUtils {
 
     public static boolean isPackageInstalled(Context context, String pkg) {
         return isPackageInstalled(context, pkg, true);
+    }
+	
+	 // Check for Chinese language
+    public static boolean isChineseLanguage() {
+       return Resources.getSystem().getConfiguration().locale.getLanguage().startsWith(
+               Locale.CHINESE.getLanguage());
     }
 
     public static void switchScreenOff(Context ctx) {
