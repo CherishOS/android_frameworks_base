@@ -934,6 +934,7 @@ package android {
     field public static final int minSdkVersion = 16843276; // 0x101020c
     field public static final int minWidth = 16843071; // 0x101013f
     field public static final int minimumHorizontalAngle = 16843901; // 0x101047d
+    field public static final int minimumUiTimeout = 16844174; // 0x101058e
     field public static final int minimumVerticalAngle = 16843902; // 0x101047e
     field public static final int mipMap = 16843725; // 0x10103cd
     field public static final int mirrorForRtl = 16843726; // 0x10103ce
@@ -2874,10 +2875,12 @@ package android.accessibilityservice {
     method public int getCapabilities();
     method public deprecated java.lang.String getDescription();
     method public java.lang.String getId();
+    method public int getMinimumUiTimeoutMillis();
     method public android.content.pm.ResolveInfo getResolveInfo();
     method public java.lang.String getSettingsActivityName();
     method public java.lang.String loadDescription(android.content.pm.PackageManager);
     method public java.lang.CharSequence loadSummary(android.content.pm.PackageManager);
+    method public void setMinimumUiTimeoutMillis(int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int CAPABILITY_CAN_CONTROL_MAGNIFICATION = 16; // 0x10
     field public static final int CAPABILITY_CAN_PERFORM_GESTURES = 32; // 0x20
@@ -4382,6 +4385,7 @@ package android.app {
 
   public final class AutomaticZenRule implements android.os.Parcelable {
     ctor public AutomaticZenRule(java.lang.String, android.content.ComponentName, android.net.Uri, int, boolean);
+    ctor public AutomaticZenRule(java.lang.String, android.content.ComponentName, android.net.Uri, android.service.notification.ZenPolicy, boolean);
     ctor public AutomaticZenRule(android.os.Parcel);
     method public int describeContents();
     method public android.net.Uri getConditionId();
@@ -4389,11 +4393,13 @@ package android.app {
     method public int getInterruptionFilter();
     method public java.lang.String getName();
     method public android.content.ComponentName getOwner();
+    method public android.service.notification.ZenPolicy getZenPolicy();
     method public boolean isEnabled();
     method public void setConditionId(android.net.Uri);
     method public void setEnabled(boolean);
     method public void setInterruptionFilter(int);
     method public void setName(java.lang.String);
+    method public void setZenPolicy(android.service.notification.ZenPolicy);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.AutomaticZenRule> CREATOR;
   }
@@ -9337,6 +9343,7 @@ package android.content {
     ctor public ContentUris();
     method public static android.net.Uri.Builder appendId(android.net.Uri.Builder, long);
     method public static long parseId(android.net.Uri);
+    method public static android.net.Uri removeId(android.net.Uri);
     method public static android.net.Uri withAppendedId(android.net.Uri, long);
   }
 
@@ -11925,6 +11932,7 @@ package android.content.res {
     method public android.graphics.drawable.Drawable getDrawable(int, android.content.res.Resources.Theme) throws android.content.res.Resources.NotFoundException;
     method public deprecated android.graphics.drawable.Drawable getDrawableForDensity(int, int) throws android.content.res.Resources.NotFoundException;
     method public android.graphics.drawable.Drawable getDrawableForDensity(int, int, android.content.res.Resources.Theme);
+    method public float getFloat(int);
     method public android.graphics.Typeface getFont(int) throws android.content.res.Resources.NotFoundException;
     method public float getFraction(int, int, int);
     method public int getIdentifier(java.lang.String, java.lang.String, java.lang.String);
@@ -12652,7 +12660,7 @@ package android.database.sqlite {
     ctor public SQLiteMisuseException(java.lang.String);
   }
 
-  public abstract class SQLiteOpenHelper {
+  public abstract class SQLiteOpenHelper implements java.lang.AutoCloseable {
     ctor public SQLiteOpenHelper(android.content.Context, java.lang.String, android.database.sqlite.SQLiteDatabase.CursorFactory, int);
     ctor public SQLiteOpenHelper(android.content.Context, java.lang.String, android.database.sqlite.SQLiteDatabase.CursorFactory, int, android.database.DatabaseErrorHandler);
     ctor public SQLiteOpenHelper(android.content.Context, java.lang.String, int, android.database.sqlite.SQLiteDatabase.OpenParams);
@@ -16030,6 +16038,7 @@ package android.hardware.camera2 {
     method public java.util.List<android.hardware.camera2.CaptureRequest.Key<?>> getAvailablePhysicalCameraRequestKeys();
     method public java.util.List<android.hardware.camera2.CaptureRequest.Key<?>> getAvailableSessionKeys();
     method public java.util.List<android.hardware.camera2.CameraCharacteristics.Key<?>> getKeys();
+    method public java.util.List<android.hardware.camera2.CameraCharacteristics.Key<?>> getKeysNeedingPermission();
     method public java.util.Set<java.lang.String> getPhysicalCameraIds();
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> COLOR_CORRECTION_AVAILABLE_ABERRATION_MODES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AE_AVAILABLE_ANTIBANDING_MODES;
@@ -36585,9 +36594,9 @@ package android.provider {
     field public static final java.lang.String IS_PRIVATE = "isprivate";
     field public static final java.lang.String LATITUDE = "latitude";
     field public static final java.lang.String LONGITUDE = "longitude";
-    field public static final java.lang.String MINI_THUMB_MAGIC = "mini_thumb_magic";
+    field public static final deprecated java.lang.String MINI_THUMB_MAGIC = "mini_thumb_magic";
     field public static final java.lang.String ORIENTATION = "orientation";
-    field public static final java.lang.String PICASA_ID = "picasa_id";
+    field public static final deprecated java.lang.String PICASA_ID = "picasa_id";
   }
 
   public static final class MediaStore.Images.Media implements android.provider.MediaStore.Images.ImageColumns {
@@ -36690,7 +36699,7 @@ package android.provider {
     field public static final java.lang.String LANGUAGE = "language";
     field public static final java.lang.String LATITUDE = "latitude";
     field public static final java.lang.String LONGITUDE = "longitude";
-    field public static final java.lang.String MINI_THUMB_MAGIC = "mini_thumb_magic";
+    field public static final deprecated java.lang.String MINI_THUMB_MAGIC = "mini_thumb_magic";
     field public static final java.lang.String RESOLUTION = "resolution";
     field public static final java.lang.String TAGS = "tags";
   }
@@ -39562,6 +39571,7 @@ package android.service.notification {
     method public final deprecated void cancelNotification(java.lang.String, java.lang.String, int);
     method public final void cancelNotification(java.lang.String);
     method public final void cancelNotifications(java.lang.String[]);
+    method public final void clearRequestedListenerHints();
     method public android.service.notification.StatusBarNotification[] getActiveNotifications();
     method public android.service.notification.StatusBarNotification[] getActiveNotifications(java.lang.String[]);
     method public final int getCurrentInterruptionFilter();
@@ -39675,6 +39685,61 @@ package android.service.notification {
     method public void setOverrideGroupKey(java.lang.String);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.notification.StatusBarNotification> CREATOR;
+  }
+
+  public final class ZenPolicy implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getPriorityCallSenders();
+    method public int getPriorityCategoryAlarms();
+    method public int getPriorityCategoryCalls();
+    method public int getPriorityCategoryEvents();
+    method public int getPriorityCategoryMedia();
+    method public int getPriorityCategoryMessages();
+    method public int getPriorityCategoryReminders();
+    method public int getPriorityCategoryRepeatCallers();
+    method public int getPriorityCategorySystem();
+    method public int getPriorityMessageSenders();
+    method public int getVisualEffectAmbient();
+    method public int getVisualEffectBadge();
+    method public int getVisualEffectFullScreenIntent();
+    method public int getVisualEffectLights();
+    method public int getVisualEffectNotificationList();
+    method public int getVisualEffectPeek();
+    method public int getVisualEffectStatusBar();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.notification.ZenPolicy> CREATOR;
+    field public static final int PEOPLE_TYPE_ANYONE = 1; // 0x1
+    field public static final int PEOPLE_TYPE_CONTACTS = 2; // 0x2
+    field public static final int PEOPLE_TYPE_NONE = 4; // 0x4
+    field public static final int PEOPLE_TYPE_STARRED = 3; // 0x3
+    field public static final int PEOPLE_TYPE_UNSET = 0; // 0x0
+    field public static final int STATE_ALLOW = 1; // 0x1
+    field public static final int STATE_DISALLOW = 2; // 0x2
+    field public static final int STATE_UNSET = 0; // 0x0
+  }
+
+  public static class ZenPolicy.Builder {
+    ctor public ZenPolicy.Builder();
+    method public android.service.notification.ZenPolicy.Builder allowAlarms(boolean);
+    method public android.service.notification.ZenPolicy.Builder allowAllSounds();
+    method public android.service.notification.ZenPolicy.Builder allowCalls(int);
+    method public android.service.notification.ZenPolicy.Builder allowEvents(boolean);
+    method public android.service.notification.ZenPolicy.Builder allowMedia(boolean);
+    method public android.service.notification.ZenPolicy.Builder allowMessages(int);
+    method public android.service.notification.ZenPolicy.Builder allowReminders(boolean);
+    method public android.service.notification.ZenPolicy.Builder allowRepeatCallers(boolean);
+    method public android.service.notification.ZenPolicy.Builder allowSystem(boolean);
+    method public android.service.notification.ZenPolicy build();
+    method public android.service.notification.ZenPolicy.Builder disallowAllSounds();
+    method public android.service.notification.ZenPolicy.Builder hideAllVisualEffects();
+    method public android.service.notification.ZenPolicy.Builder showAllVisualEffects();
+    method public android.service.notification.ZenPolicy.Builder showBadges(boolean);
+    method public android.service.notification.ZenPolicy.Builder showFullScreenIntent(boolean);
+    method public android.service.notification.ZenPolicy.Builder showInAmbientDisplay(boolean);
+    method public android.service.notification.ZenPolicy.Builder showInNotificationList(boolean);
+    method public android.service.notification.ZenPolicy.Builder showLights(boolean);
+    method public android.service.notification.ZenPolicy.Builder showPeeking(boolean);
+    method public android.service.notification.ZenPolicy.Builder showStatusBarIcons(boolean);
   }
 
 }
@@ -49547,6 +49612,7 @@ package android.view.accessibility {
     method public deprecated java.util.List<android.content.pm.ServiceInfo> getAccessibilityServiceList();
     method public java.util.List<android.accessibilityservice.AccessibilityServiceInfo> getEnabledAccessibilityServiceList(int);
     method public java.util.List<android.accessibilityservice.AccessibilityServiceInfo> getInstalledAccessibilityServiceList();
+    method public int getMinimumUiTimeoutMillis();
     method public void interrupt();
     method public static boolean isAccessibilityButtonSupported();
     method public boolean isEnabled();
