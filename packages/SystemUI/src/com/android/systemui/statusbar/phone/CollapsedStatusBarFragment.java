@@ -20,6 +20,7 @@ import static android.app.StatusBarManager.DISABLE_SYSTEM_INFO;
 
 import android.annotation.Nullable;
 import android.app.Fragment;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
@@ -90,6 +91,11 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private final Handler mHandler = new Handler();
     private int mShowCarrierLabel;
     private boolean mHasCarrierLabel;
+	 // Statusbar Weather Image
+    private View mWeatherImageView;
+    private View mWeatherTextView;
+    private int mShowWeather;
+    private boolean mWeatherInHeaderView;
 
     private View mBatteryBars[] = new View[2];
 
@@ -108,10 +114,18 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
          mContentResolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_SHOW_CARRIER),
                     false, this, UserHandle.USER_ALL);
+		mContentResolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP),
+                    false, this, UserHandle.USER_ALL);
+         mContentResolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_SHOW_WEATHER_LOCATION),
+                    false, this, UserHandle.USER_ALL);
        }
 
        @Override
-       public void onChange(boolean selfChange) {
+       public void onChange(boolean selfChange, Uri uri) {
+		   if ((uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP))) ||
+                (uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_SHOW_WEATHER_LOCATION)))){
            updateSettings(true);
        }
     }
@@ -185,6 +199,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
  		mBatteryBars[0] = mStatusBar.findViewById(R.id.battery_bar);
         mBatteryBars[1] = mStatusBar.findViewById(R.id.battery_bar_1);
         mCherishLogoRight = mStatusBar.findViewById(R.id.cherish_logo_right);
+		mWeatherTextView = mStatusBar.findViewById(R.id.weather_temp);
+        mWeatherImageView = mStatusBar.findViewById(R.id.weather_image);
         showSystemIconArea(false);
         initEmergencyCryptkeeperText();
         animateHide(mClockView, false, false);
@@ -267,11 +283,13 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
                 hideOperatorName(animate);
                 hideTicker(animate);
                 hideLyric(animate);
+				hideSbWeather(animate);
             } else {
                 showSystemIconArea(animate);
                 showOperatorName(animate);
                 showTicker(animate);
                 showLyric(animate);
+				showSbWeather(animate);
             }
         }
         if ((diff1 & DISABLE_NOTIFICATION_ICONS) != 0) {
@@ -438,6 +456,20 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             setCarrierLabel(animate);
         }
     }
+	
+	public void hideSbWeather(boolean animate) {
+        if (!mWeatherInHeaderView && mShowWeather != 0
+	    && mWeatherTextView != null && mWeatherImageView != null) {
+            animateHide(mWeatherTextView, animate, false);
+            animateHide(mWeatherImageView, animate, false);
+	}
+    }
+
+    public void showSbWeather(boolean animate) {
+        if (!mWeatherInHeaderView && mShowWeather != 0) {
+	    updateSBWeather(animate);
+	}
+    }
 
     /**
      * Hides a view.
@@ -523,6 +555,10 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     }
 
     public void updateSettings(boolean animate) {
+		mShowWeather = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP, 0, UserHandle.USER_CURRENT);
+        mWeatherInHeaderView = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.STATUS_BAR_SHOW_WEATHER_LOCATION, 0, UserHandle.USER_CURRENT) == 1;
         mShowClock = Settings.System.getIntForUser(mContentResolver,
                 Settings.System.STATUS_BAR_CLOCK, 1,
                 UserHandle.USER_CURRENT) == 1;
@@ -540,6 +576,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         }
         updateClockStyle(animate);
         setCarrierLabel(animate);
+		updateSBWeather(animate);
     }
 
     private void updateClockStyle(boolean animate) {
@@ -557,6 +594,22 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             animateShow(mCustomCarrierLabel, animate);
         } else {
             animateHide(mCustomCarrierLabel, animate, false);
+        }
+    }
+	
+	private void updateSBWeather(boolean animate) {
+        if (!mWeatherInHeaderView && mShowWeather != 0) {
+            if (mShowWeather == 1 || mShowWeather == 2
+	        || mShowWeather == 3 || mShowWeather == 4) {
+                animateShow(mWeatherTextView, animate);
+                animateShow(mWeatherImageView, animate);
+            } else if (mShowWeather == 3 || mShowWeather == 4){
+                animateShow(mWeatherTextView, animate);
+                animateHide(mWeatherImageView, animate, false);
+            } else if (mShowWeather == 5) {
+                animateShow(mWeatherImageView, animate);
+                animateHide(mWeatherTextView, animate, false);
+            }
         }
     }
 	
