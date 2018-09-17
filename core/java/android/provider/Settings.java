@@ -6187,6 +6187,12 @@ public final class Settings {
         public static final String OMNI_CUSTOM_FP_ICON_ENABLED = "custom_fp_icon_enabled";
 
         /**
+         * Force show navigation bar setting.
+         * @hide
+         */
+        public static final String FORCE_SHOW_NAVBAR = "force_show_navbar";
+
+        /**
          * @hide
          */
         public static final String OMNI_CUSTOM_FP_ICON = "custom_fingerprint_icon";
