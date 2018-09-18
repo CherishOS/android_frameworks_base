@@ -2905,6 +2905,7 @@ package android.accessibilityservice {
     field public static final deprecated int FLAG_REQUEST_ENHANCED_WEB_ACCESSIBILITY = 8; // 0x8
     field public static final int FLAG_REQUEST_FILTER_KEY_EVENTS = 32; // 0x20
     field public static final int FLAG_REQUEST_FINGERPRINT_GESTURES = 512; // 0x200
+    field public static final int FLAG_REQUEST_SHORTCUT_WARNING_DIALOG_SPOKEN_FEEDBACK = 1024; // 0x400
     field public static final int FLAG_REQUEST_TOUCH_EXPLORATION_MODE = 4; // 0x4
     field public static final int FLAG_RETRIEVE_INTERACTIVE_WINDOWS = 64; // 0x40
     field public int eventTypes;
@@ -14014,6 +14015,7 @@ package android.graphics {
     method public android.os.LocaleList getTextLocales();
     method public void getTextPath(char[], int, int, float, float, android.graphics.Path);
     method public void getTextPath(java.lang.String, int, int, float, float, android.graphics.Path);
+    method public float getTextRunAdvances(char[], int, int, int, int, boolean, float[], int);
     method public float getTextScaleX();
     method public float getTextSize();
     method public float getTextSkewX();
@@ -18675,6 +18677,37 @@ package android.icu.text {
     field public static final int WORD_NUMBER_LIMIT = 200; // 0xc8
   }
 
+  public abstract class CaseMap {
+    method public static android.icu.text.CaseMap.Fold fold();
+    method public abstract android.icu.text.CaseMap omitUnchangedText();
+    method public static android.icu.text.CaseMap.Lower toLower();
+    method public static android.icu.text.CaseMap.Title toTitle();
+    method public static android.icu.text.CaseMap.Upper toUpper();
+  }
+
+  public static final class CaseMap.Fold extends android.icu.text.CaseMap {
+    method public <A extends java.lang.Appendable> A apply(java.lang.CharSequence, A, android.icu.text.Edits);
+    method public android.icu.text.CaseMap.Fold omitUnchangedText();
+    method public android.icu.text.CaseMap.Fold turkic();
+  }
+
+  public static final class CaseMap.Lower extends android.icu.text.CaseMap {
+    method public <A extends java.lang.Appendable> A apply(java.util.Locale, java.lang.CharSequence, A, android.icu.text.Edits);
+    method public android.icu.text.CaseMap.Lower omitUnchangedText();
+  }
+
+  public static final class CaseMap.Title extends android.icu.text.CaseMap {
+    method public <A extends java.lang.Appendable> A apply(java.util.Locale, android.icu.text.BreakIterator, java.lang.CharSequence, A, android.icu.text.Edits);
+    method public android.icu.text.CaseMap.Title noBreakAdjustment();
+    method public android.icu.text.CaseMap.Title noLowercase();
+    method public android.icu.text.CaseMap.Title omitUnchangedText();
+  }
+
+  public static final class CaseMap.Upper extends android.icu.text.CaseMap {
+    method public <A extends java.lang.Appendable> A apply(java.util.Locale, java.lang.CharSequence, A, android.icu.text.Edits);
+    method public android.icu.text.CaseMap.Upper omitUnchangedText();
+  }
+
   public final class CollationElementIterator {
     method public int getMaxExpansion(int);
     method public int getOffset();
@@ -19338,6 +19371,30 @@ package android.icu.text {
     enum_constant public static final android.icu.text.DisplayContext.Type DIALECT_HANDLING;
     enum_constant public static final android.icu.text.DisplayContext.Type DISPLAY_LENGTH;
     enum_constant public static final android.icu.text.DisplayContext.Type SUBSTITUTE_HANDLING;
+  }
+
+  public final class Edits {
+    ctor public Edits();
+    method public void addReplace(int, int);
+    method public void addUnchanged(int);
+    method public android.icu.text.Edits.Iterator getCoarseChangesIterator();
+    method public android.icu.text.Edits.Iterator getCoarseIterator();
+    method public android.icu.text.Edits.Iterator getFineChangesIterator();
+    method public android.icu.text.Edits.Iterator getFineIterator();
+    method public boolean hasChanges();
+    method public int lengthDelta();
+    method public void reset();
+  }
+
+  public static final class Edits.Iterator {
+    method public int destinationIndex();
+    method public boolean findSourceIndex(int);
+    method public boolean hasChange();
+    method public int newLength();
+    method public boolean next();
+    method public int oldLength();
+    method public int replacementIndex();
+    method public int sourceIndex();
   }
 
   public abstract class IDNA {
