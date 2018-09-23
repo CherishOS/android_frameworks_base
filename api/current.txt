@@ -9527,6 +9527,7 @@ package android.content {
     field public static final int BIND_IMPORTANT = 64; // 0x40
     field public static final int BIND_NOT_FOREGROUND = 4; // 0x4
     field public static final int BIND_WAIVE_PRIORITY = 32; // 0x20
+    field public static final java.lang.String BIOMETRIC_SERVICE = "biometric";
     field public static final java.lang.String BLUETOOTH_SERVICE = "bluetooth";
     field public static final java.lang.String CAMERA_SERVICE = "camera";
     field public static final java.lang.String CAPTIONING_SERVICE = "captioning";
@@ -15933,6 +15934,10 @@ package android.hardware {
 }
 
 package android.hardware.biometrics {
+
+  public class BiometricManager {
+    method public boolean hasEnrolledBiometrics();
+  }
 
   public class BiometricPrompt {
     method public void authenticate(android.hardware.biometrics.BiometricPrompt.CryptoObject, android.os.CancellationSignal, java.util.concurrent.Executor, android.hardware.biometrics.BiometricPrompt.AuthenticationCallback);
@@ -27145,6 +27150,7 @@ package android.net {
     method public android.net.Network[] getAllNetworks();
     method public deprecated boolean getBackgroundDataSetting();
     method public android.net.Network getBoundNetworkForProcess();
+    method public int getConnectionOwnerUid(int, java.net.InetSocketAddress, java.net.InetSocketAddress);
     method public android.net.ProxyInfo getDefaultProxy();
     method public android.net.LinkProperties getLinkProperties(android.net.Network);
     method public int getMultipathPreference(android.net.Network);
@@ -33292,6 +33298,7 @@ package android.os {
     method public static final void setThreadPriority(int) throws java.lang.IllegalArgumentException, java.lang.SecurityException;
     method public static final deprecated boolean supportsProcesses();
     field public static final int FIRST_APPLICATION_UID = 10000; // 0x2710
+    field public static final int INVALID_UID = -1; // 0xffffffff
     field public static final int LAST_APPLICATION_UID = 19999; // 0x4e1f
     field public static final int PHONE_UID = 1001; // 0x3e9
     field public static final int SIGNAL_KILL = 9; // 0x9
@@ -41851,6 +41858,7 @@ package android.telecom {
     field public static final java.lang.String EXTRA_CALL_BACK_NUMBER = "android.telecom.extra.CALL_BACK_NUMBER";
     field public static final java.lang.String EXTRA_CALL_DISCONNECT_CAUSE = "android.telecom.extra.CALL_DISCONNECT_CAUSE";
     field public static final java.lang.String EXTRA_CALL_DISCONNECT_MESSAGE = "android.telecom.extra.CALL_DISCONNECT_MESSAGE";
+    field public static final java.lang.String EXTRA_CALL_NETWORK_TYPE = "android.telecom.extra.CALL_NETWORK_TYPE";
     field public static final java.lang.String EXTRA_CALL_SUBJECT = "android.telecom.extra.CALL_SUBJECT";
     field public static final java.lang.String EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME = "android.telecom.extra.CHANGE_DEFAULT_DIALER_PACKAGE_NAME";
     field public static final java.lang.String EXTRA_INCOMING_CALL_ADDRESS = "android.telecom.extra.INCOMING_CALL_ADDRESS";
@@ -42787,6 +42795,7 @@ package android.telephony {
     method public static int getDefaultSubscriptionId();
     method public static int getDefaultVoiceSubscriptionId();
     method public java.util.List<android.telephony.SubscriptionInfo> getOpportunisticSubscriptions(int);
+    method public static int getSlotIndex(int);
     method public static int[] getSubscriptionIds(int);
     method public java.util.List<android.telephony.SubscriptionPlan> getSubscriptionPlans(int);
     method public boolean isNetworkRoaming(int);
@@ -42804,7 +42813,9 @@ package android.telephony {
     field public static final int DATA_ROAMING_DISABLE = 0; // 0x0
     field public static final int DATA_ROAMING_ENABLE = 1; // 0x1
     field public static final java.lang.String EXTRA_SUBSCRIPTION_INDEX = "android.telephony.extra.SUBSCRIPTION_INDEX";
+    field public static final int INVALID_SIM_SLOT_INDEX = -2; // 0xfffffffe
     field public static final int INVALID_SUBSCRIPTION_ID = -1; // 0xffffffff
+    field public static final int SIM_NOT_INSERTED = -3; // 0xfffffffd
   }
 
   public static class SubscriptionManager.OnOpportunisticSubscriptionsChangedListener {
