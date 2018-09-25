@@ -42531,6 +42531,13 @@ package android.telephony {
     field public static final int STATUS_UNKNOWN = 0; // 0x0
   }
 
+  public class MbmsGroupCallSession implements java.lang.AutoCloseable {
+    method public void close();
+    method public static android.telephony.MbmsGroupCallSession create(android.content.Context, java.util.concurrent.Executor, int, android.telephony.mbms.MbmsGroupCallSessionCallback);
+    method public static android.telephony.MbmsGroupCallSession create(android.content.Context, java.util.concurrent.Executor, android.telephony.mbms.MbmsGroupCallSessionCallback);
+    method public android.telephony.mbms.GroupCall startGroupCall(java.util.concurrent.Executor, long, int[], int[], android.telephony.mbms.GroupCallCallback);
+  }
+
   public class MbmsStreamingSession implements java.lang.AutoCloseable {
     method public void close();
     method public static android.telephony.MbmsStreamingSession create(android.content.Context, java.util.concurrent.Executor, int, android.telephony.mbms.MbmsStreamingSessionCallback);
@@ -43480,6 +43487,29 @@ package android.telephony.mbms {
     field public static final android.os.Parcelable.Creator<android.telephony.mbms.FileServiceInfo> CREATOR;
   }
 
+  public class GroupCall implements java.lang.AutoCloseable {
+    method public void close();
+    method public long getTmgi();
+    method public void updateGroupCall(int[], int[]);
+    field public static final int REASON_BY_USER_REQUEST = 1; // 0x1
+    field public static final int REASON_FREQUENCY_CONFLICT = 3; // 0x3
+    field public static final int REASON_LEFT_MBMS_BROADCAST_AREA = 6; // 0x6
+    field public static final int REASON_NONE = 0; // 0x0
+    field public static final int REASON_NOT_CONNECTED_TO_HOMECARRIER_LTE = 5; // 0x5
+    field public static final int REASON_OUT_OF_MEMORY = 4; // 0x4
+    field public static final int STATE_STALLED = 3; // 0x3
+    field public static final int STATE_STARTED = 2; // 0x2
+    field public static final int STATE_STOPPED = 1; // 0x1
+  }
+
+  public class GroupCallCallback {
+    ctor public GroupCallCallback();
+    method public void onBroadcastSignalStrengthUpdated(int);
+    method public void onError(int, java.lang.String);
+    method public void onGroupCallStateChanged(int, int);
+    field public static final int SIGNAL_STRENGTH_UNAVAILABLE = -1; // 0xffffffff
+  }
+
   public class MbmsDownloadReceiver extends android.content.BroadcastReceiver {
     ctor public MbmsDownloadReceiver();
     method public void onReceive(android.content.Context, android.content.Intent);
@@ -43526,6 +43556,14 @@ package android.telephony.mbms {
     field public static final int ERROR_CONCURRENT_SERVICE_LIMIT_REACHED = 301; // 0x12d
     field public static final int ERROR_DUPLICATE_START_STREAM = 303; // 0x12f
     field public static final int ERROR_UNABLE_TO_START_SERVICE = 302; // 0x12e
+  }
+
+  public class MbmsGroupCallSessionCallback {
+    ctor public MbmsGroupCallSessionCallback();
+    method public void onAvailableSaisUpdated(java.util.List<java.lang.Integer>, java.util.List<java.util.List<java.lang.Integer>>);
+    method public void onError(int, java.lang.String);
+    method public void onMiddlewareReady();
+    method public void onServiceInterfaceAvailable(java.lang.String, int);
   }
 
   public class MbmsStreamingSessionCallback {
