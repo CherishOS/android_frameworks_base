@@ -7,6 +7,7 @@ package android {
   public static final class Manifest.permission {
     ctor public Manifest.permission();
     field public static final java.lang.String ACCEPT_HANDOVER = "android.permission.ACCEPT_HANDOVER";
+    field public static final java.lang.String ACCESS_BACKGROUND_LOCATION = "android.permission.ACCESS_BACKGROUND_LOCATION";
     field public static final java.lang.String ACCESS_CHECKIN_PROPERTIES = "android.permission.ACCESS_CHECKIN_PROPERTIES";
     field public static final java.lang.String ACCESS_COARSE_LOCATION = "android.permission.ACCESS_COARSE_LOCATION";
     field public static final java.lang.String ACCESS_FINE_LOCATION = "android.permission.ACCESS_FINE_LOCATION";
@@ -37,6 +38,7 @@ package android {
     field public static final java.lang.String BIND_QUICK_SETTINGS_TILE = "android.permission.BIND_QUICK_SETTINGS_TILE";
     field public static final java.lang.String BIND_REMOTEVIEWS = "android.permission.BIND_REMOTEVIEWS";
     field public static final java.lang.String BIND_SCREENING_SERVICE = "android.permission.BIND_SCREENING_SERVICE";
+    field public static final java.lang.String BIND_SMS_APP_SERVICE = "android.permission.BIND_SMS_APP_SERVICE";
     field public static final java.lang.String BIND_TELECOM_CONNECTION_SERVICE = "android.permission.BIND_TELECOM_CONNECTION_SERVICE";
     field public static final java.lang.String BIND_TEXT_SERVICE = "android.permission.BIND_TEXT_SERVICE";
     field public static final java.lang.String BIND_TV_INPUT = "android.permission.BIND_TV_INPUT";
@@ -772,6 +774,7 @@ package android {
     field public static final int isFeatureSplit = 16844123; // 0x101055b
     field public static final int isGame = 16843764; // 0x10103f4
     field public static final int isIndicator = 16843079; // 0x1010147
+    field public static final int isLightTheme = 16844175; // 0x101058f
     field public static final int isModifier = 16843334; // 0x1010246
     field public static final int isRepeatable = 16843336; // 0x1010248
     field public static final int isScrollContainer = 16843342; // 0x101024e
@@ -4296,6 +4299,20 @@ package android.app {
     method public abstract void onActivityCreated(android.app.Activity, android.os.Bundle);
     method public abstract void onActivityDestroyed(android.app.Activity);
     method public abstract void onActivityPaused(android.app.Activity);
+    method public default void onActivityPostCreated(android.app.Activity, android.os.Bundle);
+    method public default void onActivityPostDestroyed(android.app.Activity);
+    method public default void onActivityPostPaused(android.app.Activity);
+    method public default void onActivityPostResumed(android.app.Activity);
+    method public default void onActivityPostSaveInstanceState(android.app.Activity, android.os.Bundle);
+    method public default void onActivityPostStarted(android.app.Activity);
+    method public default void onActivityPostStopped(android.app.Activity);
+    method public default void onActivityPreCreated(android.app.Activity, android.os.Bundle);
+    method public default void onActivityPreDestroyed(android.app.Activity);
+    method public default void onActivityPrePaused(android.app.Activity);
+    method public default void onActivityPreResumed(android.app.Activity);
+    method public default void onActivityPreSaveInstanceState(android.app.Activity, android.os.Bundle);
+    method public default void onActivityPreStarted(android.app.Activity);
+    method public default void onActivityPreStopped(android.app.Activity);
     method public abstract void onActivityResumed(android.app.Activity);
     method public abstract void onActivitySaveInstanceState(android.app.Activity, android.os.Bundle);
     method public abstract void onActivityStarted(android.app.Activity);
@@ -6093,6 +6110,11 @@ package android.app {
 
   public static abstract interface SharedElementCallback.OnSharedElementsReadyListener {
     method public abstract void onSharedElementsReady();
+  }
+
+  public class SmsAppService extends android.app.Service {
+    ctor public SmsAppService();
+    method public final android.os.IBinder onBind(android.content.Intent);
   }
 
   public deprecated class TabActivity extends android.app.ActivityGroup {
@@ -15314,7 +15336,7 @@ package android.graphics.fonts {
     method public static java.lang.String toFontVariationSettings(android.graphics.fonts.FontVariationAxis[]);
   }
 
-  public class SystemFonts {
+  public final class SystemFonts {
     method public static java.util.Set<android.graphics.fonts.Font> getAvailableFonts();
   }
 
@@ -42547,7 +42569,7 @@ package android.telephony {
     method public android.telephony.mbms.StreamingService startStreaming(android.telephony.mbms.StreamingServiceInfo, java.util.concurrent.Executor, android.telephony.mbms.StreamingServiceCallback);
   }
 
-  public class NeighboringCellInfo implements android.os.Parcelable {
+  public deprecated class NeighboringCellInfo implements android.os.Parcelable {
     ctor public deprecated NeighboringCellInfo();
     ctor public deprecated NeighboringCellInfo(int, int);
     ctor public NeighboringCellInfo(int, java.lang.String, int);
@@ -43008,7 +43030,6 @@ package android.telephony {
     method public java.lang.String getMmsUAProfUrl();
     method public java.lang.String getMmsUserAgent();
     method public java.lang.String getNai();
-    method public deprecated java.util.List<android.telephony.NeighboringCellInfo> getNeighboringCellInfo();
     method public java.lang.String getNetworkCountryIso();
     method public java.lang.String getNetworkOperator();
     method public java.lang.String getNetworkOperatorName();
@@ -43073,6 +43094,7 @@ package android.telephony {
     field public static final java.lang.String ACTION_RESPOND_VIA_MESSAGE = "android.intent.action.RESPOND_VIA_MESSAGE";
     field public static final java.lang.String ACTION_SECRET_CODE = "android.telephony.action.SECRET_CODE";
     field public static final java.lang.String ACTION_SHOW_VOICEMAIL_NOTIFICATION = "android.telephony.action.SHOW_VOICEMAIL_NOTIFICATION";
+    field public static final java.lang.String ACTION_SMS_APP_SERVICE = "android.telephony.action.SMS_APP_SERVICE";
     field public static final java.lang.String ACTION_SUBSCRIPTION_CARRIER_IDENTITY_CHANGED = "android.telephony.action.SUBSCRIPTION_CARRIER_IDENTITY_CHANGED";
     field public static final int APPTYPE_CSIM = 4; // 0x4
     field public static final int APPTYPE_ISIM = 5; // 0x5
@@ -45018,11 +45040,20 @@ package android.text.style {
     ctor public TextAppearanceSpan(android.os.Parcel);
     method public int describeContents();
     method public java.lang.String getFamily();
+    method public java.lang.String getFontFeatureSettings();
+    method public java.lang.String getFontVariationSettings();
     method public android.content.res.ColorStateList getLinkTextColor();
+    method public int getShadowColor();
+    method public float getShadowDx();
+    method public float getShadowDy();
+    method public float getShadowRadius();
     method public int getSpanTypeId();
     method public android.content.res.ColorStateList getTextColor();
+    method public int getTextFontWeight();
     method public int getTextSize();
     method public int getTextStyle();
+    method public android.graphics.Typeface getTypeface();
+    method public boolean isElegantTextHeight();
     method public void updateDrawState(android.text.TextPaint);
     method public void updateMeasureState(android.text.TextPaint);
     method public void writeToParcel(android.os.Parcel, int);
@@ -45665,6 +45696,7 @@ package android.util {
     method public java.util.Set<java.util.Map.Entry<K, V>> entrySet();
     method public V get(java.lang.Object);
     method public int indexOfKey(java.lang.Object);
+    method public int indexOfValue(java.lang.Object);
     method public boolean isEmpty();
     method public K keyAt(int);
     method public java.util.Set<K> keySet();
@@ -45685,6 +45717,7 @@ package android.util {
     ctor public ArraySet();
     ctor public ArraySet(int);
     ctor public ArraySet(android.util.ArraySet<E>);
+    ctor public ArraySet(java.util.Collection<? extends E>);
     method public boolean add(E);
     method public void addAll(android.util.ArraySet<? extends E>);
     method public boolean addAll(java.util.Collection<? extends E>);
@@ -46256,6 +46289,7 @@ package android.util {
     method public int keyAt(int);
     method public void put(int, boolean);
     method public void removeAt(int);
+    method public void setValueAt(int, boolean);
     method public int size();
     method public boolean valueAt(int);
   }
@@ -46274,6 +46308,7 @@ package android.util {
     method public int keyAt(int);
     method public void put(int, int);
     method public void removeAt(int);
+    method public void setValueAt(int, int);
     method public int size();
     method public int valueAt(int);
   }
@@ -55223,6 +55258,7 @@ package dalvik.system {
   public final class DelegateLastClassLoader extends dalvik.system.PathClassLoader {
     ctor public DelegateLastClassLoader(java.lang.String, java.lang.ClassLoader);
     ctor public DelegateLastClassLoader(java.lang.String, java.lang.String, java.lang.ClassLoader);
+    ctor public DelegateLastClassLoader(java.lang.String, java.lang.String, java.lang.ClassLoader, boolean);
   }
 
   public class DexClassLoader extends dalvik.system.BaseDexClassLoader {
