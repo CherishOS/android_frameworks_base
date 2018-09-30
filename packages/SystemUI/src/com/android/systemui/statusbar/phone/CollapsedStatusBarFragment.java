@@ -68,6 +68,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private KeyguardStateController mKeyguardStateController;
     private NetworkController mNetworkController;
     private LinearLayout mSystemIconArea;
+    private LinearLayout mCustomIconArea;
     private View mClockView;
     private int mClockStyle;
     private View mNotificationIconAreaInner;
@@ -162,6 +163,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mDarkIconManager.setShouldLog(true);
         Dependency.get(StatusBarIconController.class).addIconGroup(mDarkIconManager);
         mSystemIconArea = mStatusBar.findViewById(R.id.system_icon_area);
+        mCustomIconArea = mStatusBar.findViewById(R.id.left_icon_area);
+        mClockView = mStatusBar.findViewById(R.id.clock);
         mSignalClusterEndPadding = getResources().getDimensionPixelSize(R.dimen.signal_cluster_battery_padding);
         mStatusIcons = mStatusBar.findViewById(R.id.statusIcons);
         int batteryStyle = Settings.System.getInt(getContext().getContentResolver(),
@@ -169,7 +172,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mStatusIcons.setPadding(mStatusIcons.getPaddingLeft(), mStatusIcons.getPaddingTop(), (batteryStyle == 5/*hidden*/ ? 0 : mSignalClusterEndPadding), mStatusIcons.getPaddingBottom());
         mBatteryMeterView = mStatusBar.findViewById(R.id.battery);
         mBatteryMeterView.addCallback(mBatteryMeterViewCallback);
-        mClockView = mStatusBar.findViewById(R.id.clock);
         mCenterClockLayout = (LinearLayout) mStatusBar.findViewById(R.id.center_clock_layout);
         mRightClock = mStatusBar.findViewById(R.id.right_clock);
         mCustomCarrierLabel = mStatusBar.findViewById(R.id.statusbar_carrier_text);
@@ -362,12 +364,14 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         animateHide(mNotificationIconAreaInner, animate, true);
         animateHide(mCenteredIconArea, animate, true);
 	animateHide(mCenterClockLayout, animate, true);
+        animateHide(mCustomIconArea, animate);
     }
 
     public void showNotificationIconArea(boolean animate) {
         animateShow(mNotificationIconAreaInner, animate);
         animateShow(mCenteredIconArea, animate);
         animateShow(mCenterClockLayout, animate);
+        animateShow(mCustomIconArea, animate);
     }
 
     public void hideOperatorName(boolean animate) {
