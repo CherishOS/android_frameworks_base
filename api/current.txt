@@ -32540,7 +32540,7 @@ package android.os {
 
   public class Build {
     ctor public Build();
-    method public static java.util.List<android.os.Build.Partition> getPartitions();
+    method public static java.util.List<android.os.Build.Partition> getFingerprintedPartitions();
     method public static java.lang.String getRadioVersion();
     method public static java.lang.String getSerial();
     field public static final java.lang.String BOARD;
@@ -32571,9 +32571,9 @@ package android.os {
 
   public static class Build.Partition {
     ctor public Build.Partition();
+    method public long getBuildTimeMillis();
     method public java.lang.String getFingerprint();
     method public java.lang.String getName();
-    method public long getTimeMillis();
     field public static final java.lang.String PARTITION_NAME_SYSTEM = "system";
   }
 
@@ -43323,7 +43323,7 @@ package android.telephony.data {
     field public static final int PROTOCOL_IPV6 = 1; // 0x1
     field public static final int PROTOCOL_PPP = 3; // 0x3
     field public static final int TYPE_CBS = 128; // 0x80
-    field public static final int TYPE_DEFAULT = 1; // 0x1
+    field public static final int TYPE_DEFAULT = 17; // 0x11
     field public static final int TYPE_DUN = 8; // 0x8
     field public static final int TYPE_EMERGENCY = 512; // 0x200
     field public static final int TYPE_FOTA = 32; // 0x20
@@ -48025,6 +48025,7 @@ package android.view {
 
   public class TouchDelegate {
     ctor public TouchDelegate(android.graphics.Rect, android.view.View);
+    method public android.view.accessibility.AccessibilityNodeInfo.TouchDelegateInfo getTouchDelegateInfo();
     method public boolean onTouchEvent(android.view.MotionEvent);
     field public static final int ABOVE = 1; // 0x1
     field public static final int BELOW = 2; // 0x2
@@ -50007,6 +50008,7 @@ package android.view.accessibility {
     method public int getTextSelectionEnd();
     method public int getTextSelectionStart();
     method public java.lang.CharSequence getTooltipText();
+    method public android.view.accessibility.AccessibilityNodeInfo.TouchDelegateInfo getTouchDelegateInfo();
     method public android.view.accessibility.AccessibilityNodeInfo getTraversalAfter();
     method public android.view.accessibility.AccessibilityNodeInfo getTraversalBefore();
     method public java.lang.String getViewIdResourceName();
@@ -50097,6 +50099,7 @@ package android.view.accessibility {
     method public void setTextEntryKey(boolean);
     method public void setTextSelection(int, int);
     method public void setTooltipText(java.lang.CharSequence);
+    method public void setTouchDelegateInfo(android.view.accessibility.AccessibilityNodeInfo.TouchDelegateInfo);
     method public void setTraversalAfter(android.view.View);
     method public void setTraversalAfter(android.view.View, int);
     method public void setTraversalBefore(android.view.View);
@@ -50221,6 +50224,16 @@ package android.view.accessibility {
     field public static final int RANGE_TYPE_FLOAT = 1; // 0x1
     field public static final int RANGE_TYPE_INT = 0; // 0x0
     field public static final int RANGE_TYPE_PERCENT = 2; // 0x2
+  }
+
+  public static final class AccessibilityNodeInfo.TouchDelegateInfo implements android.os.Parcelable {
+    ctor public AccessibilityNodeInfo.TouchDelegateInfo(java.util.Map<android.graphics.Region, android.view.View>);
+    method public int describeContents();
+    method public android.graphics.Region getRegionAt(int);
+    method public int getRegionCount();
+    method public android.view.accessibility.AccessibilityNodeInfo getTargetForRegion(android.graphics.Region);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.accessibility.AccessibilityNodeInfo.TouchDelegateInfo> CREATOR;
   }
 
   public abstract class AccessibilityNodeProvider {
