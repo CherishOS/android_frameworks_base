@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.text;
+package android.graphics.text;
 
 import android.annotation.FloatRange;
 import android.annotation.IntDef;
@@ -32,11 +32,57 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * A native implementation of the line breaker.
- * TODO: Consider to make this class public.
- * @hide
+ * Provides automatic line breaking for a <em>single</em> paragraph.
+ *
+ * <p>
+ * <pre>
+ * <code>
+ * Paint paint = new Paint();
+ * String text = "Hello, Android.";
+ *
+ * // Prepare the measured text
+ * MeasuredText mt = new MeasuredText.Builder(text.toCharArray())
+ *     .addStyleRun(paint, 0, text.length(), false)  // Use paint for whole paragraph.
+ *     .build();
+ *
+ * LineBreaker lb = new LineBreaker.Builder()
+ *     // Use simple line breaker
+ *     .setBreakStrategy(LineBreaker.BREAK_STRATEGY_SIMPLE)
+ *     // Do not add hyphenation.
+ *     .setHyphenationFrequency(LineBreaker.HYPHENATION_FREQUENCY_NONE)
+ *     // Build the LineBreaker
+ *     .build();
+ *
+ * ParagraphConstraints c = new ParagraphConstraints();
+ * c.setWidth(240);  // Set the line wieth as 1024px
+ *
+ * // Do the line breaking
+ * Result r = lb.computeLineBreaks(mt, c, 0);
+ *
+ * // Compute the total height of the text.
+ * float totalHeight = 0;
+ * for (int i = 0; i < r.getLineCount(); ++i) {  // iterate over the lines
+ *    totalHeight += r.getLineDescent(i) - r.getLineAscent(i);
+ * }
+ *
+ * // Draw text to the canvas
+ * Bitmap bmp = new Bitmap.createBitmap(240, totalHeight, Bitmap.Config.ARGB_8888);
+ * Canvas c = new Canvas(bmp);
+ * float yOffset = 0f;
+ * int prevOffset = 0;
+ * for (int i = 0; i < r.getLineCount(); ++i) {  // iterate over the lines
+ *     int nextOffset = r.getLineBreakOffset(i);
+ *     c.drawText(text, prevOffset, nextOffset, 0f, yOffset, paint);
+ *
+ *     prevOffset = nextOffset;
+ *     yOffset += r.getLineDescent(i) - r.getLineAscent(i);
+ * }
+ * </code>
+ * </pre>
+ * </p>
  */
-public class NativeLineBreaker {
+public class LineBreaker {
+    /** @hide */
     @IntDef(prefix = { "BREAK_STRATEGY_" }, value = {
             BREAK_STRATEGY_SIMPLE,
             BREAK_STRATEGY_HIGH_QUALITY,
@@ -46,25 +92,33 @@ public class NativeLineBreaker {
     public @interface BreakStrategy {}
 
     /**
-     * Value for break strategy indicating simple line breaking. Automatic hyphens are not added
-     * (though soft hyphens are respected), and modifying text generally doesn't affect the layout
-     * before it (which yields a more consistent user experience when editing), but layout may not
-     * be the highest quality.
+     * Value for break strategy indicating simple line breaking.
+     *
+     * The line breaker puts words to the line as much as possible and breaks line if no more words
+     * can fit into the same line. Automatic hyphens are only added when a line has a single word
+     * and that word is longer than line width. This is the fastest break strategy and ideal for
+     * editor.
      */
     public static final int BREAK_STRATEGY_SIMPLE = 0;
 
     /**
-     * Value for break strategy indicating high quality line breaking, including automatic
-     * hyphenation and doing whole-paragraph optimization of line breaks.
+     * Value for break strategy indicating high quality line breaking.
+     *
+     * With this option line breaker does whole-paragraph optimization for more readable text, and
+     * also applies automatic hyphenation when required.
      */
     public static final int BREAK_STRATEGY_HIGH_QUALITY = 1;
 
     /**
-     * Value for break strategy indicating balanced line breaking. The breaks are chosen to
-     * make all lines as close to the same length as possible, including automatic hyphenation.
+     * Value for break strategy indicating balanced line breaking.
+     *
+     * The line breaker does whole-paragraph optimization for making all lines similar length, and
+     * also applies automatic hyphenation when required. This break strategy is good for small
+     * screen devices such as watch screens.
      */
     public static final int BREAK_STRATEGY_BALANCED = 2;
 
+    /** @hide */
     @IntDef(prefix = { "HYPHENATION_FREQUENCY_" }, value = {
             HYPHENATION_FREQUENCY_NORMAL,
             HYPHENATION_FREQUENCY_FULL,
@@ -74,28 +128,32 @@ public class NativeLineBreaker {
     public @interface HyphenationFrequency {}
 
     /**
-     * Value for hyphenation frequency indicating no automatic hyphenation. Useful
-     * for backward compatibility, and for cases where the automatic hyphenation algorithm results
-     * in incorrect hyphenation. Mid-word breaks may still happen when a word is wider than the
-     * layout and there is otherwise no valid break. Soft hyphens are ignored and will not be used
-     * as suggestions for potential line breaks.
+     * Value for hyphenation frequency indicating no automatic hyphenation.
+     *
+     * Using this option disables auto hyphenation which results in better text layout performance.
+     * A word may be broken without hyphens when a line has a single word and that word is longer
+     * than line width. Soft hyphens are ignored and will not be used as suggestions for potential
+     * line breaks.
      */
     public static final int HYPHENATION_FREQUENCY_NONE = 0;
 
     /**
-     * Value for hyphenation frequency indicating a light amount of automatic hyphenation, which
-     * is a conservative default. Useful for informal cases, such as short sentences or chat
+     * Value for hyphenation frequency indicating a light amount of automatic hyphenation.
+     *
+     * This hyphenation frequency is useful for informal cases, such as short sentences or chat
      * messages.
      */
     public static final int HYPHENATION_FREQUENCY_NORMAL = 1;
 
     /**
-     * Value for hyphenation frequency indicating the full amount of automatic hyphenation, typical
-     * in typography. Useful for running text and where it's important to put the maximum amount of
-     * text in a screen with limited space.
+     * Value for hyphenation frequency indicating the full amount of automatic hyphenation.
+     *
+     * This hyphenation frequency is useful for running text and where it's important to put the
+     * maximum amount of text in a screen with limited space.
      */
     public static final int HYPHENATION_FREQUENCY_FULL = 2;
 
+    /** @hide */
     @IntDef(prefix = { "JUSTIFICATION_MODE_" }, value = {
             JUSTIFICATION_MODE_NONE,
             JUSTIFICATION_MODE_INTER_WORD
@@ -114,7 +172,7 @@ public class NativeLineBreaker {
     public static final int JUSTIFICATION_MODE_INTER_WORD = 1;
 
     /**
-     * A builder class of NativeLineBreaker.
+     * Helper class for creating a {@link LineBreaker}.
      */
     public static class Builder {
         private @BreakStrategy int mBreakStrategy = BREAK_STRATEGY_SIMPLE;
@@ -123,12 +181,10 @@ public class NativeLineBreaker {
         private @Nullable int[] mIndents = null;
 
         /**
-         * Construct a builder class.
-         */
-        public Builder() {}
-
-        /**
          * Set break strategy.
+         *
+         * You can change the line breaking behavior by setting break strategy. The default value is
+         * {@link #BREAK_STRATEGY_SIMPLE}.
          */
         public Builder setBreakStrategy(@BreakStrategy int breakStrategy) {
             mBreakStrategy = breakStrategy;
@@ -137,6 +193,9 @@ public class NativeLineBreaker {
 
         /**
          * Set hyphenation frequency.
+         *
+         * You can change the amount of automatic hyphenation used. The default value is
+         * {@link #HYPHENATION_FREQUENCY_NONE}.
          */
         public Builder setHyphenationFrequency(@HyphenationFrequency int hyphenationFrequency) {
             mHyphenationFrequency = hyphenationFrequency;
@@ -145,6 +204,10 @@ public class NativeLineBreaker {
 
         /**
          * Set whether the text is justified.
+         *
+         * By setting {@link #JUSTIFICATION_MODE_INTER_WORD}, the line breaker will change the
+         * internal parameters for justification.
+         * The default value is {@link #JUSTIFICATION_MODE_NONE}
          */
         public Builder setJustified(@JustificationMode int justified) {
             mJustified = justified;
@@ -152,9 +215,11 @@ public class NativeLineBreaker {
         }
 
         /**
-         * Set indents for entire text.
+         * Set indents.
          *
-         * Sets the total (left + right) indents in pixel per lines.
+         * The supplied array provides the total amount of indentation per line, in pixel. This
+         * amount is the sum of both left and right indentations. For lines past the last element in
+         * the array, the indentation amount of the last element is used.
          */
         public Builder setIndents(@Nullable int[] indents) {
             mIndents = indents;
@@ -162,11 +227,12 @@ public class NativeLineBreaker {
         }
 
         /**
-         * Returns the NativeLineBreaker with given parameters.
+         * Build a new LineBreaker with given parameters.
+         *
+         * You can reuse the Builder instance even after calling this method.
          */
-        NativeLineBreaker build() {
-            return new NativeLineBreaker(mBreakStrategy, mHyphenationFrequency, mJustified,
-                    mIndents);
+        public LineBreaker build() {
+            return new LineBreaker(mBreakStrategy, mHyphenationFrequency, mJustified, mIndents);
         }
     }
 
@@ -184,8 +250,10 @@ public class NativeLineBreaker {
 
         /**
          * Set width for this paragraph.
+         *
+         * @see #getWidth()
          */
-        public void setWidth(@FloatRange(from = 0.0f) float width) {
+        public void setWidth(@Px @FloatRange(from = 0.0f) float width) {
             mWidth = width;
         }
 
@@ -194,9 +262,11 @@ public class NativeLineBreaker {
          *
          * @param firstWidth the line width of the starting of the paragraph
          * @param firstWidthLineCount the number of lines that applies the firstWidth
+         * @see #getFirstWidth()
+         * @see #getFirstWidthLineCount()
          */
-        public void setIndent(@FloatRange(from = 0.0f) float firstWidth,
-                @IntRange(from = 0) int firstWidthLineCount) {
+        public void setIndent(@Px @FloatRange(from = 0.0f) float firstWidth,
+                @Px @IntRange(from = 0) int firstWidthLineCount) {
             mFirstWidth = firstWidth;
             mFirstWidthLineCount = firstWidthLineCount;
         }
@@ -206,16 +276,21 @@ public class NativeLineBreaker {
          *
          * @param tabStops the array of pixels of tap stopping position
          * @param defaultTabStop pixels of the default tab stopping position
+         * @see #getTabStops()
+         * @see #getDefaultTabStop()
          */
-        public void setTabStops(@Nullable int[] tabStops, @IntRange(from = 0) int defaultTabStop) {
+        public void setTabStops(@Nullable int[] tabStops,
+                @Px @IntRange(from = 0) int defaultTabStop) {
             mVariableTabStops = tabStops;
             mDefaultTabStop = defaultTabStop;
         }
 
         /**
          * Return the width for this paragraph in pixels.
+         *
+         * @see #setWidth(float)
          */
-        public @FloatRange(from = 0.0f) float getWidth() {
+        public @Px @FloatRange(from = 0.0f) float getWidth() {
             return mWidth;
         }
 
@@ -224,7 +299,7 @@ public class NativeLineBreaker {
          *
          * @see #setIndent(float, int)
          */
-        public @FloatRange(from = 0.0f) float getFirstWidth() {
+        public @Px @FloatRange(from = 0.0f) float getFirstWidth() {
             return mFirstWidth;
         }
 
@@ -233,7 +308,7 @@ public class NativeLineBreaker {
          *
          * @see #setIndent(float, int)
          */
-        public @IntRange(from = 0) int getFirstWidthLineCount() {
+        public @Px @IntRange(from = 0) int getFirstWidthLineCount() {
             return mFirstWidthLineCount;
         }
 
@@ -251,13 +326,14 @@ public class NativeLineBreaker {
          *
          * @see #setTabStop(int[], int)
          */
-        public @IntRange(from = 0) int getDefaultTabStop() {
+        public @Px @IntRange(from = 0) int getDefaultTabStop() {
             return mDefaultTabStop;
         }
     }
 
     /**
-     * A result object of a line breaking
+     * Holds the result of the {@link LineBreaker#computeLineBreaks line breaking algorithm}.
+     * @see LineBreaker#computeLineBreaks
      */
     public static class Result {
         // Following two contstant must be synced with minikin's line breaker.
@@ -274,7 +350,7 @@ public class NativeLineBreaker {
         }
 
         /**
-         * Returns a number of line count.
+         * Returns the number of lines in the paragraph.
          *
          * @return number of lines
          */
@@ -283,7 +359,7 @@ public class NativeLineBreaker {
         }
 
         /**
-         * Returns a break offset of the line.
+         * Returns character offset of the break for a given line.
          *
          * @param lineIndex an index of the line.
          * @return the break offset.
@@ -293,17 +369,17 @@ public class NativeLineBreaker {
         }
 
         /**
-         * Returns a width of the line in pixels.
+         * Returns width of a given line in pixels.
          *
          * @param lineIndex an index of the line.
-         * @return a width of the line in pixexls
+         * @return width of the line in pixels
          */
         public @Px float getLineWidth(@IntRange(from = 0) int lineIndex) {
             return nGetLineWidth(mPtr, lineIndex);
         }
 
         /**
-         * Returns an entier font ascent of the line in pixels.
+         * Returns font ascent of the line in pixels.
          *
          * @param lineIndex an index of the line.
          * @return an entier font ascent of the line in pixels.
@@ -313,7 +389,7 @@ public class NativeLineBreaker {
         }
 
         /**
-         * Returns an entier font descent of the line in pixels.
+         * Returns font descent of the line in pixels.
          *
          * @param lineIndex an index of the line.
          * @return an entier font descent of the line in pixels.
@@ -337,6 +413,7 @@ public class NativeLineBreaker {
          *
          * @param lineIndex an index of the line.
          * @return a packed hyphen edit for the line.
+         *
          * @see android.text.Hyphenator#unpackStartHyphenEdit(int)
          * @see android.text.Hyphenator#unpackEndHyphenEdit(int)
          * @see android.text.Hyphenator#packHyphenEdit(int,int)
@@ -347,14 +424,14 @@ public class NativeLineBreaker {
     }
 
     private static final NativeAllocationRegistry sRegistry = new NativeAllocationRegistry(
-            NativeLineBreaker.class.getClassLoader(), nGetReleaseFunc(), 64);
+            LineBreaker.class.getClassLoader(), nGetReleaseFunc(), 64);
 
     private final long mNativePtr;
 
     /**
      * Use Builder instead.
      */
-    private NativeLineBreaker(@BreakStrategy int breakStrategy,
+    private LineBreaker(@BreakStrategy int breakStrategy,
             @HyphenationFrequency int hyphenationFrequency, @JustificationMode int justify,
             @Nullable int[] indents) {
         mNativePtr = nInit(breakStrategy, hyphenationFrequency,
@@ -372,7 +449,7 @@ public class NativeLineBreaker {
      * @param lineNumber a line number of this paragraph
      */
     public Result computeLineBreaks(
-            @NonNull NativeMeasuredParagraph measuredPara,
+            @NonNull MeasuredText measuredPara,
             @NonNull ParagraphConstraints constraints,
             @IntRange(from = 0) int lineNumber) {
         return new Result(nComputeLineBreaks(
