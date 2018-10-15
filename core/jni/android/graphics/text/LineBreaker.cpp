@@ -168,8 +168,9 @@ static const JNINativeMethod gMethods[] = {
     {"nGetReleaseResultFunc", "()J", (void*)nGetReleaseResultFunc},
 };
 
-int register_android_text_LineBreaker(JNIEnv* env) {
-    return RegisterMethodsOrDie(env, "android/text/NativeLineBreaker", gMethods, NELEM(gMethods));
+int register_android_graphics_text_LineBreaker(JNIEnv* env) {
+    return RegisterMethodsOrDie(env, "android/graphics/text/LineBreaker", gMethods,
+                                NELEM(gMethods));
 }
 
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#define LOG_TAG "MeasuredParagraph"
+#define LOG_TAG "MeasuredText"
 
 #include "GraphicsJNI.h"
 #include "unicode/locid.h"
@@ -83,7 +83,7 @@ static void nAddReplacementRun(JNIEnv* /* unused */, jclass /* unused */, jlong 
 }
 
 // Regular JNI
-static jlong nBuildNativeMeasuredParagraph(JNIEnv* env, jclass /* unused */, jlong builderPtr,
+static jlong nBuildMeasuredText(JNIEnv* env, jclass /* unused */, jlong builderPtr,
                                       jcharArray javaText, jboolean computeHyphenation,
                                       jboolean computeLayout) {
     ScopedCharArrayRO text(env, javaText);
@@ -147,7 +147,7 @@ static const JNINativeMethod gMTBuilderMethods[] = {
     {"nInitBuilder", "()J", (void*) nInitBuilder},
     {"nAddStyleRun", "(JJIIZ)V", (void*) nAddStyleRun},
     {"nAddReplacementRun", "(JJIIF)V", (void*) nAddReplacementRun},
-    {"nBuildNativeMeasuredParagraph", "(J[CZZ)J", (void*) nBuildNativeMeasuredParagraph},
+    {"nBuildMeasuredText", "(J[CZZ)J", (void*) nBuildMeasuredText},
     {"nFreeBuilder", "(J)V", (void*) nFreeBuilder},
 };
 
@@ -160,10 +160,10 @@ static const JNINativeMethod gMTMethods[] = {
     {"nGetCharWidthAt", "(JI)F", (void*) nGetCharWidthAt},  // Critical Native
 };
 
-int register_android_text_MeasuredParagraph(JNIEnv* env) {
-    return RegisterMethodsOrDie(env, "android/text/NativeMeasuredParagraph",
+int register_android_graphics_text_MeasuredText(JNIEnv* env) {
+    return RegisterMethodsOrDie(env, "android/graphics/text/MeasuredText",
             gMTMethods, NELEM(gMTMethods))
-        + RegisterMethodsOrDie(env, "android/text/NativeMeasuredParagraph$Builder",
+        + RegisterMethodsOrDie(env, "android/graphics/text/MeasuredText$Builder",
             gMTBuilderMethods, NELEM(gMTBuilderMethods));
 }
 
