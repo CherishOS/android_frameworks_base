@@ -17,6 +17,7 @@ package android {
     field public static final java.lang.String ACCESS_NOTIFICATION_POLICY = "android.permission.ACCESS_NOTIFICATION_POLICY";
     field public static final java.lang.String ACCESS_WIFI_STATE = "android.permission.ACCESS_WIFI_STATE";
     field public static final java.lang.String ACCOUNT_MANAGER = "android.permission.ACCOUNT_MANAGER";
+    field public static final java.lang.String ACTIVITY_RECOGNITION = "android.permission.ACTIVITY_RECOGNITION";
     field public static final java.lang.String ADD_VOICEMAIL = "com.android.voicemail.permission.ADD_VOICEMAIL";
     field public static final java.lang.String ANSWER_PHONE_CALLS = "android.permission.ANSWER_PHONE_CALLS";
     field public static final java.lang.String BATTERY_STATS = "android.permission.BATTERY_STATS";
@@ -168,6 +169,7 @@ package android {
 
   public static final class Manifest.permission_group {
     ctor public Manifest.permission_group();
+    field public static final java.lang.String ACTIVITY_RECOGNITION = "android.permission-group.ACTIVITY_RECOGNITION";
     field public static final java.lang.String CALENDAR = "android.permission-group.CALENDAR";
     field public static final java.lang.String CALL_LOG = "android.permission-group.CALL_LOG";
     field public static final java.lang.String CAMERA = "android.permission-group.CAMERA";
@@ -15401,6 +15403,69 @@ package android.graphics.pdf {
     method public void render(android.graphics.Bitmap, android.graphics.Rect, android.graphics.Matrix, int);
     field public static final int RENDER_MODE_FOR_DISPLAY = 1; // 0x1
     field public static final int RENDER_MODE_FOR_PRINT = 2; // 0x2
+  }
+
+}
+
+package android.graphics.text {
+
+  public class LineBreaker {
+    method public android.graphics.text.LineBreaker.Result computeLineBreaks(android.graphics.text.MeasuredText, android.graphics.text.LineBreaker.ParagraphConstraints, int);
+    field public static final int BREAK_STRATEGY_BALANCED = 2; // 0x2
+    field public static final int BREAK_STRATEGY_HIGH_QUALITY = 1; // 0x1
+    field public static final int BREAK_STRATEGY_SIMPLE = 0; // 0x0
+    field public static final int HYPHENATION_FREQUENCY_FULL = 2; // 0x2
+    field public static final int HYPHENATION_FREQUENCY_NONE = 0; // 0x0
+    field public static final int HYPHENATION_FREQUENCY_NORMAL = 1; // 0x1
+    field public static final int JUSTIFICATION_MODE_INTER_WORD = 1; // 0x1
+    field public static final int JUSTIFICATION_MODE_NONE = 0; // 0x0
+  }
+
+  public static class LineBreaker.Builder {
+    ctor public LineBreaker.Builder();
+    method public android.graphics.text.LineBreaker build();
+    method public android.graphics.text.LineBreaker.Builder setBreakStrategy(int);
+    method public android.graphics.text.LineBreaker.Builder setHyphenationFrequency(int);
+    method public android.graphics.text.LineBreaker.Builder setIndents(int[]);
+    method public android.graphics.text.LineBreaker.Builder setJustified(int);
+  }
+
+  public static class LineBreaker.ParagraphConstraints {
+    ctor public LineBreaker.ParagraphConstraints();
+    method public int getDefaultTabStop();
+    method public float getFirstWidth();
+    method public int getFirstWidthLineCount();
+    method public int[] getTabStops();
+    method public float getWidth();
+    method public void setIndent(float, int);
+    method public void setTabStops(int[], int);
+    method public void setWidth(float);
+  }
+
+  public static class LineBreaker.Result {
+    method public float getLineAscent(int);
+    method public int getLineBreakOffset(int);
+    method public int getLineCount();
+    method public float getLineDescent(int);
+    method public int getLineHyphenEdit(int);
+    method public float getLineWidth(int);
+    method public boolean hasLineTab(int);
+  }
+
+  public class MeasuredText {
+    method public void getBounds(int, int, android.graphics.Rect);
+    method public float getCharWidthAt(int);
+    method public char[] getChars();
+    method public float getWidth(int, int);
+  }
+
+  public static class MeasuredText.Builder {
+    ctor public MeasuredText.Builder(char[]);
+    method public android.graphics.text.MeasuredText.Builder addReplacementRun(android.graphics.Paint, int, int, float);
+    method public android.graphics.text.MeasuredText.Builder addStyleRun(android.graphics.Paint, int, int, boolean);
+    method public android.graphics.text.MeasuredText build();
+    method public android.graphics.text.MeasuredText.Builder setComputeHyphenation(boolean);
+    method public android.graphics.text.MeasuredText.Builder setComputeLayout(boolean);
   }
 
 }
@@ -44926,6 +44991,16 @@ package android.text.style {
 
   public abstract interface LineBackgroundSpan implements android.text.style.ParagraphStyle {
     method public abstract void drawBackground(android.graphics.Canvas, android.graphics.Paint, int, int, int, int, int, java.lang.CharSequence, int, int, int);
+  }
+
+  public static class LineBackgroundSpan.Standard implements android.text.style.LineBackgroundSpan android.text.ParcelableSpan {
+    ctor public LineBackgroundSpan.Standard(int);
+    ctor public LineBackgroundSpan.Standard(android.os.Parcel);
+    method public int describeContents();
+    method public void drawBackground(android.graphics.Canvas, android.graphics.Paint, int, int, int, int, int, java.lang.CharSequence, int, int, int);
+    method public final int getColor();
+    method public int getSpanTypeId();
+    method public void writeToParcel(android.os.Parcel, int);
   }
 
   public abstract interface LineHeightSpan implements android.text.style.ParagraphStyle android.text.style.WrapTogetherSpan {
