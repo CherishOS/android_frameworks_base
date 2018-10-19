@@ -51415,6 +51415,7 @@ package android.view.textclassifier {
     method public default android.view.textclassifier.TextClassification classifyText(android.view.textclassifier.TextClassification.Request);
     method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.os.LocaleList);
     method public default void destroy();
+    method public default android.view.textclassifier.TextLanguage detectLanguage(android.view.textclassifier.TextLanguage.Request);
     method public default android.view.textclassifier.TextLinks generateLinks(android.view.textclassifier.TextLinks.Request);
     method public default int getMaxGenerateLinksTextLength();
     method public default boolean isDestroyed();
@@ -51453,6 +51454,39 @@ package android.view.textclassifier {
     method public java.util.Collection<java.lang.String> resolveEntityListModifications(java.util.Collection<java.lang.String>);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassifier.EntityConfig> CREATOR;
+  }
+
+  public final class TextLanguage implements android.os.Parcelable {
+    method public int describeContents();
+    method public float getConfidenceScore(android.icu.util.ULocale);
+    method public android.os.Bundle getExtras();
+    method public java.lang.String getId();
+    method public android.icu.util.ULocale getLocale(int);
+    method public int getLocaleHypothesisCount();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextLanguage> CREATOR;
+  }
+
+  public static final class TextLanguage.Builder {
+    ctor public TextLanguage.Builder();
+    method public android.view.textclassifier.TextLanguage build();
+    method public android.view.textclassifier.TextLanguage.Builder putLocale(android.icu.util.ULocale, float);
+    method public android.view.textclassifier.TextLanguage.Builder setExtras(android.os.Bundle);
+    method public android.view.textclassifier.TextLanguage.Builder setId(java.lang.String);
+  }
+
+  public static final class TextLanguage.Request implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.os.Bundle getExtras();
+    method public java.lang.CharSequence getText();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextLanguage.Request> CREATOR;
+  }
+
+  public static final class TextLanguage.Request.Builder {
+    ctor public TextLanguage.Request.Builder(java.lang.CharSequence);
+    method public android.view.textclassifier.TextLanguage.Request build();
+    method public android.view.textclassifier.TextLanguage.Request.Builder setExtras(android.os.Bundle);
   }
 
   public final class TextLinks implements android.os.Parcelable {
