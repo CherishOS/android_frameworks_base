@@ -1403,6 +1403,7 @@ package android {
     field public static final int textFilterEnabled = 16843007; // 0x10100ff
     field public static final int textFontWeight = 16844165; // 0x1010585
     field public static final int textIsSelectable = 16843542; // 0x1010316
+    field public static final int textLocale = 16844178; // 0x1010592
     field public static final int textOff = 16843045; // 0x1010125
     field public static final int textOn = 16843044; // 0x1010124
     field public static final int textScaleX = 16843089; // 0x1010151
@@ -9167,6 +9168,7 @@ package android.content {
     method public int bulkInsert(android.net.Uri, android.content.ContentValues[]);
     method public android.os.Bundle call(java.lang.String, java.lang.String, android.os.Bundle);
     method public android.net.Uri canonicalize(android.net.Uri);
+    method public final android.content.ContentProvider.CallingIdentity clearCallingIdentity();
     method public abstract int delete(android.net.Uri, java.lang.String, java.lang.String[]);
     method public void dump(java.io.FileDescriptor, java.io.PrintWriter, java.lang.String[]);
     method public final java.lang.String getCallingPackage();
@@ -9194,12 +9196,16 @@ package android.content {
     method public android.database.Cursor query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String, android.os.CancellationSignal);
     method public android.database.Cursor query(android.net.Uri, java.lang.String[], android.os.Bundle, android.os.CancellationSignal);
     method public boolean refresh(android.net.Uri, android.os.Bundle, android.os.CancellationSignal);
+    method public final void restoreCallingIdentity(android.content.ContentProvider.CallingIdentity);
     method protected final void setPathPermissions(android.content.pm.PathPermission[]);
     method protected final void setReadPermission(java.lang.String);
     method protected final void setWritePermission(java.lang.String);
     method public void shutdown();
     method public android.net.Uri uncanonicalize(android.net.Uri);
     method public abstract int update(android.net.Uri, android.content.ContentValues, java.lang.String, java.lang.String[]);
+  }
+
+  public final class ContentProvider.CallingIdentity {
   }
 
   public static abstract interface ContentProvider.PipeDataWriter<T> {
@@ -9316,6 +9322,7 @@ package android.content {
     method public final android.net.Uri insert(android.net.Uri, android.content.ContentValues);
     method public static boolean isSyncActive(android.accounts.Account, java.lang.String);
     method public static boolean isSyncPending(android.accounts.Account, java.lang.String);
+    method public android.graphics.Bitmap loadThumbnail(android.net.Uri, android.util.Size, android.os.CancellationSignal) throws java.io.IOException;
     method public void notifyChange(android.net.Uri, android.database.ContentObserver);
     method public void notifyChange(android.net.Uri, android.database.ContentObserver, boolean);
     method public void notifyChange(android.net.Uri, android.database.ContentObserver, int);
@@ -15468,8 +15475,8 @@ package android.graphics.text {
 
   public static class MeasuredText.Builder {
     ctor public MeasuredText.Builder(char[]);
-    method public android.graphics.text.MeasuredText.Builder addReplacementRun(android.graphics.Paint, int, int, float);
-    method public android.graphics.text.MeasuredText.Builder addStyleRun(android.graphics.Paint, int, int, boolean);
+    method public android.graphics.text.MeasuredText.Builder appendReplacementRun(android.graphics.Paint, int, float);
+    method public android.graphics.text.MeasuredText.Builder appendStyleRun(android.graphics.Paint, int, boolean);
     method public android.graphics.text.MeasuredText build();
     method public android.graphics.text.MeasuredText.Builder setComputeHyphenation(boolean);
     method public android.graphics.text.MeasuredText.Builder setComputeLayout(boolean);
@@ -27446,6 +27453,7 @@ package android.net {
   public static class ConnectivityManager.NetworkCallback {
     ctor public ConnectivityManager.NetworkCallback();
     method public void onAvailable(android.net.Network);
+    method public void onBlockedStatusChanged(android.net.Network, boolean);
     method public void onCapabilitiesChanged(android.net.Network, android.net.NetworkCapabilities);
     method public void onLinkPropertiesChanged(android.net.Network, android.net.LinkProperties);
     method public void onLosing(android.net.Network, int);
@@ -27717,16 +27725,16 @@ package android.net {
 
   public class NetworkInfo implements android.os.Parcelable {
     method public int describeContents();
-    method public android.net.NetworkInfo.DetailedState getDetailedState();
+    method public deprecated android.net.NetworkInfo.DetailedState getDetailedState();
     method public java.lang.String getExtraInfo();
     method public deprecated java.lang.String getReason();
     method public deprecated android.net.NetworkInfo.State getState();
-    method public int getSubtype();
-    method public java.lang.String getSubtypeName();
+    method public deprecated int getSubtype();
+    method public deprecated java.lang.String getSubtypeName();
     method public deprecated int getType();
     method public deprecated java.lang.String getTypeName();
     method public deprecated boolean isAvailable();
-    method public boolean isConnected();
+    method public deprecated boolean isConnected();
     method public deprecated boolean isConnectedOrConnecting();
     method public deprecated boolean isFailover();
     method public deprecated boolean isRoaming();
@@ -29722,6 +29730,65 @@ package android.opengl {
     field public static final int EGL_WINDOW_BIT = 4; // 0x4
   }
 
+  public class EGL15 {
+    ctor public EGL15();
+    method public static int eglClientWaitSync(android.opengl.EGLDisplay, android.opengl.EGLSync, int, long);
+    method public static android.opengl.EGLSurface eglCreatePlatformPixmapSurface(android.opengl.EGLDisplay, android.opengl.EGLConfig, java.nio.Buffer, long[], int);
+    method public static android.opengl.EGLSurface eglCreatePlatformWindowSurface(android.opengl.EGLDisplay, android.opengl.EGLConfig, java.nio.Buffer, long[], int);
+    method public static android.opengl.EGLSync eglCreateSync(android.opengl.EGLDisplay, int, long[], int);
+    method public static boolean eglDestroySync(android.opengl.EGLDisplay, android.opengl.EGLSync);
+    method public static android.opengl.EGLDisplay eglGetPlatformDisplay(int, long, long[], int);
+    method public static boolean eglGetSyncAttrib(android.opengl.EGLDisplay, android.opengl.EGLSync, int, long[], int);
+    method public static boolean eglWaitSync(android.opengl.EGLDisplay, android.opengl.EGLSync, int);
+    field public static final int EGL_CL_EVENT_HANDLE = 12444; // 0x309c
+    field public static final int EGL_CONDITION_SATISFIED = 12534; // 0x30f6
+    field public static final int EGL_CONTEXT_MAJOR_VERSION = 12440; // 0x3098
+    field public static final int EGL_CONTEXT_MINOR_VERSION = 12539; // 0x30fb
+    field public static final int EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT = 2; // 0x2
+    field public static final int EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT = 1; // 0x1
+    field public static final int EGL_CONTEXT_OPENGL_DEBUG = 12720; // 0x31b0
+    field public static final int EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE = 12721; // 0x31b1
+    field public static final int EGL_CONTEXT_OPENGL_PROFILE_MASK = 12541; // 0x30fd
+    field public static final int EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY = 12733; // 0x31bd
+    field public static final int EGL_CONTEXT_OPENGL_ROBUST_ACCESS = 12722; // 0x31b2
+    field public static final long EGL_FOREVER = -1L; // 0xffffffffffffffffL
+    field public static final int EGL_GL_COLORSPACE = 12445; // 0x309d
+    field public static final int EGL_GL_COLORSPACE_LINEAR = 12426; // 0x308a
+    field public static final int EGL_GL_COLORSPACE_SRGB = 12425; // 0x3089
+    field public static final int EGL_GL_RENDERBUFFER = 12473; // 0x30b9
+    field public static final int EGL_GL_TEXTURE_2D = 12465; // 0x30b1
+    field public static final int EGL_GL_TEXTURE_3D = 12466; // 0x30b2
+    field public static final int EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_X = 12468; // 0x30b4
+    field public static final int EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Y = 12470; // 0x30b6
+    field public static final int EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Z = 12472; // 0x30b8
+    field public static final int EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_X = 12467; // 0x30b3
+    field public static final int EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Y = 12469; // 0x30b5
+    field public static final int EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Z = 12471; // 0x30b7
+    field public static final int EGL_GL_TEXTURE_LEVEL = 12476; // 0x30bc
+    field public static final int EGL_GL_TEXTURE_ZOFFSET = 12477; // 0x30bd
+    field public static final int EGL_IMAGE_PRESERVED = 12498; // 0x30d2
+    field public static final int EGL_LOSE_CONTEXT_ON_RESET = 12735; // 0x31bf
+    field public static final android.opengl.EGLContext EGL_NO_CONTEXT;
+    field public static final android.opengl.EGLDisplay EGL_NO_DISPLAY;
+    field public static final android.opengl.EGLImage EGL_NO_IMAGE;
+    field public static final int EGL_NO_RESET_NOTIFICATION = 12734; // 0x31be
+    field public static final android.opengl.EGLSurface EGL_NO_SURFACE;
+    field public static final android.opengl.EGLSync EGL_NO_SYNC;
+    field public static final int EGL_OPENGL_ES3_BIT = 64; // 0x40
+    field public static final int EGL_PLATFORM_ANDROID_KHR = 12609; // 0x3141
+    field public static final int EGL_SIGNALED = 12530; // 0x30f2
+    field public static final int EGL_SYNC_CL_EVENT = 12542; // 0x30fe
+    field public static final int EGL_SYNC_CL_EVENT_COMPLETE = 12543; // 0x30ff
+    field public static final int EGL_SYNC_CONDITION = 12536; // 0x30f8
+    field public static final int EGL_SYNC_FENCE = 12537; // 0x30f9
+    field public static final int EGL_SYNC_FLUSH_COMMANDS_BIT = 1; // 0x1
+    field public static final int EGL_SYNC_PRIOR_COMMANDS_COMPLETE = 12528; // 0x30f0
+    field public static final int EGL_SYNC_STATUS = 12529; // 0x30f1
+    field public static final int EGL_SYNC_TYPE = 12535; // 0x30f7
+    field public static final int EGL_TIMEOUT_EXPIRED = 12533; // 0x30f5
+    field public static final int EGL_UNSIGNALED = 12531; // 0x30f3
+  }
+
   public class EGLConfig extends android.opengl.EGLObjectHandle {
   }
 
@@ -29741,6 +29808,9 @@ package android.opengl {
     field public static final int EGL_RECORDABLE_ANDROID = 12610; // 0x3142
   }
 
+  public class EGLImage extends android.opengl.EGLObjectHandle {
+  }
+
   public abstract class EGLObjectHandle {
     ctor protected deprecated EGLObjectHandle(int);
     ctor protected EGLObjectHandle(long);
@@ -29749,6 +29819,9 @@ package android.opengl {
   }
 
   public class EGLSurface extends android.opengl.EGLObjectHandle {
+  }
+
+  public class EGLSync extends android.opengl.EGLObjectHandle {
   }
 
   public class ETC1 {
@@ -36745,7 +36818,7 @@ package android.provider {
 
   public static abstract interface MediaStore.Audio.AlbumColumns {
     field public static final java.lang.String ALBUM = "album";
-    field public static final java.lang.String ALBUM_ART = "album_art";
+    field public static final deprecated java.lang.String ALBUM_ART = "album_art";
     field public static final java.lang.String ALBUM_ID = "album_id";
     field public static final java.lang.String ALBUM_KEY = "album_key";
     field public static final java.lang.String ARTIST = "artist";
@@ -36867,7 +36940,7 @@ package android.provider {
   }
 
   public static abstract interface MediaStore.Audio.PlaylistsColumns {
-    field public static final java.lang.String DATA = "_data";
+    field public static final deprecated java.lang.String DATA = "_data";
     field public static final java.lang.String DATE_ADDED = "date_added";
     field public static final java.lang.String DATE_MODIFIED = "date_modified";
     field public static final java.lang.String NAME = "name";
@@ -36929,15 +37002,15 @@ package android.provider {
 
   public static class MediaStore.Images.Thumbnails implements android.provider.BaseColumns {
     ctor public MediaStore.Images.Thumbnails();
-    method public static void cancelThumbnailRequest(android.content.ContentResolver, long);
-    method public static void cancelThumbnailRequest(android.content.ContentResolver, long, long);
+    method public static deprecated void cancelThumbnailRequest(android.content.ContentResolver, long);
+    method public static deprecated void cancelThumbnailRequest(android.content.ContentResolver, long, long);
     method public static android.net.Uri getContentUri(java.lang.String);
-    method public static android.graphics.Bitmap getThumbnail(android.content.ContentResolver, long, int, android.graphics.BitmapFactory.Options);
-    method public static android.graphics.Bitmap getThumbnail(android.content.ContentResolver, long, long, int, android.graphics.BitmapFactory.Options);
+    method public static deprecated android.graphics.Bitmap getThumbnail(android.content.ContentResolver, long, int, android.graphics.BitmapFactory.Options);
+    method public static deprecated android.graphics.Bitmap getThumbnail(android.content.ContentResolver, long, long, int, android.graphics.BitmapFactory.Options);
     method public static final android.database.Cursor query(android.content.ContentResolver, android.net.Uri, java.lang.String[]);
     method public static final android.database.Cursor queryMiniThumbnail(android.content.ContentResolver, long, int, java.lang.String[]);
     method public static final android.database.Cursor queryMiniThumbnails(android.content.ContentResolver, android.net.Uri, int, java.lang.String[]);
-    field public static final java.lang.String DATA = "_data";
+    field public static final deprecated java.lang.String DATA = "_data";
     field public static final java.lang.String DEFAULT_SORT_ORDER = "image_id ASC";
     field public static final android.net.Uri EXTERNAL_CONTENT_URI;
     field public static final int FULL_SCREEN_KIND = 2; // 0x2
@@ -36952,7 +37025,7 @@ package android.provider {
   }
 
   public static abstract interface MediaStore.MediaColumns implements android.provider.BaseColumns {
-    field public static final java.lang.String DATA = "_data";
+    field public static final deprecated java.lang.String DATA = "_data";
     field public static final java.lang.String DATE_ADDED = "date_added";
     field public static final java.lang.String DATE_MODIFIED = "date_modified";
     field public static final java.lang.String DISPLAY_NAME = "_display_name";
@@ -36980,12 +37053,12 @@ package android.provider {
 
   public static class MediaStore.Video.Thumbnails implements android.provider.BaseColumns {
     ctor public MediaStore.Video.Thumbnails();
-    method public static void cancelThumbnailRequest(android.content.ContentResolver, long);
-    method public static void cancelThumbnailRequest(android.content.ContentResolver, long, long);
+    method public static deprecated void cancelThumbnailRequest(android.content.ContentResolver, long);
+    method public static deprecated void cancelThumbnailRequest(android.content.ContentResolver, long, long);
     method public static android.net.Uri getContentUri(java.lang.String);
-    method public static android.graphics.Bitmap getThumbnail(android.content.ContentResolver, long, int, android.graphics.BitmapFactory.Options);
-    method public static android.graphics.Bitmap getThumbnail(android.content.ContentResolver, long, long, int, android.graphics.BitmapFactory.Options);
-    field public static final java.lang.String DATA = "_data";
+    method public static deprecated android.graphics.Bitmap getThumbnail(android.content.ContentResolver, long, int, android.graphics.BitmapFactory.Options);
+    method public static deprecated android.graphics.Bitmap getThumbnail(android.content.ContentResolver, long, long, int, android.graphics.BitmapFactory.Options);
+    field public static final deprecated java.lang.String DATA = "_data";
     field public static final java.lang.String DEFAULT_SORT_ORDER = "video_id ASC";
     field public static final android.net.Uri EXTERNAL_CONTENT_URI;
     field public static final int FULL_SCREEN_KIND = 2; // 0x2
@@ -43041,9 +43114,8 @@ package android.telephony {
     method public static int getDefaultSmsSubscriptionId();
     method public static int getDefaultSubscriptionId();
     method public static int getDefaultVoiceSubscriptionId();
-    method public static int getSlotIndex(int);
-    method public static int[] getSubscriptionIds(int);
     method public java.util.List<android.telephony.SubscriptionInfo> getOpportunisticSubscriptions(int);
+    method public static int getSlotIndex(int);
     method public static int[] getSubscriptionIds(int);
     method public java.util.List<android.telephony.SubscriptionPlan> getSubscriptionPlans(int);
     method public boolean isActiveSubscriptionId(int);
@@ -43439,7 +43511,8 @@ package android.telephony.data {
 
 package android.telephony.emergency {
 
-  public final class EmergencyNumber implements android.os.Parcelable {
+  public final class EmergencyNumber implements java.lang.Comparable android.os.Parcelable {
+    method public int compareTo(android.telephony.emergency.EmergencyNumber);
     method public int describeContents();
     method public java.lang.String getCountryIso();
     method public int getEmergencyNumberSourceBitmask();
@@ -45199,6 +45272,7 @@ package android.text.style {
     method public int getSpanTypeId();
     method public android.content.res.ColorStateList getTextColor();
     method public int getTextFontWeight();
+    method public android.os.LocaleList getTextLocales();
     method public int getTextSize();
     method public int getTextStyle();
     method public android.graphics.Typeface getTypeface();
@@ -51350,6 +51424,7 @@ package android.view.textclassifier {
     method public default android.view.textclassifier.TextClassification classifyText(android.view.textclassifier.TextClassification.Request);
     method public default android.view.textclassifier.TextClassification classifyText(java.lang.CharSequence, int, int, android.os.LocaleList);
     method public default void destroy();
+    method public default android.view.textclassifier.TextLanguage detectLanguage(android.view.textclassifier.TextLanguage.Request);
     method public default android.view.textclassifier.TextLinks generateLinks(android.view.textclassifier.TextLinks.Request);
     method public default int getMaxGenerateLinksTextLength();
     method public default boolean isDestroyed();
@@ -51388,6 +51463,39 @@ package android.view.textclassifier {
     method public java.util.Collection<java.lang.String> resolveEntityListModifications(java.util.Collection<java.lang.String>);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassifier.EntityConfig> CREATOR;
+  }
+
+  public final class TextLanguage implements android.os.Parcelable {
+    method public int describeContents();
+    method public float getConfidenceScore(android.icu.util.ULocale);
+    method public android.os.Bundle getExtras();
+    method public java.lang.String getId();
+    method public android.icu.util.ULocale getLocale(int);
+    method public int getLocaleHypothesisCount();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextLanguage> CREATOR;
+  }
+
+  public static final class TextLanguage.Builder {
+    ctor public TextLanguage.Builder();
+    method public android.view.textclassifier.TextLanguage build();
+    method public android.view.textclassifier.TextLanguage.Builder putLocale(android.icu.util.ULocale, float);
+    method public android.view.textclassifier.TextLanguage.Builder setExtras(android.os.Bundle);
+    method public android.view.textclassifier.TextLanguage.Builder setId(java.lang.String);
+  }
+
+  public static final class TextLanguage.Request implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.os.Bundle getExtras();
+    method public java.lang.CharSequence getText();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextLanguage.Request> CREATOR;
+  }
+
+  public static final class TextLanguage.Request.Builder {
+    ctor public TextLanguage.Request.Builder(java.lang.CharSequence);
+    method public android.view.textclassifier.TextLanguage.Request build();
+    method public android.view.textclassifier.TextLanguage.Request.Builder setExtras(android.os.Bundle);
   }
 
   public final class TextLinks implements android.os.Parcelable {
@@ -52310,6 +52418,7 @@ package android.webkit {
     field public static final int ERROR_UNSAFE_RESOURCE = -16; // 0xfffffff0
     field public static final int ERROR_UNSUPPORTED_AUTH_SCHEME = -3; // 0xfffffffd
     field public static final int ERROR_UNSUPPORTED_SCHEME = -10; // 0xfffffff6
+    field public static final int SAFE_BROWSING_THREAT_BILLING = 4; // 0x4
     field public static final int SAFE_BROWSING_THREAT_MALWARE = 1; // 0x1
     field public static final int SAFE_BROWSING_THREAT_PHISHING = 2; // 0x2
     field public static final int SAFE_BROWSING_THREAT_UNKNOWN = 0; // 0x0
