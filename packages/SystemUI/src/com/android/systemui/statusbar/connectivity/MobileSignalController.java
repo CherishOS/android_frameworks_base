@@ -129,6 +129,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
     private boolean mShowVolteIcon;
     private boolean mRoamingIconAllowed;
     private boolean mDataDisabledIcon;
+	private boolean mVolteIcon;
 
     private static final String ROAMING_INDICATOR_ICON =
             "system:" + Settings.System.ROAMING_INDICATOR_ICON;
@@ -136,6 +137,8 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
             "system:" + Settings.System.SHOW_FOURG_ICON;
     private static final String DATA_DISABLED_ICON =
             "system:" + Settings.System.DATA_DISABLED_ICON;
+	private static final String SHOW_VOLTE_ICON =
+            "system:" + Settings.System.SHOW_VOLTE_ICON;
 
     private final MobileStatusTracker.Callback mMobileCallback =
             new MobileStatusTracker.Callback() {
@@ -303,6 +306,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
         Dependency.get(TunerService.class).addTunable(this, ROAMING_INDICATOR_ICON);
         Dependency.get(TunerService.class).addTunable(this, SHOW_FOURG_ICON);
         Dependency.get(TunerService.class).addTunable(this, DATA_DISABLED_ICON);
+		Dependency.get(TunerService.class).addTunable(this, SHOW_VOLTE_ICON);
     }
 
     @Override
@@ -322,6 +326,11 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
                 mDataDisabledIcon =
                     TunerService.parseIntegerSwitch(newValue, true);
                 updateTelephony();
+                break;
+			case SHOW_VOLTE_ICON:
+                mVolteIcon =
+                    TunerService.parseIntegerSwitch(newValue, false);
+                notifyListeners();
                 break;
             default:
                 break;
@@ -457,16 +466,6 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
         return mImsManager != null && mImsManager.isEnhanced4gLteModeSettingEnabledByUser();
     }
 
-    private int getVolteResId() {
-        int resId = 0;
-
-        if ( (mCurrentState.voiceCapable || mCurrentState.videoCapable)
-                &&  mCurrentState.imsRegistered ) {
-            resId = R.drawable.ic_volte;
-        }
-        return resId;
-    }
-
     private void setListeners() {
         if (mImsManager == null) {
             Log.e(mTag, "setListeners mImsManager is null");
@@ -536,7 +535,12 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
             dataContentDescription = mContext.getString(R.string.data_connection_no_internet);
         }
 
-        int volteId = mShowVolteIcon && isVolteSwitchOn() ? getVolteResId() : 0;
+        int resId = 0;
+        if (mCurrentState.imsRegistered && mVolteIcon) {
+            resId = R.drawable.ic_volte;
+        }
+
+        int volteId = mShowVolteIcon && isVolteSwitchOn() && mVolteIcon ? resId : 0;
 
         final QsInfo qsInfo = getQsInfo(contentDescription, icons.dataType);
         final SbInfo sbInfo = getSbInfo(contentDescription, icons.dataType);
