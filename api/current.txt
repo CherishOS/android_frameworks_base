@@ -51321,6 +51321,99 @@ package android.view.inputmethod {
 
 package android.view.textclassifier {
 
+  public final class ConversationActions implements android.os.Parcelable {
+    ctor public ConversationActions(java.util.List<android.view.textclassifier.ConversationActions.ConversationAction>);
+    method public int describeContents();
+    method public java.util.List<android.view.textclassifier.ConversationActions.ConversationAction> getConversationActions();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions> CREATOR;
+    field public static final java.lang.String HINT_FOR_IN_APP = "in_app";
+    field public static final java.lang.String HINT_FOR_NOTIFICATION = "notification";
+    field public static final java.lang.String TYPE_CALL_PHONE = "call_phone";
+    field public static final java.lang.String TYPE_CREATE_REMINDER = "create_reminder";
+    field public static final java.lang.String TYPE_OPEN_URL = "open_url";
+    field public static final java.lang.String TYPE_SEND_EMAIL = "send_email";
+    field public static final java.lang.String TYPE_SEND_SMS = "send_sms";
+    field public static final java.lang.String TYPE_SHARE_LOCATION = "share_location";
+    field public static final java.lang.String TYPE_TEXT_REPLY = "text_reply";
+    field public static final java.lang.String TYPE_TRACK_FLIGHT = "track_flight";
+    field public static final java.lang.String TYPE_VIEW_CALENDAR = "view_calendar";
+    field public static final java.lang.String TYPE_VIEW_MAP = "view_map";
+  }
+
+  public static final class ConversationActions.ConversationAction implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.app.RemoteAction getAction();
+    method public float getConfidenceScore();
+    method public android.os.Bundle getExtras();
+    method public java.lang.CharSequence getTextReply();
+    method public java.lang.String getType();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions.ConversationAction> CREATOR;
+  }
+
+  public static final class ConversationActions.ConversationAction.Builder {
+    ctor public ConversationActions.ConversationAction.Builder(java.lang.String);
+    method public android.view.textclassifier.ConversationActions.ConversationAction build();
+    method public android.view.textclassifier.ConversationActions.ConversationAction.Builder setAction(android.app.RemoteAction);
+    method public android.view.textclassifier.ConversationActions.ConversationAction.Builder setConfidenceScore(float);
+    method public android.view.textclassifier.ConversationActions.ConversationAction.Builder setExtras(android.os.Bundle);
+    method public android.view.textclassifier.ConversationActions.ConversationAction.Builder setTextReply(java.lang.CharSequence);
+  }
+
+  public static final class ConversationActions.Message implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.app.Person getAuthor();
+    method public android.os.Bundle getExtras();
+    method public java.lang.CharSequence getText();
+    method public java.time.ZonedDateTime getTime();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions.Message> CREATOR;
+  }
+
+  public static final class ConversationActions.Message.Builder {
+    ctor public ConversationActions.Message.Builder();
+    method public android.view.textclassifier.ConversationActions.Message build();
+    method public android.view.textclassifier.ConversationActions.Message.Builder setAuthor(android.app.Person);
+    method public android.view.textclassifier.ConversationActions.Message.Builder setComposeTime(java.time.ZonedDateTime);
+    method public android.view.textclassifier.ConversationActions.Message.Builder setExtras(android.os.Bundle);
+    method public android.view.textclassifier.ConversationActions.Message.Builder setText(java.lang.CharSequence);
+  }
+
+  public static final class ConversationActions.Request implements android.os.Parcelable {
+    method public int describeContents();
+    method public java.util.List<android.view.textclassifier.ConversationActions.Message> getConversation();
+    method public java.util.List<java.lang.String> getHints();
+    method public int getMaxSuggestions();
+    method public android.view.textclassifier.ConversationActions.TypeConfig getTypeConfig();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions.Request> CREATOR;
+  }
+
+  public static final class ConversationActions.Request.Builder {
+    ctor public ConversationActions.Request.Builder(java.util.List<android.view.textclassifier.ConversationActions.Message>);
+    method public android.view.textclassifier.ConversationActions.Request build();
+    method public android.view.textclassifier.ConversationActions.Request.Builder setHints(java.util.List<java.lang.String>);
+    method public android.view.textclassifier.ConversationActions.Request.Builder setMaxSuggestions(int);
+    method public android.view.textclassifier.ConversationActions.Request.Builder setTypeConfig(android.view.textclassifier.ConversationActions.TypeConfig);
+  }
+
+  public static final class ConversationActions.TypeConfig implements android.os.Parcelable {
+    method public int describeContents();
+    method public java.util.Collection<java.lang.String> resolveTypes(java.util.Collection<java.lang.String>);
+    method public boolean shouldIncludeTypesFromTextClassifier();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions.TypeConfig> CREATOR;
+  }
+
+  public static final class ConversationActions.TypeConfig.Builder {
+    ctor public ConversationActions.TypeConfig.Builder();
+    method public android.view.textclassifier.ConversationActions.TypeConfig build();
+    method public android.view.textclassifier.ConversationActions.TypeConfig.Builder includeTypesFromTextClassifier(boolean);
+    method public android.view.textclassifier.ConversationActions.TypeConfig.Builder setExcludedTypes(java.util.Collection<java.lang.String>);
+    method public android.view.textclassifier.ConversationActions.TypeConfig.Builder setIncludedTypes(java.util.Collection<java.lang.String>);
+  }
+
   public final class SelectionEvent implements android.os.Parcelable {
     method public static android.view.textclassifier.SelectionEvent createSelectionActionEvent(int, int, int);
     method public static android.view.textclassifier.SelectionEvent createSelectionActionEvent(int, int, int, android.view.textclassifier.TextClassification);
@@ -51457,6 +51550,7 @@ package android.view.textclassifier {
     method public default int getMaxGenerateLinksTextLength();
     method public default boolean isDestroyed();
     method public default void onSelectionEvent(android.view.textclassifier.SelectionEvent);
+    method public default android.view.textclassifier.ConversationActions suggestConversationActions(android.view.textclassifier.ConversationActions.Request);
     method public default android.view.textclassifier.TextSelection suggestSelection(android.view.textclassifier.TextSelection.Request);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.os.LocaleList);
     field public static final java.lang.String HINT_TEXT_IS_EDITABLE = "android.text_is_editable";
