@@ -17090,6 +17090,63 @@ package android.icu.lang {
     field public static final int VOWEL_JAMO = 2; // 0x2
   }
 
+  public static abstract interface UCharacter.IndicPositionalCategory {
+    field public static final int BOTTOM = 1; // 0x1
+    field public static final int BOTTOM_AND_LEFT = 2; // 0x2
+    field public static final int BOTTOM_AND_RIGHT = 3; // 0x3
+    field public static final int LEFT = 4; // 0x4
+    field public static final int LEFT_AND_RIGHT = 5; // 0x5
+    field public static final int NA = 0; // 0x0
+    field public static final int OVERSTRUCK = 6; // 0x6
+    field public static final int RIGHT = 7; // 0x7
+    field public static final int TOP = 8; // 0x8
+    field public static final int TOP_AND_BOTTOM = 9; // 0x9
+    field public static final int TOP_AND_BOTTOM_AND_RIGHT = 10; // 0xa
+    field public static final int TOP_AND_LEFT = 11; // 0xb
+    field public static final int TOP_AND_LEFT_AND_RIGHT = 12; // 0xc
+    field public static final int TOP_AND_RIGHT = 13; // 0xd
+    field public static final int VISUAL_ORDER_LEFT = 14; // 0xe
+  }
+
+  public static abstract interface UCharacter.IndicSyllabicCategory {
+    field public static final int AVAGRAHA = 1; // 0x1
+    field public static final int BINDU = 2; // 0x2
+    field public static final int BRAHMI_JOINING_NUMBER = 3; // 0x3
+    field public static final int CANTILLATION_MARK = 4; // 0x4
+    field public static final int CONSONANT = 5; // 0x5
+    field public static final int CONSONANT_DEAD = 6; // 0x6
+    field public static final int CONSONANT_FINAL = 7; // 0x7
+    field public static final int CONSONANT_HEAD_LETTER = 8; // 0x8
+    field public static final int CONSONANT_INITIAL_POSTFIXED = 9; // 0x9
+    field public static final int CONSONANT_KILLER = 10; // 0xa
+    field public static final int CONSONANT_MEDIAL = 11; // 0xb
+    field public static final int CONSONANT_PLACEHOLDER = 12; // 0xc
+    field public static final int CONSONANT_PRECEDING_REPHA = 13; // 0xd
+    field public static final int CONSONANT_PREFIXED = 14; // 0xe
+    field public static final int CONSONANT_SUBJOINED = 15; // 0xf
+    field public static final int CONSONANT_SUCCEEDING_REPHA = 16; // 0x10
+    field public static final int CONSONANT_WITH_STACKER = 17; // 0x11
+    field public static final int GEMINATION_MARK = 18; // 0x12
+    field public static final int INVISIBLE_STACKER = 19; // 0x13
+    field public static final int JOINER = 20; // 0x14
+    field public static final int MODIFYING_LETTER = 21; // 0x15
+    field public static final int NON_JOINER = 22; // 0x16
+    field public static final int NUKTA = 23; // 0x17
+    field public static final int NUMBER = 24; // 0x18
+    field public static final int NUMBER_JOINER = 25; // 0x19
+    field public static final int OTHER = 0; // 0x0
+    field public static final int PURE_KILLER = 26; // 0x1a
+    field public static final int REGISTER_SHIFTER = 27; // 0x1b
+    field public static final int SYLLABLE_MODIFIER = 28; // 0x1c
+    field public static final int TONE_LETTER = 29; // 0x1d
+    field public static final int TONE_MARK = 30; // 0x1e
+    field public static final int VIRAMA = 31; // 0x1f
+    field public static final int VISARGA = 32; // 0x20
+    field public static final int VOWEL = 33; // 0x21
+    field public static final int VOWEL_DEPENDENT = 34; // 0x22
+    field public static final int VOWEL_INDEPENDENT = 35; // 0x23
+  }
+
   public static abstract interface UCharacter.JoiningGroup {
     field public static final int AFRICAN_FEH = 86; // 0x56
     field public static final int AFRICAN_NOON = 87; // 0x57
@@ -17873,6 +17930,13 @@ package android.icu.lang {
     field public static final int ZANABAZAR_SQUARE_ID = 280; // 0x118
   }
 
+  public static abstract interface UCharacter.VerticalOrientation {
+    field public static final int ROTATED = 0; // 0x0
+    field public static final int TRANSFORMED_ROTATED = 1; // 0x1
+    field public static final int TRANSFORMED_UPRIGHT = 2; // 0x2
+    field public static final int UPRIGHT = 3; // 0x3
+  }
+
   public static abstract interface UCharacter.WordBreak {
     field public static final int ALETTER = 1; // 0x1
     field public static final int CR = 8; // 0x8
@@ -18044,6 +18108,8 @@ package android.icu.lang {
     field public static final int IDS_TRINARY_OPERATOR = 19; // 0x13
     field public static final int ID_CONTINUE = 15; // 0xf
     field public static final int ID_START = 16; // 0x10
+    field public static final int INDIC_POSITIONAL_CATEGORY = 4118; // 0x1016
+    field public static final int INDIC_SYLLABIC_CATEGORY = 4119; // 0x1017
     field public static final int INT_START = 4096; // 0x1000
     field public static final int JOINING_GROUP = 4102; // 0x1006
     field public static final int JOINING_TYPE = 4103; // 0x1007
@@ -18097,6 +18163,7 @@ package android.icu.lang {
     field public static final int UPPERCASE = 30; // 0x1e
     field public static final int UPPERCASE_MAPPING = 16396; // 0x400c
     field public static final int VARIATION_SELECTOR = 36; // 0x24
+    field public static final int VERTICAL_ORIENTATION = 4120; // 0x1018
     field public static final int WHITE_SPACE = 31; // 0x1f
     field public static final int WORD_BREAK = 4116; // 0x1014
     field public static final int XID_CONTINUE = 32; // 0x20
@@ -18627,6 +18694,7 @@ package android.icu.text {
     method public int preceding(int);
     method public abstract int previous();
     method public void setText(java.lang.String);
+    method public void setText(java.lang.CharSequence);
     method public abstract void setText(java.text.CharacterIterator);
     field public static final int DONE = -1; // 0xffffffff
     field public static final int KIND_CHARACTER = 0; // 0x0
@@ -18655,24 +18723,31 @@ package android.icu.text {
   }
 
   public static final class CaseMap.Fold extends android.icu.text.CaseMap {
+    method public java.lang.String apply(java.lang.CharSequence);
     method public <A extends java.lang.Appendable> A apply(java.lang.CharSequence, A, android.icu.text.Edits);
     method public android.icu.text.CaseMap.Fold omitUnchangedText();
     method public android.icu.text.CaseMap.Fold turkic();
   }
 
   public static final class CaseMap.Lower extends android.icu.text.CaseMap {
+    method public java.lang.String apply(java.util.Locale, java.lang.CharSequence);
     method public <A extends java.lang.Appendable> A apply(java.util.Locale, java.lang.CharSequence, A, android.icu.text.Edits);
     method public android.icu.text.CaseMap.Lower omitUnchangedText();
   }
 
   public static final class CaseMap.Title extends android.icu.text.CaseMap {
+    method public android.icu.text.CaseMap.Title adjustToCased();
+    method public java.lang.String apply(java.util.Locale, android.icu.text.BreakIterator, java.lang.CharSequence);
     method public <A extends java.lang.Appendable> A apply(java.util.Locale, android.icu.text.BreakIterator, java.lang.CharSequence, A, android.icu.text.Edits);
     method public android.icu.text.CaseMap.Title noBreakAdjustment();
     method public android.icu.text.CaseMap.Title noLowercase();
     method public android.icu.text.CaseMap.Title omitUnchangedText();
+    method public android.icu.text.CaseMap.Title sentences();
+    method public android.icu.text.CaseMap.Title wholeString();
   }
 
   public static final class CaseMap.Upper extends android.icu.text.CaseMap {
+    method public java.lang.String apply(java.util.Locale, java.lang.CharSequence);
     method public <A extends java.lang.Appendable> A apply(java.util.Locale, java.lang.CharSequence, A, android.icu.text.Edits);
     method public android.icu.text.CaseMap.Upper omitUnchangedText();
   }
@@ -18680,7 +18755,6 @@ package android.icu.text {
   public final class CollationElementIterator {
     method public int getMaxExpansion(int);
     method public int getOffset();
-    method public deprecated int hashCode();
     method public int next();
     method public int previous();
     method public static int primaryOrder(int);
@@ -18793,7 +18867,6 @@ package android.icu.text {
     method public static android.icu.text.CurrencyPluralInfo getInstance(android.icu.util.ULocale);
     method public android.icu.util.ULocale getLocale();
     method public android.icu.text.PluralRules getPluralRules();
-    method public deprecated int hashCode();
     method public void setCurrencyPluralPattern(java.lang.String, java.lang.String);
     method public void setLocale(android.icu.util.ULocale);
     method public void setPluralRules(java.lang.String);
@@ -19083,7 +19156,6 @@ package android.icu.text {
     method public boolean firstDateInPtnIsLaterDate();
     method public java.lang.String getFirstPart();
     method public java.lang.String getSecondPart();
-    method public deprecated java.lang.String toString();
   }
 
   public class DateTimePatternGenerator implements java.lang.Cloneable android.icu.util.Freezable {
@@ -19243,6 +19315,8 @@ package android.icu.text {
     ctor public DecimalFormatSymbols(java.util.Locale);
     ctor public DecimalFormatSymbols(android.icu.util.ULocale);
     method public java.lang.Object clone();
+    method public static android.icu.text.DecimalFormatSymbols forNumberingSystem(java.util.Locale, android.icu.text.NumberingSystem);
+    method public static android.icu.text.DecimalFormatSymbols forNumberingSystem(android.icu.util.ULocale, android.icu.text.NumberingSystem);
     method public static java.util.Locale[] getAvailableLocales();
     method public android.icu.util.Currency getCurrency();
     method public java.lang.String getCurrencySymbol();
@@ -19352,11 +19426,15 @@ package android.icu.text {
     method public android.icu.text.Edits.Iterator getFineIterator();
     method public boolean hasChanges();
     method public int lengthDelta();
+    method public android.icu.text.Edits mergeAndAppend(android.icu.text.Edits, android.icu.text.Edits);
+    method public int numberOfChanges();
     method public void reset();
   }
 
   public static final class Edits.Iterator {
     method public int destinationIndex();
+    method public int destinationIndexFromSourceIndex(int);
+    method public boolean findDestinationIndex(int);
     method public boolean findSourceIndex(int);
     method public boolean hasChange();
     method public int newLength();
@@ -19364,6 +19442,7 @@ package android.icu.text {
     method public int oldLength();
     method public int replacementIndex();
     method public int sourceIndex();
+    method public int sourceIndexFromDestinationIndex(int);
   }
 
   public abstract class IDNA {
@@ -19766,6 +19845,7 @@ package android.icu.text {
     method public int getRadix();
     method public boolean isAlgorithmic();
     method public static boolean isValidDigitString(java.lang.String);
+    field public static final android.icu.text.NumberingSystem LATIN;
   }
 
   public class PluralFormat extends android.icu.text.UFormat {
@@ -19803,7 +19883,6 @@ package android.icu.text {
     method public java.util.Set<java.lang.String> getKeywords();
     method public java.util.Collection<java.lang.Double> getSamples(java.lang.String);
     method public double getUniqueKeywordValue(java.lang.String);
-    method public deprecated int hashCode();
     method public static android.icu.text.PluralRules parseDescription(java.lang.String) throws java.text.ParseException;
     method public java.lang.String select(double);
     field public static final android.icu.text.PluralRules DEFAULT;
@@ -20046,7 +20125,6 @@ package android.icu.text {
     ctor public StringPrepParseException(java.lang.String, int, java.lang.String, int);
     ctor public StringPrepParseException(java.lang.String, int, java.lang.String, int, int);
     method public int getError();
-    method public deprecated int hashCode();
     field public static final int ACE_PREFIX_ERROR = 6; // 0x6
     field public static final int BUFFER_OVERFLOW_ERROR = 9; // 0x9
     field public static final int CHECK_BIDI_ERROR = 4; // 0x4
@@ -20677,6 +20755,7 @@ package android.icu.util {
 
   public class Currency extends android.icu.util.MeasureUnit {
     ctor protected Currency(java.lang.String);
+    method public static android.icu.util.Currency fromJavaCurrency(java.util.Currency);
     method public static java.util.Set<android.icu.util.Currency> getAvailableCurrencies();
     method public static java.lang.String[] getAvailableCurrencyCodes(android.icu.util.ULocale, java.util.Date);
     method public static java.lang.String[] getAvailableCurrencyCodes(java.util.Locale, java.util.Date);
@@ -20702,6 +20781,7 @@ package android.icu.util {
     method public java.lang.String getSymbol(java.util.Locale);
     method public java.lang.String getSymbol(android.icu.util.ULocale);
     method public static boolean isAvailable(java.lang.String, java.util.Date, java.util.Date);
+    method public java.util.Currency toJavaCurrency();
     field public static final int LONG_NAME = 1; // 0x1
     field public static final int PLURAL_LONG_NAME = 2; // 0x2
     field public static final int SYMBOL_NAME = 0; // 0x0
@@ -20717,6 +20797,8 @@ package android.icu.util {
   public class CurrencyAmount extends android.icu.util.Measure {
     ctor public CurrencyAmount(java.lang.Number, android.icu.util.Currency);
     ctor public CurrencyAmount(double, android.icu.util.Currency);
+    ctor public CurrencyAmount(java.lang.Number, java.util.Currency);
+    ctor public CurrencyAmount(double, java.util.Currency);
     method public android.icu.util.Currency getCurrency();
   }
 
