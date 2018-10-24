@@ -5291,6 +5291,20 @@ public final class Settings {
          */
         public static final String LOCK_SCREEN_WEATHER_ICON_COLOR = "lock_screen_weather_icon_color";
 
+	/**
+	 ** Change fonts for the system lockscreen Owner info
+	 **
+	 ** @hide
+	 **/
+        public static final String LOCK_OWNERINFO_FONTS = "lock_ownerinfo_fonts";
+
+        /**
+	 ** Change font size for the system lockscreen owner
+	 **
+	 ** @hide
+	 **/
+        public static final String LOCKOWNER_FONT_SIZE = "lockowner_font_size";
+
         /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
@@ -5462,6 +5476,8 @@ public final class Settings {
             PRIVATE_SETTINGS.add(LOCK_SCREEN_WEATHER_TEMP_COLOR);
             PRIVATE_SETTINGS.add(LOCK_SCREEN_WEATHER_CITY_COLOR);
             PRIVATE_SETTINGS.add(LOCK_SCREEN_WEATHER_ICON_COLOR);
+            PRIVATE_SETTINGS.add(LOCK_OWNERINFO_FONTS);
+            PRIVATE_SETTINGS.add(LOCKOWNER_FONT_SIZE);
         }
 
         /**

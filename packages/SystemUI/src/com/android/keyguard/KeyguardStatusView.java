@@ -105,7 +105,9 @@ public class KeyguardStatusView extends GridLayout implements
                 mClockView.updateClockColor();
                 updateClockDateColor();
                 updateOwnerInfoColor();
-            }
+                refreshOwnerInfoSize();
+                refreshOwnerInfoFont();
+	    }
         }
 
         @Override
@@ -131,6 +133,8 @@ public class KeyguardStatusView extends GridLayout implements
             mClockView.updateClockColor();
             updateClockDateColor();
             updateOwnerInfoColor();
+            refreshOwnerInfoSize();
+            refreshOwnerInfoFont();
 	}
 
         @Override
@@ -219,6 +223,8 @@ public class KeyguardStatusView extends GridLayout implements
 	mClockView.updateClockColor();
 	updateClockDateColor();
 	updateOwnerInfoColor();
+	refreshOwnerInfoSize();
+	refreshOwnerInfoFont();
 
         mTextColor = mClockView.getCurrentTextColor();
 
@@ -267,7 +273,7 @@ public class KeyguardStatusView extends GridLayout implements
         }
         if (mOwnerInfo != null) {
             mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    getResources().getDimensionPixelSize(R.dimen.widget_label_font_size));
+                    getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_21));
         }
         loadBottomMargin();
     }
@@ -288,6 +294,16 @@ public class KeyguardStatusView extends GridLayout implements
     private int getLockDateFont() {
         return Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.LOCK_DATE_FONTS, 32);
+    }
+
+    private int getOwnerInfoFont() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCK_OWNERINFO_FONTS, 0);
+    }
+
+    private int getOwnerInfoSize() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCKOWNER_FONT_SIZE, 21);
     }
 
     private void updateClockDateColor() {
@@ -522,6 +538,165 @@ public class KeyguardStatusView extends GridLayout implements
         mIconTopMargin = getResources().getDimensionPixelSize(R.dimen.widget_vertical_padding);
         mIconTopMarginWithHeader = getResources().getDimensionPixelSize(
                 R.dimen.widget_vertical_padding_with_header);
+    }
+
+    public void refreshOwnerInfoSize() {
+        final Resources res = getContext().getResources();
+        boolean isPrimary = UserHandle.getCallingUserId() == UserHandle.USER_OWNER;
+        int ownerInfoSize = isPrimary ? getOwnerInfoSize() : 21;
+
+        if (ownerInfoSize == 10) {
+        mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_10));
+        } else if (ownerInfoSize == 11) {
+        mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_11));
+        } else if (ownerInfoSize == 12) {
+        mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_12));
+        } else if (ownerInfoSize == 13) {
+        mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_13));
+        } else if (ownerInfoSize == 14) {
+        mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_14));
+        }  else if (ownerInfoSize == 15) {
+        mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_15));
+        } else if (ownerInfoSize == 16) {
+        mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_16));
+        } else if (ownerInfoSize == 17) {
+        mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_17));
+        } else if (ownerInfoSize == 18) {
+        mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_18));
+        } else if (ownerInfoSize == 19) {
+        mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_19));
+        } else if (ownerInfoSize == 20) {
+        mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_20));
+        } else if (ownerInfoSize == 21) {
+        mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_21));
+        } else if (ownerInfoSize == 22) {
+        mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_22));
+        } else if (ownerInfoSize == 23) {
+        mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_23));
+        } else if (ownerInfoSize == 24) {
+        mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_24));
+        } else if (ownerInfoSize == 25) {
+        mOwnerInfo.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_25));
+        }
+    }
+
+    private void refreshOwnerInfoFont() {
+        final Resources res = getContext().getResources();
+        boolean isPrimary = UserHandle.getCallingUserId() == UserHandle.USER_OWNER;
+        int ownerinfoFont = isPrimary ? getOwnerInfoFont() : 0;
+
+        if (ownerinfoFont == 0) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
+        }
+        if (ownerinfoFont == 1) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+        }
+        if (ownerinfoFont == 2) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif", Typeface.ITALIC));
+        }
+        if (ownerinfoFont == 3) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif", Typeface.BOLD_ITALIC));
+        }
+        if (ownerinfoFont == 4) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-light", Typeface.ITALIC));
+        }
+        if (ownerinfoFont == 5) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+        }
+        if (ownerinfoFont == 6) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-thin", Typeface.ITALIC));
+        }
+        if (ownerinfoFont == 7) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-thin", Typeface.NORMAL));
+        }
+        if (ownerinfoFont == 8) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
+        }
+        if (ownerinfoFont == 9) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-condensed", Typeface.ITALIC));
+        }
+        if (ownerinfoFont == 10) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD));
+        }
+        if (ownerinfoFont == 11) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD_ITALIC));
+        }
+        if (ownerinfoFont == 12) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+        }
+        if (ownerinfoFont == 13) {
+            mOwnerInfo.setTypeface(Typeface.create("sans-serif-medium", Typeface.ITALIC));
+        }
+        if (ownerinfoFont == 14) {
+                mOwnerInfo.setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.NORMAL));
+        }
+        if (ownerinfoFont == 15) {
+                mOwnerInfo.setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.ITALIC));
+        }
+        if (ownerinfoFont == 16) {
+                mOwnerInfo.setTypeface(Typeface.create("sans-serif-black", Typeface.NORMAL));
+        }
+        if (ownerinfoFont == 17) {
+                mOwnerInfo.setTypeface(Typeface.create("sans-serif-black", Typeface.ITALIC));
+        }
+        if (ownerinfoFont == 18) {
+                mOwnerInfo.setTypeface(Typeface.create("cursive", Typeface.NORMAL));
+        }
+        if (ownerinfoFont == 19) {
+                mOwnerInfo.setTypeface(Typeface.create("cursive", Typeface.BOLD));
+        }
+        if (ownerinfoFont == 20) {
+                mOwnerInfo.setTypeface(Typeface.create("casual", Typeface.NORMAL));
+        }
+        if (ownerinfoFont == 21) {
+                mOwnerInfo.setTypeface(Typeface.create("serif", Typeface.NORMAL));
+        }
+        if (ownerinfoFont == 22) {
+                mOwnerInfo.setTypeface(Typeface.create("serif", Typeface.ITALIC));
+        }
+        if (ownerinfoFont == 23) {
+                mOwnerInfo.setTypeface(Typeface.create("serif", Typeface.BOLD));
+        }
+        if (ownerinfoFont == 24) {
+                mOwnerInfo.setTypeface(Typeface.create("serif", Typeface.BOLD_ITALIC));
+        }
+        if (ownerinfoFont == 25) {
+            mOwnerInfo.setTypeface(Typeface.create("gobold-light-sys", Typeface.NORMAL));
+        }
+        if (ownerinfoFont == 26) {
+            mOwnerInfo.setTypeface(Typeface.create("roadrage-sys", Typeface.NORMAL));
+        }
+        if (ownerinfoFont == 27) {
+            mOwnerInfo.setTypeface(Typeface.create("snowstorm-sys", Typeface.NORMAL));
+        }
+        if (ownerinfoFont == 28) {
+            mOwnerInfo.setTypeface(Typeface.create("googlesans-sys", Typeface.NORMAL));
+        }
+        if (ownerinfoFont == 29) {
+            mOwnerInfo.setTypeface(Typeface.create("neoneon-sys", Typeface.NORMAL));
+        }
+        if (ownerinfoFont == 30) {
+            mOwnerInfo.setTypeface(Typeface.create("themeable-sys", Typeface.NORMAL));
+        }
+        if (ownerinfoFont == 31) {
+            mOwnerInfo.setTypeface(Typeface.create("samsung-sys", Typeface.NORMAL));
+        }
     }
 
     // DateFormat.getBestDateTimePattern is extremely expensive, and refresh is called often.
