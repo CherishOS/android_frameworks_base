@@ -5232,6 +5232,66 @@ public final class Settings {
         public static final String LOCKCLOCK_FONT_SIZE = "lockclock_font_size";
 
         /**
+         * Change the color of the lockscreen clock
+         *
+         * @hide
+         */
+        public static final String LOCKSCREEN_CLOCK_COLOR = "lockscreen_clock_color";
+
+        /**
+         * Change the color of the lockscreen date underneath the clock
+         *
+         * @hide
+         */
+        public static final String LOCKSCREEN_CLOCK_DATE_COLOR = "lockscreen_clock_date_color";
+
+        /**
+         * Change the color of the lockscreen owner's info text
+         *
+         * @hide
+         */
+        public static final String LOCKSCREEN_OWNER_INFO_COLOR = "lockscreen_owner_info_color";
+
+         /**
+         * Change the color of the lockscreen bottom camera shortcut
+         *
+         * @hide
+         */
+        public static final String LOCKSCREEN_CAMERA_ICON_COLOR = "lockscreen_camera_icon_color";
+
+        /**
+         * Change the color of the lockscreen bottom phone shortcut
+         *
+         * @hide
+         */
+        public static final String LOCKSCREEN_PHONE_ICON_COLOR = "lockscreen_phone_icon_color";
+
+        /**
+         * Change the color of the lockscreen indication text
+         *
+         * @hide
+         */
+        public static final String LOCKSCREEN_INDICATION_TEXT_COLOR = "lockscreen_indication_text_color";
+
+        /**
+         * Color of the weather temperature the lock screen
+         * @hide
+         */
+        public static final String LOCK_SCREEN_WEATHER_TEMP_COLOR = "lock_screen_weather_temp_color";
+
+        /**
+         * Color of the weather city on the lock screen
+         * @hide
+         */
+        public static final String LOCK_SCREEN_WEATHER_CITY_COLOR = "lock_screen_weather_city_color";
+
+        /**
+         * Color of the weather condition icons on the lock screen
+         * @hide
+         */
+        public static final String LOCK_SCREEN_WEATHER_ICON_COLOR = "lock_screen_weather_icon_color";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
@@ -5393,6 +5453,15 @@ public final class Settings {
             PRIVATE_SETTINGS.add(LOCK_DATE_FONTS);
             PRIVATE_SETTINGS.add(LOCKDATE_FONT_SIZE);
             PRIVATE_SETTINGS.add(LOCKCLOCK_FONT_SIZE);
+            PRIVATE_SETTINGS.add(LOCKSCREEN_CLOCK_COLOR);
+            PRIVATE_SETTINGS.add(LOCKSCREEN_CLOCK_DATE_COLOR);
+            PRIVATE_SETTINGS.add(LOCKSCREEN_OWNER_INFO_COLOR);
+            PRIVATE_SETTINGS.add(LOCKSCREEN_CAMERA_ICON_COLOR);
+            PRIVATE_SETTINGS.add(LOCKSCREEN_PHONE_ICON_COLOR);
+            PRIVATE_SETTINGS.add(LOCKSCREEN_INDICATION_TEXT_COLOR);
+            PRIVATE_SETTINGS.add(LOCK_SCREEN_WEATHER_TEMP_COLOR);
+            PRIVATE_SETTINGS.add(LOCK_SCREEN_WEATHER_CITY_COLOR);
+            PRIVATE_SETTINGS.add(LOCK_SCREEN_WEATHER_ICON_COLOR);
         }
 
         /**
