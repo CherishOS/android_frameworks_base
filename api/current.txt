@@ -769,6 +769,7 @@ package android {
     field public static final int insetRight = 16843192; // 0x10101b8
     field public static final int insetTop = 16843193; // 0x10101b9
     field public static final int installLocation = 16843447; // 0x10102b7
+    field public static final int interactiveUiTimeout = 16844181; // 0x1010595
     field public static final int interpolator = 16843073; // 0x1010141
     field public static final int isAlwaysSyncable = 16843571; // 0x1010333
     field public static final int isAsciiCapable = 16843753; // 0x10103e9
@@ -941,7 +942,6 @@ package android {
     field public static final int minSdkVersion = 16843276; // 0x101020c
     field public static final int minWidth = 16843071; // 0x101013f
     field public static final int minimumHorizontalAngle = 16843901; // 0x101047d
-    field public static final int minimumUiTimeout = 16844175; // 0x101058f
     field public static final int minimumVerticalAngle = 16843902; // 0x101047e
     field public static final int mipMap = 16843725; // 0x10103cd
     field public static final int mirrorForRtl = 16843726; // 0x10103ce
@@ -965,6 +965,7 @@ package android {
     field public static final int nextFocusRight = 16842978; // 0x10100e2
     field public static final int nextFocusUp = 16842979; // 0x10100e3
     field public static final int noHistory = 16843309; // 0x101022d
+    field public static final int nonInteractiveUiTimeout = 16844175; // 0x101058f
     field public static final int normalScreens = 16843397; // 0x1010285
     field public static final int notificationTimeout = 16843651; // 0x1010383
     field public static final int numColumns = 16843032; // 0x1010118
@@ -2886,12 +2887,14 @@ package android.accessibilityservice {
     method public int getCapabilities();
     method public deprecated java.lang.String getDescription();
     method public java.lang.String getId();
-    method public int getMinimumUiTimeoutMillis();
+    method public int getInteractiveUiTimeoutMillis();
+    method public int getNonInteractiveUiTimeoutMillis();
     method public android.content.pm.ResolveInfo getResolveInfo();
     method public java.lang.String getSettingsActivityName();
     method public java.lang.String loadDescription(android.content.pm.PackageManager);
     method public java.lang.CharSequence loadSummary(android.content.pm.PackageManager);
-    method public void setMinimumUiTimeoutMillis(int);
+    method public void setInteractiveUiTimeoutMillis(int);
+    method public void setNonInteractiveUiTimeoutMillis(int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int CAPABILITY_CAN_CONTROL_MAGNIFICATION = 16; // 0x10
     field public static final int CAPABILITY_CAN_PERFORM_GESTURES = 32; // 0x20
@@ -50517,7 +50520,7 @@ package android.view.accessibility {
     method public deprecated java.util.List<android.content.pm.ServiceInfo> getAccessibilityServiceList();
     method public java.util.List<android.accessibilityservice.AccessibilityServiceInfo> getEnabledAccessibilityServiceList(int);
     method public java.util.List<android.accessibilityservice.AccessibilityServiceInfo> getInstalledAccessibilityServiceList();
-    method public int getMinimumUiTimeoutMillis();
+    method public int getRecommendedTimeoutMillis(int, int);
     method public void interrupt();
     method public static boolean isAccessibilityButtonSupported();
     method public boolean isEnabled();
@@ -50526,6 +50529,9 @@ package android.view.accessibility {
     method public boolean removeAccessibilityStateChangeListener(android.view.accessibility.AccessibilityManager.AccessibilityStateChangeListener);
     method public boolean removeTouchExplorationStateChangeListener(android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener);
     method public void sendAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
+    field public static final int FLAG_CONTENT_CONTROLS = 4; // 0x4
+    field public static final int FLAG_CONTENT_ICONS = 1; // 0x1
+    field public static final int FLAG_CONTENT_TEXT = 2; // 0x2
   }
 
   public static abstract interface AccessibilityManager.AccessibilityStateChangeListener {
