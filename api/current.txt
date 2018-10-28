@@ -283,7 +283,6 @@ package android {
     field public static final int allowBackup = 16843392; // 0x1010280
     field public static final int allowClearUserData = 16842757; // 0x1010005
     field public static final int allowEmbedded = 16843765; // 0x10103f5
-    field public static final int allowForceDark = 16844172; // 0x101058c
     field public static final int allowParallelSyncs = 16843570; // 0x1010332
     field public static final int allowSingleTap = 16843353; // 0x1010259
     field public static final int allowTaskReparenting = 16843268; // 0x1010204
@@ -638,6 +637,7 @@ package android {
     field public static final int fontVariationSettings = 16844144; // 0x1010570
     field public static final int fontWeight = 16844083; // 0x1010533
     field public static final int footerDividersEnabled = 16843311; // 0x101022f
+    field public static final int forceDarkAllowed = 16844172; // 0x101058c
     field public static final int forceHasOverlappingRendering = 16844065; // 0x1010521
     field public static final int foreground = 16843017; // 0x1010109
     field public static final int foregroundGravity = 16843264; // 0x1010200
@@ -5217,6 +5217,7 @@ package android.app {
     ctor public Notification(android.os.Parcel);
     method public android.app.Notification clone();
     method public int describeContents();
+    method public android.app.PendingIntent getAppOverlayIntent();
     method public int getBadgeIconType();
     method public java.lang.String getChannelId();
     method public java.lang.String getGroup();
@@ -5446,6 +5447,7 @@ package android.app {
     method public android.app.Notification.Style getStyle();
     method public static android.app.Notification.Builder recoverBuilder(android.content.Context, android.app.Notification);
     method public android.app.Notification.Builder setActions(android.app.Notification.Action...);
+    method public android.app.Notification.Builder setAppOverlayIntent(android.app.PendingIntent);
     method public android.app.Notification.Builder setAutoCancel(boolean);
     method public android.app.Notification.Builder setBadgeIconType(int);
     method public android.app.Notification.Builder setCategory(java.lang.String);
@@ -5663,6 +5665,7 @@ package android.app {
   public final class NotificationChannel implements android.os.Parcelable {
     ctor public NotificationChannel(java.lang.String, java.lang.CharSequence, int);
     method public boolean canBypassDnd();
+    method public boolean canOverlayApps();
     method public boolean canShowBadge();
     method public int describeContents();
     method public void enableLights(boolean);
@@ -5678,6 +5681,7 @@ package android.app {
     method public android.net.Uri getSound();
     method public long[] getVibrationPattern();
     method public boolean hasUserSetImportance();
+    method public void setAllowAppOverlay(boolean);
     method public void setBypassDnd(boolean);
     method public void setDescription(java.lang.String);
     method public void setGroup(java.lang.String);
@@ -5697,6 +5701,7 @@ package android.app {
 
   public final class NotificationChannelGroup implements android.os.Parcelable {
     ctor public NotificationChannelGroup(java.lang.String, java.lang.CharSequence);
+    method public boolean canOverlayApps();
     method public android.app.NotificationChannelGroup clone();
     method public int describeContents();
     method public java.util.List<android.app.NotificationChannel> getChannels();
@@ -5704,6 +5709,7 @@ package android.app {
     method public java.lang.String getId();
     method public java.lang.CharSequence getName();
     method public boolean isBlocked();
+    method public void setAllowAppOverlay(boolean);
     method public void setDescription(java.lang.String);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.NotificationChannelGroup> CREATOR;
@@ -16068,10 +16074,10 @@ package android.hardware.biometrics {
 
   public class BiometricManager {
     method public int canAuthenticate();
-    field public static final int ERROR_NONE = 0; // 0x0
-    field public static final int ERROR_NO_BIOMETRICS = 11; // 0xb
-    field public static final int ERROR_NO_HARDWARE = 12; // 0xc
-    field public static final int ERROR_UNAVAILABLE = 1; // 0x1
+    field public static final int BIOMETRIC_ERROR_NO_BIOMETRICS = 11; // 0xb
+    field public static final int BIOMETRIC_ERROR_NO_HARDWARE = 12; // 0xc
+    field public static final int BIOMETRIC_ERROR_UNAVAILABLE = 1; // 0x1
+    field public static final int BIOMETRIC_SUCCESS = 0; // 0x0
   }
 
   public class BiometricPrompt {
@@ -22662,6 +22668,7 @@ package android.media {
     method public boolean isBluetoothScoOn();
     method public boolean isMicrophoneMute();
     method public boolean isMusicActive();
+    method public static boolean isOffloadedPlaybackSupported(android.media.AudioFormat);
     method public boolean isSpeakerphoneOn();
     method public boolean isStreamMute(int);
     method public boolean isVolumeFixed();
@@ -22983,6 +22990,7 @@ package android.media {
     method public int getUnderrunCount();
     method public void pause() throws java.lang.IllegalStateException;
     method public void play() throws java.lang.IllegalStateException;
+    method public void registerStreamEventCallback(java.util.concurrent.Executor, android.media.AudioTrack.StreamEventCallback);
     method public void release();
     method public int reloadStaticData();
     method public void removeOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener);
@@ -23003,6 +23011,7 @@ package android.media {
     method public deprecated int setStereoVolume(float, float);
     method public int setVolume(float);
     method public void stop() throws java.lang.IllegalStateException;
+    method public void unregisterStreamEventCallback(android.media.AudioTrack.StreamEventCallback);
     method public int write(byte[], int, int);
     method public int write(byte[], int, int, int);
     method public int write(short[], int, int);
@@ -23036,6 +23045,7 @@ package android.media {
     method public android.media.AudioTrack.Builder setAudioAttributes(android.media.AudioAttributes) throws java.lang.IllegalArgumentException;
     method public android.media.AudioTrack.Builder setAudioFormat(android.media.AudioFormat) throws java.lang.IllegalArgumentException;
     method public android.media.AudioTrack.Builder setBufferSizeInBytes(int) throws java.lang.IllegalArgumentException;
+    method public android.media.AudioTrack.Builder setOffloadedPlayback(boolean);
     method public android.media.AudioTrack.Builder setPerformanceMode(int);
     method public android.media.AudioTrack.Builder setSessionId(int) throws java.lang.IllegalArgumentException;
     method public android.media.AudioTrack.Builder setTransferMode(int) throws java.lang.IllegalArgumentException;
@@ -23057,6 +23067,13 @@ package android.media {
   public static abstract deprecated interface AudioTrack.OnRoutingChangedListener implements android.media.AudioRouting.OnRoutingChangedListener {
     method public abstract void onRoutingChanged(android.media.AudioTrack);
     method public default void onRoutingChanged(android.media.AudioRouting);
+  }
+
+  public static abstract class AudioTrack.StreamEventCallback {
+    ctor public AudioTrack.StreamEventCallback();
+    method public void onDataRequest(android.media.AudioTrack, int);
+    method public void onPresentationEnded(android.media.AudioTrack);
+    method public void onTearDown(android.media.AudioTrack);
   }
 
   public class CamcorderProfile {
@@ -29742,8 +29759,7 @@ package android.opengl {
     field public static final int EGL_WINDOW_BIT = 4; // 0x4
   }
 
-  public class EGL15 {
-    ctor public EGL15();
+  public final class EGL15 {
     method public static int eglClientWaitSync(android.opengl.EGLDisplay, android.opengl.EGLSync, int, long);
     method public static android.opengl.EGLImage eglCreateImage(android.opengl.EGLDisplay, android.opengl.EGLContext, int, long, long[], int);
     method public static android.opengl.EGLSurface eglCreatePlatformPixmapSurface(android.opengl.EGLDisplay, android.opengl.EGLConfig, java.nio.Buffer, long[], int);
@@ -36791,11 +36807,14 @@ package android.provider {
     ctor public MediaStore();
     method public static android.net.Uri getDocumentUri(android.content.Context, android.net.Uri);
     method public static android.net.Uri getMediaScannerUri();
+    method public static android.net.Uri getMediaUri(android.content.Context, android.net.Uri);
     method public static java.lang.String getVersion(android.content.Context);
+    method public static java.lang.String getVolumeName(android.net.Uri);
     field public static final java.lang.String ACTION_IMAGE_CAPTURE = "android.media.action.IMAGE_CAPTURE";
     field public static final java.lang.String ACTION_IMAGE_CAPTURE_SECURE = "android.media.action.IMAGE_CAPTURE_SECURE";
     field public static final java.lang.String ACTION_VIDEO_CAPTURE = "android.media.action.VIDEO_CAPTURE";
     field public static final java.lang.String AUTHORITY = "media";
+    field public static final android.net.Uri AUTHORITY_URI;
     field public static final java.lang.String EXTRA_DURATION_LIMIT = "android.intent.extra.durationLimit";
     field public static final java.lang.String EXTRA_FINISH_ON_COMPLETION = "android.intent.extra.finishOnCompletion";
     field public static final java.lang.String EXTRA_FULL_SCREEN = "android.intent.extra.fullScreen";
@@ -42376,6 +42395,7 @@ package android.telephony {
     field public static final java.lang.String KEY_CALL_BARRING_VISIBILITY_BOOL = "call_barring_visibility_bool";
     field public static final java.lang.String KEY_CALL_FORWARDING_BLOCKS_WHILE_ROAMING_STRING_ARRAY = "call_forwarding_blocks_while_roaming_string_array";
     field public static final java.lang.String KEY_CARRIER_ALLOW_TURNOFF_IMS_BOOL = "carrier_allow_turnoff_ims_bool";
+    field public static final java.lang.String KEY_CARRIER_CALL_SCREENING_APP_STRING = "call_screening_app";
     field public static final java.lang.String KEY_CARRIER_DATA_CALL_PERMANENT_FAILURE_STRINGS = "carrier_data_call_permanent_failure_strings";
     field public static final java.lang.String KEY_CARRIER_DEFAULT_WFC_IMS_MODE_INT = "carrier_default_wfc_ims_mode_int";
     field public static final java.lang.String KEY_CARRIER_DEFAULT_WFC_IMS_ROAMING_MODE_INT = "carrier_default_wfc_ims_roaming_mode_int";
@@ -42568,6 +42588,7 @@ package android.telephony {
     method public int getLac();
     method public java.lang.String getMccString();
     method public java.lang.String getMncString();
+    method public java.lang.String getMobileNetworkOperator();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.CellIdentityTdscdma> CREATOR;
   }
@@ -43128,7 +43149,7 @@ package android.telephony {
     method public static int getDefaultSmsSubscriptionId();
     method public static int getDefaultSubscriptionId();
     method public static int getDefaultVoiceSubscriptionId();
-    method public java.util.List<android.telephony.SubscriptionInfo> getOpportunisticSubscriptions(int);
+    method public java.util.List<android.telephony.SubscriptionInfo> getOpportunisticSubscriptions();
     method public static int getSlotIndex(int);
     method public static int[] getSubscriptionIds(int);
     method public java.util.List<android.telephony.SubscriptionPlan> getSubscriptionPlans(int);
@@ -48508,6 +48529,7 @@ package android.view {
     method public final boolean isFocusableInTouchMode();
     method public boolean isFocused();
     method public final boolean isFocusedByDefault();
+    method public boolean isForceDarkAllowed();
     method public boolean isHapticFeedbackEnabled();
     method public boolean isHardwareAccelerated();
     method public boolean isHorizontalFadingEdgeEnabled();
@@ -48694,6 +48716,7 @@ package android.view {
     method public void setFocusable(int);
     method public void setFocusableInTouchMode(boolean);
     method public void setFocusedByDefault(boolean);
+    method public void setForceDarkAllowed(boolean);
     method public void setForeground(android.graphics.drawable.Drawable);
     method public void setForegroundGravity(int);
     method public void setForegroundTintList(android.content.res.ColorStateList);
