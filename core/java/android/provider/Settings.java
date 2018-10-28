@@ -5728,10 +5728,24 @@ public final class Settings {
          */
         public static final String LOCKSCREEN_WEATHER_SHOW_CITY = "lockscreen_weather_show_city";
 
-       /**
+        /**
          * @hide
          */
         public static final String LOCKSCREEN_WEATHER_SHOW_IMAGE = "lockscreen_weather_show_image";
+
+        /**
+	 * Change fonts for the system lockscreen weather temperature
+	 *
+	 * @hide
+	 */
+         public static final String LOCK_WEATHER_TEMP_FONTS = "lock_weather_temp_fonts";
+
+        /**
+	 * Change fonts for the system lockscreen weather city
+	 *
+	 * @hide
+	 */
+         public static final String LOCK_WEATHER_CITY_FONTS = "lock_weather_city_fonts";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
