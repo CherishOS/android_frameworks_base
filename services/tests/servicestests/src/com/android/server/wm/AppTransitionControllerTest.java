@@ -36,14 +36,14 @@ import org.junit.runner.RunWith;
 @SmallTest
 @Presubmit
 @RunWith(AndroidJUnit4.class)
-public class WindowSurfacePlacerTest extends WindowTestsBase {
+public class AppTransitionControllerTest extends WindowTestsBase {
 
-    private WindowSurfacePlacer mWindowSurfacePlacer;
+    private AppTransitionController mAppTransitionController;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        mWindowSurfacePlacer = new WindowSurfacePlacer(sWm);
+        mAppTransitionController = new AppTransitionController(sWm, mDisplayContent);
     }
 
     @Test
@@ -55,10 +55,11 @@ public class WindowSurfacePlacerTest extends WindowTestsBase {
                     WINDOWING_MODE_FULLSCREEN, ACTIVITY_TYPE_STANDARD);
             translucentOpening.setFillsParent(false);
             translucentOpening.setHidden(true);
-            sWm.mOpeningApps.add(behind);
-            sWm.mOpeningApps.add(translucentOpening);
+            mDisplayContent.mOpeningApps.add(behind);
+            mDisplayContent.mOpeningApps.add(translucentOpening);
             assertEquals(WindowManager.TRANSIT_TRANSLUCENT_ACTIVITY_OPEN,
-                    mWindowSurfacePlacer.maybeUpdateTransitToTranslucentAnim(TRANSIT_TASK_OPEN));
+                    mAppTransitionController.maybeUpdateTransitToTranslucentAnim(
+                            TRANSIT_TASK_OPEN));
         }
     }
 
@@ -70,9 +71,10 @@ public class WindowSurfacePlacerTest extends WindowTestsBase {
             final AppWindowToken translucentClosing = createAppWindowToken(mDisplayContent,
                     WINDOWING_MODE_FULLSCREEN, ACTIVITY_TYPE_STANDARD);
             translucentClosing.setFillsParent(false);
-            sWm.mClosingApps.add(translucentClosing);
+            mDisplayContent.mClosingApps.add(translucentClosing);
             assertEquals(WindowManager.TRANSIT_TRANSLUCENT_ACTIVITY_CLOSE,
-                    mWindowSurfacePlacer.maybeUpdateTransitToTranslucentAnim(TRANSIT_TASK_CLOSE));
+                    mAppTransitionController.maybeUpdateTransitToTranslucentAnim(
+                            TRANSIT_TASK_CLOSE));
         }
     }
 }
