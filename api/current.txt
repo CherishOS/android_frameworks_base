@@ -36900,6 +36900,7 @@ package android.provider {
 
   public final class MediaStore {
     ctor public MediaStore();
+    method public static java.util.Set<java.lang.String> getAllVolumeNames(android.content.Context);
     method public static android.net.Uri getDocumentUri(android.content.Context, android.net.Uri);
     method public static android.net.Uri getMediaScannerUri();
     method public static android.net.Uri getMediaUri(android.content.Context, android.net.Uri);
@@ -36907,9 +36908,12 @@ package android.provider {
     method public static java.lang.String getVolumeName(android.net.Uri);
     field public static final java.lang.String ACTION_IMAGE_CAPTURE = "android.media.action.IMAGE_CAPTURE";
     field public static final java.lang.String ACTION_IMAGE_CAPTURE_SECURE = "android.media.action.IMAGE_CAPTURE_SECURE";
+    field public static final java.lang.String ACTION_REVIEW = "android.provider.action.REVIEW";
+    field public static final java.lang.String ACTION_REVIEW_SECURE = "android.provider.action.REVIEW_SECURE";
     field public static final java.lang.String ACTION_VIDEO_CAPTURE = "android.media.action.VIDEO_CAPTURE";
     field public static final java.lang.String AUTHORITY = "media";
     field public static final android.net.Uri AUTHORITY_URI;
+    field public static final java.lang.String EXTRA_BRIGHTNESS = "android.provider.extra.BRIGHTNESS";
     field public static final java.lang.String EXTRA_DURATION_LIMIT = "android.intent.extra.durationLimit";
     field public static final java.lang.String EXTRA_FINISH_ON_COMPLETION = "android.intent.extra.finishOnCompletion";
     field public static final java.lang.String EXTRA_FULL_SCREEN = "android.intent.extra.fullScreen";
@@ -37035,7 +37039,7 @@ package android.provider {
   public static final class MediaStore.Audio.Media implements android.provider.MediaStore.Audio.AudioColumns {
     ctor public MediaStore.Audio.Media();
     method public static android.net.Uri getContentUri(java.lang.String);
-    method public static android.net.Uri getContentUriForPath(java.lang.String);
+    method public static deprecated android.net.Uri getContentUriForPath(java.lang.String);
     field public static final java.lang.String CONTENT_TYPE = "vnd.android.cursor.dir/audio";
     field public static final java.lang.String DEFAULT_SORT_ORDER = "title_key";
     field public static final java.lang.String ENTRY_CONTENT_TYPE = "vnd.android.cursor.item/audio";
@@ -37157,6 +37161,7 @@ package android.provider {
     field public static final java.lang.String DATE_ADDED = "date_added";
     field public static final java.lang.String DATE_MODIFIED = "date_modified";
     field public static final java.lang.String DISPLAY_NAME = "_display_name";
+    field public static final java.lang.String HASH = "_hash";
     field public static final java.lang.String HEIGHT = "height";
     field public static final java.lang.String MIME_TYPE = "mime_type";
     field public static final java.lang.String SIZE = "_size";
@@ -42607,6 +42612,7 @@ package android.telephony {
     field public static final java.lang.String KEY_SIM_NETWORK_UNLOCK_ALLOW_DISMISS_BOOL = "sim_network_unlock_allow_dismiss_bool";
     field public static final java.lang.String KEY_SMS_REQUIRES_DESTINATION_NUMBER_CONVERSION_BOOL = "sms_requires_destination_number_conversion_bool";
     field public static final java.lang.String KEY_SUPPORT_3GPP_CALL_FORWARDING_WHILE_ROAMING_BOOL = "support_3gpp_call_forwarding_while_roaming_bool";
+    field public static final java.lang.String KEY_SUPPORT_CLIR_NETWORK_DEFAULT_BOOL = "support_clir_network_default_bool";
     field public static final java.lang.String KEY_SUPPORT_CONFERENCE_CALL_BOOL = "support_conference_call_bool";
     field public static final java.lang.String KEY_SUPPORT_EMERGENCY_SMS_OVER_IMS_BOOL = "support_emergency_sms_over_ims_bool";
     field public static final java.lang.String KEY_SUPPORT_PAUSE_IMS_VIDEO_CALLS_BOOL = "support_pause_ims_video_calls_bool";
@@ -43010,6 +43016,7 @@ package android.telephony {
     field public static final int LISTEN_CELL_LOCATION = 16; // 0x10
     field public static final int LISTEN_DATA_ACTIVITY = 128; // 0x80
     field public static final int LISTEN_DATA_CONNECTION_STATE = 64; // 0x40
+    field public static final int LISTEN_EMERGENCY_NUMBER_LIST = 16777216; // 0x1000000
     field public static final int LISTEN_MESSAGE_WAITING_INDICATOR = 4; // 0x4
     field public static final int LISTEN_NONE = 0; // 0x0
     field public static final int LISTEN_SERVICE_STATE = 1; // 0x1
@@ -43320,6 +43327,8 @@ package android.telephony {
     method public int getCallState();
     method public android.os.PersistableBundle getCarrierConfig();
     method public deprecated android.telephony.CellLocation getCellLocation();
+    method public java.util.Map<java.lang.Integer, java.util.List<android.telephony.emergency.EmergencyNumber>> getCurrentEmergencyNumberList();
+    method public java.util.Map<java.lang.Integer, java.util.List<android.telephony.emergency.EmergencyNumber>> getCurrentEmergencyNumberList(int);
     method public int getDataActivity();
     method public int getDataNetworkType();
     method public int getDataState();
@@ -43373,6 +43382,7 @@ package android.telephony {
     method public java.lang.String iccTransmitApduBasicChannel(int, int, int, int, int, java.lang.String);
     method public java.lang.String iccTransmitApduLogicalChannel(int, int, int, int, int, int, java.lang.String);
     method public boolean isConcurrentVoiceAndDataSupported();
+    method public boolean isCurrentEmergencyNumber(java.lang.String);
     method public boolean isDataEnabled();
     method public boolean isDataRoamingEnabled();
     method public boolean isHearingAidCompatibilitySupported();
@@ -51428,6 +51438,99 @@ package android.view.inputmethod {
 
 package android.view.textclassifier {
 
+  public final class ConversationActions implements android.os.Parcelable {
+    ctor public ConversationActions(java.util.List<android.view.textclassifier.ConversationActions.ConversationAction>);
+    method public int describeContents();
+    method public java.util.List<android.view.textclassifier.ConversationActions.ConversationAction> getConversationActions();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions> CREATOR;
+    field public static final java.lang.String HINT_FOR_IN_APP = "in_app";
+    field public static final java.lang.String HINT_FOR_NOTIFICATION = "notification";
+    field public static final java.lang.String TYPE_CALL_PHONE = "call_phone";
+    field public static final java.lang.String TYPE_CREATE_REMINDER = "create_reminder";
+    field public static final java.lang.String TYPE_OPEN_URL = "open_url";
+    field public static final java.lang.String TYPE_SEND_EMAIL = "send_email";
+    field public static final java.lang.String TYPE_SEND_SMS = "send_sms";
+    field public static final java.lang.String TYPE_SHARE_LOCATION = "share_location";
+    field public static final java.lang.String TYPE_TEXT_REPLY = "text_reply";
+    field public static final java.lang.String TYPE_TRACK_FLIGHT = "track_flight";
+    field public static final java.lang.String TYPE_VIEW_CALENDAR = "view_calendar";
+    field public static final java.lang.String TYPE_VIEW_MAP = "view_map";
+  }
+
+  public static final class ConversationActions.ConversationAction implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.app.RemoteAction getAction();
+    method public float getConfidenceScore();
+    method public android.os.Bundle getExtras();
+    method public java.lang.CharSequence getTextReply();
+    method public java.lang.String getType();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions.ConversationAction> CREATOR;
+  }
+
+  public static final class ConversationActions.ConversationAction.Builder {
+    ctor public ConversationActions.ConversationAction.Builder(java.lang.String);
+    method public android.view.textclassifier.ConversationActions.ConversationAction build();
+    method public android.view.textclassifier.ConversationActions.ConversationAction.Builder setAction(android.app.RemoteAction);
+    method public android.view.textclassifier.ConversationActions.ConversationAction.Builder setConfidenceScore(float);
+    method public android.view.textclassifier.ConversationActions.ConversationAction.Builder setExtras(android.os.Bundle);
+    method public android.view.textclassifier.ConversationActions.ConversationAction.Builder setTextReply(java.lang.CharSequence);
+  }
+
+  public static final class ConversationActions.Message implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.app.Person getAuthor();
+    method public android.os.Bundle getExtras();
+    method public java.lang.CharSequence getText();
+    method public java.time.ZonedDateTime getTime();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions.Message> CREATOR;
+  }
+
+  public static final class ConversationActions.Message.Builder {
+    ctor public ConversationActions.Message.Builder();
+    method public android.view.textclassifier.ConversationActions.Message build();
+    method public android.view.textclassifier.ConversationActions.Message.Builder setAuthor(android.app.Person);
+    method public android.view.textclassifier.ConversationActions.Message.Builder setComposeTime(java.time.ZonedDateTime);
+    method public android.view.textclassifier.ConversationActions.Message.Builder setExtras(android.os.Bundle);
+    method public android.view.textclassifier.ConversationActions.Message.Builder setText(java.lang.CharSequence);
+  }
+
+  public static final class ConversationActions.Request implements android.os.Parcelable {
+    method public int describeContents();
+    method public java.util.List<android.view.textclassifier.ConversationActions.Message> getConversation();
+    method public java.util.List<java.lang.String> getHints();
+    method public int getMaxSuggestions();
+    method public android.view.textclassifier.ConversationActions.TypeConfig getTypeConfig();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions.Request> CREATOR;
+  }
+
+  public static final class ConversationActions.Request.Builder {
+    ctor public ConversationActions.Request.Builder(java.util.List<android.view.textclassifier.ConversationActions.Message>);
+    method public android.view.textclassifier.ConversationActions.Request build();
+    method public android.view.textclassifier.ConversationActions.Request.Builder setHints(java.util.List<java.lang.String>);
+    method public android.view.textclassifier.ConversationActions.Request.Builder setMaxSuggestions(int);
+    method public android.view.textclassifier.ConversationActions.Request.Builder setTypeConfig(android.view.textclassifier.ConversationActions.TypeConfig);
+  }
+
+  public static final class ConversationActions.TypeConfig implements android.os.Parcelable {
+    method public int describeContents();
+    method public java.util.Collection<java.lang.String> resolveTypes(java.util.Collection<java.lang.String>);
+    method public boolean shouldIncludeTypesFromTextClassifier();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions.TypeConfig> CREATOR;
+  }
+
+  public static final class ConversationActions.TypeConfig.Builder {
+    ctor public ConversationActions.TypeConfig.Builder();
+    method public android.view.textclassifier.ConversationActions.TypeConfig build();
+    method public android.view.textclassifier.ConversationActions.TypeConfig.Builder includeTypesFromTextClassifier(boolean);
+    method public android.view.textclassifier.ConversationActions.TypeConfig.Builder setExcludedTypes(java.util.Collection<java.lang.String>);
+    method public android.view.textclassifier.ConversationActions.TypeConfig.Builder setIncludedTypes(java.util.Collection<java.lang.String>);
+  }
+
   public final class SelectionEvent implements android.os.Parcelable {
     method public static android.view.textclassifier.SelectionEvent createSelectionActionEvent(int, int, int);
     method public static android.view.textclassifier.SelectionEvent createSelectionActionEvent(int, int, int, android.view.textclassifier.TextClassification);
@@ -51482,6 +51585,7 @@ package android.view.textclassifier {
     method public float getConfidenceScore(java.lang.String);
     method public java.lang.String getEntity(int);
     method public int getEntityCount();
+    method public android.os.Bundle getExtras();
     method public deprecated android.graphics.drawable.Drawable getIcon();
     method public java.lang.String getId();
     method public deprecated android.content.Intent getIntent();
@@ -51497,6 +51601,7 @@ package android.view.textclassifier {
     method public android.view.textclassifier.TextClassification.Builder addAction(android.app.RemoteAction);
     method public android.view.textclassifier.TextClassification build();
     method public android.view.textclassifier.TextClassification.Builder setEntityType(java.lang.String, float);
+    method public android.view.textclassifier.TextClassification.Builder setExtras(android.os.Bundle);
     method public deprecated android.view.textclassifier.TextClassification.Builder setIcon(android.graphics.drawable.Drawable);
     method public android.view.textclassifier.TextClassification.Builder setId(java.lang.String);
     method public deprecated android.view.textclassifier.TextClassification.Builder setIntent(android.content.Intent);
@@ -51509,6 +51614,7 @@ package android.view.textclassifier {
     method public int describeContents();
     method public android.os.LocaleList getDefaultLocales();
     method public int getEndIndex();
+    method public android.os.Bundle getExtras();
     method public java.time.ZonedDateTime getReferenceTime();
     method public int getStartIndex();
     method public java.lang.CharSequence getText();
@@ -51520,6 +51626,7 @@ package android.view.textclassifier {
     ctor public TextClassification.Request.Builder(java.lang.CharSequence, int, int);
     method public android.view.textclassifier.TextClassification.Request build();
     method public android.view.textclassifier.TextClassification.Request.Builder setDefaultLocales(android.os.LocaleList);
+    method public android.view.textclassifier.TextClassification.Request.Builder setExtras(android.os.Bundle);
     method public android.view.textclassifier.TextClassification.Request.Builder setReferenceTime(java.time.ZonedDateTime);
   }
 
@@ -51564,6 +51671,7 @@ package android.view.textclassifier {
     method public default int getMaxGenerateLinksTextLength();
     method public default boolean isDestroyed();
     method public default void onSelectionEvent(android.view.textclassifier.SelectionEvent);
+    method public default android.view.textclassifier.ConversationActions suggestConversationActions(android.view.textclassifier.ConversationActions.Request);
     method public default android.view.textclassifier.TextSelection suggestSelection(android.view.textclassifier.TextSelection.Request);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.os.LocaleList);
     field public static final java.lang.String HINT_TEXT_IS_EDITABLE = "android.text_is_editable";
