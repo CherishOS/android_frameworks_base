@@ -33173,6 +33173,7 @@ package android.os {
     field public static java.lang.String DIRECTORY_PICTURES;
     field public static java.lang.String DIRECTORY_PODCASTS;
     field public static java.lang.String DIRECTORY_RINGTONES;
+    field public static java.lang.String DIRECTORY_SCREENSHOTS;
     field public static final java.lang.String MEDIA_BAD_REMOVAL = "bad_removal";
     field public static final java.lang.String MEDIA_CHECKING = "checking";
     field public static final java.lang.String MEDIA_EJECTING = "ejecting";
@@ -36900,12 +36901,15 @@ package android.provider {
 
   public final class MediaStore {
     ctor public MediaStore();
+    method public static android.net.Uri createPending(android.content.Context, android.provider.MediaStore.PendingParams);
     method public static java.util.Set<java.lang.String> getAllVolumeNames(android.content.Context);
     method public static android.net.Uri getDocumentUri(android.content.Context, android.net.Uri);
     method public static android.net.Uri getMediaScannerUri();
     method public static android.net.Uri getMediaUri(android.content.Context, android.net.Uri);
     method public static java.lang.String getVersion(android.content.Context);
     method public static java.lang.String getVolumeName(android.net.Uri);
+    method public static android.provider.MediaStore.PendingSession openPending(android.content.Context, android.net.Uri);
+    method public static android.net.Uri setIncludePending(android.net.Uri);
     field public static final java.lang.String ACTION_IMAGE_CAPTURE = "android.media.action.IMAGE_CAPTURE";
     field public static final java.lang.String ACTION_IMAGE_CAPTURE_SECURE = "android.media.action.IMAGE_CAPTURE_SECURE";
     field public static final java.lang.String ACTION_REVIEW = "android.provider.action.REVIEW";
@@ -37163,10 +37167,27 @@ package android.provider {
     field public static final java.lang.String DISPLAY_NAME = "_display_name";
     field public static final java.lang.String HASH = "_hash";
     field public static final java.lang.String HEIGHT = "height";
+    field public static final java.lang.String IS_PENDING = "is_pending";
     field public static final java.lang.String MIME_TYPE = "mime_type";
+    field public static final java.lang.String OWNER_PACKAGE_NAME = "owner_package_name";
     field public static final java.lang.String SIZE = "_size";
     field public static final java.lang.String TITLE = "title";
     field public static final java.lang.String WIDTH = "width";
+  }
+
+  public static class MediaStore.PendingParams {
+    ctor public MediaStore.PendingParams(android.net.Uri, java.lang.String, java.lang.String);
+    method public void setPrimaryDirectory(java.lang.String);
+    method public void setSecondaryDirectory(java.lang.String);
+  }
+
+  public static class MediaStore.PendingSession implements java.lang.AutoCloseable {
+    method public void abandon();
+    method public void close();
+    method public void notifyProgress(int);
+    method public android.os.ParcelFileDescriptor open() throws java.io.FileNotFoundException;
+    method public java.io.OutputStream openOutputStream() throws java.io.FileNotFoundException;
+    method public android.net.Uri publish();
   }
 
   public static final class MediaStore.Video {
