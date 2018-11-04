@@ -1209,6 +1209,7 @@ package android {
     field public static final int shareInterpolator = 16843195; // 0x10101bb
     field public static final int sharedUserId = 16842763; // 0x101000b
     field public static final int sharedUserLabel = 16843361; // 0x1010261
+    field public static final int shell = 16844180; // 0x1010594
     field public static final int shortcutDisabledMessage = 16844075; // 0x101052b
     field public static final int shortcutId = 16844072; // 0x1010528
     field public static final int shortcutLongLabel = 16844074; // 0x101052a
@@ -10833,6 +10834,7 @@ package android.content.pm {
     method public int describeContents();
     method public void dump(android.util.Printer, java.lang.String);
     method public static java.lang.CharSequence getCategoryTitle(android.content.Context, int);
+    method public boolean isProfileableByShell();
     method public boolean isVirtualPreload();
     method public java.lang.CharSequence loadDescription(android.content.pm.PackageManager);
     field public static final int CATEGORY_AUDIO = 1; // 0x1
@@ -22925,6 +22927,8 @@ package android.media {
     method public java.util.Map<java.util.Locale, java.lang.String> getLabels();
     method public java.util.Locale getLocale();
     method public int getMasteringIndication();
+    method public int getPresentationId();
+    method public int getProgramId();
     method public boolean hasAudioDescription();
     method public boolean hasDialogueEnhancement();
     method public boolean hasSpokenSubtitles();
@@ -22933,6 +22937,18 @@ package android.media {
     field public static final int MASTERED_FOR_STEREO = 1; // 0x1
     field public static final int MASTERED_FOR_SURROUND = 2; // 0x2
     field public static final int MASTERING_NOT_INDICATED = 0; // 0x0
+  }
+
+  public static class AudioPresentation.Builder {
+    ctor public AudioPresentation.Builder(int);
+    method public android.media.AudioPresentation build();
+    method public android.media.AudioPresentation.Builder setHasAudioDescription(boolean);
+    method public android.media.AudioPresentation.Builder setHasDialogueEnhancement(boolean);
+    method public android.media.AudioPresentation.Builder setHasSpokenSubtitles(boolean);
+    method public android.media.AudioPresentation.Builder setLabels(java.util.Map<android.icu.util.ULocale, java.lang.String>);
+    method public android.media.AudioPresentation.Builder setLocale(android.icu.util.ULocale);
+    method public android.media.AudioPresentation.Builder setMasteringIndication(int);
+    method public android.media.AudioPresentation.Builder setProgramId(int);
   }
 
   public class AudioRecord implements android.media.AudioRouting {
@@ -33173,6 +33189,7 @@ package android.os {
     field public static java.lang.String DIRECTORY_PICTURES;
     field public static java.lang.String DIRECTORY_PODCASTS;
     field public static java.lang.String DIRECTORY_RINGTONES;
+    field public static java.lang.String DIRECTORY_SCREENSHOTS;
     field public static final java.lang.String MEDIA_BAD_REMOVAL = "bad_removal";
     field public static final java.lang.String MEDIA_CHECKING = "checking";
     field public static final java.lang.String MEDIA_EJECTING = "ejecting";
@@ -36816,6 +36833,7 @@ package android.provider {
     method public android.database.Cursor queryChildDocuments(java.lang.String, java.lang.String[], android.os.Bundle) throws java.io.FileNotFoundException;
     method public abstract android.database.Cursor queryDocument(java.lang.String, java.lang.String[]) throws java.io.FileNotFoundException;
     method public android.database.Cursor queryRecentDocuments(java.lang.String, java.lang.String[]) throws java.io.FileNotFoundException;
+    method public android.database.Cursor queryRecentDocuments(java.lang.String, java.lang.String[], android.os.Bundle, android.os.CancellationSignal) throws java.io.FileNotFoundException;
     method public abstract android.database.Cursor queryRoots(java.lang.String[]) throws java.io.FileNotFoundException;
     method public android.database.Cursor querySearchDocuments(java.lang.String, java.lang.String, java.lang.String[]) throws java.io.FileNotFoundException;
     method public void removeDocument(java.lang.String, java.lang.String) throws java.io.FileNotFoundException;
@@ -36900,12 +36918,15 @@ package android.provider {
 
   public final class MediaStore {
     ctor public MediaStore();
+    method public static android.net.Uri createPending(android.content.Context, android.provider.MediaStore.PendingParams);
     method public static java.util.Set<java.lang.String> getAllVolumeNames(android.content.Context);
     method public static android.net.Uri getDocumentUri(android.content.Context, android.net.Uri);
     method public static android.net.Uri getMediaScannerUri();
     method public static android.net.Uri getMediaUri(android.content.Context, android.net.Uri);
     method public static java.lang.String getVersion(android.content.Context);
     method public static java.lang.String getVolumeName(android.net.Uri);
+    method public static android.provider.MediaStore.PendingSession openPending(android.content.Context, android.net.Uri);
+    method public static android.net.Uri setIncludePending(android.net.Uri);
     field public static final java.lang.String ACTION_IMAGE_CAPTURE = "android.media.action.IMAGE_CAPTURE";
     field public static final java.lang.String ACTION_IMAGE_CAPTURE_SECURE = "android.media.action.IMAGE_CAPTURE_SECURE";
     field public static final java.lang.String ACTION_REVIEW = "android.provider.action.REVIEW";
@@ -37163,10 +37184,27 @@ package android.provider {
     field public static final java.lang.String DISPLAY_NAME = "_display_name";
     field public static final java.lang.String HASH = "_hash";
     field public static final java.lang.String HEIGHT = "height";
+    field public static final java.lang.String IS_PENDING = "is_pending";
     field public static final java.lang.String MIME_TYPE = "mime_type";
+    field public static final java.lang.String OWNER_PACKAGE_NAME = "owner_package_name";
     field public static final java.lang.String SIZE = "_size";
     field public static final java.lang.String TITLE = "title";
     field public static final java.lang.String WIDTH = "width";
+  }
+
+  public static class MediaStore.PendingParams {
+    ctor public MediaStore.PendingParams(android.net.Uri, java.lang.String, java.lang.String);
+    method public void setPrimaryDirectory(java.lang.String);
+    method public void setSecondaryDirectory(java.lang.String);
+  }
+
+  public static class MediaStore.PendingSession implements java.lang.AutoCloseable {
+    method public void abandon();
+    method public void close();
+    method public void notifyProgress(int);
+    method public android.os.ParcelFileDescriptor open() throws java.io.FileNotFoundException;
+    method public java.io.OutputStream openOutputStream() throws java.io.FileNotFoundException;
+    method public android.net.Uri publish();
   }
 
   public static final class MediaStore.Video {
@@ -41651,6 +41689,7 @@ package android.telecom {
     field public static final int PROPERTY_NETWORK_IDENTIFIED_EMERGENCY_CALL = 2048; // 0x800
     field public static final int PROPERTY_RTT = 1024; // 0x400
     field public static final int PROPERTY_SELF_MANAGED = 256; // 0x100
+    field public static final int PROPERTY_VOIP_AUDIO_MODE = 4096; // 0x1000
     field public static final int PROPERTY_WIFI = 8; // 0x8
   }
 
@@ -42803,6 +42842,7 @@ package android.telephony {
     method public int getLevel();
     method public int getRsrp();
     method public int getRsrq();
+    method public int getRssi();
     method public int getRssnr();
     method public int getTimingAdvance();
     method public void writeToParcel(android.os.Parcel, int);
@@ -43082,6 +43122,7 @@ package android.telephony {
     method public int getLevel();
     method public boolean isGsm();
     method public void writeToParcel(android.os.Parcel, int);
+    field public static final int INVALID = 2147483647; // 0x7fffffff
   }
 
   public final class SmsManager {
@@ -45850,6 +45891,7 @@ package android.transition {
     ctor public deprecated Scene(android.view.ViewGroup, android.view.ViewGroup);
     method public void enter();
     method public void exit();
+    method public static android.transition.Scene getCurrentScene(android.view.View);
     method public static android.transition.Scene getSceneForLayout(android.view.ViewGroup, int, android.content.Context);
     method public android.view.ViewGroup getSceneRoot();
     method public void setEnterAction(java.lang.Runnable);
@@ -48335,6 +48377,7 @@ package android.view {
     ctor public TouchDelegate(android.graphics.Rect, android.view.View);
     method public android.view.accessibility.AccessibilityNodeInfo.TouchDelegateInfo getTouchDelegateInfo();
     method public boolean onTouchEvent(android.view.MotionEvent);
+    method public boolean onTouchExplorationHoverEvent(android.view.MotionEvent);
     field public static final int ABOVE = 1; // 0x1
     field public static final int BELOW = 2; // 0x2
     field public static final int TO_LEFT = 4; // 0x4
@@ -54400,6 +54443,7 @@ package android.widget {
     method public void setLong(int, java.lang.String, long);
     method public void setOnClickFillInIntent(int, android.content.Intent);
     method public void setOnClickPendingIntent(int, android.app.PendingIntent);
+    method public void setOnClickResponse(int, android.widget.RemoteViews.RemoteResponse);
     method public void setPendingIntentTemplate(int, android.app.PendingIntent);
     method public void setProgressBar(int, int, int, boolean);
     method public void setRelativeScrollPosition(int, int);
@@ -54420,11 +54464,19 @@ package android.widget {
     method public void showPrevious(int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.widget.RemoteViews> CREATOR;
+    field public static final java.lang.String EXTRA_SHARED_ELEMENT_BOUNDS = "android.widget.extra.SHARED_ELEMENT_BOUNDS";
   }
 
   public static class RemoteViews.ActionException extends java.lang.RuntimeException {
     ctor public RemoteViews.ActionException(java.lang.Exception);
     ctor public RemoteViews.ActionException(java.lang.String);
+  }
+
+  public static class RemoteViews.RemoteResponse {
+    ctor public RemoteViews.RemoteResponse();
+    method public android.widget.RemoteViews.RemoteResponse addSharedElement(int, java.lang.String);
+    method public static android.widget.RemoteViews.RemoteResponse fromFillInIntent(android.content.Intent);
+    method public static android.widget.RemoteViews.RemoteResponse fromPendingIntent(android.app.PendingIntent);
   }
 
   public static abstract class RemoteViews.RemoteView implements java.lang.annotation.Annotation {
@@ -55023,6 +55075,9 @@ package android.widget {
     method public android.os.LocaleList getTextLocales();
     method public android.text.PrecomputedText.Params getTextMetricsParams();
     method public float getTextScaleX();
+    method public android.graphics.drawable.Drawable getTextSelectHandle();
+    method public android.graphics.drawable.Drawable getTextSelectHandleLeft();
+    method public android.graphics.drawable.Drawable getTextSelectHandleRight();
     method public float getTextSize();
     method public int getTotalPaddingBottom();
     method public int getTotalPaddingEnd();
@@ -55151,6 +55206,12 @@ package android.widget {
     method public void setTextLocales(android.os.LocaleList);
     method public void setTextMetricsParams(android.text.PrecomputedText.Params);
     method public void setTextScaleX(float);
+    method public void setTextSelectHandle(android.graphics.drawable.Drawable);
+    method public void setTextSelectHandle(int);
+    method public void setTextSelectHandleLeft(android.graphics.drawable.Drawable);
+    method public void setTextSelectHandleLeft(int);
+    method public void setTextSelectHandleRight(android.graphics.drawable.Drawable);
+    method public void setTextSelectHandleRight(int);
     method public void setTextSize(float);
     method public void setTextSize(int, float);
     method public final void setTransformationMethod(android.text.method.TransformationMethod);
