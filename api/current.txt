@@ -13434,6 +13434,7 @@ package android.graphics {
     method public boolean clipRect(float, float, float, float);
     method public boolean clipRect(int, int, int, int);
     method public void concat(android.graphics.Matrix);
+    method public void disableZ();
     method public void drawARGB(int, int, int, int);
     method public void drawArc(android.graphics.RectF, float, float, boolean, android.graphics.Paint);
     method public void drawArc(float, float, float, float, float, float, boolean, android.graphics.Paint);
@@ -13468,6 +13469,7 @@ package android.graphics {
     method public void drawRect(android.graphics.RectF, android.graphics.Paint);
     method public void drawRect(android.graphics.Rect, android.graphics.Paint);
     method public void drawRect(float, float, float, float, android.graphics.Paint);
+    method public void drawRenderNode(android.graphics.RenderNode);
     method public void drawRoundRect(android.graphics.RectF, float, float, android.graphics.Paint);
     method public void drawRoundRect(float, float, float, float, float, float, android.graphics.Paint);
     method public void drawText(char[], int, int, float, float, android.graphics.Paint);
@@ -13479,6 +13481,7 @@ package android.graphics {
     method public void drawTextRun(char[], int, int, int, int, float, float, boolean, android.graphics.Paint);
     method public void drawTextRun(java.lang.CharSequence, int, int, int, int, float, float, boolean, android.graphics.Paint);
     method public void drawVertices(android.graphics.Canvas.VertexMode, int, float[], int, float[], int, int[], int, short[], int, int, android.graphics.Paint);
+    method public void enableZ();
     method public boolean getClipBounds(android.graphics.Rect);
     method public final android.graphics.Rect getClipBounds();
     method public int getDensity();
@@ -14468,6 +14471,9 @@ package android.graphics {
     ctor public RadialGradient(float, float, float, int, int, android.graphics.Shader.TileMode);
   }
 
+  public final class RecordingCanvas extends android.graphics.Canvas {
+  }
+
   public final class Rect implements android.os.Parcelable {
     ctor public Rect();
     ctor public Rect(int, int, int, int);
@@ -14604,6 +14610,77 @@ package android.graphics {
     method public final boolean next(android.graphics.Rect);
   }
 
+  public class RenderNode {
+    method public int computeApproximateMemoryUsage();
+    method public static android.graphics.RenderNode create(java.lang.String);
+    method public void discardDisplayList();
+    method public void endRecording();
+    method public float getAlpha();
+    method public int getAmbientShadowColor();
+    method public int getBottom();
+    method public float getCameraDistance();
+    method public boolean getClipToOutline();
+    method public float getElevation();
+    method public int getHeight();
+    method public void getInverseMatrix(android.graphics.Matrix);
+    method public int getLeft();
+    method public void getMatrix(android.graphics.Matrix);
+    method public float getPivotX();
+    method public float getPivotY();
+    method public int getRight();
+    method public float getRotation();
+    method public float getRotationX();
+    method public float getRotationY();
+    method public float getScaleX();
+    method public float getScaleY();
+    method public int getSpotShadowColor();
+    method public int getTop();
+    method public float getTranslationX();
+    method public float getTranslationY();
+    method public float getTranslationZ();
+    method public int getWidth();
+    method public boolean hasDisplayList();
+    method public boolean hasIdentityMatrix();
+    method public boolean hasOverlappingRendering();
+    method public boolean hasShadow();
+    method public boolean isForceDarkAllowed();
+    method public boolean isPivotExplicitlySet();
+    method public boolean offsetLeftAndRight(int);
+    method public boolean offsetTopAndBottom(int);
+    method public boolean resetPivot();
+    method public boolean setAlpha(float);
+    method public boolean setAmbientShadowColor(int);
+    method public boolean setBottom(int);
+    method public boolean setCameraDistance(float);
+    method public boolean setClipBounds(android.graphics.Rect);
+    method public boolean setClipToBounds(boolean);
+    method public boolean setClipToOutline(boolean);
+    method public boolean setElevation(float);
+    method public boolean setForceDarkAllowed(boolean);
+    method public boolean setHasOverlappingRendering(boolean);
+    method public boolean setLeft(int);
+    method public boolean setLeftTopRightBottom(int, int, int, int);
+    method public boolean setOutline(android.graphics.Outline);
+    method public boolean setPivotX(float);
+    method public boolean setPivotY(float);
+    method public boolean setProjectBackwards(boolean);
+    method public boolean setProjectionReceiver(boolean);
+    method public boolean setRight(int);
+    method public boolean setRotation(float);
+    method public boolean setRotationX(float);
+    method public boolean setRotationY(float);
+    method public boolean setScaleX(float);
+    method public boolean setScaleY(float);
+    method public boolean setSpotShadowColor(int);
+    method public boolean setTop(int);
+    method public boolean setTranslationX(float);
+    method public boolean setTranslationY(float);
+    method public boolean setTranslationZ(float);
+    method public boolean setUseCompositingLayer(boolean, android.graphics.Paint);
+    method public android.graphics.RecordingCanvas startRecording(int, int);
+    method public android.graphics.RecordingCanvas startRecording();
+  }
+
   public class Shader {
     ctor public deprecated Shader();
     method public boolean getLocalMatrix(android.graphics.Matrix);
@@ -14694,8 +14771,7 @@ package android.graphics {
     ctor public Typeface.CustomFallbackBuilder(android.graphics.fonts.FontFamily);
     method public android.graphics.Typeface build();
     method public android.graphics.Typeface.CustomFallbackBuilder setFallback(java.lang.String);
-    method public android.graphics.Typeface.CustomFallbackBuilder setItalic(boolean);
-    method public android.graphics.Typeface.CustomFallbackBuilder setWeight(int);
+    method public android.graphics.Typeface.CustomFallbackBuilder setStyle(android.graphics.fonts.FontStyle);
   }
 
   public class Xfermode {
@@ -15340,9 +15416,8 @@ package android.graphics.fonts {
     method public java.nio.ByteBuffer getBuffer();
     method public java.io.File getFile();
     method public android.os.LocaleList getLocaleList();
-    method public int getSlant();
+    method public android.graphics.fonts.FontStyle getStyle();
     method public int getTtcIndex();
-    method public int getWeight();
   }
 
   public static class Font.Builder {
@@ -22714,6 +22789,7 @@ package android.media {
     field public static final int ENCODING_AC3 = 5; // 0x5
     field public static final int ENCODING_AC4 = 17; // 0x11
     field public static final int ENCODING_DEFAULT = 1; // 0x1
+    field public static final int ENCODING_DOLBY_MAT = 19; // 0x13
     field public static final int ENCODING_DOLBY_TRUEHD = 14; // 0xe
     field public static final int ENCODING_DTS = 7; // 0x7
     field public static final int ENCODING_DTS_HD = 8; // 0x8
@@ -34041,6 +34117,7 @@ package android.os {
     field public static final java.lang.String DISALLOW_INSTALL_APPS = "no_install_apps";
     field public static final java.lang.String DISALLOW_INSTALL_UNKNOWN_SOURCES = "no_install_unknown_sources";
     field public static final java.lang.String DISALLOW_INSTALL_UNKNOWN_SOURCES_GLOBALLY = "no_install_unknown_sources_globally";
+    field public static final java.lang.String DISALLOW_INTELLIGENCE_CAPTURE = "no_intelligence_capture";
     field public static final java.lang.String DISALLOW_MODIFY_ACCOUNTS = "no_modify_accounts";
     field public static final java.lang.String DISALLOW_MOUNT_PHYSICAL_MEDIA = "no_physical_media";
     field public static final java.lang.String DISALLOW_NETWORK_RESET = "no_network_reset";
@@ -37291,6 +37368,7 @@ package android.provider {
     field public static final java.lang.String ACTION_APPLICATION_SETTINGS = "android.settings.APPLICATION_SETTINGS";
     field public static final java.lang.String ACTION_APP_NOTIFICATION_SETTINGS = "android.settings.APP_NOTIFICATION_SETTINGS";
     field public static final java.lang.String ACTION_APP_SEARCH_SETTINGS = "android.settings.APP_SEARCH_SETTINGS";
+    field public static final java.lang.String ACTION_APP_USAGE_SETTINGS = "android.settings.action.APP_USAGE_SETTINGS";
     field public static final java.lang.String ACTION_BATTERY_SAVER_SETTINGS = "android.settings.BATTERY_SAVER_SETTINGS";
     field public static final java.lang.String ACTION_BLUETOOTH_SETTINGS = "android.settings.BLUETOOTH_SETTINGS";
     field public static final java.lang.String ACTION_CAPTIONING_SETTINGS = "android.settings.CAPTIONING_SETTINGS";
@@ -42316,6 +42394,7 @@ package android.telecom {
     method public java.lang.String getVoiceMailNumber(android.telecom.PhoneAccountHandle);
     method public boolean handleMmi(java.lang.String);
     method public boolean handleMmi(java.lang.String, android.telecom.PhoneAccountHandle);
+    method public boolean isDefaultCallScreeningApp(android.content.ComponentName);
     method public boolean isInCall();
     method public boolean isInManagedCall();
     method public boolean isIncomingCallPermitted(android.telecom.PhoneAccountHandle);
@@ -42324,12 +42403,14 @@ package android.telecom {
     method public boolean isVoiceMailNumber(android.telecom.PhoneAccountHandle, java.lang.String);
     method public void placeCall(android.net.Uri, android.os.Bundle);
     method public void registerPhoneAccount(android.telecom.PhoneAccount);
+    method public void requestChangeDefaultCallScreeningApp(android.content.ComponentName);
     method public void showInCallScreen(boolean);
     method public void silenceRinger();
     method public void unregisterPhoneAccount(android.telecom.PhoneAccountHandle);
     field public static final java.lang.String ACTION_CHANGE_DEFAULT_DIALER = "android.telecom.action.CHANGE_DEFAULT_DIALER";
     field public static final java.lang.String ACTION_CHANGE_PHONE_ACCOUNTS = "android.telecom.action.CHANGE_PHONE_ACCOUNTS";
     field public static final java.lang.String ACTION_CONFIGURE_PHONE_ACCOUNT = "android.telecom.action.CONFIGURE_PHONE_ACCOUNT";
+    field public static final java.lang.String ACTION_DEFAULT_CALL_SCREENING_APP_CHANGED = "android.telecom.action.DEFAULT_CALL_SCREENING_APP_CHANGED";
     field public static final java.lang.String ACTION_DEFAULT_DIALER_CHANGED = "android.telecom.action.DEFAULT_DIALER_CHANGED";
     field public static final deprecated java.lang.String ACTION_INCOMING_CALL = "android.telecom.action.INCOMING_CALL";
     field public static final java.lang.String ACTION_PHONE_ACCOUNT_REGISTERED = "android.telecom.action.PHONE_ACCOUNT_REGISTERED";
@@ -42346,9 +42427,11 @@ package android.telecom {
     field public static final java.lang.String EXTRA_CALL_NETWORK_TYPE = "android.telecom.extra.CALL_NETWORK_TYPE";
     field public static final java.lang.String EXTRA_CALL_SUBJECT = "android.telecom.extra.CALL_SUBJECT";
     field public static final java.lang.String EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME = "android.telecom.extra.CHANGE_DEFAULT_DIALER_PACKAGE_NAME";
+    field public static final java.lang.String EXTRA_DEFAULT_CALL_SCREENING_APP_COMPONENT_NAME = "android.telecom.extra.DEFAULT_CALL_SCREENING_APP_COMPONENT_NAME";
     field public static final java.lang.String EXTRA_INCOMING_CALL_ADDRESS = "android.telecom.extra.INCOMING_CALL_ADDRESS";
     field public static final java.lang.String EXTRA_INCOMING_CALL_EXTRAS = "android.telecom.extra.INCOMING_CALL_EXTRAS";
     field public static final java.lang.String EXTRA_INCOMING_VIDEO_STATE = "android.telecom.extra.INCOMING_VIDEO_STATE";
+    field public static final java.lang.String EXTRA_IS_DEFAULT_CALL_SCREENING_APP = "android.telecom.extra.IS_DEFAULT_CALL_SCREENING_APP";
     field public static final java.lang.String EXTRA_NOTIFICATION_COUNT = "android.telecom.extra.NOTIFICATION_COUNT";
     field public static final java.lang.String EXTRA_NOTIFICATION_PHONE_NUMBER = "android.telecom.extra.NOTIFICATION_PHONE_NUMBER";
     field public static final java.lang.String EXTRA_OUTGOING_CALL_EXTRAS = "android.telecom.extra.OUTGOING_CALL_EXTRAS";
@@ -51475,6 +51558,17 @@ package android.view.inputmethod {
     method public android.view.inputmethod.InputMethodSubtype.InputMethodSubtypeBuilder setSubtypeLocale(java.lang.String);
     method public android.view.inputmethod.InputMethodSubtype.InputMethodSubtypeBuilder setSubtypeMode(java.lang.String);
     method public android.view.inputmethod.InputMethodSubtype.InputMethodSubtypeBuilder setSubtypeNameResId(int);
+  }
+
+}
+
+package android.view.intelligence {
+
+  public final class IntelligenceManager {
+    method public void disableContentCapture();
+    method public android.content.ComponentName getIntelligenceServiceComponentName();
+    method public boolean isContentCaptureEnabled();
+    field public static final int FLAG_USER_INPUT = 1; // 0x1
   }
 
 }
