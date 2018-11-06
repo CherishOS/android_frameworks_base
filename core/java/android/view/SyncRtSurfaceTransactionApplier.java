@@ -11,24 +11,22 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License
+ * limitations under the License.
  */
 
-package com.android.systemui.shared.system;
+package android.view;
 
-import android.graphics.HardwareRenderer;
 import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.view.Surface;
-import android.view.SurfaceControl;
 import android.view.SurfaceControl.Transaction;
-import android.view.View;
-import android.view.ViewRootImpl;
+
+import com.android.internal.annotations.VisibleForTesting;
 
 import java.util.function.Consumer;
 
 /**
  * Helper class to apply surface transactions in sync with RenderThread.
+ * @hide
  */
 public class SyncRtSurfaceTransactionApplier {
 
@@ -54,30 +52,32 @@ public class SyncRtSurfaceTransactionApplier {
         if (mTargetViewRootImpl == null) {
             return;
         }
-        mTargetViewRootImpl.registerRtFrameCallback(new HardwareRenderer.FrameDrawingCallback() {
-            @Override
-            public void onFrameDraw(long frame) {
-                if (mTargetSurface == null || !mTargetSurface.isValid()) {
-                    return;
-                }
-                Transaction t = new Transaction();
-                for (int i = params.length - 1; i >= 0; i--) {
-                    SurfaceParams surfaceParams = params[i];
-                    SurfaceControl surface = surfaceParams.surface;
-                    t.deferTransactionUntilSurface(surface, mTargetSurface, frame);
-                    applyParams(t, surfaceParams, mTmpFloat9);
-                }
-                t.setEarlyWakeup();
-                t.apply();
+        mTargetViewRootImpl.registerRtFrameCallback(frame -> {
+            if (mTargetSurface == null || !mTargetSurface.isValid()) {
+                return;
             }
+            Transaction t = new Transaction();
+            for (int i = params.length - 1; i >= 0; i--) {
+                SurfaceParams surfaceParams = params[i];
+                SurfaceControl surface = surfaceParams.surface;
+                t.deferTransactionUntilSurface(surface, mTargetSurface, frame);
+                applyParams(t, surfaceParams, mTmpFloat9);
+            }
+            t.setEarlyWakeup();
+            t.apply();
         });
 
         // Make sure a frame gets scheduled.
         mTargetViewRootImpl.getView().invalidate();
     }
 
-    public static void applyParams(TransactionCompat t, SurfaceParams params) {
-        applyParams(t.mTransaction, params, t.mTmpValues);
+    public static void applyParams(Transaction t, SurfaceParams params, float[] tmpFloat9) {
+        t.setMatrix(params.surface, params.matrix, tmpFloat9);
+        t.setWindowCrop(params.surface, params.windowCrop);
+        t.setAlpha(params.surface, params.alpha);
+        t.setLayer(params.surface, params.layer);
+        t.setCornerRadius(params.surface, params.cornerRadius);
+        t.show(params.surface);
     }
 
     /**
@@ -109,15 +109,6 @@ public class SyncRtSurfaceTransactionApplier {
         }
     }
 
-    private static void applyParams(Transaction t, SurfaceParams params, float[] tmpFloat9) {
-        t.setMatrix(params.surface, params.matrix, tmpFloat9);
-        t.setWindowCrop(params.surface, params.windowCrop);
-        t.setAlpha(params.surface, params.alpha);
-        t.setLayer(params.surface, params.layer);
-        t.setCornerRadius(params.surface, params.cornerRadius);
-        t.show(params.surface);
-    }
-
     public static class SurfaceParams {
 
         /**
@@ -129,9 +120,9 @@ public class SyncRtSurfaceTransactionApplier {
          * @param matrix Matrix to apply.
          * @param windowCrop Crop to apply.
          */
-        public SurfaceParams(SurfaceControlCompat surface, float alpha, Matrix matrix,
+        public SurfaceParams(SurfaceControl surface, float alpha, Matrix matrix,
                 Rect windowCrop, int layer, float cornerRadius) {
-            this.surface = surface.mSurfaceControl;
+            this.surface = surface;
             this.alpha = alpha;
             this.matrix = new Matrix(matrix);
             this.windowCrop = new Rect(windowCrop);
@@ -139,11 +130,22 @@ public class SyncRtSurfaceTransactionApplier {
             this.cornerRadius = cornerRadius;
         }
 
-        final SurfaceControl surface;
-        final float alpha;
-        final Matrix matrix;
-        final Rect windowCrop;
-        final int layer;
+        @VisibleForTesting
+        public final SurfaceControl surface;
+
+        @VisibleForTesting
+        public final float alpha;
+
+        @VisibleForTesting
         final float cornerRadius;
+
+        @VisibleForTesting
+        public final Matrix matrix;
+
+        @VisibleForTesting
+        public final Rect windowCrop;
+
+        @VisibleForTesting
+        public final int layer;
     }
 }
