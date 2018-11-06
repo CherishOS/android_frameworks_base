@@ -28690,7 +28690,7 @@ package android.net.wifi {
     enum_constant public static final android.net.wifi.SupplicantState UNINITIALIZED;
   }
 
-  public class WifiConfiguration implements android.os.Parcelable {
+  public deprecated class WifiConfiguration implements android.os.Parcelable {
     ctor public WifiConfiguration();
     method public int describeContents();
     method public android.net.ProxyInfo getHttpProxy();
@@ -28844,7 +28844,8 @@ package android.net.wifi {
   }
 
   public class WifiManager {
-    method public int addNetwork(android.net.wifi.WifiConfiguration);
+    method public deprecated int addNetwork(android.net.wifi.WifiConfiguration);
+    method public boolean addNetworkSuggestions(java.util.List<android.net.wifi.WifiNetworkSuggestion>, android.app.PendingIntent);
     method public void addOrUpdatePasspointConfiguration(android.net.wifi.hotspot2.PasspointConfiguration);
     method public static int calculateSignalLevel(int, int);
     method public deprecated void cancelWps(android.net.wifi.WifiManager.WpsCallback);
@@ -28852,10 +28853,10 @@ package android.net.wifi {
     method public android.net.wifi.WifiManager.MulticastLock createMulticastLock(java.lang.String);
     method public android.net.wifi.WifiManager.WifiLock createWifiLock(int, java.lang.String);
     method public android.net.wifi.WifiManager.WifiLock createWifiLock(java.lang.String);
-    method public boolean disableNetwork(int);
-    method public boolean disconnect();
-    method public boolean enableNetwork(int, boolean);
-    method public java.util.List<android.net.wifi.WifiConfiguration> getConfiguredNetworks();
+    method public deprecated boolean disableNetwork(int);
+    method public deprecated boolean disconnect();
+    method public deprecated boolean enableNetwork(int, boolean);
+    method public deprecated java.util.List<android.net.wifi.WifiConfiguration> getConfiguredNetworks();
     method public android.net.wifi.WifiInfo getConnectionInfo();
     method public android.net.DhcpInfo getDhcpInfo();
     method public java.util.List<android.net.wifi.hotspot2.PasspointConfiguration> getPasspointConfigurations();
@@ -28870,18 +28871,19 @@ package android.net.wifi {
     method public boolean isTdlsSupported();
     method public boolean isWifiEnabled();
     method public deprecated boolean pingSupplicant();
-    method public boolean reassociate();
-    method public boolean reconnect();
-    method public boolean removeNetwork(int);
+    method public deprecated boolean reassociate();
+    method public deprecated boolean reconnect();
+    method public deprecated boolean removeNetwork(int);
+    method public boolean removeNetworkSuggestions(java.util.List<android.net.wifi.WifiNetworkSuggestion>);
     method public void removePasspointConfiguration(java.lang.String);
     method public deprecated boolean saveConfiguration();
     method public void setTdlsEnabled(java.net.InetAddress, boolean);
     method public void setTdlsEnabledWithMacAddress(java.lang.String, boolean);
-    method public boolean setWifiEnabled(boolean);
+    method public deprecated boolean setWifiEnabled(boolean);
     method public void startLocalOnlyHotspot(android.net.wifi.WifiManager.LocalOnlyHotspotCallback, android.os.Handler);
     method public deprecated boolean startScan();
     method public deprecated void startWps(android.net.wifi.WpsInfo, android.net.wifi.WifiManager.WpsCallback);
-    method public int updateNetwork(android.net.wifi.WifiConfiguration);
+    method public deprecated int updateNetwork(android.net.wifi.WifiConfiguration);
     field public static final java.lang.String ACTION_PICK_WIFI_NETWORK = "android.net.wifi.PICK_WIFI_NETWORK";
     field public static final java.lang.String ACTION_REQUEST_SCAN_ALWAYS_AVAILABLE = "android.net.wifi.action.REQUEST_SCAN_ALWAYS_AVAILABLE";
     field public static final deprecated int ERROR_AUTHENTICATING = 1; // 0x1
@@ -28953,6 +28955,29 @@ package android.net.wifi {
     method public abstract deprecated void onFailed(int);
     method public abstract deprecated void onStarted(java.lang.String);
     method public abstract deprecated void onSucceeded();
+  }
+
+  public class WifiNetworkConfigBuilder {
+    ctor public WifiNetworkConfigBuilder();
+    method public android.net.NetworkSpecifier buildNetworkSpecifier();
+    method public android.net.wifi.WifiNetworkSuggestion buildNetworkSuggestion();
+    method public android.net.wifi.WifiNetworkConfigBuilder setBssid(android.net.MacAddress);
+    method public android.net.wifi.WifiNetworkConfigBuilder setBssidPattern(android.net.MacAddress, android.net.MacAddress);
+    method public android.net.wifi.WifiNetworkConfigBuilder setEnterpriseConfig(android.net.wifi.WifiEnterpriseConfig);
+    method public android.net.wifi.WifiNetworkConfigBuilder setIsAppInteractionRequired();
+    method public android.net.wifi.WifiNetworkConfigBuilder setIsHiddenSsid();
+    method public android.net.wifi.WifiNetworkConfigBuilder setIsMetered();
+    method public android.net.wifi.WifiNetworkConfigBuilder setIsUserInteractionRequired();
+    method public android.net.wifi.WifiNetworkConfigBuilder setPriority(int);
+    method public android.net.wifi.WifiNetworkConfigBuilder setPskPassphrase(java.lang.String);
+    method public android.net.wifi.WifiNetworkConfigBuilder setSsid(java.lang.String);
+    method public android.net.wifi.WifiNetworkConfigBuilder setSsidPattern(android.os.PatternMatcher);
+  }
+
+  public final class WifiNetworkSuggestion implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.wifi.WifiNetworkSuggestion> CREATOR;
   }
 
   public deprecated class WpsInfo implements android.os.Parcelable {
