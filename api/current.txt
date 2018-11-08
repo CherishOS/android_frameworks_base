@@ -13878,6 +13878,7 @@ package android.graphics {
     field public static final int RAW_SENSOR = 32; // 0x20
     field public static final int RGB_565 = 4; // 0x4
     field public static final int UNKNOWN = 0; // 0x0
+    field public static final int Y8 = 538982489; // 0x20203859
     field public static final int YUV_420_888 = 35; // 0x23
     field public static final int YUV_422_888 = 39; // 0x27
     field public static final int YUV_444_888 = 40; // 0x28
@@ -14769,9 +14770,10 @@ package android.graphics {
 
   public static class Typeface.CustomFallbackBuilder {
     ctor public Typeface.CustomFallbackBuilder(android.graphics.fonts.FontFamily);
+    method public android.graphics.Typeface.CustomFallbackBuilder addCustomFallback(android.graphics.fonts.FontFamily);
     method public android.graphics.Typeface build();
-    method public android.graphics.Typeface.CustomFallbackBuilder setFallback(java.lang.String);
     method public android.graphics.Typeface.CustomFallbackBuilder setStyle(android.graphics.fonts.FontStyle);
+    method public android.graphics.Typeface.CustomFallbackBuilder setSystemFallback(java.lang.String);
   }
 
   public class Xfermode {
@@ -16291,6 +16293,7 @@ package android.hardware.camera2 {
     method public java.util.List<android.hardware.camera2.CameraCharacteristics.Key<?>> getKeys();
     method public java.util.List<android.hardware.camera2.CameraCharacteristics.Key<?>> getKeysNeedingPermission();
     method public java.util.Set<java.lang.String> getPhysicalCameraIds();
+    method public android.hardware.camera2.params.RecommendedStreamConfigurationMap getRecommendedStreamConfigurationMap(int);
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> COLOR_CORRECTION_AVAILABLE_ABERRATION_MODES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AE_AVAILABLE_ANTIBANDING_MODES;
     field public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AE_AVAILABLE_MODES;
@@ -16951,6 +16954,33 @@ package android.hardware.camera2.params {
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.hardware.camera2.params.OutputConfiguration> CREATOR;
     field public static final int SURFACE_GROUP_ID_NONE = -1; // 0xffffffff
+  }
+
+  public final class RecommendedStreamConfigurationMap {
+    method public java.util.Set<android.util.Size> getHighResolutionOutputSizes(int);
+    method public java.util.Set<android.util.Range<java.lang.Integer>> getHighSpeedVideoFpsRanges();
+    method public java.util.Set<android.util.Range<java.lang.Integer>> getHighSpeedVideoFpsRangesFor(android.util.Size);
+    method public java.util.Set<android.util.Size> getHighSpeedVideoSizes();
+    method public java.util.Set<android.util.Size> getHighSpeedVideoSizesFor(android.util.Range<java.lang.Integer>);
+    method public java.util.Set<java.lang.Integer> getInputFormats();
+    method public java.util.Set<android.util.Size> getInputSizes(int);
+    method public java.util.Set<java.lang.Integer> getOutputFormats();
+    method public long getOutputMinFrameDuration(int, android.util.Size);
+    method public <T> long getOutputMinFrameDuration(java.lang.Class<T>, android.util.Size);
+    method public java.util.Set<android.util.Size> getOutputSizes(int);
+    method public <T> java.util.Set<android.util.Size> getOutputSizes(java.lang.Class<T>);
+    method public long getOutputStallDuration(int, android.util.Size);
+    method public <T> long getOutputStallDuration(java.lang.Class<T>, android.util.Size);
+    method public int getRecommendedUseCase();
+    method public java.util.Set<java.lang.Integer> getValidOutputFormatsForInput(int);
+    method public boolean isOutputSupportedFor(int);
+    method public boolean isOutputSupportedFor(android.view.Surface);
+    field public static final int USECASE_PREVIEW = 0; // 0x0
+    field public static final int USECASE_RAW = 5; // 0x5
+    field public static final int USECASE_RECORD = 1; // 0x1
+    field public static final int USECASE_SNAPSHOT = 3; // 0x3
+    field public static final int USECASE_VIDEO_SNAPSHOT = 2; // 0x2
+    field public static final int USECASE_ZSL = 4; // 0x4
   }
 
   public final class RggbChannelVector {
@@ -28702,9 +28732,11 @@ package android.net.wifi {
     field public java.lang.String SSID;
     field public java.util.BitSet allowedAuthAlgorithms;
     field public java.util.BitSet allowedGroupCiphers;
+    field public java.util.BitSet allowedGroupMgmtCiphers;
     field public java.util.BitSet allowedKeyManagement;
     field public java.util.BitSet allowedPairwiseCiphers;
     field public java.util.BitSet allowedProtocols;
+    field public java.util.BitSet allowedSuiteBCiphers;
     field public android.net.wifi.WifiEnterpriseConfig enterpriseConfig;
     field public boolean hiddenSSID;
     field public boolean isHomeProviderNetwork;
@@ -28728,6 +28760,7 @@ package android.net.wifi {
 
   public static class WifiConfiguration.GroupCipher {
     field public static final int CCMP = 3; // 0x3
+    field public static final int GCMP_256 = 5; // 0x5
     field public static final int TKIP = 2; // 0x2
     field public static final deprecated int WEP104 = 1; // 0x1
     field public static final deprecated int WEP40 = 0; // 0x0
@@ -28735,9 +28768,18 @@ package android.net.wifi {
     field public static final java.lang.String varName = "group";
   }
 
+  public static class WifiConfiguration.GroupMgmtCipher {
+    field public static final int BIP_CMAC_256 = 0; // 0x0
+    field public static final int BIP_GMAC_128 = 1; // 0x1
+    field public static final int BIP_GMAC_256 = 2; // 0x2
+  }
+
   public static class WifiConfiguration.KeyMgmt {
     field public static final int IEEE8021X = 3; // 0x3
     field public static final int NONE = 0; // 0x0
+    field public static final int OWE = 9; // 0x9
+    field public static final int SAE = 8; // 0x8
+    field public static final int SUITE_B_192 = 10; // 0xa
     field public static final int WPA_EAP = 2; // 0x2
     field public static final int WPA_PSK = 1; // 0x1
     field public static final java.lang.String[] strings;
@@ -28746,6 +28788,7 @@ package android.net.wifi {
 
   public static class WifiConfiguration.PairwiseCipher {
     field public static final int CCMP = 2; // 0x2
+    field public static final int GCMP_256 = 3; // 0x3
     field public static final int NONE = 0; // 0x0
     field public static final deprecated int TKIP = 1; // 0x1
     field public static final java.lang.String[] strings;
@@ -28867,7 +28910,7 @@ package android.net.wifi {
     method public boolean isEnhancedPowerReportingSupported();
     method public boolean isP2pSupported();
     method public boolean isPreferredNetworkOffloadSupported();
-    method public boolean isScanAlwaysAvailable();
+    method public deprecated boolean isScanAlwaysAvailable();
     method public boolean isTdlsSupported();
     method public boolean isWifiEnabled();
     method public deprecated boolean pingSupplicant();
@@ -50143,17 +50186,29 @@ package android.view {
     method public int getStableInsetLeft();
     method public int getStableInsetRight();
     method public int getStableInsetTop();
+    method public android.graphics.Insets getStableInsets();
     method public int getSystemWindowInsetBottom();
     method public int getSystemWindowInsetLeft();
     method public int getSystemWindowInsetRight();
     method public int getSystemWindowInsetTop();
+    method public android.graphics.Insets getSystemWindowInsets();
     method public boolean hasInsets();
     method public boolean hasStableInsets();
     method public boolean hasSystemWindowInsets();
+    method public android.view.WindowInsets inset(int, int, int, int);
     method public boolean isConsumed();
     method public boolean isRound();
-    method public android.view.WindowInsets replaceSystemWindowInsets(int, int, int, int);
-    method public android.view.WindowInsets replaceSystemWindowInsets(android.graphics.Rect);
+    method public deprecated android.view.WindowInsets replaceSystemWindowInsets(int, int, int, int);
+    method public deprecated android.view.WindowInsets replaceSystemWindowInsets(android.graphics.Rect);
+  }
+
+  public static class WindowInsets.Builder {
+    ctor public WindowInsets.Builder();
+    ctor public WindowInsets.Builder(android.view.WindowInsets);
+    method public android.view.WindowInsets build();
+    method public android.view.WindowInsets.Builder setDisplayCutout(android.view.DisplayCutout);
+    method public android.view.WindowInsets.Builder setStableInsets(android.graphics.Insets);
+    method public android.view.WindowInsets.Builder setSystemWindowInsets(android.graphics.Insets);
   }
 
   public abstract interface WindowManager implements android.view.ViewManager {
