@@ -47,6 +47,7 @@ import android.view.View;
 import androidx.lifecycle.Observer;
 
 import com.android.settingslib.bluetooth.CachedBluetoothDevice;
+import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.broadcast.BroadcastDispatcher;
 import com.android.systemui.dagger.qualifiers.DisplayId;
@@ -478,7 +479,9 @@ public class PhoneStatusBarPolicy
                 mResources.getString(R.string.accessibility_quick_settings_bluetooth_on);
         boolean bluetoothVisible = false;
         if (mBluetooth != null) {
-            if (mBluetooth.isBluetoothConnected()) {
+            if (mBluetooth.isBluetoothConnected()
+                    && (mBluetooth.isBluetoothAudioActive()
+                    || !mBluetooth.isBluetoothAudioProfileOnly())) {
                 final Collection<CachedBluetoothDevice> devices = mBluetooth.getDevices();
                 if (devices != null) {
                     // get battery level for the first device with battery level support
