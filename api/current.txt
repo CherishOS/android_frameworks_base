@@ -769,6 +769,7 @@ package android {
     field public static final int insetRight = 16843192; // 0x10101b8
     field public static final int insetTop = 16843193; // 0x10101b9
     field public static final int installLocation = 16843447; // 0x10102b7
+    field public static final int interactiveUiTimeout = 16844181; // 0x1010595
     field public static final int interpolator = 16843073; // 0x1010141
     field public static final int isAlwaysSyncable = 16843571; // 0x1010333
     field public static final int isAsciiCapable = 16843753; // 0x10103e9
@@ -941,7 +942,6 @@ package android {
     field public static final int minSdkVersion = 16843276; // 0x101020c
     field public static final int minWidth = 16843071; // 0x101013f
     field public static final int minimumHorizontalAngle = 16843901; // 0x101047d
-    field public static final int minimumUiTimeout = 16844175; // 0x101058f
     field public static final int minimumVerticalAngle = 16843902; // 0x101047e
     field public static final int mipMap = 16843725; // 0x10103cd
     field public static final int mirrorForRtl = 16843726; // 0x10103ce
@@ -965,6 +965,7 @@ package android {
     field public static final int nextFocusRight = 16842978; // 0x10100e2
     field public static final int nextFocusUp = 16842979; // 0x10100e3
     field public static final int noHistory = 16843309; // 0x101022d
+    field public static final int nonInteractiveUiTimeout = 16844175; // 0x101058f
     field public static final int normalScreens = 16843397; // 0x1010285
     field public static final int notificationTimeout = 16843651; // 0x1010383
     field public static final int numColumns = 16843032; // 0x1010118
@@ -2886,12 +2887,14 @@ package android.accessibilityservice {
     method public int getCapabilities();
     method public deprecated java.lang.String getDescription();
     method public java.lang.String getId();
-    method public int getMinimumUiTimeoutMillis();
+    method public int getInteractiveUiTimeoutMillis();
+    method public int getNonInteractiveUiTimeoutMillis();
     method public android.content.pm.ResolveInfo getResolveInfo();
     method public java.lang.String getSettingsActivityName();
     method public java.lang.String loadDescription(android.content.pm.PackageManager);
     method public java.lang.CharSequence loadSummary(android.content.pm.PackageManager);
-    method public void setMinimumUiTimeoutMillis(int);
+    method public void setInteractiveUiTimeoutMillis(int);
+    method public void setNonInteractiveUiTimeoutMillis(int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int CAPABILITY_CAN_CONTROL_MAGNIFICATION = 16; // 0x10
     field public static final int CAPABILITY_CAN_PERFORM_GESTURES = 32; // 0x20
@@ -6181,6 +6184,7 @@ package android.app {
 
   public final class UiAutomation {
     method public void adoptShellPermissionIdentity();
+    method public void adoptShellPermissionIdentity(java.lang.String...);
     method public void clearWindowAnimationFrameStats();
     method public boolean clearWindowContentFrameStats(int);
     method public void dropShellPermissionIdentity();
@@ -11176,12 +11180,17 @@ package android.content.pm {
 
   public static class PackageInstaller.Session implements java.io.Closeable {
     method public void abandon();
+    method public void addChildSessionId(int);
     method public void close();
     method public void commit(android.content.IntentSender);
     method public void fsync(java.io.OutputStream) throws java.io.IOException;
+    method public int[] getChildSessionIds();
     method public java.lang.String[] getNames() throws java.io.IOException;
+    method public int getParentSessionId();
+    method public boolean isMultiPackage();
     method public java.io.InputStream openRead(java.lang.String) throws java.io.IOException;
     method public java.io.OutputStream openWrite(java.lang.String, long, long) throws java.io.IOException;
+    method public void removeChildSessionId(int);
     method public void removeSplit(java.lang.String) throws java.io.IOException;
     method public void setStagingProgress(float);
     method public void transfer(java.lang.String) throws android.content.pm.PackageManager.NameNotFoundException;
@@ -11202,20 +11211,24 @@ package android.content.pm {
     method public android.graphics.Bitmap getAppIcon();
     method public java.lang.CharSequence getAppLabel();
     method public java.lang.String getAppPackageName();
+    method public int[] getChildSessionIds();
     method public int getInstallLocation();
     method public int getInstallReason();
     method public java.lang.String getInstallerPackageName();
     method public int getMode();
     method public int getOriginatingUid();
     method public android.net.Uri getOriginatingUri();
+    method public int getParentSessionId();
     method public float getProgress();
     method public android.net.Uri getReferrerUri();
     method public int getSessionId();
     method public long getSize();
     method public boolean isActive();
+    method public boolean isMultiPackage();
     method public boolean isSealed();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.PackageInstaller.SessionInfo> CREATOR;
+    field public static final int INVALID_ID = -1; // 0xffffffff
   }
 
   public static class PackageInstaller.SessionParams implements android.os.Parcelable {
@@ -11226,6 +11239,7 @@ package android.content.pm {
     method public void setAppPackageName(java.lang.String);
     method public void setInstallLocation(int);
     method public void setInstallReason(int);
+    method public void setMultiPackage();
     method public void setOriginatingUid(int);
     method public void setOriginatingUri(android.net.Uri);
     method public void setReferrerUri(android.net.Uri);
@@ -14611,9 +14625,9 @@ package android.graphics {
     method public final boolean next(android.graphics.Rect);
   }
 
-  public class RenderNode {
+  public final class RenderNode {
+    ctor public RenderNode(java.lang.String);
     method public int computeApproximateMemoryUsage();
-    method public static android.graphics.RenderNode create(java.lang.String);
     method public void discardDisplayList();
     method public void endRecording();
     method public float getAlpha();
@@ -14980,7 +14994,7 @@ package android.graphics.drawable {
     method public final int getLevel();
     method public int getMinimumHeight();
     method public int getMinimumWidth();
-    method public abstract int getOpacity();
+    method public abstract deprecated int getOpacity();
     method public android.graphics.Insets getOpticalInsets();
     method public void getOutline(android.graphics.Outline);
     method public boolean getPadding(android.graphics.Rect);
@@ -34442,7 +34456,7 @@ package android.os.storage {
   }
 
   public final class StorageVolume implements android.os.Parcelable {
-    method public android.content.Intent createAccessIntent(java.lang.String);
+    method public deprecated android.content.Intent createAccessIntent(java.lang.String);
     method public int describeContents();
     method public java.lang.String getDescription(android.content.Context);
     method public java.lang.String getState();
@@ -35681,6 +35695,15 @@ package android.provider {
     method public static java.lang.String getLastOutgoingCall(android.content.Context);
     field public static final int ANSWERED_EXTERNALLY_TYPE = 7; // 0x7
     field public static final int BLOCKED_TYPE = 6; // 0x6
+    field public static final java.lang.String BLOCK_REASON = "block_reason";
+    field public static final int BLOCK_REASON_BLOCKED_NUMBER = 3; // 0x3
+    field public static final int BLOCK_REASON_CALL_SCREENING_SERVICE = 1; // 0x1
+    field public static final int BLOCK_REASON_DIRECT_TO_VOICEMAIL = 2; // 0x2
+    field public static final int BLOCK_REASON_NOT_BLOCKED = 0; // 0x0
+    field public static final int BLOCK_REASON_NOT_IN_CONTACTS = 7; // 0x7
+    field public static final int BLOCK_REASON_PAY_PHONE = 6; // 0x6
+    field public static final int BLOCK_REASON_RESTRICTED_NUMBER = 5; // 0x5
+    field public static final int BLOCK_REASON_UNKNOWN_NUMBER = 4; // 0x4
     field public static final java.lang.String CACHED_FORMATTED_NUMBER = "formatted_number";
     field public static final java.lang.String CACHED_LOOKUP_URI = "lookup_uri";
     field public static final java.lang.String CACHED_MATCHED_NUMBER = "matched_number";
@@ -35690,6 +35713,8 @@ package android.provider {
     field public static final java.lang.String CACHED_NUMBER_TYPE = "numbertype";
     field public static final java.lang.String CACHED_PHOTO_ID = "photo_id";
     field public static final java.lang.String CACHED_PHOTO_URI = "photo_uri";
+    field public static final java.lang.String CALL_SCREENING_APP_NAME = "call_screening_app_name";
+    field public static final java.lang.String CALL_SCREENING_COMPONENT_NAME = "call_screening_component_name";
     field public static final android.net.Uri CONTENT_FILTER_URI;
     field public static final java.lang.String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/calls";
     field public static final java.lang.String CONTENT_TYPE = "vnd.android.cursor.dir/calls";
@@ -37482,7 +37507,7 @@ package android.provider {
     field public static final java.lang.String ACTION_SETTINGS = "android.settings.SETTINGS";
     field public static final java.lang.String ACTION_SHOW_REGULATORY_INFO = "android.settings.SHOW_REGULATORY_INFO";
     field public static final java.lang.String ACTION_SOUND_SETTINGS = "android.settings.SOUND_SETTINGS";
-    field public static final java.lang.String ACTION_STORAGE_VOLUME_ACCESS_SETTINGS = "android.settings.STORAGE_VOLUME_ACCESS_SETTINGS";
+    field public static final deprecated java.lang.String ACTION_STORAGE_VOLUME_ACCESS_SETTINGS = "android.settings.STORAGE_VOLUME_ACCESS_SETTINGS";
     field public static final java.lang.String ACTION_SYNC_SETTINGS = "android.settings.SYNC_SETTINGS";
     field public static final java.lang.String ACTION_USAGE_ACCESS_SETTINGS = "android.settings.USAGE_ACCESS_SETTINGS";
     field public static final java.lang.String ACTION_USER_DICTIONARY_SETTINGS = "android.settings.USER_DICTIONARY_SETTINGS";
@@ -40342,6 +40367,7 @@ package android.service.notification {
 
   public static class NotificationListenerService.Ranking {
     ctor public NotificationListenerService.Ranking();
+    method public boolean audiblyAlerted();
     method public boolean canShowBadge();
     method public android.app.NotificationChannel getChannel();
     method public int getImportance();
@@ -42874,6 +42900,16 @@ package android.telephony {
     field public static final android.os.Parcelable.Creator<android.telephony.CellIdentityLte> CREATOR;
   }
 
+  public final class CellIdentityNr extends android.telephony.CellIdentity {
+    method public int getChannelNumber();
+    method public java.lang.String getMccString();
+    method public java.lang.String getMncString();
+    method public int getPci();
+    method public int getTac();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.CellIdentityNr> CREATOR;
+  }
+
   public final class CellIdentityTdscdma extends android.telephony.CellIdentity {
     method public int getCid();
     method public int getCpid();
@@ -42931,6 +42967,13 @@ package android.telephony {
     method public android.telephony.CellSignalStrengthLte getCellSignalStrength();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.CellInfoLte> CREATOR;
+  }
+
+  public final class CellInfoNr extends android.telephony.CellInfo {
+    method public android.telephony.CellIdentity getCellIdentity();
+    method public android.telephony.CellSignalStrength getCellSignalStrength();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.CellInfoNr> CREATOR;
   }
 
   public final class CellInfoWcdma extends android.telephony.CellInfo implements android.os.Parcelable {
@@ -42997,6 +43040,21 @@ package android.telephony {
     method public int getTimingAdvance();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.CellSignalStrengthLte> CREATOR;
+  }
+
+  public final class CellSignalStrengthNr extends android.telephony.CellSignalStrength implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getAsuLevel();
+    method public int getCsiRsrp();
+    method public int getCsiRsrq();
+    method public int getCsiSinr();
+    method public int getDbm();
+    method public int getLevel();
+    method public int getSsRsrp();
+    method public int getSsRsrq();
+    method public int getSsSinr();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.CellSignalStrengthNr> CREATOR;
   }
 
   public final class CellSignalStrengthWcdma extends android.telephony.CellSignalStrength implements android.os.Parcelable {
@@ -50464,7 +50522,7 @@ package android.view.accessibility {
     method public deprecated java.util.List<android.content.pm.ServiceInfo> getAccessibilityServiceList();
     method public java.util.List<android.accessibilityservice.AccessibilityServiceInfo> getEnabledAccessibilityServiceList(int);
     method public java.util.List<android.accessibilityservice.AccessibilityServiceInfo> getInstalledAccessibilityServiceList();
-    method public int getMinimumUiTimeoutMillis();
+    method public int getRecommendedTimeoutMillis(int, int);
     method public void interrupt();
     method public static boolean isAccessibilityButtonSupported();
     method public boolean isEnabled();
@@ -50473,6 +50531,9 @@ package android.view.accessibility {
     method public boolean removeAccessibilityStateChangeListener(android.view.accessibility.AccessibilityManager.AccessibilityStateChangeListener);
     method public boolean removeTouchExplorationStateChangeListener(android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener);
     method public void sendAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
+    field public static final int FLAG_CONTENT_CONTROLS = 4; // 0x4
+    field public static final int FLAG_CONTENT_ICONS = 1; // 0x1
+    field public static final int FLAG_CONTENT_TEXT = 2; // 0x2
   }
 
   public static abstract interface AccessibilityManager.AccessibilityStateChangeListener {
@@ -73746,10 +73807,13 @@ package javax.net.ssl {
     method public abstract void beginHandshake() throws javax.net.ssl.SSLException;
     method public abstract void closeInbound() throws javax.net.ssl.SSLException;
     method public abstract void closeOutbound();
+    method public java.lang.String getApplicationProtocol();
     method public abstract java.lang.Runnable getDelegatedTask();
     method public abstract boolean getEnableSessionCreation();
     method public abstract java.lang.String[] getEnabledCipherSuites();
     method public abstract java.lang.String[] getEnabledProtocols();
+    method public java.lang.String getHandshakeApplicationProtocol();
+    method public java.util.function.BiFunction<javax.net.ssl.SSLEngine, java.util.List<java.lang.String>, java.lang.String> getHandshakeApplicationProtocolSelector();
     method public javax.net.ssl.SSLSession getHandshakeSession();
     method public abstract javax.net.ssl.SSLEngineResult.HandshakeStatus getHandshakeStatus();
     method public abstract boolean getNeedClientAuth();
@@ -73766,6 +73830,7 @@ package javax.net.ssl {
     method public abstract void setEnableSessionCreation(boolean);
     method public abstract void setEnabledCipherSuites(java.lang.String[]);
     method public abstract void setEnabledProtocols(java.lang.String[]);
+    method public void setHandshakeApplicationProtocolSelector(java.util.function.BiFunction<javax.net.ssl.SSLEngine, java.util.List<java.lang.String>, java.lang.String>);
     method public abstract void setNeedClientAuth(boolean);
     method public void setSSLParameters(javax.net.ssl.SSLParameters);
     method public abstract void setUseClientMode(boolean);
@@ -73824,6 +73889,7 @@ package javax.net.ssl {
     ctor public SSLParameters(java.lang.String[]);
     ctor public SSLParameters(java.lang.String[], java.lang.String[]);
     method public java.security.AlgorithmConstraints getAlgorithmConstraints();
+    method public java.lang.String[] getApplicationProtocols();
     method public java.lang.String[] getCipherSuites();
     method public java.lang.String getEndpointIdentificationAlgorithm();
     method public boolean getNeedClientAuth();
@@ -73833,6 +73899,7 @@ package javax.net.ssl {
     method public final boolean getUseCipherSuitesOrder();
     method public boolean getWantClientAuth();
     method public void setAlgorithmConstraints(java.security.AlgorithmConstraints);
+    method public void setApplicationProtocols(java.lang.String[]);
     method public void setCipherSuites(java.lang.String[]);
     method public void setEndpointIdentificationAlgorithm(java.lang.String);
     method public void setNeedClientAuth(boolean);
@@ -73937,9 +74004,12 @@ package javax.net.ssl {
     ctor protected SSLSocket(java.lang.String, int, java.net.InetAddress, int) throws java.io.IOException, java.net.UnknownHostException;
     ctor protected SSLSocket(java.net.InetAddress, int, java.net.InetAddress, int) throws java.io.IOException;
     method public abstract void addHandshakeCompletedListener(javax.net.ssl.HandshakeCompletedListener);
+    method public java.lang.String getApplicationProtocol();
     method public abstract boolean getEnableSessionCreation();
     method public abstract java.lang.String[] getEnabledCipherSuites();
     method public abstract java.lang.String[] getEnabledProtocols();
+    method public java.lang.String getHandshakeApplicationProtocol();
+    method public java.util.function.BiFunction<javax.net.ssl.SSLSocket, java.util.List<java.lang.String>, java.lang.String> getHandshakeApplicationProtocolSelector();
     method public javax.net.ssl.SSLSession getHandshakeSession();
     method public abstract boolean getNeedClientAuth();
     method public javax.net.ssl.SSLParameters getSSLParameters();
@@ -73952,6 +74022,7 @@ package javax.net.ssl {
     method public abstract void setEnableSessionCreation(boolean);
     method public abstract void setEnabledCipherSuites(java.lang.String[]);
     method public abstract void setEnabledProtocols(java.lang.String[]);
+    method public void setHandshakeApplicationProtocolSelector(java.util.function.BiFunction<javax.net.ssl.SSLSocket, java.util.List<java.lang.String>, java.lang.String>);
     method public abstract void setNeedClientAuth(boolean);
     method public void setSSLParameters(javax.net.ssl.SSLParameters);
     method public abstract void setUseClientMode(boolean);
