@@ -740,6 +740,7 @@ package android {
     field public static final int immersive = 16843456; // 0x10102c0
     field public static final int importantForAccessibility = 16843690; // 0x10103aa
     field public static final int importantForAutofill = 16844120; // 0x1010558
+    field public static final int importantForContentCapture = 16844182; // 0x1010596
     field public static final int inAnimation = 16843127; // 0x1010177
     field public static final int includeFontPadding = 16843103; // 0x101015f
     field public static final int includeInGlobalSearch = 16843374; // 0x101026e
@@ -7580,6 +7581,8 @@ package android.app.usage {
     method public java.lang.String getShortcutId();
     method public long getTimeStamp();
     field public static final int CONFIGURATION_CHANGE = 5; // 0x5
+    field public static final int FOREGROUND_SERVICE_START = 19; // 0x13
+    field public static final int FOREGROUND_SERVICE_STOP = 20; // 0x14
     field public static final int KEYGUARD_HIDDEN = 18; // 0x12
     field public static final int KEYGUARD_SHOWN = 17; // 0x11
     field public static final int MOVE_TO_BACKGROUND = 2; // 0x2
@@ -7597,9 +7600,11 @@ package android.app.usage {
     method public void add(android.app.usage.UsageStats);
     method public int describeContents();
     method public long getFirstTimeStamp();
+    method public long getLastTimeForegroundServiceUsed();
     method public long getLastTimeStamp();
     method public long getLastTimeUsed();
     method public java.lang.String getPackageName();
+    method public long getTotalTimeForegroundServiceUsed();
     method public long getTotalTimeInForeground();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.usage.UsageStats> CREATOR;
@@ -16628,6 +16633,8 @@ package android.hardware.camera2 {
     field public static final int SENSOR_INFO_COLOR_FILTER_ARRANGEMENT_BGGR = 3; // 0x3
     field public static final int SENSOR_INFO_COLOR_FILTER_ARRANGEMENT_GBRG = 2; // 0x2
     field public static final int SENSOR_INFO_COLOR_FILTER_ARRANGEMENT_GRBG = 1; // 0x1
+    field public static final int SENSOR_INFO_COLOR_FILTER_ARRANGEMENT_MONO = 5; // 0x5
+    field public static final int SENSOR_INFO_COLOR_FILTER_ARRANGEMENT_NIR = 6; // 0x6
     field public static final int SENSOR_INFO_COLOR_FILTER_ARRANGEMENT_RGB = 4; // 0x4
     field public static final int SENSOR_INFO_COLOR_FILTER_ARRANGEMENT_RGGB = 0; // 0x0
     field public static final int SENSOR_INFO_TIMESTAMP_SOURCE_REALTIME = 1; // 0x1
@@ -20712,6 +20719,51 @@ package android.icu.text {
     enum_constant public static final android.icu.text.TimeZoneNames.NameType SHORT_STANDARD;
   }
 
+  public abstract class Transliterator {
+    method public static final android.icu.text.Transliterator createFromRules(java.lang.String, java.lang.String, int);
+    method public void filteredTransliterate(android.icu.text.Replaceable, android.icu.text.Transliterator.Position, boolean);
+    method public final void finishTransliteration(android.icu.text.Replaceable, android.icu.text.Transliterator.Position);
+    method public static final java.util.Enumeration<java.lang.String> getAvailableIDs();
+    method public static final java.util.Enumeration<java.lang.String> getAvailableSources();
+    method public static final java.util.Enumeration<java.lang.String> getAvailableTargets(java.lang.String);
+    method public static final java.util.Enumeration<java.lang.String> getAvailableVariants(java.lang.String, java.lang.String);
+    method public static final java.lang.String getDisplayName(java.lang.String);
+    method public static java.lang.String getDisplayName(java.lang.String, java.util.Locale);
+    method public static java.lang.String getDisplayName(java.lang.String, android.icu.util.ULocale);
+    method public android.icu.text.Transliterator[] getElements();
+    method public final android.icu.text.UnicodeFilter getFilter();
+    method public final java.lang.String getID();
+    method public static final android.icu.text.Transliterator getInstance(java.lang.String);
+    method public static android.icu.text.Transliterator getInstance(java.lang.String, int);
+    method public final android.icu.text.Transliterator getInverse();
+    method public final int getMaximumContextLength();
+    method public final android.icu.text.UnicodeSet getSourceSet();
+    method public android.icu.text.UnicodeSet getTargetSet();
+    method public void setFilter(android.icu.text.UnicodeFilter);
+    method public java.lang.String toRules(boolean);
+    method public final int transliterate(android.icu.text.Replaceable, int, int);
+    method public final void transliterate(android.icu.text.Replaceable);
+    method public final java.lang.String transliterate(java.lang.String);
+    method public final void transliterate(android.icu.text.Replaceable, android.icu.text.Transliterator.Position, java.lang.String);
+    method public final void transliterate(android.icu.text.Replaceable, android.icu.text.Transliterator.Position, int);
+    method public final void transliterate(android.icu.text.Replaceable, android.icu.text.Transliterator.Position);
+    field public static final int FORWARD = 0; // 0x0
+    field public static final int REVERSE = 1; // 0x1
+  }
+
+  public static class Transliterator.Position {
+    ctor public Transliterator.Position();
+    ctor public Transliterator.Position(int, int, int);
+    ctor public Transliterator.Position(int, int, int, int);
+    ctor public Transliterator.Position(android.icu.text.Transliterator.Position);
+    method public void set(android.icu.text.Transliterator.Position);
+    method public final void validate(int);
+    field public int contextLimit;
+    field public int contextStart;
+    field public int limit;
+    field public int start;
+  }
+
   public abstract class UCharacterIterator implements java.lang.Cloneable {
     ctor protected UCharacterIterator();
     method public java.lang.Object clone() throws java.lang.CloneNotSupportedException;
@@ -24208,6 +24260,8 @@ package android.media {
     method public static int getMaxSecurityLevel();
     method public int getMaxSessionCount();
     method public android.os.PersistableBundle getMetrics();
+    method public java.util.List<byte[]> getOfflineLicenseKeySetIds();
+    method public int getOfflineLicenseState(byte[]);
     method public int getOpenSessionCount();
     method public byte[] getPropertyByteArray(java.lang.String);
     method public java.lang.String getPropertyString(java.lang.String);
@@ -24228,6 +24282,7 @@ package android.media {
     method public void releaseSecureStops(byte[]);
     method public void removeAllSecureStops();
     method public void removeKeys(byte[]);
+    method public void removeOfflineLicense(byte[]);
     method public void removeSecureStop(byte[]);
     method public void restoreKeys(byte[], byte[]);
     method public void setOnEventListener(android.media.MediaDrm.OnEventListener);
@@ -24250,6 +24305,9 @@ package android.media {
     field public static final int KEY_TYPE_OFFLINE = 2; // 0x2
     field public static final int KEY_TYPE_RELEASE = 3; // 0x3
     field public static final int KEY_TYPE_STREAMING = 1; // 0x1
+    field public static final int OFFLINE_LICENSE_INACTIVE = 2; // 0x2
+    field public static final int OFFLINE_LICENSE_STATE_UNKNOWN = 0; // 0x0
+    field public static final int OFFLINE_LICENSE_USABLE = 1; // 0x1
     field public static final java.lang.String PROPERTY_ALGORITHMS = "algorithms";
     field public static final java.lang.String PROPERTY_DESCRIPTION = "description";
     field public static final java.lang.String PROPERTY_DEVICE_UNIQUE_ID = "deviceUniqueId";
@@ -42083,7 +42141,7 @@ package android.telecom {
     field public static final int CAPABILITY_CAN_PAUSE_VIDEO = 1048576; // 0x100000
     field public static final int CAPABILITY_CAN_PULL_CALL = 16777216; // 0x1000000
     field public static final int CAPABILITY_CAN_SEND_RESPONSE_VIA_CONNECTION = 4194304; // 0x400000
-    field public static final int CAPABILITY_CAN_UPGRADE_TO_VIDEO = 524288; // 0x80000
+    field public static final deprecated int CAPABILITY_CAN_UPGRADE_TO_VIDEO = 524288; // 0x80000
     field public static final int CAPABILITY_DISCONNECT_FROM_CONFERENCE = 8192; // 0x2000
     field public static final int CAPABILITY_HOLD = 1; // 0x1
     field public static final int CAPABILITY_MANAGE_CONFERENCE = 128; // 0x80
@@ -42503,6 +42561,7 @@ package android.telecom {
     method public android.telecom.PhoneAccount getPhoneAccount(android.telecom.PhoneAccountHandle);
     method public java.util.List<android.telecom.PhoneAccountHandle> getSelfManagedPhoneAccounts();
     method public android.telecom.PhoneAccountHandle getSimCallManager();
+    method public java.lang.String getSystemDialerPackage();
     method public java.lang.String getVoiceMailNumber(android.telecom.PhoneAccountHandle);
     method public boolean handleMmi(java.lang.String);
     method public boolean handleMmi(java.lang.String, android.telecom.PhoneAccountHandle);
@@ -48785,6 +48844,7 @@ package android.view {
     method public int getId();
     method public int getImportantForAccessibility();
     method public int getImportantForAutofill();
+    method public int getImportantForContentCapture();
     method public boolean getKeepScreenOn();
     method public android.view.KeyEvent.DispatcherState getKeyDispatcherState();
     method public int getLabelFor();
@@ -48918,6 +48978,7 @@ package android.view {
     method public boolean isHovered();
     method public boolean isImportantForAccessibility();
     method public final boolean isImportantForAutofill();
+    method public final boolean isImportantForContentCapture();
     method public boolean isInEditMode();
     method public boolean isInLayout();
     method public boolean isInTouchMode();
@@ -48992,6 +49053,7 @@ package android.view {
     method public void onPopulateAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
     method public void onProvideAutofillStructure(android.view.ViewStructure, int);
     method public void onProvideAutofillVirtualStructure(android.view.ViewStructure, int);
+    method public boolean onProvideContentCaptureStructure(android.view.ViewStructure, int);
     method public void onProvideStructure(android.view.ViewStructure);
     method public void onProvideVirtualStructure(android.view.ViewStructure);
     method public android.view.PointerIcon onResolvePointerIcon(android.view.MotionEvent, int);
@@ -49110,6 +49172,7 @@ package android.view {
     method public void setId(int);
     method public void setImportantForAccessibility(int);
     method public void setImportantForAutofill(int);
+    method public void setImportantForContentCapture(int);
     method public void setKeepScreenOn(boolean);
     method public void setKeyboardNavigationCluster(boolean);
     method public void setLabelFor(int);
@@ -49280,6 +49343,11 @@ package android.view {
     field public static final int IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS = 8; // 0x8
     field public static final int IMPORTANT_FOR_AUTOFILL_YES = 1; // 0x1
     field public static final int IMPORTANT_FOR_AUTOFILL_YES_EXCLUDE_DESCENDANTS = 4; // 0x4
+    field public static final int IMPORTANT_FOR_CONTENT_CAPTURE_AUTO = 0; // 0x0
+    field public static final int IMPORTANT_FOR_CONTENT_CAPTURE_NO = 2; // 0x2
+    field public static final int IMPORTANT_FOR_CONTENT_CAPTURE_NO_EXCLUDE_DESCENDANTS = 8; // 0x8
+    field public static final int IMPORTANT_FOR_CONTENT_CAPTURE_YES = 1; // 0x1
+    field public static final int IMPORTANT_FOR_CONTENT_CAPTURE_YES_EXCLUDE_DESCENDANTS = 4; // 0x4
     field public static final int INVISIBLE = 4; // 0x4
     field public static final int KEEP_SCREEN_ON = 67108864; // 0x4000000
     field public static final int LAYER_TYPE_HARDWARE = 2; // 0x2
@@ -51734,6 +51802,10 @@ package android.view.intelligence {
     method public void disableContentCapture();
     method public android.content.ComponentName getIntelligenceServiceComponentName();
     method public boolean isContentCaptureEnabled();
+    method public android.view.ViewStructure newVirtualViewStructure(android.view.autofill.AutofillId, int);
+    method public void notifyViewAppeared(android.view.ViewStructure);
+    method public void notifyViewDisappeared(android.view.autofill.AutofillId);
+    method public void notifyViewTextChanged(android.view.autofill.AutofillId, java.lang.CharSequence, int);
     field public static final int FLAG_USER_INPUT = 1; // 0x1
   }
 
@@ -52047,6 +52119,7 @@ package android.view.textclassifier {
   public final class TextLinks implements android.os.Parcelable {
     method public int apply(android.text.Spannable, int, java.util.function.Function<android.view.textclassifier.TextLinks.TextLink, android.view.textclassifier.TextLinks.TextLinkSpan>);
     method public int describeContents();
+    method public android.os.Bundle getExtras();
     method public java.util.Collection<android.view.textclassifier.TextLinks.TextLink> getLinks();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int APPLY_STRATEGY_IGNORE = 0; // 0x0
@@ -52063,12 +52136,14 @@ package android.view.textclassifier {
     method public android.view.textclassifier.TextLinks.Builder addLink(int, int, java.util.Map<java.lang.String, java.lang.Float>);
     method public android.view.textclassifier.TextLinks build();
     method public android.view.textclassifier.TextLinks.Builder clearTextLinks();
+    method public android.view.textclassifier.TextLinks.Builder setExtras(android.os.Bundle);
   }
 
   public static final class TextLinks.Request implements android.os.Parcelable {
     method public int describeContents();
     method public android.os.LocaleList getDefaultLocales();
     method public android.view.textclassifier.TextClassifier.EntityConfig getEntityConfig();
+    method public android.os.Bundle getExtras();
     method public java.lang.CharSequence getText();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextLinks.Request> CREATOR;
@@ -52079,6 +52154,7 @@ package android.view.textclassifier {
     method public android.view.textclassifier.TextLinks.Request build();
     method public android.view.textclassifier.TextLinks.Request.Builder setDefaultLocales(android.os.LocaleList);
     method public android.view.textclassifier.TextLinks.Request.Builder setEntityConfig(android.view.textclassifier.TextClassifier.EntityConfig);
+    method public android.view.textclassifier.TextLinks.Request.Builder setExtras(android.os.Bundle);
   }
 
   public static final class TextLinks.TextLink implements android.os.Parcelable {
@@ -52103,6 +52179,7 @@ package android.view.textclassifier {
     method public float getConfidenceScore(java.lang.String);
     method public java.lang.String getEntity(int);
     method public int getEntityCount();
+    method public android.os.Bundle getExtras();
     method public java.lang.String getId();
     method public int getSelectionEndIndex();
     method public int getSelectionStartIndex();
@@ -52114,6 +52191,7 @@ package android.view.textclassifier {
     ctor public TextSelection.Builder(int, int);
     method public android.view.textclassifier.TextSelection build();
     method public android.view.textclassifier.TextSelection.Builder setEntityType(java.lang.String, float);
+    method public android.view.textclassifier.TextSelection.Builder setExtras(android.os.Bundle);
     method public android.view.textclassifier.TextSelection.Builder setId(java.lang.String);
   }
 
@@ -52121,6 +52199,7 @@ package android.view.textclassifier {
     method public int describeContents();
     method public android.os.LocaleList getDefaultLocales();
     method public int getEndIndex();
+    method public android.os.Bundle getExtras();
     method public int getStartIndex();
     method public java.lang.CharSequence getText();
     method public void writeToParcel(android.os.Parcel, int);
@@ -52131,6 +52210,7 @@ package android.view.textclassifier {
     ctor public TextSelection.Request.Builder(java.lang.CharSequence, int, int);
     method public android.view.textclassifier.TextSelection.Request build();
     method public android.view.textclassifier.TextSelection.Request.Builder setDefaultLocales(android.os.LocaleList);
+    method public android.view.textclassifier.TextSelection.Request.Builder setExtras(android.os.Bundle);
   }
 
 }
