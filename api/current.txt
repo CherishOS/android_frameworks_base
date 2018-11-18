@@ -5370,6 +5370,7 @@ package android.app {
     field public static final android.os.Parcelable.Creator<android.app.Notification.Action> CREATOR;
     field public static final int SEMANTIC_ACTION_ARCHIVE = 5; // 0x5
     field public static final int SEMANTIC_ACTION_CALL = 10; // 0xa
+    field public static final int SEMANTIC_ACTION_CONTEXTUAL_SUGGESTION = 11; // 0xb
     field public static final int SEMANTIC_ACTION_DELETE = 4; // 0x4
     field public static final int SEMANTIC_ACTION_MARK_AS_READ = 2; // 0x2
     field public static final int SEMANTIC_ACTION_MARK_AS_UNREAD = 3; // 0x3
@@ -23250,6 +23251,7 @@ package android.media {
     method public android.media.VolumeShaper createVolumeShaper(android.media.VolumeShaper.Configuration);
     method protected void finalize();
     method public void flush();
+    method public android.media.AudioAttributes getAudioAttributes();
     method public int getAudioFormat();
     method public int getAudioSessionId();
     method public int getBufferCapacityInFrames();
@@ -24464,6 +24466,7 @@ package android.media {
   }
 
   public static final class MediaExtractor.CasInfo {
+    method public byte[] getPrivateData();
     method public android.media.MediaCas.Session getSession();
     method public int getSystemId();
   }
@@ -28980,7 +28983,7 @@ package android.net.wifi {
 
   public class WifiManager {
     method public deprecated int addNetwork(android.net.wifi.WifiConfiguration);
-    method public boolean addNetworkSuggestions(java.util.List<android.net.wifi.WifiNetworkSuggestion>, android.app.PendingIntent);
+    method public boolean addNetworkSuggestions(java.util.List<android.net.wifi.WifiNetworkSuggestion>);
     method public void addOrUpdatePasspointConfiguration(android.net.wifi.hotspot2.PasspointConfiguration);
     method public static int calculateSignalLevel(int, int);
     method public deprecated void cancelWps(android.net.wifi.WifiManager.WpsCallback);
@@ -29000,11 +29003,14 @@ package android.net.wifi {
     method public boolean is5GHzBandSupported();
     method public boolean isDeviceToApRttSupported();
     method public boolean isEnhancedPowerReportingSupported();
+    method public boolean isOweSupported();
     method public boolean isP2pSupported();
     method public boolean isPreferredNetworkOffloadSupported();
     method public deprecated boolean isScanAlwaysAvailable();
     method public boolean isTdlsSupported();
     method public boolean isWifiEnabled();
+    method public boolean isWpa3SaeSupported();
+    method public boolean isWpa3SuiteBSupported();
     method public deprecated boolean pingSupplicant();
     method public deprecated boolean reassociate();
     method public deprecated boolean reconnect();
@@ -29021,9 +29027,11 @@ package android.net.wifi {
     method public deprecated int updateNetwork(android.net.wifi.WifiConfiguration);
     field public static final java.lang.String ACTION_PICK_WIFI_NETWORK = "android.net.wifi.PICK_WIFI_NETWORK";
     field public static final java.lang.String ACTION_REQUEST_SCAN_ALWAYS_AVAILABLE = "android.net.wifi.action.REQUEST_SCAN_ALWAYS_AVAILABLE";
+    field public static final java.lang.String ACTION_WIFI_NETWORK_SUGGESTION_POST_CONNECTION = "android.net.wifi.action.WIFI_NETWORK_SUGGESTION_POST_CONNECTION";
     field public static final deprecated int ERROR_AUTHENTICATING = 1; // 0x1
     field public static final deprecated java.lang.String EXTRA_BSSID = "bssid";
     field public static final java.lang.String EXTRA_NETWORK_INFO = "networkInfo";
+    field public static final java.lang.String EXTRA_NETWORK_SUGGESTION = "android.net.wifi.extra.NETWORK_SUGGESTION";
     field public static final java.lang.String EXTRA_NEW_RSSI = "newRssi";
     field public static final deprecated java.lang.String EXTRA_NEW_STATE = "newState";
     field public static final java.lang.String EXTRA_PREVIOUS_WIFI_STATE = "previous_wifi_state";
@@ -43326,6 +43334,7 @@ package android.telephony {
 
   public class PhoneStateListener {
     ctor public PhoneStateListener();
+    ctor public PhoneStateListener(java.util.concurrent.Executor);
     method public void onCallForwardingIndicatorChanged(boolean);
     method public void onCallStateChanged(int, java.lang.String);
     method public void onCellInfoChanged(java.util.List<android.telephony.CellInfo>);
@@ -43551,6 +43560,7 @@ package android.telephony {
     method public java.lang.String getCountryIso();
     method public int getDataRoaming();
     method public java.lang.CharSequence getDisplayName();
+    method public java.lang.String getGroupUuid();
     method public java.lang.String getIccId();
     method public int getIconTint();
     method public deprecated int getMcc();
@@ -43558,7 +43568,6 @@ package android.telephony {
     method public deprecated int getMnc();
     method public java.lang.String getMncString();
     method public java.lang.String getNumber();
-    method public int getParentSubId();
     method public int getSimSlotIndex();
     method public int getSubscriptionId();
     method public boolean isEmbedded();
@@ -43592,6 +43601,7 @@ package android.telephony {
     method public static boolean isValidSubscriptionId(int);
     method public void removeOnOpportunisticSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnOpportunisticSubscriptionsChangedListener);
     method public void removeOnSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnSubscriptionsChangedListener);
+    method public java.lang.String setSubscriptionGroup(int[]);
     method public void setSubscriptionOverrideCongested(int, boolean, long);
     method public void setSubscriptionOverrideUnmetered(int, boolean, long);
     method public void setSubscriptionPlans(int, java.util.List<android.telephony.SubscriptionPlan>);
@@ -43723,6 +43733,7 @@ package android.telephony {
     method public boolean isVoicemailVibrationEnabled(android.telecom.PhoneAccountHandle);
     method public boolean isWorldPhone();
     method public void listen(android.telephony.PhoneStateListener, int);
+    method public void requestCellInfoUpdate(java.util.concurrent.Executor, android.telephony.TelephonyManager.CellInfoCallback);
     method public android.telephony.NetworkScan requestNetworkScan(android.telephony.NetworkScanRequest, java.util.concurrent.Executor, android.telephony.TelephonyScanManager.NetworkScanCallback);
     method public void sendDialerSpecialCode(java.lang.String);
     method public java.lang.String sendEnvelopeWithStatus(java.lang.String);
@@ -43823,6 +43834,11 @@ package android.telephony {
     field public static final int USSD_RETURN_FAILURE = -1; // 0xffffffff
     field public static final java.lang.String VVM_TYPE_CVVM = "vvm_type_cvvm";
     field public static final java.lang.String VVM_TYPE_OMTP = "vvm_type_omtp";
+  }
+
+  public static abstract class TelephonyManager.CellInfoCallback {
+    ctor public TelephonyManager.CellInfoCallback();
+    method public abstract void onCellInfo(java.util.List<android.telephony.CellInfo>);
   }
 
   public static abstract class TelephonyManager.UssdResponseCallback {
@@ -54354,6 +54370,9 @@ package android.widget {
     method public void show(float, float);
     method public void show(float, float, float, float);
     method public void update();
+    field public static final int SOURCE_BOUND_MAX_IN_SURFACE = 0; // 0x0
+    field public static final int SOURCE_BOUND_MAX_IN_VIEW = 1; // 0x1
+    field public static final int SOURCE_BOUND_MAX_VISIBLE = 2; // 0x2
   }
 
   public static class Magnifier.Builder {
@@ -54364,6 +54383,7 @@ package android.widget {
     method public android.widget.Magnifier.Builder setElevation(float);
     method public android.widget.Magnifier.Builder setForcePositionWithinWindowSystemInsetsBounds(boolean);
     method public android.widget.Magnifier.Builder setSize(int, int);
+    method public android.widget.Magnifier.Builder setSourceBounds(int, int, int, int);
     method public android.widget.Magnifier.Builder setZoom(float);
   }
 
