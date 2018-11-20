@@ -29050,7 +29050,7 @@ package android.net.wifi {
 
   public class WifiManager {
     method public deprecated int addNetwork(android.net.wifi.WifiConfiguration);
-    method public boolean addNetworkSuggestions(java.util.List<android.net.wifi.WifiNetworkSuggestion>);
+    method public int addNetworkSuggestions(java.util.List<android.net.wifi.WifiNetworkSuggestion>);
     method public void addOrUpdatePasspointConfiguration(android.net.wifi.hotspot2.PasspointConfiguration);
     method public static int calculateSignalLevel(int, int);
     method public deprecated void cancelWps(android.net.wifi.WifiManager.WpsCallback);
@@ -29064,6 +29064,7 @@ package android.net.wifi {
     method public deprecated java.util.List<android.net.wifi.WifiConfiguration> getConfiguredNetworks();
     method public android.net.wifi.WifiInfo getConnectionInfo();
     method public android.net.DhcpInfo getDhcpInfo();
+    method public int getMaxNumberOfNetworkSuggestionsPerApp();
     method public java.util.List<android.net.wifi.hotspot2.PasspointConfiguration> getPasspointConfigurations();
     method public java.util.List<android.net.wifi.ScanResult> getScanResults();
     method public int getWifiState();
@@ -29082,7 +29083,7 @@ package android.net.wifi {
     method public deprecated boolean reassociate();
     method public deprecated boolean reconnect();
     method public deprecated boolean removeNetwork(int);
-    method public boolean removeNetworkSuggestions(java.util.List<android.net.wifi.WifiNetworkSuggestion>);
+    method public int removeNetworkSuggestions(java.util.List<android.net.wifi.WifiNetworkSuggestion>);
     method public void removePasspointConfiguration(java.lang.String);
     method public deprecated boolean saveConfiguration();
     method public void setTdlsEnabled(java.net.InetAddress, boolean);
@@ -29111,6 +29112,11 @@ package android.net.wifi {
     field public static final java.lang.String NETWORK_STATE_CHANGED_ACTION = "android.net.wifi.STATE_CHANGE";
     field public static final java.lang.String RSSI_CHANGED_ACTION = "android.net.wifi.RSSI_CHANGED";
     field public static final java.lang.String SCAN_RESULTS_AVAILABLE_ACTION = "android.net.wifi.SCAN_RESULTS";
+    field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_ADD_DUPLICATE = 2; // 0x2
+    field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_ADD_EXCEEDS_MAX_PER_APP = 3; // 0x3
+    field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_INTERNAL = 1; // 0x1
+    field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_REMOVE_INVALID = 4; // 0x4
+    field public static final int STATUS_NETWORK_SUGGESTIONS_SUCCESS = 0; // 0x0
     field public static final deprecated java.lang.String SUPPLICANT_CONNECTION_CHANGE_ACTION = "android.net.wifi.supplicant.CONNECTION_CHANGE";
     field public static final deprecated java.lang.String SUPPLICANT_STATE_CHANGED_ACTION = "android.net.wifi.supplicant.STATE_CHANGE";
     field public static final int WIFI_MODE_FULL = 1; // 0x1
@@ -29150,6 +29156,9 @@ package android.net.wifi {
     method public boolean isHeld();
     method public void release();
     method public void setReferenceCounted(boolean);
+  }
+
+  public static abstract class WifiManager.NetworkSuggestionsStatusCode implements java.lang.annotation.Annotation {
   }
 
   public class WifiManager.WifiLock {
