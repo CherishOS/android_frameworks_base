@@ -23435,6 +23435,17 @@ package android.media {
     method public void onTearDown(android.media.AudioTrack);
   }
 
+  public class CallbackDataSourceDesc extends android.media.DataSourceDesc {
+    method public android.media.DataSourceCallback getDataSourceCallback();
+  }
+
+  public static class CallbackDataSourceDesc.Builder extends android.media.DataSourceDesc.BuilderBase {
+    ctor public CallbackDataSourceDesc.Builder();
+    ctor public CallbackDataSourceDesc.Builder(android.media.CallbackDataSourceDesc);
+    method public android.media.CallbackDataSourceDesc build();
+    method public android.media.CallbackDataSourceDesc.Builder setDataSource(android.media.DataSourceCallback);
+  }
+
   public class CamcorderProfile {
     method public static android.media.CamcorderProfile get(int);
     method public static android.media.CamcorderProfile get(int, int);
@@ -23485,6 +23496,26 @@ package android.media {
     field public static final int QUALITY_HIGH = 2; // 0x2
     field public static final int QUALITY_LOW = 0; // 0x0
     field public static final int QUALITY_MEDIUM = 1; // 0x1
+  }
+
+  public abstract class DataSourceCallback implements java.io.Closeable {
+    ctor public DataSourceCallback();
+    method public abstract long getSize() throws java.io.IOException;
+    method public abstract int readAt(long, byte[], int, int) throws java.io.IOException;
+  }
+
+  public class DataSourceDesc {
+    method public long getEndPosition();
+    method public java.lang.String getMediaId();
+    method public long getStartPosition();
+    field public static final long LONG_MAX_TIME_MS = 576460752303423L; // 0x20c49ba5e353fL
+    field public static final long POSITION_UNKNOWN = 576460752303423L; // 0x20c49ba5e353fL
+  }
+
+  protected static class DataSourceDesc.BuilderBase<T extends android.media.DataSourceDesc.BuilderBase> {
+    method public T setEndPosition(long);
+    method public T setMediaId(java.lang.String);
+    method public T setStartPosition(long);
   }
 
   public final class DeniedByServerException extends android.media.MediaDrmException {
@@ -23685,6 +23716,21 @@ package android.media {
     field public static final int EULER_X = 0; // 0x0
     field public static final int EULER_Y = 1; // 0x1
     field public static final int EULER_Z = 2; // 0x2
+  }
+
+  public class FileDataSourceDesc extends android.media.DataSourceDesc {
+    method public long getLength();
+    method public long getOffset();
+    method public android.os.ParcelFileDescriptor getParcelFileDescriptor();
+    field public static final long FD_LENGTH_UNKNOWN = 576460752303423487L; // 0x7ffffffffffffffL
+  }
+
+  public static class FileDataSourceDesc.Builder extends android.media.DataSourceDesc.BuilderBase {
+    ctor public FileDataSourceDesc.Builder();
+    ctor public FileDataSourceDesc.Builder(android.media.FileDataSourceDesc);
+    method public android.media.FileDataSourceDesc build();
+    method public android.media.FileDataSourceDesc.Builder setDataSource(android.os.ParcelFileDescriptor);
+    method public android.media.FileDataSourceDesc.Builder setDataSource(android.os.ParcelFileDescriptor, long, long);
   }
 
   public abstract class Image implements java.lang.AutoCloseable {
@@ -25054,6 +25100,166 @@ package android.media {
     field public static final int MEDIA_TRACK_TYPE_VIDEO = 1; // 0x1
   }
 
+  public class MediaPlayer2 implements android.media.AudioRouting java.lang.AutoCloseable {
+    ctor public MediaPlayer2(android.content.Context);
+    method public void addOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener, android.os.Handler);
+    method public java.lang.Object attachAuxEffect(int);
+    method public boolean cancelCommand(java.lang.Object);
+    method public java.lang.Object clearNextDataSources();
+    method public void clearPendingCommands();
+    method public void close();
+    method public java.lang.Object deselectTrack(int);
+    method public android.media.AudioAttributes getAudioAttributes();
+    method public int getAudioSessionId();
+    method public long getBufferedPosition();
+    method public android.media.DataSourceDesc getCurrentDataSource();
+    method public long getCurrentPosition();
+    method public long getDuration();
+    method public float getMaxPlayerVolume();
+    method public android.os.PersistableBundle getMetrics();
+    method public android.media.PlaybackParams getPlaybackParams();
+    method public float getPlayerVolume();
+    method public android.media.AudioDeviceInfo getPreferredDevice();
+    method public android.media.AudioDeviceInfo getRoutedDevice();
+    method public int getSelectedTrack(int);
+    method public int getState();
+    method public android.media.SyncParams getSyncParams();
+    method public android.media.MediaTimestamp getTimestamp();
+    method public java.util.List<android.media.MediaPlayer2.TrackInfo> getTrackInfo();
+    method public android.media.VideoSize getVideoSize();
+    method public boolean isLooping();
+    method public java.lang.Object loopCurrent(boolean);
+    method public java.lang.Object notifyWhenCommandLabelReached(java.lang.Object);
+    method public java.lang.Object pause();
+    method public java.lang.Object play();
+    method public java.lang.Object prepare();
+    method public void registerEventCallback(java.util.concurrent.Executor, android.media.MediaPlayer2.EventCallback);
+    method public void removeOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener);
+    method public void reset();
+    method public java.lang.Object seekTo(long);
+    method public java.lang.Object seekTo(long, int);
+    method public java.lang.Object selectTrack(int);
+    method public java.lang.Object setAudioAttributes(android.media.AudioAttributes);
+    method public java.lang.Object setAudioSessionId(int);
+    method public java.lang.Object setAuxEffectSendLevel(float);
+    method public java.lang.Object setDataSource(android.media.DataSourceDesc);
+    method public java.lang.Object setDisplay(android.view.SurfaceHolder);
+    method public java.lang.Object setNextDataSource(android.media.DataSourceDesc);
+    method public java.lang.Object setNextDataSources(java.util.List<android.media.DataSourceDesc>);
+    method public java.lang.Object setPlaybackParams(android.media.PlaybackParams);
+    method public java.lang.Object setPlayerVolume(float);
+    method public boolean setPreferredDevice(android.media.AudioDeviceInfo);
+    method public java.lang.Object setScreenOnWhilePlaying(boolean);
+    method public java.lang.Object setSurface(android.view.Surface);
+    method public java.lang.Object setSyncParams(android.media.SyncParams);
+    method public java.lang.Object setWakeLock(android.os.PowerManager.WakeLock);
+    method public java.lang.Object skipToNext();
+    method public void unregisterEventCallback(android.media.MediaPlayer2.EventCallback);
+    field public static final int CALL_COMPLETED_ATTACH_AUX_EFFECT = 1; // 0x1
+    field public static final int CALL_COMPLETED_CLEAR_NEXT_DATA_SOURCES = 30; // 0x1e
+    field public static final int CALL_COMPLETED_DESELECT_TRACK = 2; // 0x2
+    field public static final int CALL_COMPLETED_LOOP_CURRENT = 3; // 0x3
+    field public static final int CALL_COMPLETED_PAUSE = 4; // 0x4
+    field public static final int CALL_COMPLETED_PLAY = 5; // 0x5
+    field public static final int CALL_COMPLETED_PREPARE = 6; // 0x6
+    field public static final int CALL_COMPLETED_SEEK_TO = 14; // 0xe
+    field public static final int CALL_COMPLETED_SELECT_TRACK = 15; // 0xf
+    field public static final int CALL_COMPLETED_SET_AUDIO_ATTRIBUTES = 16; // 0x10
+    field public static final int CALL_COMPLETED_SET_AUDIO_SESSION_ID = 17; // 0x11
+    field public static final int CALL_COMPLETED_SET_AUX_EFFECT_SEND_LEVEL = 18; // 0x12
+    field public static final int CALL_COMPLETED_SET_DATA_SOURCE = 19; // 0x13
+    field public static final int CALL_COMPLETED_SET_DISPLAY = 33; // 0x21
+    field public static final int CALL_COMPLETED_SET_NEXT_DATA_SOURCE = 22; // 0x16
+    field public static final int CALL_COMPLETED_SET_NEXT_DATA_SOURCES = 23; // 0x17
+    field public static final int CALL_COMPLETED_SET_PLAYBACK_PARAMS = 24; // 0x18
+    field public static final int CALL_COMPLETED_SET_PLAYER_VOLUME = 26; // 0x1a
+    field public static final int CALL_COMPLETED_SET_SCREEN_ON_WHILE_PLAYING = 35; // 0x23
+    field public static final int CALL_COMPLETED_SET_SURFACE = 27; // 0x1b
+    field public static final int CALL_COMPLETED_SET_SYNC_PARAMS = 28; // 0x1c
+    field public static final int CALL_COMPLETED_SET_WAKE_LOCK = 34; // 0x22
+    field public static final int CALL_COMPLETED_SKIP_TO_NEXT = 29; // 0x1d
+    field public static final int CALL_STATUS_BAD_VALUE = 2; // 0x2
+    field public static final int CALL_STATUS_ERROR_IO = 4; // 0x4
+    field public static final int CALL_STATUS_ERROR_UNKNOWN = -2147483648; // 0x80000000
+    field public static final int CALL_STATUS_INVALID_OPERATION = 1; // 0x1
+    field public static final int CALL_STATUS_NO_DRM_SCHEME = 6; // 0x6
+    field public static final int CALL_STATUS_NO_ERROR = 0; // 0x0
+    field public static final int CALL_STATUS_PERMISSION_DENIED = 3; // 0x3
+    field public static final int CALL_STATUS_SKIPPED = 5; // 0x5
+    field public static final int MEDIA_ERROR_IO = -1004; // 0xfffffc14
+    field public static final int MEDIA_ERROR_MALFORMED = -1007; // 0xfffffc11
+    field public static final int MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK = 200; // 0xc8
+    field public static final int MEDIA_ERROR_TIMED_OUT = -110; // 0xffffff92
+    field public static final int MEDIA_ERROR_UNKNOWN = 1; // 0x1
+    field public static final int MEDIA_ERROR_UNSUPPORTED = -1010; // 0xfffffc0e
+    field public static final int MEDIA_INFO_AUDIO_NOT_PLAYING = 804; // 0x324
+    field public static final int MEDIA_INFO_AUDIO_RENDERING_START = 4; // 0x4
+    field public static final int MEDIA_INFO_BAD_INTERLEAVING = 800; // 0x320
+    field public static final int MEDIA_INFO_BUFFERING_END = 702; // 0x2be
+    field public static final int MEDIA_INFO_BUFFERING_START = 701; // 0x2bd
+    field public static final int MEDIA_INFO_BUFFERING_UPDATE = 704; // 0x2c0
+    field public static final int MEDIA_INFO_DATA_SOURCE_END = 5; // 0x5
+    field public static final int MEDIA_INFO_DATA_SOURCE_LIST_END = 6; // 0x6
+    field public static final int MEDIA_INFO_DATA_SOURCE_REPEAT = 7; // 0x7
+    field public static final int MEDIA_INFO_DATA_SOURCE_START = 2; // 0x2
+    field public static final int MEDIA_INFO_METADATA_UPDATE = 802; // 0x322
+    field public static final int MEDIA_INFO_NOT_SEEKABLE = 801; // 0x321
+    field public static final int MEDIA_INFO_PREPARED = 100; // 0x64
+    field public static final int MEDIA_INFO_SUBTITLE_TIMED_OUT = 902; // 0x386
+    field public static final int MEDIA_INFO_UNKNOWN = 1; // 0x1
+    field public static final int MEDIA_INFO_UNSUPPORTED_SUBTITLE = 901; // 0x385
+    field public static final int MEDIA_INFO_VIDEO_NOT_PLAYING = 805; // 0x325
+    field public static final int MEDIA_INFO_VIDEO_RENDERING_START = 3; // 0x3
+    field public static final int MEDIA_INFO_VIDEO_TRACK_LAGGING = 700; // 0x2bc
+    field public static final int PLAYER_STATE_ERROR = 1005; // 0x3ed
+    field public static final int PLAYER_STATE_IDLE = 1001; // 0x3e9
+    field public static final int PLAYER_STATE_PAUSED = 1003; // 0x3eb
+    field public static final int PLAYER_STATE_PLAYING = 1004; // 0x3ec
+    field public static final int PLAYER_STATE_PREPARED = 1002; // 0x3ea
+    field public static final int SEEK_CLOSEST = 3; // 0x3
+    field public static final int SEEK_CLOSEST_SYNC = 2; // 0x2
+    field public static final int SEEK_NEXT_SYNC = 1; // 0x1
+    field public static final int SEEK_PREVIOUS_SYNC = 0; // 0x0
+  }
+
+  public static class MediaPlayer2.EventCallback {
+    ctor public MediaPlayer2.EventCallback();
+    method public void onCallCompleted(android.media.MediaPlayer2, android.media.DataSourceDesc, int, int);
+    method public void onCommandLabelReached(android.media.MediaPlayer2, java.lang.Object);
+    method public void onError(android.media.MediaPlayer2, android.media.DataSourceDesc, int, int);
+    method public void onInfo(android.media.MediaPlayer2, android.media.DataSourceDesc, int, int);
+    method public void onMediaTimeDiscontinuity(android.media.MediaPlayer2, android.media.DataSourceDesc, android.media.MediaTimestamp);
+    method public void onSubtitleData(android.media.MediaPlayer2, android.media.DataSourceDesc, android.media.SubtitleData);
+    method public void onTimedMetaDataAvailable(android.media.MediaPlayer2, android.media.DataSourceDesc, android.media.TimedMetaData);
+    method public void onVideoSizeChanged(android.media.MediaPlayer2, android.media.DataSourceDesc, android.media.VideoSize);
+  }
+
+  public static final class MediaPlayer2.MetricsConstants {
+    field public static final java.lang.String CODEC_AUDIO = "android.media.mediaplayer.audio.codec";
+    field public static final java.lang.String CODEC_VIDEO = "android.media.mediaplayer.video.codec";
+    field public static final java.lang.String DURATION = "android.media.mediaplayer.durationMs";
+    field public static final java.lang.String ERRORS = "android.media.mediaplayer.err";
+    field public static final java.lang.String ERROR_CODE = "android.media.mediaplayer.errcode";
+    field public static final java.lang.String FRAMES = "android.media.mediaplayer.frames";
+    field public static final java.lang.String FRAMES_DROPPED = "android.media.mediaplayer.dropped";
+    field public static final java.lang.String HEIGHT = "android.media.mediaplayer.height";
+    field public static final java.lang.String MIME_TYPE_AUDIO = "android.media.mediaplayer.audio.mime";
+    field public static final java.lang.String MIME_TYPE_VIDEO = "android.media.mediaplayer.video.mime";
+    field public static final java.lang.String PLAYING = "android.media.mediaplayer.playingMs";
+    field public static final java.lang.String WIDTH = "android.media.mediaplayer.width";
+  }
+
+  public static class MediaPlayer2.TrackInfo {
+    method public android.media.MediaFormat getFormat();
+    method public java.lang.String getLanguage();
+    method public int getTrackType();
+    field public static final int MEDIA_TRACK_TYPE_AUDIO = 2; // 0x2
+    field public static final int MEDIA_TRACK_TYPE_METADATA = 5; // 0x5
+    field public static final int MEDIA_TRACK_TYPE_SUBTITLE = 4; // 0x4
+    field public static final int MEDIA_TRACK_TYPE_UNKNOWN = 0; // 0x0
+    field public static final int MEDIA_TRACK_TYPE_VIDEO = 1; // 0x1
+  }
+
   public class MediaRecorder implements android.media.AudioRouting {
     ctor public MediaRecorder();
     method public void addOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener, android.os.Handler);
@@ -25794,6 +26000,26 @@ package android.media {
 
   public final class UnsupportedSchemeException extends android.media.MediaDrmException {
     ctor public UnsupportedSchemeException(java.lang.String);
+  }
+
+  public class UriDataSourceDesc extends android.media.DataSourceDesc {
+    method public android.content.Context getContext();
+    method public java.util.List<java.net.HttpCookie> getCookies();
+    method public java.util.Map<java.lang.String, java.lang.String> getHeaders();
+    method public android.net.Uri getUri();
+  }
+
+  public static class UriDataSourceDesc.Builder extends android.media.DataSourceDesc.BuilderBase {
+    ctor public UriDataSourceDesc.Builder();
+    ctor public UriDataSourceDesc.Builder(android.media.UriDataSourceDesc);
+    method public android.media.UriDataSourceDesc build();
+    method public android.media.UriDataSourceDesc.Builder setDataSource(android.content.Context, android.net.Uri);
+    method public android.media.UriDataSourceDesc.Builder setDataSource(android.content.Context, android.net.Uri, java.util.Map<java.lang.String, java.lang.String>, java.util.List<java.net.HttpCookie>);
+  }
+
+  public final class VideoSize {
+    method public int getHeight();
+    method public int getWidth();
   }
 
   public abstract interface VolumeAutomation {
