@@ -142,6 +142,7 @@ package android {
     field public static final java.lang.String SET_WALLPAPER = "android.permission.SET_WALLPAPER";
     field public static final java.lang.String SET_WALLPAPER_HINTS = "android.permission.SET_WALLPAPER_HINTS";
     field public static final java.lang.String SIGNAL_PERSISTENT_PROCESSES = "android.permission.SIGNAL_PERSISTENT_PROCESSES";
+    field public static final java.lang.String SMS_FINANCIAL_TRANSACTIONS = "android.permission.SMS_FINANCIAL_TRANSACTIONS";
     field public static final java.lang.String STATUS_BAR = "android.permission.STATUS_BAR";
     field public static final java.lang.String SYSTEM_ALERT_WINDOW = "android.permission.SYSTEM_ALERT_WINDOW";
     field public static final java.lang.String TRANSMIT_IR = "android.permission.TRANSMIT_IR";
@@ -4226,8 +4227,10 @@ package android.app {
 
   public class AppComponentFactory {
     ctor public AppComponentFactory();
+    method public android.content.pm.ApplicationInfo getApplicationInfo();
     method public android.app.Activity instantiateActivity(java.lang.ClassLoader, java.lang.String, android.content.Intent) throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException;
     method public android.app.Application instantiateApplication(java.lang.ClassLoader, java.lang.String) throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException;
+    method public java.lang.ClassLoader instantiateClassLoader(java.lang.ClassLoader);
     method public android.content.ContentProvider instantiateProvider(java.lang.ClassLoader, java.lang.String) throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException;
     method public android.content.BroadcastReceiver instantiateReceiver(java.lang.ClassLoader, java.lang.String, android.content.Intent) throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException;
     method public android.app.Service instantiateService(java.lang.ClassLoader, java.lang.String, android.content.Intent) throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException;
@@ -10182,6 +10185,7 @@ package android.content {
     field public static final java.lang.String EXTRA_CHOSEN_COMPONENT_INTENT_SENDER = "android.intent.extra.CHOSEN_COMPONENT_INTENT_SENDER";
     field public static final java.lang.String EXTRA_COMPONENT_NAME = "android.intent.extra.COMPONENT_NAME";
     field public static final java.lang.String EXTRA_CONTENT_ANNOTATIONS = "android.intent.extra.CONTENT_ANNOTATIONS";
+    field public static final java.lang.String EXTRA_CONTENT_QUERY = "android.intent.extra.CONTENT_QUERY";
     field public static final java.lang.String EXTRA_DATA_REMOVED = "android.intent.extra.DATA_REMOVED";
     field public static final java.lang.String EXTRA_DOCK_STATE = "android.intent.extra.DOCK_STATE";
     field public static final int EXTRA_DOCK_STATE_CAR = 2; // 0x2
@@ -11137,6 +11141,7 @@ package android.content.pm {
     field public int[] gids;
     field public int installLocation;
     field public android.content.pm.InstrumentationInfo[] instrumentation;
+    field public boolean isApex;
     field public long lastUpdateTime;
     field public java.lang.String packageName;
     field public android.content.pm.PermissionInfo[] permissions;
@@ -11528,6 +11533,7 @@ package android.content.pm {
     field public static final int INSTALL_REASON_UNKNOWN = 0; // 0x0
     field public static final int INSTALL_REASON_USER = 4; // 0x4
     field public static final int MATCH_ALL = 131072; // 0x20000
+    field public static final int MATCH_APEX = 1073741824; // 0x40000000
     field public static final int MATCH_DEFAULT_ONLY = 65536; // 0x10000
     field public static final int MATCH_DIRECT_BOOT_AUTO = 268435456; // 0x10000000
     field public static final int MATCH_DIRECT_BOOT_AWARE = 524288; // 0x80000
@@ -22924,7 +22930,7 @@ package android.media {
     method public void adjustSuggestedStreamVolume(int, int, int);
     method public void adjustVolume(int, int);
     method public void dispatchMediaKeyEvent(android.view.KeyEvent);
-    method public int generateAudioSessionId();
+    method public static int generateAudioSessionId();
     method public java.util.List<android.media.AudioPlaybackConfiguration> getActivePlaybackConfigurations();
     method public java.util.List<android.media.AudioRecordingConfiguration> getActiveRecordingConfigurations();
     method public android.media.AudioDeviceInfo[] getDevices(int);
@@ -43929,6 +43935,7 @@ package android.telephony.data {
     method public java.lang.String getApnName();
     method public int getApnTypeBitmask();
     method public int getAuthType();
+    method public int getCarrierId();
     method public java.lang.String getEntryName();
     method public int getId();
     method public deprecated java.net.InetAddress getMmsProxyAddress();
@@ -43979,6 +43986,7 @@ package android.telephony.data {
     method public android.telephony.data.ApnSetting.Builder setApnTypeBitmask(int);
     method public android.telephony.data.ApnSetting.Builder setAuthType(int);
     method public android.telephony.data.ApnSetting.Builder setCarrierEnabled(boolean);
+    method public android.telephony.data.ApnSetting.Builder setCarrierId(int);
     method public android.telephony.data.ApnSetting.Builder setEntryName(java.lang.String);
     method public deprecated android.telephony.data.ApnSetting.Builder setMmsProxyAddress(java.net.InetAddress);
     method public android.telephony.data.ApnSetting.Builder setMmsProxyAddress(java.lang.String);
@@ -47072,6 +47080,7 @@ package android.util {
   public class TimeUtils {
     method public static java.util.TimeZone getTimeZone(int, boolean, long, java.lang.String);
     method public static java.lang.String getTimeZoneDatabaseVersion();
+    method public static java.util.List<java.lang.String> getTimeZoneIdsForCountryCode(java.lang.String);
   }
 
   public class TimingLogger {
@@ -51819,13 +51828,13 @@ package android.view.inputmethod {
 package android.view.intelligence {
 
   public final class IntelligenceManager {
-    method public void disableContentCapture();
     method public android.content.ComponentName getIntelligenceServiceComponentName();
     method public boolean isContentCaptureEnabled();
     method public android.view.ViewStructure newVirtualViewStructure(android.view.autofill.AutofillId, int);
     method public void notifyViewAppeared(android.view.ViewStructure);
     method public void notifyViewDisappeared(android.view.autofill.AutofillId);
     method public void notifyViewTextChanged(android.view.autofill.AutofillId, java.lang.CharSequence, int);
+    method public void setContentCaptureEnabled(boolean);
     field public static final int FLAG_USER_INPUT = 1; // 0x1
   }
 
@@ -54359,6 +54368,7 @@ package android.widget {
     method public int getDefaultVerticalSourceToMagnifierOffset();
     method public float getElevation();
     method public int getHeight();
+    method public android.graphics.drawable.Drawable getOverlay();
     method public android.graphics.Point getPosition();
     method public int getSourceHeight();
     method public android.graphics.Point getSourcePosition();
@@ -54382,6 +54392,7 @@ package android.widget {
     method public android.widget.Magnifier.Builder setDefaultSourceToMagnifierOffset(int, int);
     method public android.widget.Magnifier.Builder setElevation(float);
     method public android.widget.Magnifier.Builder setForcePositionWithinWindowSystemInsetsBounds(boolean);
+    method public android.widget.Magnifier.Builder setOverlay(android.graphics.drawable.Drawable);
     method public android.widget.Magnifier.Builder setSize(int, int);
     method public android.widget.Magnifier.Builder setSourceBounds(int, int, int, int);
     method public android.widget.Magnifier.Builder setZoom(float);
