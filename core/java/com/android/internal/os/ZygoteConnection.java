@@ -25,6 +25,7 @@ import static com.android.internal.os.ZygoteConnectionConstants.WRAPPED_PID_TIME
 
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.pm.ApplicationInfo;
+import android.graphics.Typeface;
 import android.net.Credentials;
 import android.net.LocalSocket;
 import android.os.Parcel;
@@ -229,6 +230,10 @@ class ZygoteConnection {
                                 errnoEx);
                     }
                 }
+				
+				if (parsedArgs.refreshTheme) {
+                    Typeface.recreateDefaults();
+                 }
 
                 /*
                  * In order to avoid leaking descriptors to the Zygote child,
