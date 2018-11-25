@@ -6598,6 +6598,7 @@ package android.app.admin {
     method public boolean installKeyPair(android.content.ComponentName, java.security.PrivateKey, java.security.cert.Certificate, java.lang.String);
     method public boolean installKeyPair(android.content.ComponentName, java.security.PrivateKey, java.security.cert.Certificate[], java.lang.String, boolean);
     method public boolean installKeyPair(android.content.ComponentName, java.security.PrivateKey, java.security.cert.Certificate[], java.lang.String, int);
+    method public void installSystemUpdate(android.content.ComponentName, android.net.Uri, java.util.concurrent.Executor, android.app.admin.DevicePolicyManager.InstallUpdateCallback);
     method public boolean isActivePasswordSufficient();
     method public boolean isAdminActive(android.content.ComponentName);
     method public boolean isAffiliatedUser();
@@ -6838,6 +6839,16 @@ package android.app.admin {
     field public static final int WIPE_EUICC = 4; // 0x4
     field public static final int WIPE_EXTERNAL_STORAGE = 1; // 0x1
     field public static final int WIPE_RESET_PROTECTION_DATA = 2; // 0x2
+  }
+
+  public static abstract class DevicePolicyManager.InstallUpdateCallback {
+    ctor public DevicePolicyManager.InstallUpdateCallback();
+    method public void onInstallUpdateError(int, java.lang.String);
+    field public static final int UPDATE_ERROR_BATTERY_LOW = 5; // 0x5
+    field public static final int UPDATE_ERROR_FILE_NOT_FOUND = 4; // 0x4
+    field public static final int UPDATE_ERROR_INCORRECT_OS_VERSION = 2; // 0x2
+    field public static final int UPDATE_ERROR_UNKNOWN = 1; // 0x1
+    field public static final int UPDATE_ERROR_UPDATE_FILE_INVALID = 3; // 0x3
   }
 
   public static abstract interface DevicePolicyManager.OnClearApplicationUserDataListener {
@@ -56240,6 +56251,7 @@ package dalvik.system {
   }
 
   public final class InMemoryDexClassLoader extends dalvik.system.BaseDexClassLoader {
+    ctor public InMemoryDexClassLoader(java.nio.ByteBuffer[], java.lang.String, java.lang.ClassLoader);
     ctor public InMemoryDexClassLoader(java.nio.ByteBuffer[], java.lang.ClassLoader);
     ctor public InMemoryDexClassLoader(java.nio.ByteBuffer, java.lang.ClassLoader);
   }
