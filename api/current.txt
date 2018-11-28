@@ -159,9 +159,6 @@ package android {
     field public static final java.lang.String WRITE_CONTACTS = "android.permission.WRITE_CONTACTS";
     field public static final deprecated java.lang.String WRITE_EXTERNAL_STORAGE = "android.permission.WRITE_EXTERNAL_STORAGE";
     field public static final java.lang.String WRITE_GSERVICES = "android.permission.WRITE_GSERVICES";
-    field public static final java.lang.String WRITE_MEDIA_AUDIO = "android.permission.WRITE_MEDIA_AUDIO";
-    field public static final java.lang.String WRITE_MEDIA_IMAGES = "android.permission.WRITE_MEDIA_IMAGES";
-    field public static final java.lang.String WRITE_MEDIA_VIDEO = "android.permission.WRITE_MEDIA_VIDEO";
     field public static final java.lang.String WRITE_SECURE_SETTINGS = "android.permission.WRITE_SECURE_SETTINGS";
     field public static final java.lang.String WRITE_SETTINGS = "android.permission.WRITE_SETTINGS";
     field public static final java.lang.String WRITE_SYNC_SETTINGS = "android.permission.WRITE_SYNC_SETTINGS";
@@ -1319,6 +1316,7 @@ package android {
     field public static final int supportsAssist = 16844016; // 0x10104f0
     field public static final int supportsLaunchVoiceAssistFromKeyguard = 16844017; // 0x10104f1
     field public static final int supportsLocalInteraction = 16844047; // 0x101050f
+    field public static final int supportsMultipleDisplays = 16844183; // 0x1010597
     field public static final int supportsPictureInPicture = 16844023; // 0x10104f7
     field public static final int supportsRtl = 16843695; // 0x10103af
     field public static final int supportsSwitchingToNextInputMethod = 16843755; // 0x10103eb
@@ -6354,6 +6352,7 @@ package android.app {
     method public java.lang.CharSequence loadLabel(android.content.pm.PackageManager);
     method public android.graphics.drawable.Drawable loadThumbnail(android.content.pm.PackageManager);
     method public boolean supportsAmbientMode();
+    method public boolean supportsMultipleDisplays();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.WallpaperInfo> CREATOR;
   }
@@ -10041,6 +10040,7 @@ package android.content {
     field public static final java.lang.String ACTION_CREATE_SHORTCUT = "android.intent.action.CREATE_SHORTCUT";
     field public static final java.lang.String ACTION_DATE_CHANGED = "android.intent.action.DATE_CHANGED";
     field public static final java.lang.String ACTION_DEFAULT = "android.intent.action.VIEW";
+    field public static final java.lang.String ACTION_DEFINE = "android.intent.action.DEFINE";
     field public static final java.lang.String ACTION_DELETE = "android.intent.action.DELETE";
     field public static final deprecated java.lang.String ACTION_DEVICE_STORAGE_LOW = "android.intent.action.DEVICE_STORAGE_LOW";
     field public static final deprecated java.lang.String ACTION_DEVICE_STORAGE_OK = "android.intent.action.DEVICE_STORAGE_OK";
@@ -10131,6 +10131,7 @@ package android.content {
     field public static final java.lang.String ACTION_TIMEZONE_CHANGED = "android.intent.action.TIMEZONE_CHANGED";
     field public static final java.lang.String ACTION_TIME_CHANGED = "android.intent.action.TIME_SET";
     field public static final java.lang.String ACTION_TIME_TICK = "android.intent.action.TIME_TICK";
+    field public static final java.lang.String ACTION_TRANSLATE = "android.intent.action.TRANSLATE";
     field public static final java.lang.String ACTION_UID_REMOVED = "android.intent.action.UID_REMOVED";
     field public static final deprecated java.lang.String ACTION_UMS_CONNECTED = "android.intent.action.UMS_CONNECTED";
     field public static final deprecated java.lang.String ACTION_UMS_DISCONNECTED = "android.intent.action.UMS_DISCONNECTED";
@@ -22641,7 +22642,7 @@ package android.location {
     method public abstract void onLocationChanged(android.location.Location);
     method public abstract void onProviderDisabled(java.lang.String);
     method public abstract void onProviderEnabled(java.lang.String);
-    method public abstract void onStatusChanged(java.lang.String, int, android.os.Bundle);
+    method public abstract deprecated void onStatusChanged(java.lang.String, int, android.os.Bundle);
   }
 
   public class LocationManager {
@@ -22653,7 +22654,7 @@ package android.location {
     method public void addTestProvider(java.lang.String, boolean, boolean, boolean, boolean, boolean, boolean, boolean, int, int);
     method public void clearTestProviderEnabled(java.lang.String);
     method public void clearTestProviderLocation(java.lang.String);
-    method public void clearTestProviderStatus(java.lang.String);
+    method public deprecated void clearTestProviderStatus(java.lang.String);
     method public java.util.List<java.lang.String> getAllProviders();
     method public java.lang.String getBestProvider(android.location.Criteria, boolean);
     method public java.lang.String getGnssHardwareModelName();
@@ -22690,7 +22691,7 @@ package android.location {
     method public boolean sendExtraCommand(java.lang.String, java.lang.String, android.os.Bundle);
     method public void setTestProviderEnabled(java.lang.String, boolean);
     method public void setTestProviderLocation(java.lang.String, android.location.Location);
-    method public void setTestProviderStatus(java.lang.String, int, android.os.Bundle, long);
+    method public deprecated void setTestProviderStatus(java.lang.String, int, android.os.Bundle, long);
     method public void unregisterGnssMeasurementsCallback(android.location.GnssMeasurementsEvent.Callback);
     method public void unregisterGnssNavigationMessageCallback(android.location.GnssNavigationMessage.Callback);
     method public void unregisterGnssStatusCallback(android.location.GnssStatus.Callback);
@@ -22698,7 +22699,7 @@ package android.location {
     field public static final java.lang.String KEY_LOCATION_CHANGED = "location";
     field public static final java.lang.String KEY_PROVIDER_ENABLED = "providerEnabled";
     field public static final java.lang.String KEY_PROXIMITY_ENTERING = "entering";
-    field public static final java.lang.String KEY_STATUS_CHANGED = "status";
+    field public static final deprecated java.lang.String KEY_STATUS_CHANGED = "status";
     field public static final java.lang.String MODE_CHANGED_ACTION = "android.location.MODE_CHANGED";
     field public static final java.lang.String NETWORK_PROVIDER = "network";
     field public static final java.lang.String PASSIVE_PROVIDER = "passive";
@@ -22717,9 +22718,9 @@ package android.location {
     method public boolean supportsAltitude();
     method public boolean supportsBearing();
     method public boolean supportsSpeed();
-    field public static final int AVAILABLE = 2; // 0x2
-    field public static final int OUT_OF_SERVICE = 0; // 0x0
-    field public static final int TEMPORARILY_UNAVAILABLE = 1; // 0x1
+    field public static final deprecated int AVAILABLE = 2; // 0x2
+    field public static final deprecated int OUT_OF_SERVICE = 0; // 0x0
+    field public static final deprecated int TEMPORARILY_UNAVAILABLE = 1; // 0x1
   }
 
   public abstract interface OnNmeaMessageListener {
@@ -29131,15 +29132,18 @@ package android.net.wifi {
     method public android.net.wifi.WifiNetworkSuggestion buildNetworkSuggestion();
     method public android.net.wifi.WifiNetworkConfigBuilder setBssid(android.net.MacAddress);
     method public android.net.wifi.WifiNetworkConfigBuilder setBssidPattern(android.net.MacAddress, android.net.MacAddress);
-    method public android.net.wifi.WifiNetworkConfigBuilder setEnterpriseConfig(android.net.wifi.WifiEnterpriseConfig);
     method public android.net.wifi.WifiNetworkConfigBuilder setIsAppInteractionRequired();
+    method public android.net.wifi.WifiNetworkConfigBuilder setIsEnhancedOpen();
     method public android.net.wifi.WifiNetworkConfigBuilder setIsHiddenSsid();
     method public android.net.wifi.WifiNetworkConfigBuilder setIsMetered();
     method public android.net.wifi.WifiNetworkConfigBuilder setIsUserInteractionRequired();
     method public android.net.wifi.WifiNetworkConfigBuilder setPriority(int);
-    method public android.net.wifi.WifiNetworkConfigBuilder setPskPassphrase(java.lang.String);
     method public android.net.wifi.WifiNetworkConfigBuilder setSsid(java.lang.String);
     method public android.net.wifi.WifiNetworkConfigBuilder setSsidPattern(android.os.PatternMatcher);
+    method public android.net.wifi.WifiNetworkConfigBuilder setWpa2EnterpriseConfig(android.net.wifi.WifiEnterpriseConfig);
+    method public android.net.wifi.WifiNetworkConfigBuilder setWpa2Passphrase(java.lang.String);
+    method public android.net.wifi.WifiNetworkConfigBuilder setWpa3EnterpriseConfig(android.net.wifi.WifiEnterpriseConfig);
+    method public android.net.wifi.WifiNetworkConfigBuilder setWpa3Passphrase(java.lang.String);
   }
 
   public final class WifiNetworkSuggestion implements android.os.Parcelable {
@@ -43233,9 +43237,9 @@ package android.telephony {
 
   public class MbmsGroupCallSession implements java.lang.AutoCloseable {
     method public void close();
-    method public static android.telephony.MbmsGroupCallSession create(android.content.Context, java.util.concurrent.Executor, int, android.telephony.mbms.MbmsGroupCallSessionCallback);
+    method public static android.telephony.MbmsGroupCallSession create(android.content.Context, int, java.util.concurrent.Executor, android.telephony.mbms.MbmsGroupCallSessionCallback);
     method public static android.telephony.MbmsGroupCallSession create(android.content.Context, java.util.concurrent.Executor, android.telephony.mbms.MbmsGroupCallSessionCallback);
-    method public android.telephony.mbms.GroupCall startGroupCall(java.util.concurrent.Executor, long, int[], int[], android.telephony.mbms.GroupCallCallback);
+    method public android.telephony.mbms.GroupCall startGroupCall(long, java.util.List<java.lang.Integer>, java.util.List<java.lang.Integer>, java.util.concurrent.Executor, android.telephony.mbms.GroupCallCallback);
   }
 
   public class MbmsStreamingSession implements java.lang.AutoCloseable {
@@ -44240,7 +44244,7 @@ package android.telephony.mbms {
   public class GroupCall implements java.lang.AutoCloseable {
     method public void close();
     method public long getTmgi();
-    method public void updateGroupCall(int[], int[]);
+    method public void updateGroupCall(java.util.List<java.lang.Integer>, java.util.List<java.lang.Integer>);
     field public static final int REASON_BY_USER_REQUEST = 1; // 0x1
     field public static final int REASON_FREQUENCY_CONFLICT = 3; // 0x3
     field public static final int REASON_LEFT_MBMS_BROADCAST_AREA = 6; // 0x6
@@ -44252,11 +44256,10 @@ package android.telephony.mbms {
     field public static final int STATE_STOPPED = 1; // 0x1
   }
 
-  public class GroupCallCallback {
-    ctor public GroupCallCallback();
-    method public void onBroadcastSignalStrengthUpdated(int);
-    method public void onError(int, java.lang.String);
-    method public void onGroupCallStateChanged(int, int);
+  public abstract interface GroupCallCallback {
+    method public abstract void onBroadcastSignalStrengthUpdated(int);
+    method public abstract void onError(int, java.lang.String);
+    method public abstract void onGroupCallStateChanged(int, int);
     field public static final int SIGNAL_STRENGTH_UNAVAILABLE = -1; // 0xffffffff
   }
 
@@ -44296,6 +44299,11 @@ package android.telephony.mbms {
     field public static final int ERROR_UNABLE_TO_READ_SIM = 206; // 0xce
   }
 
+  public static class MbmsErrors.GroupCallErrors {
+    field public static final int ERROR_DUPLICATE_START_GROUP_CALL = 502; // 0x1f6
+    field public static final int ERROR_UNABLE_TO_START_SERVICE = 501; // 0x1f5
+  }
+
   public static class MbmsErrors.InitializationErrors {
     field public static final int ERROR_APP_PERMISSIONS_NOT_GRANTED = 102; // 0x66
     field public static final int ERROR_DUPLICATE_INITIALIZE = 101; // 0x65
@@ -44308,12 +44316,11 @@ package android.telephony.mbms {
     field public static final int ERROR_UNABLE_TO_START_SERVICE = 302; // 0x12e
   }
 
-  public class MbmsGroupCallSessionCallback {
-    ctor public MbmsGroupCallSessionCallback();
-    method public void onAvailableSaisUpdated(java.util.List<java.lang.Integer>, java.util.List<java.util.List<java.lang.Integer>>);
-    method public void onError(int, java.lang.String);
-    method public void onMiddlewareReady();
-    method public void onServiceInterfaceAvailable(java.lang.String, int);
+  public abstract interface MbmsGroupCallSessionCallback {
+    method public abstract void onAvailableSaisUpdated(java.util.List<java.lang.Integer>, java.util.List<java.util.List<java.lang.Integer>>);
+    method public abstract void onError(int, java.lang.String);
+    method public abstract void onMiddlewareReady();
+    method public abstract void onServiceInterfaceAvailable(java.lang.String, int);
   }
 
   public class MbmsStreamingSessionCallback {
@@ -45614,9 +45621,14 @@ package android.text.style {
     method public abstract void chooseHeight(java.lang.CharSequence, int, int, int, int, android.graphics.Paint.FontMetricsInt);
   }
 
-  public static class LineHeightSpan.Standard implements android.text.style.LineHeightSpan {
+  public static class LineHeightSpan.Standard implements android.text.style.LineHeightSpan android.text.ParcelableSpan {
     ctor public LineHeightSpan.Standard(int);
+    ctor public LineHeightSpan.Standard(android.os.Parcel);
     method public void chooseHeight(java.lang.CharSequence, int, int, int, int, android.graphics.Paint.FontMetricsInt);
+    method public int describeContents();
+    method public int getHeight();
+    method public int getSpanTypeId();
+    method public void writeToParcel(android.os.Parcel, int);
   }
 
   public static abstract interface LineHeightSpan.WithDensity implements android.text.style.LineHeightSpan {
@@ -49319,6 +49331,8 @@ package android.view {
     method public final boolean startDragAndDrop(android.content.ClipData, android.view.View.DragShadowBuilder, java.lang.Object, int);
     method public boolean startNestedScroll(int);
     method public void stopNestedScroll();
+    method public void transformMatrixToGlobal(android.graphics.Matrix);
+    method public void transformMatrixToLocal(android.graphics.Matrix);
     method public void unscheduleDrawable(android.graphics.drawable.Drawable, java.lang.Runnable);
     method public void unscheduleDrawable(android.graphics.drawable.Drawable);
     method public final void updateDragShadow(android.view.View.DragShadowBuilder);
@@ -51911,6 +51925,7 @@ package android.view.textclassifier {
     method public java.time.ZonedDateTime getTime();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions.Message> CREATOR;
+    field public static final android.app.Person PERSON_USER_LOCAL;
   }
 
   public static final class ConversationActions.Message.Builder {
@@ -52179,6 +52194,7 @@ package android.view.textclassifier {
     field public static final int STATUS_LINKS_APPLIED = 0; // 0x0
     field public static final int STATUS_NO_LINKS_APPLIED = 2; // 0x2
     field public static final int STATUS_NO_LINKS_FOUND = 1; // 0x1
+    field public static final int STATUS_UNSUPPORTED_CHARACTER = 4; // 0x4
   }
 
   public static final class TextLinks.Builder {
@@ -54172,6 +54188,7 @@ package android.widget {
     ctor public ImageView(android.content.Context, android.util.AttributeSet);
     ctor public ImageView(android.content.Context, android.util.AttributeSet, int);
     ctor public ImageView(android.content.Context, android.util.AttributeSet, int, int);
+    method public void animateTransform(android.graphics.Matrix);
     method public final void clearColorFilter();
     method public boolean getAdjustViewBounds();
     method public boolean getBaselineAlignBottom();
