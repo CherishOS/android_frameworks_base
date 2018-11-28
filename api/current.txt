@@ -37123,11 +37123,15 @@ package android.provider {
     method public static void ejectRoot(android.content.ContentResolver, android.net.Uri);
     method public static android.provider.DocumentsContract.Path findDocumentPath(android.content.ContentResolver, android.net.Uri) throws java.io.FileNotFoundException;
     method public static java.lang.String getDocumentId(android.net.Uri);
+    method public static android.os.Bundle getDocumentMetadata(android.content.ContentResolver, android.net.Uri) throws java.io.FileNotFoundException;
     method public static android.graphics.Bitmap getDocumentThumbnail(android.content.ContentResolver, android.net.Uri, android.graphics.Point, android.os.CancellationSignal) throws java.io.FileNotFoundException;
     method public static java.lang.String getRootId(android.net.Uri);
     method public static java.lang.String getSearchDocumentsQuery(android.net.Uri);
     method public static java.lang.String getTreeDocumentId(android.net.Uri);
+    method public static boolean isChildDocument(android.content.ContentResolver, android.net.Uri, android.net.Uri) throws java.io.FileNotFoundException;
     method public static boolean isDocumentUri(android.content.Context, android.net.Uri);
+    method public static boolean isRootUri(android.content.Context, android.net.Uri);
+    method public static boolean isRootsUri(android.content.Context, android.net.Uri);
     method public static boolean isTreeUri(android.net.Uri);
     method public static android.net.Uri moveDocument(android.content.ContentResolver, android.net.Uri, android.net.Uri, android.net.Uri) throws java.io.FileNotFoundException;
     method public static boolean removeDocument(android.content.ContentResolver, android.net.Uri, android.net.Uri) throws java.io.FileNotFoundException;
@@ -37140,7 +37144,14 @@ package android.provider {
     field public static final java.lang.String EXTRA_LOADING = "loading";
     field public static final java.lang.String EXTRA_ORIENTATION = "android.provider.extra.ORIENTATION";
     field public static final java.lang.String EXTRA_PROMPT = "android.provider.extra.PROMPT";
+    field public static final java.lang.String METADATA_EXIF = "android:documentExif";
+    field public static final java.lang.String METADATA_TYPES = "android:documentMetadataTypes";
     field public static final java.lang.String PROVIDER_INTERFACE = "android.content.action.DOCUMENTS_PROVIDER";
+    field public static final java.lang.String QUERY_ARG_DISPLAY_NAME = "android:query-arg-display-name";
+    field public static final java.lang.String QUERY_ARG_EXCLUDE_MEDIA = "android:query-arg-exclude-media";
+    field public static final java.lang.String QUERY_ARG_FILE_SIZE_OVER = "android:query-arg-file-size-over";
+    field public static final java.lang.String QUERY_ARG_LAST_MODIFIED_AFTER = "android:query-arg-last-modified-after";
+    field public static final java.lang.String QUERY_ARG_MIME_TYPES = "android:query-arg-mime-types";
   }
 
   public static final class DocumentsContract.Document {
@@ -37155,8 +37166,10 @@ package android.provider {
     field public static final int FLAG_DIR_PREFERS_GRID = 16; // 0x10
     field public static final int FLAG_DIR_PREFERS_LAST_MODIFIED = 32; // 0x20
     field public static final int FLAG_DIR_SUPPORTS_CREATE = 8; // 0x8
+    field public static final int FLAG_PARTIAL = 8192; // 0x2000
     field public static final int FLAG_SUPPORTS_COPY = 128; // 0x80
     field public static final int FLAG_SUPPORTS_DELETE = 4; // 0x4
+    field public static final int FLAG_SUPPORTS_METADATA = 16384; // 0x4000
     field public static final int FLAG_SUPPORTS_MOVE = 256; // 0x100
     field public static final int FLAG_SUPPORTS_REMOVE = 1024; // 0x400
     field public static final int FLAG_SUPPORTS_RENAME = 64; // 0x40
@@ -37187,6 +37200,7 @@ package android.provider {
     field public static final java.lang.String COLUMN_ROOT_ID = "root_id";
     field public static final java.lang.String COLUMN_SUMMARY = "summary";
     field public static final java.lang.String COLUMN_TITLE = "title";
+    field public static final int FLAG_EMPTY = 64; // 0x40
     field public static final int FLAG_LOCAL_ONLY = 2; // 0x2
     field public static final int FLAG_SUPPORTS_CREATE = 1; // 0x1
     field public static final int FLAG_SUPPORTS_EJECT = 32; // 0x20
@@ -37205,6 +37219,7 @@ package android.provider {
     method public void deleteDocument(java.lang.String) throws java.io.FileNotFoundException;
     method public void ejectRoot(java.lang.String);
     method public android.provider.DocumentsContract.Path findDocumentPath(java.lang.String, java.lang.String) throws java.io.FileNotFoundException;
+    method public android.os.Bundle getDocumentMetadata(java.lang.String) throws java.io.FileNotFoundException;
     method public java.lang.String[] getDocumentStreamTypes(java.lang.String, java.lang.String);
     method public java.lang.String getDocumentType(java.lang.String) throws java.io.FileNotFoundException;
     method public final java.lang.String getType(android.net.Uri);
@@ -37229,6 +37244,7 @@ package android.provider {
     method public android.database.Cursor queryRecentDocuments(java.lang.String, java.lang.String[], android.os.Bundle, android.os.CancellationSignal) throws java.io.FileNotFoundException;
     method public abstract android.database.Cursor queryRoots(java.lang.String[]) throws java.io.FileNotFoundException;
     method public android.database.Cursor querySearchDocuments(java.lang.String, java.lang.String, java.lang.String[]) throws java.io.FileNotFoundException;
+    method public android.database.Cursor querySearchDocuments(java.lang.String, java.lang.String[], android.os.Bundle) throws java.io.FileNotFoundException;
     method public void removeDocument(java.lang.String, java.lang.String) throws java.io.FileNotFoundException;
     method public java.lang.String renameDocument(java.lang.String, java.lang.String) throws java.io.FileNotFoundException;
     method public final void revokeDocumentPermission(java.lang.String);
