@@ -480,6 +480,10 @@ package android {
     field public static final int dashGap = 16843175; // 0x10101a7
     field public static final int dashWidth = 16843174; // 0x10101a6
     field public static final int data = 16842798; // 0x101002e
+    field public static final int dataRetentionTime = 16844189; // 0x101059d
+    field public static final int dataSentOffDevice = 16844186; // 0x101059a
+    field public static final int dataSharedWithThirdParty = 16844187; // 0x101059b
+    field public static final int dataUsedForMonetization = 16844188; // 0x101059c
     field public static final int datePickerDialogTheme = 16843948; // 0x10104ac
     field public static final int datePickerMode = 16843955; // 0x10104b3
     field public static final int datePickerStyle = 16843612; // 0x101035c
@@ -1496,6 +1500,7 @@ package android {
     field public static final deprecated int unfocusedMonthDateColor = 16843588; // 0x1010344
     field public static final int unselectedAlpha = 16843278; // 0x101020e
     field public static final int updatePeriodMillis = 16843344; // 0x1010250
+    field public static final int usageInfoRequired = 16844185; // 0x1010599
     field public static final int use32bitAbi = 16844053; // 0x1010515
     field public static final int useAppZygote = 16844184; // 0x1010598
     field public static final int useDefaultMargins = 16843641; // 0x1010379
@@ -11171,8 +11176,8 @@ package android.content.pm {
     field public android.content.pm.ProviderInfo[] providers;
     field public android.content.pm.ActivityInfo[] receivers;
     field public android.content.pm.FeatureInfo[] reqFeatures;
-    field public java.lang.String[] requestedPermissions;
-    field public int[] requestedPermissionsFlags;
+    field public deprecated java.lang.String[] requestedPermissions;
+    field public deprecated int[] requestedPermissionsFlags;
     field public android.content.pm.ServiceInfo[] services;
     field public java.lang.String sharedUserId;
     field public int sharedUserLabel;
@@ -11180,6 +11185,7 @@ package android.content.pm {
     field public android.content.pm.SigningInfo signingInfo;
     field public java.lang.String[] splitNames;
     field public int[] splitRevisionCodes;
+    field public android.content.pm.UsesPermissionInfo[] usesPermissions;
     field public deprecated int versionCode;
     field public java.lang.String versionName;
   }
@@ -11655,6 +11661,7 @@ package android.content.pm {
     field public java.lang.String group;
     field public java.lang.CharSequence nonLocalizedDescription;
     field public deprecated int protectionLevel;
+    field public boolean usageInfoRequired;
   }
 
   public final class ProviderInfo extends android.content.pm.ComponentInfo implements android.os.Parcelable {
@@ -11832,6 +11839,28 @@ package android.content.pm {
     method public boolean hasPastSigningCertificates();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.SigningInfo> CREATOR;
+  }
+
+  public final class UsesPermissionInfo extends android.content.pm.PackageItemInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getDataRetention();
+    method public int getDataRetentionWeeks();
+    method public int getDataSentOffDevice();
+    method public int getDataSharedWithThirdParty();
+    method public int getDataUsedForMonetization();
+    method public int getFlags();
+    method public java.lang.String getPermission();
+    field public static final android.os.Parcelable.Creator<android.content.pm.UsesPermissionInfo> CREATOR;
+    field public static final int FLAG_REQUESTED_PERMISSION_GRANTED = 2; // 0x2
+    field public static final int RETENTION_NOT_RETAINED = 1; // 0x1
+    field public static final int RETENTION_SPECIFIED = 4; // 0x4
+    field public static final int RETENTION_UNDEFINED = 0; // 0x0
+    field public static final int RETENTION_UNLIMITED = 3; // 0x3
+    field public static final int RETENTION_USER_SELECTED = 2; // 0x2
+    field public static final int USAGE_NO = 3; // 0x3
+    field public static final int USAGE_UNDEFINED = 0; // 0x0
+    field public static final int USAGE_USER_TRIGGERED = 2; // 0x2
+    field public static final int USAGE_YES = 1; // 0x1
   }
 
   public final class VersionedPackage implements android.os.Parcelable {
