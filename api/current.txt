@@ -1201,6 +1201,7 @@ package android {
     field public static final int selectableItemBackgroundBorderless = 16843868; // 0x101045c
     field public static final deprecated int selectedDateVerticalBar = 16843591; // 0x1010347
     field public static final deprecated int selectedWeekBackgroundColor = 16843586; // 0x1010342
+    field public static final int selectionDividerHeight = 16844190; // 0x101059e
     field public static final int sessionService = 16843837; // 0x101043d
     field public static final int settingsActivity = 16843301; // 0x1010225
     field public static final int settingsSliceUri = 16844179; // 0x1010593
@@ -1316,7 +1317,6 @@ package android {
     field public static final int summaryColumn = 16843426; // 0x10102a2
     field public static final int summaryOff = 16843248; // 0x10101f0
     field public static final int summaryOn = 16843247; // 0x10101ef
-    field public static final int supportsAmbientMode = 16844173; // 0x101058d
     field public static final int supportsAssist = 16844016; // 0x10104f0
     field public static final int supportsLaunchVoiceAssistFromKeyguard = 16844017; // 0x10104f1
     field public static final int supportsLocalInteraction = 16844047; // 0x101050f
@@ -3808,6 +3808,7 @@ package android.app {
     method public void overridePendingTransition(int, int);
     method public void postponeEnterTransition();
     method public void recreate();
+    method public void registerActivityLifecycleCallbacks(android.app.Application.ActivityLifecycleCallbacks);
     method public void registerForContextMenu(android.view.View);
     method public boolean releaseInstance();
     method public final deprecated void removeDialog(int);
@@ -3885,6 +3886,7 @@ package android.app {
     method public deprecated void stopManagingCursor(android.database.Cursor);
     method public void takeKeyEvents(boolean);
     method public void triggerSearch(java.lang.String, android.os.Bundle);
+    method public void unregisterActivityLifecycleCallbacks(android.app.Application.ActivityLifecycleCallbacks);
     method public void unregisterForContextMenu(android.view.View);
     field public static final int DEFAULT_KEYS_DIALER = 1; // 0x1
     field public static final int DEFAULT_KEYS_DISABLE = 0; // 0x0
@@ -6357,7 +6359,6 @@ package android.app {
     method public android.graphics.drawable.Drawable loadIcon(android.content.pm.PackageManager);
     method public java.lang.CharSequence loadLabel(android.content.pm.PackageManager);
     method public android.graphics.drawable.Drawable loadThumbnail(android.content.pm.PackageManager);
-    method public boolean supportsAmbientMode();
     method public boolean supportsMultipleDisplays();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.WallpaperInfo> CREATOR;
@@ -9556,6 +9557,7 @@ package android.content {
     method public abstract java.io.File getNoBackupFilesDir();
     method public abstract java.io.File getObbDir();
     method public abstract java.io.File[] getObbDirs();
+    method public abstract java.lang.String getOpPackageName();
     method public abstract java.lang.String getPackageCodePath();
     method public abstract android.content.pm.PackageManager getPackageManager();
     method public abstract java.lang.String getPackageName();
@@ -9766,6 +9768,7 @@ package android.content {
     method public java.io.File getNoBackupFilesDir();
     method public java.io.File getObbDir();
     method public java.io.File[] getObbDirs();
+    method public java.lang.String getOpPackageName();
     method public java.lang.String getPackageCodePath();
     method public android.content.pm.PackageManager getPackageManager();
     method public java.lang.String getPackageName();
@@ -11336,7 +11339,7 @@ package android.content.pm {
     method public abstract int checkSignatures(java.lang.String, java.lang.String);
     method public abstract int checkSignatures(int, int);
     method public abstract void clearInstantAppCookie();
-    method public abstract void clearPackagePreferredActivities(java.lang.String);
+    method public abstract deprecated void clearPackagePreferredActivities(java.lang.String);
     method public abstract java.lang.String[] currentToCanonicalPackageNames(java.lang.String[]);
     method public abstract void extendVerificationTimeout(int, int, long);
     method public abstract android.graphics.drawable.Drawable getActivityBanner(android.content.ComponentName) throws android.content.pm.PackageManager.NameNotFoundException;
@@ -11380,8 +11383,8 @@ package android.content.pm {
     method public abstract java.util.List<android.content.pm.PackageInfo> getPackagesHoldingPermissions(java.lang.String[], int);
     method public abstract android.content.pm.PermissionGroupInfo getPermissionGroupInfo(java.lang.String, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract android.content.pm.PermissionInfo getPermissionInfo(java.lang.String, int) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract int getPreferredActivities(java.util.List<android.content.IntentFilter>, java.util.List<android.content.ComponentName>, java.lang.String);
-    method public abstract java.util.List<android.content.pm.PackageInfo> getPreferredPackages(int);
+    method public abstract deprecated int getPreferredActivities(java.util.List<android.content.IntentFilter>, java.util.List<android.content.ComponentName>, java.lang.String);
+    method public abstract deprecated java.util.List<android.content.pm.PackageInfo> getPreferredPackages(int);
     method public abstract android.content.pm.ProviderInfo getProviderInfo(android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract android.content.pm.ActivityInfo getReceiverInfo(android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract android.content.res.Resources getResourcesForActivity(android.content.ComponentName) throws android.content.pm.PackageManager.NameNotFoundException;
@@ -13724,6 +13727,7 @@ package android.graphics {
   public abstract class ColorSpace {
     method public static android.graphics.ColorSpace adapt(android.graphics.ColorSpace, float[]);
     method public static android.graphics.ColorSpace adapt(android.graphics.ColorSpace, float[], android.graphics.ColorSpace.Adaptation);
+    method public static float[] chromaticAdaptation(android.graphics.ColorSpace.Adaptation, float[], float[]);
     method public static android.graphics.ColorSpace.Connector connect(android.graphics.ColorSpace, android.graphics.ColorSpace);
     method public static android.graphics.ColorSpace.Connector connect(android.graphics.ColorSpace, android.graphics.ColorSpace, android.graphics.ColorSpace.RenderIntent);
     method public static android.graphics.ColorSpace.Connector connect(android.graphics.ColorSpace);
@@ -13972,6 +13976,7 @@ package android.graphics {
   }
 
   public final class Insets {
+    method public static android.graphics.Insets add(android.graphics.Insets, android.graphics.Insets);
     method public static android.graphics.Insets of(int, int, int, int);
     method public static android.graphics.Insets of(android.graphics.Rect);
     field public static final android.graphics.Insets NONE;
@@ -14724,6 +14729,7 @@ package android.graphics {
     method public float getTranslationX();
     method public float getTranslationY();
     method public float getTranslationZ();
+    method public long getUniqueId();
     method public int getWidth();
     method public boolean hasDisplayList();
     method public boolean hasIdentityMatrix();
@@ -15077,6 +15083,7 @@ package android.graphics.drawable {
     method public void invalidateSelf();
     method public boolean isAutoMirrored();
     method public boolean isFilterBitmap();
+    method public boolean isProjected();
     method public boolean isStateful();
     method public final boolean isVisible();
     method public void jumpToCurrentState();
@@ -29440,9 +29447,22 @@ package android.net.wifi.p2p {
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.wifi.p2p.WifiP2pConfig> CREATOR;
+    field public static final int GROUP_OWNER_BAND_2GHZ = 1; // 0x1
+    field public static final int GROUP_OWNER_BAND_5GHZ = 2; // 0x2
+    field public static final int GROUP_OWNER_BAND_AUTO = 0; // 0x0
     field public java.lang.String deviceAddress;
     field public int groupOwnerIntent;
     field public android.net.wifi.WpsInfo wps;
+  }
+
+  public static final class WifiP2pConfig.Builder {
+    ctor public WifiP2pConfig.Builder();
+    method public android.net.wifi.p2p.WifiP2pConfig build();
+    method public android.net.wifi.p2p.WifiP2pConfig.Builder enablePersistentMode(boolean);
+    method public android.net.wifi.p2p.WifiP2pConfig.Builder setDeviceAddress(android.net.MacAddress);
+    method public android.net.wifi.p2p.WifiP2pConfig.Builder setGroupOwnerBand(int);
+    method public android.net.wifi.p2p.WifiP2pConfig.Builder setNetworkName(java.lang.String);
+    method public android.net.wifi.p2p.WifiP2pConfig.Builder setPassphrase(java.lang.String);
   }
 
   public class WifiP2pDevice implements android.os.Parcelable {
@@ -29511,6 +29531,7 @@ package android.net.wifi.p2p {
     method public void clearServiceRequests(android.net.wifi.p2p.WifiP2pManager.Channel, android.net.wifi.p2p.WifiP2pManager.ActionListener);
     method public void connect(android.net.wifi.p2p.WifiP2pManager.Channel, android.net.wifi.p2p.WifiP2pConfig, android.net.wifi.p2p.WifiP2pManager.ActionListener);
     method public void createGroup(android.net.wifi.p2p.WifiP2pManager.Channel, android.net.wifi.p2p.WifiP2pManager.ActionListener);
+    method public void createGroup(android.net.wifi.p2p.WifiP2pManager.Channel, android.net.wifi.p2p.WifiP2pConfig, android.net.wifi.p2p.WifiP2pManager.ActionListener);
     method public void discoverPeers(android.net.wifi.p2p.WifiP2pManager.Channel, android.net.wifi.p2p.WifiP2pManager.ActionListener);
     method public void discoverServices(android.net.wifi.p2p.WifiP2pManager.Channel, android.net.wifi.p2p.WifiP2pManager.ActionListener);
     method public android.net.wifi.p2p.WifiP2pManager.Channel initialize(android.content.Context, android.os.Looper, android.net.wifi.p2p.WifiP2pManager.ChannelListener);
@@ -29518,7 +29539,10 @@ package android.net.wifi.p2p {
     method public void removeLocalService(android.net.wifi.p2p.WifiP2pManager.Channel, android.net.wifi.p2p.nsd.WifiP2pServiceInfo, android.net.wifi.p2p.WifiP2pManager.ActionListener);
     method public void removeServiceRequest(android.net.wifi.p2p.WifiP2pManager.Channel, android.net.wifi.p2p.nsd.WifiP2pServiceRequest, android.net.wifi.p2p.WifiP2pManager.ActionListener);
     method public void requestConnectionInfo(android.net.wifi.p2p.WifiP2pManager.Channel, android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener);
+    method public void requestDiscoveryState(android.net.wifi.p2p.WifiP2pManager.Channel, android.net.wifi.p2p.WifiP2pManager.DiscoveryStateListener);
     method public void requestGroupInfo(android.net.wifi.p2p.WifiP2pManager.Channel, android.net.wifi.p2p.WifiP2pManager.GroupInfoListener);
+    method public void requestNetworkInfo(android.net.wifi.p2p.WifiP2pManager.Channel, android.net.wifi.p2p.WifiP2pManager.NetworkInfoListener);
+    method public void requestP2pState(android.net.wifi.p2p.WifiP2pManager.Channel, android.net.wifi.p2p.WifiP2pManager.P2pStateListener);
     method public void requestPeers(android.net.wifi.p2p.WifiP2pManager.Channel, android.net.wifi.p2p.WifiP2pManager.PeerListListener);
     method public void setDnsSdResponseListeners(android.net.wifi.p2p.WifiP2pManager.Channel, android.net.wifi.p2p.WifiP2pManager.DnsSdServiceResponseListener, android.net.wifi.p2p.WifiP2pManager.DnsSdTxtRecordListener);
     method public void setServiceResponseListener(android.net.wifi.p2p.WifiP2pManager.Channel, android.net.wifi.p2p.WifiP2pManager.ServiceResponseListener);
@@ -29563,6 +29587,10 @@ package android.net.wifi.p2p {
     method public abstract void onConnectionInfoAvailable(android.net.wifi.p2p.WifiP2pInfo);
   }
 
+  public static abstract interface WifiP2pManager.DiscoveryStateListener {
+    method public abstract void onDiscoveryStateAvailable(int);
+  }
+
   public static abstract interface WifiP2pManager.DnsSdServiceResponseListener {
     method public abstract void onDnsSdServiceAvailable(java.lang.String, java.lang.String, android.net.wifi.p2p.WifiP2pDevice);
   }
@@ -29573,6 +29601,14 @@ package android.net.wifi.p2p {
 
   public static abstract interface WifiP2pManager.GroupInfoListener {
     method public abstract void onGroupInfoAvailable(android.net.wifi.p2p.WifiP2pGroup);
+  }
+
+  public static abstract interface WifiP2pManager.NetworkInfoListener {
+    method public abstract void onNetworkInfoAvailable(android.net.NetworkInfo);
+  }
+
+  public static abstract interface WifiP2pManager.P2pStateListener {
+    method public abstract void onP2pStateAvailable(int);
   }
 
   public static abstract interface WifiP2pManager.PeerListListener {
@@ -37426,6 +37462,17 @@ package android.provider {
     field public static final java.lang.String ENTRY_CONTENT_TYPE = "vnd.android.cursor.item/radio";
   }
 
+  public static abstract interface MediaStore.DownloadColumns implements android.provider.MediaStore.MediaColumns {
+    field public static final java.lang.String DOWNLOAD_URI = "download_uri";
+    field public static final java.lang.String REFERER_URI = "referer_uri";
+  }
+
+  public static final class MediaStore.Downloads implements android.provider.MediaStore.DownloadColumns {
+    method public static android.net.Uri getContentUri(java.lang.String);
+    field public static final android.net.Uri EXTERNAL_CONTENT_URI;
+    field public static final android.net.Uri INTERNAL_CONTENT_URI;
+  }
+
   public static final class MediaStore.Files {
     ctor public MediaStore.Files();
     method public static android.net.Uri getContentUri(java.lang.String);
@@ -37517,7 +37564,9 @@ package android.provider {
 
   public static class MediaStore.PendingParams {
     ctor public MediaStore.PendingParams(android.net.Uri, java.lang.String, java.lang.String);
+    method public void setDownloadUri(android.net.Uri);
     method public void setPrimaryDirectory(java.lang.String);
+    method public void setRefererUri(android.net.Uri);
     method public void setSecondaryDirectory(java.lang.String);
   }
 
@@ -40897,11 +40946,9 @@ package android.service.wallpaper {
     method public int getDesiredMinimumHeight();
     method public int getDesiredMinimumWidth();
     method public android.view.SurfaceHolder getSurfaceHolder();
-    method public boolean isInAmbientMode();
     method public boolean isPreview();
     method public boolean isVisible();
     method public void notifyColorsChanged();
-    method public void onAmbientModeChanged(boolean, boolean);
     method public void onApplyWindowInsets(android.view.WindowInsets);
     method public android.os.Bundle onCommand(java.lang.String, int, int, int, android.os.Bundle, boolean);
     method public android.app.WallpaperColors onComputeColors();
@@ -43881,6 +43928,7 @@ package android.telephony {
     field public static final int NETWORK_TYPE_IDEN = 11; // 0xb
     field public static final int NETWORK_TYPE_IWLAN = 18; // 0x12
     field public static final int NETWORK_TYPE_LTE = 13; // 0xd
+    field public static final int NETWORK_TYPE_NR = 20; // 0x14
     field public static final int NETWORK_TYPE_TD_SCDMA = 17; // 0x11
     field public static final int NETWORK_TYPE_UMTS = 3; // 0x3
     field public static final int NETWORK_TYPE_UNKNOWN = 0; // 0x0
@@ -49026,6 +49074,7 @@ package android.view {
     method public float getTranslationX();
     method public float getTranslationY();
     method public float getTranslationZ();
+    method public long getUniqueDrawingId();
     method public int getVerticalFadingEdgeLength();
     method public int getVerticalScrollbarPosition();
     method public int getVerticalScrollbarWidth();
@@ -49281,6 +49330,7 @@ package android.view {
     method public void setLayoutDirection(int);
     method public void setLayoutParams(android.view.ViewGroup.LayoutParams);
     method public final void setLeft(int);
+    method public void setLeftTopRightBottom(int, int, int, int);
     method public void setLongClickable(boolean);
     method protected final void setMeasuredDimension(int, int);
     method public void setMinimumHeight(int);
@@ -54532,6 +54582,7 @@ package android.widget {
     method public java.lang.String[] getDisplayedValues();
     method public int getMaxValue();
     method public int getMinValue();
+    method public int getSelectionDividerHeight();
     method public int getValue();
     method public boolean getWrapSelectorWheel();
     method public void setDisplayedValues(java.lang.String[]);
@@ -54541,6 +54592,7 @@ package android.widget {
     method public void setOnLongPressUpdateInterval(long);
     method public void setOnScrollListener(android.widget.NumberPicker.OnScrollListener);
     method public void setOnValueChangedListener(android.widget.NumberPicker.OnValueChangeListener);
+    method public void setSelectionDividerHeight(int);
     method public void setValue(int);
     method public void setWrapSelectorWheel(boolean);
   }
@@ -55548,6 +55600,7 @@ package android.widget {
     method public boolean isElegantTextHeight();
     method public boolean isFallbackLineSpacing();
     method public boolean isInputMethodTarget();
+    method public boolean isSingleLine();
     method public boolean isSuggestionsEnabled();
     method public boolean isTextSelectable();
     method public int length();
