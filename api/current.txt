@@ -150,6 +150,7 @@ package android {
     field public static final java.lang.String UPDATE_DEVICE_STATS = "android.permission.UPDATE_DEVICE_STATS";
     field public static final java.lang.String USE_BIOMETRIC = "android.permission.USE_BIOMETRIC";
     field public static final deprecated java.lang.String USE_FINGERPRINT = "android.permission.USE_FINGERPRINT";
+    field public static final java.lang.String USE_FULL_SCREEN_INTENT = "android.permission.USE_FULL_SCREEN_INTENT";
     field public static final java.lang.String USE_SIP = "android.permission.USE_SIP";
     field public static final java.lang.String VIBRATE = "android.permission.VIBRATE";
     field public static final java.lang.String WAKE_LOCK = "android.permission.WAKE_LOCK";
@@ -29054,20 +29055,21 @@ package android.net.wifi {
 
   public class WifiManager {
     method public deprecated int addNetwork(android.net.wifi.WifiConfiguration);
-    method public boolean addNetworkSuggestions(java.util.List<android.net.wifi.WifiNetworkSuggestion>);
+    method public int addNetworkSuggestions(java.util.List<android.net.wifi.WifiNetworkSuggestion>);
     method public void addOrUpdatePasspointConfiguration(android.net.wifi.hotspot2.PasspointConfiguration);
     method public static int calculateSignalLevel(int, int);
     method public deprecated void cancelWps(android.net.wifi.WifiManager.WpsCallback);
     method public static int compareSignalLevel(int, int);
     method public android.net.wifi.WifiManager.MulticastLock createMulticastLock(java.lang.String);
     method public android.net.wifi.WifiManager.WifiLock createWifiLock(int, java.lang.String);
-    method public android.net.wifi.WifiManager.WifiLock createWifiLock(java.lang.String);
+    method public deprecated android.net.wifi.WifiManager.WifiLock createWifiLock(java.lang.String);
     method public deprecated boolean disableNetwork(int);
     method public deprecated boolean disconnect();
     method public deprecated boolean enableNetwork(int, boolean);
     method public deprecated java.util.List<android.net.wifi.WifiConfiguration> getConfiguredNetworks();
     method public android.net.wifi.WifiInfo getConnectionInfo();
     method public android.net.DhcpInfo getDhcpInfo();
+    method public int getMaxNumberOfNetworkSuggestionsPerApp();
     method public java.util.List<android.net.wifi.hotspot2.PasspointConfiguration> getPasspointConfigurations();
     method public java.util.List<android.net.wifi.ScanResult> getScanResults();
     method public int getWifiState();
@@ -29086,7 +29088,7 @@ package android.net.wifi {
     method public deprecated boolean reassociate();
     method public deprecated boolean reconnect();
     method public deprecated boolean removeNetwork(int);
-    method public boolean removeNetworkSuggestions(java.util.List<android.net.wifi.WifiNetworkSuggestion>);
+    method public int removeNetworkSuggestions(java.util.List<android.net.wifi.WifiNetworkSuggestion>);
     method public void removePasspointConfiguration(java.lang.String);
     method public deprecated boolean saveConfiguration();
     method public void setTdlsEnabled(java.net.InetAddress, boolean);
@@ -29115,11 +29117,17 @@ package android.net.wifi {
     field public static final java.lang.String NETWORK_STATE_CHANGED_ACTION = "android.net.wifi.STATE_CHANGE";
     field public static final java.lang.String RSSI_CHANGED_ACTION = "android.net.wifi.RSSI_CHANGED";
     field public static final java.lang.String SCAN_RESULTS_AVAILABLE_ACTION = "android.net.wifi.SCAN_RESULTS";
+    field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_ADD_DUPLICATE = 2; // 0x2
+    field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_ADD_EXCEEDS_MAX_PER_APP = 3; // 0x3
+    field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_INTERNAL = 1; // 0x1
+    field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_REMOVE_INVALID = 4; // 0x4
+    field public static final int STATUS_NETWORK_SUGGESTIONS_SUCCESS = 0; // 0x0
     field public static final deprecated java.lang.String SUPPLICANT_CONNECTION_CHANGE_ACTION = "android.net.wifi.supplicant.CONNECTION_CHANGE";
     field public static final deprecated java.lang.String SUPPLICANT_STATE_CHANGED_ACTION = "android.net.wifi.supplicant.STATE_CHANGE";
-    field public static final int WIFI_MODE_FULL = 1; // 0x1
+    field public static final deprecated int WIFI_MODE_FULL = 1; // 0x1
     field public static final int WIFI_MODE_FULL_HIGH_PERF = 3; // 0x3
-    field public static final int WIFI_MODE_SCAN_ONLY = 2; // 0x2
+    field public static final int WIFI_MODE_FULL_LOW_LATENCY = 4; // 0x4
+    field public static final deprecated int WIFI_MODE_SCAN_ONLY = 2; // 0x2
     field public static final java.lang.String WIFI_STATE_CHANGED_ACTION = "android.net.wifi.WIFI_STATE_CHANGED";
     field public static final int WIFI_STATE_DISABLED = 1; // 0x1
     field public static final int WIFI_STATE_DISABLING = 0; // 0x0
@@ -29154,6 +29162,9 @@ package android.net.wifi {
     method public boolean isHeld();
     method public void release();
     method public void setReferenceCounted(boolean);
+  }
+
+  public static abstract class WifiManager.NetworkSuggestionsStatusCode implements java.lang.annotation.Annotation {
   }
 
   public class WifiManager.WifiLock {
@@ -37286,6 +37297,7 @@ package android.provider {
     method public static java.lang.String getVolumeName(android.net.Uri);
     method public static android.provider.MediaStore.PendingSession openPending(android.content.Context, android.net.Uri);
     method public static android.net.Uri setIncludePending(android.net.Uri);
+    method public static android.net.Uri setRequireOriginal(android.net.Uri);
     field public static final java.lang.String ACTION_IMAGE_CAPTURE = "android.media.action.IMAGE_CAPTURE";
     field public static final java.lang.String ACTION_IMAGE_CAPTURE_SECURE = "android.media.action.IMAGE_CAPTURE_SECURE";
     field public static final java.lang.String ACTION_REVIEW = "android.provider.action.REVIEW";
@@ -49070,6 +49082,7 @@ package android.view {
     method protected int getTopPaddingOffset();
     method public android.view.TouchDelegate getTouchDelegate();
     method public java.util.ArrayList<android.view.View> getTouchables();
+    method public float getTransitionAlpha();
     method public java.lang.String getTransitionName();
     method public float getTranslationX();
     method public float getTranslationY();
@@ -49279,6 +49292,7 @@ package android.view {
     method public void setActivated(boolean);
     method public void setAlpha(float);
     method public void setAnimation(android.view.animation.Animation);
+    method public void setAnimationMatrix(android.graphics.Matrix);
     method public void setAutofillHints(java.lang.String...);
     method public void setAutofillId(android.view.autofill.AutofillId);
     method public void setBackground(android.graphics.drawable.Drawable);
@@ -49330,7 +49344,7 @@ package android.view {
     method public void setLayoutDirection(int);
     method public void setLayoutParams(android.view.ViewGroup.LayoutParams);
     method public final void setLeft(int);
-    method public void setLeftTopRightBottom(int, int, int, int);
+    method public final void setLeftTopRightBottom(int, int, int, int);
     method public void setLongClickable(boolean);
     method protected final void setMeasuredDimension(int, int);
     method public void setMinimumHeight(int);
@@ -49397,6 +49411,7 @@ package android.view {
     method public void setTooltipText(java.lang.CharSequence);
     method public final void setTop(int);
     method public void setTouchDelegate(android.view.TouchDelegate);
+    method public void setTransitionAlpha(float);
     method public final void setTransitionName(java.lang.String);
     method public void setTranslationX(float);
     method public void setTranslationY(float);
@@ -49870,6 +49885,7 @@ package android.view {
     method public deprecated boolean isAnimationCacheEnabled();
     method protected boolean isChildrenDrawingOrderEnabled();
     method protected deprecated boolean isChildrenDrawnWithCacheEnabled();
+    method public boolean isLayoutSuppressed();
     method public boolean isMotionEventSplittingEnabled();
     method public boolean isTransitionGroup();
     method public final void layout(int, int, int, int);
@@ -49935,6 +49951,7 @@ package android.view {
     method public android.view.ActionMode startActionModeForChild(android.view.View, android.view.ActionMode.Callback, int);
     method public void startLayoutAnimation();
     method public void startViewTransition(android.view.View);
+    method public void suppressLayout(boolean);
     method public void updateViewLayout(android.view.View, android.view.ViewGroup.LayoutParams);
     field protected static final int CLIP_TO_PADDING_MASK = 34; // 0x22
     field public static final int FOCUS_AFTER_DESCENDANTS = 262144; // 0x40000
@@ -51950,8 +51967,8 @@ package android.view.inputmethod {
 
 package android.view.intelligence {
 
-  public final class IntelligenceManager {
-    method public android.content.ComponentName getIntelligenceServiceComponentName();
+  public final class ContentCaptureManager {
+    method public android.content.ComponentName getServiceComponentName();
     method public boolean isContentCaptureEnabled();
     method public android.view.ViewStructure newVirtualViewStructure(android.view.autofill.AutofillId, int);
     method public void notifyViewAppeared(android.view.ViewStructure);
