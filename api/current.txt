@@ -51982,6 +51982,86 @@ package android.view.inputmethod {
 
 }
 
+package android.view.inspector {
+
+  public abstract interface InspectionCompanion<T> {
+    method public default java.lang.String getNodeName();
+    method public abstract void mapProperties(android.view.inspector.PropertyMapper);
+    method public abstract void readProperties(T, android.view.inspector.PropertyReader);
+  }
+
+  public static class InspectionCompanion.UninitializedPropertyMapException extends java.lang.RuntimeException {
+    ctor public InspectionCompanion.UninitializedPropertyMapException();
+  }
+
+  public final class IntEnumMapping {
+    method public java.lang.String nameOf(int);
+  }
+
+  public static final class IntEnumMapping.Builder {
+    ctor public IntEnumMapping.Builder();
+    method public android.view.inspector.IntEnumMapping.Builder addValue(java.lang.String, int);
+    method public android.view.inspector.IntEnumMapping build();
+    method public void clear();
+  }
+
+  public final class IntFlagMapping {
+    method public java.lang.String[] namesOf(int);
+  }
+
+  public static final class IntFlagMapping.Builder {
+    ctor public IntFlagMapping.Builder();
+    method public android.view.inspector.IntFlagMapping.Builder addFlag(java.lang.String, int);
+    method public android.view.inspector.IntFlagMapping.Builder addFlag(java.lang.String, int, int);
+    method public android.view.inspector.IntFlagMapping build();
+    method public void clear();
+  }
+
+  public abstract interface PropertyMapper {
+    method public abstract int mapBoolean(java.lang.String, int);
+    method public abstract int mapByte(java.lang.String, int);
+    method public abstract int mapChar(java.lang.String, int);
+    method public abstract int mapColor(java.lang.String, int);
+    method public abstract int mapDouble(java.lang.String, int);
+    method public abstract int mapFloat(java.lang.String, int);
+    method public abstract int mapGravity(java.lang.String, int);
+    method public abstract int mapInt(java.lang.String, int);
+    method public abstract int mapIntEnum(java.lang.String, int, android.view.inspector.IntEnumMapping);
+    method public abstract int mapIntFlag(java.lang.String, int, android.view.inspector.IntFlagMapping);
+    method public abstract int mapLong(java.lang.String, int);
+    method public abstract int mapObject(java.lang.String, int);
+    method public abstract int mapShort(java.lang.String, int);
+  }
+
+  public static class PropertyMapper.PropertyConflictException extends java.lang.RuntimeException {
+    ctor public PropertyMapper.PropertyConflictException(java.lang.String, java.lang.String, java.lang.String);
+  }
+
+  public abstract interface PropertyReader {
+    method public abstract void readBoolean(int, boolean);
+    method public abstract void readByte(int, byte);
+    method public abstract void readChar(int, char);
+    method public abstract void readColor(int, int);
+    method public abstract void readColor(int, long);
+    method public abstract void readColor(int, android.graphics.Color);
+    method public abstract void readDouble(int, double);
+    method public abstract void readFloat(int, float);
+    method public abstract void readGravity(int, int);
+    method public abstract void readInt(int, int);
+    method public abstract void readIntEnum(int, int);
+    method public abstract void readIntFlag(int, int);
+    method public abstract void readLong(int, long);
+    method public abstract void readObject(int, java.lang.Object);
+    method public abstract void readShort(int, short);
+  }
+
+  public static class PropertyReader.PropertyTypeMismatchException extends java.lang.RuntimeException {
+    ctor public PropertyReader.PropertyTypeMismatchException(int, java.lang.String, java.lang.String, java.lang.String);
+    ctor public PropertyReader.PropertyTypeMismatchException(int, java.lang.String, java.lang.String);
+  }
+
+}
+
 package android.view.intelligence {
 
   public final class ContentCaptureManager {
