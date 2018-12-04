@@ -35176,6 +35176,12 @@ package android.provider {
     field public static final java.lang.String CACHED_NUMBER_TYPE = "numbertype";
     field public static final java.lang.String CACHED_PHOTO_ID = "photo_id";
     field public static final java.lang.String CACHED_PHOTO_URI = "photo_uri";
+    field public static final java.lang.String CALL_ID_APP_NAME = "call_id_app_name";
+    field public static final java.lang.String CALL_ID_DESCRIPTION = "call_id_description";
+    field public static final java.lang.String CALL_ID_DETAILS = "call_id_details";
+    field public static final java.lang.String CALL_ID_NAME = "call_id_name";
+    field public static final java.lang.String CALL_ID_NUISANCE_CONFIDENCE = "call_id_nuisance_confidence";
+    field public static final java.lang.String CALL_ID_PACKAGE_NAME = "call_id_package_name";
     field public static final java.lang.String CALL_SCREENING_APP_NAME = "call_screening_app_name";
     field public static final java.lang.String CALL_SCREENING_COMPONENT_NAME = "call_screening_component_name";
     field public static final android.net.Uri CONTENT_FILTER_URI;
@@ -41177,6 +41183,7 @@ package android.telecom {
     method public static java.lang.String capabilitiesToString(int);
     method public android.telecom.PhoneAccountHandle getAccountHandle();
     method public int getCallCapabilities();
+    method public android.telecom.CallIdentification getCallIdentification();
     method public int getCallProperties();
     method public java.lang.String getCallerDisplayName();
     method public int getCallerDisplayNamePresentation();
@@ -41255,6 +41262,34 @@ package android.telecom {
     field public static final int ROUTE_WIRED_OR_EARPIECE = 5; // 0x5
   }
 
+  public final class CallIdentification implements android.os.Parcelable {
+    method public int describeContents();
+    method public java.lang.String getCallScreeningAppName();
+    method public java.lang.String getCallScreeningPackageName();
+    method public java.lang.String getDescription();
+    method public java.lang.String getDetails();
+    method public java.lang.String getName();
+    method public int getNuisanceConfidence();
+    method public android.graphics.drawable.Icon getPhoto();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final int CONFIDENCE_LIKELY_NOT_NUISANCE = -1; // 0xffffffff
+    field public static final int CONFIDENCE_LIKELY_NUISANCE = 1; // 0x1
+    field public static final int CONFIDENCE_NOT_NUISANCE = -2; // 0xfffffffe
+    field public static final int CONFIDENCE_NUISANCE = 2; // 0x2
+    field public static final int CONFIDENCE_UNKNOWN = 0; // 0x0
+    field public static final android.os.Parcelable.Creator<android.telecom.CallIdentification> CREATOR;
+  }
+
+  public static class CallIdentification.Builder {
+    ctor public CallIdentification.Builder();
+    method public android.telecom.CallIdentification build();
+    method public android.telecom.CallIdentification.Builder setDescription(java.lang.String);
+    method public android.telecom.CallIdentification.Builder setDetails(java.lang.String);
+    method public android.telecom.CallIdentification.Builder setName(java.lang.String);
+    method public android.telecom.CallIdentification.Builder setNuisanceConfidence(int);
+    method public android.telecom.CallIdentification.Builder setPhoto(android.graphics.drawable.Icon);
+  }
+
   public abstract class CallRedirectionService extends android.app.Service {
     ctor public CallRedirectionService();
     method public final void cancelCall();
@@ -41270,6 +41305,7 @@ package android.telecom {
     ctor public CallScreeningService();
     method public android.os.IBinder onBind(android.content.Intent);
     method public abstract void onScreenCall(android.telecom.Call.Details);
+    method public final void provideCallIdentification(android.telecom.Call.Details, android.telecom.CallIdentification);
     method public final void respondToCall(android.telecom.Call.Details, android.telecom.CallScreeningService.CallResponse);
     field public static final java.lang.String SERVICE_INTERFACE = "android.telecom.CallScreeningService";
   }
@@ -41864,7 +41900,6 @@ package android.telecom {
     method public java.lang.String getVoiceMailNumber(android.telecom.PhoneAccountHandle);
     method public boolean handleMmi(java.lang.String);
     method public boolean handleMmi(java.lang.String, android.telecom.PhoneAccountHandle);
-    method public boolean isDefaultCallScreeningApp(android.content.ComponentName);
     method public boolean isInCall();
     method public boolean isInManagedCall();
     method public boolean isIncomingCallPermitted(android.telecom.PhoneAccountHandle);
@@ -41873,7 +41908,6 @@ package android.telecom {
     method public boolean isVoiceMailNumber(android.telecom.PhoneAccountHandle, java.lang.String);
     method public void placeCall(android.net.Uri, android.os.Bundle);
     method public void registerPhoneAccount(android.telecom.PhoneAccount);
-    method public void requestChangeDefaultCallScreeningApp(android.content.ComponentName);
     method public void showInCallScreen(boolean);
     method public void silenceRinger();
     method public void unregisterPhoneAccount(android.telecom.PhoneAccountHandle);
