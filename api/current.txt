@@ -7692,6 +7692,7 @@ package android.appwidget {
     method protected void prepareView(android.view.View);
     method public void setAppWidget(int, android.appwidget.AppWidgetProviderInfo);
     method public void setExecutor(java.util.concurrent.Executor);
+    method public void setOnLightBackground(boolean);
     method public void updateAppWidget(android.widget.RemoteViews);
     method public void updateAppWidgetOptions(android.os.Bundle);
     method public void updateAppWidgetSize(android.os.Bundle, int, int, int, int);
@@ -13728,6 +13729,7 @@ package android.graphics {
   public abstract class ColorSpace {
     method public static android.graphics.ColorSpace adapt(android.graphics.ColorSpace, float[]);
     method public static android.graphics.ColorSpace adapt(android.graphics.ColorSpace, float[], android.graphics.ColorSpace.Adaptation);
+    method public static float[] cctToIlluminantdXyz(int);
     method public static float[] chromaticAdaptation(android.graphics.ColorSpace.Adaptation, float[], float[]);
     method public static android.graphics.ColorSpace.Connector connect(android.graphics.ColorSpace, android.graphics.ColorSpace);
     method public static android.graphics.ColorSpace.Connector connect(android.graphics.ColorSpace, android.graphics.ColorSpace, android.graphics.ColorSpace.RenderIntent);
@@ -24550,16 +24552,30 @@ package android.media {
 
   public final class MediaFormat {
     ctor public MediaFormat();
+    ctor public MediaFormat(android.media.MediaFormat);
+    method public boolean containsFeature(java.lang.String);
     method public boolean containsKey(java.lang.String);
     method public static android.media.MediaFormat createAudioFormat(java.lang.String, int, int);
     method public static android.media.MediaFormat createSubtitleFormat(java.lang.String, java.lang.String);
     method public static android.media.MediaFormat createVideoFormat(java.lang.String, int, int);
     method public java.nio.ByteBuffer getByteBuffer(java.lang.String);
+    method public java.nio.ByteBuffer getByteBuffer(java.lang.String, java.nio.ByteBuffer);
     method public boolean getFeatureEnabled(java.lang.String);
+    method public java.util.Set<java.lang.String> getFeatures();
     method public float getFloat(java.lang.String);
+    method public float getFloat(java.lang.String, float);
     method public int getInteger(java.lang.String);
+    method public int getInteger(java.lang.String, int);
+    method public java.util.Set<java.lang.String> getKeys();
     method public long getLong(java.lang.String);
+    method public long getLong(java.lang.String, long);
+    method public java.lang.Number getNumber(java.lang.String);
+    method public java.lang.Number getNumber(java.lang.String, java.lang.Number);
     method public java.lang.String getString(java.lang.String);
+    method public java.lang.String getString(java.lang.String, java.lang.String);
+    method public int getValueTypeForKey(java.lang.String);
+    method public void removeFeature(java.lang.String);
+    method public void removeKey(java.lang.String);
     method public void setByteBuffer(java.lang.String, java.nio.ByteBuffer);
     method public void setFeatureEnabled(java.lang.String, boolean);
     method public void setFloat(java.lang.String, float);
@@ -24664,6 +24680,12 @@ package android.media {
     field public static final java.lang.String MIMETYPE_VIDEO_SCRAMBLED = "video/scrambled";
     field public static final java.lang.String MIMETYPE_VIDEO_VP8 = "video/x-vnd.on2.vp8";
     field public static final java.lang.String MIMETYPE_VIDEO_VP9 = "video/x-vnd.on2.vp9";
+    field public static final int TYPE_BYTE_BUFFER = 5; // 0x5
+    field public static final int TYPE_FLOAT = 3; // 0x3
+    field public static final int TYPE_INTEGER = 1; // 0x1
+    field public static final int TYPE_LONG = 2; // 0x2
+    field public static final int TYPE_NULL = 0; // 0x0
+    field public static final int TYPE_STRING = 4; // 0x4
   }
 
   public final class MediaMetadata implements android.os.Parcelable {
@@ -33538,6 +33560,7 @@ package android.os {
     method public static boolean isExternalStorageRemovable();
     method public static boolean isExternalStorageRemovable(java.io.File);
     field public static java.lang.String DIRECTORY_ALARMS;
+    field public static java.lang.String DIRECTORY_AUDIOBOOKS;
     field public static java.lang.String DIRECTORY_DCIM;
     field public static java.lang.String DIRECTORY_DOCUMENTS;
     field public static java.lang.String DIRECTORY_DOWNLOADS;
@@ -37395,6 +37418,7 @@ package android.provider {
     field public static final java.lang.String COMPOSER = "composer";
     field public static final java.lang.String DURATION = "duration";
     field public static final java.lang.String IS_ALARM = "is_alarm";
+    field public static final java.lang.String IS_AUDIOBOOK = "is_audiobook";
     field public static final java.lang.String IS_MUSIC = "is_music";
     field public static final java.lang.String IS_NOTIFICATION = "is_notification";
     field public static final java.lang.String IS_PODCAST = "is_podcast";
@@ -42900,6 +42924,19 @@ package android.telephony {
     field public static final int BAND_9 = 9; // 0x9
   }
 
+  public final class AvailableNetworkInfo implements android.os.Parcelable {
+    ctor public AvailableNetworkInfo(int, int, java.util.ArrayList<java.lang.String>);
+    method public int describeContents();
+    method public java.util.List<java.lang.String> getMccMncs();
+    method public int getPriority();
+    method public int getSubId();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.AvailableNetworkInfo> CREATOR;
+    field public static final int PRIORITY_HIGH = 1; // 0x1
+    field public static final int PRIORITY_LOW = 3; // 0x3
+    field public static final int PRIORITY_MED = 2; // 0x2
+  }
+
   public class CarrierConfigManager {
     method public android.os.PersistableBundle getConfig();
     method public android.os.PersistableBundle getConfigForSubId(int);
@@ -43878,6 +43915,7 @@ package android.telephony {
     method public boolean setVoiceMailNumber(java.lang.String, java.lang.String);
     method public deprecated void setVoicemailRingtoneUri(android.telecom.PhoneAccountHandle, android.net.Uri);
     method public deprecated void setVoicemailVibrationEnabled(android.telecom.PhoneAccountHandle, boolean);
+    method public boolean updateAvailableNetworks(java.util.List<android.telephony.AvailableNetworkInfo>);
     field public static final java.lang.String ACTION_CONFIGURE_VOICEMAIL = "android.telephony.action.CONFIGURE_VOICEMAIL";
     field public static final java.lang.String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
     field public static final java.lang.String ACTION_RESPOND_VIA_MESSAGE = "android.intent.action.RESPOND_VIA_MESSAGE";
@@ -45849,6 +45887,7 @@ package android.text.style {
     method public deprecated java.lang.String getLocale();
     method public java.util.Locale getLocaleObject();
     method public int getSpanTypeId();
+    method public int getUnderlineColor();
     method public java.lang.String[] getSuggestions();
     method public void setFlags(int);
     method public void updateDrawState(android.text.TextPaint);
@@ -47850,6 +47889,7 @@ package android.view {
     method public final boolean isFunctionPressed();
     method public static final boolean isGamepadButton(int);
     method public final boolean isLongPress();
+    method public static final boolean isMediaSessionKey(int);
     method public final boolean isMetaPressed();
     method public static boolean isModifierKey(int);
     method public final boolean isNumLockOn();
@@ -51965,6 +52005,86 @@ package android.view.inputmethod {
 
 }
 
+package android.view.inspector {
+
+  public abstract interface InspectionCompanion<T> {
+    method public default java.lang.String getNodeName();
+    method public abstract void mapProperties(android.view.inspector.PropertyMapper);
+    method public abstract void readProperties(T, android.view.inspector.PropertyReader);
+  }
+
+  public static class InspectionCompanion.UninitializedPropertyMapException extends java.lang.RuntimeException {
+    ctor public InspectionCompanion.UninitializedPropertyMapException();
+  }
+
+  public final class IntEnumMapping {
+    method public java.lang.String nameOf(int);
+  }
+
+  public static final class IntEnumMapping.Builder {
+    ctor public IntEnumMapping.Builder();
+    method public android.view.inspector.IntEnumMapping.Builder addValue(java.lang.String, int);
+    method public android.view.inspector.IntEnumMapping build();
+    method public void clear();
+  }
+
+  public final class IntFlagMapping {
+    method public java.lang.String[] namesOf(int);
+  }
+
+  public static final class IntFlagMapping.Builder {
+    ctor public IntFlagMapping.Builder();
+    method public android.view.inspector.IntFlagMapping.Builder addFlag(java.lang.String, int);
+    method public android.view.inspector.IntFlagMapping.Builder addFlag(java.lang.String, int, int);
+    method public android.view.inspector.IntFlagMapping build();
+    method public void clear();
+  }
+
+  public abstract interface PropertyMapper {
+    method public abstract int mapBoolean(java.lang.String, int);
+    method public abstract int mapByte(java.lang.String, int);
+    method public abstract int mapChar(java.lang.String, int);
+    method public abstract int mapColor(java.lang.String, int);
+    method public abstract int mapDouble(java.lang.String, int);
+    method public abstract int mapFloat(java.lang.String, int);
+    method public abstract int mapGravity(java.lang.String, int);
+    method public abstract int mapInt(java.lang.String, int);
+    method public abstract int mapIntEnum(java.lang.String, int, android.view.inspector.IntEnumMapping);
+    method public abstract int mapIntFlag(java.lang.String, int, android.view.inspector.IntFlagMapping);
+    method public abstract int mapLong(java.lang.String, int);
+    method public abstract int mapObject(java.lang.String, int);
+    method public abstract int mapShort(java.lang.String, int);
+  }
+
+  public static class PropertyMapper.PropertyConflictException extends java.lang.RuntimeException {
+    ctor public PropertyMapper.PropertyConflictException(java.lang.String, java.lang.String, java.lang.String);
+  }
+
+  public abstract interface PropertyReader {
+    method public abstract void readBoolean(int, boolean);
+    method public abstract void readByte(int, byte);
+    method public abstract void readChar(int, char);
+    method public abstract void readColor(int, int);
+    method public abstract void readColor(int, long);
+    method public abstract void readColor(int, android.graphics.Color);
+    method public abstract void readDouble(int, double);
+    method public abstract void readFloat(int, float);
+    method public abstract void readGravity(int, int);
+    method public abstract void readInt(int, int);
+    method public abstract void readIntEnum(int, int);
+    method public abstract void readIntFlag(int, int);
+    method public abstract void readLong(int, long);
+    method public abstract void readObject(int, java.lang.Object);
+    method public abstract void readShort(int, short);
+  }
+
+  public static class PropertyReader.PropertyTypeMismatchException extends java.lang.RuntimeException {
+    ctor public PropertyReader.PropertyTypeMismatchException(int, java.lang.String, java.lang.String, java.lang.String);
+    ctor public PropertyReader.PropertyTypeMismatchException(int, java.lang.String, java.lang.String);
+  }
+
+}
+
 package android.view.intelligence {
 
   public final class ContentCaptureManager {
@@ -54962,6 +55082,7 @@ package android.widget {
     method public void setInt(int, java.lang.String, int);
     method public void setIntent(int, java.lang.String, android.content.Intent);
     method public void setLabelFor(int, int);
+    method public void setLightBackgroundLayoutId(int);
     method public void setLong(int, java.lang.String, long);
     method public void setOnClickFillInIntent(int, android.content.Intent);
     method public void setOnClickPendingIntent(int, android.app.PendingIntent);
