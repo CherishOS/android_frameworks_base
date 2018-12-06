@@ -34297,6 +34297,7 @@ package android.os {
   }
 
   public final class PowerManager {
+    method public int getCurrentThermalStatus();
     method public int getLocationPowerSaveMode();
     method public boolean isDeviceIdleMode();
     method public boolean isIgnoringBatteryOptimizations(java.lang.String);
@@ -34307,6 +34308,8 @@ package android.os {
     method public boolean isWakeLockLevelSupported(int);
     method public android.os.PowerManager.WakeLock newWakeLock(int, java.lang.String);
     method public void reboot(java.lang.String);
+    method public void registerThermalStatusCallback(android.os.PowerManager.ThermalStatusCallback, java.util.concurrent.Executor);
+    method public void unregisterThermalStatusCallback(android.os.PowerManager.ThermalStatusCallback);
     field public static final int ACQUIRE_CAUSES_WAKEUP = 268435456; // 0x10000000
     field public static final java.lang.String ACTION_DEVICE_IDLE_MODE_CHANGED = "android.os.action.DEVICE_IDLE_MODE_CHANGED";
     field public static final java.lang.String ACTION_POWER_SAVE_MODE_CHANGED = "android.os.action.POWER_SAVE_MODE_CHANGED";
@@ -34321,6 +34324,18 @@ package android.os {
     field public static final int RELEASE_FLAG_WAIT_FOR_NO_PROXIMITY = 1; // 0x1
     field public static final deprecated int SCREEN_BRIGHT_WAKE_LOCK = 10; // 0xa
     field public static final deprecated int SCREEN_DIM_WAKE_LOCK = 6; // 0x6
+    field public static final int THERMAL_STATUS_CRITICAL = 4; // 0x4
+    field public static final int THERMAL_STATUS_EMERGENCY = 5; // 0x5
+    field public static final int THERMAL_STATUS_LIGHT = 1; // 0x1
+    field public static final int THERMAL_STATUS_MODERATE = 2; // 0x2
+    field public static final int THERMAL_STATUS_NONE = 0; // 0x0
+    field public static final int THERMAL_STATUS_SEVERE = 3; // 0x3
+    field public static final int THERMAL_STATUS_SHUTDOWN = 6; // 0x6
+  }
+
+  public static abstract class PowerManager.ThermalStatusCallback {
+    ctor public PowerManager.ThermalStatusCallback();
+    method public void onStatusChange(int);
   }
 
   public final class PowerManager.WakeLock {
