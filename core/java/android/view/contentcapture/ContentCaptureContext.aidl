@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-package android.service.contentcapture;
+package android.view.contentcapture;
 
-parcelable InteractionContext;
+parcelable ContentCaptureContext;
