@@ -52831,6 +52831,7 @@ package android.view.textclassifier {
     method public default int getMaxGenerateLinksTextLength();
     method public default boolean isDestroyed();
     method public default void onSelectionEvent(android.view.textclassifier.SelectionEvent);
+    method public default void onTextClassifierEvent(android.view.textclassifier.TextClassifierEvent);
     method public default android.view.textclassifier.ConversationActions suggestConversationActions(android.view.textclassifier.ConversationActions.Request);
     method public default android.view.textclassifier.TextSelection suggestSelection(android.view.textclassifier.TextSelection.Request);
     method public default android.view.textclassifier.TextSelection suggestSelection(java.lang.CharSequence, int, int, android.os.LocaleList);
@@ -52852,6 +52853,7 @@ package android.view.textclassifier {
     field public static final java.lang.String WIDGET_TYPE_CUSTOM_UNSELECTABLE_TEXTVIEW = "nosel-customview";
     field public static final java.lang.String WIDGET_TYPE_EDITTEXT = "edittext";
     field public static final java.lang.String WIDGET_TYPE_EDIT_WEBVIEW = "edit-webview";
+    field public static final java.lang.String WIDGET_TYPE_NOTIFICATION = "notification";
     field public static final java.lang.String WIDGET_TYPE_TEXTVIEW = "textview";
     field public static final java.lang.String WIDGET_TYPE_UNKNOWN = "unknown";
     field public static final java.lang.String WIDGET_TYPE_UNSELECTABLE_TEXTVIEW = "nosel-textview";
@@ -52867,6 +52869,68 @@ package android.view.textclassifier {
     method public java.util.Collection<java.lang.String> resolveEntityListModifications(java.util.Collection<java.lang.String>);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassifier.EntityConfig> CREATOR;
+  }
+
+  public final class TextClassifierEvent implements android.os.Parcelable {
+    method public int describeContents();
+    method public int[] getActionIndices();
+    method public java.lang.String getEntityType();
+    method public int getEventCategory();
+    method public android.view.textclassifier.TextClassificationContext getEventContext();
+    method public int getEventIndex();
+    method public long getEventTime();
+    method public int getEventType();
+    method public android.os.Bundle getExtras();
+    method public java.lang.String getLanguage();
+    method public int getRelativeSuggestedWordEndIndex();
+    method public int getRelativeSuggestedWordStartIndex();
+    method public int getRelativeWordEndIndex();
+    method public int getRelativeWordStartIndex();
+    method public java.lang.String getResultId();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final int CATEGORY_CONVERSATION_ACTIONS = 3; // 0x3
+    field public static final int CATEGORY_LANGUAGE_DETECTION = 4; // 0x4
+    field public static final int CATEGORY_LINKIFY = 2; // 0x2
+    field public static final int CATEGORY_SELECTION = 1; // 0x1
+    field public static final int CATEGORY_UNDEFINED = 0; // 0x0
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassifierEvent> CREATOR;
+    field public static final int TYPE_ACTIONS_SHOWN = 6; // 0x6
+    field public static final int TYPE_AUTO_SELECTION = 5; // 0x5
+    field public static final int TYPE_COPY_ACTION = 9; // 0x9
+    field public static final int TYPE_CUT_ACTION = 11; // 0xb
+    field public static final int TYPE_LINK_CLICKED = 7; // 0x7
+    field public static final int TYPE_MANUAL_REPLY = 19; // 0x13
+    field public static final int TYPE_OTHER_ACTION = 16; // 0x10
+    field public static final int TYPE_OVERTYPE = 8; // 0x8
+    field public static final int TYPE_PASTE_ACTION = 10; // 0xa
+    field public static final int TYPE_SELECTION_DESTROYED = 15; // 0xf
+    field public static final int TYPE_SELECTION_DRAG = 14; // 0xe
+    field public static final int TYPE_SELECTION_MODIFIED = 2; // 0x2
+    field public static final int TYPE_SELECTION_RESET = 18; // 0x12
+    field public static final int TYPE_SELECTION_STARTED = 1; // 0x1
+    field public static final int TYPE_SELECT_ALL = 17; // 0x11
+    field public static final int TYPE_SHARE_ACTION = 12; // 0xc
+    field public static final int TYPE_SMART_ACTION = 13; // 0xd
+    field public static final int TYPE_SMART_SELECTION_MULTI = 4; // 0x4
+    field public static final int TYPE_SMART_SELECTION_SINGLE = 3; // 0x3
+    field public static final int TYPE_UNDEFINED = 0; // 0x0
+  }
+
+  public static final class TextClassifierEvent.Builder {
+    ctor public TextClassifierEvent.Builder(int, int);
+    method public android.view.textclassifier.TextClassifierEvent build();
+    method public android.view.textclassifier.TextClassifierEvent.Builder setActionIndices(int...);
+    method public android.view.textclassifier.TextClassifierEvent.Builder setEntityType(java.lang.String);
+    method public android.view.textclassifier.TextClassifierEvent.Builder setEventContext(android.view.textclassifier.TextClassificationContext);
+    method public android.view.textclassifier.TextClassifierEvent.Builder setEventIndex(int);
+    method public android.view.textclassifier.TextClassifierEvent.Builder setEventTime(long);
+    method public android.view.textclassifier.TextClassifierEvent.Builder setExtras(android.os.Bundle);
+    method public android.view.textclassifier.TextClassifierEvent.Builder setLanguage(java.lang.String);
+    method public android.view.textclassifier.TextClassifierEvent.Builder setRelativeSuggestedWordEndIndex(int);
+    method public android.view.textclassifier.TextClassifierEvent.Builder setRelativeSuggestedWordStartIndex(int);
+    method public android.view.textclassifier.TextClassifierEvent.Builder setRelativeWordEndIndex(int);
+    method public android.view.textclassifier.TextClassifierEvent.Builder setRelativeWordStartIndex(int);
+    method public android.view.textclassifier.TextClassifierEvent.Builder setResultId(java.lang.String);
   }
 
   public final class TextLanguage implements android.os.Parcelable {
