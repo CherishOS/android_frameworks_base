@@ -644,6 +644,7 @@ package android {
     field public static final int forceHasOverlappingRendering = 16844065; // 0x1010521
     field public static final int foreground = 16843017; // 0x1010109
     field public static final int foregroundGravity = 16843264; // 0x1010200
+    field public static final int foregroundServiceType = 16844191; // 0x101059f
     field public static final int foregroundTint = 16843885; // 0x101046d
     field public static final int foregroundTintMode = 16843886; // 0x101046e
     field public static final int format = 16843013; // 0x1010105
@@ -11755,12 +11756,20 @@ package android.content.pm {
     ctor public ServiceInfo(android.content.pm.ServiceInfo);
     method public int describeContents();
     method public void dump(android.util.Printer, java.lang.String);
+    method public int getForegroundServiceType();
     field public static final android.os.Parcelable.Creator<android.content.pm.ServiceInfo> CREATOR;
     field public static final int FLAG_EXTERNAL_SERVICE = 4; // 0x4
     field public static final int FLAG_ISOLATED_PROCESS = 2; // 0x2
     field public static final int FLAG_SINGLE_USER = 1073741824; // 0x40000000
     field public static final int FLAG_STOP_WITH_TASK = 1; // 0x1
     field public static final int FLAG_USE_APP_ZYGOTE = 8; // 0x8
+    field public static final int FOREGROUND_SERVICE_TYPE_DEVICE_COMPANION = 5; // 0x5
+    field public static final int FOREGROUND_SERVICE_TYPE_LOCATION = 4; // 0x4
+    field public static final int FOREGROUND_SERVICE_TYPE_MEDIA_PLAY = 2; // 0x2
+    field public static final int FOREGROUND_SERVICE_TYPE_ONGOING_PROCESS = 6; // 0x6
+    field public static final int FOREGROUND_SERVICE_TYPE_PHONE_CALL = 3; // 0x3
+    field public static final int FOREGROUND_SERVICE_TYPE_SYNC = 1; // 0x1
+    field public static final int FOREGROUND_SERVICE_TYPE_UNSPECIFIED = 0; // 0x0
     field public int flags;
     field public java.lang.String permission;
   }
@@ -22732,8 +22741,8 @@ package android.location {
     method public boolean addNmeaListener(android.location.OnNmeaMessageListener, android.os.Handler);
     method public void addProximityAlert(double, double, float, long, android.app.PendingIntent);
     method public void addTestProvider(java.lang.String, boolean, boolean, boolean, boolean, boolean, boolean, boolean, int, int);
-    method public void clearTestProviderEnabled(java.lang.String);
-    method public void clearTestProviderLocation(java.lang.String);
+    method public deprecated void clearTestProviderEnabled(java.lang.String);
+    method public deprecated void clearTestProviderLocation(java.lang.String);
     method public deprecated void clearTestProviderStatus(java.lang.String);
     method public java.util.List<java.lang.String> getAllProviders();
     method public java.lang.String getBestProvider(android.location.Criteria, boolean);
@@ -22945,6 +22954,7 @@ package android.media {
     method public int getChannelIndexMask();
     method public int getChannelMask();
     method public int getEncoding();
+    method public int getFrameSizeInBytes();
     method public int getSampleRate();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final deprecated int CHANNEL_CONFIGURATION_DEFAULT = 1; // 0x1
@@ -23964,6 +23974,7 @@ package android.media {
     field public static final deprecated int INFO_OUTPUT_BUFFERS_CHANGED = -3; // 0xfffffffd
     field public static final int INFO_OUTPUT_FORMAT_CHANGED = -2; // 0xfffffffe
     field public static final int INFO_TRY_AGAIN_LATER = -1; // 0xffffffff
+    field public static final java.lang.String PARAMETER_KEY_HDR10_PLUS_INFO = "hdr10-plus-info";
     field public static final java.lang.String PARAMETER_KEY_REQUEST_SYNC_FRAME = "request-sync";
     field public static final java.lang.String PARAMETER_KEY_SUSPEND = "drop-input-frames";
     field public static final java.lang.String PARAMETER_KEY_VIDEO_BITRATE = "video-bitrate";
@@ -24237,6 +24248,7 @@ package android.media {
     field public static final int HEVCProfileMain = 1; // 0x1
     field public static final int HEVCProfileMain10 = 2; // 0x2
     field public static final int HEVCProfileMain10HDR10 = 4096; // 0x1000
+    field public static final int HEVCProfileMain10HDR10Plus = 8192; // 0x2000
     field public static final int HEVCProfileMainStill = 4; // 0x4
     field public static final int MPEG2LevelH14 = 2; // 0x2
     field public static final int MPEG2LevelHL = 3; // 0x3
@@ -24298,8 +24310,10 @@ package android.media {
     field public static final int VP9Profile1 = 2; // 0x2
     field public static final int VP9Profile2 = 4; // 0x4
     field public static final int VP9Profile2HDR = 4096; // 0x1000
+    field public static final int VP9Profile2HDR10Plus = 16384; // 0x4000
     field public static final int VP9Profile3 = 8; // 0x8
     field public static final int VP9Profile3HDR = 8192; // 0x2000
+    field public static final int VP9Profile3HDR10Plus = 32768; // 0x8000
     field public int level;
     field public int profile;
   }
@@ -24698,6 +24712,7 @@ package android.media {
     field public static final java.lang.String KEY_FRAME_RATE = "frame-rate";
     field public static final java.lang.String KEY_GRID_COLUMNS = "grid-cols";
     field public static final java.lang.String KEY_GRID_ROWS = "grid-rows";
+    field public static final java.lang.String KEY_HDR10_PLUS_INFO = "hdr10-plus-info";
     field public static final java.lang.String KEY_HDR_STATIC_INFO = "hdr-static-info";
     field public static final java.lang.String KEY_HEIGHT = "height";
     field public static final java.lang.String KEY_INTRA_REFRESH_PERIOD = "intra-refresh-period";
@@ -28371,6 +28386,7 @@ package android.net {
     method public int describeContents();
     method public int getLinkDownstreamBandwidthKbps();
     method public int getLinkUpstreamBandwidthKbps();
+    method public android.net.TransportInfo getTransportInfo();
     method public boolean hasCapability(int);
     method public boolean hasTransport(int);
     method public void writeToParcel(android.os.Parcel, int);
@@ -28579,6 +28595,9 @@ package android.net {
     field public static final int UNSUPPORTED = -1; // 0xffffffff
   }
 
+  public abstract interface TransportInfo {
+  }
+
   public abstract class Uri implements java.lang.Comparable android.os.Parcelable {
     method public abstract android.net.Uri.Builder buildUpon();
     method public int compareTo(android.net.Uri);
@@ -28614,6 +28633,7 @@ package android.net {
     method public abstract boolean isRelative();
     method public android.net.Uri normalizeScheme();
     method public static android.net.Uri parse(java.lang.String);
+    method public java.lang.String toSafeString();
     method public abstract java.lang.String toString();
     method public static android.net.Uri withAppendedPath(android.net.Uri, java.lang.String);
     method public static void writeToParcel(android.os.Parcel, android.net.Uri);
@@ -40448,6 +40468,7 @@ package android.service.autofill {
     method public android.service.autofill.FillResponse.Builder setHeader(android.widget.RemoteViews);
     method public android.service.autofill.FillResponse.Builder setIgnoredIds(android.view.autofill.AutofillId...);
     method public android.service.autofill.FillResponse.Builder setSaveInfo(android.service.autofill.SaveInfo);
+    method public android.service.autofill.FillResponse.Builder setUserData(android.service.autofill.UserData);
   }
 
   public final class ImageTransformation implements android.os.Parcelable android.service.autofill.Transformation {
@@ -43766,10 +43787,10 @@ package android.telephony {
     method public static java.lang.String getStrippedReversed(java.lang.String);
     method public static final boolean is12Key(char);
     method public static final boolean isDialable(char);
-    method public static boolean isEmergencyNumber(java.lang.String);
+    method public static deprecated boolean isEmergencyNumber(java.lang.String);
     method public static boolean isGlobalPhoneNumber(java.lang.String);
     method public static boolean isISODigit(char);
-    method public static boolean isLocalEmergencyNumber(android.content.Context, java.lang.String);
+    method public static deprecated boolean isLocalEmergencyNumber(android.content.Context, java.lang.String);
     method public static final boolean isNonSeparator(char);
     method public static final boolean isReallyDialable(char);
     method public static final boolean isStartsPostDial(char);
@@ -44477,11 +44498,13 @@ package android.telephony.emergency {
     method public java.util.List<java.lang.Integer> getEmergencyNumberSources();
     method public java.util.List<java.lang.Integer> getEmergencyServiceCategories();
     method public int getEmergencyServiceCategoryBitmask();
+    method public java.lang.String getMnc();
     method public java.lang.String getNumber();
     method public boolean isFromSources(int);
     method public boolean isInEmergencyServiceCategories(int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.emergency.EmergencyNumber> CREATOR;
+    field public static final int EMERGENCY_NUMBER_SOURCE_DATABASE = 16; // 0x10
     field public static final int EMERGENCY_NUMBER_SOURCE_DEFAULT = 8; // 0x8
     field public static final int EMERGENCY_NUMBER_SOURCE_MODEM_CONFIG = 4; // 0x4
     field public static final int EMERGENCY_NUMBER_SOURCE_NETWORK_SIGNALING = 1; // 0x1
@@ -52464,6 +52487,7 @@ package android.view.textclassifier {
 
   public static final class ConversationActions.Request implements android.os.Parcelable {
     method public int describeContents();
+    method public java.lang.String getCallingPackageName();
     method public java.util.List<android.view.textclassifier.ConversationActions.Message> getConversation();
     method public java.util.List<java.lang.String> getHints();
     method public int getMaxSuggestions();
@@ -52577,6 +52601,7 @@ package android.view.textclassifier {
 
   public static final class TextClassification.Request implements android.os.Parcelable {
     method public int describeContents();
+    method public java.lang.String getCallingPackageName();
     method public android.os.LocaleList getDefaultLocales();
     method public int getEndIndex();
     method public android.os.Bundle getExtras();
@@ -52694,6 +52719,7 @@ package android.view.textclassifier {
 
   public static final class TextLanguage.Request implements android.os.Parcelable {
     method public int describeContents();
+    method public java.lang.String getCallingPackageName();
     method public android.os.Bundle getExtras();
     method public java.lang.CharSequence getText();
     method public void writeToParcel(android.os.Parcel, int);
@@ -52725,6 +52751,7 @@ package android.view.textclassifier {
   public static final class TextLinks.Builder {
     ctor public TextLinks.Builder(java.lang.String);
     method public android.view.textclassifier.TextLinks.Builder addLink(int, int, java.util.Map<java.lang.String, java.lang.Float>);
+    method public android.view.textclassifier.TextLinks.Builder addLink(int, int, java.util.Map<java.lang.String, java.lang.Float>, android.os.Bundle);
     method public android.view.textclassifier.TextLinks build();
     method public android.view.textclassifier.TextLinks.Builder clearTextLinks();
     method public android.view.textclassifier.TextLinks.Builder setExtras(android.os.Bundle);
@@ -52732,6 +52759,7 @@ package android.view.textclassifier {
 
   public static final class TextLinks.Request implements android.os.Parcelable {
     method public int describeContents();
+    method public java.lang.String getCallingPackageName();
     method public android.os.LocaleList getDefaultLocales();
     method public android.view.textclassifier.TextClassifier.EntityConfig getEntityConfig();
     method public android.os.Bundle getExtras();
@@ -52754,6 +52782,7 @@ package android.view.textclassifier {
     method public int getEnd();
     method public java.lang.String getEntity(int);
     method public int getEntityCount();
+    method public android.os.Bundle getExtras();
     method public int getStart();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextLinks.TextLink> CREATOR;
@@ -52788,6 +52817,7 @@ package android.view.textclassifier {
 
   public static final class TextSelection.Request implements android.os.Parcelable {
     method public int describeContents();
+    method public java.lang.String getCallingPackageName();
     method public android.os.LocaleList getDefaultLocales();
     method public int getEndIndex();
     method public android.os.Bundle getExtras();
