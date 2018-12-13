@@ -78,6 +78,7 @@ package android {
     field public static final java.lang.String FOREGROUND_SERVICE = "android.permission.FOREGROUND_SERVICE";
     field public static final java.lang.String GET_ACCOUNTS = "android.permission.GET_ACCOUNTS";
     field public static final java.lang.String GET_ACCOUNTS_PRIVILEGED = "android.permission.GET_ACCOUNTS_PRIVILEGED";
+    field public static final java.lang.String GET_AND_REQUEST_SCREEN_LOCK_COMPLEXITY = "android.permission.GET_AND_REQUEST_SCREEN_LOCK_COMPLEXITY";
     field public static final java.lang.String GET_PACKAGE_SIZE = "android.permission.GET_PACKAGE_SIZE";
     field public static final deprecated java.lang.String GET_TASKS = "android.permission.GET_TASKS";
     field public static final java.lang.String GLOBAL_SEARCH = "android.permission.GLOBAL_SEARCH";
@@ -90,6 +91,7 @@ package android {
     field public static final java.lang.String LOCATION_HARDWARE = "android.permission.LOCATION_HARDWARE";
     field public static final java.lang.String MANAGE_DOCUMENTS = "android.permission.MANAGE_DOCUMENTS";
     field public static final java.lang.String MANAGE_OWN_CALLS = "android.permission.MANAGE_OWN_CALLS";
+    field public static final java.lang.String CALL_COMPANION_APP = "android.permission.CALL_COMPANION_APP";
     field public static final java.lang.String MASTER_CLEAR = "android.permission.MASTER_CLEAR";
     field public static final java.lang.String MEDIA_CONTENT_CONTROL = "android.permission.MEDIA_CONTENT_CONTROL";
     field public static final java.lang.String MODIFY_AUDIO_SETTINGS = "android.permission.MODIFY_AUDIO_SETTINGS";
@@ -5948,6 +5950,15 @@ package android.app {
     field public static final int STYLE_SPINNER = 0; // 0x0
   }
 
+  public final class RecoverableSecurityException extends java.lang.SecurityException implements android.os.Parcelable {
+    ctor public RecoverableSecurityException(java.lang.Throwable, java.lang.CharSequence, android.app.RemoteAction);
+    method public int describeContents();
+    method public android.app.RemoteAction getUserAction();
+    method public java.lang.CharSequence getUserMessage();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.app.RecoverableSecurityException> CREATOR;
+  }
+
   public final class RemoteAction implements android.os.Parcelable {
     ctor public RemoteAction(android.graphics.drawable.Icon, java.lang.CharSequence, java.lang.CharSequence, android.app.PendingIntent);
     method public android.app.RemoteAction clone();
@@ -5973,6 +5984,7 @@ package android.app {
     method public java.util.Set<java.lang.String> getAllowedDataTypes();
     method public java.lang.CharSequence[] getChoices();
     method public static java.util.Map<java.lang.String, android.net.Uri> getDataResultsFromIntent(android.content.Intent, java.lang.String);
+    method public int getEditChoicesBeforeSending();
     method public android.os.Bundle getExtras();
     method public java.lang.CharSequence getLabel();
     method public java.lang.String getResultKey();
@@ -5982,6 +5994,9 @@ package android.app {
     method public static void setResultsSource(android.content.Intent, int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.RemoteInput> CREATOR;
+    field public static final int EDIT_CHOICES_BEFORE_SENDING_AUTO = 0; // 0x0
+    field public static final int EDIT_CHOICES_BEFORE_SENDING_DISABLED = 1; // 0x1
+    field public static final int EDIT_CHOICES_BEFORE_SENDING_ENABLED = 2; // 0x2
     field public static final java.lang.String EXTRA_RESULTS_DATA = "android.remoteinput.resultsData";
     field public static final java.lang.String RESULTS_CLIP_LABEL = "android.remoteinput.results";
     field public static final int SOURCE_CHOICE = 1; // 0x1
@@ -5996,6 +6011,7 @@ package android.app {
     method public android.app.RemoteInput.Builder setAllowDataType(java.lang.String, boolean);
     method public android.app.RemoteInput.Builder setAllowFreeFormInput(boolean);
     method public android.app.RemoteInput.Builder setChoices(java.lang.CharSequence[]);
+    method public android.app.RemoteInput.Builder setEditChoicesBeforeSending(int);
     method public android.app.RemoteInput.Builder setLabel(java.lang.CharSequence);
   }
 
@@ -6433,6 +6449,13 @@ package android.app.admin {
     field public static final android.os.Parcelable.Creator<android.app.admin.ConnectEvent> CREATOR;
   }
 
+  public class DelegatedAdminReceiver extends android.content.BroadcastReceiver {
+    ctor public DelegatedAdminReceiver();
+    method public java.lang.String onChoosePrivateKeyAlias(android.content.Context, android.content.Intent, int, android.net.Uri, java.lang.String);
+    method public void onNetworkLogsAvailable(android.content.Context, android.content.Intent, long, int);
+    method public void onReceive(android.content.Context, android.content.Intent);
+  }
+
   public final class DeviceAdminInfo implements android.os.Parcelable {
     ctor public DeviceAdminInfo(android.content.Context, android.content.pm.ResolveInfo) throws java.io.IOException, org.xmlpull.v1.XmlPullParserException;
     method public int describeContents();
@@ -6495,11 +6518,13 @@ package android.app.admin {
     method public void onUserStarted(android.content.Context, android.content.Intent, android.os.UserHandle);
     method public void onUserStopped(android.content.Context, android.content.Intent, android.os.UserHandle);
     method public void onUserSwitched(android.content.Context, android.content.Intent, android.os.UserHandle);
+    field public static final java.lang.String ACTION_CHOOSE_PRIVATE_KEY_ALIAS = "android.app.action.CHOOSE_PRIVATE_KEY_ALIAS";
     field public static final java.lang.String ACTION_DEVICE_ADMIN_DISABLED = "android.app.action.DEVICE_ADMIN_DISABLED";
     field public static final java.lang.String ACTION_DEVICE_ADMIN_DISABLE_REQUESTED = "android.app.action.DEVICE_ADMIN_DISABLE_REQUESTED";
     field public static final java.lang.String ACTION_DEVICE_ADMIN_ENABLED = "android.app.action.DEVICE_ADMIN_ENABLED";
     field public static final java.lang.String ACTION_LOCK_TASK_ENTERING = "android.app.action.LOCK_TASK_ENTERING";
     field public static final java.lang.String ACTION_LOCK_TASK_EXITING = "android.app.action.LOCK_TASK_EXITING";
+    field public static final java.lang.String ACTION_NETWORK_LOGS_AVAILABLE = "android.app.action.NETWORK_LOGS_AVAILABLE";
     field public static final java.lang.String ACTION_PASSWORD_CHANGED = "android.app.action.ACTION_PASSWORD_CHANGED";
     field public static final java.lang.String ACTION_PASSWORD_EXPIRING = "android.app.action.ACTION_PASSWORD_EXPIRING";
     field public static final java.lang.String ACTION_PASSWORD_FAILED = "android.app.action.ACTION_PASSWORD_FAILED";
@@ -6573,6 +6598,7 @@ package android.app.admin {
     method public java.lang.CharSequence getOrganizationName(android.content.ComponentName);
     method public java.util.List<android.telephony.data.ApnSetting> getOverrideApns(android.content.ComponentName);
     method public android.app.admin.DevicePolicyManager getParentProfileInstance(android.content.ComponentName);
+    method public int getPasswordComplexity();
     method public long getPasswordExpiration(android.content.ComponentName);
     method public long getPasswordExpirationTimeout(android.content.ComponentName);
     method public int getPasswordHistoryLength(android.content.ComponentName);
@@ -6744,10 +6770,13 @@ package android.app.admin {
     field public static final java.lang.String DELEGATION_APP_RESTRICTIONS = "delegation-app-restrictions";
     field public static final java.lang.String DELEGATION_BLOCK_UNINSTALL = "delegation-block-uninstall";
     field public static final java.lang.String DELEGATION_CERT_INSTALL = "delegation-cert-install";
+    field public static final java.lang.String DELEGATION_CERT_SELECTION = "delegation-cert-selection";
     field public static final java.lang.String DELEGATION_ENABLE_SYSTEM_APP = "delegation-enable-system-app";
     field public static final java.lang.String DELEGATION_INSTALL_EXISTING_PACKAGE = "delegation-install-existing-package";
     field public static final java.lang.String DELEGATION_KEEP_UNINSTALLED_PACKAGES = "delegation-keep-uninstalled-packages";
+    field public static final java.lang.String DELEGATION_NETWORK_LOGGING = "delegation-network-logging";
     field public static final java.lang.String DELEGATION_PACKAGE_ACCESS = "delegation-package-access";
+    field public static final java.lang.String DELEGATION_PACKAGE_INSTALLATION = "delegation-package-installation";
     field public static final java.lang.String DELEGATION_PERMISSION_GRANT = "delegation-permission-grant";
     field public static final int ENCRYPTION_STATUS_ACTIVATING = 2; // 0x2
     field public static final int ENCRYPTION_STATUS_ACTIVE = 3; // 0x3
@@ -6826,6 +6855,10 @@ package android.app.admin {
     field public static final int LOCK_TASK_FEATURE_SYSTEM_INFO = 1; // 0x1
     field public static final int MAKE_USER_EPHEMERAL = 2; // 0x2
     field public static final java.lang.String MIME_TYPE_PROVISIONING_NFC = "application/com.android.managedprovisioning";
+    field public static final int PASSWORD_COMPLEXITY_HIGH = 327680; // 0x50000
+    field public static final int PASSWORD_COMPLEXITY_LOW = 65536; // 0x10000
+    field public static final int PASSWORD_COMPLEXITY_MEDIUM = 196608; // 0x30000
+    field public static final int PASSWORD_COMPLEXITY_NONE = 0; // 0x0
     field public static final int PASSWORD_QUALITY_ALPHABETIC = 262144; // 0x40000
     field public static final int PASSWORD_QUALITY_ALPHANUMERIC = 327680; // 0x50000
     field public static final int PASSWORD_QUALITY_BIOMETRIC_WEAK = 32768; // 0x8000
@@ -7614,13 +7647,16 @@ package android.app.usage {
     method public java.lang.String getPackageName();
     method public java.lang.String getShortcutId();
     method public long getTimeStamp();
+    field public static final int ACTIVITY_PAUSED = 2; // 0x2
+    field public static final int ACTIVITY_RESUMED = 1; // 0x1
+    field public static final int ACTIVITY_STOPPED = 23; // 0x17
     field public static final int CONFIGURATION_CHANGE = 5; // 0x5
     field public static final int FOREGROUND_SERVICE_START = 19; // 0x13
     field public static final int FOREGROUND_SERVICE_STOP = 20; // 0x14
     field public static final int KEYGUARD_HIDDEN = 18; // 0x12
     field public static final int KEYGUARD_SHOWN = 17; // 0x11
-    field public static final int MOVE_TO_BACKGROUND = 2; // 0x2
-    field public static final int MOVE_TO_FOREGROUND = 1; // 0x1
+    field public static final deprecated int MOVE_TO_BACKGROUND = 2; // 0x2
+    field public static final deprecated int MOVE_TO_FOREGROUND = 1; // 0x1
     field public static final int NONE = 0; // 0x0
     field public static final int SCREEN_INTERACTIVE = 15; // 0xf
     field public static final int SCREEN_NON_INTERACTIVE = 16; // 0x10
@@ -7637,9 +7673,11 @@ package android.app.usage {
     method public long getLastTimeForegroundServiceUsed();
     method public long getLastTimeStamp();
     method public long getLastTimeUsed();
+    method public long getLastTimeVisible();
     method public java.lang.String getPackageName();
     method public long getTotalTimeForegroundServiceUsed();
     method public long getTotalTimeInForeground();
+    method public long getTotalTimeVisible();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.usage.UsageStats> CREATOR;
   }
@@ -11235,6 +11273,7 @@ package android.content.pm {
     method public java.util.List<android.content.pm.PackageInstaller.SessionInfo> getAllSessions();
     method public java.util.List<android.content.pm.PackageInstaller.SessionInfo> getMySessions();
     method public android.content.pm.PackageInstaller.SessionInfo getSessionInfo(int);
+    method public java.util.List<android.content.pm.PackageInstaller.SessionInfo> getStagedSessions();
     method public android.content.pm.PackageInstaller.Session openSession(int) throws java.io.IOException;
     method public void registerSessionCallback(android.content.pm.PackageInstaller.SessionCallback);
     method public void registerSessionCallback(android.content.pm.PackageInstaller.SessionCallback, android.os.Handler);
@@ -11273,6 +11312,7 @@ package android.content.pm {
     method public java.lang.String[] getNames() throws java.io.IOException;
     method public int getParentSessionId();
     method public boolean isMultiPackage();
+    method public boolean isStaged();
     method public java.io.InputStream openRead(java.lang.String) throws java.io.IOException;
     method public java.io.OutputStream openWrite(java.lang.String, long, long) throws java.io.IOException;
     method public void removeChildSessionId(int);
@@ -11311,6 +11351,7 @@ package android.content.pm {
     method public boolean isActive();
     method public boolean isMultiPackage();
     method public boolean isSealed();
+    method public boolean isStaged();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.PackageInstaller.SessionInfo> CREATOR;
     field public static final int INVALID_ID = -1; // 0xffffffff
@@ -11329,6 +11370,7 @@ package android.content.pm {
     method public void setOriginatingUri(android.net.Uri);
     method public void setReferrerUri(android.net.Uri);
     method public void setSize(long);
+    method public void setStaged();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.PackageInstaller.SessionParams> CREATOR;
     field public static final int MODE_FULL_INSTALL = 1; // 0x1
@@ -15724,6 +15766,7 @@ package android.graphics.text {
 
   public static class MeasuredText.Builder {
     ctor public MeasuredText.Builder(char[]);
+    ctor public MeasuredText.Builder(android.graphics.text.MeasuredText);
     method public android.graphics.text.MeasuredText.Builder appendReplacementRun(android.graphics.Paint, int, float);
     method public android.graphics.text.MeasuredText.Builder appendStyleRun(android.graphics.Paint, int, boolean);
     method public android.graphics.text.MeasuredText build();
@@ -23060,6 +23103,7 @@ package android.media {
     method public deprecated boolean isBluetoothA2dpOn();
     method public boolean isBluetoothScoAvailableOffCall();
     method public boolean isBluetoothScoOn();
+    method public static boolean isHapticPlaybackSupported();
     method public boolean isMicrophoneMute();
     method public boolean isMusicActive();
     method public static boolean isOffloadedPlaybackSupported(android.media.AudioFormat);
@@ -23956,6 +24000,7 @@ package android.media {
     method public void releaseOutputBuffer(int, boolean);
     method public void releaseOutputBuffer(int, long);
     method public void reset();
+    method public void setAudioPresentation(android.media.AudioPresentation);
     method public void setCallback(android.media.MediaCodec.Callback, android.os.Handler);
     method public void setCallback(android.media.MediaCodec.Callback);
     method public void setInputSurface(android.view.Surface);
@@ -24946,6 +24991,7 @@ package android.media {
     field public static final int MUXER_OUTPUT_3GPP = 2; // 0x2
     field public static final int MUXER_OUTPUT_HEIF = 3; // 0x3
     field public static final int MUXER_OUTPUT_MPEG_4 = 0; // 0x0
+    field public static final int MUXER_OUTPUT_OGG = 4; // 0x4
     field public static final int MUXER_OUTPUT_WEBM = 1; // 0x1
   }
 
@@ -25401,6 +25447,7 @@ package android.media {
     field public static final int AMR_WB = 2; // 0x2
     field public static final int DEFAULT = 0; // 0x0
     field public static final int HE_AAC = 4; // 0x4
+    field public static final int OPUS = 7; // 0x7
     field public static final int VORBIS = 6; // 0x6
   }
 
@@ -25451,6 +25498,7 @@ package android.media {
     field public static final int DEFAULT = 0; // 0x0
     field public static final int MPEG_2_TS = 8; // 0x8
     field public static final int MPEG_4 = 2; // 0x2
+    field public static final int OGG = 11; // 0xb
     field public static final deprecated int RAW_AMR = 3; // 0x3
     field public static final int THREE_GPP = 1; // 0x1
     field public static final int WEBM = 9; // 0x9
@@ -35929,9 +35977,11 @@ package android.provider {
   }
 
   public final class CalendarContract {
+    method public static boolean startViewCalendarEventInManagedProfile(android.content.Context, long, long, long, boolean, int);
     field public static final java.lang.String ACCOUNT_TYPE_LOCAL = "LOCAL";
     field public static final java.lang.String ACTION_EVENT_REMINDER = "android.intent.action.EVENT_REMINDER";
     field public static final java.lang.String ACTION_HANDLE_CUSTOM_EVENT = "android.provider.calendar.action.HANDLE_CUSTOM_EVENT";
+    field public static final java.lang.String ACTION_VIEW_WORK_CALENDAR_EVENT = "android.provider.calendar.action.VIEW_WORK_CALENDAR_EVENT";
     field public static final java.lang.String AUTHORITY = "com.android.calendar";
     field public static final java.lang.String CALLER_IS_SYNCADAPTER = "caller_is_syncadapter";
     field public static final android.net.Uri CONTENT_URI;
@@ -35939,6 +35989,7 @@ package android.provider {
     field public static final java.lang.String EXTRA_EVENT_ALL_DAY = "allDay";
     field public static final java.lang.String EXTRA_EVENT_BEGIN_TIME = "beginTime";
     field public static final java.lang.String EXTRA_EVENT_END_TIME = "endTime";
+    field public static final java.lang.String EXTRA_EVENT_ID = "id";
   }
 
   public static final class CalendarContract.Attendees implements android.provider.BaseColumns android.provider.CalendarContract.AttendeesColumns android.provider.CalendarContract.EventsColumns {
@@ -38469,10 +38520,13 @@ package android.provider {
   }
 
   public static final class Telephony.CarrierId implements android.provider.BaseColumns {
+    method public static android.net.Uri getPreciseCarrierIdUriForSubscriptionId(int);
     method public static android.net.Uri getUriForSubscriptionId(int);
     field public static final java.lang.String CARRIER_ID = "carrier_id";
     field public static final java.lang.String CARRIER_NAME = "carrier_name";
     field public static final android.net.Uri CONTENT_URI;
+    field public static final java.lang.String PRECISE_CARRIER_ID = "precise_carrier_id";
+    field public static final java.lang.String PRECISE_CARRIER_ID_NAME = "precise_carrier_id_name";
   }
 
   public static final class Telephony.Carriers implements android.provider.BaseColumns {
@@ -40618,13 +40672,16 @@ package android.service.carrier {
 
   public class CarrierIdentifier implements android.os.Parcelable {
     ctor public CarrierIdentifier(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String);
+    ctor public CarrierIdentifier(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, int, int);
     ctor public CarrierIdentifier(byte[], java.lang.String, java.lang.String);
     method public int describeContents();
+    method public int getCarrierId();
     method public java.lang.String getGid1();
     method public java.lang.String getGid2();
     method public java.lang.String getImsi();
     method public java.lang.String getMcc();
     method public java.lang.String getMnc();
+    method public int getPreciseCarrierId();
     method public java.lang.String getSpn();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.carrier.CarrierIdentifier> CREATOR;
@@ -43116,12 +43173,14 @@ package android.telecom {
     field public static final java.lang.String EXTRA_START_CALL_WITH_RTT = "android.telecom.extra.START_CALL_WITH_RTT";
     field public static final java.lang.String EXTRA_START_CALL_WITH_SPEAKERPHONE = "android.telecom.extra.START_CALL_WITH_SPEAKERPHONE";
     field public static final java.lang.String EXTRA_START_CALL_WITH_VIDEO_STATE = "android.telecom.extra.START_CALL_WITH_VIDEO_STATE";
+    field public static final java.lang.String EXTRA_IS_ENABLED = "android.telecom.extra.IS_ENABLED";
     field public static final java.lang.String GATEWAY_ORIGINAL_ADDRESS = "android.telecom.extra.GATEWAY_ORIGINAL_ADDRESS";
     field public static final java.lang.String GATEWAY_PROVIDER_PACKAGE = "android.telecom.extra.GATEWAY_PROVIDER_PACKAGE";
     field public static final java.lang.String METADATA_INCLUDE_EXTERNAL_CALLS = "android.telecom.INCLUDE_EXTERNAL_CALLS";
     field public static final java.lang.String METADATA_INCLUDE_SELF_MANAGED_CALLS = "android.telecom.INCLUDE_SELF_MANAGED_CALLS";
     field public static final java.lang.String METADATA_IN_CALL_SERVICE_RINGING = "android.telecom.IN_CALL_SERVICE_RINGING";
     field public static final java.lang.String METADATA_IN_CALL_SERVICE_UI = "android.telecom.IN_CALL_SERVICE_UI";
+    field public static final java.lang.String METADATA_IN_CALL_SERVICE_CAR_MODE_UI = "android.telecom.IN_CALL_SERVICE_CAR_MODE_UI";
     field public static final int PRESENTATION_ALLOWED = 1; // 0x1
     field public static final int PRESENTATION_PAYPHONE = 4; // 0x4
     field public static final int PRESENTATION_RESTRICTED = 2; // 0x2
@@ -43309,6 +43368,7 @@ package android.telephony {
     field public static final java.lang.String KEY_CALL_FORWARDING_BLOCKS_WHILE_ROAMING_STRING_ARRAY = "call_forwarding_blocks_while_roaming_string_array";
     field public static final java.lang.String KEY_CARRIER_ALLOW_TURNOFF_IMS_BOOL = "carrier_allow_turnoff_ims_bool";
     field public static final java.lang.String KEY_CARRIER_CALL_SCREENING_APP_STRING = "call_screening_app";
+    field public static final java.lang.String KEY_CARRIER_CONFIG_VERSION_STRING = "carrier_config_version_string";
     field public static final java.lang.String KEY_CARRIER_DATA_CALL_PERMANENT_FAILURE_STRINGS = "carrier_data_call_permanent_failure_strings";
     field public static final java.lang.String KEY_CARRIER_DEFAULT_WFC_IMS_MODE_INT = "carrier_default_wfc_ims_mode_int";
     field public static final java.lang.String KEY_CARRIER_DEFAULT_WFC_IMS_ROAMING_MODE_INT = "carrier_default_wfc_ims_roaming_mode_int";
@@ -44106,12 +44166,14 @@ package android.telephony {
     method public static int getSlotIndex(int);
     method public int[] getSubscriptionIds(int);
     method public java.util.List<android.telephony.SubscriptionPlan> getSubscriptionPlans(int);
+    method public java.util.List<android.telephony.SubscriptionInfo> getSubscriptionsInGroup(int);
     method public boolean isActiveSubscriptionId(int);
     method public boolean isNetworkRoaming(int);
     method public static boolean isUsableSubscriptionId(int);
     method public static boolean isValidSubscriptionId(int);
     method public void removeOnOpportunisticSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnOpportunisticSubscriptionsChangedListener);
     method public void removeOnSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnSubscriptionsChangedListener);
+    method public boolean removeSubscriptionsFromGroup(int[]);
     method public java.lang.String setSubscriptionGroup(int[]);
     method public void setSubscriptionOverrideCongested(int, boolean, long);
     method public void setSubscriptionOverrideUnmetered(int, boolean, long);
@@ -44176,6 +44238,7 @@ package android.telephony {
     method public java.util.List<android.telephony.CellInfo> getAllCellInfo();
     method public int getCallState();
     method public android.os.PersistableBundle getCarrierConfig();
+    method public int getCarrierIdFromSimMccMnc();
     method public deprecated android.telephony.CellLocation getCellLocation();
     method public java.util.Map<java.lang.Integer, java.util.List<android.telephony.emergency.EmergencyNumber>> getCurrentEmergencyNumberList();
     method public java.util.Map<java.lang.Integer, java.util.List<android.telephony.emergency.EmergencyNumber>> getCurrentEmergencyNumberList(int);
@@ -44213,6 +44276,8 @@ package android.telephony {
     method public java.lang.String getSimCountryIso();
     method public java.lang.String getSimOperator();
     method public java.lang.String getSimOperatorName();
+    method public int getSimPreciseCarrierId();
+    method public java.lang.CharSequence getSimPreciseCarrierIdName();
     method public java.lang.String getSimSerialNumber();
     method public int getSimState();
     method public int getSimState(int);
@@ -44269,6 +44334,7 @@ package android.telephony {
     field public static final java.lang.String ACTION_SHOW_VOICEMAIL_NOTIFICATION = "android.telephony.action.SHOW_VOICEMAIL_NOTIFICATION";
     field public static final java.lang.String ACTION_SMS_APP_SERVICE = "android.telephony.action.SMS_APP_SERVICE";
     field public static final java.lang.String ACTION_SUBSCRIPTION_CARRIER_IDENTITY_CHANGED = "android.telephony.action.SUBSCRIPTION_CARRIER_IDENTITY_CHANGED";
+    field public static final java.lang.String ACTION_SUBSCRIPTION_PRECISE_CARRIER_IDENTITY_CHANGED = "android.telephony.action.SUBSCRIPTION_PRECISE_CARRIER_IDENTITY_CHANGED";
     field public static final int APPTYPE_CSIM = 4; // 0x4
     field public static final int APPTYPE_ISIM = 5; // 0x5
     field public static final int APPTYPE_RUIM = 3; // 0x3
@@ -44301,6 +44367,8 @@ package android.telephony {
     field public static final java.lang.String EXTRA_LAUNCH_VOICEMAIL_SETTINGS_INTENT = "android.telephony.extra.LAUNCH_VOICEMAIL_SETTINGS_INTENT";
     field public static final java.lang.String EXTRA_NOTIFICATION_COUNT = "android.telephony.extra.NOTIFICATION_COUNT";
     field public static final java.lang.String EXTRA_PHONE_ACCOUNT_HANDLE = "android.telephony.extra.PHONE_ACCOUNT_HANDLE";
+    field public static final java.lang.String EXTRA_PRECISE_CARRIER_ID = "android.telephony.extra.PRECISE_CARRIER_ID";
+    field public static final java.lang.String EXTRA_PRECISE_CARRIER_NAME = "android.telephony.extra.PRECISE_CARRIER_NAME";
     field public static final java.lang.String EXTRA_STATE = "state";
     field public static final java.lang.String EXTRA_STATE_IDLE;
     field public static final java.lang.String EXTRA_STATE_OFFHOOK;
@@ -45263,6 +45331,7 @@ package android.text {
 
   public static class PrecomputedText.Params.Builder {
     ctor public PrecomputedText.Params.Builder(android.text.TextPaint);
+    ctor public PrecomputedText.Params.Builder(android.text.PrecomputedText.Params);
     method public android.text.PrecomputedText.Params build();
     method public android.text.PrecomputedText.Params.Builder setBreakStrategy(int);
     method public android.text.PrecomputedText.Params.Builder setHyphenationFrequency(int);
@@ -52494,19 +52563,19 @@ package android.view.textclassifier {
     method public int describeContents();
     method public android.app.Person getAuthor();
     method public android.os.Bundle getExtras();
+    method public java.time.ZonedDateTime getReferenceTime();
     method public java.lang.CharSequence getText();
-    method public java.time.ZonedDateTime getTime();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions.Message> CREATOR;
     field public static final android.app.Person PERSON_USER_LOCAL;
+    field public static final android.app.Person PERSON_USER_REMOTE;
   }
 
   public static final class ConversationActions.Message.Builder {
-    ctor public ConversationActions.Message.Builder();
+    ctor public ConversationActions.Message.Builder(android.app.Person);
     method public android.view.textclassifier.ConversationActions.Message build();
-    method public android.view.textclassifier.ConversationActions.Message.Builder setAuthor(android.app.Person);
-    method public android.view.textclassifier.ConversationActions.Message.Builder setComposeTime(java.time.ZonedDateTime);
     method public android.view.textclassifier.ConversationActions.Message.Builder setExtras(android.os.Bundle);
+    method public android.view.textclassifier.ConversationActions.Message.Builder setReferenceTime(java.time.ZonedDateTime);
     method public android.view.textclassifier.ConversationActions.Message.Builder setText(java.lang.CharSequence);
   }
 
