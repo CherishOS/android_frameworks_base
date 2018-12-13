@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (C) 2018 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,33 +18,21 @@ package android.graphics;
 
 import android.annotation.ColorInt;
 import android.annotation.NonNull;
-import android.annotation.UnsupportedAppUsage;
 
 /**
  * A color filter that can be used to tint the source pixels using a single
- * color and a specific {@link PorterDuff Porter-Duff composite mode}.
- *
- * @deprecated Consider using {@link BlendModeColorFilter} instead as it supports a wider
- * set of blend modes than those defined in {@link PorterDuff.Mode}
+ * color and a specific {@link BlendMode}.
  */
-@Deprecated
-public class PorterDuffColorFilter extends ColorFilter {
-    @ColorInt
-    private int mColor;
-    private PorterDuff.Mode mMode;
+public final class BlendModeColorFilter extends ColorFilter {
 
-    /**
-     * Create a color filter that uses the specified color and Porter-Duff mode.
-     *
-     * @param color The ARGB source color used with the specified Porter-Duff mode
-     * @param mode The porter-duff mode that is applied
-     *
-     * @see Color
-     */
-    public PorterDuffColorFilter(@ColorInt int color, @NonNull PorterDuff.Mode mode) {
+    @ColorInt final int mColor;
+    private final BlendMode mMode;
+
+    public BlendModeColorFilter(@ColorInt int color, @NonNull BlendMode mode) {
         mColor = color;
         mMode = mode;
     }
+
 
     /**
      * Returns the ARGB color used to tint the source pixels when this filter
@@ -52,10 +40,8 @@ public class PorterDuffColorFilter extends ColorFilter {
      *
      * @see Color
      *
-     * @hide
      */
     @ColorInt
-    @UnsupportedAppUsage
     public int getColor() {
         return mColor;
     }
@@ -64,18 +50,16 @@ public class PorterDuffColorFilter extends ColorFilter {
      * Returns the Porter-Duff mode used to composite this color filter's
      * color with the source pixel when this filter is applied.
      *
-     * @see PorterDuff
+     * @see BlendMode
      *
-     * @hide
      */
-    @UnsupportedAppUsage
-    public PorterDuff.Mode getMode() {
+    public BlendMode getMode() {
         return mMode;
     }
 
     @Override
     long createNativeInstance() {
-        return native_CreateBlendModeFilter(mColor, mMode.nativeInt);
+        return native_CreateBlendModeFilter(mColor, mMode.getXfermode().porterDuffMode);
     }
 
     @Override
@@ -86,8 +70,8 @@ public class PorterDuffColorFilter extends ColorFilter {
         if (object == null || getClass() != object.getClass()) {
             return false;
         }
-        final PorterDuffColorFilter other = (PorterDuffColorFilter) object;
-        return (mColor == other.mColor && mMode.nativeInt == other.mMode.nativeInt);
+        final BlendModeColorFilter other = (BlendModeColorFilter) object;
+        return other.mMode == mMode;
     }
 
     @Override
@@ -96,4 +80,5 @@ public class PorterDuffColorFilter extends ColorFilter {
     }
 
     private static native long native_CreateBlendModeFilter(int srcColor, int blendmode);
+
 }
