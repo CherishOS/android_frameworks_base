@@ -181,6 +181,7 @@ public class VolumeDialogImpl implements VolumeDialog,
     private boolean isPanelExpanded = false;
     private boolean isAllRowsVisible;
     private boolean isAnimationInProgress;
+    private boolean mEnableVolumePanelTint;
     private boolean isEpilepticUser;
     private boolean directlyCalled = false;
     private boolean mediaRingCase;
@@ -1281,15 +1282,20 @@ public class VolumeDialogImpl implements VolumeDialog,
             row.slider.requestFocus();
         }
         boolean useActiveColoring = isActive && row.slider.isEnabled();
-        ColorStateList tint;
-        int alpha;
-        tint = Utils.getColorAccent(mContext);
-        alpha = Color.alpha(tint.getDefaultColor());
+        final ColorStateList tint = useActiveColoring
+                ? Utils.getColorAccent(mContext)
+                : Utils.getColorAttr(mContext, android.R.attr.colorForeground);
+        final int alpha = useActiveColoring
+                ? Color.alpha(tint.getDefaultColor())
+                : getAlphaAttr(android.R.attr.secondaryContentAlpha);
+        boolean mEnableVolumePanelTint = mContext.getResources().getBoolean(R.bool.config_enableVolumePanelTint);
         final ColorStateList progressTint = useActiveColoring ? null : tint;
-        if (tint == row.cachedTint) return;
-        row.slider.setProgressTintList(progressTint);
+        if (tint == row.cachedTint && mExpanded) return;
+        row.slider.setProgressTintList(mEnableVolumePanelTint ? tint : progressTint);
+        row.slider.setThumbTintList(tint);
+        if (!mEnableVolumePanelTint) row.slider.setProgressBackgroundTintList(tint);
         row.slider.setAlpha(((float) alpha) / 255);
-        row.icon.setImageTintList(mIconNTint);
+        row.icon.setImageTintList(tint);
         row.icon.setImageAlpha(alpha);
         row.cachedTint = tint;
     }
