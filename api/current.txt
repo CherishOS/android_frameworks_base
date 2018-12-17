@@ -49567,6 +49567,7 @@ package android.view {
     method public android.graphics.Rect getClipBounds();
     method public boolean getClipBounds(android.graphics.Rect);
     method public final boolean getClipToOutline();
+    method public final android.view.contentcapture.ContentCaptureSession getContentCaptureSession();
     method public java.lang.CharSequence getContentDescription();
     method public final android.content.Context getContext();
     method protected android.view.ContextMenu.ContextMenuInfo getContextMenuInfo();
@@ -49903,6 +49904,7 @@ package android.view {
     method public void setClickable(boolean);
     method public void setClipBounds(android.graphics.Rect);
     method public void setClipToOutline(boolean);
+    method public void setContentCaptureSession(android.view.contentcapture.ContentCaptureSession);
     method public void setContentDescription(java.lang.CharSequence);
     method public void setContextClickable(boolean);
     method public void setDefaultFocusHighlightEnabled(boolean);
@@ -52163,15 +52165,54 @@ package android.view.autofill {
 
 package android.view.contentcapture {
 
+  public final class ContentCaptureContext implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.contentcapture.ContentCaptureContext> CREATOR;
+  }
+
+  public static final class ContentCaptureContext.Builder {
+    ctor public ContentCaptureContext.Builder();
+    method public android.view.contentcapture.ContentCaptureContext build();
+    method public android.view.contentcapture.ContentCaptureContext.Builder setExtras(android.os.Bundle);
+    method public android.view.contentcapture.ContentCaptureContext.Builder setUri(android.net.Uri);
+  }
+
   public final class ContentCaptureManager {
+    method public android.view.contentcapture.ContentCaptureSession createContentCaptureSession(android.view.contentcapture.ContentCaptureContext);
     method public android.content.ComponentName getServiceComponentName();
     method public boolean isContentCaptureEnabled();
-    method public android.view.ViewStructure newVirtualViewStructure(android.view.autofill.AutofillId, int);
+    method public void removeUserData(android.view.contentcapture.UserDataRemovalRequest);
+    method public void setContentCaptureEnabled(boolean);
+  }
+
+  public final class ContentCaptureSession implements java.lang.AutoCloseable {
+    method public void close();
+    method public void destroy();
+    method public android.view.contentcapture.ContentCaptureSessionId getContentCaptureSessionId();
     method public void notifyViewAppeared(android.view.ViewStructure);
     method public void notifyViewDisappeared(android.view.autofill.AutofillId);
     method public void notifyViewTextChanged(android.view.autofill.AutofillId, java.lang.CharSequence, int);
-    method public void setContentCaptureEnabled(boolean);
     field public static final int FLAG_USER_INPUT = 1; // 0x1
+  }
+
+  public final class ContentCaptureSessionId implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.contentcapture.ContentCaptureSessionId> CREATOR;
+  }
+
+  public final class UserDataRemovalRequest implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.contentcapture.UserDataRemovalRequest> CREATOR;
+  }
+
+  public static final class UserDataRemovalRequest.Builder {
+    ctor public UserDataRemovalRequest.Builder();
+    method public android.view.contentcapture.UserDataRemovalRequest.Builder addUri(android.net.Uri, boolean);
+    method public android.view.contentcapture.UserDataRemovalRequest build();
+    method public android.view.contentcapture.UserDataRemovalRequest.Builder forEverything();
   }
 
 }
