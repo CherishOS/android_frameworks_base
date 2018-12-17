@@ -37328,10 +37328,13 @@ package android.provider {
   }
 
   public static final class Telephony.CarrierId implements android.provider.BaseColumns {
+    method public static android.net.Uri getPreciseCarrierIdUriForSubscriptionId(int);
     method public static android.net.Uri getUriForSubscriptionId(int);
     field public static final java.lang.String CARRIER_ID = "carrier_id";
     field public static final java.lang.String CARRIER_NAME = "carrier_name";
     field public static final android.net.Uri CONTENT_URI;
+    field public static final java.lang.String PRECISE_CARRIER_ID = "precise_carrier_id";
+    field public static final java.lang.String PRECISE_CARRIER_ID_NAME = "precise_carrier_id_name";
   }
 
   public static final class Telephony.Carriers implements android.provider.BaseColumns {
@@ -39456,13 +39459,16 @@ package android.service.carrier {
 
   public class CarrierIdentifier implements android.os.Parcelable {
     ctor public CarrierIdentifier(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String);
+    ctor public CarrierIdentifier(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, int, int);
     ctor public CarrierIdentifier(byte[], java.lang.String, java.lang.String);
     method public int describeContents();
+    method public int getCarrierId();
     method public java.lang.String getGid1();
     method public java.lang.String getGid2();
     method public java.lang.String getImsi();
     method public java.lang.String getMcc();
     method public java.lang.String getMnc();
+    method public int getPreciseCarrierId();
     method public java.lang.String getSpn();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.carrier.CarrierIdentifier> CREATOR;
@@ -42958,6 +42964,7 @@ package android.telephony {
     method public java.util.List<android.telephony.CellInfo> getAllCellInfo();
     method public int getCallState();
     method public android.os.PersistableBundle getCarrierConfig();
+    method public int getCarrierIdFromSimMccMnc();
     method public deprecated android.telephony.CellLocation getCellLocation();
     method public java.util.Map<java.lang.Integer, java.util.List<android.telephony.emergency.EmergencyNumber>> getCurrentEmergencyNumberList();
     method public java.util.Map<java.lang.Integer, java.util.List<android.telephony.emergency.EmergencyNumber>> getCurrentEmergencyNumberList(int);
@@ -42995,6 +43002,8 @@ package android.telephony {
     method public java.lang.String getSimCountryIso();
     method public java.lang.String getSimOperator();
     method public java.lang.String getSimOperatorName();
+    method public int getSimPreciseCarrierId();
+    method public java.lang.CharSequence getSimPreciseCarrierIdName();
     method public java.lang.String getSimSerialNumber();
     method public int getSimState();
     method public int getSimState(int);
@@ -43050,6 +43059,7 @@ package android.telephony {
     field public static final java.lang.String ACTION_SECRET_CODE = "android.telephony.action.SECRET_CODE";
     field public static final java.lang.String ACTION_SHOW_VOICEMAIL_NOTIFICATION = "android.telephony.action.SHOW_VOICEMAIL_NOTIFICATION";
     field public static final java.lang.String ACTION_SUBSCRIPTION_CARRIER_IDENTITY_CHANGED = "android.telephony.action.SUBSCRIPTION_CARRIER_IDENTITY_CHANGED";
+    field public static final java.lang.String ACTION_SUBSCRIPTION_PRECISE_CARRIER_IDENTITY_CHANGED = "android.telephony.action.SUBSCRIPTION_PRECISE_CARRIER_IDENTITY_CHANGED";
     field public static final int APPTYPE_CSIM = 4; // 0x4
     field public static final int APPTYPE_ISIM = 5; // 0x5
     field public static final int APPTYPE_RUIM = 3; // 0x3
@@ -43082,6 +43092,8 @@ package android.telephony {
     field public static final java.lang.String EXTRA_LAUNCH_VOICEMAIL_SETTINGS_INTENT = "android.telephony.extra.LAUNCH_VOICEMAIL_SETTINGS_INTENT";
     field public static final java.lang.String EXTRA_NOTIFICATION_COUNT = "android.telephony.extra.NOTIFICATION_COUNT";
     field public static final java.lang.String EXTRA_PHONE_ACCOUNT_HANDLE = "android.telephony.extra.PHONE_ACCOUNT_HANDLE";
+    field public static final java.lang.String EXTRA_PRECISE_CARRIER_ID = "android.telephony.extra.PRECISE_CARRIER_ID";
+    field public static final java.lang.String EXTRA_PRECISE_CARRIER_NAME = "android.telephony.extra.PRECISE_CARRIER_NAME";
     field public static final java.lang.String EXTRA_STATE = "state";
     field public static final java.lang.String EXTRA_STATE_IDLE;
     field public static final java.lang.String EXTRA_STATE_OFFHOOK;
