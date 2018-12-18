@@ -4433,11 +4433,12 @@ package android.app {
   }
 
   public final class AutomaticZenRule implements android.os.Parcelable {
-    ctor public AutomaticZenRule(java.lang.String, android.content.ComponentName, android.net.Uri, int, boolean);
-    ctor public AutomaticZenRule(java.lang.String, android.content.ComponentName, android.net.Uri, android.service.notification.ZenPolicy, boolean);
+    ctor public deprecated AutomaticZenRule(java.lang.String, android.content.ComponentName, android.net.Uri, int, boolean);
+    ctor public AutomaticZenRule(java.lang.String, android.content.ComponentName, android.content.ComponentName, android.net.Uri, android.service.notification.ZenPolicy, int, boolean);
     ctor public AutomaticZenRule(android.os.Parcel);
     method public int describeContents();
     method public android.net.Uri getConditionId();
+    method public android.content.ComponentName getConfigurationActivity();
     method public long getCreationTime();
     method public int getInterruptionFilter();
     method public java.lang.String getName();
@@ -4445,6 +4446,7 @@ package android.app {
     method public android.service.notification.ZenPolicy getZenPolicy();
     method public boolean isEnabled();
     method public void setConditionId(android.net.Uri);
+    method public void setConfigurationActivity(android.content.ComponentName);
     method public void setEnabled(boolean);
     method public void setInterruptionFilter(int);
     method public void setName(java.lang.String);
@@ -5773,16 +5775,19 @@ package android.app {
     method public void notifyAsPackage(java.lang.String, java.lang.String, int, android.app.Notification);
     method public boolean removeAutomaticZenRule(java.lang.String);
     method public void revokeNotificationDelegate();
+    method public void setAutomaticZenRuleState(java.lang.String, android.service.notification.Condition);
     method public final void setInterruptionFilter(int);
     method public void setNotificationDelegate(java.lang.String);
     method public void setNotificationPolicy(android.app.NotificationManager.Policy);
     method public boolean updateAutomaticZenRule(java.lang.String, android.app.AutomaticZenRule);
     field public static final java.lang.String ACTION_APP_BLOCK_STATE_CHANGED = "android.app.action.APP_BLOCK_STATE_CHANGED";
+    field public static final java.lang.String ACTION_AUTOMATIC_ZEN_RULE = "android.app.action.AUTOMATIC_ZEN_RULE";
     field public static final java.lang.String ACTION_INTERRUPTION_FILTER_CHANGED = "android.app.action.INTERRUPTION_FILTER_CHANGED";
     field public static final java.lang.String ACTION_NOTIFICATION_CHANNEL_BLOCK_STATE_CHANGED = "android.app.action.NOTIFICATION_CHANNEL_BLOCK_STATE_CHANGED";
     field public static final java.lang.String ACTION_NOTIFICATION_CHANNEL_GROUP_BLOCK_STATE_CHANGED = "android.app.action.NOTIFICATION_CHANNEL_GROUP_BLOCK_STATE_CHANGED";
     field public static final java.lang.String ACTION_NOTIFICATION_POLICY_ACCESS_GRANTED_CHANGED = "android.app.action.NOTIFICATION_POLICY_ACCESS_GRANTED_CHANGED";
     field public static final java.lang.String ACTION_NOTIFICATION_POLICY_CHANGED = "android.app.action.NOTIFICATION_POLICY_CHANGED";
+    field public static final java.lang.String EXTRA_AUTOMATIC_RULE_ID = "android.app.extra.AUTOMATIC_RULE_ID";
     field public static final java.lang.String EXTRA_BLOCKED_STATE = "android.app.extra.BLOCKED_STATE";
     field public static final java.lang.String EXTRA_NOTIFICATION_CHANNEL_GROUP_ID = "android.app.extra.NOTIFICATION_CHANNEL_GROUP_ID";
     field public static final java.lang.String EXTRA_NOTIFICATION_CHANNEL_ID = "android.app.extra.NOTIFICATION_CHANNEL_ID";
@@ -5798,6 +5803,8 @@ package android.app {
     field public static final int INTERRUPTION_FILTER_NONE = 3; // 0x3
     field public static final int INTERRUPTION_FILTER_PRIORITY = 2; // 0x2
     field public static final int INTERRUPTION_FILTER_UNKNOWN = 0; // 0x0
+    field public static final java.lang.String META_DATA_AUTOMATIC_RULE_TYPE = "android.app.automatic.ruleType";
+    field public static final java.lang.String META_DATA_RULE_INSTANCE_LIMIT = "android.app.zen.automatic.ruleInstanceLimit";
   }
 
   public static class NotificationManager.Policy implements android.os.Parcelable {
@@ -11558,18 +11565,19 @@ package android.content.pm {
     field public static final java.lang.String FEATURE_DEVICE_ADMIN = "android.software.device_admin";
     field public static final java.lang.String FEATURE_EMBEDDED = "android.hardware.type.embedded";
     field public static final java.lang.String FEATURE_ETHERNET = "android.hardware.ethernet";
-    field public static final java.lang.String FEATURE_FACE = "android.hardware.face";
+    field public static final java.lang.String FEATURE_FACE = "android.hardware.biometrics.face";
     field public static final java.lang.String FEATURE_FAKETOUCH = "android.hardware.faketouch";
     field public static final java.lang.String FEATURE_FAKETOUCH_MULTITOUCH_DISTINCT = "android.hardware.faketouch.multitouch.distinct";
     field public static final java.lang.String FEATURE_FAKETOUCH_MULTITOUCH_JAZZHAND = "android.hardware.faketouch.multitouch.jazzhand";
-    field public static final java.lang.String FEATURE_FINGERPRINT = "android.hardware.fingerprint";
+    field public static final java.lang.String FEATURE_FINGERPRINT = "android.hardware.biometrics.fingerprint";
+    field public static final java.lang.String FEATURE_FINGERPRINT_PRE_29 = "android.hardware.fingerprint";
     field public static final java.lang.String FEATURE_FREEFORM_WINDOW_MANAGEMENT = "android.software.freeform_window_management";
     field public static final java.lang.String FEATURE_GAMEPAD = "android.hardware.gamepad";
     field public static final java.lang.String FEATURE_HIFI_SENSORS = "android.hardware.sensor.hifi_sensors";
     field public static final java.lang.String FEATURE_HOME_SCREEN = "android.software.home_screen";
     field public static final java.lang.String FEATURE_INPUT_METHODS = "android.software.input_methods";
     field public static final java.lang.String FEATURE_IPSEC_TUNNELS = "android.software.ipsec_tunnels";
-    field public static final java.lang.String FEATURE_IRIS = "android.hardware.iris";
+    field public static final java.lang.String FEATURE_IRIS = "android.hardware.biometrics.iris";
     field public static final java.lang.String FEATURE_LEANBACK = "android.software.leanback";
     field public static final java.lang.String FEATURE_LEANBACK_ONLY = "android.software.leanback_only";
     field public static final java.lang.String FEATURE_LIVE_TV = "android.software.live_tv";
@@ -14854,6 +14862,7 @@ package android.graphics {
     method public int getAmbientShadowColor();
     method public int getBottom();
     method public float getCameraDistance();
+    method public boolean getClipToBounds();
     method public boolean getClipToOutline();
     method public float getElevation();
     method public int getHeight();
@@ -14874,6 +14883,7 @@ package android.graphics {
     method public float getTranslationY();
     method public float getTranslationZ();
     method public long getUniqueId();
+    method public boolean getUseCompositingLayer();
     method public int getWidth();
     method public boolean hasDisplayList();
     method public boolean hasIdentityMatrix();
@@ -25301,24 +25311,24 @@ package android.media {
     method public java.lang.Object clearNextDataSources();
     method public void clearPendingCommands();
     method public void close();
-    method public java.lang.Object deselectTrack(int);
+    method public java.lang.Object deselectTrack(android.media.DataSourceDesc, int);
     method public android.media.AudioAttributes getAudioAttributes();
     method public int getAudioSessionId();
-    method public long getBufferedPosition();
+    method public long getBufferedPosition(android.media.DataSourceDesc);
     method public android.media.DataSourceDesc getCurrentDataSource();
     method public long getCurrentPosition();
-    method public long getDuration();
+    method public long getDuration(android.media.DataSourceDesc);
     method public float getMaxPlayerVolume();
     method public android.os.PersistableBundle getMetrics();
     method public android.media.PlaybackParams getPlaybackParams();
     method public float getPlayerVolume();
     method public android.media.AudioDeviceInfo getPreferredDevice();
     method public android.media.AudioDeviceInfo getRoutedDevice();
-    method public int getSelectedTrack(int);
+    method public int getSelectedTrack(android.media.DataSourceDesc, int);
     method public int getState();
     method public android.media.SyncParams getSyncParams();
     method public android.media.MediaTimestamp getTimestamp();
-    method public java.util.List<android.media.MediaPlayer2.TrackInfo> getTrackInfo();
+    method public java.util.List<android.media.MediaPlayer2.TrackInfo> getTrackInfo(android.media.DataSourceDesc);
     method public android.media.VideoSize getVideoSize();
     method public boolean isLooping();
     method public java.lang.Object loopCurrent(boolean);
@@ -25331,7 +25341,7 @@ package android.media {
     method public void reset();
     method public java.lang.Object seekTo(long);
     method public java.lang.Object seekTo(long, int);
-    method public java.lang.Object selectTrack(int);
+    method public java.lang.Object selectTrack(android.media.DataSourceDesc, int);
     method public java.lang.Object setAudioAttributes(android.media.AudioAttributes);
     method public java.lang.Object setAudioSessionId(int);
     method public java.lang.Object setAuxEffectSendLevel(float);
@@ -41009,10 +41019,10 @@ package android.service.notification {
     field public final java.lang.String summary;
   }
 
-  public abstract class ConditionProviderService extends android.app.Service {
+  public abstract deprecated class ConditionProviderService extends android.app.Service {
     ctor public ConditionProviderService();
-    method public final void notifyCondition(android.service.notification.Condition);
-    method public final void notifyConditions(android.service.notification.Condition...);
+    method public final deprecated void notifyCondition(android.service.notification.Condition);
+    method public final deprecated void notifyConditions(android.service.notification.Condition...);
     method public android.os.IBinder onBind(android.content.Intent);
     method public abstract void onConnected();
     method public void onRequestConditions(int);
@@ -41020,10 +41030,10 @@ package android.service.notification {
     method public abstract void onUnsubscribe(android.net.Uri);
     method public static final void requestRebind(android.content.ComponentName);
     method public final void requestUnbind();
-    field public static final java.lang.String EXTRA_RULE_ID = "android.service.notification.extra.RULE_ID";
-    field public static final java.lang.String META_DATA_CONFIGURATION_ACTIVITY = "android.service.zen.automatic.configurationActivity";
-    field public static final java.lang.String META_DATA_RULE_INSTANCE_LIMIT = "android.service.zen.automatic.ruleInstanceLimit";
-    field public static final java.lang.String META_DATA_RULE_TYPE = "android.service.zen.automatic.ruleType";
+    field public static final deprecated java.lang.String EXTRA_RULE_ID = "android.service.notification.extra.RULE_ID";
+    field public static final deprecated java.lang.String META_DATA_CONFIGURATION_ACTIVITY = "android.service.zen.automatic.configurationActivity";
+    field public static final deprecated java.lang.String META_DATA_RULE_INSTANCE_LIMIT = "android.service.zen.automatic.ruleInstanceLimit";
+    field public static final deprecated java.lang.String META_DATA_RULE_TYPE = "android.service.zen.automatic.ruleType";
     field public static final java.lang.String SERVICE_INTERFACE = "android.service.notification.ConditionProviderService";
   }
 
@@ -43351,9 +43361,12 @@ package android.telecom {
 
   public static final class VideoProfile.CameraCapabilities implements android.os.Parcelable {
     ctor public VideoProfile.CameraCapabilities(int, int);
+    ctor public VideoProfile.CameraCapabilities(int, int, boolean, float);
     method public int describeContents();
     method public int getHeight();
+    method public float getMaxZoom();
     method public int getWidth();
+    method public boolean isZoomSupported();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telecom.VideoProfile.CameraCapabilities> CREATOR;
   }
@@ -44263,6 +44276,7 @@ package android.telephony {
   public class SubscriptionInfo implements android.os.Parcelable {
     method public android.graphics.Bitmap createIconBitmap(android.content.Context);
     method public int describeContents();
+    method public int getCarrierId();
     method public java.lang.CharSequence getCarrierName();
     method public java.lang.String getCountryIso();
     method public int getDataRoaming();
@@ -46930,7 +46944,7 @@ package android.transition {
     ctor public deprecated Scene(android.view.ViewGroup, android.view.ViewGroup);
     method public void enter();
     method public void exit();
-    method public static android.transition.Scene getCurrentScene(android.view.View);
+    method public static android.transition.Scene getCurrentScene(android.view.ViewGroup);
     method public static android.transition.Scene getSceneForLayout(android.view.ViewGroup, int, android.content.Context);
     method public android.view.ViewGroup getSceneRoot();
     method public void setEnterAction(java.lang.Runnable);
@@ -49567,6 +49581,7 @@ package android.view {
     method public android.graphics.Rect getClipBounds();
     method public boolean getClipBounds(android.graphics.Rect);
     method public final boolean getClipToOutline();
+    method public final android.view.contentcapture.ContentCaptureSession getContentCaptureSession();
     method public java.lang.CharSequence getContentDescription();
     method public final android.content.Context getContext();
     method protected android.view.ContextMenu.ContextMenuInfo getContextMenuInfo();
@@ -49903,6 +49918,7 @@ package android.view {
     method public void setClickable(boolean);
     method public void setClipBounds(android.graphics.Rect);
     method public void setClipToOutline(boolean);
+    method public void setContentCaptureSession(android.view.contentcapture.ContentCaptureSession);
     method public void setContentDescription(java.lang.CharSequence);
     method public void setContextClickable(boolean);
     method public void setDefaultFocusHighlightEnabled(boolean);
@@ -52163,15 +52179,54 @@ package android.view.autofill {
 
 package android.view.contentcapture {
 
+  public final class ContentCaptureContext implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.contentcapture.ContentCaptureContext> CREATOR;
+  }
+
+  public static final class ContentCaptureContext.Builder {
+    ctor public ContentCaptureContext.Builder();
+    method public android.view.contentcapture.ContentCaptureContext build();
+    method public android.view.contentcapture.ContentCaptureContext.Builder setExtras(android.os.Bundle);
+    method public android.view.contentcapture.ContentCaptureContext.Builder setUri(android.net.Uri);
+  }
+
   public final class ContentCaptureManager {
+    method public android.view.contentcapture.ContentCaptureSession createContentCaptureSession(android.view.contentcapture.ContentCaptureContext);
     method public android.content.ComponentName getServiceComponentName();
     method public boolean isContentCaptureEnabled();
-    method public android.view.ViewStructure newVirtualViewStructure(android.view.autofill.AutofillId, int);
+    method public void removeUserData(android.view.contentcapture.UserDataRemovalRequest);
+    method public void setContentCaptureEnabled(boolean);
+  }
+
+  public final class ContentCaptureSession implements java.lang.AutoCloseable {
+    method public void close();
+    method public void destroy();
+    method public android.view.contentcapture.ContentCaptureSessionId getContentCaptureSessionId();
     method public void notifyViewAppeared(android.view.ViewStructure);
     method public void notifyViewDisappeared(android.view.autofill.AutofillId);
     method public void notifyViewTextChanged(android.view.autofill.AutofillId, java.lang.CharSequence, int);
-    method public void setContentCaptureEnabled(boolean);
     field public static final int FLAG_USER_INPUT = 1; // 0x1
+  }
+
+  public final class ContentCaptureSessionId implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.contentcapture.ContentCaptureSessionId> CREATOR;
+  }
+
+  public final class UserDataRemovalRequest implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.contentcapture.UserDataRemovalRequest> CREATOR;
+  }
+
+  public static final class UserDataRemovalRequest.Builder {
+    ctor public UserDataRemovalRequest.Builder();
+    method public android.view.contentcapture.UserDataRemovalRequest.Builder addUri(android.net.Uri, boolean);
+    method public android.view.contentcapture.UserDataRemovalRequest build();
+    method public android.view.contentcapture.UserDataRemovalRequest.Builder forEverything();
   }
 
 }
