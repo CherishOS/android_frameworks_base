@@ -106,5 +106,6 @@ public class SystemSettings {
         Settings.System.ENABLE_FLOATING_ROTATION_BUTTON,
         Settings.System.SCREEN_OFF_FOD,
         Settings.System.SCREEN_OFF_ANIMATION,
+        Settings.System.VOLUME_PANEL_ON_LEFT,
     };
 }

@@ -6140,6 +6140,14 @@ public final class Settings {
         public static final String ENABLE_FLOATING_ROTATION_BUTTON = "enable_floating_rotation_button";
 		
 		/**
+         * Whether to show volume panel on the left side
+         * Defaults to com.android.systemui.R.bool.config_audioPanelOnLeftSide
+         * @hide
+         */
+        @Readable
+        public static final String VOLUME_PANEL_ON_LEFT = "volume_panel_on_left";
+		
+		/**
          * Enable fod detection even when screen is off
          * Default value is 0
          * @hide
