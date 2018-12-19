@@ -94,6 +94,9 @@ public class VolumeDialogImplTest extends SysuiTestCase {
     @Mock
     private DumpManager mDumpManager;
 
+    @Mock
+    TunerService mTunerService;
+
     @Before
     public void setup() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -110,8 +113,8 @@ public class VolumeDialogImplTest extends SysuiTestCase {
                 mVolumePanelFactory,
                 mActivityStarter,
                 mInteractionJankMonitor,
-                mDumpManager
-            );
+                mDumpManager,
+                mTunerService);
         mDialog.init(0, null);
         State state = createShellState();
         mDialog.onStateChangedH(state);
