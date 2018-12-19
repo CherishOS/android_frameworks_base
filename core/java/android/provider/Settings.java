@@ -6480,6 +6480,12 @@ public final class Settings {
         public static final String FORCE_FULLSCREEN_CUTOUT_APPS = "force_full_screen_cutout_apps";
 		
 		/**
+         * Volume panel on left
+         * @hide
+         */
+        public static final String VOLUME_PANEL_ON_LEFT = "volume_panel_on_left";
+		
+		/**
          * These are all public system settings
          *
          * @hide
@@ -6627,6 +6633,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(FLASHLIGHT_ON_CALL_IGNORE_DND);
             PRIVATE_SETTINGS.add(FLASHLIGHT_ON_CALL_RATE);
             PRIVATE_SETTINGS.add(STATUSBAR_ICONS_STYLE);
+            PRIVATE_SETTINGS.add(VOLUME_PANEL_ON_LEFT);
         }
 
         /**
