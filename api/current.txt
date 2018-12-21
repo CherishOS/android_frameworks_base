@@ -23379,12 +23379,13 @@ package android.media {
     method public android.media.AudioPresentation.Builder setProgramId(int);
   }
 
-  public class AudioRecord implements android.media.AudioRouting {
+  public class AudioRecord implements android.media.AudioRecordingMonitor android.media.AudioRouting {
     ctor public AudioRecord(int, int, int, int, int) throws java.lang.IllegalArgumentException;
     method public void addOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener, android.os.Handler);
     method public deprecated void addOnRoutingChangedListener(android.media.AudioRecord.OnRoutingChangedListener, android.os.Handler);
     method protected void finalize();
     method public java.util.List<android.media.MicrophoneInfo> getActiveMicrophones() throws java.io.IOException;
+    method public android.media.AudioRecordingConfiguration getActiveRecordingConfiguration();
     method public int getAudioFormat();
     method public int getAudioSessionId();
     method public int getAudioSource();
@@ -23409,6 +23410,7 @@ package android.media {
     method public int read(float[], int, int, int);
     method public int read(java.nio.ByteBuffer, int);
     method public int read(java.nio.ByteBuffer, int, int);
+    method public void registerAudioRecordingCallback(java.util.concurrent.Executor, android.media.AudioManager.AudioRecordingCallback);
     method public void release();
     method public void removeOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener);
     method public deprecated void removeOnRoutingChangedListener(android.media.AudioRecord.OnRoutingChangedListener);
@@ -23420,6 +23422,7 @@ package android.media {
     method public void startRecording() throws java.lang.IllegalStateException;
     method public void startRecording(android.media.MediaSyncEvent) throws java.lang.IllegalStateException;
     method public void stop() throws java.lang.IllegalStateException;
+    method public void unregisterAudioRecordingCallback(android.media.AudioManager.AudioRecordingCallback);
     field public static final int ERROR = -1; // 0xffffffff
     field public static final int ERROR_BAD_VALUE = -2; // 0xfffffffe
     field public static final int ERROR_DEAD_OBJECT = -6; // 0xfffffffa
@@ -23472,6 +23475,12 @@ package android.media {
     method public boolean isClientSilenced();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.media.AudioRecordingConfiguration> CREATOR;
+  }
+
+  public abstract interface AudioRecordingMonitor {
+    method public abstract android.media.AudioRecordingConfiguration getActiveRecordingConfiguration();
+    method public abstract void registerAudioRecordingCallback(java.util.concurrent.Executor, android.media.AudioManager.AudioRecordingCallback);
+    method public abstract void unregisterAudioRecordingCallback(android.media.AudioManager.AudioRecordingCallback);
   }
 
   public abstract interface AudioRouting {
@@ -25475,11 +25484,12 @@ package android.media {
     field public static final int MEDIA_TRACK_TYPE_VIDEO = 1; // 0x1
   }
 
-  public class MediaRecorder implements android.media.AudioRouting {
+  public class MediaRecorder implements android.media.AudioRecordingMonitor android.media.AudioRouting {
     ctor public MediaRecorder();
     method public void addOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener, android.os.Handler);
     method protected void finalize();
     method public java.util.List<android.media.MicrophoneInfo> getActiveMicrophones() throws java.io.IOException;
+    method public android.media.AudioRecordingConfiguration getActiveRecordingConfiguration();
     method public static final int getAudioSourceMax();
     method public int getMaxAmplitude() throws java.lang.IllegalStateException;
     method public android.os.PersistableBundle getMetrics();
@@ -25488,6 +25498,7 @@ package android.media {
     method public android.view.Surface getSurface();
     method public void pause() throws java.lang.IllegalStateException;
     method public void prepare() throws java.io.IOException, java.lang.IllegalStateException;
+    method public void registerAudioRecordingCallback(java.util.concurrent.Executor, android.media.AudioManager.AudioRecordingCallback);
     method public void release();
     method public void removeOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener);
     method public void reset();
@@ -25523,6 +25534,7 @@ package android.media {
     method public void setVideoSource(int) throws java.lang.IllegalStateException;
     method public void start() throws java.lang.IllegalStateException;
     method public void stop() throws java.lang.IllegalStateException;
+    method public void unregisterAudioRecordingCallback(android.media.AudioManager.AudioRecordingCallback);
     field public static final int MEDIA_ERROR_SERVER_DIED = 100; // 0x64
     field public static final int MEDIA_RECORDER_ERROR_UNKNOWN = 1; // 0x1
     field public static final int MEDIA_RECORDER_INFO_MAX_DURATION_REACHED = 800; // 0x320
