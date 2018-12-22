@@ -162,6 +162,7 @@ public class KeyguardSliceProvider extends SliceProvider implements
     private OmniJawsClient.WeatherInfo mWeatherInfo;
     private OmniJawsClient.PackageInfo mPackageInfo;
     private boolean mWeatherEnabled;
+    private boolean mShowWeatherSlice;
 
     /**
      * Receiver responsible for time ticking and updating the date format.
@@ -362,7 +363,7 @@ public class KeyguardSliceProvider extends SliceProvider implements
 	
 	protected void addWeather(ListBuilder builder) {
         if (!mWeatherClient.isOmniJawsEnabled()) return;
-        if (!mWeatherEnabled || mWeatherInfo == null || mPackageInfo == null) {
+        if (!mWeatherEnabled || !mShowWeatherSlice || mWeatherInfo == null || mPackageInfo == null) {
             return;
         }
         String temperatureText = mWeatherInfo.temp + " " + mWeatherInfo.tempUnits;
@@ -423,6 +424,10 @@ public class KeyguardSliceProvider extends SliceProvider implements
             mContentResolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.OMNIJAWS_WEATHER_ICON_PACK),
                     false, this, UserHandle.USER_ALL);
+
+            mContentResolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.AICP_LOCKSCREEN_WEATHER_STYLE),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -434,11 +439,18 @@ public class KeyguardSliceProvider extends SliceProvider implements
             } else if (uri.equals(Settings.System.getUriFor(Settings.System.OMNIJAWS_WEATHER_ICON_PACK))) {
                 queryAndUpdateWeather();
                 mContentResolver.notifyChange(mSliceUri, null /* observer */);
+            } else if (uri.equals(Settings.System.getUriFor(Settings.System.AICP_LOCKSCREEN_WEATHER_STYLE))) {
+                updateLockscreenWeatherStyle();
+                mContentResolver.notifyChange(mSliceUri, null /* observer */);
             }
         }
 
         public void updateLockscreenWeather() {
             mWeatherEnabled = Settings.System.getIntForUser(mContentResolver, Settings.System.OMNI_LOCKSCREEN_WEATHER_ENABLED, 0, UserHandle.USER_CURRENT) != 0;
+        }
+
+        public void updateLockscreenWeatherStyle() {
+            mShowWeatherSlice = Settings.System.getIntForUser(mContentResolver, Settings.System.AICP_LOCKSCREEN_WEATHER_STYLE, 0, UserHandle.USER_CURRENT) != 0;
         }
     }
 
@@ -462,6 +474,7 @@ public class KeyguardSliceProvider extends SliceProvider implements
             mWeatherSettingsObserver.observe();
             mWeatherClient = new OmniJawsClient(getContext());
             mWeatherEnabled = Settings.System.getIntForUser(mContentResolver, Settings.System.OMNI_LOCKSCREEN_WEATHER_ENABLED, 0, UserHandle.USER_CURRENT) != 0;
+            mShowWeatherSlice = Settings.System.getIntForUser(mContentResolver, Settings.System.AICP_LOCKSCREEN_WEATHER_STYLE, 0, UserHandle.USER_CURRENT) != 0;
             mWeatherClient.addSettingsObserver();
             mWeatherClient.addObserver(this);
             queryAndUpdateWeather();
