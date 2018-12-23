@@ -5730,7 +5730,6 @@ package android.app {
 
   public final class NotificationChannelGroup implements android.os.Parcelable {
     ctor public NotificationChannelGroup(java.lang.String, java.lang.CharSequence);
-    method public boolean canOverlayApps();
     method public android.app.NotificationChannelGroup clone();
     method public int describeContents();
     method public java.util.List<android.app.NotificationChannel> getChannels();
@@ -5738,7 +5737,6 @@ package android.app {
     method public java.lang.String getId();
     method public java.lang.CharSequence getName();
     method public boolean isBlocked();
-    method public void setAllowAppOverlay(boolean);
     method public void setDescription(java.lang.String);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.NotificationChannelGroup> CREATOR;
@@ -5746,6 +5744,7 @@ package android.app {
 
   public class NotificationManager {
     method public java.lang.String addAutomaticZenRule(android.app.AutomaticZenRule);
+    method public boolean areAppOverlaysAllowed();
     method public boolean areNotificationsEnabled();
     method public boolean canNotifyAsPackage(java.lang.String);
     method public void cancel(int);
@@ -10268,6 +10267,7 @@ package android.content {
     field public static final java.lang.String CATEGORY_OPENABLE = "android.intent.category.OPENABLE";
     field public static final java.lang.String CATEGORY_PREFERENCE = "android.intent.category.PREFERENCE";
     field public static final java.lang.String CATEGORY_SAMPLE_CODE = "android.intent.category.SAMPLE_CODE";
+    field public static final java.lang.String CATEGORY_SECONDARY_HOME = "android.intent.category.SECONDARY_HOME";
     field public static final java.lang.String CATEGORY_SELECTED_ALTERNATIVE = "android.intent.category.SELECTED_ALTERNATIVE";
     field public static final java.lang.String CATEGORY_TAB = "android.intent.category.TAB";
     field public static final java.lang.String CATEGORY_TEST = "android.intent.category.TEST";
@@ -11302,6 +11302,7 @@ package android.content.pm {
     method public void updateSessionAppLabel(int, java.lang.CharSequence);
     field public static final java.lang.String ACTION_SESSION_COMMITTED = "android.content.pm.action.SESSION_COMMITTED";
     field public static final java.lang.String ACTION_SESSION_DETAILS = "android.content.pm.action.SESSION_DETAILS";
+    field public static final java.lang.String ACTION_SESSION_UPDATED = "android.content.pm.action.SESSION_UPDATED";
     field public static final java.lang.String EXTRA_OTHER_PACKAGE_NAME = "android.content.pm.extra.OTHER_PACKAGE_NAME";
     field public static final java.lang.String EXTRA_PACKAGE_NAME = "android.content.pm.extra.PACKAGE_NAME";
     field public static final java.lang.String EXTRA_SESSION = "android.content.pm.extra.SESSION";
@@ -11366,13 +11367,20 @@ package android.content.pm {
     method public android.net.Uri getReferrerUri();
     method public int getSessionId();
     method public long getSize();
+    method public int getStagedSessionErrorCode();
     method public boolean isActive();
     method public boolean isMultiPackage();
     method public boolean isSealed();
+    method public boolean isSessionApplied();
+    method public boolean isSessionFailed();
+    method public boolean isSessionReady();
     method public boolean isStaged();
     method public void writeToParcel(android.os.Parcel, int);
+    field public static final int ACTIVATION_FAILED = 2; // 0x2
     field public static final android.os.Parcelable.Creator<android.content.pm.PackageInstaller.SessionInfo> CREATOR;
     field public static final int INVALID_ID = -1; // 0xffffffff
+    field public static final int NO_ERROR = 0; // 0x0
+    field public static final int VERIFICATION_FAILED = 1; // 0x1
   }
 
   public static class PackageInstaller.SessionParams implements android.os.Parcelable {
@@ -14127,8 +14135,11 @@ package android.graphics {
 
   public final class Insets {
     method public static android.graphics.Insets add(android.graphics.Insets, android.graphics.Insets);
+    method public static android.graphics.Insets max(android.graphics.Insets, android.graphics.Insets);
+    method public static android.graphics.Insets min(android.graphics.Insets, android.graphics.Insets);
     method public static android.graphics.Insets of(int, int, int, int);
     method public static android.graphics.Insets of(android.graphics.Rect);
+    method public static android.graphics.Insets subtract(android.graphics.Insets, android.graphics.Insets);
     field public static final android.graphics.Insets NONE;
     field public final int bottom;
     field public final int left;
@@ -23372,12 +23383,13 @@ package android.media {
     method public android.media.AudioPresentation.Builder setProgramId(int);
   }
 
-  public class AudioRecord implements android.media.AudioRouting {
+  public class AudioRecord implements android.media.AudioRecordingMonitor android.media.AudioRouting {
     ctor public AudioRecord(int, int, int, int, int) throws java.lang.IllegalArgumentException;
     method public void addOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener, android.os.Handler);
     method public deprecated void addOnRoutingChangedListener(android.media.AudioRecord.OnRoutingChangedListener, android.os.Handler);
     method protected void finalize();
     method public java.util.List<android.media.MicrophoneInfo> getActiveMicrophones() throws java.io.IOException;
+    method public android.media.AudioRecordingConfiguration getActiveRecordingConfiguration();
     method public int getAudioFormat();
     method public int getAudioSessionId();
     method public int getAudioSource();
@@ -23402,6 +23414,7 @@ package android.media {
     method public int read(float[], int, int, int);
     method public int read(java.nio.ByteBuffer, int);
     method public int read(java.nio.ByteBuffer, int, int);
+    method public void registerAudioRecordingCallback(java.util.concurrent.Executor, android.media.AudioManager.AudioRecordingCallback);
     method public void release();
     method public void removeOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener);
     method public deprecated void removeOnRoutingChangedListener(android.media.AudioRecord.OnRoutingChangedListener);
@@ -23413,6 +23426,7 @@ package android.media {
     method public void startRecording() throws java.lang.IllegalStateException;
     method public void startRecording(android.media.MediaSyncEvent) throws java.lang.IllegalStateException;
     method public void stop() throws java.lang.IllegalStateException;
+    method public void unregisterAudioRecordingCallback(android.media.AudioManager.AudioRecordingCallback);
     field public static final int ERROR = -1; // 0xffffffff
     field public static final int ERROR_BAD_VALUE = -2; // 0xfffffffe
     field public static final int ERROR_DEAD_OBJECT = -6; // 0xfffffffa
@@ -23455,12 +23469,22 @@ package android.media {
   public final class AudioRecordingConfiguration implements android.os.Parcelable {
     method public int describeContents();
     method public android.media.AudioDeviceInfo getAudioDevice();
+    method public int getAudioSource();
     method public int getClientAudioSessionId();
     method public int getClientAudioSource();
+    method public java.util.List<android.media.audiofx.AudioEffect.Descriptor> getClientEffects();
     method public android.media.AudioFormat getClientFormat();
+    method public java.util.List<android.media.audiofx.AudioEffect.Descriptor> getEffects();
     method public android.media.AudioFormat getFormat();
+    method public boolean isClientSilenced();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.media.AudioRecordingConfiguration> CREATOR;
+  }
+
+  public abstract interface AudioRecordingMonitor {
+    method public abstract android.media.AudioRecordingConfiguration getActiveRecordingConfiguration();
+    method public abstract void registerAudioRecordingCallback(java.util.concurrent.Executor, android.media.AudioManager.AudioRecordingCallback);
+    method public abstract void unregisterAudioRecordingCallback(android.media.AudioManager.AudioRecordingCallback);
   }
 
   public abstract interface AudioRouting {
@@ -25464,11 +25488,12 @@ package android.media {
     field public static final int MEDIA_TRACK_TYPE_VIDEO = 1; // 0x1
   }
 
-  public class MediaRecorder implements android.media.AudioRouting {
+  public class MediaRecorder implements android.media.AudioRecordingMonitor android.media.AudioRouting {
     ctor public MediaRecorder();
     method public void addOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener, android.os.Handler);
     method protected void finalize();
     method public java.util.List<android.media.MicrophoneInfo> getActiveMicrophones() throws java.io.IOException;
+    method public android.media.AudioRecordingConfiguration getActiveRecordingConfiguration();
     method public static final int getAudioSourceMax();
     method public int getMaxAmplitude() throws java.lang.IllegalStateException;
     method public android.os.PersistableBundle getMetrics();
@@ -25477,6 +25502,7 @@ package android.media {
     method public android.view.Surface getSurface();
     method public void pause() throws java.lang.IllegalStateException;
     method public void prepare() throws java.io.IOException, java.lang.IllegalStateException;
+    method public void registerAudioRecordingCallback(java.util.concurrent.Executor, android.media.AudioManager.AudioRecordingCallback);
     method public void release();
     method public void removeOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener);
     method public void reset();
@@ -25512,6 +25538,7 @@ package android.media {
     method public void setVideoSource(int) throws java.lang.IllegalStateException;
     method public void start() throws java.lang.IllegalStateException;
     method public void stop() throws java.lang.IllegalStateException;
+    method public void unregisterAudioRecordingCallback(android.media.AudioManager.AudioRecordingCallback);
     field public static final int MEDIA_ERROR_SERVER_DIED = 100; // 0x64
     field public static final int MEDIA_RECORDER_ERROR_UNKNOWN = 1; // 0x1
     field public static final int MEDIA_RECORDER_INFO_MAX_DURATION_REACHED = 800; // 0x320
@@ -28217,7 +28244,7 @@ package android.net {
     method public void addDefaultNetworkActiveListener(android.net.ConnectivityManager.OnNetworkActiveListener);
     method public boolean bindProcessToNetwork(android.net.Network);
     method public android.net.Network getActiveNetwork();
-    method public android.net.NetworkInfo getActiveNetworkInfo();
+    method public deprecated android.net.NetworkInfo getActiveNetworkInfo();
     method public deprecated android.net.NetworkInfo[] getAllNetworkInfo();
     method public android.net.Network[] getAllNetworks();
     method public deprecated boolean getBackgroundDataSetting();
@@ -28228,7 +28255,7 @@ package android.net {
     method public int getMultipathPreference(android.net.Network);
     method public android.net.NetworkCapabilities getNetworkCapabilities(android.net.Network);
     method public deprecated android.net.NetworkInfo getNetworkInfo(int);
-    method public android.net.NetworkInfo getNetworkInfo(android.net.Network);
+    method public deprecated android.net.NetworkInfo getNetworkInfo(android.net.Network);
     method public deprecated int getNetworkPreference();
     method public byte[] getNetworkWatchlistConfigHash();
     method public static deprecated android.net.Network getProcessDefaultNetwork();
@@ -28262,14 +28289,14 @@ package android.net {
     field public static final deprecated int DEFAULT_NETWORK_PREFERENCE = 1; // 0x1
     field public static final java.lang.String EXTRA_CAPTIVE_PORTAL = "android.net.extra.CAPTIVE_PORTAL";
     field public static final java.lang.String EXTRA_CAPTIVE_PORTAL_URL = "android.net.extra.CAPTIVE_PORTAL_URL";
-    field public static final java.lang.String EXTRA_EXTRA_INFO = "extraInfo";
-    field public static final java.lang.String EXTRA_IS_FAILOVER = "isFailover";
+    field public static final deprecated java.lang.String EXTRA_EXTRA_INFO = "extraInfo";
+    field public static final deprecated java.lang.String EXTRA_IS_FAILOVER = "isFailover";
     field public static final java.lang.String EXTRA_NETWORK = "android.net.extra.NETWORK";
     field public static final deprecated java.lang.String EXTRA_NETWORK_INFO = "networkInfo";
     field public static final java.lang.String EXTRA_NETWORK_REQUEST = "android.net.extra.NETWORK_REQUEST";
     field public static final java.lang.String EXTRA_NETWORK_TYPE = "networkType";
     field public static final java.lang.String EXTRA_NO_CONNECTIVITY = "noConnectivity";
-    field public static final java.lang.String EXTRA_OTHER_NETWORK_INFO = "otherNetwork";
+    field public static final deprecated java.lang.String EXTRA_OTHER_NETWORK_INFO = "otherNetwork";
     field public static final java.lang.String EXTRA_REASON = "reason";
     field public static final int MULTIPATH_PREFERENCE_HANDOVER = 1; // 0x1
     field public static final int MULTIPATH_PREFERENCE_PERFORMANCE = 4; // 0x4
@@ -28421,6 +28448,7 @@ package android.net {
     method public android.net.ProxyInfo getHttpProxy();
     method public java.lang.String getInterfaceName();
     method public java.util.List<android.net.LinkAddress> getLinkAddresses();
+    method public int getMtu();
     method public java.lang.String getPrivateDnsServerName();
     method public java.util.List<android.net.RouteInfo> getRoutes();
     method public boolean isPrivateDnsActive();
@@ -28569,10 +28597,10 @@ package android.net {
     field public static final int TRANSPORT_WIFI_AWARE = 5; // 0x5
   }
 
-  public class NetworkInfo implements android.os.Parcelable {
+  public deprecated class NetworkInfo implements android.os.Parcelable {
     method public int describeContents();
     method public deprecated android.net.NetworkInfo.DetailedState getDetailedState();
-    method public java.lang.String getExtraInfo();
+    method public deprecated java.lang.String getExtraInfo();
     method public deprecated java.lang.String getReason();
     method public deprecated android.net.NetworkInfo.State getState();
     method public deprecated int getSubtype();
@@ -28588,7 +28616,7 @@ package android.net {
     field public static final android.os.Parcelable.Creator<android.net.NetworkInfo> CREATOR;
   }
 
-  public static final class NetworkInfo.DetailedState extends java.lang.Enum {
+  public static final deprecated class NetworkInfo.DetailedState extends java.lang.Enum {
     method public static android.net.NetworkInfo.DetailedState valueOf(java.lang.String);
     method public static final android.net.NetworkInfo.DetailedState[] values();
     enum_constant public static final android.net.NetworkInfo.DetailedState AUTHENTICATING;
@@ -28606,7 +28634,7 @@ package android.net {
     enum_constant public static final android.net.NetworkInfo.DetailedState VERIFYING_POOR_LINK;
   }
 
-  public static final class NetworkInfo.State extends java.lang.Enum {
+  public static final deprecated class NetworkInfo.State extends java.lang.Enum {
     method public static android.net.NetworkInfo.State valueOf(java.lang.String);
     method public static final android.net.NetworkInfo.State[] values();
     enum_constant public static final android.net.NetworkInfo.State CONNECTED;
@@ -35140,6 +35168,7 @@ package android.os.storage {
 
   public final class StorageVolume implements android.os.Parcelable {
     method public deprecated android.content.Intent createAccessIntent(java.lang.String);
+    method public android.content.Intent createOpenDocumentTreeIntent();
     method public int describeContents();
     method public java.lang.String getDescription(android.content.Context);
     method public java.lang.String getState();
@@ -38348,6 +38377,11 @@ package android.provider {
     field public static final java.lang.String VALUE = "value";
   }
 
+  public static final class Settings.Panel {
+    field public static final java.lang.String ACTION_INTERNET_CONNECTIVITY = "android.settings.panel.action.INTERNET_CONNECTIVITY";
+    field public static final java.lang.String ACTION_VOLUME = "android.settings.panel.action.VOLUME";
+  }
+
   public static final class Settings.Secure extends android.provider.Settings.NameValueTable {
     ctor public Settings.Secure();
     method public static float getFloat(android.content.ContentResolver, java.lang.String, float);
@@ -38665,22 +38699,23 @@ package android.provider {
     field public static final android.net.Uri CONTENT_URI;
     field public static final java.lang.String CURRENT = "current";
     field public static final java.lang.String DEFAULT_SORT_ORDER = "name ASC";
-    field public static final java.lang.String MCC = "mcc";
+    field public static final deprecated java.lang.String MCC = "mcc";
     field public static final java.lang.String MMSC = "mmsc";
     field public static final java.lang.String MMSPORT = "mmsport";
     field public static final java.lang.String MMSPROXY = "mmsproxy";
-    field public static final java.lang.String MNC = "mnc";
-    field public static final java.lang.String MVNO_MATCH_DATA = "mvno_match_data";
-    field public static final java.lang.String MVNO_TYPE = "mvno_type";
+    field public static final deprecated java.lang.String MNC = "mnc";
+    field public static final deprecated java.lang.String MVNO_MATCH_DATA = "mvno_match_data";
+    field public static final deprecated java.lang.String MVNO_TYPE = "mvno_type";
     field public static final java.lang.String NAME = "name";
     field public static final java.lang.String NETWORK_TYPE_BITMASK = "network_type_bitmask";
-    field public static final java.lang.String NUMERIC = "numeric";
+    field public static final deprecated java.lang.String NUMERIC = "numeric";
     field public static final java.lang.String PASSWORD = "password";
     field public static final java.lang.String PORT = "port";
     field public static final java.lang.String PROTOCOL = "protocol";
     field public static final java.lang.String PROXY = "proxy";
     field public static final java.lang.String ROAMING_PROTOCOL = "roaming_protocol";
     field public static final java.lang.String SERVER = "server";
+    field public static final android.net.Uri SIM_APN_URI;
     field public static final java.lang.String SUBSCRIPTION_ID = "sub_id";
     field public static final java.lang.String TYPE = "type";
     field public static final java.lang.String USER = "user";
@@ -41236,10 +41271,12 @@ package android.service.quicksettings {
     method public android.graphics.drawable.Icon getIcon();
     method public java.lang.CharSequence getLabel();
     method public int getState();
+    method public java.lang.CharSequence getSubtitle();
     method public void setContentDescription(java.lang.CharSequence);
     method public void setIcon(android.graphics.drawable.Icon);
     method public void setLabel(java.lang.CharSequence);
     method public void setState(int);
+    method public void setSubtitle(java.lang.CharSequence);
     method public void updateTile();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.quicksettings.Tile> CREATOR;
@@ -43631,6 +43668,10 @@ package android.telephony {
     field public static final java.lang.String KEY_MONTHLY_DATA_CYCLE_DAY_INT = "monthly_data_cycle_day_int";
     field public static final java.lang.String KEY_ONLY_SINGLE_DC_ALLOWED_INT_ARRAY = "only_single_dc_allowed_int_array";
     field public static final java.lang.String KEY_OPERATOR_SELECTION_EXPAND_BOOL = "operator_selection_expand_bool";
+    field public static final java.lang.String KEY_OPPORTUNISTIC_NETWORK_ENTRY_THRESHOLD_RSRP_INT = "opportunistic_network_entry_threshold_rsrp_int";
+    field public static final java.lang.String KEY_OPPORTUNISTIC_NETWORK_ENTRY_THRESHOLD_RSSNR_INT = "opportunistic_network_entry_threshold_rssnr_int";
+    field public static final java.lang.String KEY_OPPORTUNISTIC_NETWORK_EXIT_THRESHOLD_RSRP_INT = "opportunistic_network_exit_threshold_rsrp_int";
+    field public static final java.lang.String KEY_OPPORTUNISTIC_NETWORK_EXIT_THRESHOLD_RSSNR_INT = "opportunistic_network_exit_threshold_rssnr_int";
     field public static final java.lang.String KEY_PREFER_2G_BOOL = "prefer_2g_bool";
     field public static final java.lang.String KEY_RADIO_RESTART_FAILURE_CAUSES_INT_ARRAY = "radio_restart_failure_causes_int_array";
     field public static final java.lang.String KEY_RCS_CONFIG_SERVER_URL_STRING = "rcs_config_server_url_string";
@@ -52205,20 +52246,20 @@ package android.view.contentcapture {
   }
 
   public final class ContentCaptureManager {
-    method public android.view.contentcapture.ContentCaptureSession createContentCaptureSession(android.view.contentcapture.ContentCaptureContext);
     method public android.content.ComponentName getServiceComponentName();
     method public boolean isContentCaptureEnabled();
     method public void removeUserData(android.view.contentcapture.UserDataRemovalRequest);
     method public void setContentCaptureEnabled(boolean);
   }
 
-  public final class ContentCaptureSession implements java.lang.AutoCloseable {
+  public abstract class ContentCaptureSession implements java.lang.AutoCloseable {
     method public void close();
-    method public void destroy();
-    method public android.view.contentcapture.ContentCaptureSessionId getContentCaptureSessionId();
-    method public void notifyViewAppeared(android.view.ViewStructure);
-    method public void notifyViewDisappeared(android.view.autofill.AutofillId);
-    method public void notifyViewTextChanged(android.view.autofill.AutofillId, java.lang.CharSequence, int);
+    method public final android.view.contentcapture.ContentCaptureSession createContentCaptureSession(android.view.contentcapture.ContentCaptureContext);
+    method public final void destroy();
+    method public final android.view.contentcapture.ContentCaptureSessionId getContentCaptureSessionId();
+    method public final void notifyViewAppeared(android.view.ViewStructure);
+    method public final void notifyViewDisappeared(android.view.autofill.AutofillId);
+    method public final void notifyViewTextChanged(android.view.autofill.AutofillId, java.lang.CharSequence, int);
     field public static final int FLAG_USER_INPUT = 1; // 0x1
   }
 
