@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.server.appops;
+package com.android.server.appop;
 
 import static com.google.common.truth.Truth.assertThat;
 
