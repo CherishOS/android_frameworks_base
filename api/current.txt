@@ -11598,8 +11598,11 @@ package android.content.pm {
     field public static final java.lang.String FEATURE_MICROPHONE = "android.hardware.microphone";
     field public static final java.lang.String FEATURE_MIDI = "android.software.midi";
     field public static final java.lang.String FEATURE_NFC = "android.hardware.nfc";
+    field public static final java.lang.String FEATURE_NFC_BEAM = "android.sofware.nfc.beam";
     field public static final java.lang.String FEATURE_NFC_HOST_CARD_EMULATION = "android.hardware.nfc.hce";
     field public static final java.lang.String FEATURE_NFC_HOST_CARD_EMULATION_NFCF = "android.hardware.nfc.hcef";
+    field public static final java.lang.String FEATURE_NFC_OFF_HOST_CARD_EMULATION_ESE = "android.hardware.nfc.ese";
+    field public static final java.lang.String FEATURE_NFC_OFF_HOST_CARD_EMULATION_UICC = "android.hardware.nfc.uicc";
     field public static final java.lang.String FEATURE_OPENGLES_EXTENSION_PACK = "android.hardware.opengles.aep";
     field public static final java.lang.String FEATURE_PC = "android.hardware.type.pc";
     field public static final java.lang.String FEATURE_PICTURE_IN_PICTURE = "android.software.picture_in_picture";
@@ -29555,6 +29558,7 @@ package android.net.wifi {
     method public int getWifiState();
     method public boolean is5GHzBandSupported();
     method public boolean isDeviceToApRttSupported();
+    method public boolean isDppSupported();
     method public boolean isEnhancedPowerReportingSupported();
     method public boolean isOweSupported();
     method public boolean isP2pSupported();
@@ -29750,7 +29754,10 @@ package android.net.wifi.aware {
     method public void onIdentityChanged(byte[]);
   }
 
-  public class PeerHandle {
+  public final class PeerHandle implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.wifi.aware.PeerHandle> CREATOR;
   }
 
   public final class PublishConfig implements android.os.Parcelable {
@@ -30285,15 +30292,16 @@ package android.nfc {
     method public deprecated void enableForegroundNdefPush(android.app.Activity, android.nfc.NdefMessage);
     method public void enableReaderMode(android.app.Activity, android.nfc.NfcAdapter.ReaderCallback, int, android.os.Bundle);
     method public static android.nfc.NfcAdapter getDefaultAdapter(android.content.Context);
+    method public java.util.List<java.lang.String> getSupportedOffHostSecureElements();
     method public boolean ignore(android.nfc.Tag, int, android.nfc.NfcAdapter.OnTagRemovedListener, android.os.Handler);
-    method public boolean invokeBeam(android.app.Activity);
+    method public deprecated boolean invokeBeam(android.app.Activity);
     method public boolean isEnabled();
-    method public boolean isNdefPushEnabled();
-    method public void setBeamPushUris(android.net.Uri[], android.app.Activity);
-    method public void setBeamPushUrisCallback(android.nfc.NfcAdapter.CreateBeamUrisCallback, android.app.Activity);
-    method public void setNdefPushMessage(android.nfc.NdefMessage, android.app.Activity, android.app.Activity...);
-    method public void setNdefPushMessageCallback(android.nfc.NfcAdapter.CreateNdefMessageCallback, android.app.Activity, android.app.Activity...);
-    method public void setOnNdefPushCompleteCallback(android.nfc.NfcAdapter.OnNdefPushCompleteCallback, android.app.Activity, android.app.Activity...);
+    method public deprecated boolean isNdefPushEnabled();
+    method public deprecated void setBeamPushUris(android.net.Uri[], android.app.Activity);
+    method public deprecated void setBeamPushUrisCallback(android.nfc.NfcAdapter.CreateBeamUrisCallback, android.app.Activity);
+    method public deprecated void setNdefPushMessage(android.nfc.NdefMessage, android.app.Activity, android.app.Activity...);
+    method public deprecated void setNdefPushMessageCallback(android.nfc.NfcAdapter.CreateNdefMessageCallback, android.app.Activity, android.app.Activity...);
+    method public deprecated void setOnNdefPushCompleteCallback(android.nfc.NfcAdapter.OnNdefPushCompleteCallback, android.app.Activity, android.app.Activity...);
     field public static final java.lang.String ACTION_ADAPTER_STATE_CHANGED = "android.nfc.action.ADAPTER_STATE_CHANGED";
     field public static final java.lang.String ACTION_NDEF_DISCOVERED = "android.nfc.action.NDEF_DISCOVERED";
     field public static final java.lang.String ACTION_TAG_DISCOVERED = "android.nfc.action.TAG_DISCOVERED";
@@ -30320,15 +30328,15 @@ package android.nfc {
     field public static final int STATE_TURNING_ON = 2; // 0x2
   }
 
-  public static abstract interface NfcAdapter.CreateBeamUrisCallback {
+  public static abstract deprecated interface NfcAdapter.CreateBeamUrisCallback {
     method public abstract android.net.Uri[] createBeamUris(android.nfc.NfcEvent);
   }
 
-  public static abstract interface NfcAdapter.CreateNdefMessageCallback {
+  public static abstract deprecated interface NfcAdapter.CreateNdefMessageCallback {
     method public abstract android.nfc.NdefMessage createNdefMessage(android.nfc.NfcEvent);
   }
 
-  public static abstract interface NfcAdapter.OnNdefPushCompleteCallback {
+  public static abstract deprecated interface NfcAdapter.OnNdefPushCompleteCallback {
     method public abstract void onNdefPushComplete(android.nfc.NfcEvent);
   }
 
@@ -30376,8 +30384,10 @@ package android.nfc.cardemulation {
     method public boolean isDefaultServiceForCategory(android.content.ComponentName, java.lang.String);
     method public boolean registerAidsForService(android.content.ComponentName, java.lang.String, java.util.List<java.lang.String>);
     method public boolean removeAidsForService(android.content.ComponentName, java.lang.String);
+    method public boolean setOffHostForService(android.content.ComponentName, java.lang.String);
     method public boolean setPreferredService(android.app.Activity, android.content.ComponentName);
     method public boolean supportsAidPrefixRegistration();
+    method public boolean unsetOffHostForService(android.content.ComponentName);
     method public boolean unsetPreferredService(android.app.Activity);
     field public static final java.lang.String ACTION_CHANGE_DEFAULT = "android.nfc.cardemulation.action.ACTION_CHANGE_DEFAULT";
     field public static final java.lang.String CATEGORY_OTHER = "other";
@@ -37854,7 +37864,11 @@ package android.provider {
     method public static java.lang.String getVolumeName(android.net.Uri);
     method public static android.provider.MediaStore.PendingSession openPending(android.content.Context, android.net.Uri);
     method public static android.net.Uri setIncludePending(android.net.Uri);
+    method public static android.net.Uri setIncludeTrashed(android.net.Uri);
     method public static android.net.Uri setRequireOriginal(android.net.Uri);
+    method public static void trash(android.content.Context, android.net.Uri);
+    method public static void trash(android.content.Context, android.net.Uri, long);
+    method public static void untrash(android.content.Context, android.net.Uri);
     field public static final java.lang.String ACTION_IMAGE_CAPTURE = "android.media.action.IMAGE_CAPTURE";
     field public static final java.lang.String ACTION_IMAGE_CAPTURE_SECURE = "android.media.action.IMAGE_CAPTURE_SECURE";
     field public static final java.lang.String ACTION_REVIEW = "android.provider.action.REVIEW";
@@ -38077,6 +38091,7 @@ package android.provider {
     field public static final deprecated java.lang.String MINI_THUMB_MAGIC = "mini_thumb_magic";
     field public static final java.lang.String ORIENTATION = "orientation";
     field public static final deprecated java.lang.String PICASA_ID = "picasa_id";
+    field public static final java.lang.String SECONDARY_BUCKET_ID = "secondary_bucket_id";
   }
 
   public static final class MediaStore.Images.Media implements android.provider.MediaStore.Images.ImageColumns {
@@ -38121,11 +38136,13 @@ package android.provider {
   public static abstract interface MediaStore.MediaColumns implements android.provider.BaseColumns {
     field public static final deprecated java.lang.String DATA = "_data";
     field public static final java.lang.String DATE_ADDED = "date_added";
+    field public static final java.lang.String DATE_EXPIRES = "date_expires";
     field public static final java.lang.String DATE_MODIFIED = "date_modified";
     field public static final java.lang.String DISPLAY_NAME = "_display_name";
     field public static final java.lang.String HASH = "_hash";
     field public static final java.lang.String HEIGHT = "height";
     field public static final java.lang.String IS_PENDING = "is_pending";
+    field public static final java.lang.String IS_TRASHED = "is_trashed";
     field public static final java.lang.String MIME_TYPE = "mime_type";
     field public static final java.lang.String OWNER_PACKAGE_NAME = "owner_package_name";
     field public static final java.lang.String SIZE = "_size";
@@ -38201,6 +38218,7 @@ package android.provider {
     field public static final deprecated java.lang.String LONGITUDE = "longitude";
     field public static final deprecated java.lang.String MINI_THUMB_MAGIC = "mini_thumb_magic";
     field public static final java.lang.String RESOLUTION = "resolution";
+    field public static final java.lang.String SECONDARY_BUCKET_ID = "secondary_bucket_id";
     field public static final java.lang.String TAGS = "tags";
   }
 
