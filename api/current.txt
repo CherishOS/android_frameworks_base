@@ -5245,8 +5245,8 @@ package android.app {
     method public android.app.Notification clone();
     method public int describeContents();
     method public boolean getAllowSystemGeneratedContextualActions();
-    method public android.app.PendingIntent getAppOverlayIntent();
     method public int getBadgeIconType();
+    method public android.app.Notification.BubbleMetadata getBubbleMetadata();
     method public java.lang.String getChannelId();
     method public java.lang.String getGroup();
     method public int getGroupAlertBehavior();
@@ -5459,6 +5459,25 @@ package android.app {
     method public android.app.Notification.BigTextStyle setSummaryText(java.lang.CharSequence);
   }
 
+  public static final class Notification.BubbleMetadata implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getDesiredHeight();
+    method public android.graphics.drawable.Icon getIcon();
+    method public android.app.PendingIntent getIntent();
+    method public java.lang.CharSequence getTitle();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.app.Notification.BubbleMetadata> CREATOR;
+  }
+
+  public static class Notification.BubbleMetadata.Builder {
+    ctor public Notification.BubbleMetadata.Builder();
+    method public android.app.Notification.BubbleMetadata build();
+    method public android.app.Notification.BubbleMetadata.Builder setDesiredHeight(int);
+    method public android.app.Notification.BubbleMetadata.Builder setIcon(android.graphics.drawable.Icon);
+    method public android.app.Notification.BubbleMetadata.Builder setIntent(android.app.PendingIntent);
+    method public android.app.Notification.BubbleMetadata.Builder setTitle(java.lang.CharSequence);
+  }
+
   public static class Notification.Builder {
     ctor public Notification.Builder(android.content.Context, java.lang.String);
     ctor public deprecated Notification.Builder(android.content.Context);
@@ -5478,9 +5497,9 @@ package android.app {
     method public static android.app.Notification.Builder recoverBuilder(android.content.Context, android.app.Notification);
     method public android.app.Notification.Builder setActions(android.app.Notification.Action...);
     method public android.app.Notification.Builder setAllowSystemGeneratedContextualActions(boolean);
-    method public android.app.Notification.Builder setAppOverlayIntent(android.app.PendingIntent);
     method public android.app.Notification.Builder setAutoCancel(boolean);
     method public android.app.Notification.Builder setBadgeIconType(int);
+    method public android.app.Notification.Builder setBubbleMetadata(android.app.Notification.BubbleMetadata);
     method public android.app.Notification.Builder setCategory(java.lang.String);
     method public android.app.Notification.Builder setChannelId(java.lang.String);
     method public android.app.Notification.Builder setChronometerCountDown(boolean);
@@ -5695,8 +5714,8 @@ package android.app {
 
   public final class NotificationChannel implements android.os.Parcelable {
     ctor public NotificationChannel(java.lang.String, java.lang.CharSequence, int);
+    method public boolean canBubble();
     method public boolean canBypassDnd();
-    method public boolean canOverlayApps();
     method public boolean canShowBadge();
     method public int describeContents();
     method public void enableLights(boolean);
@@ -5712,7 +5731,7 @@ package android.app {
     method public android.net.Uri getSound();
     method public long[] getVibrationPattern();
     method public boolean hasUserSetImportance();
-    method public void setAllowAppOverlay(boolean);
+    method public void setAllowBubbles(boolean);
     method public void setBypassDnd(boolean);
     method public void setDescription(java.lang.String);
     method public void setGroup(java.lang.String);
@@ -5746,7 +5765,7 @@ package android.app {
 
   public class NotificationManager {
     method public java.lang.String addAutomaticZenRule(android.app.AutomaticZenRule);
-    method public boolean areAppOverlaysAllowed();
+    method public boolean areBubblesAllowed();
     method public boolean areNotificationsEnabled();
     method public boolean canNotifyAsPackage(java.lang.String);
     method public void cancel(int);
