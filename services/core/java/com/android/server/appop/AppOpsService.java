@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.android.server;
+package com.android.server.appop;
 
 import static android.app.AppOpsManager.OP_PLAY_AUDIO;
+import static android.app.AppOpsManager.OP_NONE;
 import static android.app.AppOpsManager.UID_STATE_BACKGROUND;
 import static android.app.AppOpsManager.UID_STATE_CACHED;
 import static android.app.AppOpsManager.UID_STATE_FOREGROUND;
@@ -35,8 +36,7 @@ import android.app.ActivityManager;
 import android.app.ActivityThread;
 import android.app.AppGlobals;
 import android.app.AppOpsManager;
-import android.app.AppOpsManager.HistoricalOpEntry;
-import android.app.AppOpsManager.HistoricalPackageOps;
+import android.app.AppOpsManager.HistoricalOps;
 import android.app.AppOpsManagerInternal;
 import android.app.AppOpsManagerInternal.CheckOpsDelegate;
 import android.content.BroadcastReceiver;
@@ -48,7 +48,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManagerInternal;
-import android.content.pm.ParceledListSlice;
 import android.content.pm.UserInfo;
 import android.database.ContentObserver;
 import android.media.AudioAttributes;
@@ -59,6 +58,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Process;
+import android.os.RemoteCallback;
 import android.os.RemoteException;
 import android.os.ResultReceiver;
 import android.os.ServiceManager;
@@ -95,6 +95,8 @@ import com.android.internal.util.Preconditions;
 import com.android.internal.util.XmlUtils;
 import com.android.internal.util.function.pooled.PooledLambda;
 
+import com.android.server.LocalServices;
+import com.android.server.LockGuard;
 import libcore.util.EmptyArray;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -212,6 +214,8 @@ public class AppOpsService extends IAppOpsService.Stub {
 
     @VisibleForTesting
     final SparseArray<UidState> mUidStates = new SparseArray<>();
+
+    private final HistoricalRegistry mHistoricalRegistry = new HistoricalRegistry(this);
 
     long mLastRealtime;
 
@@ -654,6 +658,7 @@ public class AppOpsService extends IAppOpsService.Stub {
 
     public void systemReady() {
         mConstants.startMonitoring(mContext.getContentResolver());
+        mHistoricalRegistry.systemReady(mContext.getContentResolver());
 
         synchronized (this) {
             boolean changed = false;
@@ -1012,113 +1017,99 @@ public class AppOpsService extends IAppOpsService.Stub {
     }
 
     @Override
-    public @Nullable ParceledListSlice getAllHistoricalPackagesOps(@Nullable String[] opNames,
-            long beginTimeMillis, long endTimeMillis) {
+    public void getHistoricalOps(int uid, @NonNull String packageName,
+            @Nullable String[] opNames, long beginTimeMillis, long endTimeMillis,
+            @NonNull RemoteCallback callback) {
+        Preconditions.checkArgument(uid == Process.INVALID_UID || uid >= 0,
+                "uid must be " + Process.INVALID_UID + " or non negative");
         Preconditions.checkArgument(beginTimeMillis >= 0 && beginTimeMillis < endTimeMillis,
                 "beginTimeMillis must be non negative and lesser than endTimeMillis");
+        Preconditions.checkNotNull(callback, "callback cannot be null");
+        checkValidOpsOrNull(opNames);
 
         mContext.enforcePermission(android.Manifest.permission.GET_APP_OPS_STATS,
-                Binder.getCallingPid(), Binder.getCallingUid(), "getAllHistoricalPackagesOps");
+                Binder.getCallingPid(), Binder.getCallingUid(), "getHistoricalOps");
 
-        ArrayList<HistoricalPackageOps> historicalPackageOpsList = null;
-
-        final int uidStateCount = mUidStates.size();
-        for (int i = 0; i < uidStateCount; i++) {
-            final UidState uidState = mUidStates.valueAt(i);
-            if (uidState.pkgOps == null || uidState.pkgOps.isEmpty()) {
-                continue;
-            }
-            final ArrayMap<String, Ops> packages = uidState.pkgOps;
-            final int packageCount = packages.size();
-            for (int j = 0; j < packageCount; j++) {
-                final Ops pkgOps = packages.valueAt(j);
-                final AppOpsManager.HistoricalPackageOps historicalPackageOps =
-                        createHistoricalPackageOps(uidState.uid, pkgOps, opNames,
-                                beginTimeMillis, endTimeMillis);
-                if (historicalPackageOps != null) {
-                    if (historicalPackageOpsList == null) {
-                        historicalPackageOpsList = new ArrayList<>();
-                    }
-                    historicalPackageOpsList.add(historicalPackageOps);
-                }
-            }
+        if (mHistoricalRegistry.getMode() == AppOpsManager.HISTORICAL_MODE_DISABLED) {
+            // TODO (bug:122218838): Remove once the feature fully enabled.
+            getHistoricalPackagesOpsCompat(uid, packageName, opNames, beginTimeMillis,
+                    endTimeMillis, callback);
+        } else {
+            // Must not hold the appops lock
+            mHistoricalRegistry.getHistoricalOps(uid, packageName, opNames,
+                    beginTimeMillis, endTimeMillis, callback);
         }
-
-        if (historicalPackageOpsList == null) {
-            return null;
-        }
-
-        return new ParceledListSlice<>(historicalPackageOpsList);
     }
 
-    private static @Nullable HistoricalPackageOps createHistoricalPackageOps(int uid,
-            @Nullable Ops pkgOps, @Nullable String[] opNames, long beginTimeMillis,
-            long endTimeMillis) {
-        // TODO: Implement historical data collection
-        if (pkgOps == null) {
-            return null;
+    private void getHistoricalPackagesOpsCompat(int uid, @NonNull String packageName,
+            @Nullable String[] opNames, long beginTimeMillis, long endTimeMillis,
+            @NonNull RemoteCallback callback) {
+        synchronized (AppOpsService.this) {
+            final HistoricalOps ops = new HistoricalOps(beginTimeMillis, endTimeMillis);
+            if (opNames == null) {
+                opNames = AppOpsManager.getOpStrs();
+            }
+            final int uidStateCount = mUidStates.size();
+            for (int uidIdx = 0; uidIdx < uidStateCount; uidIdx++) {
+                final UidState uidState = mUidStates.valueAt(uidIdx);
+                if (uidState.pkgOps == null || uidState.pkgOps.isEmpty()
+                        || (uid != Process.INVALID_UID && uid != uidState.uid)) {
+                    continue;
+                }
+                final ArrayMap<String, Ops> packages = uidState.pkgOps;
+                final int packageCount = packages.size();
+                for (int pkgIdx = 0; pkgIdx < packageCount; pkgIdx++) {
+                    final Ops pkgOps = packages.valueAt(pkgIdx);
+                    if (packageName != null && !packageName.equals(pkgOps.packageName)) {
+                        continue;
+                    }
+                    final int opCount = opNames.length;
+                    for (int opIdx = 0; opIdx < opCount; opIdx++) {
+                        final String opName = opNames[opIdx];
+                        if (!ArrayUtils.contains(opNames, opName)) {
+                            continue;
+                        }
+                        final int opCode = AppOpsManager.strOpToOp(opName);
+                        final Op op = pkgOps.get(opCode);
+                        if (op == null) {
+                            continue;
+                        }
+                        final int stateCount = AppOpsManager._NUM_UID_STATE;
+                        for (int stateIdx = 0; stateIdx < stateCount; stateIdx++) {
+                            if (op.rejectTime[stateIdx] != 0) {
+                                ops.increaseRejectCount(opCode, uidState.uid,
+                                        pkgOps.packageName, stateIdx, 1);
+                            } else if (op.time[stateIdx] != 0) {
+                                ops.increaseAccessCount(opCode, uidState.uid,
+                                        pkgOps.packageName, stateIdx, 1);
+                            }
+                        }
+                    }
+                }
+            }
+            final Bundle payload = new Bundle();
+            payload.putParcelable(AppOpsManager.KEY_HISTORICAL_OPS, ops);
+            callback.sendResult(payload);
         }
-
-        final HistoricalPackageOps historicalPackageOps = new HistoricalPackageOps(uid,
-                pkgOps.packageName);
-
-        if (opNames == null) {
-            opNames = AppOpsManager.getOpStrs();
-        }
-        for (String opName : opNames) {
-            addHistoricOpEntry(AppOpsManager.strOpToOp(opName), pkgOps, historicalPackageOps);
-        }
-
-        return historicalPackageOps;
     }
 
     @Override
-    public @Nullable HistoricalPackageOps getHistoricalPackagesOps(int uid,
-            @NonNull String packageName, @Nullable String[] opNames,
-            long beginTimeMillis, long endTimeMillis) {
-        Preconditions.checkNotNull(packageName,
-                "packageName cannot be null");
+    public void getHistoricalOpsFromDiskRaw(int uid, @NonNull String packageName,
+            @Nullable String[] opNames, long beginTimeMillis, long endTimeMillis,
+            @NonNull RemoteCallback callback) {
+        Preconditions.checkArgument(uid == Process.INVALID_UID || uid >= 0,
+                "uid must be " + Process.INVALID_UID + " or non negative");
         Preconditions.checkArgument(beginTimeMillis >= 0 && beginTimeMillis < endTimeMillis,
                 "beginTimeMillis must be non negative and lesser than endTimeMillis");
+        Preconditions.checkNotNull(callback, "callback cannot be null");
+        checkValidOpsOrNull(opNames);
 
         mContext.enforcePermission(android.Manifest.permission.GET_APP_OPS_STATS,
-                Binder.getCallingPid(), Binder.getCallingUid(), "getHistoricalPackagesOps");
+                Binder.getCallingPid(), Binder.getCallingUid(), "getHistoricalOps");
 
-        final String resolvedPackageName = resolvePackageName(uid, packageName);
-        if (resolvedPackageName == null) {
-            return null;
-        }
-
-        // TODO: Implement historical data collection
-        final Ops pkgOps = getOpsRawLocked(uid, resolvedPackageName, false /* edit */,
-                false /* uidMismatchExpected */);
-        return createHistoricalPackageOps(uid, pkgOps, opNames, beginTimeMillis, endTimeMillis);
-    }
-
-    private static void addHistoricOpEntry(int opCode, @NonNull Ops ops,
-            @NonNull HistoricalPackageOps outHistoricalPackageOps) {
-        final Op op = ops.get(opCode);
-        if (op == null) {
-            return;
-        }
-
-        final HistoricalOpEntry historicalOpEntry = new HistoricalOpEntry(opCode);
-
-        // TODO: Keep per UID state duration
-        for (int uidState = 0; uidState < AppOpsManager._NUM_UID_STATE; uidState++) {
-            final int acceptCount;
-            final int rejectCount;
-            if (op.rejectTime[uidState] == 0) {
-                acceptCount = 1;
-                rejectCount = 0;
-            } else {
-                acceptCount = 0;
-                rejectCount = 1;
-            }
-            historicalOpEntry.addEntry(uidState, acceptCount, rejectCount, 0);
-        }
-
-        outHistoricalPackageOps.addEntry(historicalOpEntry);
+        // Must not hold the appops lock
+        mHistoricalRegistry.getHistoricalOpsFromDiskRaw(uid, packageName, opNames,
+                beginTimeMillis, endTimeMillis, callback);
     }
 
     @Override
@@ -1884,6 +1875,8 @@ public class AppOpsService extends IAppOpsService.Stub {
                             + packageName);
                     op.rejectTime[uidState.state] = System.currentTimeMillis();
                     scheduleOpNotedIfNeededLocked(code, uid, packageName, uidMode);
+                    mHistoricalRegistry.incrementOpRejected(op.op, uid, packageName,
+                            uidState.state);
                     return uidMode;
                 }
             } else {
@@ -1895,12 +1888,16 @@ public class AppOpsService extends IAppOpsService.Stub {
                             + packageName);
                     op.rejectTime[uidState.state] = System.currentTimeMillis();
                     scheduleOpNotedIfNeededLocked(op.op, uid, packageName, mode);
+                    mHistoricalRegistry.incrementOpRejected(op.op, uid, packageName,
+                            uidState.state);
                     return mode;
                 }
             }
             if (DEBUG) Slog.d(TAG, "noteOperation: allowing code " + code + " uid " + uid
                     + " package " + packageName);
             op.time[uidState.state] = System.currentTimeMillis();
+            mHistoricalRegistry.incrementOpAccessedCount(op.op, uid, packageName,
+                    uidState.state);
             op.rejectTime[uidState.state] = 0;
             op.proxyUid = proxyUid;
             op.proxyPackageName = proxyPackageName;
@@ -2035,6 +2032,8 @@ public class AppOpsService extends IAppOpsService.Stub {
                             + switchCode + " (" + code + ") uid " + uid + " package "
                             + resolvedPackageName);
                     op.rejectTime[uidState.state] = System.currentTimeMillis();
+                    mHistoricalRegistry.incrementOpRejected(op.op, uid, packageName,
+                            uidState.state);
                     return uidMode;
                 }
             } else {
@@ -2046,6 +2045,8 @@ public class AppOpsService extends IAppOpsService.Stub {
                             + switchCode + " (" + code + ") uid " + uid + " package "
                             + resolvedPackageName);
                     op.rejectTime[uidState.state] = System.currentTimeMillis();
+                    mHistoricalRegistry.incrementOpRejected(op.op, uid, packageName,
+                            uidState.state);
                     return mode;
                 }
             }
@@ -2054,6 +2055,8 @@ public class AppOpsService extends IAppOpsService.Stub {
             if (op.startNesting == 0) {
                 op.startRealtime = SystemClock.elapsedRealtime();
                 op.time[uidState.state] = System.currentTimeMillis();
+                mHistoricalRegistry.incrementOpAccessedCount(op.op, uid, packageName,
+                        uidState.state);
                 op.rejectTime[uidState.state] = 0;
                 op.duration = -1;
                 scheduleOpActiveChangedIfNeededLocked(code, uid, packageName, true);
@@ -2216,6 +2219,8 @@ public class AppOpsService extends IAppOpsService.Stub {
         if (op.startNesting <= 1 || finishNested) {
             if (op.startNesting == 1 || finishNested) {
                 op.duration = (int)(SystemClock.elapsedRealtime() - op.startRealtime);
+                mHistoricalRegistry.increaseOpAccessDuration(op.op, op.uid, op.packageName,
+                        op.uidState.state, op.duration);
                 op.time[op.uidState.state] = System.currentTimeMillis();
             } else {
                 Slog.w(TAG, "Finishing op nesting under-run: uid " + op.uid + " pkg "
@@ -2344,7 +2349,7 @@ public class AppOpsService extends IAppOpsService.Stub {
                         ApplicationInfo appInfo = ActivityThread.getPackageManager()
                                 .getApplicationInfo(packageName,
                                         PackageManager.MATCH_DIRECT_BOOT_AWARE
-                                        | PackageManager.MATCH_DIRECT_BOOT_UNAWARE,
+                                                | PackageManager.MATCH_DIRECT_BOOT_UNAWARE,
                                         UserHandle.getUserId(uid));
                         if (appInfo != null) {
                             pkgUid = appInfo.uid;
@@ -3427,9 +3432,9 @@ public class AppOpsService extends IAppOpsService.Stub {
     protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         if (!DumpUtils.checkDumpAndUsageStatsPermission(mContext, TAG, pw)) return;
 
-        int dumpOp = -1;
+        int dumpOp = OP_NONE;
         String dumpPackage = null;
-        int dumpUid = -1;
+        int dumpUid = Process.INVALID_UID;
         int dumpMode = -1;
         boolean dumpWatchers = false;
 
@@ -3748,8 +3753,8 @@ public class AppOpsService extends IAppOpsService.Stub {
                     }
                     if (pkgOps != null) {
                         for (int pkgi = 0;
-                                (!hasOp || !hasPackage || !hasMode) && pkgi < pkgOps.size();
-                                pkgi++) {
+                                 (!hasOp || !hasPackage || !hasMode) && pkgi < pkgOps.size();
+                                 pkgi++) {
                             Ops ops = pkgOps.valueAt(pkgi);
                             if (!hasOp && ops != null && ops.indexOfKey(dumpOp) >= 0) {
                                 hasOp = true;
@@ -3973,6 +3978,9 @@ public class AppOpsService extends IAppOpsService.Stub {
                 }
             }
         }
+
+        // Must not hold the appops lock
+        mHistoricalRegistry.dump("  ", pw, dumpUid, dumpPackage, dumpOp);
     }
 
     private static final class Restriction {
@@ -4093,6 +4101,47 @@ public class AppOpsService extends IAppOpsService.Stub {
         return false;
     }
 
+    @Override
+    public void setHistoryParameters(@AppOpsManager.HistoricalMode int mode,
+            long baseSnapshotInterval, int compressionStep) {
+        mContext.enforceCallingOrSelfPermission(android.Manifest.permission.MANAGE_APPOPS,
+                "setHistoryParameters");
+        // Must not hold the appops lock
+        mHistoricalRegistry.setHistoryParameters(mode, baseSnapshotInterval, compressionStep);
+    }
+
+    @Override
+    public void offsetHistory(long offsetMillis) {
+        mContext.enforceCallingOrSelfPermission(android.Manifest.permission.MANAGE_APPOPS,
+                "offsetHistory");
+        // Must not hold the appops lock
+        mHistoricalRegistry.offsetHistory(offsetMillis);
+    }
+
+    @Override
+    public void addHistoricalOps(HistoricalOps ops) {
+        mContext.enforceCallingOrSelfPermission(android.Manifest.permission.MANAGE_APPOPS,
+                "addHistoricalOps");
+        // Must not hold the appops lock
+        mHistoricalRegistry.addHistoricalOps(ops);
+    }
+
+    @Override
+    public void resetHistoryParameters() {
+        mContext.enforceCallingOrSelfPermission(android.Manifest.permission.MANAGE_APPOPS,
+                "resetHistoryParameters");
+        // Must not hold the appops lock
+        mHistoricalRegistry.resetHistoryParameters();
+    }
+
+    @Override
+    public void clearHistory() {
+        mContext.enforceCallingOrSelfPermission(android.Manifest.permission.MANAGE_APPOPS,
+                "clearHistory");
+        // Must not hold the appops lock
+        mHistoricalRegistry.clearHistory();
+    }
+
     private void removeUidsForUserLocked(int userHandle) {
         for (int i = mUidStates.size() - 1; i >= 0; --i) {
             final int uid = mUidStates.keyAt(i);
@@ -4161,6 +4210,16 @@ public class AppOpsService extends IAppOpsService.Stub {
             return EmptyArray.STRING;
         }
         return packageNames;
+    }
+
+    private static void checkValidOpsOrNull(String[] opNames) {
+        if (opNames != null) {
+            for (String opName : opNames) {
+                if (AppOpsManager.strOpToOp(opName) == AppOpsManager.OP_NONE) {
+                    throw new IllegalArgumentException("Unknown op: " + opName);
+                }
+            }
+        }
     }
 
     private final class ClientRestrictionState implements DeathRecipient {
