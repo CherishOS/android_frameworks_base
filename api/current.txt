@@ -27142,6 +27142,21 @@ package android.media.projection {
 
 package android.media.session {
 
+  public final class ControllerCallbackLink implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.os.IBinder getBinder();
+    method public void notifyEvent(java.lang.String, android.os.Bundle);
+    method public void notifyExtrasChanged(android.os.Bundle);
+    method public void notifyMetadataChanged(android.media.MediaMetadata);
+    method public void notifyPlaybackStateChanged(android.media.session.PlaybackState);
+    method public void notifyQueueChanged(java.util.List<android.media.session.MediaSession.QueueItem>);
+    method public void notifyQueueTitleChanged(java.lang.CharSequence);
+    method public void notifySessionDestroyed();
+    method public void notifyVolumeInfoChanged(android.media.session.MediaController.PlaybackInfo);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.media.session.ControllerCallbackLink> CREATOR;
+  }
+
   public final class MediaController {
     ctor public MediaController(android.content.Context, android.media.session.MediaSession.Token);
     method public void adjustVolume(int, int);
@@ -27374,6 +27389,36 @@ package android.media.session {
     ctor public PlaybackState.CustomAction.Builder(java.lang.String, java.lang.CharSequence, int);
     method public android.media.session.PlaybackState.CustomAction build();
     method public android.media.session.PlaybackState.CustomAction.Builder setExtras(android.os.Bundle);
+  }
+
+  public final class SessionCallbackLink implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.os.IBinder getBinder();
+    method public void notifyAdjustVolume(java.lang.String, int, int, android.media.session.ControllerCallbackLink, int);
+    method public void notifyCommand(java.lang.String, int, int, android.media.session.ControllerCallbackLink, java.lang.String, android.os.Bundle, android.os.ResultReceiver);
+    method public void notifyCustomAction(java.lang.String, int, int, android.media.session.ControllerCallbackLink, java.lang.String, android.os.Bundle);
+    method public void notifyFastForward(java.lang.String, int, int, android.media.session.ControllerCallbackLink);
+    method public void notifyMediaButton(java.lang.String, int, int, android.content.Intent, int, android.os.ResultReceiver);
+    method public void notifyMediaButtonFromController(java.lang.String, int, int, android.media.session.ControllerCallbackLink, android.content.Intent);
+    method public void notifyNext(java.lang.String, int, int, android.media.session.ControllerCallbackLink);
+    method public void notifyPause(java.lang.String, int, int, android.media.session.ControllerCallbackLink);
+    method public void notifyPlay(java.lang.String, int, int, android.media.session.ControllerCallbackLink);
+    method public void notifyPlayFromMediaId(java.lang.String, int, int, android.media.session.ControllerCallbackLink, java.lang.String, android.os.Bundle);
+    method public void notifyPlayFromSearch(java.lang.String, int, int, android.media.session.ControllerCallbackLink, java.lang.String, android.os.Bundle);
+    method public void notifyPlayFromUri(java.lang.String, int, int, android.media.session.ControllerCallbackLink, android.net.Uri, android.os.Bundle);
+    method public void notifyPrepare(java.lang.String, int, int, android.media.session.ControllerCallbackLink);
+    method public void notifyPrepareFromMediaId(java.lang.String, int, int, android.media.session.ControllerCallbackLink, java.lang.String, android.os.Bundle);
+    method public void notifyPrepareFromSearch(java.lang.String, int, int, android.media.session.ControllerCallbackLink, java.lang.String, android.os.Bundle);
+    method public void notifyPrepareFromUri(java.lang.String, int, int, android.media.session.ControllerCallbackLink, android.net.Uri, android.os.Bundle);
+    method public void notifyPrevious(java.lang.String, int, int, android.media.session.ControllerCallbackLink);
+    method public void notifyRate(java.lang.String, int, int, android.media.session.ControllerCallbackLink, android.media.Rating);
+    method public void notifyRewind(java.lang.String, int, int, android.media.session.ControllerCallbackLink);
+    method public void notifySeekTo(java.lang.String, int, int, android.media.session.ControllerCallbackLink, long);
+    method public void notifySetVolumeTo(java.lang.String, int, int, android.media.session.ControllerCallbackLink, int);
+    method public void notifySkipToTrack(java.lang.String, int, int, android.media.session.ControllerCallbackLink, long);
+    method public void notifyStop(java.lang.String, int, int, android.media.session.ControllerCallbackLink);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.media.session.SessionCallbackLink> CREATOR;
   }
 
 }
