@@ -7379,7 +7379,9 @@ package android.app.role {
     method public boolean isRoleHeld(java.lang.String);
     field public static final java.lang.String ROLE_BROWSER = "android.app.role.BROWSER";
     field public static final java.lang.String ROLE_DIALER = "android.app.role.DIALER";
+    field public static final java.lang.String ROLE_EMERGENCY = "android.app.role.EMERGENCY";
     field public static final java.lang.String ROLE_GALLERY = "android.app.role.GALLERY";
+    field public static final java.lang.String ROLE_HOME = "android.app.role.HOME";
     field public static final java.lang.String ROLE_MUSIC = "android.app.role.MUSIC";
     field public static final java.lang.String ROLE_SMS = "android.app.role.SMS";
   }
@@ -26076,6 +26078,27 @@ package android.media {
     field public static final int URI_COLUMN_INDEX = 2; // 0x2
   }
 
+  public final class Session2Command implements android.os.Parcelable {
+    ctor public Session2Command(int);
+    ctor public Session2Command(java.lang.String, android.os.Bundle);
+    method public int describeContents();
+    method public int getCommandCode();
+    method public java.lang.String getCustomCommand();
+    method public android.os.Bundle getExtras();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final int COMMAND_CODE_CUSTOM = 0; // 0x0
+    field public static final android.os.Parcelable.Creator<android.media.Session2Command> CREATOR;
+    field public static final int RESULT_ERROR_UNKNOWN_ERROR = -1; // 0xffffffff
+    field public static final int RESULT_INFO_SKIPPED = 1; // 0x1
+    field public static final int RESULT_SUCCESS = 0; // 0x0
+  }
+
+  public static final class Session2Command.Result {
+    ctor public Session2Command.Result(int, android.os.Bundle);
+    method public int getResultCode();
+    method public android.os.Bundle getResultData();
+  }
+
   public class SoundPool {
     ctor public deprecated SoundPool(int, int, int);
     method public final void autoPause();
@@ -27121,6 +27144,21 @@ package android.media.projection {
 
 package android.media.session {
 
+  public final class ControllerCallbackLink implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.os.IBinder getBinder();
+    method public void notifyEvent(java.lang.String, android.os.Bundle);
+    method public void notifyExtrasChanged(android.os.Bundle);
+    method public void notifyMetadataChanged(android.media.MediaMetadata);
+    method public void notifyPlaybackStateChanged(android.media.session.PlaybackState);
+    method public void notifyQueueChanged(java.util.List<android.media.session.MediaSession.QueueItem>);
+    method public void notifyQueueTitleChanged(java.lang.CharSequence);
+    method public void notifySessionDestroyed();
+    method public void notifyVolumeInfoChanged(android.media.session.MediaController.PlaybackInfo);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.media.session.ControllerCallbackLink> CREATOR;
+  }
+
   public final class MediaController {
     ctor public MediaController(android.content.Context, android.media.session.MediaSession.Token);
     method public void adjustVolume(int, int);
@@ -27353,6 +27391,36 @@ package android.media.session {
     ctor public PlaybackState.CustomAction.Builder(java.lang.String, java.lang.CharSequence, int);
     method public android.media.session.PlaybackState.CustomAction build();
     method public android.media.session.PlaybackState.CustomAction.Builder setExtras(android.os.Bundle);
+  }
+
+  public final class SessionCallbackLink implements android.os.Parcelable {
+    method public int describeContents();
+    method public android.os.IBinder getBinder();
+    method public void notifyAdjustVolume(java.lang.String, int, int, android.media.session.ControllerCallbackLink, int);
+    method public void notifyCommand(java.lang.String, int, int, android.media.session.ControllerCallbackLink, java.lang.String, android.os.Bundle, android.os.ResultReceiver);
+    method public void notifyCustomAction(java.lang.String, int, int, android.media.session.ControllerCallbackLink, java.lang.String, android.os.Bundle);
+    method public void notifyFastForward(java.lang.String, int, int, android.media.session.ControllerCallbackLink);
+    method public void notifyMediaButton(java.lang.String, int, int, android.content.Intent, int, android.os.ResultReceiver);
+    method public void notifyMediaButtonFromController(java.lang.String, int, int, android.media.session.ControllerCallbackLink, android.content.Intent);
+    method public void notifyNext(java.lang.String, int, int, android.media.session.ControllerCallbackLink);
+    method public void notifyPause(java.lang.String, int, int, android.media.session.ControllerCallbackLink);
+    method public void notifyPlay(java.lang.String, int, int, android.media.session.ControllerCallbackLink);
+    method public void notifyPlayFromMediaId(java.lang.String, int, int, android.media.session.ControllerCallbackLink, java.lang.String, android.os.Bundle);
+    method public void notifyPlayFromSearch(java.lang.String, int, int, android.media.session.ControllerCallbackLink, java.lang.String, android.os.Bundle);
+    method public void notifyPlayFromUri(java.lang.String, int, int, android.media.session.ControllerCallbackLink, android.net.Uri, android.os.Bundle);
+    method public void notifyPrepare(java.lang.String, int, int, android.media.session.ControllerCallbackLink);
+    method public void notifyPrepareFromMediaId(java.lang.String, int, int, android.media.session.ControllerCallbackLink, java.lang.String, android.os.Bundle);
+    method public void notifyPrepareFromSearch(java.lang.String, int, int, android.media.session.ControllerCallbackLink, java.lang.String, android.os.Bundle);
+    method public void notifyPrepareFromUri(java.lang.String, int, int, android.media.session.ControllerCallbackLink, android.net.Uri, android.os.Bundle);
+    method public void notifyPrevious(java.lang.String, int, int, android.media.session.ControllerCallbackLink);
+    method public void notifyRate(java.lang.String, int, int, android.media.session.ControllerCallbackLink, android.media.Rating);
+    method public void notifyRewind(java.lang.String, int, int, android.media.session.ControllerCallbackLink);
+    method public void notifySeekTo(java.lang.String, int, int, android.media.session.ControllerCallbackLink, long);
+    method public void notifySetVolumeTo(java.lang.String, int, int, android.media.session.ControllerCallbackLink, int);
+    method public void notifySkipToTrack(java.lang.String, int, int, android.media.session.ControllerCallbackLink, long);
+    method public void notifyStop(java.lang.String, int, int, android.media.session.ControllerCallbackLink);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.media.session.SessionCallbackLink> CREATOR;
   }
 
 }
@@ -29680,9 +29748,6 @@ package android.net.wifi {
     method public boolean isHeld();
     method public void release();
     method public void setReferenceCounted(boolean);
-  }
-
-  public static abstract class WifiManager.NetworkSuggestionsStatusCode implements java.lang.annotation.Annotation {
   }
 
   public class WifiManager.WifiLock {
@@ -34374,6 +34439,8 @@ package android.os {
     method public java.util.ArrayList<java.lang.String> createStringArrayList();
     method public <T> T[] createTypedArray(android.os.Parcelable.Creator<T>);
     method public <T> java.util.ArrayList<T> createTypedArrayList(android.os.Parcelable.Creator<T>);
+    method public <T extends android.os.Parcelable> android.util.ArrayMap<java.lang.String, T> createTypedArrayMap(android.os.Parcelable.Creator<T>);
+    method public <T extends android.os.Parcelable> android.util.SparseArray<T> createTypedSparseArray(android.os.Parcelable.Creator<T>);
     method public int dataAvail();
     method public int dataCapacity();
     method public int dataPosition();
@@ -34415,7 +34482,7 @@ package android.os {
     method public java.io.Serializable readSerializable();
     method public android.util.Size readSize();
     method public android.util.SizeF readSizeF();
-    method public android.util.SparseArray readSparseArray(java.lang.ClassLoader);
+    method public <T> android.util.SparseArray<T> readSparseArray(java.lang.ClassLoader);
     method public android.util.SparseBooleanArray readSparseBooleanArray();
     method public java.lang.String readString();
     method public void readStringArray(java.lang.String[]);
@@ -34461,7 +34528,7 @@ package android.os {
     method public void writeSerializable(java.io.Serializable);
     method public void writeSize(android.util.Size);
     method public void writeSizeF(android.util.SizeF);
-    method public void writeSparseArray(android.util.SparseArray<java.lang.Object>);
+    method public <T> void writeSparseArray(android.util.SparseArray<T>);
     method public void writeSparseBooleanArray(android.util.SparseBooleanArray);
     method public void writeString(java.lang.String);
     method public void writeStringArray(java.lang.String[]);
@@ -34469,8 +34536,10 @@ package android.os {
     method public void writeStrongBinder(android.os.IBinder);
     method public void writeStrongInterface(android.os.IInterface);
     method public <T extends android.os.Parcelable> void writeTypedArray(T[], int);
+    method public <T extends android.os.Parcelable> void writeTypedArrayMap(android.util.ArrayMap<java.lang.String, T>, int);
     method public <T extends android.os.Parcelable> void writeTypedList(java.util.List<T>);
     method public <T extends android.os.Parcelable> void writeTypedObject(T, int);
+    method public <T extends android.os.Parcelable> void writeTypedSparseArray(android.util.SparseArray<T>, int);
     method public void writeValue(java.lang.Object);
     field public static final android.os.Parcelable.Creator<java.lang.String> STRING_CREATOR;
   }
@@ -42662,6 +42731,7 @@ package android.telecom {
     method public static java.lang.String capabilitiesToString(int);
     method public android.telecom.PhoneAccountHandle getAccountHandle();
     method public int getCallCapabilities();
+    method public int getCallDirection();
     method public android.telecom.CallIdentification getCallIdentification();
     method public int getCallProperties();
     method public java.lang.String getCallerDisplayName();
@@ -42698,6 +42768,9 @@ package android.telecom {
     field public static final int CAPABILITY_SUPPORT_DEFLECT = 16777216; // 0x1000000
     field public static final int CAPABILITY_SUPPORT_HOLD = 2; // 0x2
     field public static final int CAPABILITY_SWAP_CONFERENCE = 8; // 0x8
+    field public static final int DIRECTION_INCOMING = 0; // 0x0
+    field public static final int DIRECTION_OUTGOING = 1; // 0x1
+    field public static final int DIRECTION_UNKNOWN = -1; // 0xffffffff
     field public static final int PROPERTY_CONFERENCE = 1; // 0x1
     field public static final int PROPERTY_EMERGENCY_CALLBACK_MODE = 4; // 0x4
     field public static final int PROPERTY_ENTERPRISE_CALL = 32; // 0x20
@@ -44848,16 +44921,21 @@ package android.telephony.emergency {
     method public int compareTo(android.telephony.emergency.EmergencyNumber);
     method public int describeContents();
     method public java.lang.String getCountryIso();
+    method public int getEmergencyCallRouting();
     method public int getEmergencyNumberSourceBitmask();
     method public java.util.List<java.lang.Integer> getEmergencyNumberSources();
     method public java.util.List<java.lang.Integer> getEmergencyServiceCategories();
     method public int getEmergencyServiceCategoryBitmask();
+    method public java.util.List<java.lang.String> getEmergencyUrns();
     method public java.lang.String getMnc();
     method public java.lang.String getNumber();
     method public boolean isFromSources(int);
     method public boolean isInEmergencyServiceCategories(int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.emergency.EmergencyNumber> CREATOR;
+    field public static final int EMERGENCY_CALL_ROUTING_EMERGENCY = 1; // 0x1
+    field public static final int EMERGENCY_CALL_ROUTING_NORMAL = 2; // 0x2
+    field public static final int EMERGENCY_CALL_ROUTING_UNKNOWN = 0; // 0x0
     field public static final int EMERGENCY_NUMBER_SOURCE_DATABASE = 16; // 0x10
     field public static final int EMERGENCY_NUMBER_SOURCE_DEFAULT = 8; // 0x8
     field public static final int EMERGENCY_NUMBER_SOURCE_MODEM_CONFIG = 4; // 0x4
@@ -44902,6 +44980,7 @@ package android.telephony.euicc {
     method public boolean isEnabled();
     method public void startResolutionActivity(android.app.Activity, int, android.content.Intent, android.app.PendingIntent) throws android.content.IntentSender.SendIntentException;
     method public void switchToSubscription(int, android.app.PendingIntent);
+    method public void updateSubscriptionNickname(int, java.lang.String, android.app.PendingIntent);
     field public static final java.lang.String ACTION_MANAGE_EMBEDDED_SUBSCRIPTIONS = "android.telephony.euicc.action.MANAGE_EMBEDDED_SUBSCRIPTIONS";
     field public static final java.lang.String ACTION_NOTIFY_CARRIER_SETUP_INCOMPLETE = "android.telephony.euicc.action.NOTIFY_CARRIER_SETUP_INCOMPLETE";
     field public static final int EMBEDDED_SUBSCRIPTION_RESULT_ERROR = 2; // 0x2
@@ -49114,6 +49193,7 @@ package android.view {
     method public float getAxisValue(int);
     method public float getAxisValue(int, int);
     method public int getButtonState();
+    method public int getClassification();
     method public int getDeviceId();
     method public long getDownTime();
     method public int getEdgeFlags();
@@ -49265,6 +49345,9 @@ package android.view {
     field public static final int BUTTON_STYLUS_PRIMARY = 32; // 0x20
     field public static final int BUTTON_STYLUS_SECONDARY = 64; // 0x40
     field public static final int BUTTON_TERTIARY = 4; // 0x4
+    field public static final int CLASSIFICATION_AMBIGUOUS_GESTURE = 1; // 0x1
+    field public static final int CLASSIFICATION_DEEP_PRESS = 2; // 0x2
+    field public static final int CLASSIFICATION_NONE = 0; // 0x0
     field public static final android.os.Parcelable.Creator<android.view.MotionEvent> CREATOR;
     field public static final int EDGE_BOTTOM = 2; // 0x2
     field public static final int EDGE_LEFT = 4; // 0x4
@@ -52315,6 +52398,8 @@ package android.view.contentcapture {
     method public final android.view.contentcapture.ContentCaptureSession createContentCaptureSession(android.view.contentcapture.ContentCaptureContext);
     method public final void destroy();
     method public final android.view.contentcapture.ContentCaptureSessionId getContentCaptureSessionId();
+    method public android.view.autofill.AutofillId newAutofillId(android.view.autofill.AutofillId, int);
+    method public final android.view.ViewStructure newVirtualViewStructure(android.view.autofill.AutofillId, int);
     method public final void notifyViewAppeared(android.view.ViewStructure);
     method public final void notifyViewDisappeared(android.view.autofill.AutofillId);
     method public final void notifyViewTextChanged(android.view.autofill.AutofillId, java.lang.CharSequence, int);
