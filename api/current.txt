@@ -24521,6 +24521,22 @@ package android.media {
     field public static final int REGULAR_CODECS = 0; // 0x0
   }
 
+  public class MediaController2 implements java.lang.AutoCloseable {
+    ctor public MediaController2(android.content.Context, android.media.Session2Token);
+    ctor public MediaController2(android.content.Context, android.media.Session2Token, java.util.concurrent.Executor, android.media.MediaController2.ControllerCallback);
+    method public void cancelSessionCommand(java.lang.Object);
+    method public void close();
+    method public java.lang.Object sendSessionCommand(android.media.Session2Command, android.os.Bundle);
+  }
+
+  public static abstract class MediaController2.ControllerCallback {
+    ctor public MediaController2.ControllerCallback();
+    method public void onCommandResult(android.media.MediaController2, java.lang.Object, android.media.Session2Command, android.media.Session2Command.Result);
+    method public void onConnected(android.media.MediaController2, android.media.Session2CommandGroup);
+    method public void onDisconnected(android.media.MediaController2);
+    method public android.media.Session2Command.Result onSessionCommand(android.media.MediaController2, android.media.Session2Command, android.os.Bundle);
+  }
+
   public final class MediaCrypto {
     ctor public MediaCrypto(java.util.UUID, byte[]) throws android.media.MediaCryptoException;
     method protected void finalize();
@@ -25820,6 +25836,37 @@ package android.media {
     method public abstract void onScanCompleted(java.lang.String, android.net.Uri);
   }
 
+  public class MediaSession2 implements java.lang.AutoCloseable {
+    method public void broadcastSessionCommand(android.media.Session2Command, android.os.Bundle);
+    method public void cancelSessionCommand(android.media.MediaSession2.ControllerInfo, java.lang.Object);
+    method public void close();
+    method public java.lang.String getSessionId();
+    method public android.media.Session2Token getSessionToken();
+    method public java.lang.Object sendSessionCommand(android.media.MediaSession2.ControllerInfo, android.media.Session2Command, android.os.Bundle);
+  }
+
+  public static final class MediaSession2.Builder {
+    ctor public MediaSession2.Builder(android.content.Context);
+    method public android.media.MediaSession2 build();
+    method public android.media.MediaSession2.Builder setId(java.lang.String);
+    method public android.media.MediaSession2.Builder setSessionActivity(android.app.PendingIntent);
+    method public android.media.MediaSession2.Builder setSessionCallback(java.util.concurrent.Executor, android.media.MediaSession2.SessionCallback);
+  }
+
+  public static final class MediaSession2.ControllerInfo {
+    method public java.lang.String getPackageName();
+    method public android.media.session.MediaSessionManager.RemoteUserInfo getRemoteUserInfo();
+    method public int getUid();
+  }
+
+  public static abstract class MediaSession2.SessionCallback {
+    ctor public MediaSession2.SessionCallback();
+    method public void onCommandResult(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo, java.lang.Object, android.media.Session2Command, android.media.Session2Command.Result);
+    method public android.media.Session2CommandGroup onConnect(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo);
+    method public void onDisconnected(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo);
+    method public android.media.Session2Command.Result onSessionCommand(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo, android.media.Session2Command, android.os.Bundle);
+  }
+
   public final class MediaSync {
     ctor public MediaSync();
     method public android.view.Surface createInputSurface();
@@ -26131,6 +26178,19 @@ package android.media {
     method public android.media.Session2CommandGroup build();
     method public android.media.Session2CommandGroup.Builder removeCommand(android.media.Session2Command);
     method public android.media.Session2CommandGroup.Builder removeCommand(int);
+  }
+
+  public final class Session2Token implements android.os.Parcelable {
+    ctor public Session2Token(android.content.Context, android.content.ComponentName);
+    method public int describeContents();
+    method public java.lang.String getPackageName();
+    method public java.lang.String getServiceName();
+    method public int getType();
+    method public int getUid();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.media.Session2Token> CREATOR;
+    field public static final int TYPE_SESSION = 0; // 0x0
+    field public static final int TYPE_SESSION_SERVICE = 1; // 0x1
   }
 
   public class SoundPool {
