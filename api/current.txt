@@ -25476,6 +25476,7 @@ package android.media {
     method public java.lang.Object setAuxEffectSendLevel(float);
     method public java.lang.Object setDataSource(android.media.DataSourceDesc);
     method public java.lang.Object setDisplay(android.view.SurfaceHolder);
+    method public void setDrmEventCallback(java.util.concurrent.Executor, android.media.MediaPlayer2.DrmEventCallback);
     method public java.lang.Object setNextDataSource(android.media.DataSourceDesc);
     method public java.lang.Object setNextDataSources(java.util.List<android.media.DataSourceDesc>);
     method public java.lang.Object setPlaybackParams(android.media.PlaybackParams);
@@ -25554,6 +25555,33 @@ package android.media {
     field public static final int SEEK_PREVIOUS_SYNC = 0; // 0x0
   }
 
+  public static class MediaPlayer2.DrmEventCallback {
+    ctor public MediaPlayer2.DrmEventCallback();
+    method public void onDrmConfig(android.media.MediaPlayer2, android.media.DataSourceDesc, android.media.MediaDrm);
+    method public android.media.MediaPlayer2.DrmPreparationInfo onDrmInfo(android.media.MediaPlayer2, android.media.DataSourceDesc, android.media.MediaPlayer2.DrmInfo);
+    method public byte[] onDrmKeyRequest(android.media.MediaPlayer2, android.media.DataSourceDesc, android.media.MediaDrm.KeyRequest);
+    method public void onDrmPrepared(android.media.MediaPlayer2, android.media.DataSourceDesc, int, byte[]);
+  }
+
+  public static final class MediaPlayer2.DrmInfo {
+    method public java.util.Map<java.util.UUID, byte[]> getPssh();
+    method public java.util.List<java.util.UUID> getSupportedSchemes();
+  }
+
+  public static final class MediaPlayer2.DrmPreparationInfo {
+  }
+
+  public static final class MediaPlayer2.DrmPreparationInfo.Builder {
+    ctor public MediaPlayer2.DrmPreparationInfo.Builder();
+    method public android.media.MediaPlayer2.DrmPreparationInfo build();
+    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setInitData(byte[]);
+    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setKeySetId(byte[]);
+    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setKeyType(int);
+    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setMimeType(java.lang.String);
+    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setOptionalParameters(java.util.Map<java.lang.String, java.lang.String>);
+    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setUuid(java.util.UUID);
+  }
+
   public static class MediaPlayer2.EventCallback {
     ctor public MediaPlayer2.EventCallback();
     method public void onCallCompleted(android.media.MediaPlayer2, android.media.DataSourceDesc, int, int);
@@ -25579,6 +25607,10 @@ package android.media {
     field public static final java.lang.String MIME_TYPE_VIDEO = "android.media.mediaplayer.video.mime";
     field public static final java.lang.String PLAYING = "android.media.mediaplayer.playingMs";
     field public static final java.lang.String WIDTH = "android.media.mediaplayer.width";
+  }
+
+  public static final class MediaPlayer2.NoDrmSchemeException extends android.media.MediaDrmException {
+    ctor public MediaPlayer2.NoDrmSchemeException(java.lang.String);
   }
 
   public static class MediaPlayer2.TrackInfo {
