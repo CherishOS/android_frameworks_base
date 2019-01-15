@@ -5793,6 +5793,7 @@ package android.app {
     method public java.util.List<android.app.NotificationChannel> getNotificationChannels();
     method @Nullable public String getNotificationDelegate();
     method public android.app.NotificationManager.Policy getNotificationPolicy();
+    method public boolean isNotificationAssistantAccessGranted(android.content.ComponentName);
     method public boolean isNotificationListenerAccessGranted(android.content.ComponentName);
     method public boolean isNotificationPolicyAccessGranted();
     method public void notify(int, android.app.Notification);
@@ -41332,6 +41333,22 @@ package android.service.media {
 
 package android.service.notification {
 
+  public final class Adjustment implements android.os.Parcelable {
+    ctor public Adjustment(String, String, android.os.Bundle, CharSequence, int);
+    method public int describeContents();
+    method public CharSequence getExplanation();
+    method public String getKey();
+    method public String getPackage();
+    method public android.os.Bundle getSignals();
+    method public int getUser();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.notification.Adjustment> CREATOR;
+    field public static final String KEY_IMPORTANCE = "key_importance";
+    field public static final String KEY_SMART_ACTIONS = "key_smart_actions";
+    field public static final String KEY_SMART_REPLIES = "key_smart_replies";
+    field public static final String KEY_USER_SENTIMENT = "key_user_sentiment";
+  }
+
   public final class Condition implements android.os.Parcelable {
     ctor public Condition(android.net.Uri, String, int);
     ctor public Condition(android.net.Uri, String, String, String, int, int, int);
@@ -41376,6 +41393,24 @@ package android.service.notification {
     field @Deprecated public static final String META_DATA_RULE_INSTANCE_LIMIT = "android.service.zen.automatic.ruleInstanceLimit";
     field @Deprecated public static final String META_DATA_RULE_TYPE = "android.service.zen.automatic.ruleType";
     field @Deprecated public static final String SERVICE_INTERFACE = "android.service.notification.ConditionProviderService";
+  }
+
+  public abstract class NotificationAssistantService extends android.service.notification.NotificationListenerService {
+    ctor public NotificationAssistantService();
+    method public final void adjustNotification(android.service.notification.Adjustment);
+    method public final void adjustNotifications(java.util.List<android.service.notification.Adjustment>);
+    method public void onActionInvoked(@NonNull String, @NonNull android.app.Notification.Action, int);
+    method public final android.os.IBinder onBind(android.content.Intent);
+    method public void onNotificationDirectReplied(@NonNull String);
+    method public android.service.notification.Adjustment onNotificationEnqueued(android.service.notification.StatusBarNotification);
+    method public android.service.notification.Adjustment onNotificationEnqueued(android.service.notification.StatusBarNotification, android.app.NotificationChannel);
+    method public void onNotificationExpansionChanged(@NonNull String, boolean, boolean);
+    method public void onNotificationRemoved(android.service.notification.StatusBarNotification, android.service.notification.NotificationListenerService.RankingMap, android.service.notification.NotificationStats, int);
+    method public void onNotificationsSeen(java.util.List<java.lang.String>);
+    method public void onSuggestedReplySent(@NonNull String, @NonNull CharSequence, int);
+    field public static final String SERVICE_INTERFACE = "android.service.notification.NotificationAssistantService";
+    field public static final int SOURCE_FROM_APP = 0; // 0x0
+    field public static final int SOURCE_FROM_ASSISTANT = 1; // 0x1
   }
 
   public abstract class NotificationListenerService extends android.app.Service {
@@ -41458,6 +41493,8 @@ package android.service.notification {
     method public long getLastAudiblyAlertedMillis();
     method public String getOverrideGroupKey();
     method public int getRank();
+    method public java.util.List<android.app.Notification.Action> getSmartActions();
+    method public java.util.List<java.lang.CharSequence> getSmartReplies();
     method public int getSuppressedVisualEffects();
     method public int getUserSentiment();
     method public boolean isAmbient();
@@ -41474,6 +41511,37 @@ package android.service.notification {
     method public boolean getRanking(String, android.service.notification.NotificationListenerService.Ranking);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.notification.NotificationListenerService.RankingMap> CREATOR;
+  }
+
+  public final class NotificationStats implements android.os.Parcelable {
+    ctor public NotificationStats();
+    method public int describeContents();
+    method public int getDismissalSentiment();
+    method public int getDismissalSurface();
+    method public boolean hasDirectReplied();
+    method public boolean hasExpanded();
+    method public boolean hasInteracted();
+    method public boolean hasSeen();
+    method public boolean hasSnoozed();
+    method public boolean hasViewedSettings();
+    method public void setDirectReplied();
+    method public void setDismissalSentiment(int);
+    method public void setDismissalSurface(int);
+    method public void setExpanded();
+    method public void setSeen();
+    method public void setSnoozed();
+    method public void setViewedSettings();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.service.notification.NotificationStats> CREATOR;
+    field public static final int DISMISSAL_AOD = 2; // 0x2
+    field public static final int DISMISSAL_NOT_DISMISSED = -1; // 0xffffffff
+    field public static final int DISMISSAL_OTHER = 0; // 0x0
+    field public static final int DISMISSAL_PEEK = 1; // 0x1
+    field public static final int DISMISSAL_SHADE = 3; // 0x3
+    field public static final int DISMISS_SENTIMENT_NEGATIVE = 0; // 0x0
+    field public static final int DISMISS_SENTIMENT_NEUTRAL = 1; // 0x1
+    field public static final int DISMISS_SENTIMENT_POSITIVE = 2; // 0x2
+    field public static final int DISMISS_SENTIMENT_UNKNOWN = -1000; // 0xfffffc18
   }
 
   public class StatusBarNotification implements android.os.Parcelable {
