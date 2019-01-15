@@ -26099,6 +26099,25 @@ package android.media {
     method public android.os.Bundle getResultData();
   }
 
+  public final class Session2CommandGroup implements android.os.Parcelable {
+    method public int describeContents();
+    method public java.util.Set<android.media.Session2Command> getCommands();
+    method public boolean hasCommand(android.media.Session2Command);
+    method public boolean hasCommand(int);
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.media.Session2CommandGroup> CREATOR;
+  }
+
+  public static final class Session2CommandGroup.Builder {
+    ctor public Session2CommandGroup.Builder();
+    ctor public Session2CommandGroup.Builder(android.media.Session2CommandGroup);
+    method public android.media.Session2CommandGroup.Builder addCommand(android.media.Session2Command);
+    method public android.media.Session2CommandGroup.Builder addCommand(int);
+    method public android.media.Session2CommandGroup build();
+    method public android.media.Session2CommandGroup.Builder removeCommand(android.media.Session2Command);
+    method public android.media.Session2CommandGroup.Builder removeCommand(int);
+  }
+
   public class SoundPool {
     ctor public deprecated SoundPool(int, int, int);
     method public final void autoPause();
@@ -29922,12 +29941,16 @@ package android.net.wifi.aware {
     method public android.net.NetworkSpecifier build();
     method public android.net.wifi.aware.WifiAwareManager.NetworkSpecifierBuilder setDiscoverySession(android.net.wifi.aware.DiscoverySession);
     method public android.net.wifi.aware.WifiAwareManager.NetworkSpecifierBuilder setPeerHandle(android.net.wifi.aware.PeerHandle);
+    method public android.net.wifi.aware.WifiAwareManager.NetworkSpecifierBuilder setPort(int);
     method public android.net.wifi.aware.WifiAwareManager.NetworkSpecifierBuilder setPskPassphrase(java.lang.String);
+    method public android.net.wifi.aware.WifiAwareManager.NetworkSpecifierBuilder setTransportProtocol(int);
   }
 
   public final class WifiAwareNetworkInfo implements android.os.Parcelable android.net.TransportInfo {
     method public int describeContents();
     method public java.net.Inet6Address getPeerIpv6Addr();
+    method public int getPort();
+    method public int getTransportProtocol();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.wifi.aware.WifiAwareNetworkInfo> CREATOR;
   }
@@ -30071,7 +30094,8 @@ package android.net.wifi.p2p {
     method public android.net.wifi.p2p.WifiP2pConfig build();
     method public android.net.wifi.p2p.WifiP2pConfig.Builder enablePersistentMode(boolean);
     method public android.net.wifi.p2p.WifiP2pConfig.Builder setDeviceAddress(android.net.MacAddress);
-    method public android.net.wifi.p2p.WifiP2pConfig.Builder setGroupOwnerBand(int);
+    method public android.net.wifi.p2p.WifiP2pConfig.Builder setGroupOperatingBand(int);
+    method public android.net.wifi.p2p.WifiP2pConfig.Builder setGroupOperatingFrequency(int);
     method public android.net.wifi.p2p.WifiP2pConfig.Builder setNetworkName(java.lang.String);
     method public android.net.wifi.p2p.WifiP2pConfig.Builder setPassphrase(java.lang.String);
   }
@@ -43033,10 +43057,12 @@ package android.telecom {
     field public static final int CAPABILITY_SWAP_CONFERENCE = 8; // 0x8
     field public static final java.lang.String EVENT_CALL_MERGE_FAILED = "android.telecom.event.CALL_MERGE_FAILED";
     field public static final java.lang.String EVENT_CALL_PULL_FAILED = "android.telecom.event.CALL_PULL_FAILED";
+    field public static final java.lang.String EVENT_RTT_AUDIO_INDICATION_CHANGED = "android.telecom.event.RTT_AUDIO_INDICATION_CHANGED";
     field public static final java.lang.String EXTRA_ANSWERING_DROPS_FG_CALL = "android.telecom.extra.ANSWERING_DROPS_FG_CALL";
     field public static final java.lang.String EXTRA_ANSWERING_DROPS_FG_CALL_APP_NAME = "android.telecom.extra.ANSWERING_DROPS_FG_CALL_APP_NAME";
     field public static final java.lang.String EXTRA_CALL_SUBJECT = "android.telecom.extra.CALL_SUBJECT";
     field public static final java.lang.String EXTRA_CHILD_ADDRESS = "android.telecom.extra.CHILD_ADDRESS";
+    field public static final java.lang.String EXTRA_IS_RTT_AUDIO_PRESENT = "android.telecom.extra.IS_RTT_AUDIO_PRESENT";
     field public static final java.lang.String EXTRA_LAST_FORWARDED_NUMBER = "android.telecom.extra.LAST_FORWARDED_NUMBER";
     field public static final java.lang.String EXTRA_SIP_INVITE = "android.telecom.extra.SIP_INVITE";
     field public static final int PROPERTY_HAS_CDMA_VOICE_PRIVACY = 32; // 0x20
@@ -44312,6 +44338,7 @@ package android.telephony {
     method public int describeContents();
     method public int getCdmaDbm();
     method public int getCdmaEcio();
+    method public java.util.List<android.telephony.CellSignalStrength> getCellSignalStrengths();
     method public int getEvdoDbm();
     method public int getEvdoEcio();
     method public int getEvdoSnr();
@@ -44754,6 +44781,9 @@ package android.telephony {
   public static abstract class TelephonyManager.CellInfoCallback {
     ctor public TelephonyManager.CellInfoCallback();
     method public abstract void onCellInfo(java.util.List<android.telephony.CellInfo>);
+    method public void onError(int, java.lang.Throwable);
+    field public static final int ERROR_MODEM_ERROR = 2; // 0x2
+    field public static final int ERROR_TIMEOUT = 1; // 0x1
   }
 
   public static abstract class TelephonyManager.UssdResponseCallback {
