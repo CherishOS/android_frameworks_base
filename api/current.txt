@@ -24176,8 +24176,11 @@ package android.media {
   public static final class MediaCodec.CryptoException extends java.lang.RuntimeException {
     ctor public MediaCodec.CryptoException(int, java.lang.String);
     method public int getErrorCode();
+    field public static final int ERROR_FRAME_TOO_LARGE = 8; // 0x8
     field public static final int ERROR_INSUFFICIENT_OUTPUT_PROTECTION = 4; // 0x4
+    field public static final int ERROR_INSUFFICIENT_SECURITY = 7; // 0x7
     field public static final int ERROR_KEY_EXPIRED = 2; // 0x2
+    field public static final int ERROR_LOST_STATE = 9; // 0x9
     field public static final int ERROR_NO_KEY = 1; // 0x1
     field public static final int ERROR_RESOURCE_BUSY = 3; // 0x3
     field public static final int ERROR_SESSION_NOT_OPENED = 5; // 0x5
@@ -24625,6 +24628,7 @@ package android.media {
     method public void setOnEventListener(android.media.MediaDrm.OnEventListener);
     method public void setOnExpirationUpdateListener(android.media.MediaDrm.OnExpirationUpdateListener, android.os.Handler);
     method public void setOnKeyStatusChangeListener(android.media.MediaDrm.OnKeyStatusChangeListener, android.os.Handler);
+    method public void setOnSessionLostStateListener(android.media.MediaDrm.OnSessionLostStateListener, android.os.Handler);
     method public void setPropertyByteArray(java.lang.String, byte[]);
     method public void setPropertyString(java.lang.String, java.lang.String);
     field public static final deprecated int EVENT_KEY_EXPIRED = 3; // 0x3
@@ -24743,12 +24747,22 @@ package android.media {
     method public abstract void onKeyStatusChange(android.media.MediaDrm, byte[], java.util.List<android.media.MediaDrm.KeyStatus>, boolean);
   }
 
+  public static abstract interface MediaDrm.OnSessionLostStateListener {
+    method public abstract void onSessionLostState(android.media.MediaDrm, byte[]);
+  }
+
   public static final class MediaDrm.ProvisionRequest {
     method public byte[] getData();
     method public java.lang.String getDefaultUrl();
   }
 
   public static abstract class MediaDrm.SecurityLevel implements java.lang.annotation.Annotation {
+  }
+
+  public static final class MediaDrm.SessionException extends java.lang.RuntimeException {
+    ctor public MediaDrm.SessionException(int, java.lang.String);
+    method public int getErrorCode();
+    field public static final int ERROR_RESOURCE_CONTENTION = 1; // 0x1
   }
 
   public class MediaDrmException extends java.lang.Exception {
