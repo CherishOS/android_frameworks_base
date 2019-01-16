@@ -5245,8 +5245,8 @@ package android.app {
     method public android.app.Notification clone();
     method public int describeContents();
     method public boolean getAllowSystemGeneratedContextualActions();
-    method public android.app.PendingIntent getAppOverlayIntent();
     method public int getBadgeIconType();
+    method public android.app.Notification.BubbleMetadata getBubbleMetadata();
     method public java.lang.String getChannelId();
     method public java.lang.String getGroup();
     method public int getGroupAlertBehavior();
@@ -5459,6 +5459,25 @@ package android.app {
     method public android.app.Notification.BigTextStyle setSummaryText(java.lang.CharSequence);
   }
 
+  public static final class Notification.BubbleMetadata implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getDesiredHeight();
+    method public android.graphics.drawable.Icon getIcon();
+    method public android.app.PendingIntent getIntent();
+    method public java.lang.CharSequence getTitle();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.app.Notification.BubbleMetadata> CREATOR;
+  }
+
+  public static class Notification.BubbleMetadata.Builder {
+    ctor public Notification.BubbleMetadata.Builder();
+    method public android.app.Notification.BubbleMetadata build();
+    method public android.app.Notification.BubbleMetadata.Builder setDesiredHeight(int);
+    method public android.app.Notification.BubbleMetadata.Builder setIcon(android.graphics.drawable.Icon);
+    method public android.app.Notification.BubbleMetadata.Builder setIntent(android.app.PendingIntent);
+    method public android.app.Notification.BubbleMetadata.Builder setTitle(java.lang.CharSequence);
+  }
+
   public static class Notification.Builder {
     ctor public Notification.Builder(android.content.Context, java.lang.String);
     ctor public deprecated Notification.Builder(android.content.Context);
@@ -5478,9 +5497,9 @@ package android.app {
     method public static android.app.Notification.Builder recoverBuilder(android.content.Context, android.app.Notification);
     method public android.app.Notification.Builder setActions(android.app.Notification.Action...);
     method public android.app.Notification.Builder setAllowSystemGeneratedContextualActions(boolean);
-    method public android.app.Notification.Builder setAppOverlayIntent(android.app.PendingIntent);
     method public android.app.Notification.Builder setAutoCancel(boolean);
     method public android.app.Notification.Builder setBadgeIconType(int);
+    method public android.app.Notification.Builder setBubbleMetadata(android.app.Notification.BubbleMetadata);
     method public android.app.Notification.Builder setCategory(java.lang.String);
     method public android.app.Notification.Builder setChannelId(java.lang.String);
     method public android.app.Notification.Builder setChronometerCountDown(boolean);
@@ -5695,8 +5714,8 @@ package android.app {
 
   public final class NotificationChannel implements android.os.Parcelable {
     ctor public NotificationChannel(java.lang.String, java.lang.CharSequence, int);
+    method public boolean canBubble();
     method public boolean canBypassDnd();
-    method public boolean canOverlayApps();
     method public boolean canShowBadge();
     method public int describeContents();
     method public void enableLights(boolean);
@@ -5712,7 +5731,7 @@ package android.app {
     method public android.net.Uri getSound();
     method public long[] getVibrationPattern();
     method public boolean hasUserSetImportance();
-    method public void setAllowAppOverlay(boolean);
+    method public void setAllowBubbles(boolean);
     method public void setBypassDnd(boolean);
     method public void setDescription(java.lang.String);
     method public void setGroup(java.lang.String);
@@ -5746,7 +5765,7 @@ package android.app {
 
   public class NotificationManager {
     method public java.lang.String addAutomaticZenRule(android.app.AutomaticZenRule);
-    method public boolean areAppOverlaysAllowed();
+    method public boolean areBubblesAllowed();
     method public boolean areNotificationsEnabled();
     method public boolean canNotifyAsPackage(java.lang.String);
     method public void cancel(int);
@@ -11191,6 +11210,7 @@ package android.content.pm {
     method public void registerCallback(android.content.pm.LauncherApps.Callback);
     method public void registerCallback(android.content.pm.LauncherApps.Callback, android.os.Handler);
     method public android.content.pm.LauncherActivityInfo resolveActivity(android.content.Intent, android.os.UserHandle);
+    method public boolean shouldHideFromSuggestions(java.lang.String, android.os.UserHandle);
     method public void startAppDetailsActivity(android.content.ComponentName, android.os.UserHandle, android.graphics.Rect, android.os.Bundle);
     method public void startMainActivity(android.content.ComponentName, android.os.UserHandle, android.graphics.Rect, android.os.Bundle);
     method public void startShortcut(java.lang.String, java.lang.String, android.graphics.Rect, android.os.Bundle, android.os.UserHandle);
@@ -13736,6 +13756,7 @@ package android.graphics {
     method public void drawTextOnPath(java.lang.String, android.graphics.Path, float, float, android.graphics.Paint);
     method public void drawTextRun(char[], int, int, int, int, float, float, boolean, android.graphics.Paint);
     method public void drawTextRun(java.lang.CharSequence, int, int, int, int, float, float, boolean, android.graphics.Paint);
+    method public void drawTextRun(android.graphics.text.MeasuredText, int, int, int, int, float, float, boolean, android.graphics.Paint);
     method public void drawVertices(android.graphics.Canvas.VertexMode, int, float[], int, float[], int, int[], int, short[], int, int, android.graphics.Paint);
     method public void enableZ();
     method public boolean getClipBounds(android.graphics.Rect);
@@ -22662,6 +22683,7 @@ package android.location {
     method public deprecated double getCarrierPhase();
     method public deprecated double getCarrierPhaseUncertainty();
     method public double getCn0DbHz();
+    method public int getCodeType();
     method public int getConstellationType();
     method public int getMultipathIndicator();
     method public double getPseudorangeRateMetersPerSecond();
@@ -22677,6 +22699,7 @@ package android.location {
     method public boolean hasCarrierFrequencyHz();
     method public deprecated boolean hasCarrierPhase();
     method public deprecated boolean hasCarrierPhaseUncertainty();
+    method public boolean hasCodeType();
     method public boolean hasSnrInDb();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int ADR_STATE_CYCLE_SLIP = 4; // 0x4
@@ -22685,6 +22708,21 @@ package android.location {
     field public static final int ADR_STATE_RESET = 2; // 0x2
     field public static final int ADR_STATE_UNKNOWN = 0; // 0x0
     field public static final int ADR_STATE_VALID = 1; // 0x1
+    field public static final int CODE_TYPE_A = 0; // 0x0
+    field public static final int CODE_TYPE_B = 1; // 0x1
+    field public static final int CODE_TYPE_C = 2; // 0x2
+    field public static final int CODE_TYPE_CODELESS = 13; // 0xd
+    field public static final int CODE_TYPE_I = 3; // 0x3
+    field public static final int CODE_TYPE_L = 4; // 0x4
+    field public static final int CODE_TYPE_M = 5; // 0x5
+    field public static final int CODE_TYPE_P = 6; // 0x6
+    field public static final int CODE_TYPE_Q = 7; // 0x7
+    field public static final int CODE_TYPE_S = 8; // 0x8
+    field public static final int CODE_TYPE_UNKNOWN = -1; // 0xffffffff
+    field public static final int CODE_TYPE_W = 9; // 0x9
+    field public static final int CODE_TYPE_X = 10; // 0xa
+    field public static final int CODE_TYPE_Y = 11; // 0xb
+    field public static final int CODE_TYPE_Z = 12; // 0xc
     field public static final android.os.Parcelable.Creator<android.location.GnssMeasurement> CREATOR;
     field public static final int MULTIPATH_INDICATOR_DETECTED = 1; // 0x1
     field public static final int MULTIPATH_INDICATOR_NOT_DETECTED = 2; // 0x2
@@ -24175,8 +24213,11 @@ package android.media {
   public static final class MediaCodec.CryptoException extends java.lang.RuntimeException {
     ctor public MediaCodec.CryptoException(int, java.lang.String);
     method public int getErrorCode();
+    field public static final int ERROR_FRAME_TOO_LARGE = 8; // 0x8
     field public static final int ERROR_INSUFFICIENT_OUTPUT_PROTECTION = 4; // 0x4
+    field public static final int ERROR_INSUFFICIENT_SECURITY = 7; // 0x7
     field public static final int ERROR_KEY_EXPIRED = 2; // 0x2
+    field public static final int ERROR_LOST_STATE = 9; // 0x9
     field public static final int ERROR_NO_KEY = 1; // 0x1
     field public static final int ERROR_RESOURCE_BUSY = 3; // 0x3
     field public static final int ERROR_SESSION_NOT_OPENED = 5; // 0x5
@@ -24517,6 +24558,22 @@ package android.media {
     field public static final int REGULAR_CODECS = 0; // 0x0
   }
 
+  public class MediaController2 implements java.lang.AutoCloseable {
+    ctor public MediaController2(android.content.Context, android.media.Session2Token);
+    ctor public MediaController2(android.content.Context, android.media.Session2Token, java.util.concurrent.Executor, android.media.MediaController2.ControllerCallback);
+    method public void cancelSessionCommand(java.lang.Object);
+    method public void close();
+    method public java.lang.Object sendSessionCommand(android.media.Session2Command, android.os.Bundle);
+  }
+
+  public static abstract class MediaController2.ControllerCallback {
+    ctor public MediaController2.ControllerCallback();
+    method public void onCommandResult(android.media.MediaController2, java.lang.Object, android.media.Session2Command, android.media.Session2Command.Result);
+    method public void onConnected(android.media.MediaController2, android.media.Session2CommandGroup);
+    method public void onDisconnected(android.media.MediaController2);
+    method public android.media.Session2Command.Result onSessionCommand(android.media.MediaController2, android.media.Session2Command, android.os.Bundle);
+  }
+
   public final class MediaCrypto {
     ctor public MediaCrypto(java.util.UUID, byte[]) throws android.media.MediaCryptoException;
     method protected void finalize();
@@ -24624,6 +24681,7 @@ package android.media {
     method public void setOnEventListener(android.media.MediaDrm.OnEventListener);
     method public void setOnExpirationUpdateListener(android.media.MediaDrm.OnExpirationUpdateListener, android.os.Handler);
     method public void setOnKeyStatusChangeListener(android.media.MediaDrm.OnKeyStatusChangeListener, android.os.Handler);
+    method public void setOnSessionLostStateListener(android.media.MediaDrm.OnSessionLostStateListener, android.os.Handler);
     method public void setPropertyByteArray(java.lang.String, byte[]);
     method public void setPropertyString(java.lang.String, java.lang.String);
     field public static final deprecated int EVENT_KEY_EXPIRED = 3; // 0x3
@@ -24742,12 +24800,22 @@ package android.media {
     method public abstract void onKeyStatusChange(android.media.MediaDrm, byte[], java.util.List<android.media.MediaDrm.KeyStatus>, boolean);
   }
 
+  public static abstract interface MediaDrm.OnSessionLostStateListener {
+    method public abstract void onSessionLostState(android.media.MediaDrm, byte[]);
+  }
+
   public static final class MediaDrm.ProvisionRequest {
     method public byte[] getData();
     method public java.lang.String getDefaultUrl();
   }
 
   public static abstract class MediaDrm.SecurityLevel implements java.lang.annotation.Annotation {
+  }
+
+  public static final class MediaDrm.SessionException extends java.lang.RuntimeException {
+    ctor public MediaDrm.SessionException(int, java.lang.String);
+    method public int getErrorCode();
+    field public static final int ERROR_RESOURCE_CONTENTION = 1; // 0x1
   }
 
   public class MediaDrmException extends java.lang.Exception {
@@ -25408,6 +25476,7 @@ package android.media {
     method public java.lang.Object setAuxEffectSendLevel(float);
     method public java.lang.Object setDataSource(android.media.DataSourceDesc);
     method public java.lang.Object setDisplay(android.view.SurfaceHolder);
+    method public void setDrmEventCallback(java.util.concurrent.Executor, android.media.MediaPlayer2.DrmEventCallback);
     method public java.lang.Object setNextDataSource(android.media.DataSourceDesc);
     method public java.lang.Object setNextDataSources(java.util.List<android.media.DataSourceDesc>);
     method public java.lang.Object setPlaybackParams(android.media.PlaybackParams);
@@ -25486,6 +25555,33 @@ package android.media {
     field public static final int SEEK_PREVIOUS_SYNC = 0; // 0x0
   }
 
+  public static class MediaPlayer2.DrmEventCallback {
+    ctor public MediaPlayer2.DrmEventCallback();
+    method public void onDrmConfig(android.media.MediaPlayer2, android.media.DataSourceDesc, android.media.MediaDrm);
+    method public android.media.MediaPlayer2.DrmPreparationInfo onDrmInfo(android.media.MediaPlayer2, android.media.DataSourceDesc, android.media.MediaPlayer2.DrmInfo);
+    method public byte[] onDrmKeyRequest(android.media.MediaPlayer2, android.media.DataSourceDesc, android.media.MediaDrm.KeyRequest);
+    method public void onDrmPrepared(android.media.MediaPlayer2, android.media.DataSourceDesc, int, byte[]);
+  }
+
+  public static final class MediaPlayer2.DrmInfo {
+    method public java.util.Map<java.util.UUID, byte[]> getPssh();
+    method public java.util.List<java.util.UUID> getSupportedSchemes();
+  }
+
+  public static final class MediaPlayer2.DrmPreparationInfo {
+  }
+
+  public static final class MediaPlayer2.DrmPreparationInfo.Builder {
+    ctor public MediaPlayer2.DrmPreparationInfo.Builder();
+    method public android.media.MediaPlayer2.DrmPreparationInfo build();
+    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setInitData(byte[]);
+    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setKeySetId(byte[]);
+    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setKeyType(int);
+    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setMimeType(java.lang.String);
+    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setOptionalParameters(java.util.Map<java.lang.String, java.lang.String>);
+    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setUuid(java.util.UUID);
+  }
+
   public static class MediaPlayer2.EventCallback {
     ctor public MediaPlayer2.EventCallback();
     method public void onCallCompleted(android.media.MediaPlayer2, android.media.DataSourceDesc, int, int);
@@ -25511,6 +25607,10 @@ package android.media {
     field public static final java.lang.String MIME_TYPE_VIDEO = "android.media.mediaplayer.video.mime";
     field public static final java.lang.String PLAYING = "android.media.mediaplayer.playingMs";
     field public static final java.lang.String WIDTH = "android.media.mediaplayer.width";
+  }
+
+  public static final class MediaPlayer2.NoDrmSchemeException extends android.media.MediaDrmException {
+    ctor public MediaPlayer2.NoDrmSchemeException(java.lang.String);
   }
 
   public static class MediaPlayer2.TrackInfo {
@@ -25803,6 +25903,37 @@ package android.media {
 
   public static abstract interface MediaScannerConnection.OnScanCompletedListener {
     method public abstract void onScanCompleted(java.lang.String, android.net.Uri);
+  }
+
+  public class MediaSession2 implements java.lang.AutoCloseable {
+    method public void broadcastSessionCommand(android.media.Session2Command, android.os.Bundle);
+    method public void cancelSessionCommand(android.media.MediaSession2.ControllerInfo, java.lang.Object);
+    method public void close();
+    method public java.lang.String getSessionId();
+    method public android.media.Session2Token getSessionToken();
+    method public java.lang.Object sendSessionCommand(android.media.MediaSession2.ControllerInfo, android.media.Session2Command, android.os.Bundle);
+  }
+
+  public static final class MediaSession2.Builder {
+    ctor public MediaSession2.Builder(android.content.Context);
+    method public android.media.MediaSession2 build();
+    method public android.media.MediaSession2.Builder setId(java.lang.String);
+    method public android.media.MediaSession2.Builder setSessionActivity(android.app.PendingIntent);
+    method public android.media.MediaSession2.Builder setSessionCallback(java.util.concurrent.Executor, android.media.MediaSession2.SessionCallback);
+  }
+
+  public static final class MediaSession2.ControllerInfo {
+    method public java.lang.String getPackageName();
+    method public android.media.session.MediaSessionManager.RemoteUserInfo getRemoteUserInfo();
+    method public int getUid();
+  }
+
+  public static abstract class MediaSession2.SessionCallback {
+    ctor public MediaSession2.SessionCallback();
+    method public void onCommandResult(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo, java.lang.Object, android.media.Session2Command, android.media.Session2Command.Result);
+    method public android.media.Session2CommandGroup onConnect(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo);
+    method public void onDisconnected(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo);
+    method public android.media.Session2Command.Result onSessionCommand(android.media.MediaSession2, android.media.MediaSession2.ControllerInfo, android.media.Session2Command, android.os.Bundle);
   }
 
   public final class MediaSync {
@@ -26116,6 +26247,19 @@ package android.media {
     method public android.media.Session2CommandGroup build();
     method public android.media.Session2CommandGroup.Builder removeCommand(android.media.Session2Command);
     method public android.media.Session2CommandGroup.Builder removeCommand(int);
+  }
+
+  public final class Session2Token implements android.os.Parcelable {
+    ctor public Session2Token(android.content.Context, android.content.ComponentName);
+    method public int describeContents();
+    method public java.lang.String getPackageName();
+    method public java.lang.String getServiceName();
+    method public int getType();
+    method public int getUid();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.media.Session2Token> CREATOR;
+    field public static final int TYPE_SESSION = 0; // 0x0
+    field public static final int TYPE_SESSION_SERVICE = 1; // 0x1
   }
 
   public class SoundPool {
@@ -29649,8 +29793,10 @@ package android.net.wifi {
     method public java.lang.String getMacAddress();
     method public int getNetworkId();
     method public int getRssi();
+    method public int getRxLinkSpeedMbps();
     method public java.lang.String getSSID();
     method public android.net.wifi.SupplicantState getSupplicantState();
+    method public int getTxLinkSpeedMbps();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final java.lang.String FREQUENCY_UNITS = "MHz";
     field public static final java.lang.String LINK_SPEED_UNITS = "Mbps";
@@ -45003,6 +45149,7 @@ package android.telephony.euicc {
   }
 
   public class EuiccManager {
+    method public android.telephony.euicc.EuiccManager createForCardId(int);
     method public void deleteSubscription(int, android.app.PendingIntent);
     method public void downloadSubscription(android.telephony.euicc.DownloadableSubscription, boolean, android.app.PendingIntent);
     method public java.lang.String getEid();
@@ -47005,7 +47152,7 @@ package android.text.util {
   public class Linkify {
     ctor public Linkify();
     method public static final boolean addLinks(android.text.Spannable, int);
-    method public static final boolean addLinks(android.text.Spannable, int, android.text.util.Linkify.UrlSpanFactory);
+    method public static final boolean addLinks(android.text.Spannable, int, java.util.function.Function<java.lang.String, android.text.style.URLSpan>);
     method public static final boolean addLinks(android.widget.TextView, int);
     method public static final void addLinks(android.widget.TextView, java.util.regex.Pattern, java.lang.String);
     method public static final void addLinks(android.widget.TextView, java.util.regex.Pattern, java.lang.String, android.text.util.Linkify.MatchFilter, android.text.util.Linkify.TransformFilter);
@@ -47013,7 +47160,7 @@ package android.text.util {
     method public static final boolean addLinks(android.text.Spannable, java.util.regex.Pattern, java.lang.String);
     method public static final boolean addLinks(android.text.Spannable, java.util.regex.Pattern, java.lang.String, android.text.util.Linkify.MatchFilter, android.text.util.Linkify.TransformFilter);
     method public static final boolean addLinks(android.text.Spannable, java.util.regex.Pattern, java.lang.String, java.lang.String[], android.text.util.Linkify.MatchFilter, android.text.util.Linkify.TransformFilter);
-    method public static final boolean addLinks(android.text.Spannable, java.util.regex.Pattern, java.lang.String, java.lang.String[], android.text.util.Linkify.MatchFilter, android.text.util.Linkify.TransformFilter, android.text.util.Linkify.UrlSpanFactory);
+    method public static final boolean addLinks(android.text.Spannable, java.util.regex.Pattern, java.lang.String, java.lang.String[], android.text.util.Linkify.MatchFilter, android.text.util.Linkify.TransformFilter, java.util.function.Function<java.lang.String, android.text.style.URLSpan>);
     field public static final int ALL = 15; // 0xf
     field public static final int EMAIL_ADDRESSES = 2; // 0x2
     field public static final deprecated int MAP_ADDRESSES = 8; // 0x8
@@ -47030,11 +47177,6 @@ package android.text.util {
 
   public static abstract interface Linkify.TransformFilter {
     method public abstract java.lang.String transformUrl(java.util.regex.Matcher, java.lang.String);
-  }
-
-  public static class Linkify.UrlSpanFactory {
-    ctor public Linkify.UrlSpanFactory();
-    method public android.text.style.URLSpan create(java.lang.String);
   }
 
   public class Rfc822Token {
@@ -52940,15 +53082,15 @@ package android.view.inspector {
 
 package android.view.textclassifier {
 
-  public final class ConversationActions implements android.os.Parcelable {
-    ctor public ConversationActions(java.util.List<android.view.textclassifier.ConversationActions.ConversationAction>, java.lang.String);
+  public final class ConversationAction implements android.os.Parcelable {
     method public int describeContents();
-    method public java.util.List<android.view.textclassifier.ConversationActions.ConversationAction> getConversationActions();
-    method public java.lang.String getId();
+    method public android.app.RemoteAction getAction();
+    method public float getConfidenceScore();
+    method public android.os.Bundle getExtras();
+    method public java.lang.CharSequence getTextReply();
+    method public java.lang.String getType();
     method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions> CREATOR;
-    field public static final java.lang.String HINT_FOR_IN_APP = "in_app";
-    field public static final java.lang.String HINT_FOR_NOTIFICATION = "notification";
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationAction> CREATOR;
     field public static final java.lang.String TYPE_CALL_PHONE = "call_phone";
     field public static final java.lang.String TYPE_CREATE_REMINDER = "create_reminder";
     field public static final java.lang.String TYPE_OPEN_URL = "open_url";
@@ -52961,24 +53103,22 @@ package android.view.textclassifier {
     field public static final java.lang.String TYPE_VIEW_MAP = "view_map";
   }
 
-  public static final class ConversationActions.ConversationAction implements android.os.Parcelable {
-    method public int describeContents();
-    method public android.app.RemoteAction getAction();
-    method public float getConfidenceScore();
-    method public android.os.Bundle getExtras();
-    method public java.lang.CharSequence getTextReply();
-    method public java.lang.String getType();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions.ConversationAction> CREATOR;
+  public static final class ConversationAction.Builder {
+    ctor public ConversationAction.Builder(java.lang.String);
+    method public android.view.textclassifier.ConversationAction build();
+    method public android.view.textclassifier.ConversationAction.Builder setAction(android.app.RemoteAction);
+    method public android.view.textclassifier.ConversationAction.Builder setConfidenceScore(float);
+    method public android.view.textclassifier.ConversationAction.Builder setExtras(android.os.Bundle);
+    method public android.view.textclassifier.ConversationAction.Builder setTextReply(java.lang.CharSequence);
   }
 
-  public static final class ConversationActions.ConversationAction.Builder {
-    ctor public ConversationActions.ConversationAction.Builder(java.lang.String);
-    method public android.view.textclassifier.ConversationActions.ConversationAction build();
-    method public android.view.textclassifier.ConversationActions.ConversationAction.Builder setAction(android.app.RemoteAction);
-    method public android.view.textclassifier.ConversationActions.ConversationAction.Builder setConfidenceScore(float);
-    method public android.view.textclassifier.ConversationActions.ConversationAction.Builder setExtras(android.os.Bundle);
-    method public android.view.textclassifier.ConversationActions.ConversationAction.Builder setTextReply(java.lang.CharSequence);
+  public final class ConversationActions implements android.os.Parcelable {
+    ctor public ConversationActions(java.util.List<android.view.textclassifier.ConversationAction>, java.lang.String);
+    method public int describeContents();
+    method public java.util.List<android.view.textclassifier.ConversationAction> getConversationActions();
+    method public java.lang.String getId();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions> CREATOR;
   }
 
   public static final class ConversationActions.Message implements android.os.Parcelable {
@@ -53008,9 +53148,11 @@ package android.view.textclassifier {
     method public java.lang.String getConversationId();
     method public java.util.List<java.lang.String> getHints();
     method public int getMaxSuggestions();
-    method public android.view.textclassifier.ConversationActions.TypeConfig getTypeConfig();
+    method public android.view.textclassifier.TextClassifier.EntityConfig getTypeConfig();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions.Request> CREATOR;
+    field public static final java.lang.String HINT_FOR_IN_APP = "in_app";
+    field public static final java.lang.String HINT_FOR_NOTIFICATION = "notification";
   }
 
   public static final class ConversationActions.Request.Builder {
@@ -53019,23 +53161,7 @@ package android.view.textclassifier {
     method public android.view.textclassifier.ConversationActions.Request.Builder setConversationId(java.lang.String);
     method public android.view.textclassifier.ConversationActions.Request.Builder setHints(java.util.List<java.lang.String>);
     method public android.view.textclassifier.ConversationActions.Request.Builder setMaxSuggestions(int);
-    method public android.view.textclassifier.ConversationActions.Request.Builder setTypeConfig(android.view.textclassifier.ConversationActions.TypeConfig);
-  }
-
-  public static final class ConversationActions.TypeConfig implements android.os.Parcelable {
-    method public int describeContents();
-    method public java.util.Collection<java.lang.String> resolveTypes(java.util.Collection<java.lang.String>);
-    method public boolean shouldIncludeTypesFromTextClassifier();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions.TypeConfig> CREATOR;
-  }
-
-  public static final class ConversationActions.TypeConfig.Builder {
-    ctor public ConversationActions.TypeConfig.Builder();
-    method public android.view.textclassifier.ConversationActions.TypeConfig build();
-    method public android.view.textclassifier.ConversationActions.TypeConfig.Builder includeTypesFromTextClassifier(boolean);
-    method public android.view.textclassifier.ConversationActions.TypeConfig.Builder setExcludedTypes(java.util.Collection<java.lang.String>);
-    method public android.view.textclassifier.ConversationActions.TypeConfig.Builder setIncludedTypes(java.util.Collection<java.lang.String>);
+    method public android.view.textclassifier.ConversationActions.Request.Builder setTypeConfig(android.view.textclassifier.TextClassifier.EntityConfig);
   }
 
   public final class SelectionEvent implements android.os.Parcelable {
@@ -53209,14 +53335,24 @@ package android.view.textclassifier {
   }
 
   public static final class TextClassifier.EntityConfig implements android.os.Parcelable {
-    method public static android.view.textclassifier.TextClassifier.EntityConfig create(java.util.Collection<java.lang.String>, java.util.Collection<java.lang.String>, java.util.Collection<java.lang.String>);
-    method public static android.view.textclassifier.TextClassifier.EntityConfig createWithExplicitEntityList(java.util.Collection<java.lang.String>);
-    method public static android.view.textclassifier.TextClassifier.EntityConfig createWithHints(java.util.Collection<java.lang.String>);
+    method public static deprecated android.view.textclassifier.TextClassifier.EntityConfig create(java.util.Collection<java.lang.String>, java.util.Collection<java.lang.String>, java.util.Collection<java.lang.String>);
+    method public static deprecated android.view.textclassifier.TextClassifier.EntityConfig createWithExplicitEntityList(java.util.Collection<java.lang.String>);
+    method public static deprecated android.view.textclassifier.TextClassifier.EntityConfig createWithHints(java.util.Collection<java.lang.String>);
     method public int describeContents();
     method public java.util.Collection<java.lang.String> getHints();
     method public java.util.Collection<java.lang.String> resolveEntityListModifications(java.util.Collection<java.lang.String>);
+    method public boolean shouldIncludeTypesFromTextClassifier();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassifier.EntityConfig> CREATOR;
+  }
+
+  public static final class TextClassifier.EntityConfig.Builder {
+    ctor public TextClassifier.EntityConfig.Builder();
+    method public android.view.textclassifier.TextClassifier.EntityConfig build();
+    method public android.view.textclassifier.TextClassifier.EntityConfig.Builder includeTypesFromTextClassifier(boolean);
+    method public android.view.textclassifier.TextClassifier.EntityConfig.Builder setExcludedTypes(java.util.Collection<java.lang.String>);
+    method public android.view.textclassifier.TextClassifier.EntityConfig.Builder setHints(java.util.Collection<java.lang.String>);
+    method public android.view.textclassifier.TextClassifier.EntityConfig.Builder setIncludedTypes(java.util.Collection<java.lang.String>);
   }
 
   public final class TextClassifierEvent implements android.os.Parcelable {
