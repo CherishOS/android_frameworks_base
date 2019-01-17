@@ -6784,9 +6784,11 @@ package android.app.admin {
     method public void wipeData(int);
     method public void wipeData(int, java.lang.CharSequence);
     field public static final java.lang.String ACTION_ADD_DEVICE_ADMIN = "android.app.action.ADD_DEVICE_ADMIN";
+    field public static final java.lang.String ACTION_ADMIN_POLICY_COMPLIANCE = "android.app.action.ADMIN_POLICY_COMPLIANCE";
     field public static final java.lang.String ACTION_APPLICATION_DELEGATION_SCOPES_CHANGED = "android.app.action.APPLICATION_DELEGATION_SCOPES_CHANGED";
     field public static final java.lang.String ACTION_DEVICE_ADMIN_SERVICE = "android.app.action.DEVICE_ADMIN_SERVICE";
     field public static final java.lang.String ACTION_DEVICE_OWNER_CHANGED = "android.app.action.DEVICE_OWNER_CHANGED";
+    field public static final java.lang.String ACTION_GET_PROVISIONING_MODE = "android.app.action.GET_PROVISIONING_MODE";
     field public static final java.lang.String ACTION_MANAGED_PROFILE_PROVISIONED = "android.app.action.MANAGED_PROFILE_PROVISIONED";
     field public static final java.lang.String ACTION_PROFILE_OWNER_CHANGED = "android.app.action.PROFILE_OWNER_CHANGED";
     field public static final java.lang.String ACTION_PROVISIONING_SUCCESSFUL = "android.app.action.PROVISIONING_SUCCESSFUL";
@@ -6829,12 +6831,15 @@ package android.app.admin {
     field public static final java.lang.String EXTRA_PROVISIONING_DISCLAIMER_CONTENT = "android.app.extra.PROVISIONING_DISCLAIMER_CONTENT";
     field public static final java.lang.String EXTRA_PROVISIONING_DISCLAIMER_HEADER = "android.app.extra.PROVISIONING_DISCLAIMER_HEADER";
     field public static final deprecated java.lang.String EXTRA_PROVISIONING_EMAIL_ADDRESS = "android.app.extra.PROVISIONING_EMAIL_ADDRESS";
+    field public static final java.lang.String EXTRA_PROVISIONING_IMEI = "android.app.extra.PROVISIONING_IMEI";
     field public static final java.lang.String EXTRA_PROVISIONING_KEEP_ACCOUNT_ON_MIGRATION = "android.app.extra.PROVISIONING_KEEP_ACCOUNT_ON_MIGRATION";
     field public static final java.lang.String EXTRA_PROVISIONING_LEAVE_ALL_SYSTEM_APPS_ENABLED = "android.app.extra.PROVISIONING_LEAVE_ALL_SYSTEM_APPS_ENABLED";
     field public static final java.lang.String EXTRA_PROVISIONING_LOCALE = "android.app.extra.PROVISIONING_LOCALE";
     field public static final java.lang.String EXTRA_PROVISIONING_LOCAL_TIME = "android.app.extra.PROVISIONING_LOCAL_TIME";
     field public static final java.lang.String EXTRA_PROVISIONING_LOGO_URI = "android.app.extra.PROVISIONING_LOGO_URI";
     field public static final java.lang.String EXTRA_PROVISIONING_MAIN_COLOR = "android.app.extra.PROVISIONING_MAIN_COLOR";
+    field public static final java.lang.String EXTRA_PROVISIONING_MODE = "android.app.extra.PROVISIONING_MODE";
+    field public static final java.lang.String EXTRA_PROVISIONING_SERIAL_NUMBER = "android.app.extra.PROVISIONING_SERIAL_NUMBER";
     field public static final java.lang.String EXTRA_PROVISIONING_SKIP_ENCRYPTION = "android.app.extra.PROVISIONING_SKIP_ENCRYPTION";
     field public static final java.lang.String EXTRA_PROVISIONING_SKIP_USER_CONSENT = "android.app.extra.PROVISIONING_SKIP_USER_CONSENT";
     field public static final java.lang.String EXTRA_PROVISIONING_TIME_ZONE = "android.app.extra.PROVISIONING_TIME_ZONE";
@@ -6911,6 +6916,9 @@ package android.app.admin {
     field public static final int PRIVATE_DNS_SET_ERROR_FAILURE_SETTING = 2; // 0x2
     field public static final int PRIVATE_DNS_SET_ERROR_HOST_NOT_SERVING = 1; // 0x1
     field public static final int PRIVATE_DNS_SET_SUCCESS = 0; // 0x0
+    field public static final int PROVISIONING_MODE_FULLY_MANAGED_DEVICE = 1; // 0x1
+    field public static final int PROVISIONING_MODE_MANAGED_PROFILE = 2; // 0x2
+    field public static final int PROVISIONING_MODE_MANAGED_PROFILE_ON_FULLY_MANAGED_DEVICE = 3; // 0x3
     field public static final int RESET_PASSWORD_DO_NOT_ASK_CREDENTIALS_ON_BOOT = 2; // 0x2
     field public static final int RESET_PASSWORD_REQUIRE_ENTRY = 1; // 0x1
     field public static final int SKIP_SETUP_WIZARD = 1; // 0x1
@@ -7682,6 +7690,7 @@ package android.app.usage {
     field public static final int ACTIVITY_RESUMED = 1; // 0x1
     field public static final int ACTIVITY_STOPPED = 23; // 0x17
     field public static final int CONFIGURATION_CHANGE = 5; // 0x5
+    field public static final int DEVICE_SHUTDOWN = 26; // 0x1a
     field public static final int FOREGROUND_SERVICE_START = 19; // 0x13
     field public static final int FOREGROUND_SERVICE_STOP = 20; // 0x14
     field public static final int KEYGUARD_HIDDEN = 18; // 0x12
@@ -12324,6 +12333,7 @@ package android.content.res {
     method public java.lang.String getPositionDescription();
     method public int getResourceId(int, int);
     method public android.content.res.Resources getResources();
+    method public int getSourceStyleResourceId(int, int);
     method public java.lang.String getString(int);
     method public java.lang.CharSequence getText(int);
     method public java.lang.CharSequence[] getTextArray(int);
@@ -16457,9 +16467,9 @@ package android.hardware.biometrics {
 
   public class BiometricManager {
     method public int canAuthenticate();
-    field public static final int BIOMETRIC_ERROR_NO_BIOMETRICS = 11; // 0xb
+    field public static final int BIOMETRIC_ERROR_HW_UNAVAILABLE = 1; // 0x1
+    field public static final int BIOMETRIC_ERROR_NONE_ENROLLED = 11; // 0xb
     field public static final int BIOMETRIC_ERROR_NO_HARDWARE = 12; // 0xc
-    field public static final int BIOMETRIC_ERROR_UNAVAILABLE = 1; // 0x1
     field public static final int BIOMETRIC_SUCCESS = 0; // 0x0
   }
 
@@ -16502,6 +16512,7 @@ package android.hardware.biometrics {
     method public android.hardware.biometrics.BiometricPrompt build();
     method public android.hardware.biometrics.BiometricPrompt.Builder setDescription(java.lang.CharSequence);
     method public android.hardware.biometrics.BiometricPrompt.Builder setNegativeButton(java.lang.CharSequence, java.util.concurrent.Executor, android.content.DialogInterface.OnClickListener);
+    method public android.hardware.biometrics.BiometricPrompt.Builder setRequireConfirmation(boolean);
     method public android.hardware.biometrics.BiometricPrompt.Builder setSubtitle(java.lang.CharSequence);
     method public android.hardware.biometrics.BiometricPrompt.Builder setTitle(java.lang.CharSequence);
   }
@@ -24362,6 +24373,33 @@ package android.media {
     field public static final int AACObjectSSR = 3; // 0x3
     field public static final int AACObjectScalable = 6; // 0x6
     field public static final int AACObjectXHE = 42; // 0x2a
+    field public static final int AV1Level2 = 1; // 0x1
+    field public static final int AV1Level21 = 2; // 0x2
+    field public static final int AV1Level22 = 4; // 0x4
+    field public static final int AV1Level23 = 8; // 0x8
+    field public static final int AV1Level3 = 16; // 0x10
+    field public static final int AV1Level31 = 32; // 0x20
+    field public static final int AV1Level32 = 64; // 0x40
+    field public static final int AV1Level33 = 128; // 0x80
+    field public static final int AV1Level4 = 256; // 0x100
+    field public static final int AV1Level41 = 512; // 0x200
+    field public static final int AV1Level42 = 1024; // 0x400
+    field public static final int AV1Level43 = 2048; // 0x800
+    field public static final int AV1Level5 = 4096; // 0x1000
+    field public static final int AV1Level51 = 8192; // 0x2000
+    field public static final int AV1Level52 = 16384; // 0x4000
+    field public static final int AV1Level53 = 32768; // 0x8000
+    field public static final int AV1Level6 = 65536; // 0x10000
+    field public static final int AV1Level61 = 131072; // 0x20000
+    field public static final int AV1Level62 = 262144; // 0x40000
+    field public static final int AV1Level63 = 524288; // 0x80000
+    field public static final int AV1Level7 = 1048576; // 0x100000
+    field public static final int AV1Level71 = 2097152; // 0x200000
+    field public static final int AV1Level72 = 4194304; // 0x400000
+    field public static final int AV1Level73 = 8388608; // 0x800000
+    field public static final int AV1Profile0 = 1; // 0x1
+    field public static final int AV1Profile1 = 2; // 0x2
+    field public static final int AV1Profile2 = 4; // 0x4
     field public static final int AVCLevel1 = 1; // 0x1
     field public static final int AVCLevel11 = 4; // 0x4
     field public static final int AVCLevel12 = 8; // 0x8
@@ -24379,6 +24417,9 @@ package android.media {
     field public static final int AVCLevel5 = 16384; // 0x4000
     field public static final int AVCLevel51 = 32768; // 0x8000
     field public static final int AVCLevel52 = 65536; // 0x10000
+    field public static final int AVCLevel6 = 131072; // 0x20000
+    field public static final int AVCLevel61 = 262144; // 0x40000
+    field public static final int AVCLevel62 = 524288; // 0x80000
     field public static final int AVCProfileBaseline = 1; // 0x1
     field public static final int AVCProfileConstrainedBaseline = 65536; // 0x10000
     field public static final int AVCProfileConstrainedHigh = 524288; // 0x80000
@@ -24999,6 +25040,7 @@ package android.media {
     field public static final java.lang.String MIMETYPE_TEXT_CEA_708 = "text/cea-708";
     field public static final java.lang.String MIMETYPE_TEXT_SUBRIP = "application/x-subrip";
     field public static final java.lang.String MIMETYPE_TEXT_VTT = "text/vtt";
+    field public static final java.lang.String MIMETYPE_VIDEO_AV1 = "video/av01";
     field public static final java.lang.String MIMETYPE_VIDEO_AVC = "video/avc";
     field public static final java.lang.String MIMETYPE_VIDEO_DOLBY_VISION = "video/dolby-vision";
     field public static final java.lang.String MIMETYPE_VIDEO_H263 = "video/3gpp";
@@ -25704,6 +25746,7 @@ package android.media {
     field public static final int VOICE_CALL = 4; // 0x4
     field public static final int VOICE_COMMUNICATION = 7; // 0x7
     field public static final int VOICE_DOWNLINK = 3; // 0x3
+    field public static final int VOICE_PERFORMANCE = 10; // 0xa
     field public static final int VOICE_RECOGNITION = 6; // 0x6
     field public static final int VOICE_UPLINK = 2; // 0x2
   }
@@ -41735,6 +41778,7 @@ package android.service.voice {
     field public static final int SHOW_SOURCE_ACTIVITY = 16; // 0x10
     field public static final int SHOW_SOURCE_APPLICATION = 8; // 0x8
     field public static final int SHOW_SOURCE_ASSIST_GESTURE = 4; // 0x4
+    field public static final int SHOW_SOURCE_AUTOMOTIVE_SYSTEM_UI = 128; // 0x80
     field public static final int SHOW_SOURCE_NOTIFICATION = 64; // 0x40
     field public static final int SHOW_SOURCE_PUSH_TO_TALK = 32; // 0x20
     field public static final int SHOW_WITH_ASSIST = 1; // 0x1
@@ -48251,6 +48295,7 @@ package android.util {
     field public int data;
     field public int density;
     field public int resourceId;
+    field public int sourceStyleResourceId;
     field public java.lang.CharSequence string;
     field public int type;
   }
@@ -53012,19 +53057,8 @@ package android.view.inspector {
     ctor public InspectionCompanion.UninitializedPropertyMapException();
   }
 
-  public final class IntEnumMapping {
-    method public java.lang.String nameOf(int);
-  }
-
-  public static final class IntEnumMapping.Builder {
-    ctor public IntEnumMapping.Builder();
-    method public android.view.inspector.IntEnumMapping.Builder addValue(java.lang.String, int);
-    method public android.view.inspector.IntEnumMapping build();
-    method public void clear();
-  }
-
   public final class IntFlagMapping {
-    method public java.lang.String[] namesOf(int);
+    method public java.util.Set<java.lang.String> get(int);
   }
 
   public static final class IntFlagMapping.Builder {
@@ -53032,7 +53066,6 @@ package android.view.inspector {
     method public android.view.inspector.IntFlagMapping.Builder addFlag(java.lang.String, int);
     method public android.view.inspector.IntFlagMapping.Builder addFlag(java.lang.String, int, int);
     method public android.view.inspector.IntFlagMapping build();
-    method public void clear();
   }
 
   public abstract interface PropertyMapper {
@@ -53044,7 +53077,7 @@ package android.view.inspector {
     method public abstract int mapFloat(java.lang.String, int);
     method public abstract int mapGravity(java.lang.String, int);
     method public abstract int mapInt(java.lang.String, int);
-    method public abstract int mapIntEnum(java.lang.String, int, android.view.inspector.IntEnumMapping);
+    method public abstract int mapIntEnum(java.lang.String, int, android.util.SparseArray<java.lang.String>);
     method public abstract int mapIntFlag(java.lang.String, int, android.view.inspector.IntFlagMapping);
     method public abstract int mapLong(java.lang.String, int);
     method public abstract int mapObject(java.lang.String, int);
@@ -54251,6 +54284,8 @@ package android.webkit {
     method public static java.lang.ClassLoader getWebViewClassLoader();
     method public android.webkit.WebViewClient getWebViewClient();
     method public android.os.Looper getWebViewLooper();
+    method public android.webkit.WebViewRenderer getWebViewRenderer();
+    method public android.webkit.WebViewRendererClient getWebViewRendererClient();
     method public void goBack();
     method public void goBackOrForward(int);
     method public void goForward();
@@ -54300,6 +54335,8 @@ package android.webkit {
     method public void setWebChromeClient(android.webkit.WebChromeClient);
     method public static void setWebContentsDebuggingEnabled(boolean);
     method public void setWebViewClient(android.webkit.WebViewClient);
+    method public void setWebViewRendererClient(java.util.concurrent.Executor, android.webkit.WebViewRendererClient);
+    method public void setWebViewRendererClient(android.webkit.WebViewRendererClient);
     method public deprecated boolean shouldDelayChildPressedState();
     method public deprecated boolean showFindDialog(java.lang.String, boolean);
     method public static void startSafeBrowsing(android.content.Context, android.webkit.ValueCallback<java.lang.Boolean>);
@@ -54413,6 +54450,16 @@ package android.webkit {
   public deprecated class WebViewFragment extends android.app.Fragment {
     ctor public WebViewFragment();
     method public android.webkit.WebView getWebView();
+  }
+
+  public abstract class WebViewRenderer {
+    method public abstract boolean terminate();
+  }
+
+  public abstract class WebViewRendererClient {
+    ctor public WebViewRendererClient();
+    method public abstract void onRendererResponsive(android.webkit.WebView, android.webkit.WebViewRenderer);
+    method public abstract void onRendererUnresponsive(android.webkit.WebView, android.webkit.WebViewRenderer);
   }
 
 }
