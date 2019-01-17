@@ -54253,6 +54253,8 @@ package android.webkit {
     method public static java.lang.ClassLoader getWebViewClassLoader();
     method public android.webkit.WebViewClient getWebViewClient();
     method public android.os.Looper getWebViewLooper();
+    method public android.webkit.WebViewRenderer getWebViewRenderer();
+    method public android.webkit.WebViewRendererClient getWebViewRendererClient();
     method public void goBack();
     method public void goBackOrForward(int);
     method public void goForward();
@@ -54302,6 +54304,8 @@ package android.webkit {
     method public void setWebChromeClient(android.webkit.WebChromeClient);
     method public static void setWebContentsDebuggingEnabled(boolean);
     method public void setWebViewClient(android.webkit.WebViewClient);
+    method public void setWebViewRendererClient(java.util.concurrent.Executor, android.webkit.WebViewRendererClient);
+    method public void setWebViewRendererClient(android.webkit.WebViewRendererClient);
     method public deprecated boolean shouldDelayChildPressedState();
     method public deprecated boolean showFindDialog(java.lang.String, boolean);
     method public static void startSafeBrowsing(android.content.Context, android.webkit.ValueCallback<java.lang.Boolean>);
@@ -54415,6 +54419,16 @@ package android.webkit {
   public deprecated class WebViewFragment extends android.app.Fragment {
     ctor public WebViewFragment();
     method public android.webkit.WebView getWebView();
+  }
+
+  public abstract class WebViewRenderer {
+    method public abstract boolean terminate();
+  }
+
+  public abstract class WebViewRendererClient {
+    ctor public WebViewRendererClient();
+    method public abstract void onRendererResponsive(android.webkit.WebView, android.webkit.WebViewRenderer);
+    method public abstract void onRendererUnresponsive(android.webkit.WebView, android.webkit.WebViewRenderer);
   }
 
 }
