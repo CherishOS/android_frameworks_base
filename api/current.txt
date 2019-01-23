@@ -9625,7 +9625,7 @@ package android.content {
 
   public abstract class Context {
     ctor public Context();
-    method public abstract boolean bindIsolatedService(@RequiresPermission android.content.Intent, @NonNull android.content.ServiceConnection, int, @NonNull String);
+    method public boolean bindIsolatedService(@RequiresPermission android.content.Intent, @NonNull android.content.ServiceConnection, int, @NonNull String);
     method public abstract boolean bindService(@RequiresPermission android.content.Intent, @NonNull android.content.ServiceConnection, int);
     method @CheckResult(suggest="#enforceCallingOrSelfPermission(String,String)") public abstract int checkCallingOrSelfPermission(@NonNull String);
     method @CheckResult(suggest="#enforceCallingOrSelfUriPermission(Uri,int,String)") public abstract int checkCallingOrSelfUriPermission(android.net.Uri, int);
@@ -9678,7 +9678,7 @@ package android.content {
     method public abstract java.io.File getNoBackupFilesDir();
     method public abstract java.io.File getObbDir();
     method public abstract java.io.File[] getObbDirs();
-    method public abstract String getOpPackageName();
+    method public String getOpPackageName();
     method public abstract String getPackageCodePath();
     method public abstract android.content.pm.PackageManager getPackageManager();
     method public abstract String getPackageName();
@@ -9745,7 +9745,7 @@ package android.content {
     method public abstract void unbindService(@NonNull android.content.ServiceConnection);
     method public void unregisterComponentCallbacks(android.content.ComponentCallbacks);
     method public abstract void unregisterReceiver(android.content.BroadcastReceiver);
-    method public abstract void updateServiceGroup(@NonNull android.content.ServiceConnection, int, int);
+    method public void updateServiceGroup(@NonNull android.content.ServiceConnection, int, int);
     field public static final String ACCESSIBILITY_SERVICE = "accessibility";
     field public static final String ACCOUNT_SERVICE = "account";
     field public static final String ACTIVITY_SERVICE = "activity";
@@ -9839,7 +9839,6 @@ package android.content {
   public class ContextWrapper extends android.content.Context {
     ctor public ContextWrapper(android.content.Context);
     method protected void attachBaseContext(android.content.Context);
-    method public boolean bindIsolatedService(android.content.Intent, android.content.ServiceConnection, int, String);
     method public boolean bindService(android.content.Intent, android.content.ServiceConnection, int);
     method public int checkCallingOrSelfPermission(String);
     method public int checkCallingOrSelfUriPermission(android.net.Uri, int);
@@ -9889,7 +9888,6 @@ package android.content {
     method public java.io.File getNoBackupFilesDir();
     method public java.io.File getObbDir();
     method public java.io.File[] getObbDirs();
-    method public String getOpPackageName();
     method public String getPackageCodePath();
     method public android.content.pm.PackageManager getPackageManager();
     method public String getPackageName();
@@ -9945,7 +9943,6 @@ package android.content {
     method public boolean stopService(android.content.Intent);
     method public void unbindService(android.content.ServiceConnection);
     method public void unregisterReceiver(android.content.BroadcastReceiver);
-    method public void updateServiceGroup(android.content.ServiceConnection, int, int);
   }
 
   @Deprecated public class CursorLoader extends android.content.AsyncTaskLoader<android.database.Cursor> {
@@ -10221,7 +10218,7 @@ package android.content {
     field public static final String ACTION_MY_PACKAGE_REPLACED = "android.intent.action.MY_PACKAGE_REPLACED";
     field public static final String ACTION_MY_PACKAGE_SUSPENDED = "android.intent.action.MY_PACKAGE_SUSPENDED";
     field public static final String ACTION_MY_PACKAGE_UNSUSPENDED = "android.intent.action.MY_PACKAGE_UNSUSPENDED";
-    field public static final String ACTION_NEW_OUTGOING_CALL = "android.intent.action.NEW_OUTGOING_CALL";
+    field @Deprecated public static final String ACTION_NEW_OUTGOING_CALL = "android.intent.action.NEW_OUTGOING_CALL";
     field public static final String ACTION_OPEN_DOCUMENT = "android.intent.action.OPEN_DOCUMENT";
     field public static final String ACTION_OPEN_DOCUMENT_TREE = "android.intent.action.OPEN_DOCUMENT_TREE";
     field public static final String ACTION_PACKAGES_SUSPENDED = "android.intent.action.PACKAGES_SUSPENDED";
@@ -21650,7 +21647,7 @@ package android.icu.util {
     ctor public JapaneseCalendar(int, int, int, int);
     ctor public JapaneseCalendar(int, int, int);
     ctor public JapaneseCalendar(int, int, int, int, int, int);
-    field public static final int CURRENT_ERA;
+    field @Deprecated public static final int CURRENT_ERA;
     field public static final int HEISEI;
     field public static final int MEIJI;
     field public static final int SHOWA;
@@ -24533,6 +24530,7 @@ package android.media {
     ctor public MediaController2(@NonNull android.content.Context, @NonNull android.media.Session2Token, @NonNull java.util.concurrent.Executor, @NonNull android.media.MediaController2.ControllerCallback);
     method public void cancelSessionCommand(@NonNull Object);
     method public void close();
+    method public android.media.Session2Token getConnectedSessionToken();
     method public boolean isPlaybackActive();
     method @NonNull public Object sendSessionCommand(@NonNull android.media.Session2Command, @Nullable android.os.Bundle);
   }
@@ -27286,21 +27284,6 @@ package android.media.projection {
 
 package android.media.session {
 
-  public final class ControllerCallbackLink implements android.os.Parcelable {
-    method public int describeContents();
-    method @NonNull public android.os.IBinder getBinder();
-    method public void notifyEvent(@NonNull String, @Nullable android.os.Bundle);
-    method public void notifyExtrasChanged(@Nullable android.os.Bundle);
-    method public void notifyMetadataChanged(@Nullable android.media.MediaMetadata);
-    method public void notifyPlaybackStateChanged(@Nullable android.media.session.PlaybackState);
-    method public void notifyQueueChanged(@Nullable java.util.List<android.media.session.MediaSession.QueueItem>);
-    method public void notifyQueueTitleChanged(@Nullable CharSequence);
-    method public void notifySessionDestroyed();
-    method public void notifyVolumeInfoChanged(@NonNull android.media.session.MediaController.PlaybackInfo);
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.media.session.ControllerCallbackLink> CREATOR;
-  }
-
   public final class MediaController {
     ctor public MediaController(@NonNull android.content.Context, @NonNull android.media.session.MediaSession.Token);
     method public void adjustVolume(int, int);
@@ -27440,13 +27423,22 @@ package android.media.session {
   public final class MediaSessionManager {
     method public void addOnActiveSessionsChangedListener(@NonNull android.media.session.MediaSessionManager.OnActiveSessionsChangedListener, @Nullable android.content.ComponentName);
     method public void addOnActiveSessionsChangedListener(@NonNull android.media.session.MediaSessionManager.OnActiveSessionsChangedListener, @Nullable android.content.ComponentName, @Nullable android.os.Handler);
+    method public void addOnSession2TokensChangedListener(@NonNull android.media.session.MediaSessionManager.OnSession2TokensChangedListener);
+    method public void addOnSession2TokensChangedListener(@NonNull android.media.session.MediaSessionManager.OnSession2TokensChangedListener, @NonNull android.os.Handler);
     method @NonNull public java.util.List<android.media.session.MediaController> getActiveSessions(@Nullable android.content.ComponentName);
+    method @NonNull public java.util.List<android.media.Session2Token> getSession2Tokens();
     method public boolean isTrustedForMediaControl(@NonNull android.media.session.MediaSessionManager.RemoteUserInfo);
+    method public void notifySession2Created(@NonNull android.media.Session2Token);
     method public void removeOnActiveSessionsChangedListener(@NonNull android.media.session.MediaSessionManager.OnActiveSessionsChangedListener);
+    method public void removeOnSession2TokensChangedListener(@NonNull android.media.session.MediaSessionManager.OnSession2TokensChangedListener);
   }
 
   public static interface MediaSessionManager.OnActiveSessionsChangedListener {
     method public void onActiveSessionsChanged(@Nullable java.util.List<android.media.session.MediaController>);
+  }
+
+  public static interface MediaSessionManager.OnSession2TokensChangedListener {
+    method public void onSession2TokensChanged(@NonNull java.util.List<android.media.Session2Token>);
   }
 
   public static final class MediaSessionManager.RemoteUserInfo {
@@ -27533,36 +27525,6 @@ package android.media.session {
     ctor public PlaybackState.CustomAction.Builder(String, CharSequence, @DrawableRes int);
     method public android.media.session.PlaybackState.CustomAction build();
     method public android.media.session.PlaybackState.CustomAction.Builder setExtras(android.os.Bundle);
-  }
-
-  public final class SessionCallbackLink implements android.os.Parcelable {
-    method public int describeContents();
-    method @NonNull public android.os.IBinder getBinder();
-    method public void notifyAdjustVolume(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink, int);
-    method public void notifyCommand(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink, @NonNull String, @Nullable android.os.Bundle, @Nullable android.os.ResultReceiver);
-    method public void notifyCustomAction(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink, @NonNull String, @Nullable android.os.Bundle);
-    method public void notifyFastForward(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink);
-    method public void notifyMediaButton(@NonNull String, int, int, @NonNull android.content.Intent, int, @Nullable android.os.ResultReceiver);
-    method public void notifyMediaButtonFromController(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink, @NonNull android.content.Intent);
-    method public void notifyNext(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink);
-    method public void notifyPause(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink);
-    method public void notifyPlay(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink);
-    method public void notifyPlayFromMediaId(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink, @NonNull String, @Nullable android.os.Bundle);
-    method public void notifyPlayFromSearch(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink, @NonNull String, @Nullable android.os.Bundle);
-    method public void notifyPlayFromUri(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink, @NonNull android.net.Uri, @Nullable android.os.Bundle);
-    method public void notifyPrepare(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink);
-    method public void notifyPrepareFromMediaId(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink, @NonNull String, @Nullable android.os.Bundle);
-    method public void notifyPrepareFromSearch(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink, @NonNull String, @Nullable android.os.Bundle);
-    method public void notifyPrepareFromUri(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink, @NonNull android.net.Uri, @Nullable android.os.Bundle);
-    method public void notifyPrevious(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink);
-    method public void notifyRate(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink, @NonNull android.media.Rating);
-    method public void notifyRewind(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink);
-    method public void notifySeekTo(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink, long);
-    method public void notifySetVolumeTo(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink, int);
-    method public void notifySkipToTrack(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink, long);
-    method public void notifyStop(@NonNull String, int, int, @NonNull android.media.session.ControllerCallbackLink);
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.media.session.SessionCallbackLink> CREATOR;
   }
 
 }
@@ -28947,24 +28909,24 @@ package android.net {
     field public static final android.os.Parcelable.Creator<android.net.RouteInfo> CREATOR;
   }
 
-  public class SSLCertificateSocketFactory extends javax.net.ssl.SSLSocketFactory {
+  @Deprecated public class SSLCertificateSocketFactory extends javax.net.ssl.SSLSocketFactory {
     ctor @Deprecated public SSLCertificateSocketFactory(int);
-    method public java.net.Socket createSocket(java.net.Socket, String, int, boolean) throws java.io.IOException;
-    method public java.net.Socket createSocket(java.net.InetAddress, int, java.net.InetAddress, int) throws java.io.IOException;
-    method public java.net.Socket createSocket(java.net.InetAddress, int) throws java.io.IOException;
-    method public java.net.Socket createSocket(String, int, java.net.InetAddress, int) throws java.io.IOException;
-    method public java.net.Socket createSocket(String, int) throws java.io.IOException;
-    method public static javax.net.SocketFactory getDefault(int);
-    method public static javax.net.ssl.SSLSocketFactory getDefault(int, android.net.SSLSessionCache);
-    method public String[] getDefaultCipherSuites();
-    method public static javax.net.ssl.SSLSocketFactory getInsecure(int, android.net.SSLSessionCache);
-    method public byte[] getNpnSelectedProtocol(java.net.Socket);
-    method public String[] getSupportedCipherSuites();
-    method public void setHostname(java.net.Socket, String);
-    method public void setKeyManagers(javax.net.ssl.KeyManager[]);
-    method public void setNpnProtocols(byte[][]);
-    method public void setTrustManagers(javax.net.ssl.TrustManager[]);
-    method public void setUseSessionTickets(java.net.Socket, boolean);
+    method @Deprecated public java.net.Socket createSocket(java.net.Socket, String, int, boolean) throws java.io.IOException;
+    method @Deprecated public java.net.Socket createSocket(java.net.InetAddress, int, java.net.InetAddress, int) throws java.io.IOException;
+    method @Deprecated public java.net.Socket createSocket(java.net.InetAddress, int) throws java.io.IOException;
+    method @Deprecated public java.net.Socket createSocket(String, int, java.net.InetAddress, int) throws java.io.IOException;
+    method @Deprecated public java.net.Socket createSocket(String, int) throws java.io.IOException;
+    method @Deprecated public static javax.net.SocketFactory getDefault(int);
+    method @Deprecated public static javax.net.ssl.SSLSocketFactory getDefault(int, android.net.SSLSessionCache);
+    method @Deprecated public String[] getDefaultCipherSuites();
+    method @Deprecated public static javax.net.ssl.SSLSocketFactory getInsecure(int, android.net.SSLSessionCache);
+    method @Deprecated public byte[] getNpnSelectedProtocol(java.net.Socket);
+    method @Deprecated public String[] getSupportedCipherSuites();
+    method @Deprecated public void setHostname(java.net.Socket, String);
+    method @Deprecated public void setKeyManagers(javax.net.ssl.KeyManager[]);
+    method @Deprecated public void setNpnProtocols(byte[][]);
+    method @Deprecated public void setTrustManagers(javax.net.ssl.TrustManager[]);
+    method @Deprecated public void setUseSessionTickets(java.net.Socket, boolean);
   }
 
   public final class SSLSessionCache {
@@ -29153,6 +29115,8 @@ package android.net {
 
   public class VpnService extends android.app.Service {
     ctor public VpnService();
+    method public final boolean isAlwaysOn();
+    method public final boolean isLockdownEnabled();
     method public android.os.IBinder onBind(android.content.Intent);
     method public void onRevoke();
     method public static android.content.Intent prepare(android.content.Context);
@@ -34908,10 +34872,13 @@ package android.os {
     method public static final void setThreadPriority(int, int) throws java.lang.IllegalArgumentException, java.lang.SecurityException;
     method public static final void setThreadPriority(int) throws java.lang.IllegalArgumentException, java.lang.SecurityException;
     method @Deprecated public static final boolean supportsProcesses();
+    field public static final int BLUETOOTH_UID = 1002; // 0x3ea
     field public static final int FIRST_APPLICATION_UID = 10000; // 0x2710
     field public static final int INVALID_UID = -1; // 0xffffffff
     field public static final int LAST_APPLICATION_UID = 19999; // 0x4e1f
     field public static final int PHONE_UID = 1001; // 0x3e9
+    field public static final int ROOT_UID = 0; // 0x0
+    field public static final int SHELL_UID = 2000; // 0x7d0
     field public static final int SIGNAL_KILL = 9; // 0x9
     field public static final int SIGNAL_QUIT = 3; // 0x3
     field public static final int SIGNAL_USR1 = 10; // 0xa
@@ -37926,18 +37893,18 @@ package android.provider {
     method public static android.provider.DocumentsContract.Path findDocumentPath(android.content.ContentInterface, android.net.Uri) throws java.io.FileNotFoundException;
     method @Deprecated public static android.provider.DocumentsContract.Path findDocumentPath(android.content.ContentResolver, android.net.Uri) throws java.io.FileNotFoundException;
     method public static String getDocumentId(android.net.Uri);
-    method public static android.os.Bundle getDocumentMetadata(android.content.ContentInterface, android.net.Uri) throws java.io.FileNotFoundException;
+    method @Nullable public static android.os.Bundle getDocumentMetadata(@NonNull android.content.ContentInterface, @NonNull android.net.Uri) throws java.io.FileNotFoundException;
     method @Deprecated public static android.os.Bundle getDocumentMetadata(android.content.ContentResolver, android.net.Uri) throws java.io.FileNotFoundException;
     method public static android.graphics.Bitmap getDocumentThumbnail(android.content.ContentInterface, android.net.Uri, android.graphics.Point, android.os.CancellationSignal) throws java.io.FileNotFoundException;
     method @Deprecated public static android.graphics.Bitmap getDocumentThumbnail(android.content.ContentResolver, android.net.Uri, android.graphics.Point, android.os.CancellationSignal) throws java.io.FileNotFoundException;
     method public static String getRootId(android.net.Uri);
     method public static String getSearchDocumentsQuery(android.net.Uri);
     method public static String getTreeDocumentId(android.net.Uri);
-    method public static boolean isChildDocument(android.content.ContentInterface, android.net.Uri, android.net.Uri) throws java.io.FileNotFoundException;
+    method public static boolean isChildDocument(@NonNull android.content.ContentInterface, @NonNull android.net.Uri, @NonNull android.net.Uri) throws java.io.FileNotFoundException;
     method @Deprecated public static boolean isChildDocument(android.content.ContentResolver, android.net.Uri, android.net.Uri) throws java.io.FileNotFoundException;
     method public static boolean isDocumentUri(android.content.Context, @Nullable android.net.Uri);
-    method public static boolean isRootUri(android.content.Context, @Nullable android.net.Uri);
-    method public static boolean isRootsUri(android.content.Context, @Nullable android.net.Uri);
+    method public static boolean isRootUri(@NonNull android.content.Context, @Nullable android.net.Uri);
+    method public static boolean isRootsUri(@NonNull android.content.Context, @Nullable android.net.Uri);
     method public static boolean isTreeUri(android.net.Uri);
     method public static android.net.Uri moveDocument(android.content.ContentInterface, android.net.Uri, android.net.Uri, android.net.Uri) throws java.io.FileNotFoundException;
     method @Deprecated public static android.net.Uri moveDocument(android.content.ContentResolver, android.net.Uri, android.net.Uri, android.net.Uri) throws java.io.FileNotFoundException;
@@ -38030,7 +37997,7 @@ package android.provider {
     method public void deleteDocument(String) throws java.io.FileNotFoundException;
     method public void ejectRoot(String);
     method public android.provider.DocumentsContract.Path findDocumentPath(@Nullable String, String) throws java.io.FileNotFoundException;
-    method @Nullable public android.os.Bundle getDocumentMetadata(String) throws java.io.FileNotFoundException;
+    method @Nullable public android.os.Bundle getDocumentMetadata(@NonNull String) throws java.io.FileNotFoundException;
     method public String[] getDocumentStreamTypes(String, String);
     method public String getDocumentType(String) throws java.io.FileNotFoundException;
     method public final String getType(android.net.Uri);
@@ -38055,7 +38022,7 @@ package android.provider {
     method public android.database.Cursor queryRecentDocuments(String, String[], @Nullable android.os.Bundle, @Nullable android.os.CancellationSignal) throws java.io.FileNotFoundException;
     method public abstract android.database.Cursor queryRoots(String[]) throws java.io.FileNotFoundException;
     method public android.database.Cursor querySearchDocuments(String, String, String[]) throws java.io.FileNotFoundException;
-    method public android.database.Cursor querySearchDocuments(String, String[], android.os.Bundle) throws java.io.FileNotFoundException;
+    method public android.database.Cursor querySearchDocuments(@NonNull String, @Nullable String[], @NonNull android.os.Bundle) throws java.io.FileNotFoundException;
     method public void removeDocument(String, String) throws java.io.FileNotFoundException;
     method public String renameDocument(String, String) throws java.io.FileNotFoundException;
     method public final void revokeDocumentPermission(String);
@@ -45055,7 +45022,9 @@ package android.telephony.data {
     field public static final int PROTOCOL_IP = 0; // 0x0
     field public static final int PROTOCOL_IPV4V6 = 2; // 0x2
     field public static final int PROTOCOL_IPV6 = 1; // 0x1
+    field public static final int PROTOCOL_NON_IP = 4; // 0x4
     field public static final int PROTOCOL_PPP = 3; // 0x3
+    field public static final int PROTOCOL_UNSTRUCTURED = 5; // 0x5
     field public static final int TYPE_CBS = 128; // 0x80
     field public static final int TYPE_DEFAULT = 17; // 0x11
     field public static final int TYPE_DUN = 8; // 0x8
