@@ -3941,7 +3941,8 @@ package android.app {
     method public boolean isBackgroundRestricted();
     method @Deprecated public boolean isInLockTaskMode();
     method public boolean isLowRamDevice();
-    method public static boolean isRunningInTestHarness();
+    method @Deprecated public static boolean isRunningInTestHarness();
+    method public static boolean isRunningInUserTestHarness();
     method public static boolean isUserAMonkey();
     method @RequiresPermission(android.Manifest.permission.KILL_BACKGROUND_PROCESSES) public void killBackgroundProcesses(String);
     method @RequiresPermission(android.Manifest.permission.REORDER_TASKS) public void moveTaskToFront(int, int);
@@ -6822,6 +6823,7 @@ package android.app.admin {
     field public static final String EXTRA_ADD_EXPLANATION = "android.app.extra.ADD_EXPLANATION";
     field public static final String EXTRA_DELEGATION_SCOPES = "android.app.extra.DELEGATION_SCOPES";
     field public static final String EXTRA_DEVICE_ADMIN = "android.app.extra.DEVICE_ADMIN";
+    field @RequiresPermission(android.Manifest.permission.GET_AND_REQUEST_SCREEN_LOCK_COMPLEXITY) public static final String EXTRA_PASSWORD_COMPLEXITY = "android.app.extra.PASSWORD_COMPLEXITY";
     field public static final String EXTRA_PROVISIONING_ACCOUNT_TO_MIGRATE = "android.app.extra.PROVISIONING_ACCOUNT_TO_MIGRATE";
     field public static final String EXTRA_PROVISIONING_ADMIN_EXTRAS_BUNDLE = "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE";
     field public static final String EXTRA_PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME = "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME";
@@ -10346,6 +10348,7 @@ package android.content {
     field public static final int EXTRA_DOCK_STATE_LE_DESK = 3; // 0x3
     field public static final int EXTRA_DOCK_STATE_UNDOCKED = 0; // 0x0
     field public static final String EXTRA_DONT_KILL_APP = "android.intent.extra.DONT_KILL_APP";
+    field public static final String EXTRA_DURATION_MILLIS = "android.intent.extra.DURATION_MILLIS";
     field public static final String EXTRA_EMAIL = "android.intent.extra.EMAIL";
     field public static final String EXTRA_EXCLUDE_COMPONENTS = "android.intent.extra.EXCLUDE_COMPONENTS";
     field public static final String EXTRA_FROM_STORAGE = "android.intent.extra.FROM_STORAGE";
@@ -11497,7 +11500,7 @@ package android.content.pm {
     method public abstract java.util.List<android.content.pm.PermissionGroupInfo> getAllPermissionGroups(int);
     method public abstract android.graphics.drawable.Drawable getApplicationBanner(android.content.pm.ApplicationInfo);
     method public abstract android.graphics.drawable.Drawable getApplicationBanner(String) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract int getApplicationEnabledSetting(String);
+    method public abstract int getApplicationEnabledSetting(@NonNull String);
     method public abstract android.graphics.drawable.Drawable getApplicationIcon(android.content.pm.ApplicationInfo);
     method public abstract android.graphics.drawable.Drawable getApplicationIcon(String) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract android.content.pm.ApplicationInfo getApplicationInfo(String, int) throws android.content.pm.PackageManager.NameNotFoundException;
@@ -11505,7 +11508,7 @@ package android.content.pm {
     method public abstract android.graphics.drawable.Drawable getApplicationLogo(android.content.pm.ApplicationInfo);
     method public abstract android.graphics.drawable.Drawable getApplicationLogo(String) throws android.content.pm.PackageManager.NameNotFoundException;
     method @Nullable public abstract android.content.pm.ChangedPackages getChangedPackages(@IntRange(from=0) int);
-    method public abstract int getComponentEnabledSetting(android.content.ComponentName);
+    method public abstract int getComponentEnabledSetting(@NonNull android.content.ComponentName);
     method public abstract android.graphics.drawable.Drawable getDefaultActivityIcon();
     method public abstract android.graphics.drawable.Drawable getDrawable(String, @DrawableRes int, android.content.pm.ApplicationInfo);
     method public abstract java.util.List<android.content.pm.ApplicationInfo> getInstalledApplications(int);
@@ -11571,8 +11574,8 @@ package android.content.pm {
     method public abstract android.content.pm.ProviderInfo resolveContentProvider(String, int);
     method public abstract android.content.pm.ResolveInfo resolveService(android.content.Intent, int);
     method public abstract void setApplicationCategoryHint(@NonNull String, int);
-    method @RequiresPermission(value=android.Manifest.permission.CHANGE_COMPONENT_ENABLED_STATE, conditional=true) public abstract void setApplicationEnabledSetting(String, int, int);
-    method @RequiresPermission(value=android.Manifest.permission.CHANGE_COMPONENT_ENABLED_STATE, conditional=true) public abstract void setComponentEnabledSetting(android.content.ComponentName, int, int);
+    method @RequiresPermission(value=android.Manifest.permission.CHANGE_COMPONENT_ENABLED_STATE, conditional=true) public abstract void setApplicationEnabledSetting(@NonNull String, int, int);
+    method @RequiresPermission(value=android.Manifest.permission.CHANGE_COMPONENT_ENABLED_STATE, conditional=true) public abstract void setComponentEnabledSetting(@NonNull android.content.ComponentName, int, int);
     method public abstract void setInstallerPackageName(String, String);
     method public abstract void updateInstantAppCookie(@Nullable byte[]);
     method public abstract void verifyPendingInstall(int, int);
@@ -11652,6 +11655,7 @@ package android.content.pm {
     field public static final String FEATURE_SCREEN_LANDSCAPE = "android.hardware.screen.landscape";
     field public static final String FEATURE_SCREEN_PORTRAIT = "android.hardware.screen.portrait";
     field public static final String FEATURE_SECURELY_REMOVES_USERS = "android.software.securely_removes_users";
+    field public static final String FEATURE_SECURE_LOCK_SCREEN = "android.software.secure_lock_screen";
     field public static final String FEATURE_SENSOR_ACCELEROMETER = "android.hardware.sensor.accelerometer";
     field public static final String FEATURE_SENSOR_AMBIENT_TEMPERATURE = "android.hardware.sensor.ambient_temperature";
     field public static final String FEATURE_SENSOR_BAROMETER = "android.hardware.sensor.barometer";
@@ -14615,8 +14619,8 @@ package android.graphics {
   public class Picture {
     ctor public Picture();
     ctor public Picture(android.graphics.Picture);
-    method public android.graphics.Canvas beginRecording(int, int);
-    method public void draw(android.graphics.Canvas);
+    method @NonNull public android.graphics.Canvas beginRecording(int, int);
+    method public void draw(@NonNull android.graphics.Canvas);
     method public void endRecording();
     method public int getHeight();
     method public int getWidth();
@@ -14868,7 +14872,7 @@ package android.graphics {
   }
 
   public final class RenderNode {
-    ctor public RenderNode(String);
+    ctor public RenderNode(@Nullable String);
     method public int computeApproximateMemoryUsage();
     method public void discardDisplayList();
     method public void endRecording();
@@ -22253,7 +22257,7 @@ package android.inputmethodservice {
     method public void onUpdateExtractingViews(android.view.inputmethod.EditorInfo);
     method public void onUpdateExtractingVisibility(android.view.inputmethod.EditorInfo);
     method public void onUpdateSelection(int, int, int, int, int, int);
-    method public void onViewClicked(boolean);
+    method @Deprecated public void onViewClicked(boolean);
     method public void onWindowHidden();
     method public void onWindowShown();
     method public void requestHideSelf(int);
@@ -24635,6 +24639,7 @@ package android.media {
     method @android.media.MediaDrm.SecurityLevel public int getSecurityLevel(@NonNull byte[]);
     method public static boolean isCryptoSchemeSupported(@NonNull java.util.UUID);
     method public static boolean isCryptoSchemeSupported(@NonNull java.util.UUID, @NonNull String);
+    method public static boolean isCryptoSchemeSupported(@NonNull java.util.UUID, @NonNull String, @android.media.MediaDrm.SecurityLevel int);
     method @NonNull public byte[] openSession() throws android.media.NotProvisionedException, android.media.ResourceBusyException;
     method @NonNull public byte[] openSession(@android.media.MediaDrm.SecurityLevel int) throws android.media.NotProvisionedException, android.media.ResourceBusyException;
     method @Nullable public byte[] provideKeyResponse(@NonNull byte[], @NonNull byte[]) throws android.media.DeniedByServerException, android.media.NotProvisionedException;
@@ -25912,6 +25917,23 @@ package android.media {
     method @Nullable public android.media.Session2Command.Result onSessionCommand(@NonNull android.media.MediaSession2, @NonNull android.media.MediaSession2.ControllerInfo, @NonNull android.media.Session2Command, @Nullable android.os.Bundle);
   }
 
+  public abstract class MediaSession2Service extends android.app.Service {
+    ctor public MediaSession2Service();
+    method public final void addSession(@NonNull android.media.MediaSession2);
+    method @NonNull public final java.util.List<android.media.MediaSession2> getSessions();
+    method @CallSuper @Nullable public android.os.IBinder onBind(@NonNull android.content.Intent);
+    method @NonNull public abstract android.media.MediaSession2 onGetPrimarySession();
+    method @Nullable public abstract android.media.MediaSession2Service.MediaNotification onUpdateNotification(@NonNull android.media.MediaSession2);
+    method public final void removeSession(@NonNull android.media.MediaSession2);
+    field public static final String SERVICE_INTERFACE = "android.media.MediaSession2Service";
+  }
+
+  public static class MediaSession2Service.MediaNotification {
+    ctor public MediaSession2Service.MediaNotification(int, @NonNull android.app.Notification);
+    method @NonNull public android.app.Notification getNotification();
+    method public int getNotificationId();
+  }
+
   public final class MediaSync {
     ctor public MediaSync();
     method @NonNull public android.view.Surface createInputSurface();
@@ -26574,12 +26596,9 @@ package android.media.audiofx {
     field public static final int SUCCESS = 0; // 0x0
   }
 
-  public static final class AudioEffect.Descriptor implements android.os.Parcelable {
+  public static class AudioEffect.Descriptor {
     ctor public AudioEffect.Descriptor();
     ctor public AudioEffect.Descriptor(String, String, String, String, String);
-    method public int describeContents();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.media.audiofx.AudioEffect.Descriptor> CREATOR;
     field public String connectMode;
     field public String implementor;
     field public String name;
@@ -27443,7 +27462,6 @@ package android.media.session {
 
   public static final class MediaSessionManager.RemoteUserInfo {
     ctor public MediaSessionManager.RemoteUserInfo(@NonNull String, int, int);
-    ctor public MediaSessionManager.RemoteUserInfo(String, int, int, android.os.IBinder);
     method public String getPackageName();
     method public int getPid();
     method public int getUid();
@@ -28559,6 +28577,28 @@ package android.net {
     field public int leaseDuration;
     field public int netmask;
     field public int serverAddress;
+  }
+
+  public final class DnsResolver {
+    method public static android.net.DnsResolver getInstance();
+    method public void query(@Nullable android.net.Network, @NonNull byte[], int, @NonNull android.os.Handler, @NonNull android.net.DnsResolver.RawAnswerListener) throws android.system.ErrnoException;
+    method public void query(@Nullable android.net.Network, @NonNull String, int, int, int, @NonNull android.os.Handler, @NonNull android.net.DnsResolver.RawAnswerListener) throws android.system.ErrnoException;
+    method public void query(@Nullable android.net.Network, @NonNull String, int, @NonNull android.os.Handler, @NonNull android.net.DnsResolver.InetAddressAnswerListener) throws android.system.ErrnoException;
+    field public static final int CLASS_IN = 1; // 0x1
+    field public static final int FLAG_EMPTY = 0; // 0x0
+    field public static final int FLAG_NO_CACHE_LOOKUP = 4; // 0x4
+    field public static final int FLAG_NO_CACHE_STORE = 2; // 0x2
+    field public static final int FLAG_NO_RETRY = 1; // 0x1
+    field public static final int TYPE_A = 1; // 0x1
+    field public static final int TYPE_AAAA = 28; // 0x1c
+  }
+
+  public static interface DnsResolver.InetAddressAnswerListener {
+    method public void onAnswer(@NonNull java.util.List<java.net.InetAddress>);
+  }
+
+  public static interface DnsResolver.RawAnswerListener {
+    method public void onAnswer(@Nullable byte[]);
   }
 
   public class InetAddresses {
@@ -37975,6 +38015,7 @@ package android.provider {
     field public static final String COLUMN_FLAGS = "flags";
     field public static final String COLUMN_ICON = "icon";
     field public static final String COLUMN_MIME_TYPES = "mime_types";
+    field public static final String COLUMN_QUERY_ARGS = "query_args";
     field public static final String COLUMN_ROOT_ID = "root_id";
     field public static final String COLUMN_SUMMARY = "summary";
     field public static final String COLUMN_TITLE = "title";
@@ -38154,6 +38195,8 @@ package android.provider {
     field public static final String MEDIA_SCANNER_VOLUME = "volume";
     field public static final String META_DATA_STILL_IMAGE_CAMERA_PREWARM_SERVICE = "android.media.still_image_camera_preview_service";
     field public static final String UNKNOWN_STRING = "<unknown>";
+    field public static final String VOLUME_EXTERNAL = "external";
+    field public static final String VOLUME_INTERNAL = "internal";
   }
 
   public static final class MediaStore.Audio {
@@ -38360,28 +38403,28 @@ package android.provider {
     field public static final android.net.Uri INTERNAL_CONTENT_URI;
   }
 
-  public static class MediaStore.Images.Thumbnails implements android.provider.BaseColumns {
-    ctor public MediaStore.Images.Thumbnails();
+  @Deprecated public static class MediaStore.Images.Thumbnails implements android.provider.BaseColumns {
+    ctor @Deprecated public MediaStore.Images.Thumbnails();
     method @Deprecated public static void cancelThumbnailRequest(android.content.ContentResolver, long);
     method @Deprecated public static void cancelThumbnailRequest(android.content.ContentResolver, long, long);
-    method public static android.net.Uri getContentUri(String);
+    method @Deprecated public static android.net.Uri getContentUri(String);
     method @Deprecated public static android.graphics.Bitmap getThumbnail(android.content.ContentResolver, long, int, android.graphics.BitmapFactory.Options);
     method @Deprecated public static android.graphics.Bitmap getThumbnail(android.content.ContentResolver, long, long, int, android.graphics.BitmapFactory.Options);
-    method public static final android.database.Cursor query(android.content.ContentResolver, android.net.Uri, String[]);
-    method public static final android.database.Cursor queryMiniThumbnail(android.content.ContentResolver, long, int, String[]);
-    method public static final android.database.Cursor queryMiniThumbnails(android.content.ContentResolver, android.net.Uri, int, String[]);
+    method @Deprecated public static final android.database.Cursor query(android.content.ContentResolver, android.net.Uri, String[]);
+    method @Deprecated public static final android.database.Cursor queryMiniThumbnail(android.content.ContentResolver, long, int, String[]);
+    method @Deprecated public static final android.database.Cursor queryMiniThumbnails(android.content.ContentResolver, android.net.Uri, int, String[]);
     field @Deprecated public static final String DATA = "_data";
-    field public static final String DEFAULT_SORT_ORDER = "image_id ASC";
-    field public static final android.net.Uri EXTERNAL_CONTENT_URI;
-    field public static final int FULL_SCREEN_KIND = 2; // 0x2
-    field public static final String HEIGHT = "height";
-    field public static final String IMAGE_ID = "image_id";
-    field public static final android.net.Uri INTERNAL_CONTENT_URI;
-    field public static final String KIND = "kind";
-    field public static final int MICRO_KIND = 3; // 0x3
-    field public static final int MINI_KIND = 1; // 0x1
-    field public static final String THUMB_DATA = "thumb_data";
-    field public static final String WIDTH = "width";
+    field @Deprecated public static final String DEFAULT_SORT_ORDER = "image_id ASC";
+    field @Deprecated public static final android.net.Uri EXTERNAL_CONTENT_URI;
+    field @Deprecated public static final int FULL_SCREEN_KIND = 2; // 0x2
+    field @Deprecated public static final String HEIGHT = "height";
+    field @Deprecated public static final String IMAGE_ID = "image_id";
+    field @Deprecated public static final android.net.Uri INTERNAL_CONTENT_URI;
+    field @Deprecated public static final String KIND = "kind";
+    field @Deprecated public static final int MICRO_KIND = 3; // 0x3
+    field @Deprecated public static final int MINI_KIND = 1; // 0x1
+    field @Deprecated public static final String THUMB_DATA = "thumb_data";
+    field @Deprecated public static final String WIDTH = "width";
   }
 
   public static interface MediaStore.MediaColumns extends android.provider.BaseColumns {
@@ -38433,24 +38476,24 @@ package android.provider {
     field public static final android.net.Uri INTERNAL_CONTENT_URI;
   }
 
-  public static class MediaStore.Video.Thumbnails implements android.provider.BaseColumns {
-    ctor public MediaStore.Video.Thumbnails();
+  @Deprecated public static class MediaStore.Video.Thumbnails implements android.provider.BaseColumns {
+    ctor @Deprecated public MediaStore.Video.Thumbnails();
     method @Deprecated public static void cancelThumbnailRequest(android.content.ContentResolver, long);
     method @Deprecated public static void cancelThumbnailRequest(android.content.ContentResolver, long, long);
-    method public static android.net.Uri getContentUri(String);
+    method @Deprecated public static android.net.Uri getContentUri(String);
     method @Deprecated public static android.graphics.Bitmap getThumbnail(android.content.ContentResolver, long, int, android.graphics.BitmapFactory.Options);
     method @Deprecated public static android.graphics.Bitmap getThumbnail(android.content.ContentResolver, long, long, int, android.graphics.BitmapFactory.Options);
     field @Deprecated public static final String DATA = "_data";
-    field public static final String DEFAULT_SORT_ORDER = "video_id ASC";
-    field public static final android.net.Uri EXTERNAL_CONTENT_URI;
-    field public static final int FULL_SCREEN_KIND = 2; // 0x2
-    field public static final String HEIGHT = "height";
-    field public static final android.net.Uri INTERNAL_CONTENT_URI;
-    field public static final String KIND = "kind";
-    field public static final int MICRO_KIND = 3; // 0x3
-    field public static final int MINI_KIND = 1; // 0x1
-    field public static final String VIDEO_ID = "video_id";
-    field public static final String WIDTH = "width";
+    field @Deprecated public static final String DEFAULT_SORT_ORDER = "video_id ASC";
+    field @Deprecated public static final android.net.Uri EXTERNAL_CONTENT_URI;
+    field @Deprecated public static final int FULL_SCREEN_KIND = 2; // 0x2
+    field @Deprecated public static final String HEIGHT = "height";
+    field @Deprecated public static final android.net.Uri INTERNAL_CONTENT_URI;
+    field @Deprecated public static final String KIND = "kind";
+    field @Deprecated public static final int MICRO_KIND = 3; // 0x3
+    field @Deprecated public static final int MINI_KIND = 1; // 0x1
+    field @Deprecated public static final String VIDEO_ID = "video_id";
+    field @Deprecated public static final String WIDTH = "width";
   }
 
   public static interface MediaStore.Video.VideoColumns extends android.provider.MediaStore.MediaColumns {
@@ -43002,6 +43045,15 @@ package android.telecom {
     method public abstract void onScreenCall(@NonNull android.telecom.Call.Details);
     method public final void provideCallIdentification(@NonNull android.telecom.Call.Details, @NonNull android.telecom.CallIdentification);
     method public final void respondToCall(@NonNull android.telecom.Call.Details, @NonNull android.telecom.CallScreeningService.CallResponse);
+    field public static final String ACTION_NUISANCE_CALL_STATUS_CHANGED = "android.telecom.action.NUISANCE_CALL_STATUS_CHANGED";
+    field public static final int CALL_DURATION_LONG = 4; // 0x4
+    field public static final int CALL_DURATION_MEDIUM = 3; // 0x3
+    field public static final int CALL_DURATION_SHORT = 2; // 0x2
+    field public static final int CALL_DURATION_VERY_SHORT = 1; // 0x1
+    field public static final String EXTRA_CALL_DURATION = "android.telecom.extra.CALL_DURATION";
+    field public static final String EXTRA_CALL_HANDLE = "android.telecom.extra.CALL_HANDLE";
+    field public static final String EXTRA_CALL_TYPE = "android.telecom.extra.CALL_TYPE";
+    field public static final String EXTRA_IS_NUISANCE = "android.telecom.extra.IS_NUISANCE";
     field public static final String SERVICE_INTERFACE = "android.telecom.CallScreeningService";
   }
 
@@ -43595,6 +43647,7 @@ package android.telecom {
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public java.util.List<android.telecom.PhoneAccountHandle> getSelfManagedPhoneAccounts();
     method public android.telecom.PhoneAccountHandle getSimCallManager();
     method public String getSystemDialerPackage();
+    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public android.telecom.PhoneAccountHandle getUserSelectedOutgoingPhoneAccount();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getVoiceMailNumber(android.telecom.PhoneAccountHandle);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public boolean handleMmi(String);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public boolean handleMmi(String, android.telecom.PhoneAccountHandle);
@@ -43606,6 +43659,7 @@ package android.telecom {
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public boolean isVoiceMailNumber(android.telecom.PhoneAccountHandle, String);
     method @RequiresPermission(anyOf={android.Manifest.permission.CALL_PHONE, android.Manifest.permission.MANAGE_OWN_CALLS}) public void placeCall(android.net.Uri, android.os.Bundle);
     method public void registerPhoneAccount(android.telecom.PhoneAccount);
+    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public void reportNuisanceCallStatus(@NonNull android.net.Uri, boolean);
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public void showInCallScreen(boolean);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public void silenceRinger();
     method public void unregisterPhoneAccount(android.telecom.PhoneAccountHandle);
@@ -44154,6 +44208,7 @@ package android.telephony {
   public final class CellSignalStrengthGsm extends android.telephony.CellSignalStrength implements android.os.Parcelable {
     method public int describeContents();
     method public int getAsuLevel();
+    method public int getBitErrorRate();
     method public int getDbm();
     method public int getLevel();
     method public int getTimingAdvance();
@@ -44455,16 +44510,16 @@ package android.telephony {
 
   public class SignalStrength implements android.os.Parcelable {
     method public int describeContents();
-    method public int getCdmaDbm();
-    method public int getCdmaEcio();
+    method @Deprecated public int getCdmaDbm();
+    method @Deprecated public int getCdmaEcio();
     method @NonNull public java.util.List<android.telephony.CellSignalStrength> getCellSignalStrengths();
-    method public int getEvdoDbm();
-    method public int getEvdoEcio();
-    method public int getEvdoSnr();
-    method public int getGsmBitErrorRate();
-    method public int getGsmSignalStrength();
+    method @Deprecated public int getEvdoDbm();
+    method @Deprecated public int getEvdoEcio();
+    method @Deprecated public int getEvdoSnr();
+    method @Deprecated public int getGsmBitErrorRate();
+    method @Deprecated public int getGsmSignalStrength();
     method public int getLevel();
-    method public boolean isGsm();
+    method @Deprecated public boolean isGsm();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int INVALID = 2147483647; // 0x7fffffff
   }
@@ -49673,6 +49728,7 @@ package android.view {
   }
 
   public class Surface implements android.os.Parcelable {
+    ctor public Surface(android.view.SurfaceControl);
     ctor public Surface(android.graphics.SurfaceTexture);
     method public int describeContents();
     method public boolean isValid();
@@ -49693,6 +49749,38 @@ package android.view {
   public static class Surface.OutOfResourcesException extends java.lang.RuntimeException {
     ctor public Surface.OutOfResourcesException();
     ctor public Surface.OutOfResourcesException(String);
+  }
+
+  public final class SurfaceControl implements android.os.Parcelable {
+    method public int describeContents();
+    method public boolean isValid();
+    method public void readFromParcel(android.os.Parcel);
+    method public void release();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.view.SurfaceControl> CREATOR;
+  }
+
+  public static class SurfaceControl.Builder {
+    ctor public SurfaceControl.Builder();
+    method public android.view.SurfaceControl build();
+    method public android.view.SurfaceControl.Builder setBufferSize(@IntRange(from=0) int, @IntRange(from=0) int);
+    method @NonNull public android.view.SurfaceControl.Builder setFormat(int);
+    method public android.view.SurfaceControl.Builder setName(String);
+    method @NonNull public android.view.SurfaceControl.Builder setOpaque(boolean);
+    method @NonNull public android.view.SurfaceControl.Builder setParent(@Nullable android.view.SurfaceControl);
+  }
+
+  public static class SurfaceControl.Transaction implements java.io.Closeable {
+    ctor public SurfaceControl.Transaction();
+    method public void apply();
+    method public void close();
+    method @NonNull public android.view.SurfaceControl.Transaction merge(@NonNull android.view.SurfaceControl.Transaction);
+    method @NonNull public android.view.SurfaceControl.Transaction reparent(@NonNull android.view.SurfaceControl, @Nullable android.view.SurfaceControl);
+    method @NonNull public android.view.SurfaceControl.Transaction setAlpha(@NonNull android.view.SurfaceControl, @FloatRange(from=0.0, to=1.0) float);
+    method @NonNull public android.view.SurfaceControl.Transaction setBufferSize(@NonNull android.view.SurfaceControl, @IntRange(from=0) int, @IntRange(from=0) int);
+    method @NonNull public android.view.SurfaceControl.Transaction setGeometry(@NonNull android.view.SurfaceControl, @Nullable android.graphics.Rect, @Nullable android.graphics.Rect, int);
+    method @NonNull public android.view.SurfaceControl.Transaction setLayer(@NonNull android.view.SurfaceControl, @IntRange(from=java.lang.Integer.MIN_VALUE, to=java.lang.Integer.MAX_VALUE) int);
+    method @NonNull public android.view.SurfaceControl.Transaction setVisibility(@NonNull android.view.SurfaceControl, boolean);
   }
 
   public interface SurfaceHolder {
@@ -49739,6 +49827,7 @@ package android.view {
     ctor public SurfaceView(android.content.Context, android.util.AttributeSet, int, int);
     method public boolean gatherTransparentRegion(android.graphics.Region);
     method public android.view.SurfaceHolder getHolder();
+    method public android.view.SurfaceControl getSurfaceControl();
     method public void setSecure(boolean);
     method public void setZOrderMediaOverlay(boolean);
     method public void setZOrderOnTop(boolean);
@@ -52560,12 +52649,12 @@ package android.view.contentcapture {
     method @NonNull public final android.view.contentcapture.ContentCaptureSession createContentCaptureSession(@NonNull android.view.contentcapture.ContentCaptureContext);
     method public final void destroy();
     method public final android.view.contentcapture.ContentCaptureSessionId getContentCaptureSessionId();
-    method @NonNull public android.view.autofill.AutofillId newAutofillId(@NonNull android.view.autofill.AutofillId, int);
-    method @NonNull public final android.view.ViewStructure newVirtualViewStructure(@NonNull android.view.autofill.AutofillId, int);
+    method @NonNull public android.view.autofill.AutofillId newAutofillId(@NonNull android.view.autofill.AutofillId, long);
+    method @NonNull public final android.view.ViewStructure newVirtualViewStructure(@NonNull android.view.autofill.AutofillId, long);
     method public final void notifyViewAppeared(@NonNull android.view.ViewStructure);
     method public final void notifyViewDisappeared(@NonNull android.view.autofill.AutofillId);
     method public final void notifyViewTextChanged(@NonNull android.view.autofill.AutofillId, @Nullable CharSequence, int);
-    method public final void notifyViewsDisappeared(@NonNull android.view.autofill.AutofillId, @NonNull int[]);
+    method public final void notifyViewsDisappeared(@NonNull android.view.autofill.AutofillId, @NonNull long[]);
   }
 
   public final class ContentCaptureSessionId implements android.os.Parcelable {
@@ -52904,7 +52993,7 @@ package android.view.inputmethod {
     method @Deprecated public boolean isWatchingCursor(android.view.View);
     method public void restartInput(android.view.View);
     method public void sendAppPrivateCommand(android.view.View, String, android.os.Bundle);
-    method public void setAdditionalInputMethodSubtypes(String, android.view.inputmethod.InputMethodSubtype[]);
+    method @Deprecated public void setAdditionalInputMethodSubtypes(String, android.view.inputmethod.InputMethodSubtype[]);
     method @RequiresPermission(android.Manifest.permission.WRITE_SECURE_SETTINGS) public boolean setCurrentInputMethodSubtype(android.view.inputmethod.InputMethodSubtype);
     method @Deprecated public void setInputMethod(android.os.IBinder, String);
     method @Deprecated public void setInputMethodAndSubtype(@NonNull android.os.IBinder, String, android.view.inputmethod.InputMethodSubtype);
@@ -52923,7 +53012,7 @@ package android.view.inputmethod {
     method public void updateCursorAnchorInfo(android.view.View, android.view.inputmethod.CursorAnchorInfo);
     method public void updateExtractedText(android.view.View, int, android.view.inputmethod.ExtractedText);
     method public void updateSelection(android.view.View, int, int, int, int);
-    method public void viewClicked(android.view.View);
+    method @Deprecated public void viewClicked(android.view.View);
     field public static final int HIDE_IMPLICIT_ONLY = 1; // 0x1
     field public static final int HIDE_NOT_ALWAYS = 2; // 0x2
     field public static final int RESULT_HIDDEN = 3; // 0x3
@@ -56770,7 +56859,7 @@ package android.widget {
     method public boolean isCursorVisible();
     method public boolean isElegantTextHeight();
     method public boolean isFallbackLineSpacing();
-    method public final boolean isHorizontallyScrolling();
+    method public final boolean isHorizontallyScrollable();
     method public boolean isInputMethodTarget();
     method public boolean isSingleLine();
     method public boolean isSuggestionsEnabled();
