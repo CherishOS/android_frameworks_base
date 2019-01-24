@@ -28481,6 +28481,7 @@ package android.net {
   public class ConnectivityManager {
     method public void addDefaultNetworkActiveListener(android.net.ConnectivityManager.OnNetworkActiveListener);
     method public boolean bindProcessToNetwork(@Nullable android.net.Network);
+    method public android.net.SocketKeepalive createSocketKeepalive(@NonNull android.net.Network, @NonNull android.net.IpSecManager.UdpEncapsulationSocket, @NonNull java.net.InetAddress, @NonNull java.net.InetAddress, @NonNull java.util.concurrent.Executor, @NonNull android.net.SocketKeepalive.Callback);
     method @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) @Nullable public android.net.Network getActiveNetwork();
     method @Deprecated @Nullable @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) public android.net.NetworkInfo getActiveNetworkInfo();
     method @Deprecated @NonNull @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) public android.net.NetworkInfo[] getAllNetworkInfo();
@@ -28983,6 +28984,29 @@ package android.net {
   public final class SSLSessionCache {
     ctor public SSLSessionCache(java.io.File) throws java.io.IOException;
     ctor public SSLSessionCache(android.content.Context);
+  }
+
+  public abstract class SocketKeepalive implements java.lang.AutoCloseable {
+    method public final void close();
+    method public final void start(@IntRange(from=0xa, to=0xe10) int);
+    method public final void stop();
+    field public static final int ERROR_HARDWARE_ERROR = -31; // 0xffffffe1
+    field public static final int ERROR_HARDWARE_UNSUPPORTED = -30; // 0xffffffe2
+    field public static final int ERROR_INVALID_INTERVAL = -24; // 0xffffffe8
+    field public static final int ERROR_INVALID_IP_ADDRESS = -21; // 0xffffffeb
+    field public static final int ERROR_INVALID_LENGTH = -23; // 0xffffffe9
+    field public static final int ERROR_INVALID_NETWORK = -20; // 0xffffffec
+    field public static final int ERROR_INVALID_PORT = -22; // 0xffffffea
+    field public static final int ERROR_INVALID_SOCKET = -25; // 0xffffffe7
+    field public static final int ERROR_SOCKET_NOT_IDLE = -26; // 0xffffffe6
+  }
+
+  public static class SocketKeepalive.Callback {
+    ctor public SocketKeepalive.Callback();
+    method public void onDataReceived();
+    method public void onError(int);
+    method public void onStarted();
+    method public void onStopped();
   }
 
   public class TrafficStats {
