@@ -42881,6 +42881,7 @@ package android.telephony {
   public class SubscriptionInfo implements android.os.Parcelable {
     method public android.graphics.Bitmap createIconBitmap(android.content.Context);
     method public int describeContents();
+    method public int getCardId();
     method public int getCarrierId();
     method public CharSequence getCarrierName();
     method public String getCountryIso();
@@ -42997,6 +42998,7 @@ package android.telephony {
     method public android.telephony.TelephonyManager createForSubscriptionId(int);
     method @RequiresPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) public java.util.List<android.telephony.CellInfo> getAllCellInfo();
     method public int getCallState();
+    method public int getCardIdForDefaultEuicc();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @WorkerThread public android.os.PersistableBundle getCarrierConfig();
     method public int getCarrierIdFromSimMccMnc();
     method @Deprecated @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public android.telephony.CellLocation getCellLocation();
@@ -43044,6 +43046,7 @@ package android.telephony {
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getSubscriberId();
     method public String getTypeAllocationCode();
     method public String getTypeAllocationCode(int);
+    method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public java.util.List<android.telephony.UiccCardInfo> getUiccCardsInfo();
     method @Nullable @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getVisualVoicemailPackageName();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getVoiceMailAlphaTag();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getVoiceMailNumber();
@@ -43135,6 +43138,7 @@ package android.telephony {
     field public static final String EXTRA_STATE_RINGING;
     field public static final String EXTRA_SUBSCRIPTION_ID = "android.telephony.extra.SUBSCRIPTION_ID";
     field public static final String EXTRA_VOICEMAIL_NUMBER = "android.telephony.extra.VOICEMAIL_NUMBER";
+    field public static final int INVALID_CARD_ID = -1; // 0xffffffff
     field public static final String METADATA_HIDE_VOICEMAIL_SETTINGS_MENU = "android.telephony.HIDE_VOICEMAIL_SETTINGS_MENU";
     field public static final int NETWORK_TYPE_1xRTT = 7; // 0x7
     field public static final int NETWORK_TYPE_CDMA = 4; // 0x4
@@ -43200,6 +43204,18 @@ package android.telephony {
     method public void onComplete();
     method public void onError(int);
     method public void onResults(java.util.List<android.telephony.CellInfo>);
+  }
+
+  public final class UiccCardInfo implements android.os.Parcelable {
+    ctor public UiccCardInfo(boolean, int, String, String, int);
+    method public int describeContents();
+    method public int getCardId();
+    method public String getEid();
+    method public String getIccId();
+    method public int getSlotIndex();
+    method public boolean isEuicc();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.UiccCardInfo> CREATOR;
   }
 
   public abstract class VisualVoicemailService extends android.app.Service {
