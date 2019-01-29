@@ -3802,6 +3802,7 @@ package android.app {
     method @Deprecated public void onStateNotSaved();
     method @CallSuper protected void onStop();
     method protected void onTitleChanged(CharSequence, int);
+    method public void onTopResumedActivityChanged(boolean);
     method public boolean onTouchEvent(android.view.MotionEvent);
     method public boolean onTrackballEvent(android.view.MotionEvent);
     method public void onTrimMemory(int);
@@ -14167,6 +14168,7 @@ package android.graphics {
     ctor public ImageFormat();
     method public static int getBitsPerPixel(int);
     field public static final int DEPTH16 = 1144402265; // 0x44363159
+    field public static final int DEPTH_JPEG = 1768253795; // 0x69656963
     field public static final int DEPTH_POINT_CLOUD = 257; // 0x101
     field public static final int FLEX_RGBA_8888 = 42; // 0x2a
     field public static final int FLEX_RGB_888 = 41; // 0x29
@@ -16171,6 +16173,7 @@ package android.hardware {
     method public long getUsage();
     method public int getWidth();
     method public boolean isClosed();
+    method public static boolean isSupported(int, int, int, int, long);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int BLOB = 33; // 0x21
     field public static final android.os.Parcelable.Creator<android.hardware.HardwareBuffer> CREATOR;
@@ -23523,6 +23526,8 @@ package android.media {
     method public int setBufferSizeInFrames(int);
     method public int setLoopPoints(int, int, int);
     method public int setNotificationMarkerPosition(int);
+    method public void setOffloadDelayPadding(int, int);
+    method public void setOffloadEndOfStream();
     method public int setPlaybackHeadPosition(int);
     method public void setPlaybackParams(@NonNull android.media.PlaybackParams);
     method public void setPlaybackPositionUpdateListener(android.media.AudioTrack.OnPlaybackPositionUpdateListener);
@@ -27679,6 +27684,7 @@ package android.media.tv {
     field public static final String TYPE_DVB_T2 = "TYPE_DVB_T2";
     field public static final String TYPE_ISDB_C = "TYPE_ISDB_C";
     field public static final String TYPE_ISDB_S = "TYPE_ISDB_S";
+    field public static final String TYPE_ISDB_S3 = "TYPE_ISDB_S3";
     field public static final String TYPE_ISDB_T = "TYPE_ISDB_T";
     field public static final String TYPE_ISDB_TB = "TYPE_ISDB_TB";
     field public static final String TYPE_NTSC = "TYPE_NTSC";
@@ -34406,8 +34412,12 @@ package android.os {
   }
 
   public abstract class FileObserver {
-    ctor public FileObserver(String);
-    ctor public FileObserver(String, int);
+    ctor @Deprecated public FileObserver(String);
+    ctor public FileObserver(@NonNull java.io.File);
+    ctor public FileObserver(@NonNull java.util.List<java.io.File>);
+    ctor @Deprecated public FileObserver(String, int);
+    ctor public FileObserver(@NonNull java.io.File, int);
+    ctor public FileObserver(@NonNull java.util.List<java.io.File>, int);
     method protected void finalize();
     method public abstract void onEvent(int, @Nullable String);
     method public void startWatching();
@@ -38643,6 +38653,7 @@ package android.provider {
     field public static final String ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS = "android.settings.NOTIFICATION_POLICY_ACCESS_SETTINGS";
     field public static final String ACTION_PRINT_SETTINGS = "android.settings.ACTION_PRINT_SETTINGS";
     field public static final String ACTION_PRIVACY_SETTINGS = "android.settings.PRIVACY_SETTINGS";
+    field public static final String ACTION_PROCESS_WIFI_EASY_CONNECT_QR_CODE = "android.settings.PROCESS_WIFI_EASY_CONNECT_QR_CODE";
     field public static final String ACTION_QUICK_LAUNCH_SETTINGS = "android.settings.QUICK_LAUNCH_SETTINGS";
     field public static final String ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS = "android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS";
     field public static final String ACTION_REQUEST_SET_AUTOFILL_SERVICE = "android.settings.REQUEST_SET_AUTOFILL_SERVICE";
@@ -38676,6 +38687,7 @@ package android.provider {
     field public static final String EXTRA_DO_NOT_DISTURB_MODE_ENABLED = "android.settings.extra.do_not_disturb_mode_enabled";
     field public static final String EXTRA_DO_NOT_DISTURB_MODE_MINUTES = "android.settings.extra.do_not_disturb_mode_minutes";
     field public static final String EXTRA_INPUT_METHOD_ID = "input_method_id";
+    field public static final String EXTRA_QR_CODE = "android.provider.extra.QR_CODE";
     field public static final String EXTRA_SUB_ID = "android.provider.extra.SUB_ID";
     field public static final String INTENT_CATEGORY_USAGE_ACCESS_CONFIG = "android.intent.category.USAGE_ACCESS_CONFIG";
     field public static final String METADATA_USAGE_ACCESS_REASON = "android.settings.metadata.USAGE_ACCESS_REASON";
@@ -41406,9 +41418,9 @@ package android.service.notification {
     method public int getUser();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.notification.Adjustment> CREATOR;
+    field public static final String KEY_CONTEXTUAL_ACTIONS = "key_contextual_actions";
     field public static final String KEY_IMPORTANCE = "key_importance";
-    field public static final String KEY_SMART_ACTIONS = "key_smart_actions";
-    field public static final String KEY_SMART_REPLIES = "key_smart_replies";
+    field public static final String KEY_TEXT_REPLIES = "key_text_replies";
     field public static final String KEY_USER_SENTIMENT = "key_user_sentiment";
   }
 
@@ -44670,6 +44682,7 @@ package android.telephony {
     method public static android.telephony.SmsManager getDefault();
     method public static int getDefaultSmsSubscriptionId();
     method public static android.telephony.SmsManager getSmsManagerForSubscriptionId(int);
+    method @RequiresPermission(android.Manifest.permission.SMS_FINANCIAL_TRANSACTIONS) public void getSmsMessagesForFinancialApp(android.os.Bundle, @NonNull java.util.concurrent.Executor, @NonNull android.telephony.SmsManager.FinancialSmsCallback);
     method public int getSubscriptionId();
     method public void injectSmsPdu(byte[], String, android.app.PendingIntent);
     method public void sendDataMessage(String, String, short, byte[], android.app.PendingIntent, android.app.PendingIntent);
@@ -44730,6 +44743,11 @@ package android.telephony {
     field public static final int STATUS_ON_ICC_SENT = 5; // 0x5
     field public static final int STATUS_ON_ICC_UNREAD = 3; // 0x3
     field public static final int STATUS_ON_ICC_UNSENT = 7; // 0x7
+  }
+
+  public abstract static class SmsManager.FinancialSmsCallback {
+    ctor public SmsManager.FinancialSmsCallback();
+    method public abstract void onFinancialSmsMessages(android.database.CursorWindow);
   }
 
   public class SmsMessage {
@@ -45001,6 +45019,7 @@ package android.telephony {
     method @Deprecated public void setVoicemailVibrationEnabled(android.telecom.PhoneAccountHandle, boolean);
     method public boolean updateAvailableNetworks(java.util.List<android.telephony.AvailableNetworkInfo>);
     field public static final String ACTION_CONFIGURE_VOICEMAIL = "android.telephony.action.CONFIGURE_VOICEMAIL";
+    field public static final String ACTION_NETWORK_COUNTRY_CHANGED = "android.telephony.action.NETWORK_COUNTRY_CHANGED";
     field @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public static final String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
     field public static final String ACTION_RESPOND_VIA_MESSAGE = "android.intent.action.RESPOND_VIA_MESSAGE";
     field public static final String ACTION_SECRET_CODE = "android.telephony.action.SECRET_CODE";
@@ -45039,6 +45058,7 @@ package android.telephony {
     field public static final String EXTRA_INCOMING_NUMBER = "incoming_number";
     field public static final String EXTRA_IS_REFRESH = "android.telephony.extra.IS_REFRESH";
     field public static final String EXTRA_LAUNCH_VOICEMAIL_SETTINGS_INTENT = "android.telephony.extra.LAUNCH_VOICEMAIL_SETTINGS_INTENT";
+    field public static final String EXTRA_NETWORK_COUNTRY = "android.telephony.extra.NETWORK_COUNTRY";
     field public static final String EXTRA_NOTIFICATION_COUNT = "android.telephony.extra.NOTIFICATION_COUNT";
     field public static final String EXTRA_PHONE_ACCOUNT_HANDLE = "android.telephony.extra.PHONE_ACCOUNT_HANDLE";
     field public static final String EXTRA_PRECISE_CARRIER_ID = "android.telephony.extra.PRECISE_CARRIER_ID";
@@ -55934,10 +55954,10 @@ package android.widget {
     method @NonNull public android.widget.Magnifier.Builder setCornerRadius(@Px @FloatRange(from=0) float);
     method @NonNull public android.widget.Magnifier.Builder setDefaultSourceToMagnifierOffset(@Px int, @Px int);
     method @NonNull public android.widget.Magnifier.Builder setElevation(@Px @FloatRange(from=0) float);
+    method @NonNull public android.widget.Magnifier.Builder setInitialZoom(@FloatRange(from=0.0f) float);
     method @NonNull public android.widget.Magnifier.Builder setOverlay(@Nullable android.graphics.drawable.Drawable);
     method @NonNull public android.widget.Magnifier.Builder setSize(@Px @IntRange(from=0) int, @Px @IntRange(from=0) int);
     method @NonNull public android.widget.Magnifier.Builder setSourceBounds(int, int, int, int);
-    method @NonNull public android.widget.Magnifier.Builder setZoom(@FloatRange(from=0.0f) float);
   }
 
   public class MediaController extends android.widget.FrameLayout {
