@@ -5777,6 +5777,7 @@ package android.app {
     method public String addAutomaticZenRule(android.app.AutomaticZenRule);
     method public boolean areBubblesAllowed();
     method public boolean areNotificationsEnabled();
+    method public boolean areNotificationsPaused();
     method public boolean canNotifyAsPackage(String);
     method public void cancel(int);
     method public void cancel(String, int);
@@ -6210,6 +6211,9 @@ package android.app {
     method public final android.os.IBinder onBind(android.content.Intent);
   }
 
+  public class StatusBarManager {
+  }
+
   @Deprecated public class TabActivity extends android.app.ActivityGroup {
     ctor @Deprecated public TabActivity();
     method @Deprecated public android.widget.TabHost getTabHost();
@@ -6605,6 +6609,7 @@ package android.app.admin {
     method @Nullable public String[] getAccountTypesWithManagementDisabled();
     method @Nullable public java.util.List<android.content.ComponentName> getActiveAdmins();
     method @NonNull public java.util.Set<java.lang.String> getAffiliationIds(@NonNull android.content.ComponentName);
+    method @Nullable public java.util.List<java.lang.String> getAlwaysOnVpnLockdownWhitelist(@NonNull android.content.ComponentName);
     method @Nullable public String getAlwaysOnVpnPackage(@NonNull android.content.ComponentName);
     method @WorkerThread @NonNull public android.os.Bundle getApplicationRestrictions(@Nullable android.content.ComponentName, String);
     method @Deprecated @Nullable public String getApplicationRestrictionsManagingPackage(@NonNull android.content.ComponentName);
@@ -6679,6 +6684,7 @@ package android.app.admin {
     method public boolean isActivePasswordSufficient();
     method public boolean isAdminActive(@NonNull android.content.ComponentName);
     method public boolean isAffiliatedUser();
+    method public boolean isAlwaysOnVpnLockdownEnabled(@NonNull android.content.ComponentName);
     method public boolean isApplicationHidden(@NonNull android.content.ComponentName, String);
     method public boolean isBackupServiceEnabled(@NonNull android.content.ComponentName);
     method @Deprecated public boolean isCallerApplicationRestrictionsManagingPackage();
@@ -6715,7 +6721,8 @@ package android.app.admin {
     method @Nullable public java.util.List<android.app.admin.SecurityLog.SecurityEvent> retrieveSecurityLogs(@NonNull android.content.ComponentName);
     method public void setAccountManagementDisabled(@NonNull android.content.ComponentName, String, boolean);
     method public void setAffiliationIds(@NonNull android.content.ComponentName, @NonNull java.util.Set<java.lang.String>);
-    method public void setAlwaysOnVpnPackage(@NonNull android.content.ComponentName, @Nullable String, boolean) throws android.content.pm.PackageManager.NameNotFoundException, java.lang.UnsupportedOperationException;
+    method public void setAlwaysOnVpnPackage(@NonNull android.content.ComponentName, @Nullable String, boolean) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public void setAlwaysOnVpnPackage(@NonNull android.content.ComponentName, @Nullable String, boolean, @Nullable java.util.List<java.lang.String>) throws android.content.pm.PackageManager.NameNotFoundException;
     method public boolean setApplicationHidden(@NonNull android.content.ComponentName, String, boolean);
     method @WorkerThread public void setApplicationRestrictions(@Nullable android.content.ComponentName, String, android.os.Bundle);
     method @Deprecated public void setApplicationRestrictionsManagingPackage(@NonNull android.content.ComponentName, @Nullable String) throws android.content.pm.PackageManager.NameNotFoundException;
@@ -11647,8 +11654,7 @@ package android.content.pm {
     field public static final String FEATURE_FAKETOUCH = "android.hardware.faketouch";
     field public static final String FEATURE_FAKETOUCH_MULTITOUCH_DISTINCT = "android.hardware.faketouch.multitouch.distinct";
     field public static final String FEATURE_FAKETOUCH_MULTITOUCH_JAZZHAND = "android.hardware.faketouch.multitouch.jazzhand";
-    field public static final String FEATURE_FINGERPRINT = "android.hardware.biometrics.fingerprint";
-    field public static final String FEATURE_FINGERPRINT_PRE_29 = "android.hardware.fingerprint";
+    field public static final String FEATURE_FINGERPRINT = "android.hardware.fingerprint";
     field public static final String FEATURE_FREEFORM_WINDOW_MANAGEMENT = "android.software.freeform_window_management";
     field public static final String FEATURE_GAMEPAD = "android.hardware.gamepad";
     field public static final String FEATURE_HIFI_SENSORS = "android.hardware.sensor.hifi_sensors";
@@ -16677,6 +16683,7 @@ package android.hardware.camera2 {
   }
 
   public static final class CameraCharacteristics.Key<T> {
+    ctor public CameraCharacteristics.Key(String, Class<T>);
     method @NonNull public String getName();
   }
 
@@ -17048,6 +17055,7 @@ package android.hardware.camera2 {
   }
 
   public static final class CaptureRequest.Key<T> {
+    ctor public CaptureRequest.Key(String, Class<T>);
     method @NonNull public String getName();
   }
 
@@ -17142,6 +17150,7 @@ package android.hardware.camera2 {
   }
 
   public static final class CaptureResult.Key<T> {
+    ctor public CaptureResult.Key(String, Class<T>);
     method @NonNull public String getName();
   }
 
@@ -25156,6 +25165,8 @@ package android.media {
     field public static final int METADATA_KEY_DATE = 5; // 0x5
     field public static final int METADATA_KEY_DISC_NUMBER = 14; // 0xe
     field public static final int METADATA_KEY_DURATION = 9; // 0x9
+    field public static final int METADATA_KEY_EXIF_LENGTH = 34; // 0x22
+    field public static final int METADATA_KEY_EXIF_OFFSET = 33; // 0x21
     field public static final int METADATA_KEY_GENRE = 6; // 0x6
     field public static final int METADATA_KEY_HAS_AUDIO = 16; // 0x10
     field public static final int METADATA_KEY_HAS_IMAGE = 26; // 0x1a
@@ -25959,6 +25970,7 @@ package android.media {
     method @NonNull public abstract android.media.MediaSession2 onGetPrimarySession();
     method @Nullable public abstract android.media.MediaSession2Service.MediaNotification onUpdateNotification(@NonNull android.media.MediaSession2);
     method public final void removeSession(@NonNull android.media.MediaSession2);
+    field public static final String SERVICE_INTERFACE = "android.media.MediaSession2Service";
   }
 
   public static class MediaSession2Service.MediaNotification {
@@ -27351,6 +27363,7 @@ package android.media.session {
     method public int getRatingType();
     method @Nullable public android.app.PendingIntent getSessionActivity();
     method @NonNull public android.media.session.MediaSession.Token getSessionToken();
+    method public String getTag();
     method @NonNull public android.media.session.MediaController.TransportControls getTransportControls();
     method public void registerCallback(@NonNull android.media.session.MediaController.Callback);
     method public void registerCallback(@NonNull android.media.session.MediaController.Callback, @Nullable android.os.Handler);
@@ -28944,6 +28957,7 @@ package android.net {
   }
 
   public abstract class NetworkSpecifier {
+    ctor public NetworkSpecifier();
   }
 
   public class ParseException extends java.lang.RuntimeException {
@@ -29967,30 +29981,48 @@ package android.net.wifi {
     method @Deprecated public abstract void onSucceeded();
   }
 
-  public class WifiNetworkConfigBuilder {
-    ctor public WifiNetworkConfigBuilder();
-    method public android.net.NetworkSpecifier buildNetworkSpecifier();
-    method public android.net.wifi.WifiNetworkSuggestion buildNetworkSuggestion();
-    method public android.net.wifi.WifiNetworkConfigBuilder setBssid(@NonNull android.net.MacAddress);
-    method public android.net.wifi.WifiNetworkConfigBuilder setBssidPattern(@NonNull android.net.MacAddress, @NonNull android.net.MacAddress);
-    method public android.net.wifi.WifiNetworkConfigBuilder setIsAppInteractionRequired();
-    method public android.net.wifi.WifiNetworkConfigBuilder setIsEnhancedOpen();
-    method public android.net.wifi.WifiNetworkConfigBuilder setIsHiddenSsid();
-    method public android.net.wifi.WifiNetworkConfigBuilder setIsMetered();
-    method public android.net.wifi.WifiNetworkConfigBuilder setIsUserInteractionRequired();
-    method public android.net.wifi.WifiNetworkConfigBuilder setPriority(int);
-    method public android.net.wifi.WifiNetworkConfigBuilder setSsid(@NonNull String);
-    method public android.net.wifi.WifiNetworkConfigBuilder setSsidPattern(@NonNull android.os.PatternMatcher);
-    method public android.net.wifi.WifiNetworkConfigBuilder setWpa2EnterpriseConfig(@NonNull android.net.wifi.WifiEnterpriseConfig);
-    method public android.net.wifi.WifiNetworkConfigBuilder setWpa2Passphrase(@NonNull String);
-    method public android.net.wifi.WifiNetworkConfigBuilder setWpa3EnterpriseConfig(@NonNull android.net.wifi.WifiEnterpriseConfig);
-    method public android.net.wifi.WifiNetworkConfigBuilder setWpa3Passphrase(@NonNull String);
+  public final class WifiNetworkSpecifier extends android.net.NetworkSpecifier implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.net.wifi.WifiNetworkSpecifier> CREATOR;
+  }
+
+  public static class WifiNetworkSpecifier.Builder {
+    ctor public WifiNetworkSpecifier.Builder();
+    method public android.net.NetworkSpecifier build();
+    method public android.net.wifi.WifiNetworkSpecifier.Builder setBssid(@NonNull android.net.MacAddress);
+    method public android.net.wifi.WifiNetworkSpecifier.Builder setBssidPattern(@NonNull android.net.MacAddress, @NonNull android.net.MacAddress);
+    method public android.net.wifi.WifiNetworkSpecifier.Builder setIsEnhancedOpen();
+    method public android.net.wifi.WifiNetworkSpecifier.Builder setIsHiddenSsid();
+    method public android.net.wifi.WifiNetworkSpecifier.Builder setSsid(@NonNull String);
+    method public android.net.wifi.WifiNetworkSpecifier.Builder setSsidPattern(@NonNull android.os.PatternMatcher);
+    method public android.net.wifi.WifiNetworkSpecifier.Builder setWpa2EnterpriseConfig(@NonNull android.net.wifi.WifiEnterpriseConfig);
+    method public android.net.wifi.WifiNetworkSpecifier.Builder setWpa2Passphrase(@NonNull String);
+    method public android.net.wifi.WifiNetworkSpecifier.Builder setWpa3EnterpriseConfig(@NonNull android.net.wifi.WifiEnterpriseConfig);
+    method public android.net.wifi.WifiNetworkSpecifier.Builder setWpa3Passphrase(@NonNull String);
   }
 
   public final class WifiNetworkSuggestion implements android.os.Parcelable {
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.wifi.WifiNetworkSuggestion> CREATOR;
+  }
+
+  public static class WifiNetworkSuggestion.Builder {
+    ctor public WifiNetworkSuggestion.Builder();
+    method public android.net.wifi.WifiNetworkSuggestion build();
+    method public android.net.wifi.WifiNetworkSuggestion.Builder setBssid(@NonNull android.net.MacAddress);
+    method public android.net.wifi.WifiNetworkSuggestion.Builder setIsAppInteractionRequired();
+    method public android.net.wifi.WifiNetworkSuggestion.Builder setIsEnhancedOpen();
+    method public android.net.wifi.WifiNetworkSuggestion.Builder setIsHiddenSsid();
+    method public android.net.wifi.WifiNetworkSuggestion.Builder setIsMetered();
+    method public android.net.wifi.WifiNetworkSuggestion.Builder setIsUserInteractionRequired();
+    method public android.net.wifi.WifiNetworkSuggestion.Builder setPriority(int);
+    method public android.net.wifi.WifiNetworkSuggestion.Builder setSsid(@NonNull String);
+    method public android.net.wifi.WifiNetworkSuggestion.Builder setWpa2EnterpriseConfig(@NonNull android.net.wifi.WifiEnterpriseConfig);
+    method public android.net.wifi.WifiNetworkSuggestion.Builder setWpa2Passphrase(@NonNull String);
+    method public android.net.wifi.WifiNetworkSuggestion.Builder setWpa3EnterpriseConfig(@NonNull android.net.wifi.WifiEnterpriseConfig);
+    method public android.net.wifi.WifiNetworkSuggestion.Builder setWpa3Passphrase(@NonNull String);
   }
 
   public class WpsInfo implements android.os.Parcelable {
@@ -30591,6 +30623,7 @@ package android.nfc {
   }
 
   public final class NfcAdapter {
+    method public boolean deviceSupportsNfcSecure();
     method public void disableForegroundDispatch(android.app.Activity);
     method @Deprecated public void disableForegroundNdefPush(android.app.Activity);
     method public void disableReaderMode(android.app.Activity);
@@ -30603,6 +30636,7 @@ package android.nfc {
     method @Deprecated public boolean invokeBeam(android.app.Activity);
     method public boolean isEnabled();
     method @Deprecated public boolean isNdefPushEnabled();
+    method public boolean isNfcSecureEnabled();
     method @Deprecated public void setBeamPushUris(android.net.Uri[], android.app.Activity);
     method @Deprecated public void setBeamPushUrisCallback(android.nfc.NfcAdapter.CreateBeamUrisCallback, android.app.Activity);
     method @Deprecated public void setNdefPushMessage(android.nfc.NdefMessage, android.app.Activity, android.app.Activity...);
@@ -43883,8 +43917,8 @@ package android.telecom {
   }
 
   public static final class VideoProfile.CameraCapabilities implements android.os.Parcelable {
-    ctor public VideoProfile.CameraCapabilities(int, int);
-    ctor public VideoProfile.CameraCapabilities(int, int, boolean, float);
+    ctor public VideoProfile.CameraCapabilities(@IntRange(from=0) int, @IntRange(from=0) int);
+    ctor public VideoProfile.CameraCapabilities(@IntRange(from=0) int, @IntRange(from=0) int, boolean, @FloatRange(from=1.0f) float);
     method public int describeContents();
     method public int getHeight();
     method public float getMaxZoom();
@@ -44144,6 +44178,9 @@ package android.telephony {
     field public static final String KEY_MONTHLY_DATA_CYCLE_DAY_INT = "monthly_data_cycle_day_int";
     field public static final String KEY_ONLY_SINGLE_DC_ALLOWED_INT_ARRAY = "only_single_dc_allowed_int_array";
     field public static final String KEY_OPERATOR_SELECTION_EXPAND_BOOL = "operator_selection_expand_bool";
+    field public static final String KEY_OPPORTUNISTIC_NETWORK_DATA_SWITCH_HYSTERESIS_TIME_LONG = "opportunistic_network_data_switch_hysteresis_time_long";
+    field public static final String KEY_OPPORTUNISTIC_NETWORK_ENTRY_OR_EXIT_HYSTERESIS_TIME_LONG = "opportunistic_network_entry_or_exit_hysteresis_time_long";
+    field public static final String KEY_OPPORTUNISTIC_NETWORK_ENTRY_THRESHOLD_BANDWIDTH_INT = "opportunistic_network_entry_threshold_bandwidth_int";
     field public static final String KEY_OPPORTUNISTIC_NETWORK_ENTRY_THRESHOLD_RSRP_INT = "opportunistic_network_entry_threshold_rsrp_int";
     field public static final String KEY_OPPORTUNISTIC_NETWORK_ENTRY_THRESHOLD_RSSNR_INT = "opportunistic_network_entry_threshold_rssnr_int";
     field public static final String KEY_OPPORTUNISTIC_NETWORK_EXIT_THRESHOLD_RSRP_INT = "opportunistic_network_exit_threshold_rsrp_int";
@@ -44812,6 +44849,7 @@ package android.telephony {
   public class SubscriptionInfo implements android.os.Parcelable {
     method public android.graphics.Bitmap createIconBitmap(android.content.Context);
     method public int describeContents();
+    method public int getCardId();
     method public int getCarrierId();
     method public CharSequence getCarrierName();
     method public String getCountryIso();
@@ -44928,6 +44966,7 @@ package android.telephony {
     method public android.telephony.TelephonyManager createForSubscriptionId(int);
     method @RequiresPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) public java.util.List<android.telephony.CellInfo> getAllCellInfo();
     method public int getCallState();
+    method public int getCardIdForDefaultEuicc();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @WorkerThread public android.os.PersistableBundle getCarrierConfig();
     method public int getCarrierIdFromSimMccMnc();
     method @Deprecated @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public android.telephony.CellLocation getCellLocation();
@@ -44975,6 +45014,7 @@ package android.telephony {
     method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public String getSubscriberId();
     method public String getTypeAllocationCode();
     method public String getTypeAllocationCode(int);
+    method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public java.util.List<android.telephony.UiccCardInfo> getUiccCardsInfo();
     method @Nullable @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getVisualVoicemailPackageName();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getVoiceMailAlphaTag();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getVoiceMailNumber();
@@ -45069,6 +45109,7 @@ package android.telephony {
     field public static final String EXTRA_STATE_RINGING;
     field public static final String EXTRA_SUBSCRIPTION_ID = "android.telephony.extra.SUBSCRIPTION_ID";
     field public static final String EXTRA_VOICEMAIL_NUMBER = "android.telephony.extra.VOICEMAIL_NUMBER";
+    field public static final int INVALID_CARD_ID = -1; // 0xffffffff
     field public static final String METADATA_HIDE_VOICEMAIL_SETTINGS_MENU = "android.telephony.HIDE_VOICEMAIL_SETTINGS_MENU";
     field public static final int NETWORK_TYPE_1xRTT = 7; // 0x7
     field public static final int NETWORK_TYPE_CDMA = 4; // 0x4
@@ -45134,6 +45175,18 @@ package android.telephony {
     method public void onComplete();
     method public void onError(int);
     method public void onResults(java.util.List<android.telephony.CellInfo>);
+  }
+
+  public final class UiccCardInfo implements android.os.Parcelable {
+    ctor public UiccCardInfo(boolean, int, String, String, int);
+    method public int describeContents();
+    method public int getCardId();
+    method public String getEid();
+    method public String getIccId();
+    method public int getSlotIndex();
+    method public boolean isEuicc();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.telephony.UiccCardInfo> CREATOR;
   }
 
   public abstract class VisualVoicemailService extends android.app.Service {
