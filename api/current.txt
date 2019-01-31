@@ -1622,6 +1622,7 @@ package android {
     field @Deprecated public static final int yearListSelectorColor = 16843930; // 0x101049a
     field public static final int yesNoPreferenceStyle = 16842896; // 0x1010090
     field public static final int zAdjustment = 16843201; // 0x10101c1
+    field public static final int zygotePreloadName = 16844195; // 0x10105a3
   }
 
   public static final class R.bool {
@@ -6483,6 +6484,10 @@ package android.app {
     method public void onColorsChanged(android.app.WallpaperColors, int);
   }
 
+  public interface ZygotePreload {
+    method public void doPreload(android.content.pm.ApplicationInfo);
+  }
+
 }
 
 package android.app.admin {
@@ -11233,6 +11238,7 @@ package android.content.pm {
 
   public class LauncherApps {
     method public java.util.List<android.content.pm.LauncherActivityInfo> getActivityList(String, android.os.UserHandle);
+    method @NonNull public java.util.List<android.content.pm.PackageInstaller.SessionInfo> getAllPackageInstallerSessions();
     method @Nullable public android.content.pm.LauncherApps.AppUsageLimit getAppUsageLimit(String, android.os.UserHandle);
     method public android.content.pm.ApplicationInfo getApplicationInfo(@NonNull String, int, @NonNull android.os.UserHandle) throws android.content.pm.PackageManager.NameNotFoundException;
     method public android.content.pm.LauncherApps.PinItemRequest getPinItemRequest(android.content.Intent);
@@ -11249,13 +11255,16 @@ package android.content.pm {
     method public void pinShortcuts(@NonNull String, @NonNull java.util.List<java.lang.String>, @NonNull android.os.UserHandle);
     method public void registerCallback(android.content.pm.LauncherApps.Callback);
     method public void registerCallback(android.content.pm.LauncherApps.Callback, android.os.Handler);
+    method public void registerPackageInstallerSessionCallback(@NonNull java.util.concurrent.Executor, @NonNull android.content.pm.PackageInstaller.SessionCallback);
     method public android.content.pm.LauncherActivityInfo resolveActivity(android.content.Intent, android.os.UserHandle);
     method public boolean shouldHideFromSuggestions(@NonNull String, @NonNull android.os.UserHandle);
     method public void startAppDetailsActivity(android.content.ComponentName, android.os.UserHandle, android.graphics.Rect, android.os.Bundle);
     method public void startMainActivity(android.content.ComponentName, android.os.UserHandle, android.graphics.Rect, android.os.Bundle);
+    method public void startPackageInstallerSessionDetailsActivity(android.content.pm.PackageInstaller.SessionInfo, android.graphics.Rect, android.os.Bundle);
     method public void startShortcut(@NonNull String, @NonNull String, @Nullable android.graphics.Rect, @Nullable android.os.Bundle, @NonNull android.os.UserHandle);
     method public void startShortcut(@NonNull android.content.pm.ShortcutInfo, @Nullable android.graphics.Rect, @Nullable android.os.Bundle);
     method public void unregisterCallback(android.content.pm.LauncherApps.Callback);
+    method public void unregisterPackageInstallerSessionCallback(android.content.pm.PackageInstaller.SessionCallback);
     field public static final String ACTION_CONFIRM_PIN_APPWIDGET = "android.content.pm.action.CONFIRM_PIN_APPWIDGET";
     field public static final String ACTION_CONFIRM_PIN_SHORTCUT = "android.content.pm.action.CONFIRM_PIN_SHORTCUT";
     field public static final String EXTRA_PIN_ITEM_REQUEST = "android.content.pm.extra.PIN_ITEM_REQUEST";
@@ -11445,6 +11454,7 @@ package android.content.pm {
     method public long getSize();
     method public int getStagedSessionErrorCode();
     method public String getStagedSessionErrorMessage();
+    method public android.os.UserHandle getUser();
     method public boolean isActive();
     method public boolean isMultiPackage();
     method public boolean isSealed();
@@ -14244,7 +14254,9 @@ package android.graphics {
 
   public class LinearGradient extends android.graphics.Shader {
     ctor public LinearGradient(float, float, float, float, @NonNull @ColorInt int[], @Nullable float[], @NonNull android.graphics.Shader.TileMode);
+    ctor public LinearGradient(float, float, float, float, @NonNull @ColorLong long[], @Nullable float[], @NonNull android.graphics.Shader.TileMode);
     ctor public LinearGradient(float, float, float, float, @ColorInt int, @ColorInt int, @NonNull android.graphics.Shader.TileMode);
+    ctor public LinearGradient(float, float, float, float, @ColorLong long, @ColorLong long, @NonNull android.graphics.Shader.TileMode);
   }
 
   public class MaskFilter {
@@ -14773,7 +14785,9 @@ package android.graphics {
 
   public class RadialGradient extends android.graphics.Shader {
     ctor public RadialGradient(float, float, float, @NonNull @ColorInt int[], @Nullable float[], @NonNull android.graphics.Shader.TileMode);
+    ctor public RadialGradient(float, float, float, @NonNull @ColorLong long[], @Nullable float[], @NonNull android.graphics.Shader.TileMode);
     ctor public RadialGradient(float, float, float, @ColorInt int, @ColorInt int, @NonNull android.graphics.Shader.TileMode);
+    ctor public RadialGradient(float, float, float, @ColorLong long, @ColorLong long, @NonNull android.graphics.Shader.TileMode);
   }
 
   public final class RecordingCanvas extends android.graphics.Canvas {
@@ -15033,7 +15047,9 @@ package android.graphics {
 
   public class SweepGradient extends android.graphics.Shader {
     ctor public SweepGradient(float, float, @NonNull @ColorInt int[], @Nullable float[]);
+    ctor public SweepGradient(float, float, @NonNull @ColorLong long[], @Nullable float[]);
     ctor public SweepGradient(float, float, @ColorInt int, @ColorInt int);
+    ctor public SweepGradient(float, float, @ColorLong long, @ColorLong long);
   }
 
   public class Typeface {
@@ -25582,6 +25598,14 @@ package android.media {
     field public static final int PLAYER_STATE_PAUSED = 1003; // 0x3eb
     field public static final int PLAYER_STATE_PLAYING = 1004; // 0x3ec
     field public static final int PLAYER_STATE_PREPARED = 1002; // 0x3ea
+    field public static final int PREPARE_DRM_STATUS_KEY_EXCHANGE_ERROR = 7; // 0x7
+    field public static final int PREPARE_DRM_STATUS_PREPARATION_ERROR = 3; // 0x3
+    field public static final int PREPARE_DRM_STATUS_PROVISIONING_NETWORK_ERROR = 1; // 0x1
+    field public static final int PREPARE_DRM_STATUS_PROVISIONING_SERVER_ERROR = 2; // 0x2
+    field public static final int PREPARE_DRM_STATUS_RESOURCE_BUSY = 5; // 0x5
+    field public static final int PREPARE_DRM_STATUS_RESTORE_ERROR = 6; // 0x6
+    field public static final int PREPARE_DRM_STATUS_SUCCESS = 0; // 0x0
+    field public static final int PREPARE_DRM_STATUS_UNSUPPORTED_SCHEME = 4; // 0x4
     field public static final int SEEK_CLOSEST = 3; // 0x3
     field public static final int SEEK_CLOSEST_SYNC = 2; // 0x2
     field public static final int SEEK_NEXT_SYNC = 1; // 0x1
@@ -27373,7 +27397,6 @@ package android.media.session {
     method public int getRatingType();
     method @Nullable public android.app.PendingIntent getSessionActivity();
     method @NonNull public android.media.session.MediaSession.Token getSessionToken();
-    method public String getTag();
     method @NonNull public android.media.session.MediaController.TransportControls getTransportControls();
     method public void registerCallback(@NonNull android.media.session.MediaController.Callback);
     method public void registerCallback(@NonNull android.media.session.MediaController.Callback, @Nullable android.os.Handler);
@@ -29268,6 +29291,7 @@ package android.net {
     method public android.net.VpnService.Builder setBlocking(boolean);
     method public android.net.VpnService.Builder setConfigureIntent(android.app.PendingIntent);
     method public android.net.VpnService.Builder setHttpProxy(android.net.ProxyInfo);
+    method public android.net.VpnService.Builder setMetered(boolean);
     method public android.net.VpnService.Builder setMtu(int);
     method public android.net.VpnService.Builder setSession(String);
     method public android.net.VpnService.Builder setUnderlyingNetworks(android.net.Network[]);
@@ -38497,13 +38521,13 @@ package android.provider {
     field public static final String BUCKET_ID = "bucket_id";
     field public static final String DATE_TAKEN = "datetaken";
     field public static final String DESCRIPTION = "description";
+    field public static final String GROUP_ID = "group_id";
     field public static final String IS_PRIVATE = "isprivate";
     field @Deprecated public static final String LATITUDE = "latitude";
     field @Deprecated public static final String LONGITUDE = "longitude";
     field @Deprecated public static final String MINI_THUMB_MAGIC = "mini_thumb_magic";
     field public static final String ORIENTATION = "orientation";
     field @Deprecated public static final String PICASA_ID = "picasa_id";
-    field public static final String SECONDARY_BUCKET_ID = "secondary_bucket_id";
   }
 
   public static final class MediaStore.Images.Media implements android.provider.MediaStore.Images.ImageColumns {
@@ -38557,6 +38581,8 @@ package android.provider {
     field public static final String IS_TRASHED = "is_trashed";
     field public static final String MIME_TYPE = "mime_type";
     field public static final String OWNER_PACKAGE_NAME = "owner_package_name";
+    field public static final String PRIMARY_DIRECTORY = "primary_directory";
+    field public static final String SECONDARY_DIRECTORY = "secondary_directory";
     field public static final String SIZE = "_size";
     field public static final String TITLE = "title";
     field public static final String WIDTH = "width";
@@ -38624,13 +38650,13 @@ package android.provider {
     field public static final String DATE_TAKEN = "datetaken";
     field public static final String DESCRIPTION = "description";
     field public static final String DURATION = "duration";
+    field public static final String GROUP_ID = "group_id";
     field public static final String IS_PRIVATE = "isprivate";
     field public static final String LANGUAGE = "language";
     field @Deprecated public static final String LATITUDE = "latitude";
     field @Deprecated public static final String LONGITUDE = "longitude";
     field @Deprecated public static final String MINI_THUMB_MAGIC = "mini_thumb_magic";
     field public static final String RESOLUTION = "resolution";
-    field public static final String SECONDARY_BUCKET_ID = "secondary_bucket_id";
     field public static final String TAGS = "tags";
   }
 
@@ -38854,6 +38880,7 @@ package android.provider {
     field @Deprecated public static final int LOCATION_MODE_BATTERY_SAVING = 2; // 0x2
     field @Deprecated public static final int LOCATION_MODE_HIGH_ACCURACY = 3; // 0x3
     field @Deprecated public static final int LOCATION_MODE_OFF = 0; // 0x0
+    field @Deprecated public static final int LOCATION_MODE_ON = 3; // 0x3
     field @Deprecated public static final int LOCATION_MODE_SENSORS_ONLY = 1; // 0x1
     field @Deprecated public static final String LOCATION_PROVIDERS_ALLOWED = "location_providers_allowed";
     field @Deprecated public static final String LOCK_PATTERN_ENABLED = "lock_pattern_autolock";
@@ -41878,10 +41905,6 @@ package android.service.voice {
     method public void showSession(android.os.Bundle, int);
     field public static final String SERVICE_INTERFACE = "android.service.voice.VoiceInteractionService";
     field public static final String SERVICE_META_DATA = "android.voice_interaction";
-    field public static final int VOICE_STATE_CONDITIONAL_LISTENING = 1; // 0x1
-    field public static final int VOICE_STATE_FULFILLING = 3; // 0x3
-    field public static final int VOICE_STATE_LISTENING = 2; // 0x2
-    field public static final int VOICE_STATE_NONE = 0; // 0x0
   }
 
   public class VoiceInteractionSession implements android.content.ComponentCallbacks2 android.view.KeyEvent.Callback {
