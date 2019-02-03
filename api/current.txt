@@ -1511,6 +1511,7 @@ package android {
     field public static final int use32bitAbi = 16844053; // 0x1010515
     field public static final int useAppZygote = 16844184; // 0x1010598
     field public static final int useDefaultMargins = 16843641; // 0x1010379
+    field public static final int useEmbeddedDex = 16844196; // 0x10105a4
     field public static final int useIntrinsicSizeAsMinimum = 16843536; // 0x1010310
     field public static final int useLevel = 16843167; // 0x101019f
     field public static final int userVisible = 16843409; // 0x1010291
@@ -6177,6 +6178,7 @@ package android.app {
     method public void onTrimMemory(int);
     method public boolean onUnbind(android.content.Intent);
     method public final void startForeground(int, android.app.Notification);
+    method public final void startForeground(int, @NonNull android.app.Notification, int);
     method public final void stopForeground(boolean);
     method public final void stopForeground(int);
     method public final void stopSelf();
@@ -11322,7 +11324,7 @@ package android.content.pm {
 
   public final class ModuleInfo implements android.os.Parcelable {
     method public int describeContents();
-    method @Nullable public String getName();
+    method @Nullable public CharSequence getName();
     method @Nullable public String getPackageName();
     method public boolean isHidden();
     method public void writeToParcel(android.os.Parcel, int);
@@ -11929,13 +11931,13 @@ package android.content.pm {
     field public static final int FLAG_SINGLE_USER = 1073741824; // 0x40000000
     field public static final int FLAG_STOP_WITH_TASK = 1; // 0x1
     field public static final int FLAG_USE_APP_ZYGOTE = 8; // 0x8
-    field public static final int FOREGROUND_SERVICE_TYPE_DEVICE_COMPANION = 5; // 0x5
-    field public static final int FOREGROUND_SERVICE_TYPE_LOCATION = 4; // 0x4
-    field public static final int FOREGROUND_SERVICE_TYPE_MEDIA_PLAY = 2; // 0x2
-    field public static final int FOREGROUND_SERVICE_TYPE_ONGOING_PROCESS = 6; // 0x6
-    field public static final int FOREGROUND_SERVICE_TYPE_PHONE_CALL = 3; // 0x3
-    field public static final int FOREGROUND_SERVICE_TYPE_SYNC = 1; // 0x1
-    field public static final int FOREGROUND_SERVICE_TYPE_UNSPECIFIED = 0; // 0x0
+    field public static final int FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE = 16; // 0x10
+    field public static final int FOREGROUND_SERVICE_TYPE_DATA_SYNC = 1; // 0x1
+    field public static final int FOREGROUND_SERVICE_TYPE_LOCATION = 8; // 0x8
+    field public static final int FOREGROUND_SERVICE_TYPE_MANIFEST = -1; // 0xffffffff
+    field public static final int FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK = 2; // 0x2
+    field public static final int FOREGROUND_SERVICE_TYPE_NONE = 0; // 0x0
+    field public static final int FOREGROUND_SERVICE_TYPE_PHONE_CALL = 4; // 0x4
     field public int flags;
     field public String permission;
   }
@@ -12386,7 +12388,7 @@ package android.content.res {
     method public String getPositionDescription();
     method @AnyRes public int getResourceId(@StyleableRes int, int);
     method public android.content.res.Resources getResources();
-    method @StyleRes public int getSourceStyleResourceId(@StyleableRes int, @StyleRes int);
+    method @StyleRes public int getSourceResourceId(@StyleableRes int, @StyleRes int);
     method @Nullable public String getString(@StyleableRes int);
     method public CharSequence getText(@StyleableRes int);
     method public CharSequence[] getTextArray(@StyleableRes int);
@@ -24743,9 +24745,9 @@ package android.media {
     field public static final int KEY_TYPE_OFFLINE = 2; // 0x2
     field public static final int KEY_TYPE_RELEASE = 3; // 0x3
     field public static final int KEY_TYPE_STREAMING = 1; // 0x1
-    field public static final int OFFLINE_LICENSE_INACTIVE = 2; // 0x2
+    field public static final int OFFLINE_LICENSE_STATE_RELEASED = 2; // 0x2
     field public static final int OFFLINE_LICENSE_STATE_UNKNOWN = 0; // 0x0
-    field public static final int OFFLINE_LICENSE_USABLE = 1; // 0x1
+    field public static final int OFFLINE_LICENSE_STATE_USABLE = 1; // 0x1
     field public static final String PROPERTY_ALGORITHMS = "algorithms";
     field public static final String PROPERTY_DESCRIPTION = "description";
     field public static final String PROPERTY_DEVICE_UNIQUE_ID = "deviceUniqueId";
@@ -25506,7 +25508,7 @@ package android.media {
     method @Nullable public android.media.MediaTimestamp getTimestamp();
     method @NonNull public java.util.List<android.media.MediaPlayer2.TrackInfo> getTrackInfo();
     method @NonNull public java.util.List<android.media.MediaPlayer2.TrackInfo> getTrackInfo(@NonNull android.media.DataSourceDesc);
-    method public android.media.VideoSize getVideoSize();
+    method public android.util.Size getVideoSize();
     method public boolean isLooping();
     method public Object loopCurrent(boolean);
     method public Object notifyWhenCommandLabelReached(@NonNull Object);
@@ -25648,7 +25650,7 @@ package android.media {
     method public void onMediaTimeDiscontinuity(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.media.MediaTimestamp);
     method public void onSubtitleData(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.media.SubtitleData);
     method public void onTimedMetaDataAvailable(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.media.TimedMetaData);
-    method public void onVideoSizeChanged(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.media.VideoSize);
+    method public void onVideoSizeChanged(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.util.Size);
   }
 
   public static final class MediaPlayer2.MetricsConstants {
@@ -26551,11 +26553,6 @@ package android.media {
     method @NonNull public android.media.UriDataSourceDesc build();
     method @NonNull public android.media.UriDataSourceDesc.Builder setDataSource(@NonNull android.content.Context, @NonNull android.net.Uri);
     method @NonNull public android.media.UriDataSourceDesc.Builder setDataSource(@NonNull android.content.Context, @NonNull android.net.Uri, @Nullable java.util.Map<java.lang.String,java.lang.String>, @Nullable java.util.List<java.net.HttpCookie>);
-  }
-
-  public final class VideoSize {
-    method public int getHeight();
-    method public int getWidth();
   }
 
   public interface VolumeAutomation {
@@ -27527,7 +27524,6 @@ package android.media.session {
     method @NonNull public java.util.List<android.media.Session2Token> getSession2Tokens();
     method public boolean isTrustedForMediaControl(@NonNull android.media.session.MediaSessionManager.RemoteUserInfo);
     method public void notifySession2Created(@NonNull android.media.Session2Token);
-    method public void notifySession2Destroyed(@NonNull android.media.Session2Token);
     method public void removeOnActiveSessionsChangedListener(@NonNull android.media.session.MediaSessionManager.OnActiveSessionsChangedListener);
     method public void removeOnSession2TokensChangedListener(@NonNull android.media.session.MediaSessionManager.OnSession2TokensChangedListener);
   }
@@ -30581,6 +30577,7 @@ package android.net.wifi.rtt {
     method public int getNumSuccessfulMeasurements();
     method @Nullable public android.net.wifi.aware.PeerHandle getPeerHandle();
     method public long getRangingTimestampMillis();
+    method @Nullable public android.net.wifi.rtt.ResponderLocation getResponderLocation();
     method public int getRssi();
     method public int getStatus();
     method public void writeToParcel(android.os.Parcel, int);
@@ -30596,6 +30593,64 @@ package android.net.wifi.rtt {
     method public abstract void onRangingResults(@NonNull java.util.List<android.net.wifi.rtt.RangingResult>);
     field public static final int STATUS_CODE_FAIL = 1; // 0x1
     field public static final int STATUS_CODE_FAIL_RTT_NOT_AVAILABLE = 2; // 0x2
+  }
+
+  public final class ResponderLocation implements android.os.Parcelable {
+    method public int describeContents();
+    method public double getAltitude();
+    method public int getAltitudeType();
+    method public double getAltitudeUncertainty();
+    method public java.util.List<android.net.MacAddress> getColocatedBssids();
+    method public int getDatum();
+    method public int getExpectedToMove();
+    method public double getLatitude();
+    method public double getLatitudeUncertainty();
+    method public int getLciFlags();
+    method public double getLongitude();
+    method public double getLongitudeUncertainty();
+    method public int getMapImageType();
+    method @Nullable public java.net.URL getMapImageUrl();
+    method public double getStaFloorNumber();
+    method public double getStaHeightAboveFloorMeters();
+    method public double getStaHeightAboveFloorUncertaintyMeters();
+    method public boolean isLciSubelementValid();
+    method public boolean isZsubelementValid();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final int ALTITUDE_FLOORS = 2; // 0x2
+    field public static final int ALTITUDE_METERS = 1; // 0x1
+    field public static final int ALTITUDE_UNDEFINED = 0; // 0x0
+    field public static final android.os.Parcelable.Creator<android.net.wifi.rtt.ResponderLocation> CREATOR;
+    field public static final int DATUM_NAD83_MLLW = 3; // 0x3
+    field public static final int DATUM_NAD83_NAV88 = 2; // 0x2
+    field public static final int DATUM_UNDEFINED = 0; // 0x0
+    field public static final int DATUM_WGS84 = 1; // 0x1
+    field public static final int LCI_FLAGS_MASK_DEPENDENT_STA = 4; // 0x4
+    field public static final int LCI_FLAGS_MASK_REGLOC_AGREEMENT = 16; // 0x10
+    field public static final int LCI_FLAGS_MASK_REGLOC_DSE = 8; // 0x8
+    field public static final int LCI_FLAGS_MASK_VERSION = 3; // 0x3
+    field public static final int LCI_VERSION_1 = 1; // 0x1
+    field public static final int LOCATION_FIXED = 0; // 0x0
+    field public static final int LOCATION_MOVEMENT_UNKNOWN = 2; // 0x2
+    field public static final int LOCATION_RESERVED = 3; // 0x3
+    field public static final int LOCATION_VARIABLE = 1; // 0x1
+    field public static final int MAP_TYPE_BMP = 12; // 0xc
+    field public static final int MAP_TYPE_CAD = 8; // 0x8
+    field public static final int MAP_TYPE_DWF = 7; // 0x7
+    field public static final int MAP_TYPE_DWG = 6; // 0x6
+    field public static final int MAP_TYPE_DXF = 5; // 0x5
+    field public static final int MAP_TYPE_GIF = 2; // 0x2
+    field public static final int MAP_TYPE_GML = 10; // 0xa
+    field public static final int MAP_TYPE_ICO = 17; // 0x11
+    field public static final int MAP_TYPE_JPG = 3; // 0x3
+    field public static final int MAP_TYPE_KML = 11; // 0xb
+    field public static final int MAP_TYPE_PGM = 13; // 0xd
+    field public static final int MAP_TYPE_PNG = 1; // 0x1
+    field public static final int MAP_TYPE_PPM = 14; // 0xe
+    field public static final int MAP_TYPE_SVG = 4; // 0x4
+    field public static final int MAP_TYPE_TIFF = 9; // 0x9
+    field public static final int MAP_TYPE_URL_DEFINED = 0; // 0x0
+    field public static final int MAP_TYPE_XBM = 15; // 0xf
+    field public static final int MAP_TYPE_XPM = 16; // 0x10
   }
 
   public class WifiRttManager {
@@ -43852,12 +43907,12 @@ package android.telecom {
 
   public class TelecomManager {
     method public void acceptHandover(android.net.Uri, int, android.telecom.PhoneAccountHandle);
-    method @RequiresPermission(anyOf={android.Manifest.permission.ANSWER_PHONE_CALLS, android.Manifest.permission.MODIFY_PHONE_STATE}) public void acceptRingingCall();
-    method @RequiresPermission(anyOf={android.Manifest.permission.ANSWER_PHONE_CALLS, android.Manifest.permission.MODIFY_PHONE_STATE}) public void acceptRingingCall(int);
+    method @Deprecated @RequiresPermission(anyOf={android.Manifest.permission.ANSWER_PHONE_CALLS, android.Manifest.permission.MODIFY_PHONE_STATE}) public void acceptRingingCall();
+    method @Deprecated @RequiresPermission(anyOf={android.Manifest.permission.ANSWER_PHONE_CALLS, android.Manifest.permission.MODIFY_PHONE_STATE}) public void acceptRingingCall(int);
     method public void addNewIncomingCall(android.telecom.PhoneAccountHandle, android.os.Bundle);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public void cancelMissedCallsNotification();
     method public android.content.Intent createManageBlockedNumbersIntent();
-    method @RequiresPermission(android.Manifest.permission.ANSWER_PHONE_CALLS) public boolean endCall();
+    method @Deprecated @RequiresPermission(android.Manifest.permission.ANSWER_PHONE_CALLS) public boolean endCall();
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public android.net.Uri getAdnUriForPhoneAccount(android.telecom.PhoneAccountHandle);
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public java.util.List<android.telecom.PhoneAccountHandle> getCallCapablePhoneAccounts();
     method public String getDefaultDialerPackage();
@@ -48453,6 +48508,7 @@ package android.util {
     method public static boolean logEvent(int);
     method public static boolean logStart(int);
     method public static boolean logStop(int);
+    method public static void write(int, @NonNull java.lang.Object...);
   }
 
   public class StringBuilderPrinter implements android.util.Printer {
@@ -48538,7 +48594,7 @@ package android.util {
     field public int data;
     field public int density;
     field @AnyRes public int resourceId;
-    field public int sourceStyleResourceId;
+    field public int sourceResourceId;
     field public CharSequence string;
     field public int type;
   }
@@ -49814,6 +49870,7 @@ package android.view {
     field public static final int EDGE_RIGHT = 8; // 0x8
     field public static final int EDGE_TOP = 1; // 0x1
     field public static final int FLAG_WINDOW_IS_OBSCURED = 1; // 0x1
+    field public static final int FLAG_WINDOW_IS_PARTIALLY_OBSCURED = 2; // 0x2
     field public static final int INVALID_POINTER_ID = -1; // 0xffffffff
     field public static final int TOOL_TYPE_ERASER = 4; // 0x4
     field public static final int TOOL_TYPE_FINGER = 1; // 0x1
@@ -50366,6 +50423,7 @@ package android.view {
     method public final int getScrollX();
     method public final int getScrollY();
     method @android.view.ViewDebug.ExportedProperty(category="drawing") @ColorInt public int getSolidColor();
+    method @LayoutRes public int getSourceLayoutResId();
     method public android.animation.StateListAnimator getStateListAnimator();
     method protected int getSuggestedMinimumHeight();
     method protected int getSuggestedMinimumWidth();
@@ -51030,6 +51088,7 @@ package android.view {
   public class ViewConfiguration {
     ctor @Deprecated public ViewConfiguration();
     method public static android.view.ViewConfiguration get(android.content.Context);
+    method @FloatRange(from=1.0) public static float getAmbiguousGestureMultiplier();
     method public static long getDefaultActionModeHideDuration();
     method public static int getDoubleTapTimeout();
     method @Deprecated public static int getEdgeSlop();
@@ -56044,8 +56103,7 @@ package android.widget {
     method public void show(@FloatRange(from=0) float, @FloatRange(from=0) float, float, float);
     method public void update();
     field public static final int SOURCE_BOUND_MAX_IN_SURFACE = 0; // 0x0
-    field public static final int SOURCE_BOUND_MAX_IN_VIEW = 1; // 0x1
-    field public static final int SOURCE_BOUND_MAX_VISIBLE = 2; // 0x2
+    field public static final int SOURCE_BOUND_MAX_VISIBLE = 1; // 0x1
   }
 
   public static class Magnifier.Builder {
