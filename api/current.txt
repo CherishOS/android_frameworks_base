@@ -11465,11 +11465,12 @@ package android.content.pm {
     method public boolean isSessionReady();
     method public boolean isStaged();
     method public void writeToParcel(android.os.Parcel, int);
-    field public static final int ACTIVATION_FAILED = 2; // 0x2
     field public static final android.os.Parcelable.Creator<android.content.pm.PackageInstaller.SessionInfo> CREATOR;
     field public static final int INVALID_ID = -1; // 0xffffffff
-    field public static final int NO_ERROR = 0; // 0x0
-    field public static final int VERIFICATION_FAILED = 1; // 0x1
+    field public static final int STAGED_SESSION_ACTIVATION_FAILED = 2; // 0x2
+    field public static final int STAGED_SESSION_NO_ERROR = 0; // 0x0
+    field public static final int STAGED_SESSION_UNKNOWN = 3; // 0x3
+    field public static final int STAGED_SESSION_VERIFICATION_FAILED = 1; // 0x1
   }
 
   public static class PackageInstaller.SessionParams implements android.os.Parcelable {
@@ -24050,7 +24051,8 @@ package android.media {
   }
 
   public static interface MediaCas.EventListener {
-    method public void onEvent(android.media.MediaCas, int, int, @Nullable byte[]);
+    method public void onEvent(@NonNull android.media.MediaCas, int, int, @Nullable byte[]);
+    method public default void onSessionEvent(@NonNull android.media.MediaCas, @NonNull android.media.MediaCas.Session, int, int, @Nullable byte[]);
   }
 
   public static class MediaCas.PluginDescriptor {
@@ -24062,6 +24064,7 @@ package android.media {
     method public void close();
     method public void processEcm(@NonNull byte[], int, int) throws android.media.MediaCasException;
     method public void processEcm(@NonNull byte[]) throws android.media.MediaCasException;
+    method public void sendSessionEvent(int, int, @Nullable byte[]) throws android.media.MediaCasException;
     method public void setPrivateData(@NonNull byte[]) throws android.media.MediaCasException;
   }
 
@@ -24139,8 +24142,10 @@ package android.media {
     field public static final int INFO_OUTPUT_FORMAT_CHANGED = -2; // 0xfffffffe
     field public static final int INFO_TRY_AGAIN_LATER = -1; // 0xffffffff
     field public static final String PARAMETER_KEY_HDR10_PLUS_INFO = "hdr10-plus-info";
+    field public static final String PARAMETER_KEY_OFFSET_TIME = "time-offset-us";
     field public static final String PARAMETER_KEY_REQUEST_SYNC_FRAME = "request-sync";
     field public static final String PARAMETER_KEY_SUSPEND = "drop-input-frames";
+    field public static final String PARAMETER_KEY_SUSPEND_TIME = "drop-start-time-us";
     field public static final String PARAMETER_KEY_VIDEO_BITRATE = "video-bitrate";
     field public static final int VIDEO_SCALING_MODE_SCALE_TO_FIT = 1; // 0x1
     field public static final int VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING = 2; // 0x2
@@ -24985,6 +24990,7 @@ package android.media {
     field public static final String KEY_COLOR_STANDARD = "color-standard";
     field public static final String KEY_COLOR_TRANSFER = "color-transfer";
     field public static final String KEY_COMPLEXITY = "complexity";
+    field public static final String KEY_CREATE_INPUT_SURFACE_SUSPENDED = "create-input-buffers-suspended";
     field public static final String KEY_DURATION = "durationUs";
     field public static final String KEY_FLAC_COMPRESSION_LEVEL = "flac-compression-level";
     field public static final String KEY_FRAME_RATE = "frame-rate";
@@ -53404,6 +53410,11 @@ package android.view.inputmethod {
 
 package android.view.inspector {
 
+  public class GeneratedInspectionCompanionProvider implements android.view.inspector.InspectionCompanionProvider {
+    ctor public GeneratedInspectionCompanionProvider();
+    method @Nullable public <T> android.view.inspector.InspectionCompanion<T> provide(@NonNull Class<T>);
+  }
+
   public interface InspectionCompanion<T> {
     method @Nullable public default String getNodeName();
     method public void mapProperties(@NonNull android.view.inspector.PropertyMapper);
@@ -53412,6 +53423,10 @@ package android.view.inspector {
 
   public static class InspectionCompanion.UninitializedPropertyMapException extends java.lang.RuntimeException {
     ctor public InspectionCompanion.UninitializedPropertyMapException();
+  }
+
+  public interface InspectionCompanionProvider {
+    method @Nullable public <T> android.view.inspector.InspectionCompanion<T> provide(@NonNull Class<T>);
   }
 
   public final class IntEnumMapping {
