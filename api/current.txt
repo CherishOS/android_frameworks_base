@@ -16935,6 +16935,7 @@ package android.hardware.camera2 {
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_PRIVATE_REPROCESSING = 4; // 0x4
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_RAW = 3; // 0x3
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_READ_SENSOR_SETTINGS = 5; // 0x5
+    field public static final int REQUEST_AVAILABLE_CAPABILITIES_SECURE_IMAGE_DATA = 13; // 0xd
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_YUV_REPROCESSING = 7; // 0x7
     field public static final int SCALER_CROPPING_TYPE_CENTER_ONLY = 0; // 0x0
     field public static final int SCALER_CROPPING_TYPE_FREEFORM = 1; // 0x1
@@ -44136,7 +44137,7 @@ package android.telephony {
   }
 
   public final class AvailableNetworkInfo implements android.os.Parcelable {
-    ctor public AvailableNetworkInfo(int, int, java.util.ArrayList<java.lang.String>);
+    ctor public AvailableNetworkInfo(int, int, java.util.List<java.lang.String>);
     method public int describeContents();
     method public java.util.List<java.lang.String> getMccMncs();
     method public int getPriority();
@@ -45098,7 +45099,7 @@ package android.telephony {
     method public int getNetworkType();
     method public int getPhoneCount();
     method public int getPhoneType();
-    method public int getPreferredOpportunisticDataSubscription();
+    method @RequiresPermission(anyOf={"android.permission.READ_PRIVILEGED_PHONE_STATE", android.Manifest.permission.READ_PHONE_STATE}) public int getPreferredOpportunisticDataSubscription();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public android.telephony.ServiceState getServiceState();
     method @Nullable public android.telephony.SignalStrength getSignalStrength();
     method public int getSimCarrierId();
@@ -45134,6 +45135,7 @@ package android.telephony {
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.READ_PHONE_STATE}) public boolean isDataRoamingEnabled();
     method public boolean isHearingAidCompatibilitySupported();
     method public boolean isNetworkRoaming();
+    method public boolean isRttSupported();
     method public boolean isSmsCapable();
     method @Deprecated public boolean isTtyModeSupported();
     method public boolean isVoiceCapable();
@@ -45666,9 +45668,9 @@ package android.telephony.mbms {
   }
 
   public interface GroupCallCallback {
-    method public void onBroadcastSignalStrengthUpdated(@IntRange(from=0xffffffff, to=4) int);
-    method public void onError(int, @Nullable String);
-    method public void onGroupCallStateChanged(int, int);
+    method public default void onBroadcastSignalStrengthUpdated(@IntRange(from=0xffffffff, to=4) int);
+    method public default void onError(int, @Nullable String);
+    method public default void onGroupCallStateChanged(int, int);
     field public static final int SIGNAL_STRENGTH_UNAVAILABLE = -1; // 0xffffffff
   }
 
@@ -45726,10 +45728,10 @@ package android.telephony.mbms {
   }
 
   public interface MbmsGroupCallSessionCallback {
-    method public void onAvailableSaisUpdated(@NonNull java.util.List<java.lang.Integer>, @NonNull java.util.List<java.util.List<java.lang.Integer>>);
-    method public void onError(int, @Nullable String);
-    method public void onMiddlewareReady();
-    method public void onServiceInterfaceAvailable(@NonNull String, int);
+    method public default void onAvailableSaisUpdated(@NonNull java.util.List<java.lang.Integer>, @NonNull java.util.List<java.util.List<java.lang.Integer>>);
+    method public default void onError(int, @Nullable String);
+    method public default void onMiddlewareReady();
+    method public default void onServiceInterfaceAvailable(@NonNull String, int);
   }
 
   public class MbmsStreamingSessionCallback {
@@ -50668,7 +50670,7 @@ package android.view {
     method public void setClickable(boolean);
     method public void setClipBounds(android.graphics.Rect);
     method public void setClipToOutline(boolean);
-    method public void setContentCaptureSession(@NonNull android.view.contentcapture.ContentCaptureSession);
+    method public void setContentCaptureSession(@Nullable android.view.contentcapture.ContentCaptureSession);
     method public void setContentDescription(CharSequence);
     method public void setContextClickable(boolean);
     method public void setDefaultFocusHighlightEnabled(boolean);
@@ -50776,6 +50778,7 @@ package android.view {
     method public void setTouchDelegate(android.view.TouchDelegate);
     method public void setTransitionAlpha(float);
     method public final void setTransitionName(String);
+    method public void setTransitionVisibility(int);
     method public void setTranslationX(float);
     method public void setTranslationY(float);
     method public void setTranslationZ(float);
@@ -53562,7 +53565,7 @@ package android.view.textclassifier {
     method @NonNull public java.util.List<android.view.textclassifier.ConversationActions.Message> getConversation();
     method @Nullable public String getConversationId();
     method @Nullable public java.util.List<java.lang.String> getHints();
-    method @IntRange(from=0) public int getMaxSuggestions();
+    method @IntRange(from=0xffffffff) public int getMaxSuggestions();
     method @NonNull public android.view.textclassifier.TextClassifier.EntityConfig getTypeConfig();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.textclassifier.ConversationActions.Request> CREATOR;
@@ -53575,7 +53578,7 @@ package android.view.textclassifier {
     method @NonNull public android.view.textclassifier.ConversationActions.Request build();
     method @NonNull public android.view.textclassifier.ConversationActions.Request.Builder setConversationId(@Nullable String);
     method public android.view.textclassifier.ConversationActions.Request.Builder setHints(@Nullable java.util.List<java.lang.String>);
-    method @NonNull public android.view.textclassifier.ConversationActions.Request.Builder setMaxSuggestions(@IntRange(from=0) int);
+    method @NonNull public android.view.textclassifier.ConversationActions.Request.Builder setMaxSuggestions(@IntRange(from=0xffffffff) int);
     method @NonNull public android.view.textclassifier.ConversationActions.Request.Builder setTypeConfig(@Nullable android.view.textclassifier.TextClassifier.EntityConfig);
   }
 
@@ -54859,6 +54862,7 @@ package android.widget {
     method public int getCheckedItemPosition();
     method public android.util.SparseBooleanArray getCheckedItemPositions();
     method public int getChoiceMode();
+    method public boolean getDrawSelectorOnTop();
     method public int getListPaddingBottom();
     method public int getListPaddingLeft();
     method public int getListPaddingRight();
@@ -56259,6 +56263,7 @@ package android.widget {
     method public android.view.Menu getMenu();
     method public android.view.MenuInflater getMenuInflater();
     method public void inflate(@MenuRes int);
+    method public void setForceShowIcon(boolean);
     method public void setGravity(int);
     method public void setOnDismissListener(android.widget.PopupMenu.OnDismissListener);
     method public void setOnMenuItemClickListener(android.widget.PopupMenu.OnMenuItemClickListener);
@@ -56472,6 +56477,7 @@ package android.widget {
     ctor public RelativeLayout(android.content.Context, android.util.AttributeSet, int, int);
     method public android.widget.RelativeLayout.LayoutParams generateLayoutParams(android.util.AttributeSet);
     method public int getGravity();
+    method public int getIgnoreGravity();
     method public void setGravity(int);
     method public void setHorizontalGravity(int);
     method public void setIgnoreGravity(int);
@@ -56688,8 +56694,9 @@ package android.widget {
     method public CharSequence getQuery();
     method @Nullable public CharSequence getQueryHint();
     method public android.widget.CursorAdapter getSuggestionsAdapter();
-    method public boolean isIconfiedByDefault();
+    method @Deprecated public boolean isIconfiedByDefault();
     method public boolean isIconified();
+    method public boolean isIconifiedByDefault();
     method public boolean isQueryRefinementEnabled();
     method public boolean isSubmitButtonEnabled();
     method public void onActionViewCollapsed();
@@ -57412,6 +57419,7 @@ package android.widget {
     ctor public ToggleButton(android.content.Context, android.util.AttributeSet, int);
     ctor public ToggleButton(android.content.Context, android.util.AttributeSet);
     ctor public ToggleButton(android.content.Context);
+    method public float getDisabledAlpha();
     method public CharSequence getTextOff();
     method public CharSequence getTextOn();
     method public void setBackgroundDrawable(android.graphics.drawable.Drawable);
@@ -57572,6 +57580,7 @@ package android.widget {
   @android.widget.RemoteViews.RemoteView public class ViewFlipper extends android.widget.ViewAnimator {
     ctor public ViewFlipper(android.content.Context);
     ctor public ViewFlipper(android.content.Context, android.util.AttributeSet);
+    method public int getFlipInterval();
     method public boolean isAutoStart();
     method public boolean isFlipping();
     method public void setAutoStart(boolean);
