@@ -26,6 +26,7 @@ package android {
     field public static final String BIND_APPWIDGET = "android.permission.BIND_APPWIDGET";
     field public static final String BIND_AUTOFILL_SERVICE = "android.permission.BIND_AUTOFILL_SERVICE";
     field public static final String BIND_CALL_REDIRECTION_SERVICE = "android.permission.BIND_CALL_REDIRECTION_SERVICE";
+    field public static final String BIND_CARRIER_MESSAGING_CLIENT_SERVICE = "android.permission.BIND_CARRIER_MESSAGING_CLIENT_SERVICE";
     field @Deprecated public static final String BIND_CARRIER_MESSAGING_SERVICE = "android.permission.BIND_CARRIER_MESSAGING_SERVICE";
     field public static final String BIND_CARRIER_SERVICES = "android.permission.BIND_CARRIER_SERVICES";
     field public static final String BIND_CHOOSER_TARGET_SERVICE = "android.permission.BIND_CHOOSER_TARGET_SERVICE";
@@ -41,7 +42,6 @@ package android {
     field public static final String BIND_QUICK_SETTINGS_TILE = "android.permission.BIND_QUICK_SETTINGS_TILE";
     field public static final String BIND_REMOTEVIEWS = "android.permission.BIND_REMOTEVIEWS";
     field public static final String BIND_SCREENING_SERVICE = "android.permission.BIND_SCREENING_SERVICE";
-    field public static final String BIND_SMS_APP_SERVICE = "android.permission.BIND_SMS_APP_SERVICE";
     field public static final String BIND_TELECOM_CONNECTION_SERVICE = "android.permission.BIND_TELECOM_CONNECTION_SERVICE";
     field public static final String BIND_TEXT_SERVICE = "android.permission.BIND_TEXT_SERVICE";
     field public static final String BIND_TV_INPUT = "android.permission.BIND_TV_INPUT";
@@ -645,6 +645,7 @@ package android {
     field public static final int footerDividersEnabled = 16843311; // 0x101022f
     field public static final int forceDarkAllowed = 16844172; // 0x101058c
     field public static final int forceHasOverlappingRendering = 16844065; // 0x1010521
+    field public static final int forceUriPermissions = 16844197; // 0x10105a5
     field public static final int foreground = 16843017; // 0x1010109
     field public static final int foregroundGravity = 16843264; // 0x1010200
     field public static final int foregroundServiceType = 16844191; // 0x101059f
@@ -6210,11 +6211,6 @@ package android.app {
     method public void onSharedElementsReady();
   }
 
-  public class SmsAppService extends android.app.Service {
-    ctor public SmsAppService();
-    method public final android.os.IBinder onBind(android.content.Intent);
-  }
-
   public class StatusBarManager {
   }
 
@@ -6742,6 +6738,7 @@ package android.app.admin {
     method public void setCrossProfileCalendarPackages(@NonNull android.content.ComponentName, @Nullable java.util.Set<java.lang.String>);
     method public void setCrossProfileCallerIdDisabled(@NonNull android.content.ComponentName, boolean);
     method public void setCrossProfileContactsSearchDisabled(@NonNull android.content.ComponentName, boolean);
+    method public void setDefaultSmsApplication(@NonNull android.content.ComponentName, @NonNull String);
     method public void setDelegatedScopes(@NonNull android.content.ComponentName, @NonNull String, @NonNull java.util.List<java.lang.String>);
     method public void setDeviceOwnerLockScreenInfo(@NonNull android.content.ComponentName, CharSequence);
     method public void setEndUserSessionMessage(@NonNull android.content.ComponentName, @Nullable CharSequence);
@@ -7252,6 +7249,7 @@ package android.app.backup {
     ctor public BackupManager(android.content.Context);
     method public void dataChanged();
     method public static void dataChanged(String);
+    method @Nullable public android.os.UserHandle getUserForAncestralSerialNumber(long);
     method @Deprecated public int requestRestore(android.app.backup.RestoreObserver);
   }
 
@@ -11879,6 +11877,7 @@ package android.content.pm {
     field public static final int FLAG_SINGLE_USER = 1073741824; // 0x40000000
     field public String authority;
     field public int flags;
+    field public boolean forceUriPermissions;
     field public boolean grantUriPermissions;
     field public int initOrder;
     field @Deprecated public boolean isSyncable;
@@ -23747,6 +23746,7 @@ package android.media {
     ctor public ExifInterface(@NonNull java.io.InputStream) throws java.io.IOException;
     method public double getAltitude(double);
     method @Nullable public String getAttribute(@NonNull String);
+    method @Nullable public byte[] getAttributeBytes(@NonNull String);
     method public double getAttributeDouble(@NonNull String, double);
     method public int getAttributeInt(@NonNull String, int);
     method @Nullable public long[] getAttributeRange(@NonNull String);
@@ -23902,6 +23902,7 @@ package android.media {
     field public static final String TAG_USER_COMMENT = "UserComment";
     field public static final String TAG_WHITE_BALANCE = "WhiteBalance";
     field public static final String TAG_WHITE_POINT = "WhitePoint";
+    field public static final String TAG_XMP = "Xmp";
     field public static final String TAG_X_RESOLUTION = "XResolution";
     field public static final String TAG_Y_CB_CR_COEFFICIENTS = "YCbCrCoefficients";
     field public static final String TAG_Y_CB_CR_POSITIONING = "YCbCrPositioning";
@@ -25009,8 +25010,10 @@ package android.media {
     field public static final String KEY_LANGUAGE = "language";
     field public static final String KEY_LATENCY = "latency";
     field public static final String KEY_LEVEL = "level";
+    field public static final String KEY_MAX_FPS_TO_ENCODER = "max-fps-to-encoder";
     field public static final String KEY_MAX_HEIGHT = "max-height";
     field public static final String KEY_MAX_INPUT_SIZE = "max-input-size";
+    field public static final String KEY_MAX_PTS_GAP_TO_ENCODER = "max-pts-gap-to-encoder";
     field public static final String KEY_MAX_WIDTH = "max-width";
     field public static final String KEY_MIME = "mime";
     field public static final String KEY_OPERATING_RATE = "operating-rate";
@@ -28606,7 +28609,7 @@ package android.net {
     field public static final String EXTRA_NETWORK = "android.net.extra.NETWORK";
     field @Deprecated public static final String EXTRA_NETWORK_INFO = "networkInfo";
     field public static final String EXTRA_NETWORK_REQUEST = "android.net.extra.NETWORK_REQUEST";
-    field public static final String EXTRA_NETWORK_TYPE = "networkType";
+    field @Deprecated public static final String EXTRA_NETWORK_TYPE = "networkType";
     field public static final String EXTRA_NO_CONNECTIVITY = "noConnectivity";
     field @Deprecated public static final String EXTRA_OTHER_NETWORK_INFO = "otherNetwork";
     field public static final String EXTRA_REASON = "reason";
@@ -34200,7 +34203,6 @@ package android.os {
   }
 
   public static class Build.Partition {
-    ctor public Build.Partition();
     method public long getBuildTimeMillis();
     method @NonNull public String getFingerprint();
     method @NonNull public String getName();
@@ -41358,6 +41360,11 @@ package android.service.carrier {
     field public static final android.os.Parcelable.Creator<android.service.carrier.CarrierIdentifier> CREATOR;
   }
 
+  public class CarrierMessagingClientService extends android.app.Service {
+    ctor public CarrierMessagingClientService();
+    method public final android.os.IBinder onBind(android.content.Intent);
+  }
+
   public abstract class CarrierMessagingService extends android.app.Service {
     ctor public CarrierMessagingService();
     method @Nullable public android.os.IBinder onBind(@NonNull android.content.Intent);
@@ -41699,6 +41706,7 @@ package android.service.notification {
 
   public static class NotificationListenerService.Ranking {
     ctor public NotificationListenerService.Ranking();
+    method public boolean canBubble();
     method public boolean canShowBadge();
     method public android.app.NotificationChannel getChannel();
     method public int getImportance();
@@ -42452,6 +42460,7 @@ package android.system {
     method public static java.io.FileDescriptor accept(java.io.FileDescriptor, java.net.InetSocketAddress) throws android.system.ErrnoException, java.net.SocketException;
     method public static boolean access(String, int) throws android.system.ErrnoException;
     method public static void bind(java.io.FileDescriptor, java.net.InetAddress, int) throws android.system.ErrnoException, java.net.SocketException;
+    method public static void bind(java.io.FileDescriptor, java.net.SocketAddress) throws android.system.ErrnoException, java.net.SocketException;
     method public static void chmod(String, int) throws android.system.ErrnoException;
     method public static void chown(String, int, int) throws android.system.ErrnoException;
     method public static void close(java.io.FileDescriptor) throws android.system.ErrnoException;
@@ -42520,6 +42529,7 @@ package android.system {
     method public static long sendfile(java.io.FileDescriptor, java.io.FileDescriptor, android.system.Int64Ref, long) throws android.system.ErrnoException;
     method public static int sendto(java.io.FileDescriptor, java.nio.ByteBuffer, int, java.net.InetAddress, int) throws android.system.ErrnoException, java.net.SocketException;
     method public static int sendto(java.io.FileDescriptor, byte[], int, int, int, java.net.InetAddress, int) throws android.system.ErrnoException, java.net.SocketException;
+    method public static int sendto(java.io.FileDescriptor, byte[], int, int, int, java.net.SocketAddress) throws android.system.ErrnoException, java.net.SocketException;
     method @Deprecated public static void setegid(int) throws android.system.ErrnoException;
     method public static void setenv(String, String, boolean) throws android.system.ErrnoException;
     method @Deprecated public static void seteuid(int) throws android.system.ErrnoException;
@@ -45161,13 +45171,13 @@ package android.telephony {
     method @Deprecated public void setVoicemailVibrationEnabled(android.telecom.PhoneAccountHandle, boolean);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public void switchMultiSimConfig(int);
     method public boolean updateAvailableNetworks(java.util.List<android.telephony.AvailableNetworkInfo>);
+    field public static final String ACTION_CARRIER_MESSAGING_CLIENT_SERVICE = "android.telephony.action.CARRIER_MESSAGING_CLIENT_SERVICE";
     field public static final String ACTION_CONFIGURE_VOICEMAIL = "android.telephony.action.CONFIGURE_VOICEMAIL";
     field public static final String ACTION_NETWORK_COUNTRY_CHANGED = "android.telephony.action.NETWORK_COUNTRY_CHANGED";
     field @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public static final String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
     field public static final String ACTION_RESPOND_VIA_MESSAGE = "android.intent.action.RESPOND_VIA_MESSAGE";
     field public static final String ACTION_SECRET_CODE = "android.telephony.action.SECRET_CODE";
     field public static final String ACTION_SHOW_VOICEMAIL_NOTIFICATION = "android.telephony.action.SHOW_VOICEMAIL_NOTIFICATION";
-    field public static final String ACTION_SMS_APP_SERVICE = "android.telephony.action.SMS_APP_SERVICE";
     field public static final String ACTION_SUBSCRIPTION_CARRIER_IDENTITY_CHANGED = "android.telephony.action.SUBSCRIPTION_CARRIER_IDENTITY_CHANGED";
     field public static final String ACTION_SUBSCRIPTION_PRECISE_CARRIER_IDENTITY_CHANGED = "android.telephony.action.SUBSCRIPTION_PRECISE_CARRIER_IDENTITY_CHANGED";
     field public static final int APPTYPE_CSIM = 4; // 0x4
@@ -56363,7 +56373,11 @@ package android.widget {
     method @Nullable public android.graphics.PorterDuff.Mode getIndeterminateTintMode();
     method public android.view.animation.Interpolator getInterpolator();
     method @android.view.ViewDebug.ExportedProperty(category="progress") public int getMax();
+    method @Px public int getMaxHeight();
+    method @Px public int getMaxWidth();
     method @android.view.ViewDebug.ExportedProperty(category="progress") public int getMin();
+    method @Px public int getMinHeight();
+    method @Px public int getMinWidth();
     method @android.view.ViewDebug.ExportedProperty(category="progress") public int getProgress();
     method @Nullable public android.content.res.ColorStateList getProgressBackgroundTintList();
     method @Nullable public android.graphics.PorterDuff.Mode getProgressBackgroundTintMode();
@@ -56387,7 +56401,11 @@ package android.widget {
     method public void setInterpolator(android.content.Context, @InterpolatorRes int);
     method public void setInterpolator(android.view.animation.Interpolator);
     method public void setMax(int);
+    method public void setMaxHeight(@Px int);
+    method public void setMaxWidth(@Px int);
     method public void setMin(int);
+    method public void setMinHeight(@Px int);
+    method public void setMinWidth(@Px int);
     method public void setProgress(int);
     method public void setProgress(int, boolean);
     method public void setProgressBackgroundTintList(@Nullable android.content.res.ColorStateList);
@@ -56651,6 +56669,7 @@ package android.widget {
     method public boolean isFillViewport();
     method public boolean isSmoothScrollingEnabled();
     method public boolean pageScroll(int);
+    method public void scrollToDescendant(android.view.View);
     method public void setFillViewport(boolean);
     method public void setSmoothScrollingEnabled(boolean);
     method public final void smoothScrollBy(int, int);
