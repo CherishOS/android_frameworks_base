@@ -95,5 +95,7 @@ public class SystemSettings {
         Settings.System.RINGTONE_VIBRATION_PATTERN,
         Settings.System.CUSTOM_RINGTONE_VIBRATION_PATTERN,
         Settings.System.QS_MEDIA_PLAYER,
+        Settings.System.OMNI_KEYGUARD_SHOW_BATTERY_BAR,
+        Settings.System.OMNI_KEYGUARD_SHOW_BATTERY_BAR_ALWAYS,
     };
 }
