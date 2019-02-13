@@ -80,7 +80,6 @@ package android {
     field public static final String FOREGROUND_SERVICE = "android.permission.FOREGROUND_SERVICE";
     field public static final String GET_ACCOUNTS = "android.permission.GET_ACCOUNTS";
     field public static final String GET_ACCOUNTS_PRIVILEGED = "android.permission.GET_ACCOUNTS_PRIVILEGED";
-    field public static final String GET_AND_REQUEST_SCREEN_LOCK_COMPLEXITY = "android.permission.GET_AND_REQUEST_SCREEN_LOCK_COMPLEXITY";
     field public static final String GET_PACKAGE_SIZE = "android.permission.GET_PACKAGE_SIZE";
     field @Deprecated public static final String GET_TASKS = "android.permission.GET_TASKS";
     field public static final String GLOBAL_SEARCH = "android.permission.GLOBAL_SEARCH";
@@ -131,6 +130,7 @@ package android {
     field public static final String REQUEST_DELETE_PACKAGES = "android.permission.REQUEST_DELETE_PACKAGES";
     field public static final String REQUEST_IGNORE_BATTERY_OPTIMIZATIONS = "android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS";
     field public static final String REQUEST_INSTALL_PACKAGES = "android.permission.REQUEST_INSTALL_PACKAGES";
+    field public static final String REQUEST_SCREEN_LOCK_COMPLEXITY = "android.permission.REQUEST_SCREEN_LOCK_COMPLEXITY";
     field @Deprecated public static final String RESTART_PACKAGES = "android.permission.RESTART_PACKAGES";
     field public static final String SEND_RESPOND_VIA_MESSAGE = "android.permission.SEND_RESPOND_VIA_MESSAGE";
     field public static final String SEND_SMS = "android.permission.SEND_SMS";
@@ -6646,7 +6646,7 @@ package android.app.admin {
     method @Nullable public CharSequence getOrganizationName(@NonNull android.content.ComponentName);
     method public java.util.List<android.telephony.data.ApnSetting> getOverrideApns(@NonNull android.content.ComponentName);
     method @NonNull public android.app.admin.DevicePolicyManager getParentProfileInstance(@NonNull android.content.ComponentName);
-    method @RequiresPermission(android.Manifest.permission.GET_AND_REQUEST_SCREEN_LOCK_COMPLEXITY) public int getPasswordComplexity();
+    method @RequiresPermission(android.Manifest.permission.REQUEST_SCREEN_LOCK_COMPLEXITY) public int getPasswordComplexity();
     method public long getPasswordExpiration(@Nullable android.content.ComponentName);
     method public long getPasswordExpirationTimeout(@Nullable android.content.ComponentName);
     method public int getPasswordHistoryLength(@Nullable android.content.ComponentName);
@@ -6840,7 +6840,7 @@ package android.app.admin {
     field public static final String EXTRA_ADD_EXPLANATION = "android.app.extra.ADD_EXPLANATION";
     field public static final String EXTRA_DELEGATION_SCOPES = "android.app.extra.DELEGATION_SCOPES";
     field public static final String EXTRA_DEVICE_ADMIN = "android.app.extra.DEVICE_ADMIN";
-    field @RequiresPermission(android.Manifest.permission.GET_AND_REQUEST_SCREEN_LOCK_COMPLEXITY) public static final String EXTRA_PASSWORD_COMPLEXITY = "android.app.extra.PASSWORD_COMPLEXITY";
+    field @RequiresPermission(android.Manifest.permission.REQUEST_SCREEN_LOCK_COMPLEXITY) public static final String EXTRA_PASSWORD_COMPLEXITY = "android.app.extra.PASSWORD_COMPLEXITY";
     field public static final String EXTRA_PROVISIONING_ACCOUNT_TO_MIGRATE = "android.app.extra.PROVISIONING_ACCOUNT_TO_MIGRATE";
     field public static final String EXTRA_PROVISIONING_ADMIN_EXTRAS_BUNDLE = "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE";
     field public static final String EXTRA_PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME = "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME";
@@ -11482,7 +11482,6 @@ package android.content.pm {
     method public void setOriginatingUri(@Nullable android.net.Uri);
     method public void setReferrerUri(@Nullable android.net.Uri);
     method public void setSize(long);
-    method public void setStaged();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.PackageInstaller.SessionParams> CREATOR;
     field public static final int MODE_FULL_INSTALL = 1; // 0x1
@@ -15409,28 +15408,38 @@ package android.graphics.drawable {
     method public float getGradientCenterY();
     method public float getGradientRadius();
     method public int getGradientType();
+    method public int getInnerRadius();
+    method public float getInnerRadiusRatio();
     method public int getOpacity();
     method public android.graphics.drawable.GradientDrawable.Orientation getOrientation();
     method public int getShape();
+    method public int getThickness();
+    method public float getThicknessRatio();
     method public boolean getUseLevel();
     method public void setAlpha(int);
     method public void setColor(@ColorInt int);
     method public void setColor(@Nullable android.content.res.ColorStateList);
     method public void setColorFilter(@Nullable android.graphics.ColorFilter);
     method public void setColors(@ColorInt int[]);
+    method public void setColors(@ColorInt int[], @Nullable float[]);
     method public void setCornerRadii(@Nullable float[]);
     method public void setCornerRadius(float);
     method public void setDither(boolean);
     method public void setGradientCenter(float, float);
     method public void setGradientRadius(float);
     method public void setGradientType(int);
+    method public void setInnerRadius(int);
+    method public void setInnerRadiusRatio(float);
     method public void setOrientation(android.graphics.drawable.GradientDrawable.Orientation);
+    method public void setPadding(int, int, int, int);
     method public void setShape(int);
     method public void setSize(int, int);
     method public void setStroke(int, @ColorInt int);
     method public void setStroke(int, android.content.res.ColorStateList);
     method public void setStroke(int, @ColorInt int, float, float);
     method public void setStroke(int, android.content.res.ColorStateList, float, float);
+    method public void setThickness(int);
+    method public void setThicknessRatio(float);
     method public void setUseLevel(boolean);
     field public static final int LINE = 2; // 0x2
     field public static final int LINEAR_GRADIENT = 0; // 0x0
@@ -22667,6 +22676,7 @@ package android.location {
     field public static final int MULTIPATH_INDICATOR_DETECTED = 1; // 0x1
     field public static final int MULTIPATH_INDICATOR_NOT_DETECTED = 2; // 0x2
     field public static final int MULTIPATH_INDICATOR_UNKNOWN = 0; // 0x0
+    field public static final int STATE_2ND_CODE_LOCK = 65536; // 0x10000
     field public static final int STATE_BDS_D2_BIT_SYNC = 256; // 0x100
     field public static final int STATE_BDS_D2_SUBFRAME_SYNC = 512; // 0x200
     field public static final int STATE_BIT_SYNC = 2; // 0x2
@@ -45233,6 +45243,9 @@ package android.telephony {
     field public static final int PHONE_TYPE_GSM = 1; // 0x1
     field public static final int PHONE_TYPE_NONE = 0; // 0x0
     field public static final int PHONE_TYPE_SIP = 3; // 0x3
+    field public static final int SET_OPPORTUNISTIC_SUB_INVALID_PARAMETER = 2; // 0x2
+    field public static final int SET_OPPORTUNISTIC_SUB_SUCCESS = 0; // 0x0
+    field public static final int SET_OPPORTUNISTIC_SUB_VALIDATION_FAILED = 1; // 0x1
     field public static final int SIM_STATE_ABSENT = 1; // 0x1
     field public static final int SIM_STATE_CARD_IO_ERROR = 8; // 0x8
     field public static final int SIM_STATE_CARD_RESTRICTED = 9; // 0x9
@@ -56691,6 +56704,8 @@ package android.widget {
     method public int getMaxValue();
     method public int getMinValue();
     method public int getSelectionDividerHeight();
+    method @ColorInt public int getTextColor();
+    method @FloatRange(from=0.0, fromInclusive=false) public float getTextSize();
     method public int getValue();
     method public boolean getWrapSelectorWheel();
     method public void setDisplayedValues(String[]);
@@ -56701,6 +56716,8 @@ package android.widget {
     method public void setOnScrollListener(android.widget.NumberPicker.OnScrollListener);
     method public void setOnValueChangedListener(android.widget.NumberPicker.OnValueChangeListener);
     method public void setSelectionDividerHeight(@IntRange(from=0) @Px int);
+    method public void setTextColor(@ColorInt int);
+    method public void setTextSize(@FloatRange(from=0.0, fromInclusive=false) float);
     method public void setValue(int);
     method public void setWrapSelectorWheel(boolean);
   }
