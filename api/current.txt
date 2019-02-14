@@ -6684,7 +6684,7 @@ package android.app.admin {
     method public boolean installKeyPair(@Nullable android.content.ComponentName, @NonNull java.security.PrivateKey, @NonNull java.security.cert.Certificate, @NonNull String);
     method public boolean installKeyPair(@Nullable android.content.ComponentName, @NonNull java.security.PrivateKey, @NonNull java.security.cert.Certificate[], @NonNull String, boolean);
     method public boolean installKeyPair(@Nullable android.content.ComponentName, @NonNull java.security.PrivateKey, @NonNull java.security.cert.Certificate[], @NonNull String, int);
-    method public void installSystemUpdate(@NonNull android.content.ComponentName, @NonNull android.net.Uri, @NonNull java.util.concurrent.Executor, @NonNull android.app.admin.DevicePolicyManager.InstallUpdateCallback);
+    method public void installSystemUpdate(@NonNull android.content.ComponentName, @NonNull android.net.Uri, @NonNull java.util.concurrent.Executor, @NonNull android.app.admin.DevicePolicyManager.InstallSystemUpdateCallback);
     method public boolean isActivePasswordSufficient();
     method public boolean isAdminActive(@NonNull android.content.ComponentName);
     method public boolean isAffiliatedUser();
@@ -6951,8 +6951,8 @@ package android.app.admin {
     field public static final int WIPE_SILENTLY = 8; // 0x8
   }
 
-  public abstract static class DevicePolicyManager.InstallUpdateCallback {
-    ctor public DevicePolicyManager.InstallUpdateCallback();
+  public abstract static class DevicePolicyManager.InstallSystemUpdateCallback {
+    ctor public DevicePolicyManager.InstallSystemUpdateCallback();
     method public void onInstallUpdateError(int, String);
     field public static final int UPDATE_ERROR_BATTERY_LOW = 5; // 0x5
     field public static final int UPDATE_ERROR_FILE_NOT_FOUND = 4; // 0x4
@@ -9517,7 +9517,6 @@ package android.content {
     method public static void cancelSync(android.content.SyncRequest);
     method @Nullable public final android.net.Uri canonicalize(@NonNull android.net.Uri);
     method public final int delete(@RequiresPermission.Write @NonNull android.net.Uri, @Nullable String, @Nullable String[]);
-    method public android.os.Bundle getCache(android.net.Uri);
     method @Deprecated public static android.content.SyncInfo getCurrentSync();
     method public static java.util.List<android.content.SyncInfo> getCurrentSyncs();
     method public static int getIsSyncable(android.accounts.Account, String);
@@ -9548,7 +9547,6 @@ package android.content {
     method @Nullable public final android.content.res.AssetFileDescriptor openTypedAssetFile(@NonNull android.net.Uri, @NonNull String, @Nullable android.os.Bundle, @Nullable android.os.CancellationSignal) throws java.io.FileNotFoundException;
     method @Nullable public final android.content.res.AssetFileDescriptor openTypedAssetFileDescriptor(@NonNull android.net.Uri, @NonNull String, @Nullable android.os.Bundle) throws java.io.FileNotFoundException;
     method @Nullable public final android.content.res.AssetFileDescriptor openTypedAssetFileDescriptor(@NonNull android.net.Uri, @NonNull String, @Nullable android.os.Bundle, @Nullable android.os.CancellationSignal) throws java.io.FileNotFoundException;
-    method public void putCache(android.net.Uri, android.os.Bundle);
     method @Nullable public final android.database.Cursor query(@RequiresPermission.Read @NonNull android.net.Uri, @Nullable String[], @Nullable String, @Nullable String[], @Nullable String);
     method @Nullable public final android.database.Cursor query(@RequiresPermission.Read @NonNull android.net.Uri, @Nullable String[], @Nullable String, @Nullable String[], @Nullable String, @Nullable android.os.CancellationSignal);
     method @Nullable public final android.database.Cursor query(@RequiresPermission.Read @NonNull android.net.Uri, @Nullable String[], @Nullable android.os.Bundle, @Nullable android.os.CancellationSignal);
@@ -44383,6 +44381,7 @@ package android.telephony {
     method public int getChannelNumber();
     method public String getMccString();
     method public String getMncString();
+    method public long getNci();
     method public int getPci();
     method public int getTac();
     method public void writeToParcel(android.os.Parcel, int);
@@ -44396,6 +44395,7 @@ package android.telephony {
     method public String getMccString();
     method public String getMncString();
     method @Nullable public String getMobileNetworkOperator();
+    method public int getUarfcn();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.telephony.CellIdentityTdscdma> CREATOR;
   }
@@ -45217,7 +45217,6 @@ package android.telephony {
     field public static final String EXTRA_STATE_RINGING;
     field public static final String EXTRA_SUBSCRIPTION_ID = "android.telephony.extra.SUBSCRIPTION_ID";
     field public static final String EXTRA_VOICEMAIL_NUMBER = "android.telephony.extra.VOICEMAIL_NUMBER";
-    field public static final int INVALID_CARD_ID = -1; // 0xffffffff
     field public static final String METADATA_HIDE_VOICEMAIL_SETTINGS_MENU = "android.telephony.HIDE_VOICEMAIL_SETTINGS_MENU";
     field public static final int NETWORK_TYPE_1xRTT = 7; // 0x7
     field public static final int NETWORK_TYPE_CDMA = 4; // 0x4
@@ -45256,7 +45255,9 @@ package android.telephony {
     field public static final int SIM_STATE_PUK_REQUIRED = 3; // 0x3
     field public static final int SIM_STATE_READY = 5; // 0x5
     field public static final int SIM_STATE_UNKNOWN = 0; // 0x0
+    field public static final int UNINITIALIZED_CARD_ID = -2; // 0xfffffffe
     field public static final int UNKNOWN_CARRIER_ID = -1; // 0xffffffff
+    field public static final int UNSUPPORTED_CARD_ID = -1; // 0xffffffff
     field public static final int USSD_ERROR_SERVICE_UNAVAIL = -2; // 0xfffffffe
     field public static final int USSD_RETURN_FAILURE = -1; // 0xffffffff
     field public static final String VVM_TYPE_CVVM = "vvm_type_cvvm";
@@ -50805,7 +50806,7 @@ package android.view {
     method @android.view.ViewDebug.ExportedProperty(category="drawing") public float getAlpha();
     method public android.view.animation.Animation getAnimation();
     method public android.os.IBinder getApplicationWindowToken();
-    method @NonNull public java.util.List<java.lang.Integer> getAttributeResolutionStack();
+    method @NonNull public java.util.List<java.lang.Integer> getAttributeResolutionStack(@AttrRes int);
     method @NonNull public java.util.Map<java.lang.Integer,java.lang.Integer> getAttributeSourceResourceMap();
     method @android.view.ViewDebug.ExportedProperty @Nullable public String[] getAutofillHints();
     method public final android.view.autofill.AutofillId getAutofillId();
@@ -50855,6 +50856,8 @@ package android.view {
     method public void getHitRect(android.graphics.Rect);
     method public int getHorizontalFadingEdgeLength();
     method protected int getHorizontalScrollbarHeight();
+    method @Nullable public android.graphics.drawable.Drawable getHorizontalScrollbarThumbDrawable();
+    method @Nullable public android.graphics.drawable.Drawable getHorizontalScrollbarTrackDrawable();
     method @android.view.ViewDebug.CapturedViewProperty @IdRes public int getId();
     method @android.view.ViewDebug.ExportedProperty(category="accessibility", mapping={@android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_ACCESSIBILITY_AUTO, to="auto"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_ACCESSIBILITY_YES, to="yes"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_ACCESSIBILITY_NO, to="no"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS, to="noHideDescendants")}) public int getImportantForAccessibility();
     method @android.view.ViewDebug.ExportedProperty(mapping={@android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_AUTOFILL_AUTO, to="auto"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_AUTOFILL_YES, to="yes"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_AUTOFILL_NO, to="no"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_AUTOFILL_YES_EXCLUDE_DESCENDANTS, to="yesExcludeDescendants"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS, to="noExcludeDescendants")}) public int getImportantForAutofill();
@@ -50945,6 +50948,8 @@ package android.view {
     method public long getUniqueDrawingId();
     method public int getVerticalFadingEdgeLength();
     method public int getVerticalScrollbarPosition();
+    method @Nullable public android.graphics.drawable.Drawable getVerticalScrollbarThumbDrawable();
+    method @Nullable public android.graphics.drawable.Drawable getVerticalScrollbarTrackDrawable();
     method public int getVerticalScrollbarWidth();
     method public android.view.ViewTreeObserver getViewTreeObserver();
     method @android.view.ViewDebug.ExportedProperty(mapping={@android.view.ViewDebug.IntToString(from=android.view.View.VISIBLE, to="VISIBLE"), @android.view.ViewDebug.IntToString(from=android.view.View.INVISIBLE, to="INVISIBLE"), @android.view.ViewDebug.IntToString(from=android.view.View.GONE, to="GONE")}) public int getVisibility();
@@ -51188,6 +51193,8 @@ package android.view {
     method public void setHasTransientState(boolean);
     method public void setHorizontalFadingEdgeEnabled(boolean);
     method public void setHorizontalScrollBarEnabled(boolean);
+    method public void setHorizontalScrollbarThumbDrawable(@Nullable android.graphics.drawable.Drawable);
+    method public void setHorizontalScrollbarTrackDrawable(@Nullable android.graphics.drawable.Drawable);
     method public void setHovered(boolean);
     method public void setId(@IdRes int);
     method public void setImportantForAccessibility(int);
@@ -51277,6 +51284,8 @@ package android.view {
     method public void setVerticalFadingEdgeEnabled(boolean);
     method public void setVerticalScrollBarEnabled(boolean);
     method public void setVerticalScrollbarPosition(int);
+    method public void setVerticalScrollbarThumbDrawable(@Nullable android.graphics.drawable.Drawable);
+    method public void setVerticalScrollbarTrackDrawable(@Nullable android.graphics.drawable.Drawable);
     method public void setVisibility(int);
     method @Deprecated public void setWillNotCacheDrawing(boolean);
     method public void setWillNotDraw(boolean);
@@ -51735,6 +51744,7 @@ package android.view {
     method public android.view.View getChildAt(int);
     method public int getChildCount();
     method protected int getChildDrawingOrder(int, int);
+    method public final int getChildDrawingOrder(int);
     method public static int getChildMeasureSpec(int, int, int);
     method protected boolean getChildStaticTransformation(android.view.View, android.view.animation.Transformation);
     method public boolean getChildVisibleRect(android.view.View, android.graphics.Rect, android.graphics.Point);
