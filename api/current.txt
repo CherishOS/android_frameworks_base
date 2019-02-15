@@ -41588,6 +41588,7 @@ package android.service.notification {
     field public static final android.os.Parcelable.Creator<android.service.notification.Adjustment> CREATOR;
     field public static final String KEY_CONTEXTUAL_ACTIONS = "key_contextual_actions";
     field public static final String KEY_IMPORTANCE = "key_importance";
+    field public static final String KEY_SNOOZE_CRITERIA = "key_snooze_criteria";
     field public static final String KEY_TEXT_REPLIES = "key_text_replies";
     field public static final String KEY_USER_SENTIMENT = "key_user_sentiment";
   }
@@ -41645,12 +41646,14 @@ package android.service.notification {
     method public void onActionInvoked(@NonNull String, @NonNull android.app.Notification.Action, int);
     method public final android.os.IBinder onBind(android.content.Intent);
     method public void onNotificationDirectReplied(@NonNull String);
-    method public android.service.notification.Adjustment onNotificationEnqueued(android.service.notification.StatusBarNotification);
+    method public abstract android.service.notification.Adjustment onNotificationEnqueued(android.service.notification.StatusBarNotification);
     method public android.service.notification.Adjustment onNotificationEnqueued(android.service.notification.StatusBarNotification, android.app.NotificationChannel);
     method public void onNotificationExpansionChanged(@NonNull String, boolean, boolean);
     method public void onNotificationRemoved(android.service.notification.StatusBarNotification, android.service.notification.NotificationListenerService.RankingMap, android.service.notification.NotificationStats, int);
+    method public abstract void onNotificationSnoozedUntilContext(android.service.notification.StatusBarNotification, String);
     method public void onNotificationsSeen(java.util.List<java.lang.String>);
     method public void onSuggestedReplySent(@NonNull String, @NonNull CharSequence, int);
+    method public final void unsnoozeNotification(String);
     field public static final String SERVICE_INTERFACE = "android.service.notification.NotificationAssistantService";
     field public static final int SOURCE_FROM_APP = 0; // 0x0
     field public static final int SOURCE_FROM_ASSISTANT = 1; // 0x1
