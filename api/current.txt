@@ -23408,7 +23408,7 @@ package android.media {
     method @NonNull public android.media.AudioPresentation.Builder setProgramId(int);
   }
 
-  public class AudioRecord implements android.media.AudioRecordingMonitor android.media.AudioRouting {
+  public class AudioRecord implements android.media.AudioRecordingMonitor android.media.AudioRouting android.media.MicrophoneDirection {
     ctor public AudioRecord(int, int, int, int, int) throws java.lang.IllegalArgumentException;
     method public void addOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener, android.os.Handler);
     method @Deprecated public void addOnRoutingChangedListener(android.media.AudioRecord.OnRoutingChangedListener, android.os.Handler);
@@ -23443,6 +23443,8 @@ package android.media {
     method public void release();
     method public void removeOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener);
     method @Deprecated public void removeOnRoutingChangedListener(android.media.AudioRecord.OnRoutingChangedListener);
+    method public boolean setMicrophoneDirection(int);
+    method public boolean setMicrophoneFieldDimension(@FloatRange(from=-1.0, to=1.0) float);
     method public int setNotificationMarkerPosition(int);
     method public int setPositionNotificationPeriod(int);
     method public boolean setPreferredDevice(android.media.AudioDeviceInfo);
@@ -26090,6 +26092,15 @@ package android.media {
     method @Deprecated public long getAnchorSytemNanoTime();
     method public float getMediaClockRate();
     field public static final android.media.MediaTimestamp TIMESTAMP_UNKNOWN;
+  }
+
+  public interface MicrophoneDirection {
+    method public boolean setMicrophoneDirection(int);
+    method public boolean setMicrophoneFieldDimension(@FloatRange(from=-1.0, to=1.0) float);
+    field public static final int MIC_DIRECTION_BACK = 2; // 0x2
+    field public static final int MIC_DIRECTION_EXTERNAL = 3; // 0x3
+    field public static final int MIC_DIRECTION_FRONT = 1; // 0x1
+    field public static final int MIC_DIRECTION_UNSPECIFIED = 0; // 0x0
   }
 
   public final class MicrophoneInfo {
