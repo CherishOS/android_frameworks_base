@@ -9409,7 +9409,6 @@ package android.content {
     method @Nullable public android.os.Bundle call(@NonNull String, @NonNull String, @Nullable String, @Nullable android.os.Bundle) throws android.os.RemoteException;
     method @Nullable public final android.net.Uri canonicalize(@NonNull android.net.Uri) throws android.os.RemoteException;
     method public void close();
-    method public static void closeQuietly(android.content.ContentProviderClient);
     method public int delete(@NonNull android.net.Uri, @Nullable String, @Nullable String[]) throws android.os.RemoteException;
     method @Nullable public android.content.ContentProvider getLocalContentProvider();
     method @Nullable public String[] getStreamTypes(@NonNull android.net.Uri, @NonNull String) throws android.os.RemoteException;
@@ -9593,10 +9592,10 @@ package android.content {
 
   public class ContentUris {
     ctor public ContentUris();
-    method public static android.net.Uri.Builder appendId(android.net.Uri.Builder, long);
-    method public static long parseId(android.net.Uri);
-    method public static android.net.Uri removeId(android.net.Uri);
-    method public static android.net.Uri withAppendedId(android.net.Uri, long);
+    method @NonNull public static android.net.Uri.Builder appendId(@NonNull android.net.Uri.Builder, long);
+    method public static long parseId(@NonNull android.net.Uri);
+    method @NonNull public static android.net.Uri removeId(@NonNull android.net.Uri);
+    method @NonNull public static android.net.Uri withAppendedId(@NonNull android.net.Uri, long);
   }
 
   public final class ContentValues implements android.os.Parcelable {
@@ -10223,8 +10222,7 @@ package android.content {
     field public static final String ACTION_MEDIA_NOFS = "android.intent.action.MEDIA_NOFS";
     field public static final String ACTION_MEDIA_REMOVED = "android.intent.action.MEDIA_REMOVED";
     field public static final String ACTION_MEDIA_SCANNER_FINISHED = "android.intent.action.MEDIA_SCANNER_FINISHED";
-    field public static final String ACTION_MEDIA_SCANNER_SCAN_FILE = "android.intent.action.MEDIA_SCANNER_SCAN_FILE";
-    field public static final String ACTION_MEDIA_SCANNER_SCAN_VOLUME = "android.intent.action.MEDIA_SCANNER_SCAN_VOLUME";
+    field @Deprecated public static final String ACTION_MEDIA_SCANNER_SCAN_FILE = "android.intent.action.MEDIA_SCANNER_SCAN_FILE";
     field public static final String ACTION_MEDIA_SCANNER_STARTED = "android.intent.action.MEDIA_SCANNER_STARTED";
     field public static final String ACTION_MEDIA_SHARED = "android.intent.action.MEDIA_SHARED";
     field public static final String ACTION_MEDIA_UNMOUNTABLE = "android.intent.action.MEDIA_UNMOUNTABLE";
@@ -34607,11 +34605,9 @@ package android.os {
     ctor public FileUriExposedException(String);
   }
 
-  public class FileUtils {
+  public final class FileUtils {
     method public static void closeQuietly(@Nullable AutoCloseable);
     method public static void closeQuietly(@Nullable java.io.FileDescriptor);
-    method public static long copy(@NonNull java.io.File, @NonNull java.io.File) throws java.io.IOException;
-    method public static long copy(@NonNull java.io.File, @NonNull java.io.File, @Nullable android.os.CancellationSignal, @Nullable java.util.concurrent.Executor, @Nullable android.os.FileUtils.ProgressListener) throws java.io.IOException;
     method public static long copy(@NonNull java.io.InputStream, @NonNull java.io.OutputStream) throws java.io.IOException;
     method public static long copy(@NonNull java.io.InputStream, @NonNull java.io.OutputStream, @Nullable android.os.CancellationSignal, @Nullable java.util.concurrent.Executor, @Nullable android.os.FileUtils.ProgressListener) throws java.io.IOException;
     method public static long copy(@NonNull java.io.FileDescriptor, @NonNull java.io.FileDescriptor) throws java.io.IOException;
