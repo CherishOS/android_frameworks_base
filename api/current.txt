@@ -9348,25 +9348,7 @@ package android.content {
     field public static final android.os.Parcelable.Creator<android.content.ComponentName> CREATOR;
   }
 
-  public interface ContentInterface {
-    method @NonNull public android.content.ContentProviderResult[] applyBatch(@NonNull String, @NonNull java.util.ArrayList<android.content.ContentProviderOperation>) throws android.content.OperationApplicationException, android.os.RemoteException;
-    method public int bulkInsert(@NonNull android.net.Uri, @NonNull android.content.ContentValues[]) throws android.os.RemoteException;
-    method @Nullable public android.os.Bundle call(@NonNull String, @NonNull String, @Nullable String, @Nullable android.os.Bundle) throws android.os.RemoteException;
-    method @Nullable public android.net.Uri canonicalize(@NonNull android.net.Uri) throws android.os.RemoteException;
-    method public int delete(@NonNull android.net.Uri, @Nullable String, @Nullable String[]) throws android.os.RemoteException;
-    method @Nullable public String[] getStreamTypes(@NonNull android.net.Uri, @NonNull String) throws android.os.RemoteException;
-    method @Nullable public String getType(@NonNull android.net.Uri) throws android.os.RemoteException;
-    method @Nullable public android.net.Uri insert(@NonNull android.net.Uri, @Nullable android.content.ContentValues) throws android.os.RemoteException;
-    method @Nullable public android.content.res.AssetFileDescriptor openAssetFile(@NonNull android.net.Uri, @NonNull String, @Nullable android.os.CancellationSignal) throws java.io.FileNotFoundException, android.os.RemoteException;
-    method @Nullable public android.os.ParcelFileDescriptor openFile(@NonNull android.net.Uri, @NonNull String, @Nullable android.os.CancellationSignal) throws java.io.FileNotFoundException, android.os.RemoteException;
-    method @Nullable public android.content.res.AssetFileDescriptor openTypedAssetFile(@NonNull android.net.Uri, @NonNull String, @Nullable android.os.Bundle, @Nullable android.os.CancellationSignal) throws java.io.FileNotFoundException, android.os.RemoteException;
-    method @Nullable public android.database.Cursor query(@NonNull android.net.Uri, @Nullable String[], @Nullable android.os.Bundle, @Nullable android.os.CancellationSignal) throws android.os.RemoteException;
-    method public boolean refresh(@NonNull android.net.Uri, @Nullable android.os.Bundle, @Nullable android.os.CancellationSignal) throws android.os.RemoteException;
-    method @Nullable public android.net.Uri uncanonicalize(@NonNull android.net.Uri) throws android.os.RemoteException;
-    method public int update(@NonNull android.net.Uri, @Nullable android.content.ContentValues, @Nullable String, @Nullable String[]) throws android.os.RemoteException;
-  }
-
-  public abstract class ContentProvider implements android.content.ComponentCallbacks2 android.content.ContentInterface {
+  public abstract class ContentProvider implements android.content.ComponentCallbacks2 {
     ctor public ContentProvider();
     method @NonNull public android.content.ContentProviderResult[] applyBatch(@NonNull String, @NonNull java.util.ArrayList<android.content.ContentProviderOperation>) throws android.content.OperationApplicationException;
     method @NonNull public android.content.ContentProviderResult[] applyBatch(@NonNull java.util.ArrayList<android.content.ContentProviderOperation>) throws android.content.OperationApplicationException;
@@ -9419,7 +9401,7 @@ package android.content {
     method public void writeDataToPipe(@NonNull android.os.ParcelFileDescriptor, @NonNull android.net.Uri, @NonNull String, @Nullable android.os.Bundle, @Nullable T);
   }
 
-  public class ContentProviderClient implements java.lang.AutoCloseable android.content.ContentInterface {
+  public class ContentProviderClient implements java.lang.AutoCloseable {
     method @NonNull public android.content.ContentProviderResult[] applyBatch(@NonNull java.util.ArrayList<android.content.ContentProviderOperation>) throws android.content.OperationApplicationException, android.os.RemoteException;
     method @NonNull public android.content.ContentProviderResult[] applyBatch(@NonNull String, @NonNull java.util.ArrayList<android.content.ContentProviderOperation>) throws android.content.OperationApplicationException, android.os.RemoteException;
     method public int bulkInsert(@NonNull android.net.Uri, @NonNull android.content.ContentValues[]) throws android.os.RemoteException;
@@ -9502,8 +9484,8 @@ package android.content {
     method public void setKeepUpdated(boolean);
   }
 
-  public abstract class ContentResolver implements android.content.ContentInterface {
-    ctor public ContentResolver(android.content.Context);
+  public abstract class ContentResolver {
+    ctor public ContentResolver(@Nullable android.content.Context);
     method @Nullable public final android.content.ContentProviderClient acquireContentProviderClient(@NonNull android.net.Uri);
     method @Nullable public final android.content.ContentProviderClient acquireContentProviderClient(@NonNull String);
     method @Nullable public final android.content.ContentProviderClient acquireUnstableContentProviderClient(@NonNull android.net.Uri);
@@ -9568,6 +9550,8 @@ package android.content {
     method public final void unregisterContentObserver(@NonNull android.database.ContentObserver);
     method public final int update(@RequiresPermission.Write @NonNull android.net.Uri, @Nullable android.content.ContentValues, @Nullable String, @Nullable String[]);
     method public static void validateSyncExtrasBundle(android.os.Bundle);
+    method public static android.content.ContentResolver wrap(@NonNull android.content.ContentProvider);
+    method public static android.content.ContentResolver wrap(@NonNull android.content.ContentProviderClient);
     field public static final String ANY_CURSOR_ITEM_TYPE = "vnd.android.cursor.item/*";
     field public static final String CURSOR_DIR_BASE_TYPE = "vnd.android.cursor.dir";
     field public static final String CURSOR_ITEM_BASE_TYPE = "vnd.android.cursor.item";
@@ -26008,6 +25992,7 @@ package android.media {
     method public void broadcastSessionCommand(@NonNull android.media.Session2Command, @Nullable android.os.Bundle);
     method public void cancelSessionCommand(@NonNull android.media.MediaSession2.ControllerInfo, @NonNull Object);
     method public void close();
+    method @NonNull public java.util.List<android.media.MediaSession2.ControllerInfo> getConnectedControllers();
     method @NonNull public String getSessionId();
     method @NonNull public android.media.Session2Token getSessionToken();
     method public boolean isPlaybackActive();
@@ -38170,38 +38155,26 @@ package android.provider {
     method public static android.net.Uri buildRootsUri(String);
     method public static android.net.Uri buildSearchDocumentsUri(String, String, String);
     method public static android.net.Uri buildTreeDocumentUri(String, String);
-    method public static android.net.Uri copyDocument(android.content.ContentInterface, android.net.Uri, android.net.Uri) throws java.io.FileNotFoundException;
-    method @Deprecated public static android.net.Uri copyDocument(android.content.ContentResolver, android.net.Uri, android.net.Uri) throws java.io.FileNotFoundException;
-    method public static android.net.Uri createDocument(android.content.ContentInterface, android.net.Uri, String, String) throws java.io.FileNotFoundException;
-    method @Deprecated public static android.net.Uri createDocument(android.content.ContentResolver, android.net.Uri, String, String) throws java.io.FileNotFoundException;
-    method public static android.content.IntentSender createWebLinkIntent(android.content.ContentInterface, android.net.Uri, android.os.Bundle) throws java.io.FileNotFoundException;
-    method @Deprecated public static android.content.IntentSender createWebLinkIntent(android.content.ContentResolver, android.net.Uri, android.os.Bundle) throws java.io.FileNotFoundException;
-    method public static boolean deleteDocument(android.content.ContentInterface, android.net.Uri) throws java.io.FileNotFoundException;
-    method @Deprecated public static boolean deleteDocument(android.content.ContentResolver, android.net.Uri) throws java.io.FileNotFoundException;
-    method public static void ejectRoot(android.content.ContentInterface, android.net.Uri);
-    method @Deprecated public static void ejectRoot(android.content.ContentResolver, android.net.Uri);
-    method public static android.provider.DocumentsContract.Path findDocumentPath(android.content.ContentInterface, android.net.Uri) throws java.io.FileNotFoundException;
-    method @Deprecated public static android.provider.DocumentsContract.Path findDocumentPath(android.content.ContentResolver, android.net.Uri) throws java.io.FileNotFoundException;
+    method @Nullable public static android.net.Uri copyDocument(@NonNull android.content.ContentResolver, @NonNull android.net.Uri, @NonNull android.net.Uri) throws java.io.FileNotFoundException;
+    method @Nullable public static android.net.Uri createDocument(@NonNull android.content.ContentResolver, @NonNull android.net.Uri, @NonNull String, @NonNull String) throws java.io.FileNotFoundException;
+    method @Nullable public static android.content.IntentSender createWebLinkIntent(@NonNull android.content.ContentResolver, @NonNull android.net.Uri, @Nullable android.os.Bundle) throws java.io.FileNotFoundException;
+    method public static boolean deleteDocument(@NonNull android.content.ContentResolver, @NonNull android.net.Uri) throws java.io.FileNotFoundException;
+    method public static void ejectRoot(@NonNull android.content.ContentResolver, @NonNull android.net.Uri);
+    method @Nullable public static android.provider.DocumentsContract.Path findDocumentPath(@NonNull android.content.ContentResolver, @NonNull android.net.Uri) throws java.io.FileNotFoundException;
     method public static String getDocumentId(android.net.Uri);
-    method @Nullable public static android.os.Bundle getDocumentMetadata(@NonNull android.content.ContentInterface, @NonNull android.net.Uri) throws java.io.FileNotFoundException;
-    method @Deprecated public static android.os.Bundle getDocumentMetadata(android.content.ContentResolver, android.net.Uri) throws java.io.FileNotFoundException;
-    method public static android.graphics.Bitmap getDocumentThumbnail(android.content.ContentInterface, android.net.Uri, android.graphics.Point, android.os.CancellationSignal) throws java.io.FileNotFoundException;
-    method @Deprecated public static android.graphics.Bitmap getDocumentThumbnail(android.content.ContentResolver, android.net.Uri, android.graphics.Point, android.os.CancellationSignal) throws java.io.FileNotFoundException;
+    method @Nullable public static android.os.Bundle getDocumentMetadata(@NonNull android.content.ContentResolver, @NonNull android.net.Uri) throws java.io.FileNotFoundException;
+    method @Nullable public static android.graphics.Bitmap getDocumentThumbnail(@NonNull android.content.ContentResolver, @NonNull android.net.Uri, @NonNull android.graphics.Point, @Nullable android.os.CancellationSignal) throws java.io.FileNotFoundException;
     method public static String getRootId(android.net.Uri);
     method public static String getSearchDocumentsQuery(android.net.Uri);
     method public static String getTreeDocumentId(android.net.Uri);
-    method public static boolean isChildDocument(@NonNull android.content.ContentInterface, @NonNull android.net.Uri, @NonNull android.net.Uri) throws java.io.FileNotFoundException;
-    method @Deprecated public static boolean isChildDocument(android.content.ContentResolver, android.net.Uri, android.net.Uri) throws java.io.FileNotFoundException;
+    method public static boolean isChildDocument(@NonNull android.content.ContentResolver, @NonNull android.net.Uri, @NonNull android.net.Uri) throws java.io.FileNotFoundException;
     method public static boolean isDocumentUri(android.content.Context, @Nullable android.net.Uri);
     method public static boolean isRootUri(@NonNull android.content.Context, @Nullable android.net.Uri);
     method public static boolean isRootsUri(@NonNull android.content.Context, @Nullable android.net.Uri);
     method public static boolean isTreeUri(android.net.Uri);
-    method public static android.net.Uri moveDocument(android.content.ContentInterface, android.net.Uri, android.net.Uri, android.net.Uri) throws java.io.FileNotFoundException;
-    method @Deprecated public static android.net.Uri moveDocument(android.content.ContentResolver, android.net.Uri, android.net.Uri, android.net.Uri) throws java.io.FileNotFoundException;
-    method public static boolean removeDocument(android.content.ContentInterface, android.net.Uri, android.net.Uri) throws java.io.FileNotFoundException;
-    method @Deprecated public static boolean removeDocument(android.content.ContentResolver, android.net.Uri, android.net.Uri) throws java.io.FileNotFoundException;
-    method public static android.net.Uri renameDocument(android.content.ContentInterface, android.net.Uri, String) throws java.io.FileNotFoundException;
-    method @Deprecated public static android.net.Uri renameDocument(android.content.ContentResolver, android.net.Uri, String) throws java.io.FileNotFoundException;
+    method @Nullable public static android.net.Uri moveDocument(@NonNull android.content.ContentResolver, @NonNull android.net.Uri, @NonNull android.net.Uri, @NonNull android.net.Uri) throws java.io.FileNotFoundException;
+    method public static boolean removeDocument(@NonNull android.content.ContentResolver, @NonNull android.net.Uri, @NonNull android.net.Uri) throws java.io.FileNotFoundException;
+    method @Nullable public static android.net.Uri renameDocument(@NonNull android.content.ContentResolver, @NonNull android.net.Uri, @NonNull String) throws java.io.FileNotFoundException;
     field public static final String ACTION_DOCUMENT_SETTINGS = "android.provider.action.DOCUMENT_SETTINGS";
     field public static final String EXTRA_ERROR = "error";
     field public static final String EXTRA_EXCLUDE_SELF = "android.provider.extra.EXCLUDE_SELF";
