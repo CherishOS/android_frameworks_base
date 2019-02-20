@@ -10284,6 +10284,7 @@ package android.content {
     field public static final String ACTION_USER_PRESENT = "android.intent.action.USER_PRESENT";
     field public static final String ACTION_USER_UNLOCKED = "android.intent.action.USER_UNLOCKED";
     field public static final String ACTION_VIEW = "android.intent.action.VIEW";
+    field public static final String ACTION_VIEW_LOCUS = "android.intent.action.VIEW_LOCUS";
     field public static final String ACTION_VOICE_COMMAND = "android.intent.action.VOICE_COMMAND";
     field @Deprecated public static final String ACTION_WALLPAPER_CHANGED = "android.intent.action.WALLPAPER_CHANGED";
     field public static final String ACTION_WEB_SEARCH = "android.intent.action.WEB_SEARCH";
@@ -10368,6 +10369,7 @@ package android.content {
     field public static final String EXTRA_INTENT = "android.intent.extra.INTENT";
     field public static final String EXTRA_KEY_EVENT = "android.intent.extra.KEY_EVENT";
     field public static final String EXTRA_LOCAL_ONLY = "android.intent.extra.LOCAL_ONLY";
+    field public static final String EXTRA_LOCUS_ID = "android.intent.extra.LOCUS_ID";
     field public static final String EXTRA_MIME_TYPES = "android.intent.extra.MIME_TYPES";
     field public static final String EXTRA_NOT_UNKNOWN_SOURCE = "android.intent.extra.NOT_UNKNOWN_SOURCE";
     field public static final String EXTRA_ORIGINATING_URI = "android.intent.extra.ORIGINATING_URI";
@@ -10618,6 +10620,14 @@ package android.content {
 
   @Deprecated public static interface Loader.OnLoadCompleteListener<D> {
     method @Deprecated public void onLoadComplete(android.content.Loader<D>, D);
+  }
+
+  public final class LocusId implements android.os.Parcelable {
+    ctor public LocusId(@NonNull android.net.Uri);
+    method public int describeContents();
+    method @NonNull public android.net.Uri getUri();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.content.LocusId> CREATOR;
   }
 
   public class MutableContextWrapper extends android.content.ContextWrapper {
@@ -53471,16 +53481,17 @@ package android.view.contentcapture {
 
   public final class ContentCaptureContext implements android.os.Parcelable {
     method public int describeContents();
+    method public static android.view.contentcapture.ContentCaptureContext forLocusId(@NonNull android.net.Uri);
+    method @Nullable public android.os.Bundle getExtras();
+    method @NonNull public android.content.LocusId getLocusId();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.contentcapture.ContentCaptureContext> CREATOR;
   }
 
   public static final class ContentCaptureContext.Builder {
-    ctor public ContentCaptureContext.Builder();
+    ctor public ContentCaptureContext.Builder(@NonNull android.content.LocusId);
     method public android.view.contentcapture.ContentCaptureContext build();
-    method @NonNull public android.view.contentcapture.ContentCaptureContext.Builder setAction(@NonNull String);
     method @NonNull public android.view.contentcapture.ContentCaptureContext.Builder setExtras(@NonNull android.os.Bundle);
-    method @NonNull public android.view.contentcapture.ContentCaptureContext.Builder setUri(@NonNull android.net.Uri);
   }
 
   public final class ContentCaptureManager {
@@ -53513,8 +53524,8 @@ package android.view.contentcapture {
 
   public final class UserDataRemovalRequest implements android.os.Parcelable {
     method public int describeContents();
+    method @NonNull public java.util.List<android.view.contentcapture.UserDataRemovalRequest.LocusIdRequest> getLocusIdRequests();
     method @NonNull public String getPackageName();
-    method @NonNull public java.util.List<android.view.contentcapture.UserDataRemovalRequest.UriRequest> getUriRequests();
     method public boolean isForEverything();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.contentcapture.UserDataRemovalRequest> CREATOR;
@@ -53522,13 +53533,13 @@ package android.view.contentcapture {
 
   public static final class UserDataRemovalRequest.Builder {
     ctor public UserDataRemovalRequest.Builder();
-    method public android.view.contentcapture.UserDataRemovalRequest.Builder addUri(@NonNull android.net.Uri, boolean);
+    method public android.view.contentcapture.UserDataRemovalRequest.Builder addLocusId(@NonNull android.content.LocusId, boolean);
     method @NonNull public android.view.contentcapture.UserDataRemovalRequest build();
     method @NonNull public android.view.contentcapture.UserDataRemovalRequest.Builder forEverything();
   }
 
-  public final class UserDataRemovalRequest.UriRequest {
-    method @NonNull public android.net.Uri getUri();
+  public final class UserDataRemovalRequest.LocusIdRequest {
+    method @NonNull public android.content.LocusId getLocusId();
     method @NonNull public boolean isRecursive();
   }
 
