@@ -16,4 +16,4 @@
 
 package android.telephony.ims;
 
-parcelable RcsGroupThreadEvent;
+parcelable RcsGroupThreadIconChangedEventDescriptor;
