@@ -9409,7 +9409,6 @@ package android.content {
     method @Nullable public android.os.Bundle call(@NonNull String, @NonNull String, @Nullable String, @Nullable android.os.Bundle) throws android.os.RemoteException;
     method @Nullable public final android.net.Uri canonicalize(@NonNull android.net.Uri) throws android.os.RemoteException;
     method public void close();
-    method public static void closeQuietly(android.content.ContentProviderClient);
     method public int delete(@NonNull android.net.Uri, @Nullable String, @Nullable String[]) throws android.os.RemoteException;
     method @Nullable public android.content.ContentProvider getLocalContentProvider();
     method @Nullable public String[] getStreamTypes(@NonNull android.net.Uri, @NonNull String) throws android.os.RemoteException;
@@ -9593,10 +9592,10 @@ package android.content {
 
   public class ContentUris {
     ctor public ContentUris();
-    method public static android.net.Uri.Builder appendId(android.net.Uri.Builder, long);
-    method public static long parseId(android.net.Uri);
-    method public static android.net.Uri removeId(android.net.Uri);
-    method public static android.net.Uri withAppendedId(android.net.Uri, long);
+    method @NonNull public static android.net.Uri.Builder appendId(@NonNull android.net.Uri.Builder, long);
+    method public static long parseId(@NonNull android.net.Uri);
+    method @NonNull public static android.net.Uri removeId(@NonNull android.net.Uri);
+    method @NonNull public static android.net.Uri withAppendedId(@NonNull android.net.Uri, long);
   }
 
   public final class ContentValues implements android.os.Parcelable {
@@ -10223,8 +10222,7 @@ package android.content {
     field public static final String ACTION_MEDIA_NOFS = "android.intent.action.MEDIA_NOFS";
     field public static final String ACTION_MEDIA_REMOVED = "android.intent.action.MEDIA_REMOVED";
     field public static final String ACTION_MEDIA_SCANNER_FINISHED = "android.intent.action.MEDIA_SCANNER_FINISHED";
-    field public static final String ACTION_MEDIA_SCANNER_SCAN_FILE = "android.intent.action.MEDIA_SCANNER_SCAN_FILE";
-    field public static final String ACTION_MEDIA_SCANNER_SCAN_VOLUME = "android.intent.action.MEDIA_SCANNER_SCAN_VOLUME";
+    field @Deprecated public static final String ACTION_MEDIA_SCANNER_SCAN_FILE = "android.intent.action.MEDIA_SCANNER_SCAN_FILE";
     field public static final String ACTION_MEDIA_SCANNER_STARTED = "android.intent.action.MEDIA_SCANNER_STARTED";
     field public static final String ACTION_MEDIA_SHARED = "android.intent.action.MEDIA_SHARED";
     field public static final String ACTION_MEDIA_UNMOUNTABLE = "android.intent.action.MEDIA_UNMOUNTABLE";
@@ -10286,6 +10284,7 @@ package android.content {
     field public static final String ACTION_USER_PRESENT = "android.intent.action.USER_PRESENT";
     field public static final String ACTION_USER_UNLOCKED = "android.intent.action.USER_UNLOCKED";
     field public static final String ACTION_VIEW = "android.intent.action.VIEW";
+    field public static final String ACTION_VIEW_LOCUS = "android.intent.action.VIEW_LOCUS";
     field public static final String ACTION_VOICE_COMMAND = "android.intent.action.VOICE_COMMAND";
     field @Deprecated public static final String ACTION_WALLPAPER_CHANGED = "android.intent.action.WALLPAPER_CHANGED";
     field public static final String ACTION_WEB_SEARCH = "android.intent.action.WEB_SEARCH";
@@ -10370,6 +10369,7 @@ package android.content {
     field public static final String EXTRA_INTENT = "android.intent.extra.INTENT";
     field public static final String EXTRA_KEY_EVENT = "android.intent.extra.KEY_EVENT";
     field public static final String EXTRA_LOCAL_ONLY = "android.intent.extra.LOCAL_ONLY";
+    field public static final String EXTRA_LOCUS_ID = "android.intent.extra.LOCUS_ID";
     field public static final String EXTRA_MIME_TYPES = "android.intent.extra.MIME_TYPES";
     field public static final String EXTRA_NOT_UNKNOWN_SOURCE = "android.intent.extra.NOT_UNKNOWN_SOURCE";
     field public static final String EXTRA_ORIGINATING_URI = "android.intent.extra.ORIGINATING_URI";
@@ -10620,6 +10620,14 @@ package android.content {
 
   @Deprecated public static interface Loader.OnLoadCompleteListener<D> {
     method @Deprecated public void onLoadComplete(android.content.Loader<D>, D);
+  }
+
+  public final class LocusId implements android.os.Parcelable {
+    ctor public LocusId(@NonNull android.net.Uri);
+    method public int describeContents();
+    method @NonNull public android.net.Uri getUri();
+    method public void writeToParcel(android.os.Parcel, int);
+    field public static final android.os.Parcelable.Creator<android.content.LocusId> CREATOR;
   }
 
   public class MutableContextWrapper extends android.content.ContextWrapper {
@@ -16204,7 +16212,7 @@ package android.hardware {
 
   public final class HardwareBuffer implements java.lang.AutoCloseable android.os.Parcelable {
     method public void close();
-    method @NonNull public static android.hardware.HardwareBuffer create(int, int, int, int, long);
+    method @NonNull public static android.hardware.HardwareBuffer create(@IntRange(from=1) int, @IntRange(from=1) int, int, @IntRange(from=1) int, long);
     method public int describeContents();
     method public int getFormat();
     method public int getHeight();
@@ -16212,7 +16220,7 @@ package android.hardware {
     method public long getUsage();
     method public int getWidth();
     method public boolean isClosed();
-    method public static boolean isSupported(int, int, int, int, long);
+    method public static boolean isSupported(@IntRange(from=1) int, @IntRange(from=1) int, int, @IntRange(from=1) int, long);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int BLOB = 33; // 0x21
     field public static final android.os.Parcelable.Creator<android.hardware.HardwareBuffer> CREATOR;
@@ -26019,6 +26027,7 @@ package android.media {
     method public void onCommandResult(@NonNull android.media.MediaSession2, @NonNull android.media.MediaSession2.ControllerInfo, @NonNull Object, @NonNull android.media.Session2Command, @NonNull android.media.Session2Command.Result);
     method @Nullable public android.media.Session2CommandGroup onConnect(@NonNull android.media.MediaSession2, @NonNull android.media.MediaSession2.ControllerInfo);
     method public void onDisconnected(@NonNull android.media.MediaSession2, @NonNull android.media.MediaSession2.ControllerInfo);
+    method public void onPostConnect(@NonNull android.media.MediaSession2, @NonNull android.media.MediaSession2.ControllerInfo);
     method @Nullable public android.media.Session2Command.Result onSessionCommand(@NonNull android.media.MediaSession2, @NonNull android.media.MediaSession2.ControllerInfo, @NonNull android.media.Session2Command, @Nullable android.os.Bundle);
   }
 
@@ -34607,11 +34616,9 @@ package android.os {
     ctor public FileUriExposedException(String);
   }
 
-  public class FileUtils {
+  public final class FileUtils {
     method public static void closeQuietly(@Nullable AutoCloseable);
     method public static void closeQuietly(@Nullable java.io.FileDescriptor);
-    method public static long copy(@NonNull java.io.File, @NonNull java.io.File) throws java.io.IOException;
-    method public static long copy(@NonNull java.io.File, @NonNull java.io.File, @Nullable android.os.CancellationSignal, @Nullable java.util.concurrent.Executor, @Nullable android.os.FileUtils.ProgressListener) throws java.io.IOException;
     method public static long copy(@NonNull java.io.InputStream, @NonNull java.io.OutputStream) throws java.io.IOException;
     method public static long copy(@NonNull java.io.InputStream, @NonNull java.io.OutputStream, @Nullable android.os.CancellationSignal, @Nullable java.util.concurrent.Executor, @Nullable android.os.FileUtils.ProgressListener) throws java.io.IOException;
     method public static long copy(@NonNull java.io.FileDescriptor, @NonNull java.io.FileDescriptor) throws java.io.IOException;
@@ -41568,13 +41575,13 @@ package android.service.media {
 package android.service.notification {
 
   public final class Adjustment implements android.os.Parcelable {
-    ctor public Adjustment(String, String, android.os.Bundle, CharSequence, int);
+    ctor public Adjustment(String, String, android.os.Bundle, CharSequence, android.os.UserHandle);
     method public int describeContents();
     method public CharSequence getExplanation();
     method public String getKey();
     method public String getPackage();
     method public android.os.Bundle getSignals();
-    method public int getUser();
+    method public android.os.UserHandle getUserHandle();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.service.notification.Adjustment> CREATOR;
     field public static final String KEY_CONTEXTUAL_ACTIONS = "key_contextual_actions";
@@ -42137,7 +42144,7 @@ package android.service.wallpaper {
     method protected void dump(String, java.io.FileDescriptor, java.io.PrintWriter, String[]);
     method public int getDesiredMinimumHeight();
     method public int getDesiredMinimumWidth();
-    method public android.content.Context getDisplayContext();
+    method @Nullable public android.content.Context getDisplayContext();
     method public android.view.SurfaceHolder getSurfaceHolder();
     method public boolean isPreview();
     method public boolean isVisible();
@@ -44252,6 +44259,7 @@ package android.telephony {
     field public static final String KEY_EDITABLE_ENHANCED_4G_LTE_BOOL = "editable_enhanced_4g_lte_bool";
     field public static final String KEY_EDITABLE_VOICEMAIL_NUMBER_BOOL = "editable_voicemail_number_bool";
     field public static final String KEY_EDITABLE_VOICEMAIL_NUMBER_SETTING_BOOL = "editable_voicemail_number_setting_bool";
+    field public static final String KEY_EMERGENCY_NUMBER_PREFIX_STRING_ARRAY = "emergency_number_prefix_string_array";
     field public static final String KEY_ENABLE_DIALER_KEY_VIBRATION_BOOL = "enable_dialer_key_vibration_bool";
     field public static final String KEY_ENHANCED_4G_LTE_ON_BY_DEFAULT_BOOL = "enhanced_4g_lte_on_by_default_bool";
     field public static final String KEY_FORCE_HOME_NETWORK_BOOL = "force_home_network_bool";
@@ -45682,12 +45690,9 @@ package android.telephony.ims {
   @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.SOURCE) @IntDef({android.telephony.ims.RcsEventQueryParams.SORT_BY_CREATION_ORDER, android.telephony.ims.RcsEventQueryParams.SORT_BY_TIMESTAMP}) public static @interface RcsEventQueryParams.SortingProperty {
   }
 
-  public final class RcsEventQueryResult implements android.os.Parcelable {
-    method public int describeContents();
+  public class RcsEventQueryResult {
     method public android.telephony.ims.RcsQueryContinuationToken getContinuationToken();
     method public java.util.List<android.telephony.ims.RcsEvent> getEvents();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.telephony.ims.RcsEventQueryResult> CREATOR;
   }
 
   public final class RcsFileTransferCreationParams implements android.os.Parcelable {
@@ -45782,37 +45787,25 @@ package android.telephony.ims {
     method @NonNull public android.telephony.ims.RcsGroupThread getRcsGroupThread();
   }
 
-  public final class RcsGroupThreadIconChangedEvent extends android.telephony.ims.RcsGroupThreadEvent implements android.os.Parcelable {
+  public final class RcsGroupThreadIconChangedEvent extends android.telephony.ims.RcsGroupThreadEvent {
     ctor public RcsGroupThreadIconChangedEvent(long, @NonNull android.telephony.ims.RcsGroupThread, @NonNull android.telephony.ims.RcsParticipant, @Nullable android.net.Uri);
-    method public int describeContents();
     method @Nullable public android.net.Uri getNewIcon();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.telephony.ims.RcsGroupThreadIconChangedEvent> CREATOR;
   }
 
-  public final class RcsGroupThreadNameChangedEvent extends android.telephony.ims.RcsGroupThreadEvent implements android.os.Parcelable {
+  public final class RcsGroupThreadNameChangedEvent extends android.telephony.ims.RcsGroupThreadEvent {
     ctor public RcsGroupThreadNameChangedEvent(long, @NonNull android.telephony.ims.RcsGroupThread, @NonNull android.telephony.ims.RcsParticipant, @Nullable String);
-    method public int describeContents();
     method @Nullable public String getNewName();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.telephony.ims.RcsGroupThreadNameChangedEvent> CREATOR;
   }
 
-  public final class RcsGroupThreadParticipantJoinedEvent extends android.telephony.ims.RcsGroupThreadEvent implements android.os.Parcelable {
+  public final class RcsGroupThreadParticipantJoinedEvent extends android.telephony.ims.RcsGroupThreadEvent {
     ctor public RcsGroupThreadParticipantJoinedEvent(long, @NonNull android.telephony.ims.RcsGroupThread, @NonNull android.telephony.ims.RcsParticipant, @NonNull android.telephony.ims.RcsParticipant);
-    method public int describeContents();
     method public android.telephony.ims.RcsParticipant getJoinedParticipant();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.telephony.ims.RcsGroupThreadParticipantJoinedEvent> CREATOR;
   }
 
-  public final class RcsGroupThreadParticipantLeftEvent extends android.telephony.ims.RcsGroupThreadEvent implements android.os.Parcelable {
+  public final class RcsGroupThreadParticipantLeftEvent extends android.telephony.ims.RcsGroupThreadEvent {
     ctor public RcsGroupThreadParticipantLeftEvent(long, @NonNull android.telephony.ims.RcsGroupThread, @NonNull android.telephony.ims.RcsParticipant, @NonNull android.telephony.ims.RcsParticipant);
-    method public int describeContents();
-    method @NonNull public android.telephony.ims.RcsParticipant getLeavingParticipantId();
+    method @NonNull public android.telephony.ims.RcsParticipant getLeavingParticipant();
     method public void persist() throws android.telephony.ims.RcsMessageStoreException;
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.telephony.ims.RcsGroupThreadParticipantLeftEvent> CREATOR;
   }
 
   public class RcsIncomingMessage extends android.telephony.ims.RcsMessage {
@@ -46004,13 +45997,10 @@ package android.telephony.ims {
     method @WorkerThread public void setContactId(String) throws android.telephony.ims.RcsMessageStoreException;
   }
 
-  public final class RcsParticipantAliasChangedEvent extends android.telephony.ims.RcsEvent implements android.os.Parcelable {
+  public final class RcsParticipantAliasChangedEvent extends android.telephony.ims.RcsEvent {
     ctor public RcsParticipantAliasChangedEvent(long, @NonNull android.telephony.ims.RcsParticipant, @Nullable String);
-    method public int describeContents();
     method @Nullable public String getNewAlias();
-    method @NonNull public android.telephony.ims.RcsParticipant getParticipantId();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final android.os.Parcelable.Creator<android.telephony.ims.RcsParticipantAliasChangedEvent> CREATOR;
+    method @NonNull public android.telephony.ims.RcsParticipant getParticipant();
   }
 
   public final class RcsParticipantQueryParams implements android.os.Parcelable {
@@ -53474,16 +53464,17 @@ package android.view.contentcapture {
 
   public final class ContentCaptureContext implements android.os.Parcelable {
     method public int describeContents();
+    method public static android.view.contentcapture.ContentCaptureContext forLocusId(@NonNull android.net.Uri);
+    method @Nullable public android.os.Bundle getExtras();
+    method @NonNull public android.content.LocusId getLocusId();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.contentcapture.ContentCaptureContext> CREATOR;
   }
 
   public static final class ContentCaptureContext.Builder {
-    ctor public ContentCaptureContext.Builder();
+    ctor public ContentCaptureContext.Builder(@NonNull android.content.LocusId);
     method public android.view.contentcapture.ContentCaptureContext build();
-    method @NonNull public android.view.contentcapture.ContentCaptureContext.Builder setAction(@NonNull String);
     method @NonNull public android.view.contentcapture.ContentCaptureContext.Builder setExtras(@NonNull android.os.Bundle);
-    method @NonNull public android.view.contentcapture.ContentCaptureContext.Builder setUri(@NonNull android.net.Uri);
   }
 
   public final class ContentCaptureManager {
@@ -53516,8 +53507,8 @@ package android.view.contentcapture {
 
   public final class UserDataRemovalRequest implements android.os.Parcelable {
     method public int describeContents();
+    method @NonNull public java.util.List<android.view.contentcapture.UserDataRemovalRequest.LocusIdRequest> getLocusIdRequests();
     method @NonNull public String getPackageName();
-    method @NonNull public java.util.List<android.view.contentcapture.UserDataRemovalRequest.UriRequest> getUriRequests();
     method public boolean isForEverything();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.view.contentcapture.UserDataRemovalRequest> CREATOR;
@@ -53525,13 +53516,13 @@ package android.view.contentcapture {
 
   public static final class UserDataRemovalRequest.Builder {
     ctor public UserDataRemovalRequest.Builder();
-    method public android.view.contentcapture.UserDataRemovalRequest.Builder addUri(@NonNull android.net.Uri, boolean);
+    method public android.view.contentcapture.UserDataRemovalRequest.Builder addLocusId(@NonNull android.content.LocusId, boolean);
     method @NonNull public android.view.contentcapture.UserDataRemovalRequest build();
     method @NonNull public android.view.contentcapture.UserDataRemovalRequest.Builder forEverything();
   }
 
-  public final class UserDataRemovalRequest.UriRequest {
-    method @NonNull public android.net.Uri getUri();
+  public final class UserDataRemovalRequest.LocusIdRequest {
+    method @NonNull public android.content.LocusId getLocusId();
     method @NonNull public boolean isRecursive();
   }
 
@@ -54023,6 +54014,10 @@ package android.view.inspector {
     ctor public PropertyReader.PropertyTypeMismatchException(int, @NonNull String, @NonNull String);
   }
 
+  public final class WindowInspector {
+    method @NonNull public static java.util.List<android.view.View> getGlobalWindowViews();
+  }
+
 }
 
 package android.view.textclassifier {
@@ -54226,7 +54221,6 @@ package android.view.textclassifier {
 
   public final class TextClassificationManager {
     method @NonNull public android.view.textclassifier.TextClassifier createTextClassificationSession(@NonNull android.view.textclassifier.TextClassificationContext);
-    method @NonNull public android.view.textclassifier.TextClassifier getLocalTextClassifier();
     method @NonNull public android.view.textclassifier.TextClassifier getTextClassifier();
     method public void setTextClassificationSessionFactory(@Nullable android.view.textclassifier.TextClassificationSessionFactory);
     method public void setTextClassifier(@Nullable android.view.textclassifier.TextClassifier);
