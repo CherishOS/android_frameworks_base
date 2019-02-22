@@ -18,10 +18,18 @@ import static android.app.StatusBarManager.DISABLE2_QUICK_SETTINGS;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.net.Uri;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.os.UserHandle;
+import android.provider.AlarmClock;
+import android.provider.CalendarContract;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.DisplayCutout;
@@ -57,6 +65,9 @@ import java.util.List;
  * battery, carrier info and privacy icons) and also contains the {@link QuickQSPanel}.
  */
 public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tunable {
+
+    private static final String SHOW_QS_CLOCK =
+            "system:" + Settings.System.SHOW_QS_CLOCK;
 
     private boolean mExpanded;
     private boolean mQsDisabled;
@@ -147,6 +158,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
 
         mClockContainer = findViewById(R.id.clock_container);
         mClockView = findViewById(R.id.clock);
+        mClockView.setQsHeader();
         mDatePrivacySeparator = findViewById(R.id.space);
         // Tint for the battery icons are handled in setupHost()
         mBatteryRemainingIcon = findViewById(R.id.batteryRemainingIcon);
@@ -165,7 +177,8 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                 .build();
 
         Dependency.get(TunerService.class).addTunable(this,
-                StatusBarIconController.ICON_HIDE_LIST);
+                StatusBarIconController.ICON_HIDE_LIST,
+                SHOW_QS_CLOCK);
     }
 
     void onAttach(TintedIconManager iconManager,
@@ -587,6 +600,15 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
 
     @Override
     public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case SHOW_QS_CLOCK:
+                boolean showClock =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                mClockView.setClockVisibleByUser(showClock);
+                break;
+            default:
+                break;
+        }
 		 mClockView.setClockVisibleByUser(!StatusBarIconController.getIconHideList(
                 mContext, newValue).contains("clock"));
     }
