@@ -6153,6 +6153,12 @@ public final class Settings {
          * @hide
          */
         public static final String SCREEN_OFF_FOD = "screen_off_fod";
+		
+		/**
+         * Whether to display QS clock
+         * @hide
+         */
+        public static final String SHOW_QS_CLOCK = "show_qs_clock";
 
         /**
          * These are all public system settings
