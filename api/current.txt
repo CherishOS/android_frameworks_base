@@ -5473,11 +5473,12 @@ package android.app {
   public static final class Notification.BubbleMetadata implements android.os.Parcelable {
     method public int describeContents();
     method public boolean getAutoExpandBubble();
+    method public android.app.PendingIntent getDeleteIntent();
     method public int getDesiredHeight();
     method public android.graphics.drawable.Icon getIcon();
     method public android.app.PendingIntent getIntent();
     method public boolean getSuppressInitialNotification();
-    method public CharSequence getTitle();
+    method @Deprecated public CharSequence getTitle();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.app.Notification.BubbleMetadata> CREATOR;
   }
@@ -5486,11 +5487,12 @@ package android.app {
     ctor public Notification.BubbleMetadata.Builder();
     method public android.app.Notification.BubbleMetadata build();
     method public android.app.Notification.BubbleMetadata.Builder setAutoExpandBubble(boolean);
+    method public android.app.Notification.BubbleMetadata.Builder setDeleteIntent(android.app.PendingIntent);
     method public android.app.Notification.BubbleMetadata.Builder setDesiredHeight(int);
     method public android.app.Notification.BubbleMetadata.Builder setIcon(android.graphics.drawable.Icon);
     method public android.app.Notification.BubbleMetadata.Builder setIntent(android.app.PendingIntent);
     method public android.app.Notification.BubbleMetadata.Builder setSuppressInitialNotification(boolean);
-    method public android.app.Notification.BubbleMetadata.Builder setTitle(CharSequence);
+    method @Deprecated public android.app.Notification.BubbleMetadata.Builder setTitle(CharSequence);
   }
 
   public static class Notification.Builder {
@@ -6662,7 +6664,7 @@ package android.app.admin {
     method public int getPasswordMinimumUpperCase(@Nullable android.content.ComponentName);
     method public int getPasswordQuality(@Nullable android.content.ComponentName);
     method @Nullable public android.app.admin.SystemUpdateInfo getPendingSystemUpdate(@NonNull android.content.ComponentName);
-    method public int getPermissionGrantState(@Nullable android.content.ComponentName, String, String);
+    method public int getPermissionGrantState(@Nullable android.content.ComponentName, @NonNull String, @NonNull String);
     method public int getPermissionPolicy(android.content.ComponentName);
     method @Nullable public java.util.List<java.lang.String> getPermittedAccessibilityServices(@NonNull android.content.ComponentName);
     method @Nullable public java.util.List<java.lang.String> getPermittedCrossProfileNotificationListeners(@NonNull android.content.ComponentName);
@@ -6773,7 +6775,7 @@ package android.app.admin {
     method public void setPasswordMinimumSymbols(@NonNull android.content.ComponentName, int);
     method public void setPasswordMinimumUpperCase(@NonNull android.content.ComponentName, int);
     method public void setPasswordQuality(@NonNull android.content.ComponentName, int);
-    method public boolean setPermissionGrantState(@NonNull android.content.ComponentName, String, String, int);
+    method public boolean setPermissionGrantState(@NonNull android.content.ComponentName, @NonNull String, @NonNull String, int);
     method public void setPermissionPolicy(@NonNull android.content.ComponentName, int);
     method public boolean setPermittedAccessibilityServices(@NonNull android.content.ComponentName, java.util.List<java.lang.String>);
     method public boolean setPermittedCrossProfileNotificationListeners(@NonNull android.content.ComponentName, @Nullable java.util.List<java.lang.String>);
@@ -9511,6 +9513,7 @@ package android.content {
     method public static android.content.SyncAdapterType[] getSyncAdapterTypes();
     method public static boolean getSyncAutomatically(android.accounts.Account, String);
     method @Nullable public final String getType(@NonNull android.net.Uri);
+    method @NonNull public final android.content.ContentResolver.TypeInfo getTypeInfo(@NonNull String);
     method @Nullable public final android.net.Uri insert(@RequiresPermission.Write @NonNull android.net.Uri, @Nullable android.content.ContentValues);
     method public static boolean isSyncActive(android.accounts.Account, String);
     method public static boolean isSyncPending(android.accounts.Account, String);
@@ -9588,6 +9591,12 @@ package android.content {
     field public static final int SYNC_OBSERVER_TYPE_ACTIVE = 4; // 0x4
     field public static final int SYNC_OBSERVER_TYPE_PENDING = 2; // 0x2
     field public static final int SYNC_OBSERVER_TYPE_SETTINGS = 1; // 0x1
+  }
+
+  public static final class ContentResolver.TypeInfo {
+    method @NonNull public CharSequence getContentDescription();
+    method @NonNull public android.graphics.drawable.Icon getIcon();
+    method @NonNull public CharSequence getLabel();
   }
 
   public class ContentUris {
@@ -11366,6 +11375,7 @@ package android.content.pm {
     method @NonNull public java.util.List<android.content.pm.PackageInstaller.SessionInfo> getMySessions();
     method @Nullable public android.content.pm.PackageInstaller.SessionInfo getSessionInfo(int);
     method @NonNull public java.util.List<android.content.pm.PackageInstaller.SessionInfo> getStagedSessions();
+    method @RequiresPermission(allOf={android.Manifest.permission.INSTALL_PACKAGES, "com.android.permission.INSTALL_EXISTING_PACKAGES"}) public void installExistingPackage(@NonNull String, int, @Nullable android.content.IntentSender);
     method @NonNull public android.content.pm.PackageInstaller.Session openSession(int) throws java.io.IOException;
     method public void registerSessionCallback(@NonNull android.content.pm.PackageInstaller.SessionCallback);
     method public void registerSessionCallback(@NonNull android.content.pm.PackageInstaller.SessionCallback, @NonNull android.os.Handler);
@@ -11466,7 +11476,6 @@ package android.content.pm {
     method public void setAppIcon(@Nullable android.graphics.Bitmap);
     method public void setAppLabel(@Nullable CharSequence);
     method public void setAppPackageName(@Nullable String);
-    method public void setInstallAsApex();
     method public void setInstallLocation(int);
     method public void setInstallReason(int);
     method public void setMultiPackage();
@@ -23038,6 +23047,7 @@ package android.media {
     ctor public AudioAttributes.Builder();
     ctor public AudioAttributes.Builder(android.media.AudioAttributes);
     method public android.media.AudioAttributes build();
+    method public android.media.AudioAttributes.Builder setAllowCapture(boolean);
     method public android.media.AudioAttributes.Builder setContentType(int);
     method public android.media.AudioAttributes.Builder setFlags(int);
     method public android.media.AudioAttributes.Builder setLegacyStreamType(int);
@@ -23371,6 +23381,18 @@ package android.media {
     method public void onAudioFocusChange(int);
   }
 
+  public final class AudioPlaybackCaptureConfiguration {
+  }
+
+  public static final class AudioPlaybackCaptureConfiguration.Builder {
+    ctor public AudioPlaybackCaptureConfiguration.Builder(@NonNull android.media.projection.MediaProjection);
+    method public android.media.AudioPlaybackCaptureConfiguration.Builder addMatchingUid(int);
+    method public android.media.AudioPlaybackCaptureConfiguration.Builder addMatchingUsage(@NonNull android.media.AudioAttributes);
+    method public android.media.AudioPlaybackCaptureConfiguration build();
+    method public android.media.AudioPlaybackCaptureConfiguration.Builder excludeUid(int);
+    method public android.media.AudioPlaybackCaptureConfiguration.Builder excludeUsage(@NonNull android.media.AudioAttributes);
+  }
+
   public final class AudioPlaybackConfiguration implements android.os.Parcelable {
     method public int describeContents();
     method public android.media.AudioAttributes getAudioAttributes();
@@ -23469,6 +23491,7 @@ package android.media {
     ctor public AudioRecord.Builder();
     method public android.media.AudioRecord build() throws java.lang.UnsupportedOperationException;
     method public android.media.AudioRecord.Builder setAudioFormat(@NonNull android.media.AudioFormat) throws java.lang.IllegalArgumentException;
+    method public android.media.AudioRecord.Builder setAudioPlaybackCaptureConfig(@NonNull android.media.AudioPlaybackCaptureConfiguration);
     method public android.media.AudioRecord.Builder setAudioSource(int) throws java.lang.IllegalArgumentException;
     method public android.media.AudioRecord.Builder setBufferSizeInBytes(int) throws java.lang.IllegalArgumentException;
   }
@@ -23991,8 +24014,8 @@ package android.media {
     method public int getMaxImages();
     method public android.view.Surface getSurface();
     method public int getWidth();
-    method public static android.media.ImageReader newInstance(int, int, int, int);
-    method public static android.media.ImageReader newInstance(int, int, int, int, long);
+    method @NonNull public static android.media.ImageReader newInstance(@IntRange(from=1) int, @IntRange(from=1) int, int, @IntRange(from=1) int);
+    method @NonNull public static android.media.ImageReader newInstance(@IntRange(from=1) int, @IntRange(from=1) int, int, @IntRange(from=1) int, long);
     method public void setOnImageAvailableListener(android.media.ImageReader.OnImageAvailableListener, android.os.Handler);
   }
 
@@ -24005,8 +24028,8 @@ package android.media {
     method public android.media.Image dequeueInputImage();
     method public int getFormat();
     method public int getMaxImages();
-    method public static android.media.ImageWriter newInstance(android.view.Surface, int);
-    method public static android.media.ImageWriter newInstance(android.view.Surface, int, int);
+    method @NonNull public static android.media.ImageWriter newInstance(@NonNull android.view.Surface, @IntRange(from=1) int);
+    method @NonNull public static android.media.ImageWriter newInstance(@NonNull android.view.Surface, @IntRange(from=1) int, int);
     method public void queueInputImage(android.media.Image);
     method public void setOnImageReleasedListener(android.media.ImageWriter.OnImageReleasedListener, android.os.Handler);
   }
@@ -27435,6 +27458,7 @@ package android.media.session {
     method @Nullable public CharSequence getQueueTitle();
     method public int getRatingType();
     method @Nullable public android.app.PendingIntent getSessionActivity();
+    method @Nullable public android.os.Bundle getSessionInfo();
     method @NonNull public android.media.session.MediaSession.Token getSessionToken();
     method @NonNull public android.media.session.MediaController.TransportControls getTransportControls();
     method public void registerCallback(@NonNull android.media.session.MediaController.Callback);
@@ -27494,6 +27518,7 @@ package android.media.session {
 
   public final class MediaSession {
     ctor public MediaSession(@NonNull android.content.Context, @NonNull String);
+    ctor public MediaSession(@NonNull android.content.Context, @NonNull String, @Nullable android.os.Bundle);
     method @NonNull public android.media.session.MediaController getController();
     method @NonNull public android.media.session.MediaSessionManager.RemoteUserInfo getCurrentControllerInfo();
     method @NonNull public android.media.session.MediaSession.Token getSessionToken();
@@ -29964,7 +29989,7 @@ package android.net.wifi {
     method @Deprecated public boolean reconnect();
     method @Deprecated public boolean removeNetwork(int);
     method @RequiresPermission(android.Manifest.permission.CHANGE_WIFI_STATE) public int removeNetworkSuggestions(@NonNull java.util.List<android.net.wifi.WifiNetworkSuggestion>);
-    method @Deprecated @RequiresPermission(anyOf={"android.permission.NETWORK_SETTINGS", "android.permission.NETWORK_SETUP_WIZARD"}) public void removePasspointConfiguration(String);
+    method @Deprecated @RequiresPermission("android.permission.NETWORK_SETTINGS") public void removePasspointConfiguration(String);
     method @Deprecated public boolean saveConfiguration();
     method public void setTdlsEnabled(java.net.InetAddress, boolean);
     method public void setTdlsEnabledWithMacAddress(String, boolean);
@@ -38809,6 +38834,7 @@ package android.provider {
     field public static final String ACTION_NFC_PAYMENT_SETTINGS = "android.settings.NFC_PAYMENT_SETTINGS";
     field public static final String ACTION_NFC_SETTINGS = "android.settings.NFC_SETTINGS";
     field public static final String ACTION_NIGHT_DISPLAY_SETTINGS = "android.settings.NIGHT_DISPLAY_SETTINGS";
+    field public static final String ACTION_NOTIFICATION_ASSISTANT_SETTINGS = "android.settings.NOTIFICATION_ASSISTANT_SETTINGS";
     field public static final String ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
     field public static final String ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS = "android.settings.NOTIFICATION_POLICY_ACCESS_SETTINGS";
     field public static final String ACTION_PRINT_SETTINGS = "android.settings.ACTION_PRINT_SETTINGS";
@@ -43316,11 +43342,11 @@ package android.telecom {
 
   public final class CallIdentification implements android.os.Parcelable {
     method public int describeContents();
-    method @NonNull public String getCallScreeningAppName();
+    method @NonNull public CharSequence getCallScreeningAppName();
     method @NonNull public String getCallScreeningPackageName();
-    method @Nullable public String getDescription();
-    method @Nullable public String getDetails();
-    method @Nullable public String getName();
+    method @Nullable public CharSequence getDescription();
+    method @Nullable public CharSequence getDetails();
+    method @Nullable public CharSequence getName();
     method public int getNuisanceConfidence();
     method @Nullable public android.graphics.drawable.Icon getPhoto();
     method public void writeToParcel(android.os.Parcel, int);
@@ -43335,9 +43361,9 @@ package android.telecom {
   public static class CallIdentification.Builder {
     ctor public CallIdentification.Builder();
     method public android.telecom.CallIdentification build();
-    method public android.telecom.CallIdentification.Builder setDescription(@Nullable String);
-    method public android.telecom.CallIdentification.Builder setDetails(@Nullable String);
-    method public android.telecom.CallIdentification.Builder setName(@Nullable String);
+    method public android.telecom.CallIdentification.Builder setDescription(@Nullable CharSequence);
+    method public android.telecom.CallIdentification.Builder setDetails(@Nullable CharSequence);
+    method public android.telecom.CallIdentification.Builder setName(@Nullable CharSequence);
     method public android.telecom.CallIdentification.Builder setNuisanceConfidence(int);
     method public android.telecom.CallIdentification.Builder setPhoto(@Nullable android.graphics.drawable.Icon);
   }
@@ -45169,6 +45195,7 @@ package android.telephony {
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.MODIFY_PHONE_STATE}) public boolean isDataEnabled();
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.READ_PHONE_STATE}) public boolean isDataRoamingEnabled();
     method public boolean isHearingAidCompatibilitySupported();
+    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public boolean isMultisimSupported();
     method public boolean isNetworkRoaming();
     method public boolean isRttSupported();
     method public boolean isSmsCapable();
@@ -47454,6 +47481,7 @@ package android.text.style {
     method public int getVerticalAlignment();
     field public static final int ALIGN_BASELINE = 1; // 0x1
     field public static final int ALIGN_BOTTOM = 0; // 0x0
+    field public static final int ALIGN_CENTER = 2; // 0x2
     field protected final int mVerticalAlignment;
   }
 
