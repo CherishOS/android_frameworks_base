@@ -6434,6 +6434,12 @@ public final class Settings {
         public static final String NETWORK_TRAFFIC_LOCATION = "network_traffic_location";
 		
 		/**
+         * Specify refresh duration for network traffic
+         * @hide
+         */
+        public static final String NETWORK_TRAFFIC_REFRESH_INTERVAL = "network_traffic_refresh_interval";
+		
+		/**
          * These are all public system settings
          *
          * @hide
