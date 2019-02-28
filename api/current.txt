@@ -38405,14 +38405,12 @@ package android.provider {
 
   public final class MediaStore {
     ctor public MediaStore();
-    method @NonNull public static android.net.Uri createPending(@NonNull android.content.Context, @NonNull android.provider.MediaStore.PendingParams);
     method @NonNull public static java.util.Set<java.lang.String> getAllVolumeNames(android.content.Context);
     method public static android.net.Uri getDocumentUri(android.content.Context, android.net.Uri);
     method public static android.net.Uri getMediaScannerUri();
     method public static android.net.Uri getMediaUri(android.content.Context, android.net.Uri);
     method public static String getVersion(android.content.Context);
     method @NonNull public static String getVolumeName(@NonNull android.net.Uri);
-    method @NonNull public static android.provider.MediaStore.PendingSession openPending(@NonNull android.content.Context, @NonNull android.net.Uri);
     method @NonNull public static android.net.Uri setIncludePending(@NonNull android.net.Uri);
     method @NonNull public static android.net.Uri setRequireOriginal(@NonNull android.net.Uri);
     field public static final String ACTION_IMAGE_CAPTURE = "android.media.action.IMAGE_CAPTURE";
@@ -38685,6 +38683,7 @@ package android.provider {
   public static interface MediaStore.MediaColumns extends android.provider.BaseColumns {
     field @Deprecated public static final String DATA = "_data";
     field public static final String DATE_ADDED = "date_added";
+    field public static final String DATE_EXPIRES = "date_expires";
     field public static final String DATE_MODIFIED = "date_modified";
     field public static final String DISPLAY_NAME = "_display_name";
     field public static final String DOCUMENT_ID = "document_id";
@@ -38699,23 +38698,6 @@ package android.provider {
     field public static final String SIZE = "_size";
     field public static final String TITLE = "title";
     field public static final String WIDTH = "width";
-  }
-
-  public static class MediaStore.PendingParams {
-    ctor public MediaStore.PendingParams(@NonNull android.net.Uri, @NonNull String, @NonNull String);
-    method public void setDownloadUri(@Nullable android.net.Uri);
-    method public void setPrimaryDirectory(@Nullable String);
-    method public void setRefererUri(@Nullable android.net.Uri);
-    method public void setSecondaryDirectory(@Nullable String);
-  }
-
-  public static class MediaStore.PendingSession implements java.lang.AutoCloseable {
-    method public void abandon();
-    method public void close();
-    method public void notifyProgress(@IntRange(from=0, to=100) int);
-    method @NonNull public android.os.ParcelFileDescriptor open() throws java.io.FileNotFoundException;
-    method @NonNull public java.io.OutputStream openOutputStream() throws java.io.FileNotFoundException;
-    method @NonNull public android.net.Uri publish();
   }
 
   public static final class MediaStore.Video {
