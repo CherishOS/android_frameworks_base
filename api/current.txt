@@ -23687,12 +23687,12 @@ package android.media {
   }
 
   public class CallbackDataSourceDesc extends android.media.DataSourceDesc {
-    method public android.media.DataSourceCallback getDataSourceCallback();
+    method @NonNull public android.media.DataSourceCallback getDataSourceCallback();
   }
 
   public static class CallbackDataSourceDesc.Builder extends android.media.DataSourceDesc.BuilderBase<android.media.CallbackDataSourceDesc.Builder> {
     ctor public CallbackDataSourceDesc.Builder();
-    ctor public CallbackDataSourceDesc.Builder(android.media.CallbackDataSourceDesc);
+    ctor public CallbackDataSourceDesc.Builder(@Nullable android.media.CallbackDataSourceDesc);
     method @NonNull public android.media.CallbackDataSourceDesc build();
     method @NonNull public android.media.CallbackDataSourceDesc.Builder setDataSource(@NonNull android.media.DataSourceCallback);
   }
@@ -23752,12 +23752,12 @@ package android.media {
   public abstract class DataSourceCallback implements java.io.Closeable {
     ctor public DataSourceCallback();
     method public abstract long getSize() throws java.io.IOException;
-    method public abstract int readAt(long, byte[], int, int) throws java.io.IOException;
+    method public abstract int readAt(long, @NonNull byte[], int, int) throws java.io.IOException;
   }
 
   public class DataSourceDesc {
     method public long getEndPosition();
-    method public String getMediaId();
+    method @Nullable public String getMediaId();
     method public long getStartPosition();
     field public static final long LONG_MAX_TIME_MS = 576460752303423L; // 0x20c49ba5e353fL
     field public static final long POSITION_UNKNOWN = 576460752303423L; // 0x20c49ba5e353fL
@@ -23765,7 +23765,7 @@ package android.media {
 
   protected static class DataSourceDesc.BuilderBase<T extends android.media.DataSourceDesc.BuilderBase> {
     method @NonNull public T setEndPosition(long);
-    method @NonNull public T setMediaId(String);
+    method @NonNull public T setMediaId(@Nullable String);
     method @NonNull public T setStartPosition(long);
   }
 
@@ -23974,13 +23974,13 @@ package android.media {
   public class FileDataSourceDesc extends android.media.DataSourceDesc {
     method public long getLength();
     method public long getOffset();
-    method public android.os.ParcelFileDescriptor getParcelFileDescriptor();
+    method @NonNull public android.os.ParcelFileDescriptor getParcelFileDescriptor();
     field public static final long FD_LENGTH_UNKNOWN = 576460752303423487L; // 0x7ffffffffffffffL
   }
 
   public static class FileDataSourceDesc.Builder extends android.media.DataSourceDesc.BuilderBase<android.media.FileDataSourceDesc.Builder> {
     ctor public FileDataSourceDesc.Builder();
-    ctor public FileDataSourceDesc.Builder(android.media.FileDataSourceDesc);
+    ctor public FileDataSourceDesc.Builder(@Nullable android.media.FileDataSourceDesc);
     method @NonNull public android.media.FileDataSourceDesc build();
     method @NonNull public android.media.FileDataSourceDesc.Builder setDataSource(@NonNull android.os.ParcelFileDescriptor);
     method @NonNull public android.media.FileDataSourceDesc.Builder setDataSource(@NonNull android.os.ParcelFileDescriptor, long, long);
@@ -25532,16 +25532,16 @@ package android.media {
   }
 
   public class MediaPlayer2 implements android.media.AudioRouting java.lang.AutoCloseable {
-    ctor public MediaPlayer2(android.content.Context);
-    method public void addOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener, android.os.Handler);
-    method public Object attachAuxEffect(int);
+    ctor public MediaPlayer2(@NonNull android.content.Context);
+    method public void addOnRoutingChangedListener(@NonNull android.media.AudioRouting.OnRoutingChangedListener, @Nullable android.os.Handler);
+    method @NonNull public Object attachAuxEffect(int);
     method public boolean cancelCommand(@NonNull Object);
     method public void clearDrmEventCallback();
-    method public Object clearNextDataSources();
+    method @NonNull public Object clearNextDataSources();
     method public void clearPendingCommands();
     method public void close();
-    method public Object deselectTrack(int);
-    method public Object deselectTrack(@NonNull android.media.DataSourceDesc, int);
+    method @NonNull public Object deselectTrack(int);
+    method @NonNull public Object deselectTrack(@NonNull android.media.DataSourceDesc, int);
     method @NonNull public android.media.AudioAttributes getAudioAttributes();
     method public int getAudioSessionId();
     method public long getBufferedPosition();
@@ -25551,11 +25551,11 @@ package android.media {
     method public long getDuration();
     method public long getDuration(@NonNull android.media.DataSourceDesc);
     method public float getMaxPlayerVolume();
-    method public android.os.PersistableBundle getMetrics();
+    method @Nullable public android.os.PersistableBundle getMetrics();
     method @NonNull public android.media.PlaybackParams getPlaybackParams();
     method public float getPlayerVolume();
-    method public android.media.AudioDeviceInfo getPreferredDevice();
-    method public android.media.AudioDeviceInfo getRoutedDevice();
+    method @Nullable public android.media.AudioDeviceInfo getPreferredDevice();
+    method @Nullable public android.media.AudioDeviceInfo getRoutedDevice();
     method public int getSelectedTrack(int);
     method public int getSelectedTrack(@NonNull android.media.DataSourceDesc, int);
     method public int getState();
@@ -25563,37 +25563,37 @@ package android.media {
     method @Nullable public android.media.MediaTimestamp getTimestamp();
     method @NonNull public java.util.List<android.media.MediaPlayer2.TrackInfo> getTrackInfo();
     method @NonNull public java.util.List<android.media.MediaPlayer2.TrackInfo> getTrackInfo(@NonNull android.media.DataSourceDesc);
-    method public android.util.Size getVideoSize();
+    method @NonNull public android.util.Size getVideoSize();
     method public boolean isLooping();
-    method public Object loopCurrent(boolean);
-    method public Object notifyWhenCommandLabelReached(@NonNull Object);
-    method public Object pause();
-    method public Object play();
-    method public Object prepare();
+    method @NonNull public Object loopCurrent(boolean);
+    method @NonNull public Object notifyWhenCommandLabelReached(@NonNull Object);
+    method @NonNull public Object pause();
+    method @NonNull public Object play();
+    method @NonNull public Object prepare();
     method public void registerEventCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaPlayer2.EventCallback);
-    method public void removeOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener);
+    method public void removeOnRoutingChangedListener(@NonNull android.media.AudioRouting.OnRoutingChangedListener);
     method public void reset();
-    method public Object seekTo(long);
-    method public Object seekTo(long, int);
-    method public Object selectTrack(int);
-    method public Object selectTrack(@NonNull android.media.DataSourceDesc, int);
-    method public Object setAudioAttributes(@NonNull android.media.AudioAttributes);
-    method public Object setAudioSessionId(int);
-    method public Object setAuxEffectSendLevel(float);
-    method public Object setDataSource(@NonNull android.media.DataSourceDesc);
-    method public Object setDisplay(android.view.SurfaceHolder);
+    method @NonNull public Object seekTo(long);
+    method @NonNull public Object seekTo(long, int);
+    method @NonNull public Object selectTrack(int);
+    method @NonNull public Object selectTrack(@NonNull android.media.DataSourceDesc, int);
+    method @NonNull public Object setAudioAttributes(@NonNull android.media.AudioAttributes);
+    method @NonNull public Object setAudioSessionId(int);
+    method @NonNull public Object setAuxEffectSendLevel(float);
+    method @NonNull public Object setDataSource(@NonNull android.media.DataSourceDesc);
+    method @NonNull public Object setDisplay(@Nullable android.view.SurfaceHolder);
     method public void setDrmEventCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaPlayer2.DrmEventCallback);
-    method public Object setNextDataSource(@NonNull android.media.DataSourceDesc);
-    method public Object setNextDataSources(@NonNull java.util.List<android.media.DataSourceDesc>);
-    method public Object setPlaybackParams(@NonNull android.media.PlaybackParams);
-    method public Object setPlayerVolume(float);
-    method public boolean setPreferredDevice(android.media.AudioDeviceInfo);
-    method public Object setScreenOnWhilePlaying(boolean);
-    method public Object setSurface(android.view.Surface);
-    method public Object setSyncParams(@NonNull android.media.SyncParams);
-    method public Object setWakeLock(@NonNull android.os.PowerManager.WakeLock);
-    method public Object skipToNext();
-    method public void unregisterEventCallback(android.media.MediaPlayer2.EventCallback);
+    method @NonNull public Object setNextDataSource(@NonNull android.media.DataSourceDesc);
+    method @NonNull public Object setNextDataSources(@NonNull java.util.List<android.media.DataSourceDesc>);
+    method @NonNull public Object setPlaybackParams(@NonNull android.media.PlaybackParams);
+    method @NonNull public Object setPlayerVolume(float);
+    method public boolean setPreferredDevice(@Nullable android.media.AudioDeviceInfo);
+    method @NonNull public Object setScreenOnWhilePlaying(boolean);
+    method @NonNull public Object setSurface(@Nullable android.view.Surface);
+    method @NonNull public Object setSyncParams(@NonNull android.media.SyncParams);
+    method @NonNull public Object setWakeLock(@NonNull android.os.PowerManager.WakeLock);
+    method @NonNull public Object skipToNext();
+    method public void unregisterEventCallback(@NonNull android.media.MediaPlayer2.EventCallback);
     field public static final int CALL_COMPLETED_ATTACH_AUX_EFFECT = 1; // 0x1
     field public static final int CALL_COMPLETED_CLEAR_NEXT_DATA_SOURCES = 30; // 0x1e
     field public static final int CALL_COMPLETED_DESELECT_TRACK = 2; // 0x2
@@ -25728,8 +25728,8 @@ package android.media {
   }
 
   public static class MediaPlayer2.TrackInfo {
-    method public android.media.MediaFormat getFormat();
-    method public String getLanguage();
+    method @Nullable public android.media.MediaFormat getFormat();
+    method @Nullable public String getLanguage();
     method public int getTrackType();
     field public static final int MEDIA_TRACK_TYPE_AUDIO = 2; // 0x2
     field public static final int MEDIA_TRACK_TYPE_METADATA = 5; // 0x5
@@ -26607,15 +26607,15 @@ package android.media {
   }
 
   public class UriDataSourceDesc extends android.media.DataSourceDesc {
-    method public android.content.Context getContext();
-    method public java.util.List<java.net.HttpCookie> getCookies();
-    method public java.util.Map<java.lang.String,java.lang.String> getHeaders();
-    method public android.net.Uri getUri();
+    method @NonNull public android.content.Context getContext();
+    method @Nullable public java.util.List<java.net.HttpCookie> getCookies();
+    method @Nullable public java.util.Map<java.lang.String,java.lang.String> getHeaders();
+    method @NonNull public android.net.Uri getUri();
   }
 
   public static class UriDataSourceDesc.Builder extends android.media.DataSourceDesc.BuilderBase<android.media.UriDataSourceDesc.Builder> {
     ctor public UriDataSourceDesc.Builder();
-    ctor public UriDataSourceDesc.Builder(android.media.UriDataSourceDesc);
+    ctor public UriDataSourceDesc.Builder(@Nullable android.media.UriDataSourceDesc);
     method @NonNull public android.media.UriDataSourceDesc build();
     method @NonNull public android.media.UriDataSourceDesc.Builder setDataSource(@NonNull android.content.Context, @NonNull android.net.Uri);
     method @NonNull public android.media.UriDataSourceDesc.Builder setDataSource(@NonNull android.content.Context, @NonNull android.net.Uri, @Nullable java.util.Map<java.lang.String,java.lang.String>, @Nullable java.util.List<java.net.HttpCookie>);
