@@ -22825,24 +22825,6 @@ package android.location {
     method @Deprecated public boolean usedInFix();
   }
 
-  @Deprecated public final class GpsStatus {
-    method @Deprecated public int getMaxSatellites();
-    method @Deprecated public Iterable<android.location.GpsSatellite> getSatellites();
-    method @Deprecated public int getTimeToFirstFix();
-    field @Deprecated public static final int GPS_EVENT_FIRST_FIX = 3; // 0x3
-    field @Deprecated public static final int GPS_EVENT_SATELLITE_STATUS = 4; // 0x4
-    field @Deprecated public static final int GPS_EVENT_STARTED = 1; // 0x1
-    field @Deprecated public static final int GPS_EVENT_STOPPED = 2; // 0x2
-  }
-
-  @Deprecated public static interface GpsStatus.Listener {
-    method @Deprecated public void onGpsStatusChanged(int);
-  }
-
-  @Deprecated public static interface GpsStatus.NmeaListener {
-    method @Deprecated public void onNmeaReceived(long, String);
-  }
-
   public class Location implements android.os.Parcelable {
     ctor public Location(String);
     ctor public Location(android.location.Location);
@@ -22911,55 +22893,50 @@ package android.location {
   }
 
   public class LocationManager {
-    method @Deprecated @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean addGpsStatusListener(android.location.GpsStatus.Listener);
-    method @Deprecated @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean addNmeaListener(android.location.GpsStatus.NmeaListener);
-    method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean addNmeaListener(android.location.OnNmeaMessageListener);
-    method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean addNmeaListener(android.location.OnNmeaMessageListener, android.os.Handler);
-    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void addProximityAlert(double, double, float, long, android.app.PendingIntent);
-    method public void addTestProvider(String, boolean, boolean, boolean, boolean, boolean, boolean, boolean, int, int);
-    method @Deprecated public void clearTestProviderEnabled(String);
-    method @Deprecated public void clearTestProviderLocation(String);
-    method @Deprecated public void clearTestProviderStatus(String);
-    method public java.util.List<java.lang.String> getAllProviders();
-    method public String getBestProvider(android.location.Criteria, boolean);
+    method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean addNmeaListener(@NonNull android.location.OnNmeaMessageListener);
+    method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean addNmeaListener(@NonNull android.location.OnNmeaMessageListener, @Nullable android.os.Handler);
+    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void addProximityAlert(double, double, float, long, @NonNull android.app.PendingIntent);
+    method public void addTestProvider(@NonNull String, boolean, boolean, boolean, boolean, boolean, boolean, boolean, int, int);
+    method @Deprecated public void clearTestProviderEnabled(@NonNull String);
+    method @Deprecated public void clearTestProviderLocation(@NonNull String);
+    method @Deprecated public void clearTestProviderStatus(@NonNull String);
+    method @NonNull public java.util.List<java.lang.String> getAllProviders();
+    method @Nullable public String getBestProvider(@NonNull android.location.Criteria, boolean);
     method @Nullable public String getGnssHardwareModelName();
     method public int getGnssYearOfHardware();
-    method @Deprecated @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public android.location.GpsStatus getGpsStatus(android.location.GpsStatus);
-    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public android.location.Location getLastKnownLocation(String);
-    method public android.location.LocationProvider getProvider(String);
-    method public java.util.List<java.lang.String> getProviders(boolean);
-    method public java.util.List<java.lang.String> getProviders(android.location.Criteria, boolean);
+    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) @Nullable public android.location.Location getLastKnownLocation(@NonNull String);
+    method @Nullable public android.location.LocationProvider getProvider(@NonNull String);
+    method @NonNull public java.util.List<java.lang.String> getProviders(boolean);
+    method @NonNull public java.util.List<java.lang.String> getProviders(@NonNull android.location.Criteria, boolean);
     method public boolean isLocationEnabled();
-    method public boolean isProviderEnabled(String);
-    method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssMeasurementsCallback(android.location.GnssMeasurementsEvent.Callback);
-    method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssMeasurementsCallback(android.location.GnssMeasurementsEvent.Callback, android.os.Handler);
-    method public boolean registerGnssNavigationMessageCallback(android.location.GnssNavigationMessage.Callback);
-    method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssNavigationMessageCallback(android.location.GnssNavigationMessage.Callback, android.os.Handler);
-    method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssStatusCallback(android.location.GnssStatus.Callback);
-    method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssStatusCallback(android.location.GnssStatus.Callback, android.os.Handler);
-    method @Deprecated public void removeGpsStatusListener(android.location.GpsStatus.Listener);
-    method @Deprecated public void removeNmeaListener(android.location.GpsStatus.NmeaListener);
-    method public void removeNmeaListener(android.location.OnNmeaMessageListener);
-    method @RequiresPermission(anyOf={"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"}, apis="..22") public void removeProximityAlert(android.app.PendingIntent);
-    method public void removeTestProvider(String);
-    method @RequiresPermission(anyOf={"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"}, apis="..22") public void removeUpdates(android.location.LocationListener);
-    method public void removeUpdates(android.app.PendingIntent);
-    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestLocationUpdates(String, long, float, android.location.LocationListener);
-    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestLocationUpdates(String, long, float, android.location.LocationListener, android.os.Looper);
-    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestLocationUpdates(long, float, android.location.Criteria, android.location.LocationListener, android.os.Looper);
-    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestLocationUpdates(String, long, float, android.app.PendingIntent);
-    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestLocationUpdates(long, float, android.location.Criteria, android.app.PendingIntent);
-    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestSingleUpdate(String, android.location.LocationListener, android.os.Looper);
-    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestSingleUpdate(android.location.Criteria, android.location.LocationListener, android.os.Looper);
-    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestSingleUpdate(String, android.app.PendingIntent);
-    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestSingleUpdate(android.location.Criteria, android.app.PendingIntent);
-    method public boolean sendExtraCommand(String, String, android.os.Bundle);
-    method public void setTestProviderEnabled(String, boolean);
-    method public void setTestProviderLocation(String, android.location.Location);
-    method @Deprecated public void setTestProviderStatus(String, int, android.os.Bundle, long);
-    method public void unregisterGnssMeasurementsCallback(android.location.GnssMeasurementsEvent.Callback);
-    method public void unregisterGnssNavigationMessageCallback(android.location.GnssNavigationMessage.Callback);
-    method public void unregisterGnssStatusCallback(android.location.GnssStatus.Callback);
+    method public boolean isProviderEnabled(@NonNull String);
+    method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssMeasurementsCallback(@NonNull android.location.GnssMeasurementsEvent.Callback);
+    method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssMeasurementsCallback(@NonNull android.location.GnssMeasurementsEvent.Callback, @Nullable android.os.Handler);
+    method public boolean registerGnssNavigationMessageCallback(@NonNull android.location.GnssNavigationMessage.Callback);
+    method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssNavigationMessageCallback(@NonNull android.location.GnssNavigationMessage.Callback, @Nullable android.os.Handler);
+    method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssStatusCallback(@NonNull android.location.GnssStatus.Callback);
+    method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssStatusCallback(@NonNull android.location.GnssStatus.Callback, @Nullable android.os.Handler);
+    method public void removeNmeaListener(@NonNull android.location.OnNmeaMessageListener);
+    method @RequiresPermission(anyOf={"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"}, apis="..22") public void removeProximityAlert(@NonNull android.app.PendingIntent);
+    method public void removeTestProvider(@NonNull String);
+    method @RequiresPermission(anyOf={"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"}, apis="..22") public void removeUpdates(@NonNull android.location.LocationListener);
+    method public void removeUpdates(@NonNull android.app.PendingIntent);
+    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestLocationUpdates(@NonNull String, long, float, @NonNull android.location.LocationListener);
+    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestLocationUpdates(@NonNull String, long, float, @NonNull android.location.LocationListener, @Nullable android.os.Looper);
+    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestLocationUpdates(long, float, @NonNull android.location.Criteria, @NonNull android.location.LocationListener, @Nullable android.os.Looper);
+    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestLocationUpdates(@NonNull String, long, float, @NonNull android.app.PendingIntent);
+    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestLocationUpdates(long, float, @NonNull android.location.Criteria, @NonNull android.app.PendingIntent);
+    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestSingleUpdate(@NonNull String, @NonNull android.location.LocationListener, @Nullable android.os.Looper);
+    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestSingleUpdate(@NonNull android.location.Criteria, @NonNull android.location.LocationListener, @Nullable android.os.Looper);
+    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestSingleUpdate(@NonNull String, @NonNull android.app.PendingIntent);
+    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestSingleUpdate(@NonNull android.location.Criteria, @NonNull android.app.PendingIntent);
+    method public boolean sendExtraCommand(@NonNull String, @NonNull String, @Nullable android.os.Bundle);
+    method public void setTestProviderEnabled(@NonNull String, boolean);
+    method public void setTestProviderLocation(@NonNull String, @NonNull android.location.Location);
+    method @Deprecated public void setTestProviderStatus(@NonNull String, int, @Nullable android.os.Bundle, long);
+    method public void unregisterGnssMeasurementsCallback(@NonNull android.location.GnssMeasurementsEvent.Callback);
+    method public void unregisterGnssNavigationMessageCallback(@NonNull android.location.GnssNavigationMessage.Callback);
+    method public void unregisterGnssStatusCallback(@NonNull android.location.GnssStatus.Callback);
     field public static final String GPS_PROVIDER = "gps";
     field public static final String KEY_LOCATION_CHANGED = "location";
     field public static final String KEY_PROVIDER_ENABLED = "providerEnabled";
