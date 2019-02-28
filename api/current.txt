@@ -4250,10 +4250,9 @@ package android.app {
 
   public class AppComponentFactory {
     ctor public AppComponentFactory();
-    method public android.content.pm.ApplicationInfo getApplicationInfo();
     method @NonNull public android.app.Activity instantiateActivity(@NonNull ClassLoader, @NonNull String, @Nullable android.content.Intent) throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException;
     method @NonNull public android.app.Application instantiateApplication(@NonNull ClassLoader, @NonNull String) throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException;
-    method @NonNull public ClassLoader instantiateClassLoader(@NonNull ClassLoader);
+    method @NonNull public ClassLoader instantiateClassLoader(@NonNull ClassLoader, @NonNull android.content.pm.ApplicationInfo);
     method @NonNull public android.content.ContentProvider instantiateProvider(@NonNull ClassLoader, @NonNull String) throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException;
     method @NonNull public android.content.BroadcastReceiver instantiateReceiver(@NonNull ClassLoader, @NonNull String, @Nullable android.content.Intent) throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException;
     method @NonNull public android.app.Service instantiateService(@NonNull ClassLoader, @NonNull String, @Nullable android.content.Intent) throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException;
@@ -6171,6 +6170,7 @@ package android.app {
     ctor public Service();
     method protected void dump(java.io.FileDescriptor, java.io.PrintWriter, String[]);
     method public final android.app.Application getApplication();
+    method public final int getForegroundServiceType();
     method @Nullable public abstract android.os.IBinder onBind(android.content.Intent);
     method public void onConfigurationChanged(android.content.res.Configuration);
     method public void onCreate();
@@ -26035,6 +26035,7 @@ package android.media {
   public static final class MediaSession2.Builder {
     ctor public MediaSession2.Builder(@NonNull android.content.Context);
     method @NonNull public android.media.MediaSession2 build();
+    method @NonNull public android.media.MediaSession2.Builder setExtras(@Nullable android.os.Bundle);
     method @NonNull public android.media.MediaSession2.Builder setId(@NonNull String);
     method @NonNull public android.media.MediaSession2.Builder setSessionActivity(@Nullable android.app.PendingIntent);
     method @NonNull public android.media.MediaSession2.Builder setSessionCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaSession2.SessionCallback);
@@ -26397,6 +26398,7 @@ package android.media {
   public final class Session2Token implements android.os.Parcelable {
     ctor public Session2Token(@NonNull android.content.Context, @NonNull android.content.ComponentName);
     method public int describeContents();
+    method @Nullable public android.os.Bundle getExtras();
     method @NonNull public String getPackageName();
     method @Nullable public String getServiceName();
     method public int getType();
@@ -29356,7 +29358,7 @@ package android.net {
     method public android.os.ParcelFileDescriptor establish();
     method public android.net.VpnService.Builder setBlocking(boolean);
     method public android.net.VpnService.Builder setConfigureIntent(android.app.PendingIntent);
-    method public android.net.VpnService.Builder setHttpProxy(android.net.ProxyInfo);
+    method public android.net.VpnService.Builder setHttpProxy(@NonNull android.net.ProxyInfo);
     method public android.net.VpnService.Builder setMetered(boolean);
     method public android.net.VpnService.Builder setMtu(int);
     method public android.net.VpnService.Builder setSession(String);
@@ -29944,13 +29946,14 @@ package android.net.wifi {
     method public String getMacAddress();
     method public int getNetworkId();
     method public int getRssi();
-    method public int getRxLinkSpeedMbps();
+    method @IntRange(from=0xffffffff) public int getRxLinkSpeedMbps();
     method public String getSSID();
     method public android.net.wifi.SupplicantState getSupplicantState();
-    method public int getTxLinkSpeedMbps();
+    method @IntRange(from=0xffffffff) public int getTxLinkSpeedMbps();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final String FREQUENCY_UNITS = "MHz";
     field public static final String LINK_SPEED_UNITS = "Mbps";
+    field public static final int LINK_SPEED_UNKNOWN = -1; // 0xffffffff
   }
 
   public class WifiManager {
@@ -45020,7 +45023,7 @@ package android.telephony {
     method public String getCountryIso();
     method public int getDataRoaming();
     method public CharSequence getDisplayName();
-    method public String getGroupUuid();
+    method @Nullable public String getGroupUuid();
     method public String getIccId();
     method public int getIconTint();
     method @Deprecated public int getMcc();
@@ -51205,8 +51208,8 @@ package android.view {
     method public int getScaledHoverSlop();
     method public int getScaledMaximumDrawingCacheSize();
     method public int getScaledMaximumFlingVelocity();
-    method public int getScaledMinScalingSpan();
     method public int getScaledMinimumFlingVelocity();
+    method public int getScaledMinimumScalingSpan();
     method public int getScaledOverflingDistance();
     method public int getScaledOverscrollDistance();
     method public int getScaledPagingTouchSlop();
@@ -51980,16 +51983,16 @@ package android.view {
     method public boolean hasInsets();
     method public boolean hasStableInsets();
     method public boolean hasSystemWindowInsets();
-    method @NonNull public android.view.WindowInsets inset(int, int, int, int);
+    method @NonNull public android.view.WindowInsets inset(@IntRange(from=0) int, @IntRange(from=0) int, @IntRange(from=0) int, @IntRange(from=0) int);
     method public boolean isConsumed();
     method public boolean isRound();
     method @Deprecated @NonNull public android.view.WindowInsets replaceSystemWindowInsets(int, int, int, int);
     method @Deprecated @NonNull public android.view.WindowInsets replaceSystemWindowInsets(android.graphics.Rect);
   }
 
-  public static class WindowInsets.Builder {
+  public static final class WindowInsets.Builder {
     ctor public WindowInsets.Builder();
-    ctor public WindowInsets.Builder(android.view.WindowInsets);
+    ctor public WindowInsets.Builder(@NonNull android.view.WindowInsets);
     method @NonNull public android.view.WindowInsets build();
     method @NonNull public android.view.WindowInsets.Builder setDisplayCutout(@Nullable android.view.DisplayCutout);
     method @NonNull public android.view.WindowInsets.Builder setStableInsets(@NonNull android.graphics.Insets);
