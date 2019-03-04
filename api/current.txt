@@ -5786,7 +5786,7 @@ package android.app {
     method public boolean areBubblesAllowed();
     method public boolean areNotificationsEnabled();
     method public boolean areNotificationsPaused();
-    method public boolean canNotifyAsPackage(String);
+    method public boolean canNotifyAsPackage(@NonNull String);
     method public void cancel(int);
     method public void cancel(String, int);
     method public void cancelAll();
@@ -5807,15 +5807,15 @@ package android.app {
     method public java.util.List<android.app.NotificationChannel> getNotificationChannels();
     method @Nullable public String getNotificationDelegate();
     method public android.app.NotificationManager.Policy getNotificationPolicy();
-    method public boolean isNotificationAssistantAccessGranted(android.content.ComponentName);
+    method public boolean isNotificationAssistantAccessGranted(@NonNull android.content.ComponentName);
     method public boolean isNotificationListenerAccessGranted(android.content.ComponentName);
     method public boolean isNotificationPolicyAccessGranted();
     method public void notify(int, android.app.Notification);
     method public void notify(String, int, android.app.Notification);
-    method public void notifyAsPackage(@NonNull String, @NonNull String, int, android.app.Notification);
+    method public void notifyAsPackage(@NonNull String, @NonNull String, int, @NonNull android.app.Notification);
     method public boolean removeAutomaticZenRule(String);
     method public void revokeNotificationDelegate();
-    method public void setAutomaticZenRuleState(String, android.service.notification.Condition);
+    method public void setAutomaticZenRuleState(@NonNull String, @NonNull android.service.notification.Condition);
     method public final void setInterruptionFilter(int);
     method public void setNotificationDelegate(@NonNull String);
     method public void setNotificationPolicy(@NonNull android.app.NotificationManager.Policy);
@@ -9651,7 +9651,7 @@ package android.content {
 
   public abstract class Context {
     ctor public Context();
-    method public boolean bindIsolatedService(@RequiresPermission android.content.Intent, @NonNull android.content.ServiceConnection, int, @NonNull String);
+    method public boolean bindIsolatedService(@RequiresPermission @NonNull android.content.Intent, @NonNull android.content.ServiceConnection, int, @NonNull String);
     method public abstract boolean bindService(@RequiresPermission android.content.Intent, @NonNull android.content.ServiceConnection, int);
     method @CheckResult(suggest="#enforceCallingOrSelfPermission(String,String)") public abstract int checkCallingOrSelfPermission(@NonNull String);
     method @CheckResult(suggest="#enforceCallingOrSelfUriPermission(Uri,int,String)") public abstract int checkCallingOrSelfUriPermission(android.net.Uri, int);
@@ -9704,7 +9704,7 @@ package android.content {
     method public abstract java.io.File getNoBackupFilesDir();
     method public abstract java.io.File getObbDir();
     method public abstract java.io.File[] getObbDirs();
-    method public String getOpPackageName();
+    method @NonNull public String getOpPackageName();
     method public abstract String getPackageCodePath();
     method public abstract android.content.pm.PackageManager getPackageManager();
     method public abstract String getPackageName();
@@ -16644,7 +16644,7 @@ package android.hardware.camera2 {
     method public java.util.List<android.hardware.camera2.CaptureRequest.Key<?>> getAvailablePhysicalCameraRequestKeys();
     method public java.util.List<android.hardware.camera2.CaptureRequest.Key<?>> getAvailableSessionKeys();
     method @NonNull public java.util.List<android.hardware.camera2.CameraCharacteristics.Key<?>> getKeys();
-    method public java.util.List<android.hardware.camera2.CameraCharacteristics.Key<?>> getKeysNeedingPermission();
+    method @NonNull public java.util.List<android.hardware.camera2.CameraCharacteristics.Key<?>> getKeysNeedingPermission();
     method @NonNull public java.util.Set<java.lang.String> getPhysicalCameraIds();
     method @Nullable public android.hardware.camera2.params.RecommendedStreamConfigurationMap getRecommendedStreamConfigurationMap(int);
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> COLOR_CORRECTION_AVAILABLE_ABERRATION_MODES;
@@ -17276,13 +17276,13 @@ package android.hardware.camera2.params {
   }
 
   public final class MandatoryStreamCombination {
-    method public String getDescription();
-    method public java.util.List<android.hardware.camera2.params.MandatoryStreamCombination.MandatoryStreamInformation> getStreamsInformation();
+    method @NonNull public CharSequence getDescription();
+    method @NonNull public java.util.List<android.hardware.camera2.params.MandatoryStreamCombination.MandatoryStreamInformation> getStreamsInformation();
     method public boolean isReprocessable();
   }
 
   public static final class MandatoryStreamCombination.MandatoryStreamInformation {
-    method public java.util.List<android.util.Size> getAvailableSizes();
+    method @NonNull public java.util.List<android.util.Size> getAvailableSizes();
     method public int getFormat();
     method public boolean isInput();
   }
@@ -23569,14 +23569,14 @@ package android.media {
     method @Deprecated public void addOnRoutingChangedListener(android.media.AudioTrack.OnRoutingChangedListener, android.os.Handler);
     method public int attachAuxEffect(int);
     method @NonNull public android.media.VolumeShaper createVolumeShaper(@NonNull android.media.VolumeShaper.Configuration);
-    method public static void deprecateStreamTypeForPlayback(int, String, String) throws java.lang.IllegalArgumentException;
+    method @Deprecated public static void deprecateStreamTypeForPlayback(int, @NonNull String, @NonNull String) throws java.lang.IllegalArgumentException;
     method protected void finalize();
     method public void flush();
     method @NonNull public android.media.AudioAttributes getAudioAttributes();
     method public int getAudioFormat();
     method public int getAudioSessionId();
-    method public int getBufferCapacityInFrames();
-    method public int getBufferSizeInFrames();
+    method @IntRange(from=0) public int getBufferCapacityInFrames();
+    method @IntRange(from=0) public int getBufferSizeInFrames();
     method public int getChannelConfiguration();
     method public int getChannelCount();
     method @NonNull public android.media.AudioFormat getFormat();
@@ -23587,6 +23587,8 @@ package android.media {
     method @Deprecated protected int getNativeFrameCount();
     method public static int getNativeOutputSampleRate(int);
     method public int getNotificationMarkerPosition();
+    method @IntRange(from=0) public int getOffloadDelay();
+    method @IntRange(from=0) public int getOffloadPadding();
     method public int getPerformanceMode();
     method public int getPlayState();
     method public int getPlaybackHeadPosition();
@@ -23601,6 +23603,7 @@ package android.media {
     method public boolean getTimestamp(android.media.AudioTimestamp);
     method public int getUnderrunCount();
     method public static boolean isDirectPlaybackSupported(@NonNull android.media.AudioFormat, @NonNull android.media.AudioAttributes);
+    method public boolean isOffloadedPlayback();
     method public void pause() throws java.lang.IllegalStateException;
     method public void play() throws java.lang.IllegalStateException;
     method public void registerStreamEventCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.AudioTrack.StreamEventCallback);
@@ -23608,13 +23611,13 @@ package android.media {
     method public int reloadStaticData();
     method public void removeOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener);
     method @Deprecated public void removeOnRoutingChangedListener(android.media.AudioTrack.OnRoutingChangedListener);
-    method public int setAuxEffectSendLevel(float);
-    method public int setBufferSizeInFrames(int);
-    method public int setLoopPoints(int, int, int);
+    method public int setAuxEffectSendLevel(@FloatRange(from=0.0) float);
+    method public int setBufferSizeInFrames(@IntRange(from=0) int);
+    method public int setLoopPoints(@IntRange(from=0) int, @IntRange(from=0) int, @IntRange(from=0xffffffff) int);
     method public int setNotificationMarkerPosition(int);
-    method public void setOffloadDelayPadding(int, int);
+    method public void setOffloadDelayPadding(@IntRange(from=0) int, @IntRange(from=0) int);
     method public void setOffloadEndOfStream();
-    method public int setPlaybackHeadPosition(int);
+    method public int setPlaybackHeadPosition(@IntRange(from=0) int);
     method public void setPlaybackParams(@NonNull android.media.PlaybackParams);
     method public void setPlaybackPositionUpdateListener(android.media.AudioTrack.OnPlaybackPositionUpdateListener);
     method public void setPlaybackPositionUpdateListener(android.media.AudioTrack.OnPlaybackPositionUpdateListener, android.os.Handler);
@@ -23659,10 +23662,10 @@ package android.media {
     method @NonNull public android.media.AudioTrack build() throws java.lang.UnsupportedOperationException;
     method @NonNull public android.media.AudioTrack.Builder setAudioAttributes(@NonNull android.media.AudioAttributes) throws java.lang.IllegalArgumentException;
     method @NonNull public android.media.AudioTrack.Builder setAudioFormat(@NonNull android.media.AudioFormat) throws java.lang.IllegalArgumentException;
-    method @NonNull public android.media.AudioTrack.Builder setBufferSizeInBytes(int) throws java.lang.IllegalArgumentException;
+    method @NonNull public android.media.AudioTrack.Builder setBufferSizeInBytes(@IntRange(from=0) int) throws java.lang.IllegalArgumentException;
     method @NonNull public android.media.AudioTrack.Builder setOffloadedPlayback(boolean);
     method @NonNull public android.media.AudioTrack.Builder setPerformanceMode(int);
-    method @NonNull public android.media.AudioTrack.Builder setSessionId(int) throws java.lang.IllegalArgumentException;
+    method @NonNull public android.media.AudioTrack.Builder setSessionId(@IntRange(from=1) int) throws java.lang.IllegalArgumentException;
     method @NonNull public android.media.AudioTrack.Builder setTransferMode(int) throws java.lang.IllegalArgumentException;
   }
 
@@ -23686,9 +23689,9 @@ package android.media {
 
   public abstract static class AudioTrack.StreamEventCallback {
     ctor public AudioTrack.StreamEventCallback();
-    method public void onDataRequest(android.media.AudioTrack, int);
-    method public void onPresentationEnded(android.media.AudioTrack);
-    method public void onTearDown(android.media.AudioTrack);
+    method public void onDataRequest(@NonNull android.media.AudioTrack, int);
+    method public void onPresentationEnded(@NonNull android.media.AudioTrack);
+    method public void onTearDown(@NonNull android.media.AudioTrack);
   }
 
   public class CallbackDataSourceDesc extends android.media.DataSourceDesc {
@@ -25323,7 +25326,7 @@ package android.media {
     method public static android.media.MediaPlayer create(android.content.Context, int);
     method public static android.media.MediaPlayer create(android.content.Context, int, android.media.AudioAttributes, int);
     method @NonNull public android.media.VolumeShaper createVolumeShaper(@NonNull android.media.VolumeShaper.Configuration);
-    method public static void deprecateStreamTypeForPlayback(int, String, String) throws java.lang.IllegalArgumentException;
+    method @Deprecated public static void deprecateStreamTypeForPlayback(int, @NonNull String, @NonNull String) throws java.lang.IllegalArgumentException;
     method public void deselectTrack(int) throws java.lang.IllegalStateException;
     method protected void finalize();
     method public int getAudioSessionId();
@@ -26418,7 +26421,7 @@ package android.media {
     ctor @Deprecated public SoundPool(int, int, int);
     method public final void autoPause();
     method public final void autoResume();
-    method public static void deprecateStreamTypeForPlayback(int, String, String) throws java.lang.IllegalArgumentException;
+    method @Deprecated public static void deprecateStreamTypeForPlayback(int, @NonNull String, @NonNull String) throws java.lang.IllegalArgumentException;
     method protected void finalize();
     method public int load(String, int);
     method public int load(android.content.Context, int, int);
@@ -38831,7 +38834,7 @@ package android.provider {
     field public static final String ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS = "android.settings.NOTIFICATION_POLICY_ACCESS_SETTINGS";
     field public static final String ACTION_PRINT_SETTINGS = "android.settings.ACTION_PRINT_SETTINGS";
     field public static final String ACTION_PRIVACY_SETTINGS = "android.settings.PRIVACY_SETTINGS";
-    field public static final String ACTION_PROCESS_WIFI_EASY_CONNECT_QR_CODE = "android.settings.PROCESS_WIFI_EASY_CONNECT_QR_CODE";
+    field public static final String ACTION_PROCESS_WIFI_EASY_CONNECT_URI = "android.settings.PROCESS_WIFI_EASY_CONNECT_URI";
     field public static final String ACTION_QUICK_LAUNCH_SETTINGS = "android.settings.QUICK_LAUNCH_SETTINGS";
     field public static final String ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS = "android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS";
     field public static final String ACTION_REQUEST_SET_AUTOFILL_SERVICE = "android.settings.REQUEST_SET_AUTOFILL_SERVICE";
@@ -38865,7 +38868,6 @@ package android.provider {
     field public static final String EXTRA_DO_NOT_DISTURB_MODE_ENABLED = "android.settings.extra.do_not_disturb_mode_enabled";
     field public static final String EXTRA_DO_NOT_DISTURB_MODE_MINUTES = "android.settings.extra.do_not_disturb_mode_minutes";
     field public static final String EXTRA_INPUT_METHOD_ID = "input_method_id";
-    field public static final String EXTRA_QR_CODE = "android.provider.extra.QR_CODE";
     field public static final String EXTRA_SUB_ID = "android.provider.extra.SUB_ID";
     field public static final String INTENT_CATEGORY_USAGE_ACCESS_CONFIG = "android.intent.category.USAGE_ACCESS_CONFIG";
     field public static final String METADATA_USAGE_ACCESS_REASON = "android.settings.metadata.USAGE_ACCESS_REASON";
@@ -41595,13 +41597,13 @@ package android.service.media {
 package android.service.notification {
 
   public final class Adjustment implements android.os.Parcelable {
-    ctor public Adjustment(String, String, android.os.Bundle, CharSequence, android.os.UserHandle);
+    ctor public Adjustment(@NonNull String, @NonNull String, @NonNull android.os.Bundle, @NonNull CharSequence, @NonNull android.os.UserHandle);
     method public int describeContents();
-    method public CharSequence getExplanation();
-    method public String getKey();
-    method public String getPackage();
-    method public android.os.Bundle getSignals();
-    method public android.os.UserHandle getUserHandle();
+    method @NonNull public CharSequence getExplanation();
+    method @NonNull public String getKey();
+    method @NonNull public String getPackage();
+    method @NonNull public android.os.Bundle getSignals();
+    method @NonNull public android.os.UserHandle getUserHandle();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.service.notification.Adjustment> CREATOR;
     field public static final String KEY_CONTEXTUAL_ACTIONS = "key_contextual_actions";
@@ -41659,17 +41661,17 @@ package android.service.notification {
 
   public abstract class NotificationAssistantService extends android.service.notification.NotificationListenerService {
     ctor public NotificationAssistantService();
-    method public final void adjustNotification(android.service.notification.Adjustment);
-    method public final void adjustNotifications(java.util.List<android.service.notification.Adjustment>);
+    method public final void adjustNotification(@NonNull android.service.notification.Adjustment);
+    method public final void adjustNotifications(@NonNull java.util.List<android.service.notification.Adjustment>);
     method public void onActionInvoked(@NonNull String, @NonNull android.app.Notification.Action, int);
-    method public final android.os.IBinder onBind(android.content.Intent);
+    method @NonNull public final android.os.IBinder onBind(@Nullable android.content.Intent);
     method public void onNotificationDirectReplied(@NonNull String);
     method public abstract android.service.notification.Adjustment onNotificationEnqueued(android.service.notification.StatusBarNotification);
-    method public android.service.notification.Adjustment onNotificationEnqueued(android.service.notification.StatusBarNotification, android.app.NotificationChannel);
+    method @Nullable public android.service.notification.Adjustment onNotificationEnqueued(@NonNull android.service.notification.StatusBarNotification, @NonNull android.app.NotificationChannel);
     method public void onNotificationExpansionChanged(@NonNull String, boolean, boolean);
-    method public void onNotificationRemoved(android.service.notification.StatusBarNotification, android.service.notification.NotificationListenerService.RankingMap, android.service.notification.NotificationStats, int);
+    method public void onNotificationRemoved(@NonNull android.service.notification.StatusBarNotification, @NonNull android.service.notification.NotificationListenerService.RankingMap, @NonNull android.service.notification.NotificationStats, int);
     method public abstract void onNotificationSnoozedUntilContext(android.service.notification.StatusBarNotification, String);
-    method public void onNotificationsSeen(java.util.List<java.lang.String>);
+    method public void onNotificationsSeen(@NonNull java.util.List<java.lang.String>);
     method public void onSuggestedReplySent(@NonNull String, @NonNull CharSequence, int);
     method public final void unsnoozeNotification(String);
     field public static final String SERVICE_INTERFACE = "android.service.notification.NotificationAssistantService";
@@ -41759,8 +41761,8 @@ package android.service.notification {
     method public long getLastAudiblyAlertedMillis();
     method public String getOverrideGroupKey();
     method public int getRank();
-    method public java.util.List<android.app.Notification.Action> getSmartActions();
-    method public java.util.List<java.lang.CharSequence> getSmartReplies();
+    method @NonNull public java.util.List<android.app.Notification.Action> getSmartActions();
+    method @NonNull public java.util.List<java.lang.CharSequence> getSmartReplies();
     method public int getSuppressedVisualEffects();
     method public int getUserSentiment();
     method public boolean isAmbient();
