@@ -4277,7 +4277,8 @@ package android.app {
     method public void stopWatchingMode(android.app.AppOpsManager.OnOpChangedListener);
     method public int unsafeCheckOp(String, int, String);
     method public int unsafeCheckOpNoThrow(String, int, String);
-    method public int unsafeCheckOpRaw(String, int, String);
+    method public int unsafeCheckOpRaw(@NonNull String, int, String);
+    method public int unsafeCheckOpRawNoThrow(@NonNull String, int, @NonNull String);
     field public static final int MODE_ALLOWED = 0; // 0x0
     field public static final int MODE_DEFAULT = 3; // 0x3
     field public static final int MODE_ERRORED = 2; // 0x2
@@ -10637,9 +10638,9 @@ package android.content {
   }
 
   public final class LocusId implements android.os.Parcelable {
-    ctor public LocusId(@NonNull android.net.Uri);
+    ctor public LocusId(@NonNull String);
     method public int describeContents();
-    method @NonNull public android.net.Uri getUri();
+    method @NonNull public String getId();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.content.LocusId> CREATOR;
   }
@@ -14155,6 +14156,7 @@ package android.graphics {
     method @Nullable public android.graphics.ImageDecoder.OnPartialImageListener getOnPartialImageListener();
     method @Nullable public android.graphics.PostProcessor getPostProcessor();
     method public boolean isDecodeAsAlphaMaskEnabled();
+    method public static boolean isMimeTypeSupported(@NonNull String);
     method public boolean isMutableRequired();
     method public boolean isUnpremultipliedRequired();
     method public void setAllocator(int);
@@ -16796,6 +16798,7 @@ package android.hardware.camera2 {
 
   public abstract static class CameraManager.AvailabilityCallback {
     ctor public CameraManager.AvailabilityCallback();
+    method public void onCameraAccessPrioritiesChanged();
     method public void onCameraAvailable(@NonNull String);
     method public void onCameraUnavailable(@NonNull String);
   }
@@ -22856,7 +22859,6 @@ package android.location {
     method public float getBearing();
     method public float getBearingAccuracyDegrees();
     method public long getElapsedRealtimeNanos();
-    method public long getElapsedRealtimeUncertaintyNanos();
     method public android.os.Bundle getExtras();
     method public double getLatitude();
     method public double getLongitude();
@@ -22869,7 +22871,6 @@ package android.location {
     method public boolean hasAltitude();
     method public boolean hasBearing();
     method public boolean hasBearingAccuracy();
-    method public boolean hasElapsedRealtimeUncertaintyNanos();
     method public boolean hasSpeed();
     method public boolean hasSpeedAccuracy();
     method public boolean hasVerticalAccuracy();
@@ -22885,7 +22886,6 @@ package android.location {
     method public void setBearing(float);
     method public void setBearingAccuracyDegrees(float);
     method public void setElapsedRealtimeNanos(long);
-    method public void setElapsedRealtimeUncertaintyNanos(long);
     method public void setExtras(android.os.Bundle);
     method public void setLatitude(double);
     method public void setLongitude(double);
@@ -23569,7 +23569,6 @@ package android.media {
     method @Deprecated public void addOnRoutingChangedListener(android.media.AudioTrack.OnRoutingChangedListener, android.os.Handler);
     method public int attachAuxEffect(int);
     method @NonNull public android.media.VolumeShaper createVolumeShaper(@NonNull android.media.VolumeShaper.Configuration);
-    method @Deprecated public static void deprecateStreamTypeForPlayback(int, @NonNull String, @NonNull String) throws java.lang.IllegalArgumentException;
     method protected void finalize();
     method public void flush();
     method @NonNull public android.media.AudioAttributes getAudioAttributes();
@@ -23689,18 +23688,18 @@ package android.media {
 
   public abstract static class AudioTrack.StreamEventCallback {
     ctor public AudioTrack.StreamEventCallback();
-    method public void onDataRequest(@NonNull android.media.AudioTrack, int);
+    method public void onDataRequest(@NonNull android.media.AudioTrack, @IntRange(from=0) int);
     method public void onPresentationEnded(@NonNull android.media.AudioTrack);
     method public void onTearDown(@NonNull android.media.AudioTrack);
   }
 
   public class CallbackDataSourceDesc extends android.media.DataSourceDesc {
-    method public android.media.DataSourceCallback getDataSourceCallback();
+    method @NonNull public android.media.DataSourceCallback getDataSourceCallback();
   }
 
   public static class CallbackDataSourceDesc.Builder extends android.media.DataSourceDesc.BuilderBase<android.media.CallbackDataSourceDesc.Builder> {
     ctor public CallbackDataSourceDesc.Builder();
-    ctor public CallbackDataSourceDesc.Builder(android.media.CallbackDataSourceDesc);
+    ctor public CallbackDataSourceDesc.Builder(@Nullable android.media.CallbackDataSourceDesc);
     method @NonNull public android.media.CallbackDataSourceDesc build();
     method @NonNull public android.media.CallbackDataSourceDesc.Builder setDataSource(@NonNull android.media.DataSourceCallback);
   }
@@ -23760,12 +23759,12 @@ package android.media {
   public abstract class DataSourceCallback implements java.io.Closeable {
     ctor public DataSourceCallback();
     method public abstract long getSize() throws java.io.IOException;
-    method public abstract int readAt(long, byte[], int, int) throws java.io.IOException;
+    method public abstract int readAt(long, @NonNull byte[], int, int) throws java.io.IOException;
   }
 
   public class DataSourceDesc {
     method public long getEndPosition();
-    method public String getMediaId();
+    method @Nullable public String getMediaId();
     method public long getStartPosition();
     field public static final long LONG_MAX_TIME_MS = 576460752303423L; // 0x20c49ba5e353fL
     field public static final long POSITION_UNKNOWN = 576460752303423L; // 0x20c49ba5e353fL
@@ -23773,7 +23772,7 @@ package android.media {
 
   protected static class DataSourceDesc.BuilderBase<T extends android.media.DataSourceDesc.BuilderBase> {
     method @NonNull public T setEndPosition(long);
-    method @NonNull public T setMediaId(String);
+    method @NonNull public T setMediaId(@Nullable String);
     method @NonNull public T setStartPosition(long);
   }
 
@@ -23982,13 +23981,13 @@ package android.media {
   public class FileDataSourceDesc extends android.media.DataSourceDesc {
     method public long getLength();
     method public long getOffset();
-    method public android.os.ParcelFileDescriptor getParcelFileDescriptor();
+    method @NonNull public android.os.ParcelFileDescriptor getParcelFileDescriptor();
     field public static final long FD_LENGTH_UNKNOWN = 576460752303423487L; // 0x7ffffffffffffffL
   }
 
   public static class FileDataSourceDesc.Builder extends android.media.DataSourceDesc.BuilderBase<android.media.FileDataSourceDesc.Builder> {
     ctor public FileDataSourceDesc.Builder();
-    ctor public FileDataSourceDesc.Builder(android.media.FileDataSourceDesc);
+    ctor public FileDataSourceDesc.Builder(@Nullable android.media.FileDataSourceDesc);
     method @NonNull public android.media.FileDataSourceDesc build();
     method @NonNull public android.media.FileDataSourceDesc.Builder setDataSource(@NonNull android.os.ParcelFileDescriptor);
     method @NonNull public android.media.FileDataSourceDesc.Builder setDataSource(@NonNull android.os.ParcelFileDescriptor, long, long);
@@ -25326,7 +25325,6 @@ package android.media {
     method public static android.media.MediaPlayer create(android.content.Context, int);
     method public static android.media.MediaPlayer create(android.content.Context, int, android.media.AudioAttributes, int);
     method @NonNull public android.media.VolumeShaper createVolumeShaper(@NonNull android.media.VolumeShaper.Configuration);
-    method @Deprecated public static void deprecateStreamTypeForPlayback(int, @NonNull String, @NonNull String) throws java.lang.IllegalArgumentException;
     method public void deselectTrack(int) throws java.lang.IllegalStateException;
     method protected void finalize();
     method public int getAudioSessionId();
@@ -25540,16 +25538,16 @@ package android.media {
   }
 
   public class MediaPlayer2 implements android.media.AudioRouting java.lang.AutoCloseable {
-    ctor public MediaPlayer2(android.content.Context);
-    method public void addOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener, android.os.Handler);
-    method public Object attachAuxEffect(int);
+    ctor public MediaPlayer2(@NonNull android.content.Context);
+    method public void addOnRoutingChangedListener(@NonNull android.media.AudioRouting.OnRoutingChangedListener, @Nullable android.os.Handler);
+    method @NonNull public Object attachAuxEffect(int);
     method public boolean cancelCommand(@NonNull Object);
     method public void clearDrmEventCallback();
-    method public Object clearNextDataSources();
+    method @NonNull public Object clearNextDataSources();
     method public void clearPendingCommands();
     method public void close();
-    method public Object deselectTrack(int);
-    method public Object deselectTrack(@NonNull android.media.DataSourceDesc, int);
+    method @NonNull public Object deselectTrack(int);
+    method @NonNull public Object deselectTrack(@NonNull android.media.DataSourceDesc, int);
     method @NonNull public android.media.AudioAttributes getAudioAttributes();
     method public int getAudioSessionId();
     method public long getBufferedPosition();
@@ -25559,11 +25557,11 @@ package android.media {
     method public long getDuration();
     method public long getDuration(@NonNull android.media.DataSourceDesc);
     method public float getMaxPlayerVolume();
-    method public android.os.PersistableBundle getMetrics();
+    method @Nullable public android.os.PersistableBundle getMetrics();
     method @NonNull public android.media.PlaybackParams getPlaybackParams();
     method public float getPlayerVolume();
-    method public android.media.AudioDeviceInfo getPreferredDevice();
-    method public android.media.AudioDeviceInfo getRoutedDevice();
+    method @Nullable public android.media.AudioDeviceInfo getPreferredDevice();
+    method @Nullable public android.media.AudioDeviceInfo getRoutedDevice();
     method public int getSelectedTrack(int);
     method public int getSelectedTrack(@NonNull android.media.DataSourceDesc, int);
     method public int getState();
@@ -25571,37 +25569,37 @@ package android.media {
     method @Nullable public android.media.MediaTimestamp getTimestamp();
     method @NonNull public java.util.List<android.media.MediaPlayer2.TrackInfo> getTrackInfo();
     method @NonNull public java.util.List<android.media.MediaPlayer2.TrackInfo> getTrackInfo(@NonNull android.media.DataSourceDesc);
-    method public android.util.Size getVideoSize();
+    method @NonNull public android.util.Size getVideoSize();
     method public boolean isLooping();
-    method public Object loopCurrent(boolean);
-    method public Object notifyWhenCommandLabelReached(@NonNull Object);
-    method public Object pause();
-    method public Object play();
-    method public Object prepare();
+    method @NonNull public Object loopCurrent(boolean);
+    method @NonNull public Object notifyWhenCommandLabelReached(@NonNull Object);
+    method @NonNull public Object pause();
+    method @NonNull public Object play();
+    method @NonNull public Object prepare();
     method public void registerEventCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaPlayer2.EventCallback);
-    method public void removeOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener);
+    method public void removeOnRoutingChangedListener(@NonNull android.media.AudioRouting.OnRoutingChangedListener);
     method public void reset();
-    method public Object seekTo(long);
-    method public Object seekTo(long, int);
-    method public Object selectTrack(int);
-    method public Object selectTrack(@NonNull android.media.DataSourceDesc, int);
-    method public Object setAudioAttributes(@NonNull android.media.AudioAttributes);
-    method public Object setAudioSessionId(int);
-    method public Object setAuxEffectSendLevel(float);
-    method public Object setDataSource(@NonNull android.media.DataSourceDesc);
-    method public Object setDisplay(android.view.SurfaceHolder);
+    method @NonNull public Object seekTo(long);
+    method @NonNull public Object seekTo(long, int);
+    method @NonNull public Object selectTrack(int);
+    method @NonNull public Object selectTrack(@NonNull android.media.DataSourceDesc, int);
+    method @NonNull public Object setAudioAttributes(@NonNull android.media.AudioAttributes);
+    method @NonNull public Object setAudioSessionId(int);
+    method @NonNull public Object setAuxEffectSendLevel(float);
+    method @NonNull public Object setDataSource(@NonNull android.media.DataSourceDesc);
+    method @NonNull public Object setDisplay(@Nullable android.view.SurfaceHolder);
     method public void setDrmEventCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaPlayer2.DrmEventCallback);
-    method public Object setNextDataSource(@NonNull android.media.DataSourceDesc);
-    method public Object setNextDataSources(@NonNull java.util.List<android.media.DataSourceDesc>);
-    method public Object setPlaybackParams(@NonNull android.media.PlaybackParams);
-    method public Object setPlayerVolume(float);
-    method public boolean setPreferredDevice(android.media.AudioDeviceInfo);
-    method public Object setScreenOnWhilePlaying(boolean);
-    method public Object setSurface(android.view.Surface);
-    method public Object setSyncParams(@NonNull android.media.SyncParams);
-    method public Object setWakeLock(@NonNull android.os.PowerManager.WakeLock);
-    method public Object skipToNext();
-    method public void unregisterEventCallback(android.media.MediaPlayer2.EventCallback);
+    method @NonNull public Object setNextDataSource(@NonNull android.media.DataSourceDesc);
+    method @NonNull public Object setNextDataSources(@NonNull java.util.List<android.media.DataSourceDesc>);
+    method @NonNull public Object setPlaybackParams(@NonNull android.media.PlaybackParams);
+    method @NonNull public Object setPlayerVolume(float);
+    method public boolean setPreferredDevice(@Nullable android.media.AudioDeviceInfo);
+    method @NonNull public Object setScreenOnWhilePlaying(boolean);
+    method @NonNull public Object setSurface(@Nullable android.view.Surface);
+    method @NonNull public Object setSyncParams(@NonNull android.media.SyncParams);
+    method @NonNull public Object setWakeLock(@NonNull android.os.PowerManager.WakeLock);
+    method @NonNull public Object skipToNext();
+    method public void unregisterEventCallback(@NonNull android.media.MediaPlayer2.EventCallback);
     field public static final int CALL_COMPLETED_ATTACH_AUX_EFFECT = 1; // 0x1
     field public static final int CALL_COMPLETED_CLEAR_NEXT_DATA_SOURCES = 30; // 0x1e
     field public static final int CALL_COMPLETED_DESELECT_TRACK = 2; // 0x2
@@ -25736,8 +25734,8 @@ package android.media {
   }
 
   public static class MediaPlayer2.TrackInfo {
-    method public android.media.MediaFormat getFormat();
-    method public String getLanguage();
+    method @Nullable public android.media.MediaFormat getFormat();
+    method @Nullable public String getLanguage();
     method public int getTrackType();
     field public static final int MEDIA_TRACK_TYPE_AUDIO = 2; // 0x2
     field public static final int MEDIA_TRACK_TYPE_METADATA = 5; // 0x5
@@ -26421,7 +26419,6 @@ package android.media {
     ctor @Deprecated public SoundPool(int, int, int);
     method public final void autoPause();
     method public final void autoResume();
-    method @Deprecated public static void deprecateStreamTypeForPlayback(int, @NonNull String, @NonNull String) throws java.lang.IllegalArgumentException;
     method protected void finalize();
     method public int load(String, int);
     method public int load(android.content.Context, int, int);
@@ -26617,15 +26614,15 @@ package android.media {
   }
 
   public class UriDataSourceDesc extends android.media.DataSourceDesc {
-    method public android.content.Context getContext();
-    method public java.util.List<java.net.HttpCookie> getCookies();
-    method public java.util.Map<java.lang.String,java.lang.String> getHeaders();
-    method public android.net.Uri getUri();
+    method @NonNull public android.content.Context getContext();
+    method @Nullable public java.util.List<java.net.HttpCookie> getCookies();
+    method @Nullable public java.util.Map<java.lang.String,java.lang.String> getHeaders();
+    method @NonNull public android.net.Uri getUri();
   }
 
   public static class UriDataSourceDesc.Builder extends android.media.DataSourceDesc.BuilderBase<android.media.UriDataSourceDesc.Builder> {
     ctor public UriDataSourceDesc.Builder();
-    ctor public UriDataSourceDesc.Builder(android.media.UriDataSourceDesc);
+    ctor public UriDataSourceDesc.Builder(@Nullable android.media.UriDataSourceDesc);
     method @NonNull public android.media.UriDataSourceDesc build();
     method @NonNull public android.media.UriDataSourceDesc.Builder setDataSource(@NonNull android.content.Context, @NonNull android.net.Uri);
     method @NonNull public android.media.UriDataSourceDesc.Builder setDataSource(@NonNull android.content.Context, @NonNull android.net.Uri, @Nullable java.util.Map<java.lang.String,java.lang.String>, @Nullable java.util.List<java.net.HttpCookie>);
@@ -28980,6 +28977,7 @@ package android.net {
     field public static final int NET_CAPABILITY_IA = 7; // 0x7
     field public static final int NET_CAPABILITY_IMS = 4; // 0x4
     field public static final int NET_CAPABILITY_INTERNET = 12; // 0xc
+    field public static final int NET_CAPABILITY_MCX = 23; // 0x17
     field public static final int NET_CAPABILITY_MMS = 0; // 0x0
     field public static final int NET_CAPABILITY_NOT_CONGESTED = 20; // 0x14
     field public static final int NET_CAPABILITY_NOT_METERED = 11; // 0xb
@@ -29402,7 +29400,7 @@ package android.net.http {
     method public java.util.Date getValidNotAfterDate();
     method @Deprecated public String getValidNotBefore();
     method public java.util.Date getValidNotBeforeDate();
-    method public java.security.cert.X509Certificate getX509Certificate();
+    method @Nullable public java.security.cert.X509Certificate getX509Certificate();
     method public static android.net.http.SslCertificate restoreState(android.os.Bundle);
     method public static android.os.Bundle saveState(android.net.http.SslCertificate);
   }
@@ -38419,7 +38417,8 @@ package android.provider {
     method @Nullable public static android.net.Uri getDocumentUri(@NonNull android.content.Context, @NonNull android.net.Uri);
     method public static android.net.Uri getMediaScannerUri();
     method @Nullable public static android.net.Uri getMediaUri(@NonNull android.content.Context, @NonNull android.net.Uri);
-    method public static String getVersion(android.content.Context);
+    method @NonNull public static String getVersion(@NonNull android.content.Context);
+    method @NonNull public static String getVersion(@NonNull android.content.Context, @NonNull String);
     method @NonNull public static String getVolumeName(@NonNull android.net.Uri);
     method @NonNull public static android.net.Uri setIncludePending(@NonNull android.net.Uri);
     method @NonNull public static android.net.Uri setRequireOriginal(@NonNull android.net.Uri);
@@ -43355,14 +43354,14 @@ package android.telecom {
     field @NonNull public static final android.os.Parcelable.Creator<android.telecom.CallIdentification> CREATOR;
   }
 
-  public static class CallIdentification.Builder {
+  public static final class CallIdentification.Builder {
     ctor public CallIdentification.Builder();
-    method public android.telecom.CallIdentification build();
-    method public android.telecom.CallIdentification.Builder setDescription(@Nullable CharSequence);
-    method public android.telecom.CallIdentification.Builder setDetails(@Nullable CharSequence);
-    method public android.telecom.CallIdentification.Builder setName(@Nullable CharSequence);
-    method public android.telecom.CallIdentification.Builder setNuisanceConfidence(int);
-    method public android.telecom.CallIdentification.Builder setPhoto(@Nullable android.graphics.drawable.Icon);
+    method @NonNull public android.telecom.CallIdentification build();
+    method @NonNull public android.telecom.CallIdentification.Builder setDescription(@Nullable CharSequence);
+    method @NonNull public android.telecom.CallIdentification.Builder setDetails(@Nullable CharSequence);
+    method @NonNull public android.telecom.CallIdentification.Builder setName(@Nullable CharSequence);
+    method @NonNull public android.telecom.CallIdentification.Builder setNuisanceConfidence(int);
+    method @NonNull public android.telecom.CallIdentification.Builder setPhoto(@Nullable android.graphics.drawable.Icon);
   }
 
   public abstract class CallRedirectionService extends android.app.Service {
@@ -43983,8 +43982,8 @@ package android.telecom {
     method public android.telecom.PhoneAccount getPhoneAccount(android.telecom.PhoneAccountHandle);
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public java.util.List<android.telecom.PhoneAccountHandle> getSelfManagedPhoneAccounts();
     method public android.telecom.PhoneAccountHandle getSimCallManager();
-    method public String getSystemDialerPackage();
-    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public android.telecom.PhoneAccountHandle getUserSelectedOutgoingPhoneAccount();
+    method @Nullable public String getSystemDialerPackage();
+    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @Nullable public android.telecom.PhoneAccountHandle getUserSelectedOutgoingPhoneAccount();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getVoiceMailNumber(android.telecom.PhoneAccountHandle);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public boolean handleMmi(String);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public boolean handleMmi(String, android.telecom.PhoneAccountHandle);
@@ -45145,8 +45144,8 @@ package android.telephony {
     method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public String getImei();
     method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public String getImei(int);
     method @RequiresPermission(anyOf={android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.READ_SMS, android.Manifest.permission.READ_PHONE_NUMBERS}) public String getLine1Number();
-    method public String getManufacturerCode();
-    method public String getManufacturerCode(int);
+    method @Nullable public String getManufacturerCode();
+    method @Nullable public String getManufacturerCode(int);
     method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public String getMeid();
     method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public String getMeid(int);
     method public String getMmsUAProfUrl();
@@ -45173,8 +45172,8 @@ package android.telephony {
     method public int getSimState();
     method public int getSimState(int);
     method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public String getSubscriberId();
-    method public String getTypeAllocationCode();
-    method public String getTypeAllocationCode(int);
+    method @Nullable public String getTypeAllocationCode();
+    method @Nullable public String getTypeAllocationCode(int);
     method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") @NonNull public java.util.List<android.telephony.UiccCardInfo> getUiccCardsInfo();
     method @Nullable @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getVisualVoicemailPackageName();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getVoiceMailAlphaTag();
@@ -45470,6 +45469,7 @@ package android.telephony.data {
     field public static final int TYPE_HIPRI = 16; // 0x10
     field public static final int TYPE_IA = 256; // 0x100
     field public static final int TYPE_IMS = 64; // 0x40
+    field public static final int TYPE_MCX = 1024; // 0x400
     field public static final int TYPE_MMS = 2; // 0x2
     field public static final int TYPE_SUPL = 4; // 0x4
   }
@@ -45559,7 +45559,7 @@ package android.telephony.euicc {
   }
 
   public class EuiccManager {
-    method public android.telephony.euicc.EuiccManager createForCardId(int);
+    method @NonNull public android.telephony.euicc.EuiccManager createForCardId(int);
     method @RequiresPermission("android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS") public void deleteSubscription(int, android.app.PendingIntent);
     method @RequiresPermission("android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS") public void downloadSubscription(android.telephony.euicc.DownloadableSubscription, boolean, android.app.PendingIntent);
     method @Nullable public String getEid();
@@ -47112,7 +47112,7 @@ package android.text.style {
 
   public static class LineHeightSpan.Standard implements android.text.style.LineHeightSpan android.text.ParcelableSpan {
     ctor public LineHeightSpan.Standard(@Px @IntRange(from=1) int);
-    ctor public LineHeightSpan.Standard(android.os.Parcel);
+    ctor public LineHeightSpan.Standard(@NonNull android.os.Parcel);
     method public void chooseHeight(@NonNull CharSequence, int, int, int, int, @NonNull android.graphics.Paint.FontMetricsInt);
     method public int describeContents();
     method @Px public int getHeight();
@@ -53036,7 +53036,7 @@ package android.view.contentcapture {
 
   public final class ContentCaptureContext implements android.os.Parcelable {
     method public int describeContents();
-    method @NonNull public static android.view.contentcapture.ContentCaptureContext forLocusId(@NonNull android.net.Uri);
+    method @NonNull public static android.view.contentcapture.ContentCaptureContext forLocusId(@NonNull String);
     method @Nullable public android.os.Bundle getExtras();
     method @NonNull public android.content.LocusId getLocusId();
     method public void writeToParcel(android.os.Parcel, int);
@@ -53084,18 +53084,19 @@ package android.view.contentcapture {
     method public boolean isForEverything();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.view.contentcapture.UserDataRemovalRequest> CREATOR;
+    field public static final int FLAG_IS_PREFIX = 1; // 0x1
   }
 
   public static final class UserDataRemovalRequest.Builder {
     ctor public UserDataRemovalRequest.Builder();
-    method @NonNull public android.view.contentcapture.UserDataRemovalRequest.Builder addLocusId(@NonNull android.content.LocusId, boolean);
+    method @NonNull public android.view.contentcapture.UserDataRemovalRequest.Builder addLocusId(@NonNull android.content.LocusId, int);
     method @NonNull public android.view.contentcapture.UserDataRemovalRequest build();
     method @NonNull public android.view.contentcapture.UserDataRemovalRequest.Builder forEverything();
   }
 
   public final class UserDataRemovalRequest.LocusIdRequest {
+    method @NonNull public int getFlags();
     method @NonNull public android.content.LocusId getLocusId();
-    method @NonNull public boolean isRecursive();
   }
 
 }
@@ -57331,7 +57332,7 @@ package android.widget {
     method @NonNull public android.view.textclassifier.TextClassifier getTextClassifier();
     method public final android.content.res.ColorStateList getTextColors();
     method @Nullable public android.graphics.drawable.Drawable getTextCursorDrawable();
-    method public android.text.TextDirectionHeuristic getTextDirectionHeuristic();
+    method @NonNull public android.text.TextDirectionHeuristic getTextDirectionHeuristic();
     method @NonNull public java.util.Locale getTextLocale();
     method @NonNull @Size(min=1) public android.os.LocaleList getTextLocales();
     method @NonNull public android.text.PrecomputedText.Params getTextMetricsParams();
