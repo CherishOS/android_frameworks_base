@@ -35114,6 +35114,8 @@ package android.os {
   }
 
   public final class PowerManager {
+    method public void addThermalStatusListener(@NonNull android.os.PowerManager.OnThermalStatusChangedListener);
+    method public void addThermalStatusListener(@NonNull java.util.concurrent.Executor, @NonNull android.os.PowerManager.OnThermalStatusChangedListener);
     method public int getCurrentThermalStatus();
     method public int getLocationPowerSaveMode();
     method public boolean isDeviceIdleMode();
@@ -35125,8 +35127,7 @@ package android.os {
     method public boolean isWakeLockLevelSupported(int);
     method public android.os.PowerManager.WakeLock newWakeLock(int, String);
     method public void reboot(String);
-    method public void registerThermalStatusCallback(@NonNull android.os.PowerManager.ThermalStatusCallback, @NonNull java.util.concurrent.Executor);
-    method public void unregisterThermalStatusCallback(@NonNull android.os.PowerManager.ThermalStatusCallback);
+    method public void removeThermalStatusListener(@NonNull android.os.PowerManager.OnThermalStatusChangedListener);
     field public static final int ACQUIRE_CAUSES_WAKEUP = 268435456; // 0x10000000
     field public static final String ACTION_DEVICE_IDLE_MODE_CHANGED = "android.os.action.DEVICE_IDLE_MODE_CHANGED";
     field public static final String ACTION_POWER_SAVE_MODE_CHANGED = "android.os.action.POWER_SAVE_MODE_CHANGED";
@@ -35151,9 +35152,8 @@ package android.os {
     field public static final int THERMAL_STATUS_SHUTDOWN = 6; // 0x6
   }
 
-  public abstract static class PowerManager.ThermalStatusCallback {
-    ctor public PowerManager.ThermalStatusCallback();
-    method public void onStatusChange(int);
+  public static interface PowerManager.OnThermalStatusChangedListener {
+    method public void onThermalStatusChanged(int);
   }
 
   public final class PowerManager.WakeLock {
