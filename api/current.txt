@@ -4447,7 +4447,7 @@ package android.app {
 
   public final class AutomaticZenRule implements android.os.Parcelable {
     ctor @Deprecated public AutomaticZenRule(String, android.content.ComponentName, android.net.Uri, int, boolean);
-    ctor public AutomaticZenRule(String, android.content.ComponentName, android.content.ComponentName, android.net.Uri, android.service.notification.ZenPolicy, int, boolean);
+    ctor public AutomaticZenRule(@NonNull String, @Nullable android.content.ComponentName, @Nullable android.content.ComponentName, @NonNull android.net.Uri, @Nullable android.service.notification.ZenPolicy, int, boolean);
     ctor public AutomaticZenRule(android.os.Parcel);
     method public int describeContents();
     method public android.net.Uri getConditionId();
@@ -5421,14 +5421,14 @@ package android.app {
     ctor @Deprecated public Notification.Action.Builder(int, CharSequence, android.app.PendingIntent);
     ctor public Notification.Action.Builder(android.graphics.drawable.Icon, CharSequence, android.app.PendingIntent);
     ctor public Notification.Action.Builder(android.app.Notification.Action);
-    method public android.app.Notification.Action.Builder addExtras(android.os.Bundle);
-    method public android.app.Notification.Action.Builder addRemoteInput(android.app.RemoteInput);
-    method public android.app.Notification.Action build();
-    method public android.app.Notification.Action.Builder extend(android.app.Notification.Action.Extender);
+    method @NonNull public android.app.Notification.Action.Builder addExtras(android.os.Bundle);
+    method @NonNull public android.app.Notification.Action.Builder addRemoteInput(android.app.RemoteInput);
+    method @NonNull public android.app.Notification.Action build();
+    method @NonNull public android.app.Notification.Action.Builder extend(android.app.Notification.Action.Extender);
     method public android.os.Bundle getExtras();
-    method public android.app.Notification.Action.Builder setAllowGeneratedReplies(boolean);
-    method public android.app.Notification.Action.Builder setContextual(boolean);
-    method public android.app.Notification.Action.Builder setSemanticAction(int);
+    method @NonNull public android.app.Notification.Action.Builder setAllowGeneratedReplies(boolean);
+    method @NonNull public android.app.Notification.Action.Builder setContextual(boolean);
+    method @NonNull public android.app.Notification.Action.Builder setSemanticAction(int);
   }
 
   public static interface Notification.Action.Extender {
@@ -11825,15 +11825,15 @@ package android.content.pm {
   }
 
   public class PermissionGroupInfo extends android.content.pm.PackageItemInfo implements android.os.Parcelable {
-    ctor public PermissionGroupInfo();
-    ctor public PermissionGroupInfo(android.content.pm.PermissionGroupInfo);
+    ctor @Deprecated public PermissionGroupInfo();
+    ctor @Deprecated public PermissionGroupInfo(@NonNull android.content.pm.PermissionGroupInfo);
     method public int describeContents();
-    method public CharSequence loadDescription(android.content.pm.PackageManager);
+    method @Nullable public CharSequence loadDescription(@NonNull android.content.pm.PackageManager);
     field @NonNull public static final android.os.Parcelable.Creator<android.content.pm.PermissionGroupInfo> CREATOR;
     field public static final int FLAG_PERSONAL_INFO = 1; // 0x1
-    field public int descriptionRes;
+    field @StringRes public int descriptionRes;
     field public int flags;
-    field public CharSequence nonLocalizedDescription;
+    field @Nullable public CharSequence nonLocalizedDescription;
     field public int priority;
   }
 
@@ -14113,14 +14113,14 @@ package android.graphics {
   public class HardwareRenderer {
     ctor public HardwareRenderer();
     method public void clearContent();
-    method public android.graphics.HardwareRenderer.FrameRenderRequest createRenderRequest();
+    method @NonNull public android.graphics.HardwareRenderer.FrameRenderRequest createRenderRequest();
     method public void destroy();
     method public boolean isOpaque();
     method public void notifyFramePending();
     method public void setContentRoot(@Nullable android.graphics.RenderNode);
     method public void setLightSourceAlpha(@FloatRange(from=0.0f, to=1.0f) float, @FloatRange(from=0.0f, to=1.0f) float);
     method public void setLightSourceGeometry(float, float, float, float);
-    method public void setName(String);
+    method public void setName(@NonNull String);
     method public void setOpaque(boolean);
     method public void setStopped(boolean);
     method public void setSurface(@Nullable android.view.Surface);
@@ -14132,9 +14132,9 @@ package android.graphics {
   }
 
   public final class HardwareRenderer.FrameRenderRequest {
-    method public android.graphics.HardwareRenderer.FrameRenderRequest setFrameCommitCallback(@NonNull java.util.concurrent.Executor, @NonNull Runnable);
-    method public android.graphics.HardwareRenderer.FrameRenderRequest setVsyncTime(long);
-    method public android.graphics.HardwareRenderer.FrameRenderRequest setWaitForPresent(boolean);
+    method @NonNull public android.graphics.HardwareRenderer.FrameRenderRequest setFrameCommitCallback(@NonNull java.util.concurrent.Executor, @NonNull Runnable);
+    method @NonNull public android.graphics.HardwareRenderer.FrameRenderRequest setVsyncTime(long);
+    method @NonNull public android.graphics.HardwareRenderer.FrameRenderRequest setWaitForPresent(boolean);
     method public int syncAndDraw();
   }
 
@@ -14953,8 +14953,8 @@ package android.graphics {
 
   public final class RenderNode {
     ctor public RenderNode(@Nullable String);
-    method public android.graphics.RecordingCanvas beginRecording(int, int);
-    method public android.graphics.RecordingCanvas beginRecording();
+    method @NonNull public android.graphics.RecordingCanvas beginRecording(int, int);
+    method @NonNull public android.graphics.RecordingCanvas beginRecording();
     method public long computeApproximateMemoryUsage();
     method public void discardDisplayList();
     method public void endRecording();
@@ -15007,7 +15007,7 @@ package android.graphics {
     method public boolean setPivotX(float);
     method public boolean setPivotY(float);
     method public boolean setPosition(int, int, int, int);
-    method public boolean setPosition(android.graphics.Rect);
+    method public boolean setPosition(@NonNull android.graphics.Rect);
     method public boolean setProjectBackwards(boolean);
     method public boolean setProjectionReceiver(boolean);
     method public boolean setRotationX(float);
@@ -15446,38 +15446,38 @@ package android.graphics.drawable {
     method public float getGradientCenterY();
     method public float getGradientRadius();
     method public int getGradientType();
-    method public int getInnerRadius();
+    method @Px public int getInnerRadius();
     method public float getInnerRadiusRatio();
     method public int getOpacity();
     method public android.graphics.drawable.GradientDrawable.Orientation getOrientation();
     method public int getShape();
-    method public int getThickness();
+    method @Px public int getThickness();
     method public float getThicknessRatio();
     method public boolean getUseLevel();
     method public void setAlpha(int);
     method public void setColor(@ColorInt int);
     method public void setColor(@Nullable android.content.res.ColorStateList);
     method public void setColorFilter(@Nullable android.graphics.ColorFilter);
-    method public void setColors(@ColorInt int[]);
-    method public void setColors(@ColorInt int[], @Nullable float[]);
+    method public void setColors(@Nullable @ColorInt int[]);
+    method public void setColors(@Nullable @ColorInt int[], @Nullable float[]);
     method public void setCornerRadii(@Nullable float[]);
     method public void setCornerRadius(float);
     method public void setDither(boolean);
     method public void setGradientCenter(float, float);
     method public void setGradientRadius(float);
     method public void setGradientType(int);
-    method public void setInnerRadius(int);
-    method public void setInnerRadiusRatio(float);
+    method public void setInnerRadius(@Px int);
+    method public void setInnerRadiusRatio(@FloatRange(from=0.0f, fromInclusive=false) float);
     method public void setOrientation(android.graphics.drawable.GradientDrawable.Orientation);
-    method public void setPadding(int, int, int, int);
+    method public void setPadding(@Px int, @Px int, @Px int, @Px int);
     method public void setShape(int);
     method public void setSize(int, int);
     method public void setStroke(int, @ColorInt int);
     method public void setStroke(int, android.content.res.ColorStateList);
     method public void setStroke(int, @ColorInt int, float, float);
     method public void setStroke(int, android.content.res.ColorStateList, float, float);
-    method public void setThickness(int);
-    method public void setThicknessRatio(float);
+    method public void setThickness(@Px int);
+    method public void setThicknessRatio(@FloatRange(from=0.0f, fromInclusive=false) float);
     method public void setUseLevel(boolean);
     field public static final int LINE = 2; // 0x2
     field public static final int LINEAR_GRADIENT = 0; // 0x0
@@ -15690,10 +15690,10 @@ package android.graphics.drawable {
   public class StateListDrawable extends android.graphics.drawable.DrawableContainer {
     ctor public StateListDrawable();
     method public void addState(int[], android.graphics.drawable.Drawable);
-    method public int findStateDrawableIndex(int[]);
+    method public int findStateDrawableIndex(@NonNull int[]);
     method public int getStateCount();
-    method public android.graphics.drawable.Drawable getStateDrawable(int);
-    method public int[] getStateSet(int);
+    method @Nullable public android.graphics.drawable.Drawable getStateDrawable(int);
+    method @NonNull public int[] getStateSet(int);
   }
 
   public class TransitionDrawable extends android.graphics.drawable.LayerDrawable implements android.graphics.drawable.Drawable.Callback {
@@ -16562,10 +16562,10 @@ package android.hardware.biometrics {
   public static class BiometricPrompt.Builder {
     ctor public BiometricPrompt.Builder(android.content.Context);
     method @NonNull public android.hardware.biometrics.BiometricPrompt build();
-    method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setAllowDeviceCredential(boolean);
+    method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setConfirmationRequired(boolean);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setDescription(@NonNull CharSequence);
+    method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setDeviceCredentialAllowed(boolean);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setNegativeButton(@NonNull CharSequence, @NonNull java.util.concurrent.Executor, @NonNull android.content.DialogInterface.OnClickListener);
-    method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setRequireConfirmation(boolean);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setSubtitle(@NonNull CharSequence);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setTitle(@NonNull CharSequence);
   }
@@ -22859,6 +22859,7 @@ package android.location {
     method public float getBearing();
     method public float getBearingAccuracyDegrees();
     method public long getElapsedRealtimeNanos();
+    method public long getElapsedRealtimeUncertaintyNanos();
     method public android.os.Bundle getExtras();
     method public double getLatitude();
     method public double getLongitude();
@@ -22871,6 +22872,7 @@ package android.location {
     method public boolean hasAltitude();
     method public boolean hasBearing();
     method public boolean hasBearingAccuracy();
+    method public boolean hasElapsedRealtimeUncertaintyNanos();
     method public boolean hasSpeed();
     method public boolean hasSpeedAccuracy();
     method public boolean hasVerticalAccuracy();
@@ -22886,6 +22888,7 @@ package android.location {
     method public void setBearing(float);
     method public void setBearingAccuracyDegrees(float);
     method public void setElapsedRealtimeNanos(long);
+    method public void setElapsedRealtimeUncertaintyNanos(long);
     method public void setExtras(android.os.Bundle);
     method public void setLatitude(double);
     method public void setLongitude(double);
@@ -23053,7 +23056,7 @@ package android.media {
     ctor public AudioAttributes.Builder();
     ctor public AudioAttributes.Builder(android.media.AudioAttributes);
     method public android.media.AudioAttributes build();
-    method public android.media.AudioAttributes.Builder setAllowCapture(boolean);
+    method @NonNull public android.media.AudioAttributes.Builder setAllowCapture(boolean);
     method public android.media.AudioAttributes.Builder setContentType(int);
     method public android.media.AudioAttributes.Builder setFlags(int);
     method public android.media.AudioAttributes.Builder setLegacyStreamType(int);
@@ -23392,11 +23395,11 @@ package android.media {
 
   public static final class AudioPlaybackCaptureConfiguration.Builder {
     ctor public AudioPlaybackCaptureConfiguration.Builder(@NonNull android.media.projection.MediaProjection);
-    method public android.media.AudioPlaybackCaptureConfiguration.Builder addMatchingUid(int);
-    method public android.media.AudioPlaybackCaptureConfiguration.Builder addMatchingUsage(@NonNull android.media.AudioAttributes);
-    method public android.media.AudioPlaybackCaptureConfiguration build();
-    method public android.media.AudioPlaybackCaptureConfiguration.Builder excludeUid(int);
-    method public android.media.AudioPlaybackCaptureConfiguration.Builder excludeUsage(@NonNull android.media.AudioAttributes);
+    method @NonNull public android.media.AudioPlaybackCaptureConfiguration.Builder addMatchingUid(int);
+    method @NonNull public android.media.AudioPlaybackCaptureConfiguration.Builder addMatchingUsage(@NonNull android.media.AudioAttributes);
+    method @NonNull public android.media.AudioPlaybackCaptureConfiguration build();
+    method @NonNull public android.media.AudioPlaybackCaptureConfiguration.Builder excludeUid(int);
+    method @NonNull public android.media.AudioPlaybackCaptureConfiguration.Builder excludeUsage(@NonNull android.media.AudioAttributes);
   }
 
   public final class AudioPlaybackConfiguration implements android.os.Parcelable {
@@ -23497,7 +23500,7 @@ package android.media {
     ctor public AudioRecord.Builder();
     method public android.media.AudioRecord build() throws java.lang.UnsupportedOperationException;
     method public android.media.AudioRecord.Builder setAudioFormat(@NonNull android.media.AudioFormat) throws java.lang.IllegalArgumentException;
-    method public android.media.AudioRecord.Builder setAudioPlaybackCaptureConfig(@NonNull android.media.AudioPlaybackCaptureConfiguration);
+    method @NonNull public android.media.AudioRecord.Builder setAudioPlaybackCaptureConfig(@NonNull android.media.AudioPlaybackCaptureConfiguration);
     method public android.media.AudioRecord.Builder setAudioSource(int) throws java.lang.IllegalArgumentException;
     method public android.media.AudioRecord.Builder setBufferSizeInBytes(int) throws java.lang.IllegalArgumentException;
   }
@@ -25137,7 +25140,7 @@ package android.media {
     field public static final long POSITION_UNKNOWN = 576460752303423487L; // 0x7ffffffffffffffL
   }
 
-  public static class MediaItem2.Builder {
+  public static final class MediaItem2.Builder {
     ctor public MediaItem2.Builder();
     method @NonNull public android.media.MediaItem2 build();
     method @NonNull public android.media.MediaItem2.Builder setEndPosition(long);
@@ -35523,7 +35526,7 @@ package android.os {
 
   public abstract class VibrationEffect implements android.os.Parcelable {
     method public static android.os.VibrationEffect createOneShot(long, int);
-    method public static android.os.VibrationEffect createPredefined(int);
+    method @NonNull public static android.os.VibrationEffect createPredefined(int);
     method public static android.os.VibrationEffect createWaveform(long[], int);
     method public static android.os.VibrationEffect createWaveform(long[], int[], int);
     method public int describeContents();
@@ -41387,7 +41390,7 @@ package android.service.carrier {
 
   public class CarrierIdentifier implements android.os.Parcelable {
     ctor public CarrierIdentifier(String, String, @Nullable String, @Nullable String, @Nullable String, @Nullable String);
-    ctor public CarrierIdentifier(String, String, @Nullable String, @Nullable String, @Nullable String, @Nullable String, int, int);
+    ctor public CarrierIdentifier(@NonNull String, @NonNull String, @Nullable String, @Nullable String, @Nullable String, @Nullable String, int, int);
     ctor public CarrierIdentifier(byte[], @Nullable String, @Nullable String);
     method public int describeContents();
     method public int getCarrierId();
@@ -41869,26 +41872,26 @@ package android.service.notification {
 
   public static class ZenPolicy.Builder {
     ctor public ZenPolicy.Builder();
-    method public android.service.notification.ZenPolicy.Builder allowAlarms(boolean);
-    method public android.service.notification.ZenPolicy.Builder allowAllSounds();
-    method public android.service.notification.ZenPolicy.Builder allowCalls(int);
-    method public android.service.notification.ZenPolicy.Builder allowEvents(boolean);
-    method public android.service.notification.ZenPolicy.Builder allowMedia(boolean);
-    method public android.service.notification.ZenPolicy.Builder allowMessages(int);
-    method public android.service.notification.ZenPolicy.Builder allowReminders(boolean);
-    method public android.service.notification.ZenPolicy.Builder allowRepeatCallers(boolean);
-    method public android.service.notification.ZenPolicy.Builder allowSystem(boolean);
-    method public android.service.notification.ZenPolicy build();
-    method public android.service.notification.ZenPolicy.Builder disallowAllSounds();
-    method public android.service.notification.ZenPolicy.Builder hideAllVisualEffects();
-    method public android.service.notification.ZenPolicy.Builder showAllVisualEffects();
-    method public android.service.notification.ZenPolicy.Builder showBadges(boolean);
-    method public android.service.notification.ZenPolicy.Builder showFullScreenIntent(boolean);
-    method public android.service.notification.ZenPolicy.Builder showInAmbientDisplay(boolean);
-    method public android.service.notification.ZenPolicy.Builder showInNotificationList(boolean);
-    method public android.service.notification.ZenPolicy.Builder showLights(boolean);
-    method public android.service.notification.ZenPolicy.Builder showPeeking(boolean);
-    method public android.service.notification.ZenPolicy.Builder showStatusBarIcons(boolean);
+    method @NonNull public android.service.notification.ZenPolicy.Builder allowAlarms(boolean);
+    method @NonNull public android.service.notification.ZenPolicy.Builder allowAllSounds();
+    method @NonNull public android.service.notification.ZenPolicy.Builder allowCalls(int);
+    method @NonNull public android.service.notification.ZenPolicy.Builder allowEvents(boolean);
+    method @NonNull public android.service.notification.ZenPolicy.Builder allowMedia(boolean);
+    method @NonNull public android.service.notification.ZenPolicy.Builder allowMessages(int);
+    method @NonNull public android.service.notification.ZenPolicy.Builder allowReminders(boolean);
+    method @NonNull public android.service.notification.ZenPolicy.Builder allowRepeatCallers(boolean);
+    method @NonNull public android.service.notification.ZenPolicy.Builder allowSystem(boolean);
+    method @NonNull public android.service.notification.ZenPolicy build();
+    method @NonNull public android.service.notification.ZenPolicy.Builder disallowAllSounds();
+    method @NonNull public android.service.notification.ZenPolicy.Builder hideAllVisualEffects();
+    method @NonNull public android.service.notification.ZenPolicy.Builder showAllVisualEffects();
+    method @NonNull public android.service.notification.ZenPolicy.Builder showBadges(boolean);
+    method @NonNull public android.service.notification.ZenPolicy.Builder showFullScreenIntent(boolean);
+    method @NonNull public android.service.notification.ZenPolicy.Builder showInAmbientDisplay(boolean);
+    method @NonNull public android.service.notification.ZenPolicy.Builder showInNotificationList(boolean);
+    method @NonNull public android.service.notification.ZenPolicy.Builder showLights(boolean);
+    method @NonNull public android.service.notification.ZenPolicy.Builder showPeeking(boolean);
+    method @NonNull public android.service.notification.ZenPolicy.Builder showStatusBarIcons(boolean);
   }
 
 }
@@ -43827,6 +43830,7 @@ package android.telecom {
   }
 
   public final class PhoneAccountSuggestion implements android.os.Parcelable {
+    ctor public PhoneAccountSuggestion(@NonNull android.telecom.PhoneAccountHandle, int, boolean);
     method public int describeContents();
     method @NonNull public android.telecom.PhoneAccountHandle getPhoneAccountHandle();
     method public int getReason();
@@ -44821,7 +44825,7 @@ package android.telephony {
   public class ServiceState implements android.os.Parcelable {
     ctor public ServiceState();
     ctor public ServiceState(android.telephony.ServiceState);
-    ctor public ServiceState(android.os.Parcel);
+    ctor @Deprecated public ServiceState(android.os.Parcel);
     method protected void copyFrom(android.telephony.ServiceState);
     method public int describeContents();
     method public int getCdmaNetworkId();
@@ -45214,7 +45218,7 @@ package android.telephony {
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public boolean setNetworkSelectionModeManual(String, boolean);
     method public boolean setOperatorBrandOverride(String);
     method public boolean setPreferredNetworkTypeToGlobal();
-    method public boolean setPreferredOpportunisticDataSubscription(int);
+    method public void setPreferredOpportunisticDataSubscription(int, boolean, @Nullable java.util.concurrent.Executor, @Nullable java.util.function.Consumer<java.lang.Integer>);
     method public void setVisualVoicemailSmsFilterSettings(android.telephony.VisualVoicemailSmsFilterSettings);
     method public boolean setVoiceMailNumber(String, String);
     method @Deprecated public void setVoicemailRingtoneUri(android.telecom.PhoneAccountHandle, android.net.Uri);
@@ -51972,6 +51976,7 @@ package android.view {
     method public int getStableInsetRight();
     method public int getStableInsetTop();
     method @NonNull public android.graphics.Insets getStableInsets();
+    method @NonNull public android.graphics.Insets getSystemGestureInsets();
     method public int getSystemWindowInsetBottom();
     method public int getSystemWindowInsetLeft();
     method public int getSystemWindowInsetRight();
@@ -51993,6 +51998,7 @@ package android.view {
     method @NonNull public android.view.WindowInsets build();
     method @NonNull public android.view.WindowInsets.Builder setDisplayCutout(@Nullable android.view.DisplayCutout);
     method @NonNull public android.view.WindowInsets.Builder setStableInsets(@NonNull android.graphics.Insets);
+    method @NonNull public android.view.WindowInsets.Builder setSystemGestureInsets(@NonNull android.graphics.Insets);
     method @NonNull public android.view.WindowInsets.Builder setSystemWindowInsets(@NonNull android.graphics.Insets);
   }
 
@@ -53557,6 +53563,7 @@ package android.view.inspector {
     method public int mapIntFlag(@NonNull String, @AttrRes int, @NonNull android.view.inspector.IntFlagMapping);
     method public int mapLong(@NonNull String, @AttrRes int);
     method public int mapObject(@NonNull String, @AttrRes int);
+    method public int mapResourceId(@NonNull String, @AttrRes int);
     method public int mapShort(@NonNull String, @AttrRes int);
   }
 
@@ -53579,6 +53586,7 @@ package android.view.inspector {
     method public void readIntFlag(int, int);
     method public void readLong(int, long);
     method public void readObject(int, @Nullable Object);
+    method public void readResourceId(int, @AnyRes int);
     method public void readShort(int, short);
   }
 
@@ -56237,7 +56245,7 @@ package android.widget {
     field public static final int SOURCE_BOUND_MAX_VISIBLE = 1; // 0x1
   }
 
-  public static class Magnifier.Builder {
+  public static final class Magnifier.Builder {
     ctor public Magnifier.Builder(@NonNull android.view.View);
     method @NonNull public android.widget.Magnifier build();
     method @NonNull public android.widget.Magnifier.Builder setClippingEnabled(boolean);
@@ -56786,7 +56794,7 @@ package android.widget {
     method public boolean isFillViewport();
     method public boolean isSmoothScrollingEnabled();
     method public boolean pageScroll(int);
-    method public void scrollToDescendant(android.view.View);
+    method public void scrollToDescendant(@NonNull android.view.View);
     method public void setBottomEdgeEffectColor(@ColorInt int);
     method public void setEdgeEffectColor(@ColorInt int);
     method public void setFillViewport(boolean);
