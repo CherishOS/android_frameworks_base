@@ -30623,6 +30623,41 @@ package android.net.wifi.p2p.nsd {
 
 package android.net.wifi.rtt {
 
+  public class CivicLocationKeys {
+    field public static final int ADDITIONAL_CODE = 32; // 0x20
+    field public static final int APT = 26; // 0x1a
+    field public static final int BOROUGH = 4; // 0x4
+    field public static final int BRANCH_ROAD_NAME = 36; // 0x24
+    field public static final int BUILDING = 25; // 0x19
+    field public static final int CITY = 3; // 0x3
+    field public static final int COUNTY = 2; // 0x2
+    field public static final int DESK = 33; // 0x21
+    field public static final int FLOOR = 27; // 0x1b
+    field public static final int GROUP_OF_STREETS = 6; // 0x6
+    field public static final int HNO = 19; // 0x13
+    field public static final int HNS = 20; // 0x14
+    field public static final int LANGUAGE = 0; // 0x0
+    field public static final int LMK = 21; // 0x15
+    field public static final int LOC = 22; // 0x16
+    field public static final int NAM = 23; // 0x17
+    field public static final int NEIGHBORHOOD = 5; // 0x5
+    field public static final int PCN = 30; // 0x1e
+    field public static final int POD = 17; // 0x11
+    field public static final int POSTAL_CODE = 24; // 0x18
+    field public static final int PO_BOX = 31; // 0x1f
+    field public static final int PRD = 16; // 0x10
+    field public static final int PRIMARY_ROAD_NAME = 34; // 0x22
+    field public static final int ROAD_SECTION = 35; // 0x23
+    field public static final int ROOM = 28; // 0x1c
+    field public static final int SCRIPT = 128; // 0x80
+    field public static final int STATE = 1; // 0x1
+    field public static final int STREET_NAME_POST_MODIFIER = 39; // 0x27
+    field public static final int STREET_NAME_PRE_MODIFIER = 38; // 0x26
+    field public static final int STS = 18; // 0x12
+    field public static final int SUBBRANCH_ROAD_NAME = 37; // 0x25
+    field public static final int TYPE_OF_PLACE = 29; // 0x1d
+  }
+
   public final class RangingRequest implements android.os.Parcelable {
     method public int describeContents();
     method public static int getMaxPeers();
@@ -30648,9 +30683,9 @@ package android.net.wifi.rtt {
     method public int getNumSuccessfulMeasurements();
     method @Nullable public android.net.wifi.aware.PeerHandle getPeerHandle();
     method public long getRangingTimestampMillis();
-    method @Nullable public android.net.wifi.rtt.ResponderLocation getResponderLocation();
     method public int getRssi();
     method public int getStatus();
+    method @Nullable public android.net.wifi.rtt.ResponderLocation getUnverifiedResponderLocation();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.wifi.rtt.RangingResult> CREATOR;
     field public static final int STATUS_FAIL = 1; // 0x1
@@ -30673,19 +30708,25 @@ package android.net.wifi.rtt {
     method public double getAltitudeUncertainty();
     method public java.util.List<android.net.MacAddress> getColocatedBssids();
     method public int getDatum();
+    method public boolean getDependentStationIndication();
     method public int getExpectedToMove();
+    method public double getFloorNumber();
+    method public double getHeightAboveFloorMeters();
+    method public double getHeightAboveFloorUncertaintyMeters();
     method public double getLatitude();
     method public double getLatitudeUncertainty();
-    method public int getLciFlags();
+    method public int getLciVersion();
     method public double getLongitude();
     method public double getLongitudeUncertainty();
-    method public int getMapImageType();
-    method @Nullable public java.net.URL getMapImageUrl();
-    method public double getStaFloorNumber();
-    method public double getStaHeightAboveFloorMeters();
-    method public double getStaHeightAboveFloorUncertaintyMeters();
+    method @Nullable public String getMapImageMimeType();
+    method @Nullable public android.net.Uri getMapImageUri();
+    method public boolean getRegisteredLocationAgreementIndication();
+    method public boolean getRegisteredLocationDseIndication();
     method public boolean isLciSubelementValid();
-    method public boolean isZsubelementValid();
+    method public boolean isZaxisSubelementValid();
+    method @Nullable public android.location.Address toCivicLocationAddress();
+    method @Nullable public android.util.SparseArray toCivicLocationSparseArray();
+    method @NonNull public android.location.Location toLocation();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int ALTITUDE_FLOORS = 2; // 0x2
     field public static final int ALTITUDE_METERS = 1; // 0x1
@@ -30695,33 +30736,11 @@ package android.net.wifi.rtt {
     field public static final int DATUM_NAD83_NAV88 = 2; // 0x2
     field public static final int DATUM_UNDEFINED = 0; // 0x0
     field public static final int DATUM_WGS84 = 1; // 0x1
-    field public static final int LCI_FLAGS_MASK_DEPENDENT_STA = 4; // 0x4
-    field public static final int LCI_FLAGS_MASK_REGLOC_AGREEMENT = 16; // 0x10
-    field public static final int LCI_FLAGS_MASK_REGLOC_DSE = 8; // 0x8
-    field public static final int LCI_FLAGS_MASK_VERSION = 3; // 0x3
     field public static final int LCI_VERSION_1 = 1; // 0x1
     field public static final int LOCATION_FIXED = 0; // 0x0
     field public static final int LOCATION_MOVEMENT_UNKNOWN = 2; // 0x2
     field public static final int LOCATION_RESERVED = 3; // 0x3
     field public static final int LOCATION_VARIABLE = 1; // 0x1
-    field public static final int MAP_TYPE_BMP = 12; // 0xc
-    field public static final int MAP_TYPE_CAD = 8; // 0x8
-    field public static final int MAP_TYPE_DWF = 7; // 0x7
-    field public static final int MAP_TYPE_DWG = 6; // 0x6
-    field public static final int MAP_TYPE_DXF = 5; // 0x5
-    field public static final int MAP_TYPE_GIF = 2; // 0x2
-    field public static final int MAP_TYPE_GML = 10; // 0xa
-    field public static final int MAP_TYPE_ICO = 17; // 0x11
-    field public static final int MAP_TYPE_JPG = 3; // 0x3
-    field public static final int MAP_TYPE_KML = 11; // 0xb
-    field public static final int MAP_TYPE_PGM = 13; // 0xd
-    field public static final int MAP_TYPE_PNG = 1; // 0x1
-    field public static final int MAP_TYPE_PPM = 14; // 0xe
-    field public static final int MAP_TYPE_SVG = 4; // 0x4
-    field public static final int MAP_TYPE_TIFF = 9; // 0x9
-    field public static final int MAP_TYPE_URL_DEFINED = 0; // 0x0
-    field public static final int MAP_TYPE_XBM = 15; // 0xf
-    field public static final int MAP_TYPE_XPM = 16; // 0x10
   }
 
   public class WifiRttManager {
