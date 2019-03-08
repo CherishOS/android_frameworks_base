@@ -14459,7 +14459,7 @@ package android.graphics {
     method public android.graphics.Paint.Style getStyle();
     method public android.graphics.Paint.Align getTextAlign();
     method public void getTextBounds(String, int, int, android.graphics.Rect);
-    method public void getTextBounds(CharSequence, int, int, android.graphics.Rect);
+    method public void getTextBounds(@NonNull CharSequence, int, int, @NonNull android.graphics.Rect);
     method public void getTextBounds(char[], int, int, android.graphics.Rect);
     method @NonNull public java.util.Locale getTextLocale();
     method @NonNull @Size(min=1) public android.os.LocaleList getTextLocales();
@@ -14478,7 +14478,7 @@ package android.graphics {
     method public android.graphics.Typeface getTypeface();
     method @Px public float getUnderlinePosition();
     method @Px public float getUnderlineThickness();
-    method public float getWordSpacing();
+    method @Px public float getWordSpacing();
     method @Deprecated public android.graphics.Xfermode getXfermode();
     method public boolean hasGlyph(String);
     method public final boolean isAntiAlias();
@@ -14534,7 +14534,7 @@ package android.graphics {
     method public void setTextSkewX(float);
     method public android.graphics.Typeface setTypeface(android.graphics.Typeface);
     method public void setUnderlineText(boolean);
-    method public void setWordSpacing(float);
+    method public void setWordSpacing(@Px float);
     method @Deprecated public android.graphics.Xfermode setXfermode(android.graphics.Xfermode);
     field public static final int ANTI_ALIAS_FLAG = 1; // 0x1
     field public static final int CURSOR_AFTER = 0; // 0x0
@@ -15114,13 +15114,13 @@ package android.graphics {
     method public android.graphics.Typeface.Builder setWeight(@IntRange(from=1, to=1000) int);
   }
 
-  public static class Typeface.CustomFallbackBuilder {
+  public static final class Typeface.CustomFallbackBuilder {
     ctor public Typeface.CustomFallbackBuilder(@NonNull android.graphics.fonts.FontFamily);
-    method public android.graphics.Typeface.CustomFallbackBuilder addCustomFallback(@NonNull android.graphics.fonts.FontFamily);
-    method public android.graphics.Typeface build();
+    method @NonNull public android.graphics.Typeface.CustomFallbackBuilder addCustomFallback(@NonNull android.graphics.fonts.FontFamily);
+    method @NonNull public android.graphics.Typeface build();
     method @IntRange(from=64) public static int getMaxCustomFallbackCount();
-    method public android.graphics.Typeface.CustomFallbackBuilder setStyle(@NonNull android.graphics.fonts.FontStyle);
-    method public android.graphics.Typeface.CustomFallbackBuilder setSystemFallback(@NonNull String);
+    method @NonNull public android.graphics.Typeface.CustomFallbackBuilder setStyle(@NonNull android.graphics.fonts.FontStyle);
+    method @NonNull public android.graphics.Typeface.CustomFallbackBuilder setSystemFallback(@NonNull String);
   }
 
   public class Xfermode {
@@ -15774,15 +15774,15 @@ package android.graphics.fonts {
     method @NonNull public java.nio.ByteBuffer getBuffer();
     method @Nullable public java.io.File getFile();
     method @NonNull public android.os.LocaleList getLocaleList();
-    method public android.graphics.fonts.FontStyle getStyle();
+    method @NonNull public android.graphics.fonts.FontStyle getStyle();
     method @IntRange(from=0) public int getTtcIndex();
   }
 
-  public static class Font.Builder {
+  public static final class Font.Builder {
     ctor public Font.Builder(@NonNull java.nio.ByteBuffer);
     ctor public Font.Builder(@NonNull java.io.File);
-    ctor public Font.Builder(@NonNull java.io.FileDescriptor);
-    ctor public Font.Builder(@NonNull java.io.FileDescriptor, @IntRange(from=0) long, @IntRange(from=0xffffffff) long);
+    ctor public Font.Builder(@NonNull android.os.ParcelFileDescriptor);
+    ctor public Font.Builder(@NonNull android.os.ParcelFileDescriptor, @IntRange(from=0) long, @IntRange(from=0xffffffff) long);
     ctor public Font.Builder(@NonNull android.content.res.AssetManager, @NonNull String);
     ctor public Font.Builder(@NonNull android.content.res.Resources, int);
     method @Nullable public android.graphics.fonts.Font build() throws java.io.IOException;
@@ -15794,11 +15794,11 @@ package android.graphics.fonts {
   }
 
   public final class FontFamily {
-    method public android.graphics.fonts.Font getFont(@IntRange(from=0) int);
-    method public int getSize();
+    method @NonNull public android.graphics.fonts.Font getFont(@IntRange(from=0) int);
+    method @IntRange(from=1) public int getSize();
   }
 
-  public static class FontFamily.Builder {
+  public static final class FontFamily.Builder {
     ctor public FontFamily.Builder(@NonNull android.graphics.fonts.Font);
     method @NonNull public android.graphics.fonts.FontFamily.Builder addFont(@NonNull android.graphics.fonts.Font);
     method @NonNull public android.graphics.fonts.FontFamily build();
@@ -15890,7 +15890,7 @@ package android.graphics.pdf {
 package android.graphics.text {
 
   public class LineBreaker {
-    method public android.graphics.text.LineBreaker.Result computeLineBreaks(@NonNull android.graphics.text.MeasuredText, @NonNull android.graphics.text.LineBreaker.ParagraphConstraints, @IntRange(from=0) int);
+    method @NonNull public android.graphics.text.LineBreaker.Result computeLineBreaks(@NonNull android.graphics.text.MeasuredText, @NonNull android.graphics.text.LineBreaker.ParagraphConstraints, @IntRange(from=0) int);
     field public static final int BREAK_STRATEGY_BALANCED = 2; // 0x2
     field public static final int BREAK_STRATEGY_HIGH_QUALITY = 1; // 0x1
     field public static final int BREAK_STRATEGY_SIMPLE = 0; // 0x0
@@ -15901,13 +15901,13 @@ package android.graphics.text {
     field public static final int JUSTIFICATION_MODE_NONE = 0; // 0x0
   }
 
-  public static class LineBreaker.Builder {
+  public static final class LineBreaker.Builder {
     ctor public LineBreaker.Builder();
-    method public android.graphics.text.LineBreaker build();
-    method public android.graphics.text.LineBreaker.Builder setBreakStrategy(int);
-    method public android.graphics.text.LineBreaker.Builder setHyphenationFrequency(int);
-    method public android.graphics.text.LineBreaker.Builder setIndents(@Nullable int[]);
-    method public android.graphics.text.LineBreaker.Builder setJustified(int);
+    method @NonNull public android.graphics.text.LineBreaker build();
+    method @NonNull public android.graphics.text.LineBreaker.Builder setBreakStrategy(int);
+    method @NonNull public android.graphics.text.LineBreaker.Builder setHyphenationFrequency(int);
+    method @NonNull public android.graphics.text.LineBreaker.Builder setIndents(@Nullable int[]);
+    method @NonNull public android.graphics.text.LineBreaker.Builder setJustificationMode(int);
   }
 
   public static class LineBreaker.ParagraphConstraints {
@@ -15939,14 +15939,14 @@ package android.graphics.text {
     method @FloatRange(from=0.0) @Px public float getWidth(@IntRange(from=0) int, @IntRange(from=0) int);
   }
 
-  public static class MeasuredText.Builder {
+  public static final class MeasuredText.Builder {
     ctor public MeasuredText.Builder(@NonNull char[]);
     ctor public MeasuredText.Builder(@NonNull android.graphics.text.MeasuredText);
-    method public android.graphics.text.MeasuredText.Builder appendReplacementRun(@NonNull android.graphics.Paint, @IntRange(from=0) int, @FloatRange(from=0) float);
-    method public android.graphics.text.MeasuredText.Builder appendStyleRun(@NonNull android.graphics.Paint, @IntRange(from=0) int, boolean);
-    method public android.graphics.text.MeasuredText build();
-    method public android.graphics.text.MeasuredText.Builder setComputeHyphenation(boolean);
-    method public android.graphics.text.MeasuredText.Builder setComputeLayout(boolean);
+    method @NonNull public android.graphics.text.MeasuredText.Builder appendReplacementRun(@NonNull android.graphics.Paint, @IntRange(from=0) int, @Px @FloatRange(from=0) float);
+    method @NonNull public android.graphics.text.MeasuredText.Builder appendStyleRun(@NonNull android.graphics.Paint, @IntRange(from=0) int, boolean);
+    method @NonNull public android.graphics.text.MeasuredText build();
+    method @NonNull public android.graphics.text.MeasuredText.Builder setComputeHyphenation(boolean);
+    method @NonNull public android.graphics.text.MeasuredText.Builder setComputeLayout(boolean);
   }
 
 }
