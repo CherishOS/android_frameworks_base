@@ -6752,7 +6752,8 @@ package android.app.admin {
     method public void setDelegatedScopes(@NonNull android.content.ComponentName, @NonNull String, @NonNull java.util.List<java.lang.String>);
     method public void setDeviceOwnerLockScreenInfo(@NonNull android.content.ComponentName, CharSequence);
     method public void setEndUserSessionMessage(@NonNull android.content.ComponentName, @Nullable CharSequence);
-    method public int setGlobalPrivateDns(@NonNull android.content.ComponentName, int, @Nullable String);
+    method public int setGlobalPrivateDnsModeOpportunistic(@NonNull android.content.ComponentName);
+    method @WorkerThread public int setGlobalPrivateDnsModeSpecifiedHost(@NonNull android.content.ComponentName, @NonNull String);
     method public void setGlobalSetting(@NonNull android.content.ComponentName, String, String);
     method public void setKeepUninstalledPackages(@Nullable android.content.ComponentName, @NonNull java.util.List<java.lang.String>);
     method public boolean setKeyPairCertificate(@Nullable android.content.ComponentName, @NonNull String, @NonNull java.util.List<java.security.cert.Certificate>, boolean);
@@ -7731,6 +7732,7 @@ package android.app.usage {
     field public static final int ACTIVITY_STOPPED = 23; // 0x17
     field public static final int CONFIGURATION_CHANGE = 5; // 0x5
     field public static final int DEVICE_SHUTDOWN = 26; // 0x1a
+    field public static final int DEVICE_STARTUP = 27; // 0x1b
     field public static final int FOREGROUND_SERVICE_START = 19; // 0x13
     field public static final int FOREGROUND_SERVICE_STOP = 20; // 0x14
     field public static final int KEYGUARD_HIDDEN = 18; // 0x12
@@ -14248,7 +14250,7 @@ package android.graphics {
     method @NonNull public static android.graphics.Insets subtract(@NonNull android.graphics.Insets, @NonNull android.graphics.Insets);
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.graphics.Insets> CREATOR;
-    field public static final android.graphics.Insets NONE;
+    field @NonNull public static final android.graphics.Insets NONE;
     field public final int bottom;
     field public final int left;
     field public final int right;
@@ -30187,7 +30189,7 @@ package android.net.wifi.aware {
   }
 
   public final class ParcelablePeerHandle extends android.net.wifi.aware.PeerHandle implements android.os.Parcelable {
-    ctor public ParcelablePeerHandle(android.net.wifi.aware.PeerHandle);
+    ctor public ParcelablePeerHandle(@NonNull android.net.wifi.aware.PeerHandle);
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.wifi.aware.ParcelablePeerHandle> CREATOR;
@@ -30255,16 +30257,6 @@ package android.net.wifi.aware {
     field public static final int WIFI_AWARE_DATA_PATH_ROLE_RESPONDER = 1; // 0x1
   }
 
-  public static final class WifiAwareManager.NetworkSpecifierBuilder {
-    ctor public WifiAwareManager.NetworkSpecifierBuilder();
-    method @NonNull public android.net.NetworkSpecifier build();
-    method @NonNull public android.net.wifi.aware.WifiAwareManager.NetworkSpecifierBuilder setDiscoverySession(@NonNull android.net.wifi.aware.DiscoverySession);
-    method @NonNull public android.net.wifi.aware.WifiAwareManager.NetworkSpecifierBuilder setPeerHandle(@NonNull android.net.wifi.aware.PeerHandle);
-    method @NonNull public android.net.wifi.aware.WifiAwareManager.NetworkSpecifierBuilder setPort(int);
-    method @NonNull public android.net.wifi.aware.WifiAwareManager.NetworkSpecifierBuilder setPskPassphrase(@NonNull String);
-    method @NonNull public android.net.wifi.aware.WifiAwareManager.NetworkSpecifierBuilder setTransportProtocol(int);
-  }
-
   public final class WifiAwareNetworkInfo implements android.os.Parcelable android.net.TransportInfo {
     method public int describeContents();
     method @Nullable public java.net.Inet6Address getPeerIpv6Addr();
@@ -30272,6 +30264,22 @@ package android.net.wifi.aware {
     method public int getTransportProtocol();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.wifi.aware.WifiAwareNetworkInfo> CREATOR;
+  }
+
+  public final class WifiAwareNetworkSpecifier extends android.net.NetworkSpecifier implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.net.wifi.aware.WifiAwareNetworkSpecifier> CREATOR;
+  }
+
+  public static final class WifiAwareNetworkSpecifier.Builder {
+    ctor public WifiAwareNetworkSpecifier.Builder();
+    method @NonNull public android.net.wifi.aware.WifiAwareNetworkSpecifier build();
+    method @NonNull public android.net.wifi.aware.WifiAwareNetworkSpecifier.Builder setDiscoverySession(@NonNull android.net.wifi.aware.DiscoverySession);
+    method @NonNull public android.net.wifi.aware.WifiAwareNetworkSpecifier.Builder setPeerHandle(@NonNull android.net.wifi.aware.PeerHandle);
+    method @NonNull public android.net.wifi.aware.WifiAwareNetworkSpecifier.Builder setPort(int);
+    method @NonNull public android.net.wifi.aware.WifiAwareNetworkSpecifier.Builder setPskPassphrase(@NonNull String);
+    method @NonNull public android.net.wifi.aware.WifiAwareNetworkSpecifier.Builder setTransportProtocol(int);
   }
 
   public class WifiAwareSession implements java.lang.AutoCloseable {
@@ -43968,7 +43976,6 @@ package android.telecom {
     field public static final String EXTRA_INCOMING_CALL_EXTRAS = "android.telecom.extra.INCOMING_CALL_EXTRAS";
     field public static final String EXTRA_INCOMING_VIDEO_STATE = "android.telecom.extra.INCOMING_VIDEO_STATE";
     field public static final String EXTRA_IS_DEFAULT_CALL_SCREENING_APP = "android.telecom.extra.IS_DEFAULT_CALL_SCREENING_APP";
-    field public static final String EXTRA_IS_ENABLED = "android.telecom.extra.IS_ENABLED";
     field public static final String EXTRA_NOTIFICATION_COUNT = "android.telecom.extra.NOTIFICATION_COUNT";
     field public static final String EXTRA_NOTIFICATION_PHONE_NUMBER = "android.telecom.extra.NOTIFICATION_PHONE_NUMBER";
     field public static final String EXTRA_OUTGOING_CALL_EXTRAS = "android.telecom.extra.OUTGOING_CALL_EXTRAS";
@@ -45078,14 +45085,14 @@ package android.telephony {
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @WorkerThread public android.os.PersistableBundle getCarrierConfig();
     method public int getCarrierIdFromSimMccMnc();
     method @Deprecated @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public android.telephony.CellLocation getCellLocation();
-    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @Nullable public java.util.Map<java.lang.Integer,java.util.List<android.telephony.emergency.EmergencyNumber>> getCurrentEmergencyNumberList();
-    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @Nullable public java.util.Map<java.lang.Integer,java.util.List<android.telephony.emergency.EmergencyNumber>> getCurrentEmergencyNumberList(int);
     method public int getDataActivity();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public int getDataNetworkType();
     method public int getDataState();
     method @Deprecated @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public String getDeviceId();
     method @Deprecated @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public String getDeviceId(int);
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getDeviceSoftwareVersion();
+    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @NonNull public java.util.Map<java.lang.Integer,java.util.List<android.telephony.emergency.EmergencyNumber>> getEmergencyNumberList();
+    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @NonNull public java.util.Map<java.lang.Integer,java.util.List<android.telephony.emergency.EmergencyNumber>> getEmergencyNumberList(int);
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String[] getForbiddenPlmns();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getGroupIdLevel1();
     method public String getIccAuthentication(int, int, String);
@@ -45137,9 +45144,9 @@ package android.telephony {
     method public String iccTransmitApduBasicChannel(int, int, int, int, int, String);
     method public String iccTransmitApduLogicalChannel(int, int, int, int, int, int, String);
     method public boolean isConcurrentVoiceAndDataSupported();
-    method public boolean isCurrentEmergencyNumber(@NonNull String);
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.MODIFY_PHONE_STATE}) public boolean isDataEnabled();
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.READ_PHONE_STATE}) public boolean isDataRoamingEnabled();
+    method public boolean isEmergencyNumber(@NonNull String);
     method public boolean isHearingAidCompatibilitySupported();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public boolean isMultisimSupported();
     method public boolean isNetworkRoaming();
@@ -45459,15 +45466,13 @@ package android.telephony.emergency {
   public final class EmergencyNumber implements java.lang.Comparable<android.telephony.emergency.EmergencyNumber> android.os.Parcelable {
     method public int compareTo(@NonNull android.telephony.emergency.EmergencyNumber);
     method public int describeContents();
-    method public String getCountryIso();
+    method @NonNull public String getCountryIso();
     method public int getEmergencyCallRouting();
-    method public int getEmergencyNumberSourceBitmask();
-    method public java.util.List<java.lang.Integer> getEmergencyNumberSources();
-    method public java.util.List<java.lang.Integer> getEmergencyServiceCategories();
-    method public int getEmergencyServiceCategoryBitmask();
+    method @NonNull public java.util.List<java.lang.Integer> getEmergencyNumberSources();
+    method @NonNull public java.util.List<java.lang.Integer> getEmergencyServiceCategories();
     method @NonNull public java.util.List<java.lang.String> getEmergencyUrns();
-    method public String getMnc();
-    method public String getNumber();
+    method @NonNull public String getMnc();
+    method @NonNull public String getNumber();
     method public boolean isFromSources(int);
     method public boolean isInEmergencyServiceCategories(int);
     method public void writeToParcel(android.os.Parcel, int);
@@ -50838,8 +50843,8 @@ package android.view {
     method public final boolean startDragAndDrop(android.content.ClipData, android.view.View.DragShadowBuilder, Object, int);
     method public boolean startNestedScroll(int);
     method public void stopNestedScroll();
-    method public void transformMatrixToGlobal(android.graphics.Matrix);
-    method public void transformMatrixToLocal(android.graphics.Matrix);
+    method public void transformMatrixToGlobal(@NonNull android.graphics.Matrix);
+    method public void transformMatrixToLocal(@NonNull android.graphics.Matrix);
     method public void unscheduleDrawable(@NonNull android.graphics.drawable.Drawable, @NonNull Runnable);
     method public void unscheduleDrawable(android.graphics.drawable.Drawable);
     method public final void updateDragShadow(android.view.View.DragShadowBuilder);
@@ -53459,11 +53464,6 @@ package android.view.inputmethod {
 
 package android.view.inspector {
 
-  public class GeneratedInspectionCompanionProvider implements android.view.inspector.InspectionCompanionProvider {
-    ctor public GeneratedInspectionCompanionProvider();
-    method @Nullable public <T> android.view.inspector.InspectionCompanion<T> provide(@NonNull Class<T>);
-  }
-
   public interface InspectionCompanion<T> {
     method @Nullable public default String getNodeName();
     method public void mapProperties(@NonNull android.view.inspector.PropertyMapper);
@@ -53544,6 +53544,11 @@ package android.view.inspector {
     ctor public PropertyReader.PropertyTypeMismatchException(int, @NonNull String, @NonNull String);
   }
 
+  public class StaticInspectionCompanionProvider implements android.view.inspector.InspectionCompanionProvider {
+    ctor public StaticInspectionCompanionProvider();
+    method @Nullable public <T> android.view.inspector.InspectionCompanion<T> provide(@NonNull Class<T>);
+  }
+
   public final class WindowInspector {
     method @NonNull public static java.util.List<android.view.View> getGlobalWindowViews();
   }
@@ -53615,7 +53620,6 @@ package android.view.textclassifier {
     method public int describeContents();
     method @Nullable public String getCallingPackageName();
     method @NonNull public java.util.List<android.view.textclassifier.ConversationActions.Message> getConversation();
-    method @Nullable public String getConversationId();
     method @Nullable public java.util.List<java.lang.String> getHints();
     method @IntRange(from=0xffffffff) public int getMaxSuggestions();
     method @NonNull public android.view.textclassifier.TextClassifier.EntityConfig getTypeConfig();
@@ -53628,7 +53632,6 @@ package android.view.textclassifier {
   public static final class ConversationActions.Request.Builder {
     ctor public ConversationActions.Request.Builder(@NonNull java.util.List<android.view.textclassifier.ConversationActions.Message>);
     method @NonNull public android.view.textclassifier.ConversationActions.Request build();
-    method @NonNull public android.view.textclassifier.ConversationActions.Request.Builder setConversationId(@Nullable String);
     method @NonNull public android.view.textclassifier.ConversationActions.Request.Builder setHints(@Nullable java.util.List<java.lang.String>);
     method @NonNull public android.view.textclassifier.ConversationActions.Request.Builder setMaxSuggestions(@IntRange(from=0xffffffff) int);
     method @NonNull public android.view.textclassifier.ConversationActions.Request.Builder setTypeConfig(@Nullable android.view.textclassifier.TextClassifier.EntityConfig);
@@ -56265,7 +56268,7 @@ package android.widget {
     method public String[] getDisplayedValues();
     method public int getMaxValue();
     method public int getMinValue();
-    method public int getSelectionDividerHeight();
+    method @Px public int getSelectionDividerHeight();
     method @ColorInt public int getTextColor();
     method @FloatRange(from=0.0, fromInclusive=false) public float getTextSize();
     method public int getValue();
