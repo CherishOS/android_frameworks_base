@@ -14431,6 +14431,7 @@ package android.graphics {
     method @ColorInt public int getColor();
     method public android.graphics.ColorFilter getColorFilter();
     method @ColorLong public long getColorLong();
+    method public int getEndHyphenEdit();
     method public boolean getFillPath(android.graphics.Path, android.graphics.Path);
     method public int getFlags();
     method public String getFontFeatureSettings();
@@ -14441,7 +14442,6 @@ package android.graphics {
     method public float getFontSpacing();
     method public String getFontVariationSettings();
     method public int getHinting();
-    method public int getHyphenEdit();
     method public float getLetterSpacing();
     method public android.graphics.MaskFilter getMaskFilter();
     method public int getOffsetForAdvance(char[], int, int, int, int, boolean, float);
@@ -14455,6 +14455,7 @@ package android.graphics {
     method public float getShadowLayerDx();
     method public float getShadowLayerDy();
     method public float getShadowLayerRadius();
+    method public int getStartHyphenEdit();
     method @Px public float getStrikeThruPosition();
     method @Px public float getStrikeThruThickness();
     method public android.graphics.Paint.Cap getStrokeCap();
@@ -14510,13 +14511,13 @@ package android.graphics {
     method public android.graphics.ColorFilter setColorFilter(android.graphics.ColorFilter);
     method public void setDither(boolean);
     method public void setElegantTextHeight(boolean);
+    method public void setEndHyphenEdit(int);
     method public void setFakeBoldText(boolean);
     method public void setFilterBitmap(boolean);
     method public void setFlags(int);
     method public void setFontFeatureSettings(String);
     method public boolean setFontVariationSettings(String);
     method public void setHinting(int);
-    method public void setHyphenEdit(int);
     method public void setLetterSpacing(float);
     method public void setLinearText(boolean);
     method public android.graphics.MaskFilter setMaskFilter(android.graphics.MaskFilter);
@@ -14524,6 +14525,7 @@ package android.graphics {
     method public android.graphics.Shader setShader(android.graphics.Shader);
     method public void setShadowLayer(float, float, float, @ColorInt int);
     method public void setShadowLayer(float, float, float, @ColorLong long);
+    method public void setStartHyphenEdit(int);
     method public void setStrikeThruText(boolean);
     method public void setStrokeCap(android.graphics.Paint.Cap);
     method public void setStrokeJoin(android.graphics.Paint.Join);
@@ -14550,11 +14552,21 @@ package android.graphics {
     field public static final int DEV_KERN_TEXT_FLAG = 256; // 0x100
     field public static final int DITHER_FLAG = 4; // 0x4
     field public static final int EMBEDDED_BITMAP_TEXT_FLAG = 1024; // 0x400
+    field public static final int END_HYPHEN_EDIT_INSERT_ARMENIAN_HYPHEN = 3; // 0x3
+    field public static final int END_HYPHEN_EDIT_INSERT_HYPHEN = 2; // 0x2
+    field public static final int END_HYPHEN_EDIT_INSERT_MAQAF = 4; // 0x4
+    field public static final int END_HYPHEN_EDIT_INSERT_UCAS_HYPHEN = 5; // 0x5
+    field public static final int END_HYPHEN_EDIT_INSERT_ZWJ_AND_HYPHEN = 6; // 0x6
+    field public static final int END_HYPHEN_EDIT_NO_EDIT = 0; // 0x0
+    field public static final int END_HYPHEN_EDIT_REPLACE_WITH_HYPHEN = 1; // 0x1
     field public static final int FAKE_BOLD_TEXT_FLAG = 32; // 0x20
     field public static final int FILTER_BITMAP_FLAG = 2; // 0x2
     field public static final int HINTING_OFF = 0; // 0x0
     field public static final int HINTING_ON = 1; // 0x1
     field public static final int LINEAR_TEXT_FLAG = 64; // 0x40
+    field public static final int START_HYPHEN_EDIT_INSERT_HYPHEN = 1; // 0x1
+    field public static final int START_HYPHEN_EDIT_INSERT_ZWJ = 2; // 0x2
+    field public static final int START_HYPHEN_EDIT_NO_EDIT = 0; // 0x0
     field public static final int STRIKE_THRU_TEXT_FLAG = 16; // 0x10
     field public static final int SUBPIXEL_TEXT_FLAG = 128; // 0x80
     field public static final int UNDERLINE_TEXT_FLAG = 8; // 0x8
@@ -15928,12 +15940,13 @@ package android.graphics.text {
   }
 
   public static class LineBreaker.Result {
+    method public int getEndLineHyphenEdit(int);
     method @Px public float getLineAscent(@IntRange(from=0) int);
     method @IntRange(from=0) public int getLineBreakOffset(@IntRange(from=0) int);
     method @IntRange(from=0) public int getLineCount();
     method @Px public float getLineDescent(@IntRange(from=0) int);
-    method public int getLineHyphenEdit(int);
     method @Px public float getLineWidth(@IntRange(from=0) int);
+    method public int getStartLineHyphenEdit(int);
     method public boolean hasLineTab(int);
   }
 
@@ -46002,22 +46015,6 @@ package android.text {
 
   public static interface Html.TagHandler {
     method public void handleTag(boolean, String, android.text.Editable, org.xml.sax.XMLReader);
-  }
-
-  public class Hyphenator {
-    method public static int packHyphenEdit(int, int);
-    method public static int unpackEndHyphenEdit(int);
-    method public static int unpackStartHyphenEdit(int);
-    field public static final int END_HYPHEN_EDIT_INSERT_ARMENIAN_HYPHEN = 3; // 0x3
-    field public static final int END_HYPHEN_EDIT_INSERT_HYPHEN = 2; // 0x2
-    field public static final int END_HYPHEN_EDIT_INSERT_MAQAF = 4; // 0x4
-    field public static final int END_HYPHEN_EDIT_INSERT_UCAS_HYPHEN = 5; // 0x5
-    field public static final int END_HYPHEN_EDIT_INSERT_ZWJ_AND_HYPHEN = 6; // 0x6
-    field public static final int END_HYPHEN_EDIT_NO_EDIT = 0; // 0x0
-    field public static final int END_HYPHEN_EDIT_REPLACE_WITH_HYPHEN = 1; // 0x1
-    field public static final int START_HYPHEN_EDIT_INSERT_HYPHEN = 1; // 0x1
-    field public static final int START_HYPHEN_EDIT_INSERT_ZWJ = 2; // 0x2
-    field public static final int START_HYPHEN_EDIT_NO_EDIT = 0; // 0x0
   }
 
   public interface InputFilter {
