@@ -7966,9 +7966,9 @@ package android.bluetooth {
     method public boolean isMultipleAdvertisementSupported();
     method public boolean isOffloadedFilteringSupported();
     method public boolean isOffloadedScanBatchingSupported();
-    method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public android.bluetooth.BluetoothServerSocket listenUsingInsecureL2capChannel() throws java.io.IOException;
+    method @RequiresPermission(android.Manifest.permission.BLUETOOTH) @NonNull public android.bluetooth.BluetoothServerSocket listenUsingInsecureL2capChannel() throws java.io.IOException;
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public android.bluetooth.BluetoothServerSocket listenUsingInsecureRfcommWithServiceRecord(String, java.util.UUID) throws java.io.IOException;
-    method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public android.bluetooth.BluetoothServerSocket listenUsingL2capChannel() throws java.io.IOException;
+    method @RequiresPermission(android.Manifest.permission.BLUETOOTH) @NonNull public android.bluetooth.BluetoothServerSocket listenUsingL2capChannel() throws java.io.IOException;
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public android.bluetooth.BluetoothServerSocket listenUsingRfcommWithServiceRecord(String, java.util.UUID) throws java.io.IOException;
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH_ADMIN) public boolean setName(String);
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH_ADMIN) public boolean startDiscovery();
@@ -8336,9 +8336,9 @@ package android.bluetooth {
     method public android.bluetooth.BluetoothGatt connectGatt(android.content.Context, boolean, android.bluetooth.BluetoothGattCallback, int, int);
     method public android.bluetooth.BluetoothGatt connectGatt(android.content.Context, boolean, android.bluetooth.BluetoothGattCallback, int, int, android.os.Handler);
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH_ADMIN) public boolean createBond();
-    method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public android.bluetooth.BluetoothSocket createInsecureL2capChannel(int) throws java.io.IOException;
+    method @RequiresPermission(android.Manifest.permission.BLUETOOTH) @NonNull public android.bluetooth.BluetoothSocket createInsecureL2capChannel(int) throws java.io.IOException;
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public android.bluetooth.BluetoothSocket createInsecureRfcommSocketToServiceRecord(java.util.UUID) throws java.io.IOException;
-    method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public android.bluetooth.BluetoothSocket createL2capChannel(int) throws java.io.IOException;
+    method @RequiresPermission(android.Manifest.permission.BLUETOOTH) @NonNull public android.bluetooth.BluetoothSocket createL2capChannel(int) throws java.io.IOException;
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public android.bluetooth.BluetoothSocket createRfcommSocketToServiceRecord(java.util.UUID) throws java.io.IOException;
     method public int describeContents();
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public boolean fetchUuidsWithSdp();
@@ -15802,7 +15802,7 @@ package android.graphics.fonts {
     ctor public Font.Builder(@NonNull android.os.ParcelFileDescriptor, @IntRange(from=0) long, @IntRange(from=0xffffffff) long);
     ctor public Font.Builder(@NonNull android.content.res.AssetManager, @NonNull String);
     ctor public Font.Builder(@NonNull android.content.res.Resources, int);
-    method @Nullable public android.graphics.fonts.Font build() throws java.io.IOException;
+    method @NonNull public android.graphics.fonts.Font build() throws java.io.IOException;
     method @NonNull public android.graphics.fonts.Font.Builder setFontVariationSettings(@Nullable String);
     method @NonNull public android.graphics.fonts.Font.Builder setFontVariationSettings(@Nullable android.graphics.fonts.FontVariationAxis[]);
     method @NonNull public android.graphics.fonts.Font.Builder setSlant(int);
@@ -15929,13 +15929,13 @@ package android.graphics.text {
 
   public static class LineBreaker.ParagraphConstraints {
     ctor public LineBreaker.ParagraphConstraints();
-    method @Px @IntRange(from=0) public int getDefaultTabStop();
+    method @Px @FloatRange(from=0) public float getDefaultTabStop();
     method @Px @FloatRange(from=0.0f) public float getFirstWidth();
     method @Px @IntRange(from=0) public int getFirstWidthLineCount();
-    method @Nullable public int[] getTabStops();
+    method @Nullable public float[] getTabStops();
     method @Px @FloatRange(from=0.0f) public float getWidth();
     method public void setIndent(@Px @FloatRange(from=0.0f) float, @Px @IntRange(from=0) int);
-    method public void setTabStops(@Nullable int[], @Px @IntRange(from=0) int);
+    method public void setTabStops(@Nullable float[], @Px @FloatRange(from=0) float);
     method public void setWidth(@Px @FloatRange(from=0.0f) float);
   }
 
@@ -24753,6 +24753,10 @@ package android.media {
 
   public final class MediaDrm implements java.lang.AutoCloseable {
     ctor public MediaDrm(@NonNull java.util.UUID) throws android.media.UnsupportedSchemeException;
+    method public void clearOnEventListener();
+    method public void clearOnExpirationUpdateListener();
+    method public void clearOnKeyStatusChangeListener();
+    method public void clearOnSessionLostStateListener();
     method public void close();
     method public void closeSession(@NonNull byte[]);
     method @android.media.MediaDrm.HdcpLevel public int getConnectedHdcpLevel();
@@ -24789,9 +24793,14 @@ package android.media {
     method public void removeSecureStop(@NonNull byte[]);
     method public void restoreKeys(@NonNull byte[], @NonNull byte[]);
     method public void setOnEventListener(@Nullable android.media.MediaDrm.OnEventListener);
+    method public void setOnEventListener(@Nullable android.media.MediaDrm.OnEventListener, @Nullable android.os.Handler);
+    method public void setOnEventListener(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaDrm.OnEventListener);
     method public void setOnExpirationUpdateListener(@Nullable android.media.MediaDrm.OnExpirationUpdateListener, @Nullable android.os.Handler);
+    method public void setOnExpirationUpdateListener(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaDrm.OnExpirationUpdateListener);
     method public void setOnKeyStatusChangeListener(@Nullable android.media.MediaDrm.OnKeyStatusChangeListener, @Nullable android.os.Handler);
+    method public void setOnKeyStatusChangeListener(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaDrm.OnKeyStatusChangeListener);
     method public void setOnSessionLostStateListener(@Nullable android.media.MediaDrm.OnSessionLostStateListener, @Nullable android.os.Handler);
+    method public void setOnSessionLostStateListener(@NonNull java.util.concurrent.Executor, @Nullable android.media.MediaDrm.OnSessionLostStateListener);
     method public void setPropertyByteArray(@NonNull String, @NonNull byte[]);
     method public void setPropertyString(@NonNull String, @NonNull String);
     field @Deprecated public static final int EVENT_KEY_EXPIRED = 3; // 0x3
@@ -26412,7 +26421,7 @@ package android.media {
   public final class Session2Token implements android.os.Parcelable {
     ctor public Session2Token(@NonNull android.content.Context, @NonNull android.content.ComponentName);
     method public int describeContents();
-    method @Nullable public android.os.Bundle getExtras();
+    method @NonNull public android.os.Bundle getExtras();
     method @NonNull public String getPackageName();
     method @Nullable public String getServiceName();
     method public int getType();
@@ -45455,26 +45464,26 @@ package android.telephony.data {
   public static class ApnSetting.Builder {
     ctor public ApnSetting.Builder();
     method public android.telephony.data.ApnSetting build();
-    method public android.telephony.data.ApnSetting.Builder setApnName(String);
-    method public android.telephony.data.ApnSetting.Builder setApnTypeBitmask(int);
-    method public android.telephony.data.ApnSetting.Builder setAuthType(int);
-    method public android.telephony.data.ApnSetting.Builder setCarrierEnabled(boolean);
+    method @NonNull public android.telephony.data.ApnSetting.Builder setApnName(String);
+    method @NonNull public android.telephony.data.ApnSetting.Builder setApnTypeBitmask(int);
+    method @NonNull public android.telephony.data.ApnSetting.Builder setAuthType(int);
+    method @NonNull public android.telephony.data.ApnSetting.Builder setCarrierEnabled(boolean);
     method @NonNull public android.telephony.data.ApnSetting.Builder setCarrierId(int);
-    method public android.telephony.data.ApnSetting.Builder setEntryName(String);
+    method @NonNull public android.telephony.data.ApnSetting.Builder setEntryName(String);
     method @Deprecated public android.telephony.data.ApnSetting.Builder setMmsProxyAddress(java.net.InetAddress);
-    method public android.telephony.data.ApnSetting.Builder setMmsProxyAddress(String);
-    method public android.telephony.data.ApnSetting.Builder setMmsProxyPort(int);
-    method public android.telephony.data.ApnSetting.Builder setMmsc(android.net.Uri);
-    method public android.telephony.data.ApnSetting.Builder setMvnoType(int);
-    method public android.telephony.data.ApnSetting.Builder setNetworkTypeBitmask(int);
-    method public android.telephony.data.ApnSetting.Builder setOperatorNumeric(String);
-    method public android.telephony.data.ApnSetting.Builder setPassword(String);
-    method public android.telephony.data.ApnSetting.Builder setProtocol(int);
+    method @NonNull public android.telephony.data.ApnSetting.Builder setMmsProxyAddress(String);
+    method @NonNull public android.telephony.data.ApnSetting.Builder setMmsProxyPort(int);
+    method @NonNull public android.telephony.data.ApnSetting.Builder setMmsc(android.net.Uri);
+    method @NonNull public android.telephony.data.ApnSetting.Builder setMvnoType(int);
+    method @NonNull public android.telephony.data.ApnSetting.Builder setNetworkTypeBitmask(int);
+    method @NonNull public android.telephony.data.ApnSetting.Builder setOperatorNumeric(String);
+    method @NonNull public android.telephony.data.ApnSetting.Builder setPassword(String);
+    method @NonNull public android.telephony.data.ApnSetting.Builder setProtocol(int);
     method @Deprecated public android.telephony.data.ApnSetting.Builder setProxyAddress(java.net.InetAddress);
-    method public android.telephony.data.ApnSetting.Builder setProxyAddress(String);
-    method public android.telephony.data.ApnSetting.Builder setProxyPort(int);
-    method public android.telephony.data.ApnSetting.Builder setRoamingProtocol(int);
-    method public android.telephony.data.ApnSetting.Builder setUser(String);
+    method @NonNull public android.telephony.data.ApnSetting.Builder setProxyAddress(String);
+    method @NonNull public android.telephony.data.ApnSetting.Builder setProxyPort(int);
+    method @NonNull public android.telephony.data.ApnSetting.Builder setRoamingProtocol(int);
+    method @NonNull public android.telephony.data.ApnSetting.Builder setUser(String);
   }
 
 }
@@ -50346,6 +50355,7 @@ package android.view {
     method @IdRes public int getAccessibilityTraversalBefore();
     method @android.view.ViewDebug.ExportedProperty(category="drawing") public float getAlpha();
     method public android.view.animation.Animation getAnimation();
+    method @Nullable public android.graphics.Matrix getAnimationMatrix();
     method public android.os.IBinder getApplicationWindowToken();
     method @NonNull public int[] getAttributeResolutionStack(@AttrRes int);
     method @NonNull public java.util.Map<java.lang.Integer,java.lang.Integer> getAttributeSourceResourceMap();
@@ -56385,10 +56395,10 @@ package android.widget {
     method public int getWindowLayoutType();
     method public boolean isAboveAnchor();
     method public boolean isAttachedInDecor();
-    method public boolean isClipToScreenEnabled();
+    method public boolean isClippedToScreen();
     method public boolean isClippingEnabled();
     method public boolean isFocusable();
-    method public boolean isLayoutInScreenEnabled();
+    method public boolean isLaidOutInScreen();
     method public boolean isOutsideTouchable();
     method public boolean isShowing();
     method public boolean isSplitTouchEnabled();
@@ -56397,7 +56407,6 @@ package android.widget {
     method public void setAnimationStyle(int);
     method public void setAttachedInDecor(boolean);
     method public void setBackgroundDrawable(android.graphics.drawable.Drawable);
-    method public void setClipToScreenEnabled(boolean);
     method public void setClippingEnabled(boolean);
     method public void setContentView(android.view.View);
     method public void setElevation(float);
@@ -56408,7 +56417,8 @@ package android.widget {
     method public void setHeight(int);
     method public void setIgnoreCheekPress();
     method public void setInputMethodMode(int);
-    method public void setLayoutInScreenEnabled(boolean);
+    method public void setIsClippedToScreen(boolean);
+    method public void setIsLaidOutInScreen(boolean);
     method public void setOnDismissListener(android.widget.PopupWindow.OnDismissListener);
     method public void setOutsideTouchable(boolean);
     method public void setOverlapAnchor(boolean);
