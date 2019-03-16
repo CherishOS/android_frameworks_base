@@ -4263,24 +4263,24 @@ package android.app {
   }
 
   public class AppOpsManager {
-    method @Deprecated public int checkOp(String, int, String);
-    method @Deprecated public int checkOpNoThrow(String, int, String);
-    method public void checkPackage(int, String);
-    method public void finishOp(String, int, String);
-    method public int noteOp(String, int, String);
-    method public int noteOpNoThrow(String, int, String);
-    method public int noteProxyOp(String, String);
-    method public int noteProxyOpNoThrow(String, String);
+    method @Deprecated public int checkOp(@NonNull String, int, @NonNull String);
+    method @Deprecated public int checkOpNoThrow(@NonNull String, int, @NonNull String);
+    method public void checkPackage(int, @NonNull String);
+    method public void finishOp(@NonNull String, int, @NonNull String);
+    method public int noteOp(@NonNull String, int, @NonNull String);
+    method public int noteOpNoThrow(@NonNull String, int, @NonNull String);
+    method public int noteProxyOp(@NonNull String, @NonNull String);
+    method public int noteProxyOpNoThrow(@NonNull String, @NonNull String);
     method public int noteProxyOpNoThrow(@NonNull String, @Nullable String, int);
     method public static String permissionToOp(String);
-    method public int startOp(String, int, String);
-    method public int startOpNoThrow(String, int, String);
-    method public void startWatchingMode(String, String, android.app.AppOpsManager.OnOpChangedListener);
-    method public void startWatchingMode(String, String, int, android.app.AppOpsManager.OnOpChangedListener);
-    method public void stopWatchingMode(android.app.AppOpsManager.OnOpChangedListener);
-    method public int unsafeCheckOp(String, int, String);
-    method public int unsafeCheckOpNoThrow(String, int, String);
-    method public int unsafeCheckOpRaw(@NonNull String, int, String);
+    method public int startOp(@NonNull String, int, @NonNull String);
+    method public int startOpNoThrow(@NonNull String, int, @NonNull String);
+    method public void startWatchingMode(@NonNull String, @Nullable String, @NonNull android.app.AppOpsManager.OnOpChangedListener);
+    method public void startWatchingMode(@NonNull String, @Nullable String, int, @NonNull android.app.AppOpsManager.OnOpChangedListener);
+    method public void stopWatchingMode(@NonNull android.app.AppOpsManager.OnOpChangedListener);
+    method public int unsafeCheckOp(@NonNull String, int, @NonNull String);
+    method public int unsafeCheckOpNoThrow(@NonNull String, int, @NonNull String);
+    method public int unsafeCheckOpRaw(@NonNull String, int, @NonNull String);
     method public int unsafeCheckOpRawNoThrow(@NonNull String, int, @NonNull String);
     field public static final int MODE_ALLOWED = 0; // 0x0
     field public static final int MODE_DEFAULT = 3; // 0x3
@@ -6641,7 +6641,7 @@ package android.app.admin {
     method @NonNull public java.util.List<java.lang.String> getDelegatedScopes(@Nullable android.content.ComponentName, @NonNull String);
     method public CharSequence getDeviceOwnerLockScreenInfo();
     method public CharSequence getEndUserSessionMessage(@NonNull android.content.ComponentName);
-    method public String getGlobalPrivateDnsHost(@NonNull android.content.ComponentName);
+    method @Nullable public String getGlobalPrivateDnsHost(@NonNull android.content.ComponentName);
     method public int getGlobalPrivateDnsMode(@NonNull android.content.ComponentName);
     method @NonNull public java.util.List<byte[]> getInstalledCaCerts(@Nullable android.content.ComponentName);
     method @Nullable public java.util.List<java.lang.String> getKeepUninstalledPackages(@Nullable android.content.ComponentName);
@@ -22693,10 +22693,9 @@ package android.location {
     method @Deprecated public double getCarrierPhase();
     method @Deprecated public double getCarrierPhaseUncertainty();
     method public double getCn0DbHz();
-    method public int getCodeType();
+    method @NonNull public String getCodeType();
     method public int getConstellationType();
     method public int getMultipathIndicator();
-    method @NonNull public String getOtherCodeTypeName();
     method public double getPseudorangeRateMetersPerSecond();
     method public double getPseudorangeRateUncertaintyMetersPerSecond();
     method public long getReceivedSvTimeNanos();
@@ -22719,22 +22718,6 @@ package android.location {
     field public static final int ADR_STATE_RESET = 2; // 0x2
     field public static final int ADR_STATE_UNKNOWN = 0; // 0x0
     field public static final int ADR_STATE_VALID = 1; // 0x1
-    field public static final int CODE_TYPE_A = 0; // 0x0
-    field public static final int CODE_TYPE_B = 1; // 0x1
-    field public static final int CODE_TYPE_C = 2; // 0x2
-    field public static final int CODE_TYPE_I = 3; // 0x3
-    field public static final int CODE_TYPE_L = 4; // 0x4
-    field public static final int CODE_TYPE_M = 5; // 0x5
-    field public static final int CODE_TYPE_N = 13; // 0xd
-    field public static final int CODE_TYPE_OTHER = 255; // 0xff
-    field public static final int CODE_TYPE_P = 6; // 0x6
-    field public static final int CODE_TYPE_Q = 7; // 0x7
-    field public static final int CODE_TYPE_S = 8; // 0x8
-    field public static final int CODE_TYPE_UNKNOWN = -1; // 0xffffffff
-    field public static final int CODE_TYPE_W = 9; // 0x9
-    field public static final int CODE_TYPE_X = 10; // 0xa
-    field public static final int CODE_TYPE_Y = 11; // 0xb
-    field public static final int CODE_TYPE_Z = 12; // 0xc
     field @NonNull public static final android.os.Parcelable.Creator<android.location.GnssMeasurement> CREATOR;
     field public static final int MULTIPATH_INDICATOR_DETECTED = 1; // 0x1
     field public static final int MULTIPATH_INDICATOR_NOT_DETECTED = 2; // 0x2
@@ -22850,6 +22833,24 @@ package android.location {
     method @Deprecated public boolean usedInFix();
   }
 
+  @Deprecated public final class GpsStatus {
+    method @Deprecated public int getMaxSatellites();
+    method @Deprecated public Iterable<android.location.GpsSatellite> getSatellites();
+    method @Deprecated public int getTimeToFirstFix();
+    field @Deprecated public static final int GPS_EVENT_FIRST_FIX = 3; // 0x3
+    field @Deprecated public static final int GPS_EVENT_SATELLITE_STATUS = 4; // 0x4
+    field @Deprecated public static final int GPS_EVENT_STARTED = 1; // 0x1
+    field @Deprecated public static final int GPS_EVENT_STOPPED = 2; // 0x2
+  }
+
+  @Deprecated public static interface GpsStatus.Listener {
+    method @Deprecated public void onGpsStatusChanged(int);
+  }
+
+  @Deprecated public static interface GpsStatus.NmeaListener {
+    method @Deprecated public void onNmeaReceived(long, String);
+  }
+
   public class Location implements android.os.Parcelable {
     ctor public Location(String);
     ctor public Location(android.location.Location);
@@ -22918,6 +22919,7 @@ package android.location {
   }
 
   public class LocationManager {
+    method @Deprecated @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean addGpsStatusListener(android.location.GpsStatus.Listener);
     method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean addNmeaListener(@NonNull android.location.OnNmeaMessageListener);
     method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean addNmeaListener(@NonNull android.location.OnNmeaMessageListener, @Nullable android.os.Handler);
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void addProximityAlert(double, double, float, long, @NonNull android.app.PendingIntent);
@@ -22929,6 +22931,7 @@ package android.location {
     method @Nullable public String getBestProvider(@NonNull android.location.Criteria, boolean);
     method @Nullable public String getGnssHardwareModelName();
     method public int getGnssYearOfHardware();
+    method @Deprecated @Nullable @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public android.location.GpsStatus getGpsStatus(@Nullable android.location.GpsStatus);
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) @Nullable public android.location.Location getLastKnownLocation(@NonNull String);
     method @Nullable public android.location.LocationProvider getProvider(@NonNull String);
     method @NonNull public java.util.List<java.lang.String> getProviders(boolean);
@@ -22941,6 +22944,7 @@ package android.location {
     method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssNavigationMessageCallback(@NonNull android.location.GnssNavigationMessage.Callback, @Nullable android.os.Handler);
     method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssStatusCallback(@NonNull android.location.GnssStatus.Callback);
     method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssStatusCallback(@NonNull android.location.GnssStatus.Callback, @Nullable android.os.Handler);
+    method @Deprecated public void removeGpsStatusListener(android.location.GpsStatus.Listener);
     method public void removeNmeaListener(@NonNull android.location.OnNmeaMessageListener);
     method @RequiresPermission(anyOf={"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"}, apis="..22") public void removeProximityAlert(@NonNull android.app.PendingIntent);
     method public void removeTestProvider(@NonNull String);
@@ -24842,7 +24846,7 @@ package android.media {
     method public boolean verify(@NonNull byte[], @NonNull byte[], @NonNull byte[]);
   }
 
-  @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.SOURCE) @IntDef({android.media.MediaDrm.HDCP_LEVEL_UNKNOWN, android.media.MediaDrm.HDCP_NONE, android.media.MediaDrm.HDCP_V1, android.media.MediaDrm.HDCP_V2, android.media.MediaDrm.HDCP_V2_1, android.media.MediaDrm.HDCP_V2_2, android.media.MediaDrm.HDCP_V2_3, android.media.MediaDrm.HDCP_NO_DIGITAL_OUTPUT}) public static @interface MediaDrm.HdcpLevel {
+  @Deprecated @IntDef({android.media.MediaDrm.HDCP_LEVEL_UNKNOWN, android.media.MediaDrm.HDCP_NONE, android.media.MediaDrm.HDCP_V1, android.media.MediaDrm.HDCP_V2, android.media.MediaDrm.HDCP_V2_1, android.media.MediaDrm.HDCP_V2_2, android.media.MediaDrm.HDCP_V2_3, android.media.MediaDrm.HDCP_NO_DIGITAL_OUTPUT}) @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.SOURCE) public static @interface MediaDrm.HdcpLevel {
   }
 
   public static final class MediaDrm.KeyRequest {
@@ -24929,7 +24933,7 @@ package android.media {
     method @NonNull public String getDefaultUrl();
   }
 
-  @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.SOURCE) @IntDef({android.media.MediaDrm.SECURITY_LEVEL_UNKNOWN, android.media.MediaDrm.SECURITY_LEVEL_SW_SECURE_CRYPTO, android.media.MediaDrm.SECURITY_LEVEL_SW_SECURE_DECODE, android.media.MediaDrm.SECURITY_LEVEL_HW_SECURE_CRYPTO, android.media.MediaDrm.SECURITY_LEVEL_HW_SECURE_DECODE, android.media.MediaDrm.SECURITY_LEVEL_HW_SECURE_ALL}) public static @interface MediaDrm.SecurityLevel {
+  @Deprecated @IntDef({android.media.MediaDrm.SECURITY_LEVEL_UNKNOWN, android.media.MediaDrm.SECURITY_LEVEL_SW_SECURE_CRYPTO, android.media.MediaDrm.SECURITY_LEVEL_SW_SECURE_DECODE, android.media.MediaDrm.SECURITY_LEVEL_HW_SECURE_CRYPTO, android.media.MediaDrm.SECURITY_LEVEL_HW_SECURE_DECODE, android.media.MediaDrm.SECURITY_LEVEL_HW_SECURE_ALL}) @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.SOURCE) public static @interface MediaDrm.SecurityLevel {
   }
 
   public static final class MediaDrm.SessionException extends java.lang.RuntimeException {
@@ -30120,8 +30124,8 @@ package android.net.wifi {
     method @NonNull public android.net.wifi.WifiNetworkSpecifier build();
     method @NonNull public android.net.wifi.WifiNetworkSpecifier.Builder setBssid(@NonNull android.net.MacAddress);
     method @NonNull public android.net.wifi.WifiNetworkSpecifier.Builder setBssidPattern(@NonNull android.net.MacAddress, @NonNull android.net.MacAddress);
-    method @NonNull public android.net.wifi.WifiNetworkSpecifier.Builder setIsEnhancedOpen();
-    method @NonNull public android.net.wifi.WifiNetworkSpecifier.Builder setIsHiddenSsid();
+    method @NonNull public android.net.wifi.WifiNetworkSpecifier.Builder setIsEnhancedOpen(boolean);
+    method @NonNull public android.net.wifi.WifiNetworkSpecifier.Builder setIsHiddenSsid(boolean);
     method @NonNull public android.net.wifi.WifiNetworkSpecifier.Builder setSsid(@NonNull String);
     method @NonNull public android.net.wifi.WifiNetworkSpecifier.Builder setSsidPattern(@NonNull android.os.PatternMatcher);
     method @NonNull public android.net.wifi.WifiNetworkSpecifier.Builder setWpa2EnterpriseConfig(@NonNull android.net.wifi.WifiEnterpriseConfig);
@@ -30140,12 +30144,12 @@ package android.net.wifi {
     ctor public WifiNetworkSuggestion.Builder();
     method @NonNull public android.net.wifi.WifiNetworkSuggestion build();
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setBssid(@NonNull android.net.MacAddress);
-    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsAppInteractionRequired();
-    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsEnhancedOpen();
-    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsHiddenSsid();
-    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsMetered();
-    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsUserInteractionRequired();
-    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setPriority(int);
+    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsAppInteractionRequired(boolean);
+    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsEnhancedOpen(boolean);
+    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsHiddenSsid(boolean);
+    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsMetered(boolean);
+    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsUserInteractionRequired(boolean);
+    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setPriority(@IntRange(from=0) int);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setSsid(@NonNull String);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setWpa2EnterpriseConfig(@NonNull android.net.wifi.WifiEnterpriseConfig);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setWpa2Passphrase(@NonNull String);
@@ -39002,12 +39006,10 @@ package android.provider {
     method public static long getLong(android.content.ContentResolver, String) throws android.provider.Settings.SettingNotFoundException;
     method public static String getString(android.content.ContentResolver, String);
     method public static android.net.Uri getUriFor(String);
-    method @Deprecated public static boolean isLocationProviderEnabled(android.content.ContentResolver, String);
     method public static boolean putFloat(android.content.ContentResolver, String, float);
     method public static boolean putInt(android.content.ContentResolver, String, int);
     method public static boolean putLong(android.content.ContentResolver, String, long);
     method public static boolean putString(android.content.ContentResolver, String, String);
-    method @Deprecated public static void setLocationProviderEnabled(android.content.ContentResolver, String, boolean);
     field public static final String ACCESSIBILITY_DISPLAY_INVERSION_ENABLED = "accessibility_display_inversion_enabled";
     field public static final String ACCESSIBILITY_ENABLED = "accessibility_enabled";
     field @Deprecated public static final String ACCESSIBILITY_SPEAK_PASSWORD = "speak_password";
@@ -43345,9 +43347,9 @@ package android.telecom {
   public abstract class CallRedirectionService extends android.app.Service {
     ctor public CallRedirectionService();
     method public final void cancelCall();
-    method public final android.os.IBinder onBind(android.content.Intent);
+    method @Nullable public final android.os.IBinder onBind(@NonNull android.content.Intent);
     method public abstract void onPlaceCall(@NonNull android.net.Uri, @NonNull android.telecom.PhoneAccountHandle, boolean);
-    method public final boolean onUnbind(android.content.Intent);
+    method public final boolean onUnbind(@NonNull android.content.Intent);
     method public final void placeCallUnmodified();
     method public final void redirectCall(@NonNull android.net.Uri, @NonNull android.telecom.PhoneAccountHandle, boolean);
     field public static final String SERVICE_INTERFACE = "android.telecom.CallRedirectionService";
@@ -44410,12 +44412,12 @@ package android.telephony {
   }
 
   public final class CellIdentityNr extends android.telephony.CellIdentity {
-    method public String getMccString();
-    method public String getMncString();
+    method @Nullable public String getMccString();
+    method @Nullable public String getMncString();
     method public long getNci();
-    method public int getNrarfcn();
-    method public int getPci();
-    method public int getTac();
+    method @IntRange(from=0, to=3279165) public int getNrarfcn();
+    method @IntRange(from=0, to=1007) public int getPci();
+    method @IntRange(from=0, to=65535) public int getTac();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.telephony.CellIdentityNr> CREATOR;
   }
@@ -44482,8 +44484,8 @@ package android.telephony {
   }
 
   public final class CellInfoNr extends android.telephony.CellInfo {
-    method public android.telephony.CellIdentity getCellIdentity();
-    method public android.telephony.CellSignalStrength getCellSignalStrength();
+    method @NonNull public android.telephony.CellIdentity getCellIdentity();
+    method @NonNull public android.telephony.CellSignalStrength getCellSignalStrength();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.telephony.CellInfoNr> CREATOR;
   }
@@ -45552,7 +45554,7 @@ package android.telephony.euicc {
     method public boolean isEnabled();
     method public void startResolutionActivity(android.app.Activity, int, android.content.Intent, android.app.PendingIntent) throws android.content.IntentSender.SendIntentException;
     method @RequiresPermission("android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS") public void switchToSubscription(int, android.app.PendingIntent);
-    method @RequiresPermission("android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS") public void updateSubscriptionNickname(int, String, android.app.PendingIntent);
+    method @RequiresPermission("android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS") public void updateSubscriptionNickname(int, @Nullable String, @NonNull android.app.PendingIntent);
     field public static final String ACTION_MANAGE_EMBEDDED_SUBSCRIPTIONS = "android.telephony.euicc.action.MANAGE_EMBEDDED_SUBSCRIPTIONS";
     field public static final String ACTION_NOTIFY_CARRIER_SETUP_INCOMPLETE = "android.telephony.euicc.action.NOTIFY_CARRIER_SETUP_INCOMPLETE";
     field public static final int EMBEDDED_SUBSCRIPTION_RESULT_ERROR = 2; // 0x2
@@ -53489,25 +53491,10 @@ package android.view.inspector {
     method @Nullable public <T> android.view.inspector.InspectionCompanion<T> provide(@NonNull Class<T>);
   }
 
-  public final class IntEnumMapping {
-    method @Nullable public String get(int);
-  }
-
-  public static final class IntEnumMapping.Builder {
-    ctor public IntEnumMapping.Builder();
-    method @NonNull public android.view.inspector.IntEnumMapping.Builder addValue(@NonNull String, int);
-    method @NonNull public android.view.inspector.IntEnumMapping build();
-  }
-
   public final class IntFlagMapping {
+    ctor public IntFlagMapping();
+    method public void add(int, int, @NonNull String);
     method @NonNull public java.util.Set<java.lang.String> get(int);
-  }
-
-  public static final class IntFlagMapping.Builder {
-    ctor public IntFlagMapping.Builder();
-    method @NonNull public android.view.inspector.IntFlagMapping.Builder addFlag(@NonNull String, int);
-    method @NonNull public android.view.inspector.IntFlagMapping.Builder addFlag(@NonNull String, int, int);
-    method @NonNull public android.view.inspector.IntFlagMapping build();
   }
 
   public interface PropertyMapper {
@@ -53519,8 +53506,8 @@ package android.view.inspector {
     method public int mapFloat(@NonNull String, @AttrRes int);
     method public int mapGravity(@NonNull String, @AttrRes int);
     method public int mapInt(@NonNull String, @AttrRes int);
-    method public int mapIntEnum(@NonNull String, @AttrRes int, @NonNull android.view.inspector.IntEnumMapping);
-    method public int mapIntFlag(@NonNull String, @AttrRes int, @NonNull android.view.inspector.IntFlagMapping);
+    method public int mapIntEnum(@NonNull String, @AttrRes int, @NonNull java.util.function.IntFunction<java.lang.String>);
+    method public int mapIntFlag(@NonNull String, @AttrRes int, @NonNull java.util.function.IntFunction<java.util.Set<java.lang.String>>);
     method public int mapLong(@NonNull String, @AttrRes int);
     method public int mapObject(@NonNull String, @AttrRes int);
     method public int mapResourceId(@NonNull String, @AttrRes int);
@@ -56395,10 +56382,12 @@ package android.widget {
     method public int getWindowLayoutType();
     method public boolean isAboveAnchor();
     method public boolean isAttachedInDecor();
+    method @Deprecated public boolean isClipToScreenEnabled();
     method public boolean isClippedToScreen();
     method public boolean isClippingEnabled();
     method public boolean isFocusable();
     method public boolean isLaidOutInScreen();
+    method @Deprecated public boolean isLayoutInScreenEnabled();
     method public boolean isOutsideTouchable();
     method public boolean isShowing();
     method public boolean isSplitTouchEnabled();
@@ -56407,6 +56396,7 @@ package android.widget {
     method public void setAnimationStyle(int);
     method public void setAttachedInDecor(boolean);
     method public void setBackgroundDrawable(android.graphics.drawable.Drawable);
+    method @Deprecated public void setClipToScreenEnabled(boolean);
     method public void setClippingEnabled(boolean);
     method public void setContentView(android.view.View);
     method public void setElevation(float);
@@ -56419,6 +56409,7 @@ package android.widget {
     method public void setInputMethodMode(int);
     method public void setIsClippedToScreen(boolean);
     method public void setIsLaidOutInScreen(boolean);
+    method @Deprecated public void setLayoutInScreenEnabled(boolean);
     method public void setOnDismissListener(android.widget.PopupWindow.OnDismissListener);
     method public void setOutsideTouchable(boolean);
     method public void setOverlapAnchor(boolean);
