@@ -43034,14 +43034,14 @@ package android.telephony {
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @WorkerThread public android.os.PersistableBundle getCarrierConfig();
     method public int getCarrierIdFromSimMccMnc();
     method @Deprecated @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public android.telephony.CellLocation getCellLocation();
-    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @Nullable public java.util.Map<java.lang.Integer,java.util.List<android.telephony.emergency.EmergencyNumber>> getCurrentEmergencyNumberList();
-    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @Nullable public java.util.Map<java.lang.Integer,java.util.List<android.telephony.emergency.EmergencyNumber>> getCurrentEmergencyNumberList(int);
     method public int getDataActivity();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public int getDataNetworkType();
     method public int getDataState();
     method @Deprecated @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getDeviceId();
     method @Deprecated @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getDeviceId(int);
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getDeviceSoftwareVersion();
+    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @NonNull public java.util.Map<java.lang.Integer,java.util.List<android.telephony.emergency.EmergencyNumber>> getEmergencyNumberList();
+    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @NonNull public java.util.Map<java.lang.Integer,java.util.List<android.telephony.emergency.EmergencyNumber>> getEmergencyNumberList(int);
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String[] getForbiddenPlmns();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getGroupIdLevel1();
     method public String getIccAuthentication(int, int, String);
@@ -43093,9 +43093,9 @@ package android.telephony {
     method public String iccTransmitApduBasicChannel(int, int, int, int, int, String);
     method public String iccTransmitApduLogicalChannel(int, int, int, int, int, int, String);
     method public boolean isConcurrentVoiceAndDataSupported();
-    method public boolean isCurrentEmergencyNumber(@NonNull String);
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.MODIFY_PHONE_STATE}) public boolean isDataEnabled();
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.READ_PHONE_STATE}) public boolean isDataRoamingEnabled();
+    method public boolean isEmergencyNumber(@NonNull String);
     method public boolean isHearingAidCompatibilitySupported();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public boolean isMultisimSupported();
     method public boolean isNetworkRoaming();
@@ -43414,15 +43414,13 @@ package android.telephony.emergency {
   public final class EmergencyNumber implements java.lang.Comparable<android.telephony.emergency.EmergencyNumber> android.os.Parcelable {
     method public int compareTo(@NonNull android.telephony.emergency.EmergencyNumber);
     method public int describeContents();
-    method public String getCountryIso();
+    method @NonNull public String getCountryIso();
     method public int getEmergencyCallRouting();
-    method public int getEmergencyNumberSourceBitmask();
-    method public java.util.List<java.lang.Integer> getEmergencyNumberSources();
-    method public java.util.List<java.lang.Integer> getEmergencyServiceCategories();
-    method public int getEmergencyServiceCategoryBitmask();
+    method @NonNull public java.util.List<java.lang.Integer> getEmergencyNumberSources();
+    method @NonNull public java.util.List<java.lang.Integer> getEmergencyServiceCategories();
     method @NonNull public java.util.List<java.lang.String> getEmergencyUrns();
-    method public String getMnc();
-    method public String getNumber();
+    method @NonNull public String getMnc();
+    method @NonNull public String getNumber();
     method public boolean isFromSources(int);
     method public boolean isInEmergencyServiceCategories(int);
     method public void writeToParcel(android.os.Parcel, int);
