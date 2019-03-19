@@ -6623,7 +6623,7 @@ package android.app.admin {
     method @Nullable public String[] getAccountTypesWithManagementDisabled();
     method @Nullable public java.util.List<android.content.ComponentName> getActiveAdmins();
     method @NonNull public java.util.Set<java.lang.String> getAffiliationIds(@NonNull android.content.ComponentName);
-    method @Nullable public java.util.List<java.lang.String> getAlwaysOnVpnLockdownWhitelist(@NonNull android.content.ComponentName);
+    method @Nullable public java.util.Set<java.lang.String> getAlwaysOnVpnLockdownWhitelist(@NonNull android.content.ComponentName);
     method @Nullable public String getAlwaysOnVpnPackage(@NonNull android.content.ComponentName);
     method @WorkerThread @NonNull public android.os.Bundle getApplicationRestrictions(@Nullable android.content.ComponentName, String);
     method @Deprecated @Nullable public String getApplicationRestrictionsManagingPackage(@NonNull android.content.ComponentName);
@@ -6736,7 +6736,7 @@ package android.app.admin {
     method public void setAccountManagementDisabled(@NonNull android.content.ComponentName, String, boolean);
     method public void setAffiliationIds(@NonNull android.content.ComponentName, @NonNull java.util.Set<java.lang.String>);
     method public void setAlwaysOnVpnPackage(@NonNull android.content.ComponentName, @Nullable String, boolean) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public void setAlwaysOnVpnPackage(@NonNull android.content.ComponentName, @Nullable String, boolean, @Nullable java.util.List<java.lang.String>) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public void setAlwaysOnVpnPackage(@NonNull android.content.ComponentName, @Nullable String, boolean, @Nullable java.util.Set<java.lang.String>) throws android.content.pm.PackageManager.NameNotFoundException;
     method public boolean setApplicationHidden(@NonNull android.content.ComponentName, String, boolean);
     method @WorkerThread public void setApplicationRestrictions(@Nullable android.content.ComponentName, String, android.os.Bundle);
     method @Deprecated public void setApplicationRestrictionsManagingPackage(@NonNull android.content.ComponentName, @Nullable String) throws android.content.pm.PackageManager.NameNotFoundException;
@@ -15953,7 +15953,6 @@ package android.graphics.text {
   public class MeasuredText {
     method public void getBounds(@IntRange(from=0) int, @IntRange(from=0) int, @NonNull android.graphics.Rect);
     method @FloatRange(from=0.0f) @Px public float getCharWidthAt(@IntRange(from=0) int);
-    method @NonNull public char[] getChars();
     method @FloatRange(from=0.0) @Px public float getWidth(@IntRange(from=0) int, @IntRange(from=0) int);
   }
 
@@ -17367,15 +17366,16 @@ package android.hardware.camera2.params {
     method @Nullable public java.util.Set<android.util.Size> getInputSizes(int);
     method @NonNull public java.util.Set<java.lang.Integer> getOutputFormats();
     method @IntRange(from=0) public long getOutputMinFrameDuration(int, @NonNull android.util.Size);
-    method public <T> long getOutputMinFrameDuration(@NonNull Class<T>, @NonNull android.util.Size);
+    method @IntRange(from=0) public <T> long getOutputMinFrameDuration(@NonNull Class<T>, @NonNull android.util.Size);
     method @Nullable public java.util.Set<android.util.Size> getOutputSizes(int);
-    method public <T> java.util.Set<android.util.Size> getOutputSizes(@NonNull Class<T>);
+    method @Nullable public <T> java.util.Set<android.util.Size> getOutputSizes(@NonNull Class<T>);
     method @IntRange(from=0) public long getOutputStallDuration(int, @NonNull android.util.Size);
-    method public <T> long getOutputStallDuration(@NonNull Class<T>, @NonNull android.util.Size);
+    method @IntRange(from=0) public <T> long getOutputStallDuration(@NonNull Class<T>, @NonNull android.util.Size);
     method public int getRecommendedUseCase();
     method @Nullable public java.util.Set<java.lang.Integer> getValidOutputFormatsForInput(int);
     method public boolean isOutputSupportedFor(int);
     method public boolean isOutputSupportedFor(@NonNull android.view.Surface);
+    field public static final int USECASE_LOW_LATENCY_SNAPSHOT = 6; // 0x6
     field public static final int USECASE_PREVIEW = 0; // 0x0
     field public static final int USECASE_RAW = 5; // 0x5
     field public static final int USECASE_RECORD = 1; // 0x1
@@ -22966,6 +22966,7 @@ package android.location {
     method public void unregisterGnssMeasurementsCallback(@NonNull android.location.GnssMeasurementsEvent.Callback);
     method public void unregisterGnssNavigationMessageCallback(@NonNull android.location.GnssNavigationMessage.Callback);
     method public void unregisterGnssStatusCallback(@NonNull android.location.GnssStatus.Callback);
+    field public static final String EXTRA_PROVIDER_NAME = "android.location.extra.PROVIDER_NAME";
     field public static final String GPS_PROVIDER = "gps";
     field public static final String KEY_LOCATION_CHANGED = "location";
     field public static final String KEY_PROVIDER_ENABLED = "providerEnabled";
@@ -39006,10 +39007,12 @@ package android.provider {
     method public static long getLong(android.content.ContentResolver, String) throws android.provider.Settings.SettingNotFoundException;
     method public static String getString(android.content.ContentResolver, String);
     method public static android.net.Uri getUriFor(String);
+    method @Deprecated public static boolean isLocationProviderEnabled(android.content.ContentResolver, String);
     method public static boolean putFloat(android.content.ContentResolver, String, float);
     method public static boolean putInt(android.content.ContentResolver, String, int);
     method public static boolean putLong(android.content.ContentResolver, String, long);
     method public static boolean putString(android.content.ContentResolver, String, String);
+    method @Deprecated public static void setLocationProviderEnabled(android.content.ContentResolver, String, boolean);
     field public static final String ACCESSIBILITY_DISPLAY_INVERSION_ENABLED = "accessibility_display_inversion_enabled";
     field public static final String ACCESSIBILITY_ENABLED = "accessibility_enabled";
     field @Deprecated public static final String ACCESSIBILITY_SPEAK_PASSWORD = "speak_password";
@@ -43189,6 +43192,7 @@ package android.telecom {
     method public void unregisterCallback(android.telecom.Call.Callback);
     field @Deprecated public static final String AVAILABLE_PHONE_ACCOUNTS = "selectPhoneAccountAccounts";
     field public static final String EXTRA_LAST_EMERGENCY_CALLBACK_TIME_MILLIS = "android.telecom.extra.LAST_EMERGENCY_CALLBACK_TIME_MILLIS";
+    field public static final String EXTRA_SILENT_RINGING_REQUESTED = "android.telecom.extra.SILENT_RINGING_REQUESTED";
     field public static final String EXTRA_SUGGESTED_PHONE_ACCOUNTS = "android.telecom.extra.SUGGESTED_PHONE_ACCOUNTS";
     field public static final int STATE_ACTIVE = 4; // 0x4
     field public static final int STATE_CONNECTING = 9; // 0x9
@@ -43376,6 +43380,7 @@ package android.telecom {
   public static class CallScreeningService.CallResponse {
     method public boolean getDisallowCall();
     method public boolean getRejectCall();
+    method public boolean getSilenceCall();
     method public boolean getSkipCallLog();
     method public boolean getSkipNotification();
   }
@@ -43385,6 +43390,7 @@ package android.telecom {
     method public android.telecom.CallScreeningService.CallResponse build();
     method public android.telecom.CallScreeningService.CallResponse.Builder setDisallowCall(boolean);
     method public android.telecom.CallScreeningService.CallResponse.Builder setRejectCall(boolean);
+    method @NonNull public android.telecom.CallScreeningService.CallResponse.Builder setSilenceCall(boolean);
     method public android.telecom.CallScreeningService.CallResponse.Builder setSkipCallLog(boolean);
     method public android.telecom.CallScreeningService.CallResponse.Builder setSkipNotification(boolean);
   }
@@ -45242,7 +45248,7 @@ package android.telephony {
     field public static final String EXTRA_CARRIER_ID = "android.telephony.extra.CARRIER_ID";
     field public static final String EXTRA_CARRIER_NAME = "android.telephony.extra.CARRIER_NAME";
     field public static final String EXTRA_HIDE_PUBLIC_SETTINGS = "android.telephony.extra.HIDE_PUBLIC_SETTINGS";
-    field public static final String EXTRA_INCOMING_NUMBER = "incoming_number";
+    field @Deprecated public static final String EXTRA_INCOMING_NUMBER = "incoming_number";
     field public static final String EXTRA_IS_REFRESH = "android.telephony.extra.IS_REFRESH";
     field public static final String EXTRA_LAUNCH_VOICEMAIL_SETTINGS_INTENT = "android.telephony.extra.LAUNCH_VOICEMAIL_SETTINGS_INTENT";
     field public static final String EXTRA_NETWORK_COUNTRY = "android.telephony.extra.NETWORK_COUNTRY";
