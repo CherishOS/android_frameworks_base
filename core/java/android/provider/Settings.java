@@ -5640,6 +5640,12 @@ public final class Settings {
          * @hide
          */
         public static final String ENABLE_RIPPLE_EFFECT = "enable_ripple_effect";
+		
+		/**
+         * Switch between filters for lockscreen album art
+         * @hide
+         */
+        public static final String LOCKSCREEN_ALBUMART_FILTER = "lockscreen_albumart_filter";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
