@@ -6000,6 +6000,12 @@ public final class Settings {
         public static final String NAVIGATION_BAR_ARROW_KEYS = "navigation_bar_menu_arrow_keys";
 		
 		/**
+         * Switch between filters for lockscreen album art
+         * @hide
+         */
+        public static final String LOCKSCREEN_ALBUMART_FILTER = "lockscreen_albumart_filter";
+		
+		/**
          * Whether to enable PULSE Edge lights
          * @hide
          */
