@@ -25552,8 +25552,8 @@ package android.media {
     method @NonNull public Object clearNextDataSources();
     method public void clearPendingCommands();
     method public void close();
-    method @NonNull public Object deselectTrack(int);
-    method @NonNull public Object deselectTrack(@NonNull android.media.DataSourceDesc, int);
+    method @NonNull public Object deselectTrack(@NonNull android.media.MediaPlayer2.TrackInfo);
+    method @NonNull public Object deselectTrack(@NonNull android.media.DataSourceDesc, @NonNull android.media.MediaPlayer2.TrackInfo);
     method @NonNull public android.media.AudioAttributes getAudioAttributes();
     method public int getAudioSessionId();
     method public long getBufferedPosition();
@@ -25568,8 +25568,8 @@ package android.media {
     method public float getPlayerVolume();
     method @Nullable public android.media.AudioDeviceInfo getPreferredDevice();
     method @Nullable public android.media.AudioDeviceInfo getRoutedDevice();
-    method public int getSelectedTrack(int);
-    method public int getSelectedTrack(@NonNull android.media.DataSourceDesc, int);
+    method @Nullable public android.media.MediaPlayer2.TrackInfo getSelectedTrack(int);
+    method @Nullable public android.media.MediaPlayer2.TrackInfo getSelectedTrack(@NonNull android.media.DataSourceDesc, int);
     method public int getState();
     method @NonNull public android.media.SyncParams getSyncParams();
     method @Nullable public android.media.MediaTimestamp getTimestamp();
@@ -25587,8 +25587,8 @@ package android.media {
     method public void reset();
     method @NonNull public Object seekTo(long);
     method @NonNull public Object seekTo(long, int);
-    method @NonNull public Object selectTrack(int);
-    method @NonNull public Object selectTrack(@NonNull android.media.DataSourceDesc, int);
+    method @NonNull public Object selectTrack(@NonNull android.media.MediaPlayer2.TrackInfo);
+    method @NonNull public Object selectTrack(@NonNull android.media.DataSourceDesc, @NonNull android.media.MediaPlayer2.TrackInfo);
     method @NonNull public Object setAudioAttributes(@NonNull android.media.AudioAttributes);
     method @NonNull public Object setAudioSessionId(int);
     method @NonNull public Object setAuxEffectSendLevel(float);
@@ -25715,7 +25715,7 @@ package android.media {
     method public void onError(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, int, int);
     method public void onInfo(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, int, int);
     method public void onMediaTimeDiscontinuity(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.media.MediaTimestamp);
-    method public void onSubtitleData(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.media.SubtitleData);
+    method public void onSubtitleData(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.media.MediaPlayer2.SubtitleData);
     method public void onTimedMetaDataAvailable(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.media.TimedMetaData);
     method public void onVideoSizeChanged(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.util.Size);
   }
@@ -25737,6 +25737,13 @@ package android.media {
 
   public static final class MediaPlayer2.NoDrmSchemeException extends android.media.MediaDrmException {
     ctor public MediaPlayer2.NoDrmSchemeException(@Nullable String);
+  }
+
+  public static final class MediaPlayer2.SubtitleData {
+    method @NonNull public byte[] getData();
+    method public long getDurationUs();
+    method public long getStartTimeUs();
+    method @NonNull public android.media.MediaPlayer2.TrackInfo getTrackInfo();
   }
 
   public static class MediaPlayer2.TrackInfo {
