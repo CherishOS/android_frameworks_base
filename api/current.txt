@@ -5429,7 +5429,7 @@ package android.app {
     method @NonNull public android.app.Notification.Action.Builder addRemoteInput(android.app.RemoteInput);
     method @NonNull public android.app.Notification.Action build();
     method @NonNull public android.app.Notification.Action.Builder extend(android.app.Notification.Action.Extender);
-    method public android.os.Bundle getExtras();
+    method @NonNull public android.os.Bundle getExtras();
     method @NonNull public android.app.Notification.Action.Builder setAllowGeneratedReplies(boolean);
     method @NonNull public android.app.Notification.Action.Builder setContextual(boolean);
     method @NonNull public android.app.Notification.Action.Builder setSemanticAction(int);
@@ -12016,7 +12016,7 @@ package android.content.pm {
     method @NonNull public android.content.pm.ShortcutInfo.Builder setIntents(@NonNull android.content.Intent[]);
     method @NonNull public android.content.pm.ShortcutInfo.Builder setLocusId(@NonNull android.content.LocusId);
     method @NonNull public android.content.pm.ShortcutInfo.Builder setLongLabel(@NonNull CharSequence);
-    method @NonNull public android.content.pm.ShortcutInfo.Builder setLongLived();
+    method @NonNull public android.content.pm.ShortcutInfo.Builder setLongLived(boolean);
     method @NonNull public android.content.pm.ShortcutInfo.Builder setPerson(@NonNull android.app.Person);
     method @NonNull public android.content.pm.ShortcutInfo.Builder setPersons(@NonNull android.app.Person[]);
     method @NonNull public android.content.pm.ShortcutInfo.Builder setRank(int);
@@ -23294,6 +23294,7 @@ package android.media {
     field public static final String ACTION_MICROPHONE_MUTE_CHANGED = "android.media.action.MICROPHONE_MUTE_CHANGED";
     field @Deprecated public static final String ACTION_SCO_AUDIO_STATE_CHANGED = "android.media.SCO_AUDIO_STATE_CHANGED";
     field public static final String ACTION_SCO_AUDIO_STATE_UPDATED = "android.media.ACTION_SCO_AUDIO_STATE_UPDATED";
+    field public static final String ACTION_SPEAKERPHONE_STATE_CHANGED = "android.media.action.SPEAKERPHONE_STATE_CHANGED";
     field public static final int ADJUST_LOWER = -1; // 0xffffffff
     field public static final int ADJUST_MUTE = -100; // 0xffffff9c
     field public static final int ADJUST_RAISE = 1; // 0x1
@@ -25698,14 +25699,14 @@ package android.media {
   public static class MediaPlayer2.DrmEventCallback {
     ctor public MediaPlayer2.DrmEventCallback();
     method public void onDrmConfig(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.media.MediaDrm);
-    method public android.media.MediaPlayer2.DrmPreparationInfo onDrmInfo(android.media.MediaPlayer2, android.media.DataSourceDesc, android.media.MediaPlayer2.DrmInfo);
-    method public byte[] onDrmKeyRequest(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.media.MediaDrm.KeyRequest);
+    method @Nullable public android.media.MediaPlayer2.DrmPreparationInfo onDrmInfo(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.media.MediaPlayer2.DrmInfo);
+    method @NonNull public byte[] onDrmKeyRequest(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.media.MediaDrm.KeyRequest);
     method public void onDrmPrepared(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, int, @Nullable byte[]);
   }
 
   public static final class MediaPlayer2.DrmInfo {
-    method public java.util.Map<java.util.UUID,byte[]> getPssh();
-    method public java.util.List<java.util.UUID> getSupportedSchemes();
+    method @NonNull public java.util.Map<java.util.UUID,byte[]> getPssh();
+    method @NonNull public java.util.List<java.util.UUID> getSupportedSchemes();
   }
 
   public static final class MediaPlayer2.DrmPreparationInfo {
@@ -25713,13 +25714,13 @@ package android.media {
 
   public static final class MediaPlayer2.DrmPreparationInfo.Builder {
     ctor public MediaPlayer2.DrmPreparationInfo.Builder();
-    method public android.media.MediaPlayer2.DrmPreparationInfo build();
-    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setInitData(@Nullable byte[]);
-    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setKeySetId(@Nullable byte[]);
-    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setKeyType(int);
-    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setMimeType(@Nullable String);
-    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setOptionalParameters(@Nullable java.util.Map<java.lang.String,java.lang.String>);
-    method public android.media.MediaPlayer2.DrmPreparationInfo.Builder setUuid(@NonNull java.util.UUID);
+    method @NonNull public android.media.MediaPlayer2.DrmPreparationInfo build();
+    method @NonNull public android.media.MediaPlayer2.DrmPreparationInfo.Builder setInitData(@Nullable byte[]);
+    method @NonNull public android.media.MediaPlayer2.DrmPreparationInfo.Builder setKeySetId(@Nullable byte[]);
+    method @NonNull public android.media.MediaPlayer2.DrmPreparationInfo.Builder setKeyType(int);
+    method @NonNull public android.media.MediaPlayer2.DrmPreparationInfo.Builder setMimeType(@Nullable String);
+    method @NonNull public android.media.MediaPlayer2.DrmPreparationInfo.Builder setOptionalParameters(@Nullable java.util.Map<java.lang.String,java.lang.String>);
+    method @NonNull public android.media.MediaPlayer2.DrmPreparationInfo.Builder setUuid(@NonNull java.util.UUID);
   }
 
   public static class MediaPlayer2.EventCallback {
@@ -25750,7 +25751,7 @@ package android.media {
   }
 
   public static final class MediaPlayer2.NoDrmSchemeException extends android.media.MediaDrmException {
-    ctor public MediaPlayer2.NoDrmSchemeException(String);
+    ctor public MediaPlayer2.NoDrmSchemeException(@Nullable String);
   }
 
   public static class MediaPlayer2.TrackInfo {
@@ -28757,10 +28758,9 @@ package android.net {
   }
 
   public final class DnsResolver {
-    method public static android.net.DnsResolver getInstance();
-    method public void query(@Nullable android.net.Network, @NonNull byte[], int, @NonNull android.os.Handler, @NonNull android.net.DnsResolver.RawAnswerListener) throws android.system.ErrnoException;
-    method public void query(@Nullable android.net.Network, @NonNull String, int, int, int, @NonNull android.os.Handler, @NonNull android.net.DnsResolver.RawAnswerListener) throws android.system.ErrnoException;
-    method public void query(@Nullable android.net.Network, @NonNull String, int, @NonNull android.os.Handler, @NonNull android.net.DnsResolver.InetAddressAnswerListener) throws android.system.ErrnoException;
+    method @NonNull public static android.net.DnsResolver getInstance();
+    method public <T> void query(@Nullable android.net.Network, @NonNull byte[], int, @NonNull java.util.concurrent.Executor, @NonNull android.net.DnsResolver.AnswerCallback<T>);
+    method public <T> void query(@Nullable android.net.Network, @NonNull String, int, int, int, @NonNull java.util.concurrent.Executor, @NonNull android.net.DnsResolver.AnswerCallback<T>);
     field public static final int CLASS_IN = 1; // 0x1
     field public static final int FLAG_EMPTY = 0; // 0x0
     field public static final int FLAG_NO_CACHE_LOOKUP = 4; // 0x4
@@ -28770,12 +28770,23 @@ package android.net {
     field public static final int TYPE_AAAA = 28; // 0x1c
   }
 
-  public static interface DnsResolver.InetAddressAnswerListener {
-    method public void onAnswer(@NonNull java.util.List<java.net.InetAddress>);
+  public abstract static class DnsResolver.AnswerCallback<T> {
+    ctor public DnsResolver.AnswerCallback(@NonNull android.net.DnsResolver.AnswerParser<T>);
+    method public abstract void onAnswer(@NonNull T);
+    method public abstract void onParseException(@NonNull android.net.ParseException);
+    method public abstract void onQueryException(@NonNull android.system.ErrnoException);
   }
 
-  public static interface DnsResolver.RawAnswerListener {
-    method public void onAnswer(@Nullable byte[]);
+  public static interface DnsResolver.AnswerParser<T> {
+    method @NonNull public T parse(@NonNull byte[]) throws android.net.ParseException;
+  }
+
+  public abstract static class DnsResolver.InetAddressAnswerCallback extends android.net.DnsResolver.AnswerCallback<java.util.List<java.net.InetAddress>> {
+    ctor public DnsResolver.InetAddressAnswerCallback();
+  }
+
+  public abstract static class DnsResolver.RawAnswerCallback extends android.net.DnsResolver.AnswerCallback<byte[]> {
+    ctor public DnsResolver.RawAnswerCallback();
   }
 
   public class InetAddresses {
@@ -29090,6 +29101,8 @@ package android.net {
   }
 
   public class ParseException extends java.lang.RuntimeException {
+    ctor public ParseException(@NonNull String);
+    ctor public ParseException(@NonNull String, @NonNull Throwable);
     field public String response;
   }
 
@@ -45049,7 +45062,6 @@ package android.telephony {
     method public void removeOnOpportunisticSubscriptionsChangedListener(@NonNull android.telephony.SubscriptionManager.OnOpportunisticSubscriptionsChangedListener);
     method public void removeOnSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnSubscriptionsChangedListener);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public boolean removeSubscriptionsFromGroup(@NonNull int[]);
-    method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public boolean setMetered(boolean, int);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public boolean setOpportunistic(boolean, int);
     method @Nullable @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public String setSubscriptionGroup(@NonNull int[]);
     method public void setSubscriptionOverrideCongested(int, boolean, long);
@@ -51944,6 +51956,7 @@ package android.view {
     method @NonNull public android.view.WindowInsets consumeStableInsets();
     method @NonNull public android.view.WindowInsets consumeSystemWindowInsets();
     method @Nullable public android.view.DisplayCutout getDisplayCutout();
+    method @NonNull public android.graphics.Insets getMandatorySystemGestureInsets();
     method public int getStableInsetBottom();
     method public int getStableInsetLeft();
     method public int getStableInsetRight();
@@ -51955,6 +51968,7 @@ package android.view {
     method public int getSystemWindowInsetRight();
     method public int getSystemWindowInsetTop();
     method @NonNull public android.graphics.Insets getSystemWindowInsets();
+    method @NonNull public android.graphics.Insets getTappableElementInsets();
     method public boolean hasInsets();
     method public boolean hasStableInsets();
     method public boolean hasSystemWindowInsets();
@@ -51970,9 +51984,11 @@ package android.view {
     ctor public WindowInsets.Builder(@NonNull android.view.WindowInsets);
     method @NonNull public android.view.WindowInsets build();
     method @NonNull public android.view.WindowInsets.Builder setDisplayCutout(@Nullable android.view.DisplayCutout);
+    method @NonNull public android.view.WindowInsets.Builder setMandatorySystemGestureInsets(@NonNull android.graphics.Insets);
     method @NonNull public android.view.WindowInsets.Builder setStableInsets(@NonNull android.graphics.Insets);
     method @NonNull public android.view.WindowInsets.Builder setSystemGestureInsets(@NonNull android.graphics.Insets);
     method @NonNull public android.view.WindowInsets.Builder setSystemWindowInsets(@NonNull android.graphics.Insets);
+    method @NonNull public android.view.WindowInsets.Builder setTappableElementInsets(@NonNull android.graphics.Insets);
   }
 
   public interface WindowManager extends android.view.ViewManager {
@@ -53017,7 +53033,7 @@ package android.view.contentcapture {
     method public int describeContents();
     method @NonNull public static android.view.contentcapture.ContentCaptureContext forLocusId(@NonNull String);
     method @Nullable public android.os.Bundle getExtras();
-    method @NonNull public android.content.LocusId getLocusId();
+    method @Nullable public android.content.LocusId getLocusId();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.view.contentcapture.ContentCaptureContext> CREATOR;
   }
