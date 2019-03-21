@@ -23707,17 +23707,6 @@ package android.media {
     method public void onTearDown(@NonNull android.media.AudioTrack);
   }
 
-  public class CallbackDataSourceDesc extends android.media.DataSourceDesc {
-    method @NonNull public android.media.DataSourceCallback getDataSourceCallback();
-  }
-
-  public static class CallbackDataSourceDesc.Builder extends android.media.DataSourceDesc.BuilderBase<android.media.CallbackDataSourceDesc.Builder> {
-    ctor public CallbackDataSourceDesc.Builder();
-    ctor public CallbackDataSourceDesc.Builder(@Nullable android.media.CallbackDataSourceDesc);
-    method @NonNull public android.media.CallbackDataSourceDesc build();
-    method @NonNull public android.media.CallbackDataSourceDesc.Builder setDataSource(@NonNull android.media.DataSourceCallback);
-  }
-
   public class CamcorderProfile {
     method public static android.media.CamcorderProfile get(int);
     method public static android.media.CamcorderProfile get(int, int);
@@ -23784,10 +23773,18 @@ package android.media {
     field public static final long POSITION_UNKNOWN = 576460752303423L; // 0x20c49ba5e353fL
   }
 
-  protected static class DataSourceDesc.BuilderBase<T extends android.media.DataSourceDesc.BuilderBase> {
-    method @NonNull public T setEndPosition(long);
-    method @NonNull public T setMediaId(@Nullable String);
-    method @NonNull public T setStartPosition(long);
+  public static final class DataSourceDesc.Builder {
+    ctor public DataSourceDesc.Builder();
+    ctor public DataSourceDesc.Builder(@Nullable android.media.DataSourceDesc);
+    method @NonNull public android.media.DataSourceDesc build();
+    method @NonNull public android.media.DataSourceDesc.Builder setDataSource(@NonNull android.net.Uri);
+    method @NonNull public android.media.DataSourceDesc.Builder setDataSource(@NonNull android.net.Uri, @Nullable java.util.Map<java.lang.String,java.lang.String>, @Nullable java.util.List<java.net.HttpCookie>);
+    method @NonNull public android.media.DataSourceDesc.Builder setDataSource(@NonNull android.os.ParcelFileDescriptor);
+    method @NonNull public android.media.DataSourceDesc.Builder setDataSource(@NonNull android.os.ParcelFileDescriptor, long, long);
+    method @NonNull public android.media.DataSourceDesc.Builder setDataSource(@NonNull android.media.DataSourceCallback);
+    method @NonNull public android.media.DataSourceDesc.Builder setEndPosition(long);
+    method @NonNull public android.media.DataSourceDesc.Builder setMediaId(@Nullable String);
+    method @NonNull public android.media.DataSourceDesc.Builder setStartPosition(long);
   }
 
   public final class DeniedByServerException extends android.media.MediaDrmException {
@@ -23990,21 +23987,6 @@ package android.media {
     field public static final int EULER_X = 0; // 0x0
     field public static final int EULER_Y = 1; // 0x1
     field public static final int EULER_Z = 2; // 0x2
-  }
-
-  public class FileDataSourceDesc extends android.media.DataSourceDesc {
-    method public long getLength();
-    method public long getOffset();
-    method @NonNull public android.os.ParcelFileDescriptor getParcelFileDescriptor();
-    field public static final long FD_LENGTH_UNKNOWN = 576460752303423487L; // 0x7ffffffffffffffL
-  }
-
-  public static class FileDataSourceDesc.Builder extends android.media.DataSourceDesc.BuilderBase<android.media.FileDataSourceDesc.Builder> {
-    ctor public FileDataSourceDesc.Builder();
-    ctor public FileDataSourceDesc.Builder(@Nullable android.media.FileDataSourceDesc);
-    method @NonNull public android.media.FileDataSourceDesc build();
-    method @NonNull public android.media.FileDataSourceDesc.Builder setDataSource(@NonNull android.os.ParcelFileDescriptor);
-    method @NonNull public android.media.FileDataSourceDesc.Builder setDataSource(@NonNull android.os.ParcelFileDescriptor, long, long);
   }
 
   public abstract class Image implements java.lang.AutoCloseable {
@@ -26639,21 +26621,6 @@ package android.media {
 
   public final class UnsupportedSchemeException extends android.media.MediaDrmException {
     ctor public UnsupportedSchemeException(String);
-  }
-
-  public class UriDataSourceDesc extends android.media.DataSourceDesc {
-    method @NonNull public android.content.Context getContext();
-    method @Nullable public java.util.List<java.net.HttpCookie> getCookies();
-    method @Nullable public java.util.Map<java.lang.String,java.lang.String> getHeaders();
-    method @NonNull public android.net.Uri getUri();
-  }
-
-  public static class UriDataSourceDesc.Builder extends android.media.DataSourceDesc.BuilderBase<android.media.UriDataSourceDesc.Builder> {
-    ctor public UriDataSourceDesc.Builder();
-    ctor public UriDataSourceDesc.Builder(@Nullable android.media.UriDataSourceDesc);
-    method @NonNull public android.media.UriDataSourceDesc build();
-    method @NonNull public android.media.UriDataSourceDesc.Builder setDataSource(@NonNull android.content.Context, @NonNull android.net.Uri);
-    method @NonNull public android.media.UriDataSourceDesc.Builder setDataSource(@NonNull android.content.Context, @NonNull android.net.Uri, @Nullable java.util.Map<java.lang.String,java.lang.String>, @Nullable java.util.List<java.net.HttpCookie>);
   }
 
   public interface VolumeAutomation {
