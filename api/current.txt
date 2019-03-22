@@ -25683,11 +25683,11 @@ package android.media {
     field public static final int SEEK_PREVIOUS_SYNC = 0; // 0x0
   }
 
-  public static class MediaPlayer2.DrmEventCallback {
+  public abstract static class MediaPlayer2.DrmEventCallback {
     ctor public MediaPlayer2.DrmEventCallback();
     method public void onDrmConfig(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.media.MediaDrm);
-    method @Nullable public android.media.MediaPlayer2.DrmPreparationInfo onDrmInfo(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.media.MediaPlayer2.DrmInfo);
-    method @NonNull public byte[] onDrmKeyRequest(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.media.MediaDrm.KeyRequest);
+    method @Nullable public abstract android.media.MediaPlayer2.DrmPreparationInfo onDrmInfo(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.media.MediaPlayer2.DrmInfo);
+    method @NonNull public abstract byte[] onDrmKeyRequest(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, @NonNull android.media.MediaDrm.KeyRequest);
     method public void onDrmPrepared(@NonNull android.media.MediaPlayer2, @NonNull android.media.DataSourceDesc, int, @Nullable byte[]);
   }
 
@@ -25697,17 +25697,22 @@ package android.media {
   }
 
   public static final class MediaPlayer2.DrmPreparationInfo {
+    method @Nullable public byte[] getInitData();
+    method @Nullable public byte[] getKeySetId();
+    method public int getKeyType();
+    method @Nullable public String getMimeType();
+    method @Nullable public java.util.Map<java.lang.String,java.lang.String> getOptionalParameters();
+    method @NonNull public java.util.UUID getUuid();
   }
 
   public static final class MediaPlayer2.DrmPreparationInfo.Builder {
-    ctor public MediaPlayer2.DrmPreparationInfo.Builder();
+    ctor public MediaPlayer2.DrmPreparationInfo.Builder(@NonNull java.util.UUID);
     method @NonNull public android.media.MediaPlayer2.DrmPreparationInfo build();
     method @NonNull public android.media.MediaPlayer2.DrmPreparationInfo.Builder setInitData(@Nullable byte[]);
     method @NonNull public android.media.MediaPlayer2.DrmPreparationInfo.Builder setKeySetId(@Nullable byte[]);
     method @NonNull public android.media.MediaPlayer2.DrmPreparationInfo.Builder setKeyType(int);
     method @NonNull public android.media.MediaPlayer2.DrmPreparationInfo.Builder setMimeType(@Nullable String);
     method @NonNull public android.media.MediaPlayer2.DrmPreparationInfo.Builder setOptionalParameters(@Nullable java.util.Map<java.lang.String,java.lang.String>);
-    method @NonNull public android.media.MediaPlayer2.DrmPreparationInfo.Builder setUuid(@NonNull java.util.UUID);
   }
 
   public static class MediaPlayer2.EventCallback {
