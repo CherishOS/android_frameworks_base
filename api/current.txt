@@ -6963,7 +6963,7 @@ package android.app.admin {
 
   public abstract static class DevicePolicyManager.InstallSystemUpdateCallback {
     ctor public DevicePolicyManager.InstallSystemUpdateCallback();
-    method public void onInstallUpdateError(int, String);
+    method public void onInstallUpdateError(int, @NonNull String);
     field public static final int UPDATE_ERROR_BATTERY_LOW = 5; // 0x5
     field public static final int UPDATE_ERROR_FILE_NOT_FOUND = 4; // 0x4
     field public static final int UPDATE_ERROR_INCORRECT_OS_VERSION = 2; // 0x2
@@ -13089,10 +13089,10 @@ package android.database.sqlite {
     method @Deprecated public String buildUnionSubQuery(String, String[], java.util.Set<java.lang.String>, int, String, String, String[], String, String);
     method public int delete(@NonNull android.database.sqlite.SQLiteDatabase, @Nullable String, @Nullable String[]);
     method @Nullable public android.database.sqlite.SQLiteDatabase.CursorFactory getCursorFactory();
-    method public boolean getDistinct();
     method @Nullable public java.util.Map<java.lang.String,java.lang.String> getProjectionMap();
-    method public boolean getStrict();
     method @Nullable public String getTables();
+    method public boolean isDistinct();
+    method public boolean isStrict();
     method public android.database.Cursor query(android.database.sqlite.SQLiteDatabase, String[], String, String[], String, String, String);
     method public android.database.Cursor query(android.database.sqlite.SQLiteDatabase, String[], String, String[], String, String, String, String);
     method public android.database.Cursor query(android.database.sqlite.SQLiteDatabase, String[], String, String[], String, String, String, String, android.os.CancellationSignal);
@@ -29267,7 +29267,6 @@ package android.net {
     method public abstract boolean isRelative();
     method public android.net.Uri normalizeScheme();
     method public static android.net.Uri parse(String);
-    method @NonNull public String toSafeString();
     method public abstract String toString();
     method public static android.net.Uri withAppendedPath(android.net.Uri, String);
     method public static void writeToParcel(android.os.Parcel, android.net.Uri);
@@ -53048,6 +53047,16 @@ package android.view.autofill {
 
 package android.view.contentcapture {
 
+  public final class ContentCaptureCondition implements android.os.Parcelable {
+    ctor public ContentCaptureCondition(@NonNull android.content.LocusId, int);
+    method public int describeContents();
+    method public int getFlags();
+    method @NonNull public android.content.LocusId getLocusId();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.contentcapture.ContentCaptureCondition> CREATOR;
+    field public static final int FLAG_IS_REGEX = 2; // 0x2
+  }
+
   public final class ContentCaptureContext implements android.os.Parcelable {
     method public int describeContents();
     method @NonNull public static android.view.contentcapture.ContentCaptureContext forLocusId(@NonNull String);
@@ -53064,6 +53073,7 @@ package android.view.contentcapture {
   }
 
   public final class ContentCaptureManager {
+    method @Nullable public java.util.Set<android.view.contentcapture.ContentCaptureCondition> getContentCaptureConditions();
     method @Nullable public android.content.ComponentName getServiceComponentName();
     method public boolean isContentCaptureEnabled();
     method public void removeUserData(@NonNull android.view.contentcapture.UserDataRemovalRequest);
