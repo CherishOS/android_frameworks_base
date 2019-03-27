@@ -14100,8 +14100,9 @@ package android.graphics {
   }
 
   public class ComposeShader extends android.graphics.Shader {
-    ctor public ComposeShader(@NonNull android.graphics.Shader, @NonNull android.graphics.Shader, @NonNull android.graphics.Xfermode);
-    ctor public ComposeShader(@NonNull android.graphics.Shader, @NonNull android.graphics.Shader, @NonNull android.graphics.PorterDuff.Mode);
+    ctor @Deprecated public ComposeShader(@NonNull android.graphics.Shader, @NonNull android.graphics.Shader, @NonNull android.graphics.Xfermode);
+    ctor @Deprecated public ComposeShader(@NonNull android.graphics.Shader, @NonNull android.graphics.Shader, @NonNull android.graphics.PorterDuff.Mode);
+    ctor public ComposeShader(@NonNull android.graphics.Shader, @NonNull android.graphics.Shader, @NonNull android.graphics.BlendMode);
   }
 
   public class CornerPathEffect extends android.graphics.PathEffect {
@@ -14795,37 +14796,37 @@ package android.graphics {
     field public float y;
   }
 
-  public class PorterDuff {
-    ctor public PorterDuff();
+  @Deprecated public class PorterDuff {
+    ctor @Deprecated public PorterDuff();
   }
 
-  public enum PorterDuff.Mode {
-    enum_constant public static final android.graphics.PorterDuff.Mode ADD;
-    enum_constant public static final android.graphics.PorterDuff.Mode CLEAR;
-    enum_constant public static final android.graphics.PorterDuff.Mode DARKEN;
-    enum_constant public static final android.graphics.PorterDuff.Mode DST;
-    enum_constant public static final android.graphics.PorterDuff.Mode DST_ATOP;
-    enum_constant public static final android.graphics.PorterDuff.Mode DST_IN;
-    enum_constant public static final android.graphics.PorterDuff.Mode DST_OUT;
-    enum_constant public static final android.graphics.PorterDuff.Mode DST_OVER;
-    enum_constant public static final android.graphics.PorterDuff.Mode LIGHTEN;
-    enum_constant public static final android.graphics.PorterDuff.Mode MULTIPLY;
-    enum_constant public static final android.graphics.PorterDuff.Mode OVERLAY;
-    enum_constant public static final android.graphics.PorterDuff.Mode SCREEN;
-    enum_constant public static final android.graphics.PorterDuff.Mode SRC;
-    enum_constant public static final android.graphics.PorterDuff.Mode SRC_ATOP;
-    enum_constant public static final android.graphics.PorterDuff.Mode SRC_IN;
-    enum_constant public static final android.graphics.PorterDuff.Mode SRC_OUT;
-    enum_constant public static final android.graphics.PorterDuff.Mode SRC_OVER;
-    enum_constant public static final android.graphics.PorterDuff.Mode XOR;
+  @Deprecated public enum PorterDuff.Mode {
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode ADD;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode CLEAR;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DARKEN;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DST;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DST_ATOP;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DST_IN;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DST_OUT;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DST_OVER;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode LIGHTEN;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode MULTIPLY;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode OVERLAY;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SCREEN;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SRC;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SRC_ATOP;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SRC_IN;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SRC_OUT;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SRC_OVER;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode XOR;
   }
 
   @Deprecated public class PorterDuffColorFilter extends android.graphics.ColorFilter {
     ctor @Deprecated public PorterDuffColorFilter(@ColorInt int, @NonNull android.graphics.PorterDuff.Mode);
   }
 
-  public class PorterDuffXfermode extends android.graphics.Xfermode {
-    ctor public PorterDuffXfermode(android.graphics.PorterDuff.Mode);
+  @Deprecated public class PorterDuffXfermode extends android.graphics.Xfermode {
+    ctor @Deprecated public PorterDuffXfermode(android.graphics.PorterDuff.Mode);
   }
 
   public interface PostProcessor {
@@ -15387,7 +15388,8 @@ package android.graphics.drawable {
     method public boolean setState(@NonNull int[]);
     method public void setTint(@ColorInt int);
     method public void setTintList(@Nullable android.content.res.ColorStateList);
-    method public void setTintMode(@NonNull android.graphics.PorterDuff.Mode);
+    method @Deprecated public void setTintMode(@NonNull android.graphics.PorterDuff.Mode);
+    method public void setTintMode(@NonNull android.graphics.BlendMode);
     method public boolean setVisible(boolean, boolean);
     method public void unscheduleSelf(@NonNull Runnable);
   }
@@ -15545,7 +15547,8 @@ package android.graphics.drawable {
     method public void loadDrawableAsync(android.content.Context, android.graphics.drawable.Icon.OnDrawableLoadedListener, android.os.Handler);
     method public android.graphics.drawable.Icon setTint(@ColorInt int);
     method public android.graphics.drawable.Icon setTintList(android.content.res.ColorStateList);
-    method public android.graphics.drawable.Icon setTintMode(android.graphics.PorterDuff.Mode);
+    method @Deprecated @NonNull public android.graphics.drawable.Icon setTintMode(@NonNull android.graphics.PorterDuff.Mode);
+    method @NonNull public android.graphics.drawable.Icon setTintMode(@NonNull android.graphics.BlendMode);
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.graphics.drawable.Icon> CREATOR;
     field public static final int TYPE_ADAPTIVE_BITMAP = 5; // 0x5
@@ -49718,8 +49721,9 @@ package android.view {
     method public default CharSequence getContentDescription();
     method public int getGroupId();
     method public android.graphics.drawable.Drawable getIcon();
+    method @Nullable public default android.graphics.BlendMode getIconTintBlendMode();
     method @Nullable public default android.content.res.ColorStateList getIconTintList();
-    method @Nullable public default android.graphics.PorterDuff.Mode getIconTintMode();
+    method @Deprecated @Nullable public default android.graphics.PorterDuff.Mode getIconTintMode();
     method public android.content.Intent getIntent();
     method public int getItemId();
     method public android.view.ContextMenu.ContextMenuInfo getMenuInfo();
@@ -49748,7 +49752,8 @@ package android.view {
     method public android.view.MenuItem setIcon(android.graphics.drawable.Drawable);
     method public android.view.MenuItem setIcon(@DrawableRes int);
     method public default android.view.MenuItem setIconTintList(@Nullable android.content.res.ColorStateList);
-    method public default android.view.MenuItem setIconTintMode(@Nullable android.graphics.PorterDuff.Mode);
+    method @Deprecated @NonNull public default android.view.MenuItem setIconTintMode(@Nullable android.graphics.PorterDuff.Mode);
+    method @NonNull public default android.view.MenuItem setIconTintMode(@Nullable android.graphics.BlendMode);
     method public android.view.MenuItem setIntent(android.content.Intent);
     method public android.view.MenuItem setNumericShortcut(char);
     method public default android.view.MenuItem setNumericShortcut(char, int);
@@ -50401,8 +50406,9 @@ package android.view {
     method public int getAutofillType();
     method @Nullable public android.view.autofill.AutofillValue getAutofillValue();
     method public android.graphics.drawable.Drawable getBackground();
+    method @Nullable public android.graphics.BlendMode getBackgroundBlendMode();
     method @Nullable public android.content.res.ColorStateList getBackgroundTintList();
-    method @Nullable public android.graphics.PorterDuff.Mode getBackgroundTintMode();
+    method @Deprecated @Nullable public android.graphics.PorterDuff.Mode getBackgroundTintMode();
     method @android.view.ViewDebug.ExportedProperty(category="layout") public int getBaseline();
     method @android.view.ViewDebug.CapturedViewProperty public final int getBottom();
     method protected float getBottomFadingEdgeStrength();
@@ -50433,9 +50439,10 @@ package android.view {
     method public java.util.ArrayList<android.view.View> getFocusables(int);
     method public void getFocusedRect(android.graphics.Rect);
     method public android.graphics.drawable.Drawable getForeground();
+    method @Nullable public android.graphics.BlendMode getForegroundBlendMode();
     method public int getForegroundGravity();
     method @Nullable public android.content.res.ColorStateList getForegroundTintList();
-    method @Nullable public android.graphics.PorterDuff.Mode getForegroundTintMode();
+    method @Deprecated @Nullable public android.graphics.PorterDuff.Mode getForegroundTintMode();
     method public boolean getGlobalVisibleRect(android.graphics.Rect, android.graphics.Point);
     method public final boolean getGlobalVisibleRect(android.graphics.Rect);
     method public android.os.Handler getHandler();
@@ -50751,7 +50758,8 @@ package android.view {
     method @Deprecated public void setBackgroundDrawable(android.graphics.drawable.Drawable);
     method public void setBackgroundResource(@DrawableRes int);
     method public void setBackgroundTintList(@Nullable android.content.res.ColorStateList);
-    method public void setBackgroundTintMode(@Nullable android.graphics.PorterDuff.Mode);
+    method @Deprecated public void setBackgroundTintMode(@Nullable android.graphics.PorterDuff.Mode);
+    method public void setBackgroundTintMode(@Nullable android.graphics.BlendMode);
     method public final void setBottom(int);
     method public void setCameraDistance(float);
     method public void setClickable(boolean);
@@ -50778,7 +50786,8 @@ package android.view {
     method public void setForeground(android.graphics.drawable.Drawable);
     method public void setForegroundGravity(int);
     method public void setForegroundTintList(@Nullable android.content.res.ColorStateList);
-    method public void setForegroundTintMode(@Nullable android.graphics.PorterDuff.Mode);
+    method @Deprecated public void setForegroundTintMode(@Nullable android.graphics.PorterDuff.Mode);
+    method public void setForegroundTintMode(@Nullable android.graphics.BlendMode);
     method public void setHapticFeedbackEnabled(boolean);
     method public void setHasTransientState(boolean);
     method public void setHorizontalFadingEdgeEnabled(boolean);
