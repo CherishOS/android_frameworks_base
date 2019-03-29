@@ -40463,6 +40463,7 @@ package android.system {
     method public static int getpid();
     method public static int getppid();
     method public static java.net.SocketAddress getsockname(java.io.FileDescriptor) throws android.system.ErrnoException;
+    method @NonNull public static android.system.StructTimeval getsockoptTimeval(@NonNull java.io.FileDescriptor, int, int) throws android.system.ErrnoException;
     method public static int gettid();
     method public static int getuid();
     method public static byte[] getxattr(String, String) throws android.system.ErrnoException;
@@ -40513,6 +40514,7 @@ package android.system {
     method @Deprecated public static void setgid(int) throws android.system.ErrnoException;
     method public static int setsid() throws android.system.ErrnoException;
     method public static void setsockoptInt(java.io.FileDescriptor, int, int, int) throws android.system.ErrnoException;
+    method public static void setsockoptTimeval(@NonNull java.io.FileDescriptor, int, int, @NonNull android.system.StructTimeval) throws android.system.ErrnoException;
     method @Deprecated public static void setuid(int) throws android.system.ErrnoException;
     method public static void setxattr(String, String, byte[], int) throws android.system.ErrnoException;
     method public static void shutdown(java.io.FileDescriptor, int) throws android.system.ErrnoException;
@@ -41088,6 +41090,13 @@ package android.system {
     method public int compareTo(android.system.StructTimespec);
     field public final long tv_nsec;
     field public final long tv_sec;
+  }
+
+  public final class StructTimeval {
+    method @NonNull public static android.system.StructTimeval fromMillis(long);
+    method public long toMillis();
+    field public final long tv_sec;
+    field public final long tv_usec;
   }
 
   public final class StructUtsname {
