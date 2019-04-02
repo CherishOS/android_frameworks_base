@@ -102,16 +102,13 @@ package android {
     field public static final String NFC_TRANSACTION_EVENT = "android.permission.NFC_TRANSACTION_EVENT";
     field public static final String PACKAGE_USAGE_STATS = "android.permission.PACKAGE_USAGE_STATS";
     field @Deprecated public static final String PERSISTENT_ACTIVITY = "android.permission.PERSISTENT_ACTIVITY";
-    field public static final String PROCESS_OUTGOING_CALLS = "android.permission.PROCESS_OUTGOING_CALLS";
+    field @Deprecated public static final String PROCESS_OUTGOING_CALLS = "android.permission.PROCESS_OUTGOING_CALLS";
     field public static final String READ_CALENDAR = "android.permission.READ_CALENDAR";
     field public static final String READ_CALL_LOG = "android.permission.READ_CALL_LOG";
     field public static final String READ_CONTACTS = "android.permission.READ_CONTACTS";
-    field @Deprecated public static final String READ_EXTERNAL_STORAGE = "android.permission.READ_EXTERNAL_STORAGE";
+    field public static final String READ_EXTERNAL_STORAGE = "android.permission.READ_EXTERNAL_STORAGE";
     field @Deprecated public static final String READ_INPUT_STATE = "android.permission.READ_INPUT_STATE";
     field public static final String READ_LOGS = "android.permission.READ_LOGS";
-    field public static final String READ_MEDIA_AUDIO = "android.permission.READ_MEDIA_AUDIO";
-    field public static final String READ_MEDIA_IMAGES = "android.permission.READ_MEDIA_IMAGES";
-    field public static final String READ_MEDIA_VIDEO = "android.permission.READ_MEDIA_VIDEO";
     field public static final String READ_PHONE_NUMBERS = "android.permission.READ_PHONE_NUMBERS";
     field public static final String READ_PHONE_STATE = "android.permission.READ_PHONE_STATE";
     field public static final String READ_SMS = "android.permission.READ_SMS";
@@ -161,7 +158,7 @@ package android {
     field public static final String WRITE_CALENDAR = "android.permission.WRITE_CALENDAR";
     field public static final String WRITE_CALL_LOG = "android.permission.WRITE_CALL_LOG";
     field public static final String WRITE_CONTACTS = "android.permission.WRITE_CONTACTS";
-    field @Deprecated public static final String WRITE_EXTERNAL_STORAGE = "android.permission.WRITE_EXTERNAL_STORAGE";
+    field public static final String WRITE_EXTERNAL_STORAGE = "android.permission.WRITE_EXTERNAL_STORAGE";
     field public static final String WRITE_GSERVICES = "android.permission.WRITE_GSERVICES";
     field public static final String WRITE_SECURE_SETTINGS = "android.permission.WRITE_SECURE_SETTINGS";
     field public static final String WRITE_SETTINGS = "android.permission.WRITE_SETTINGS";
@@ -177,13 +174,11 @@ package android {
     field public static final String CAMERA = "android.permission-group.CAMERA";
     field public static final String CONTACTS = "android.permission-group.CONTACTS";
     field public static final String LOCATION = "android.permission-group.LOCATION";
-    field public static final String MEDIA_AURAL = "android.permission-group.MEDIA_AURAL";
-    field public static final String MEDIA_VISUAL = "android.permission-group.MEDIA_VISUAL";
     field public static final String MICROPHONE = "android.permission-group.MICROPHONE";
     field public static final String PHONE = "android.permission-group.PHONE";
     field public static final String SENSORS = "android.permission-group.SENSORS";
     field public static final String SMS = "android.permission-group.SMS";
-    field @Deprecated public static final String STORAGE = "android.permission-group.STORAGE";
+    field public static final String STORAGE = "android.permission-group.STORAGE";
   }
 
   public final class R {
@@ -291,6 +286,7 @@ package android {
     field public static final int allowBackup = 16843392; // 0x1010280
     field public static final int allowClearUserData = 16842757; // 0x1010005
     field public static final int allowEmbedded = 16843765; // 0x10103f5
+    field public static final int allowExternalStorageSandbox = 16844201; // 0x10105a9
     field public static final int allowParallelSyncs = 16843570; // 0x1010332
     field public static final int allowSingleTap = 16843353; // 0x1010259
     field public static final int allowTaskReparenting = 16843268; // 0x1010204
@@ -5480,7 +5476,7 @@ package android.app {
     method public int describeContents();
     method public boolean getAutoExpandBubble();
     method @Nullable public android.app.PendingIntent getDeleteIntent();
-    method public int getDesiredHeight();
+    method @Dimension(unit=android.annotation.Dimension.DP) public int getDesiredHeight();
     method @DimenRes public int getDesiredHeightResId();
     method @NonNull public android.graphics.drawable.Icon getIcon();
     method @NonNull public android.app.PendingIntent getIntent();
@@ -5494,7 +5490,7 @@ package android.app {
     method @NonNull public android.app.Notification.BubbleMetadata build();
     method @NonNull public android.app.Notification.BubbleMetadata.Builder setAutoExpandBubble(boolean);
     method @NonNull public android.app.Notification.BubbleMetadata.Builder setDeleteIntent(@Nullable android.app.PendingIntent);
-    method @NonNull public android.app.Notification.BubbleMetadata.Builder setDesiredHeight(int);
+    method @NonNull public android.app.Notification.BubbleMetadata.Builder setDesiredHeight(@Dimension(unit=android.annotation.Dimension.DP) int);
     method @NonNull public android.app.Notification.BubbleMetadata.Builder setDesiredHeightResId(@DimenRes int);
     method @NonNull public android.app.Notification.BubbleMetadata.Builder setIcon(@NonNull android.graphics.drawable.Icon);
     method @NonNull public android.app.Notification.BubbleMetadata.Builder setIntent(@NonNull android.app.PendingIntent);
@@ -6273,7 +6269,7 @@ package android.app {
 
   public final class UiAutomation {
     method public void adoptShellPermissionIdentity();
-    method public void adoptShellPermissionIdentity(java.lang.String...);
+    method public void adoptShellPermissionIdentity(@Nullable java.lang.String...);
     method public void clearWindowAnimationFrameStats();
     method public boolean clearWindowContentFrameStats(int);
     method public void dropShellPermissionIdentity();
@@ -6963,7 +6959,7 @@ package android.app.admin {
 
   public abstract static class DevicePolicyManager.InstallSystemUpdateCallback {
     ctor public DevicePolicyManager.InstallSystemUpdateCallback();
-    method public void onInstallUpdateError(int, String);
+    method public void onInstallUpdateError(int, @NonNull String);
     field public static final int UPDATE_ERROR_BATTERY_LOW = 5; // 0x5
     field public static final int UPDATE_ERROR_FILE_NOT_FOUND = 4; // 0x4
     field public static final int UPDATE_ERROR_INCORRECT_OS_VERSION = 2; // 0x2
@@ -8604,7 +8600,6 @@ package android.bluetooth {
   }
 
   @Deprecated public final class BluetoothHealth implements android.bluetooth.BluetoothProfile {
-    ctor @Deprecated public BluetoothHealth();
     method @Deprecated public boolean connectChannelToSource(android.bluetooth.BluetoothDevice, android.bluetooth.BluetoothHealthAppConfiguration);
     method @Deprecated public boolean disconnectChannel(android.bluetooth.BluetoothDevice, android.bluetooth.BluetoothHealthAppConfiguration, int);
     method @Deprecated public java.util.List<android.bluetooth.BluetoothDevice> getConnectedDevices();
@@ -8628,7 +8623,6 @@ package android.bluetooth {
   }
 
   @Deprecated public final class BluetoothHealthAppConfiguration implements android.os.Parcelable {
-    ctor @Deprecated public BluetoothHealthAppConfiguration();
     method @Deprecated public int describeContents();
     method @Deprecated public int getDataType();
     method @Deprecated public String getName();
@@ -11251,7 +11245,6 @@ package android.content.pm {
   public class LauncherApps {
     method public java.util.List<android.content.pm.LauncherActivityInfo> getActivityList(String, android.os.UserHandle);
     method @NonNull public java.util.List<android.content.pm.PackageInstaller.SessionInfo> getAllPackageInstallerSessions();
-    method @Nullable public android.content.pm.LauncherApps.AppUsageLimit getAppUsageLimit(@NonNull String, @NonNull android.os.UserHandle);
     method public android.content.pm.ApplicationInfo getApplicationInfo(@NonNull String, int, @NonNull android.os.UserHandle) throws android.content.pm.PackageManager.NameNotFoundException;
     method public android.content.pm.LauncherApps.PinItemRequest getPinItemRequest(android.content.Intent);
     method public java.util.List<android.os.UserHandle> getProfiles();
@@ -11280,14 +11273,6 @@ package android.content.pm {
     field public static final String ACTION_CONFIRM_PIN_APPWIDGET = "android.content.pm.action.CONFIRM_PIN_APPWIDGET";
     field public static final String ACTION_CONFIRM_PIN_SHORTCUT = "android.content.pm.action.CONFIRM_PIN_SHORTCUT";
     field public static final String EXTRA_PIN_ITEM_REQUEST = "android.content.pm.extra.PIN_ITEM_REQUEST";
-  }
-
-  public static final class LauncherApps.AppUsageLimit implements android.os.Parcelable {
-    method public int describeContents();
-    method public long getTotalUsageLimit();
-    method public long getUsageRemaining();
-    method public void writeToParcel(android.os.Parcel, int);
-    field @NonNull public static final android.os.Parcelable.Creator<android.content.pm.LauncherApps.AppUsageLimit> CREATOR;
   }
 
   public abstract static class LauncherApps.Callback {
@@ -11453,7 +11438,7 @@ package android.content.pm {
     method @Nullable public android.graphics.Bitmap getAppIcon();
     method @Nullable public CharSequence getAppLabel();
     method @Nullable public String getAppPackageName();
-    method public int[] getChildSessionIds();
+    method @NonNull public int[] getChildSessionIds();
     method public int getInstallLocation();
     method public int getInstallReason();
     method @Nullable public String getInstallerPackageName();
@@ -11534,107 +11519,107 @@ package android.content.pm {
 
   public abstract class PackageManager {
     ctor public PackageManager();
-    method @Deprecated public abstract void addPackageToPreferred(String);
-    method public abstract boolean addPermission(android.content.pm.PermissionInfo);
-    method public abstract boolean addPermissionAsync(android.content.pm.PermissionInfo);
-    method @Deprecated public abstract void addPreferredActivity(android.content.IntentFilter, int, android.content.ComponentName[], android.content.ComponentName);
+    method @Deprecated public abstract void addPackageToPreferred(@NonNull String);
+    method public abstract boolean addPermission(@NonNull android.content.pm.PermissionInfo);
+    method public abstract boolean addPermissionAsync(@NonNull android.content.pm.PermissionInfo);
+    method @Deprecated public abstract void addPreferredActivity(@NonNull android.content.IntentFilter, int, @Nullable android.content.ComponentName[], @NonNull android.content.ComponentName);
     method public abstract boolean canRequestPackageInstalls();
-    method public abstract String[] canonicalToCurrentPackageNames(String[]);
-    method @CheckResult public abstract int checkPermission(String, String);
-    method @CheckResult public abstract int checkSignatures(String, String);
+    method public abstract String[] canonicalToCurrentPackageNames(@NonNull String[]);
+    method @CheckResult public abstract int checkPermission(@NonNull String, @NonNull String);
+    method @CheckResult public abstract int checkSignatures(@NonNull String, @NonNull String);
     method @CheckResult public abstract int checkSignatures(int, int);
     method public abstract void clearInstantAppCookie();
-    method @Deprecated public abstract void clearPackagePreferredActivities(String);
-    method public abstract String[] currentToCanonicalPackageNames(String[]);
+    method @Deprecated public abstract void clearPackagePreferredActivities(@NonNull String);
+    method public abstract String[] currentToCanonicalPackageNames(@NonNull String[]);
     method public abstract void extendVerificationTimeout(int, int, long);
-    method public abstract android.graphics.drawable.Drawable getActivityBanner(android.content.ComponentName) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract android.graphics.drawable.Drawable getActivityBanner(android.content.Intent) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract android.graphics.drawable.Drawable getActivityIcon(android.content.ComponentName) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract android.graphics.drawable.Drawable getActivityIcon(android.content.Intent) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract android.content.pm.ActivityInfo getActivityInfo(android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract android.graphics.drawable.Drawable getActivityLogo(android.content.ComponentName) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract android.graphics.drawable.Drawable getActivityLogo(android.content.Intent) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract java.util.List<android.content.pm.PermissionGroupInfo> getAllPermissionGroups(int);
-    method public abstract android.graphics.drawable.Drawable getApplicationBanner(android.content.pm.ApplicationInfo);
-    method public abstract android.graphics.drawable.Drawable getApplicationBanner(String) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @Nullable public abstract android.graphics.drawable.Drawable getActivityBanner(@NonNull android.content.ComponentName) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @Nullable public abstract android.graphics.drawable.Drawable getActivityBanner(@NonNull android.content.Intent) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull public abstract android.graphics.drawable.Drawable getActivityIcon(@NonNull android.content.ComponentName) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull public abstract android.graphics.drawable.Drawable getActivityIcon(@NonNull android.content.Intent) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull public abstract android.content.pm.ActivityInfo getActivityInfo(@NonNull android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @Nullable public abstract android.graphics.drawable.Drawable getActivityLogo(@NonNull android.content.ComponentName) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @Nullable public abstract android.graphics.drawable.Drawable getActivityLogo(@NonNull android.content.Intent) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull public abstract java.util.List<android.content.pm.PermissionGroupInfo> getAllPermissionGroups(int);
+    method @Nullable public abstract android.graphics.drawable.Drawable getApplicationBanner(@NonNull android.content.pm.ApplicationInfo);
+    method @Nullable public abstract android.graphics.drawable.Drawable getApplicationBanner(@NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract int getApplicationEnabledSetting(@NonNull String);
-    method public abstract android.graphics.drawable.Drawable getApplicationIcon(android.content.pm.ApplicationInfo);
-    method public abstract android.graphics.drawable.Drawable getApplicationIcon(String) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract android.content.pm.ApplicationInfo getApplicationInfo(String, int) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract CharSequence getApplicationLabel(android.content.pm.ApplicationInfo);
-    method public abstract android.graphics.drawable.Drawable getApplicationLogo(android.content.pm.ApplicationInfo);
-    method public abstract android.graphics.drawable.Drawable getApplicationLogo(String) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull public abstract android.graphics.drawable.Drawable getApplicationIcon(@NonNull android.content.pm.ApplicationInfo);
+    method @NonNull public abstract android.graphics.drawable.Drawable getApplicationIcon(@NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull public abstract android.content.pm.ApplicationInfo getApplicationInfo(@NonNull String, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull public abstract CharSequence getApplicationLabel(@NonNull android.content.pm.ApplicationInfo);
+    method @Nullable public abstract android.graphics.drawable.Drawable getApplicationLogo(@NonNull android.content.pm.ApplicationInfo);
+    method @Nullable public abstract android.graphics.drawable.Drawable getApplicationLogo(@NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
     method @Nullable public abstract android.content.pm.ChangedPackages getChangedPackages(@IntRange(from=0) int);
     method public abstract int getComponentEnabledSetting(@NonNull android.content.ComponentName);
-    method public abstract android.graphics.drawable.Drawable getDefaultActivityIcon();
-    method public abstract android.graphics.drawable.Drawable getDrawable(String, @DrawableRes int, android.content.pm.ApplicationInfo);
-    method public abstract java.util.List<android.content.pm.ApplicationInfo> getInstalledApplications(int);
+    method @NonNull public abstract android.graphics.drawable.Drawable getDefaultActivityIcon();
+    method @Nullable public abstract android.graphics.drawable.Drawable getDrawable(@NonNull String, @DrawableRes int, @Nullable android.content.pm.ApplicationInfo);
+    method @NonNull public abstract java.util.List<android.content.pm.ApplicationInfo> getInstalledApplications(int);
     method @NonNull public java.util.List<android.content.pm.ModuleInfo> getInstalledModules(int);
-    method public abstract java.util.List<android.content.pm.PackageInfo> getInstalledPackages(int);
-    method @Nullable public abstract String getInstallerPackageName(String);
+    method @NonNull public abstract java.util.List<android.content.pm.PackageInfo> getInstalledPackages(int);
+    method @Nullable public abstract String getInstallerPackageName(@NonNull String);
     method @NonNull public abstract byte[] getInstantAppCookie();
     method public abstract int getInstantAppCookieMaxBytes();
-    method public abstract android.content.pm.InstrumentationInfo getInstrumentationInfo(android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull public abstract android.content.pm.InstrumentationInfo getInstrumentationInfo(@NonNull android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method @Nullable public abstract android.content.Intent getLaunchIntentForPackage(@NonNull String);
     method @Nullable public abstract android.content.Intent getLeanbackLaunchIntentForPackage(@NonNull String);
-    method public android.content.pm.ModuleInfo getModuleInfo(String, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull public android.content.pm.ModuleInfo getModuleInfo(@NonNull String, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method @Nullable public abstract String getNameForUid(int);
-    method public android.content.pm.PackageInfo getPackageArchiveInfo(String, int);
+    method @Nullable public android.content.pm.PackageInfo getPackageArchiveInfo(@NonNull String, int);
     method public abstract int[] getPackageGids(@NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract int[] getPackageGids(String, int) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract android.content.pm.PackageInfo getPackageInfo(String, int) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract android.content.pm.PackageInfo getPackageInfo(android.content.pm.VersionedPackage, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public abstract int[] getPackageGids(@NonNull String, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public abstract android.content.pm.PackageInfo getPackageInfo(@NonNull String, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public abstract android.content.pm.PackageInfo getPackageInfo(@NonNull android.content.pm.VersionedPackage, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method @NonNull public abstract android.content.pm.PackageInstaller getPackageInstaller();
-    method public abstract int getPackageUid(String, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public abstract int getPackageUid(@NonNull String, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method @Nullable public abstract String[] getPackagesForUid(int);
-    method public abstract java.util.List<android.content.pm.PackageInfo> getPackagesHoldingPermissions(String[], int);
-    method public abstract android.content.pm.PermissionGroupInfo getPermissionGroupInfo(String, int) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract android.content.pm.PermissionInfo getPermissionInfo(String, int) throws android.content.pm.PackageManager.NameNotFoundException;
-    method @Deprecated public abstract int getPreferredActivities(@NonNull java.util.List<android.content.IntentFilter>, @NonNull java.util.List<android.content.ComponentName>, String);
-    method @Deprecated public abstract java.util.List<android.content.pm.PackageInfo> getPreferredPackages(int);
-    method public abstract android.content.pm.ProviderInfo getProviderInfo(android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract android.content.pm.ActivityInfo getReceiverInfo(android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract android.content.res.Resources getResourcesForActivity(android.content.ComponentName) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract android.content.res.Resources getResourcesForApplication(android.content.pm.ApplicationInfo) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract android.content.res.Resources getResourcesForApplication(String) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public abstract android.content.pm.ServiceInfo getServiceInfo(android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull public abstract java.util.List<android.content.pm.PackageInfo> getPackagesHoldingPermissions(@NonNull String[], int);
+    method @NonNull public abstract android.content.pm.PermissionGroupInfo getPermissionGroupInfo(@NonNull String, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public abstract android.content.pm.PermissionInfo getPermissionInfo(@NonNull String, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @Deprecated public abstract int getPreferredActivities(@NonNull java.util.List<android.content.IntentFilter>, @NonNull java.util.List<android.content.ComponentName>, @Nullable String);
+    method @Deprecated @NonNull public abstract java.util.List<android.content.pm.PackageInfo> getPreferredPackages(int);
+    method @NonNull public abstract android.content.pm.ProviderInfo getProviderInfo(@NonNull android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull public abstract android.content.pm.ActivityInfo getReceiverInfo(@NonNull android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull public abstract android.content.res.Resources getResourcesForActivity(@NonNull android.content.ComponentName) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull public abstract android.content.res.Resources getResourcesForApplication(@NonNull android.content.pm.ApplicationInfo) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull public abstract android.content.res.Resources getResourcesForApplication(@NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull public abstract android.content.pm.ServiceInfo getServiceInfo(@NonNull android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method @NonNull public abstract java.util.List<android.content.pm.SharedLibraryInfo> getSharedLibraries(int);
     method @Nullable public android.os.Bundle getSuspendedPackageAppExtras();
     method public boolean getSyntheticAppDetailsActivityEnabled(@NonNull String);
-    method public abstract android.content.pm.FeatureInfo[] getSystemAvailableFeatures();
-    method public abstract String[] getSystemSharedLibraryNames();
-    method public abstract CharSequence getText(String, @StringRes int, android.content.pm.ApplicationInfo);
-    method public abstract android.graphics.drawable.Drawable getUserBadgedDrawableForDensity(android.graphics.drawable.Drawable, android.os.UserHandle, android.graphics.Rect, int);
-    method public abstract android.graphics.drawable.Drawable getUserBadgedIcon(android.graphics.drawable.Drawable, android.os.UserHandle);
-    method public abstract CharSequence getUserBadgedLabel(CharSequence, android.os.UserHandle);
-    method public abstract android.content.res.XmlResourceParser getXml(String, @XmlRes int, android.content.pm.ApplicationInfo);
-    method public boolean hasSigningCertificate(String, byte[], int);
-    method public boolean hasSigningCertificate(int, byte[], int);
-    method public abstract boolean hasSystemFeature(String);
-    method public abstract boolean hasSystemFeature(String, int);
+    method @NonNull public abstract android.content.pm.FeatureInfo[] getSystemAvailableFeatures();
+    method @Nullable public abstract String[] getSystemSharedLibraryNames();
+    method @Nullable public abstract CharSequence getText(@NonNull String, @StringRes int, @Nullable android.content.pm.ApplicationInfo);
+    method @NonNull public abstract android.graphics.drawable.Drawable getUserBadgedDrawableForDensity(@NonNull android.graphics.drawable.Drawable, @NonNull android.os.UserHandle, @Nullable android.graphics.Rect, int);
+    method @NonNull public abstract android.graphics.drawable.Drawable getUserBadgedIcon(@NonNull android.graphics.drawable.Drawable, @NonNull android.os.UserHandle);
+    method @NonNull public abstract CharSequence getUserBadgedLabel(@NonNull CharSequence, @NonNull android.os.UserHandle);
+    method @Nullable public abstract android.content.res.XmlResourceParser getXml(@NonNull String, @XmlRes int, @Nullable android.content.pm.ApplicationInfo);
+    method public boolean hasSigningCertificate(@NonNull String, @NonNull byte[], int);
+    method public boolean hasSigningCertificate(int, @NonNull byte[], int);
+    method public abstract boolean hasSystemFeature(@NonNull String);
+    method public abstract boolean hasSystemFeature(@NonNull String, int);
     method public abstract boolean isInstantApp();
-    method public abstract boolean isInstantApp(String);
-    method public boolean isPackageSuspended(String) throws android.content.pm.PackageManager.NameNotFoundException;
+    method public abstract boolean isInstantApp(@NonNull String);
+    method public boolean isPackageSuspended(@NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
     method public boolean isPackageSuspended();
     method @CheckResult public abstract boolean isPermissionRevokedByPolicy(@NonNull String, @NonNull String);
     method public abstract boolean isSafeMode();
-    method public abstract java.util.List<android.content.pm.ResolveInfo> queryBroadcastReceivers(android.content.Intent, int);
-    method public abstract java.util.List<android.content.pm.ProviderInfo> queryContentProviders(String, int, int);
-    method public abstract java.util.List<android.content.pm.InstrumentationInfo> queryInstrumentation(String, int);
-    method public abstract java.util.List<android.content.pm.ResolveInfo> queryIntentActivities(android.content.Intent, int);
-    method public abstract java.util.List<android.content.pm.ResolveInfo> queryIntentActivityOptions(@Nullable android.content.ComponentName, @Nullable android.content.Intent[], android.content.Intent, int);
-    method public abstract java.util.List<android.content.pm.ResolveInfo> queryIntentContentProviders(android.content.Intent, int);
-    method public abstract java.util.List<android.content.pm.ResolveInfo> queryIntentServices(android.content.Intent, int);
-    method public abstract java.util.List<android.content.pm.PermissionInfo> queryPermissionsByGroup(String, int) throws android.content.pm.PackageManager.NameNotFoundException;
-    method @Deprecated public abstract void removePackageFromPreferred(String);
-    method public abstract void removePermission(String);
-    method public abstract android.content.pm.ResolveInfo resolveActivity(android.content.Intent, int);
-    method public abstract android.content.pm.ProviderInfo resolveContentProvider(String, int);
-    method public abstract android.content.pm.ResolveInfo resolveService(android.content.Intent, int);
+    method @NonNull public abstract java.util.List<android.content.pm.ResolveInfo> queryBroadcastReceivers(@NonNull android.content.Intent, int);
+    method @NonNull public abstract java.util.List<android.content.pm.ProviderInfo> queryContentProviders(@Nullable String, int, int);
+    method @NonNull public abstract java.util.List<android.content.pm.InstrumentationInfo> queryInstrumentation(@NonNull String, int);
+    method @Nullable public abstract java.util.List<android.content.pm.ResolveInfo> queryIntentActivities(@NonNull android.content.Intent, int);
+    method @NonNull public abstract java.util.List<android.content.pm.ResolveInfo> queryIntentActivityOptions(@Nullable android.content.ComponentName, @Nullable android.content.Intent[], @NonNull android.content.Intent, int);
+    method @NonNull public abstract java.util.List<android.content.pm.ResolveInfo> queryIntentContentProviders(@NonNull android.content.Intent, int);
+    method @NonNull public abstract java.util.List<android.content.pm.ResolveInfo> queryIntentServices(@NonNull android.content.Intent, int);
+    method @NonNull public abstract java.util.List<android.content.pm.PermissionInfo> queryPermissionsByGroup(@NonNull String, int) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @Deprecated public abstract void removePackageFromPreferred(@NonNull String);
+    method public abstract void removePermission(@NonNull String);
+    method @Nullable public abstract android.content.pm.ResolveInfo resolveActivity(@NonNull android.content.Intent, int);
+    method @Nullable public abstract android.content.pm.ProviderInfo resolveContentProvider(@NonNull String, int);
+    method @Nullable public abstract android.content.pm.ResolveInfo resolveService(@NonNull android.content.Intent, int);
     method public abstract void setApplicationCategoryHint(@NonNull String, int);
     method @RequiresPermission(value=android.Manifest.permission.CHANGE_COMPONENT_ENABLED_STATE, conditional=true) public abstract void setApplicationEnabledSetting(@NonNull String, int, int);
     method @RequiresPermission(value=android.Manifest.permission.CHANGE_COMPONENT_ENABLED_STATE, conditional=true) public abstract void setComponentEnabledSetting(@NonNull android.content.ComponentName, int, int);
-    method public abstract void setInstallerPackageName(String, String);
+    method public abstract void setInstallerPackageName(@NonNull String, @Nullable String);
     method public abstract void updateInstantAppCookie(@Nullable byte[]);
     method public abstract void verifyPendingInstall(int, int);
     field public static final int CERT_INPUT_RAW_X509 = 0; // 0x0
@@ -13089,10 +13074,10 @@ package android.database.sqlite {
     method @Deprecated public String buildUnionSubQuery(String, String[], java.util.Set<java.lang.String>, int, String, String, String[], String, String);
     method public int delete(@NonNull android.database.sqlite.SQLiteDatabase, @Nullable String, @Nullable String[]);
     method @Nullable public android.database.sqlite.SQLiteDatabase.CursorFactory getCursorFactory();
-    method public boolean getDistinct();
     method @Nullable public java.util.Map<java.lang.String,java.lang.String> getProjectionMap();
-    method public boolean getStrict();
     method @Nullable public String getTables();
+    method public boolean isDistinct();
+    method public boolean isStrict();
     method public android.database.Cursor query(android.database.sqlite.SQLiteDatabase, String[], String, String[], String, String, String);
     method public android.database.Cursor query(android.database.sqlite.SQLiteDatabase, String[], String, String[], String, String, String, String);
     method public android.database.Cursor query(android.database.sqlite.SQLiteDatabase, String[], String, String[], String, String, String, String, android.os.CancellationSignal);
@@ -14100,8 +14085,9 @@ package android.graphics {
   }
 
   public class ComposeShader extends android.graphics.Shader {
-    ctor public ComposeShader(@NonNull android.graphics.Shader, @NonNull android.graphics.Shader, @NonNull android.graphics.Xfermode);
-    ctor public ComposeShader(@NonNull android.graphics.Shader, @NonNull android.graphics.Shader, @NonNull android.graphics.PorterDuff.Mode);
+    ctor @Deprecated public ComposeShader(@NonNull android.graphics.Shader, @NonNull android.graphics.Shader, @NonNull android.graphics.Xfermode);
+    ctor @Deprecated public ComposeShader(@NonNull android.graphics.Shader, @NonNull android.graphics.Shader, @NonNull android.graphics.PorterDuff.Mode);
+    ctor public ComposeShader(@NonNull android.graphics.Shader, @NonNull android.graphics.Shader, @NonNull android.graphics.BlendMode);
   }
 
   public class CornerPathEffect extends android.graphics.PathEffect {
@@ -14795,37 +14781,37 @@ package android.graphics {
     field public float y;
   }
 
-  public class PorterDuff {
-    ctor public PorterDuff();
+  @Deprecated public class PorterDuff {
+    ctor @Deprecated public PorterDuff();
   }
 
-  public enum PorterDuff.Mode {
-    enum_constant public static final android.graphics.PorterDuff.Mode ADD;
-    enum_constant public static final android.graphics.PorterDuff.Mode CLEAR;
-    enum_constant public static final android.graphics.PorterDuff.Mode DARKEN;
-    enum_constant public static final android.graphics.PorterDuff.Mode DST;
-    enum_constant public static final android.graphics.PorterDuff.Mode DST_ATOP;
-    enum_constant public static final android.graphics.PorterDuff.Mode DST_IN;
-    enum_constant public static final android.graphics.PorterDuff.Mode DST_OUT;
-    enum_constant public static final android.graphics.PorterDuff.Mode DST_OVER;
-    enum_constant public static final android.graphics.PorterDuff.Mode LIGHTEN;
-    enum_constant public static final android.graphics.PorterDuff.Mode MULTIPLY;
-    enum_constant public static final android.graphics.PorterDuff.Mode OVERLAY;
-    enum_constant public static final android.graphics.PorterDuff.Mode SCREEN;
-    enum_constant public static final android.graphics.PorterDuff.Mode SRC;
-    enum_constant public static final android.graphics.PorterDuff.Mode SRC_ATOP;
-    enum_constant public static final android.graphics.PorterDuff.Mode SRC_IN;
-    enum_constant public static final android.graphics.PorterDuff.Mode SRC_OUT;
-    enum_constant public static final android.graphics.PorterDuff.Mode SRC_OVER;
-    enum_constant public static final android.graphics.PorterDuff.Mode XOR;
+  @Deprecated public enum PorterDuff.Mode {
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode ADD;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode CLEAR;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DARKEN;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DST;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DST_ATOP;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DST_IN;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DST_OUT;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DST_OVER;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode LIGHTEN;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode MULTIPLY;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode OVERLAY;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SCREEN;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SRC;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SRC_ATOP;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SRC_IN;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SRC_OUT;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SRC_OVER;
+    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode XOR;
   }
 
   @Deprecated public class PorterDuffColorFilter extends android.graphics.ColorFilter {
     ctor @Deprecated public PorterDuffColorFilter(@ColorInt int, @NonNull android.graphics.PorterDuff.Mode);
   }
 
-  public class PorterDuffXfermode extends android.graphics.Xfermode {
-    ctor public PorterDuffXfermode(android.graphics.PorterDuff.Mode);
+  @Deprecated public class PorterDuffXfermode extends android.graphics.Xfermode {
+    ctor @Deprecated public PorterDuffXfermode(android.graphics.PorterDuff.Mode);
   }
 
   public interface PostProcessor {
@@ -15387,7 +15373,8 @@ package android.graphics.drawable {
     method public boolean setState(@NonNull int[]);
     method public void setTint(@ColorInt int);
     method public void setTintList(@Nullable android.content.res.ColorStateList);
-    method public void setTintMode(@NonNull android.graphics.PorterDuff.Mode);
+    method @Deprecated public void setTintMode(@Nullable android.graphics.PorterDuff.Mode);
+    method public void setTintMode(@Nullable android.graphics.BlendMode);
     method public boolean setVisible(boolean, boolean);
     method public void unscheduleSelf(@NonNull Runnable);
   }
@@ -15545,7 +15532,8 @@ package android.graphics.drawable {
     method public void loadDrawableAsync(android.content.Context, android.graphics.drawable.Icon.OnDrawableLoadedListener, android.os.Handler);
     method public android.graphics.drawable.Icon setTint(@ColorInt int);
     method public android.graphics.drawable.Icon setTintList(android.content.res.ColorStateList);
-    method public android.graphics.drawable.Icon setTintMode(android.graphics.PorterDuff.Mode);
+    method @Deprecated @NonNull public android.graphics.drawable.Icon setTintMode(@NonNull android.graphics.PorterDuff.Mode);
+    method @NonNull public android.graphics.drawable.Icon setTintMode(@NonNull android.graphics.BlendMode);
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.graphics.drawable.Icon> CREATOR;
     field public static final int TYPE_ADAPTIVE_BITMAP = 5; // 0x5
@@ -17054,6 +17042,7 @@ package android.hardware.camera2 {
 
   public class CaptureFailure {
     method public long getFrameNumber();
+    method @Nullable public String getPhysicalCameraId();
     method public int getReason();
     method @NonNull public android.hardware.camera2.CaptureRequest getRequest();
     method public int getSequenceId();
@@ -23041,6 +23030,9 @@ package android.media {
     method public int getUsage();
     method public int getVolumeControlStream();
     method public void writeToParcel(android.os.Parcel, int);
+    field public static final int ALLOW_CAPTURE_BY_ALL = 1; // 0x1
+    field public static final int ALLOW_CAPTURE_BY_NONE = 3; // 0x3
+    field public static final int ALLOW_CAPTURE_BY_SYSTEM = 2; // 0x2
     field public static final int CONTENT_TYPE_MOVIE = 3; // 0x3
     field public static final int CONTENT_TYPE_MUSIC = 2; // 0x2
     field public static final int CONTENT_TYPE_SONIFICATION = 4; // 0x4
@@ -23072,7 +23064,7 @@ package android.media {
     ctor public AudioAttributes.Builder();
     ctor public AudioAttributes.Builder(android.media.AudioAttributes);
     method public android.media.AudioAttributes build();
-    method @NonNull public android.media.AudioAttributes.Builder setAllowCapture(boolean);
+    method @NonNull public android.media.AudioAttributes.Builder setAllowedCapturePolicy(int);
     method public android.media.AudioAttributes.Builder setContentType(int);
     method public android.media.AudioAttributes.Builder setFlags(int);
     method public android.media.AudioAttributes.Builder setLegacyStreamType(int);
@@ -23273,6 +23265,7 @@ package android.media {
     method @Deprecated public boolean registerRemoteController(android.media.RemoteController);
     method @Deprecated public int requestAudioFocus(android.media.AudioManager.OnAudioFocusChangeListener, int, int);
     method public int requestAudioFocus(@NonNull android.media.AudioFocusRequest);
+    method public void setAllowedCapturePolicy(int);
     method @Deprecated public void setBluetoothA2dpOn(boolean);
     method public void setBluetoothScoOn(boolean);
     method public void setMicrophoneMute(boolean);
@@ -25069,7 +25062,7 @@ package android.media {
     field public static final String KEY_LANGUAGE = "language";
     field public static final String KEY_LATENCY = "latency";
     field public static final String KEY_LEVEL = "level";
-    field public static final String KEY_MAX_BFRAMES = "max-bframes";
+    field public static final String KEY_MAX_B_FRAMES = "max-bframes";
     field public static final String KEY_MAX_FPS_TO_ENCODER = "max-fps-to-encoder";
     field public static final String KEY_MAX_HEIGHT = "max-height";
     field public static final String KEY_MAX_INPUT_SIZE = "max-input-size";
@@ -28712,12 +28705,12 @@ package android.net {
 
   public static class ConnectivityManager.NetworkCallback {
     ctor public ConnectivityManager.NetworkCallback();
-    method public void onAvailable(android.net.Network);
+    method public void onAvailable(@NonNull android.net.Network);
     method public void onBlockedStatusChanged(@NonNull android.net.Network, boolean);
-    method public void onCapabilitiesChanged(android.net.Network, android.net.NetworkCapabilities);
-    method public void onLinkPropertiesChanged(android.net.Network, android.net.LinkProperties);
-    method public void onLosing(android.net.Network, int);
-    method public void onLost(android.net.Network);
+    method public void onCapabilitiesChanged(@NonNull android.net.Network, @NonNull android.net.NetworkCapabilities);
+    method public void onLinkPropertiesChanged(@NonNull android.net.Network, @NonNull android.net.LinkProperties);
+    method public void onLosing(@NonNull android.net.Network, int);
+    method public void onLost(@NonNull android.net.Network);
     method public void onUnavailable();
   }
 
@@ -28749,6 +28742,7 @@ package android.net {
     method @NonNull public static android.net.DnsResolver getInstance();
     method public <T> void query(@Nullable android.net.Network, @NonNull byte[], int, @NonNull java.util.concurrent.Executor, @Nullable android.os.CancellationSignal, @NonNull android.net.DnsResolver.AnswerCallback<T>);
     method public <T> void query(@Nullable android.net.Network, @NonNull String, int, int, int, @NonNull java.util.concurrent.Executor, @Nullable android.os.CancellationSignal, @NonNull android.net.DnsResolver.AnswerCallback<T>);
+    method public void query(@Nullable android.net.Network, @NonNull String, int, @NonNull java.util.concurrent.Executor, @Nullable android.os.CancellationSignal, @NonNull android.net.DnsResolver.InetAddressAnswerCallback);
     field public static final int CLASS_IN = 1; // 0x1
     field public static final int FLAG_EMPTY = 0; // 0x0
     field public static final int FLAG_NO_CACHE_LOOKUP = 4; // 0x4
@@ -28783,11 +28777,11 @@ package android.net {
   }
 
   public final class IpPrefix implements android.os.Parcelable {
-    method public boolean contains(java.net.InetAddress);
+    method public boolean contains(@NonNull java.net.InetAddress);
     method public int describeContents();
-    method public java.net.InetAddress getAddress();
-    method public int getPrefixLength();
-    method public byte[] getRawAddress();
+    method @NonNull public java.net.InetAddress getAddress();
+    method @IntRange(from=0, to=128) public int getPrefixLength();
+    method @NonNull public byte[] getRawAddress();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.IpPrefix> CREATOR;
   }
@@ -28860,7 +28854,7 @@ package android.net {
     method public int describeContents();
     method public java.net.InetAddress getAddress();
     method public int getFlags();
-    method public int getPrefixLength();
+    method @IntRange(from=0, to=128) public int getPrefixLength();
     method public int getScope();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.LinkAddress> CREATOR;
@@ -29130,9 +29124,9 @@ package android.net {
 
   public final class RouteInfo implements android.os.Parcelable {
     method public int describeContents();
-    method public android.net.IpPrefix getDestination();
-    method public java.net.InetAddress getGateway();
-    method public String getInterface();
+    method @NonNull public android.net.IpPrefix getDestination();
+    method @Nullable public java.net.InetAddress getGateway();
+    method @Nullable public String getInterface();
     method public boolean hasGateway();
     method public boolean isDefaultRoute();
     method public boolean matches(java.net.InetAddress);
@@ -29267,7 +29261,6 @@ package android.net {
     method public abstract boolean isRelative();
     method public android.net.Uri normalizeScheme();
     method public static android.net.Uri parse(String);
-    method @NonNull public String toSafeString();
     method public abstract String toString();
     method public static android.net.Uri withAppendedPath(android.net.Uri, String);
     method public static void writeToParcel(android.os.Parcel, android.net.Uri);
@@ -34652,9 +34645,11 @@ package android.os {
     method @NonNull public static java.io.File getRootDirectory();
     method @Deprecated public static String getStorageState(java.io.File);
     method public static boolean isExternalStorageEmulated();
-    method public static boolean isExternalStorageEmulated(java.io.File);
+    method public static boolean isExternalStorageEmulated(@NonNull java.io.File);
     method public static boolean isExternalStorageRemovable();
-    method public static boolean isExternalStorageRemovable(java.io.File);
+    method public static boolean isExternalStorageRemovable(@NonNull java.io.File);
+    method public static boolean isExternalStorageSandboxed();
+    method public static boolean isExternalStorageSandboxed(@NonNull java.io.File);
     field public static String DIRECTORY_ALARMS;
     field public static String DIRECTORY_AUDIOBOOKS;
     field public static String DIRECTORY_DCIM;
@@ -38852,6 +38847,7 @@ package android.provider {
     field public static final String ACTION_APPLICATION_DETAILS_SETTINGS = "android.settings.APPLICATION_DETAILS_SETTINGS";
     field public static final String ACTION_APPLICATION_DEVELOPMENT_SETTINGS = "android.settings.APPLICATION_DEVELOPMENT_SETTINGS";
     field public static final String ACTION_APPLICATION_SETTINGS = "android.settings.APPLICATION_SETTINGS";
+    field public static final String ACTION_APP_NOTIFICATION_BUBBLE_SETTINGS = "android.settings.APP_NOTIFICATION_BUBBLE_SETTINGS";
     field public static final String ACTION_APP_NOTIFICATION_SETTINGS = "android.settings.APP_NOTIFICATION_SETTINGS";
     field public static final String ACTION_APP_SEARCH_SETTINGS = "android.settings.APP_SEARCH_SETTINGS";
     field public static final String ACTION_APP_USAGE_SETTINGS = "android.settings.action.APP_USAGE_SETTINGS";
@@ -42523,6 +42519,7 @@ package android.system {
     method public static int getpid();
     method public static int getppid();
     method public static java.net.SocketAddress getsockname(java.io.FileDescriptor) throws android.system.ErrnoException;
+    method @NonNull public static android.system.StructTimeval getsockoptTimeval(@NonNull java.io.FileDescriptor, int, int) throws android.system.ErrnoException;
     method public static int gettid();
     method public static int getuid();
     method public static byte[] getxattr(String, String) throws android.system.ErrnoException;
@@ -42573,6 +42570,7 @@ package android.system {
     method @Deprecated public static void setgid(int) throws android.system.ErrnoException;
     method public static int setsid() throws android.system.ErrnoException;
     method public static void setsockoptInt(java.io.FileDescriptor, int, int, int) throws android.system.ErrnoException;
+    method public static void setsockoptTimeval(@NonNull java.io.FileDescriptor, int, int, @NonNull android.system.StructTimeval) throws android.system.ErrnoException;
     method @Deprecated public static void setuid(int) throws android.system.ErrnoException;
     method public static void setxattr(String, String, byte[], int) throws android.system.ErrnoException;
     method public static void shutdown(java.io.FileDescriptor, int) throws android.system.ErrnoException;
@@ -42778,6 +42776,10 @@ package android.system {
     field public static final int F_SETOWN;
     field public static final int F_UNLCK;
     field public static final int F_WRLCK;
+    field public static final int ICMP6_ECHO_REPLY;
+    field public static final int ICMP6_ECHO_REQUEST;
+    field public static final int ICMP_ECHO;
+    field public static final int ICMP_ECHOREPLY;
     field public static final int IFA_F_DADFAILED;
     field public static final int IFA_F_DEPRECATED;
     field public static final int IFA_F_HOMEADDRESS;
@@ -43148,6 +43150,13 @@ package android.system {
     method public int compareTo(android.system.StructTimespec);
     field public final long tv_nsec;
     field public final long tv_sec;
+  }
+
+  public final class StructTimeval {
+    method @NonNull public static android.system.StructTimeval fromMillis(long);
+    method public long toMillis();
+    field public final long tv_sec;
+    field public final long tv_usec;
   }
 
   public final class StructUtsname {
@@ -49719,8 +49728,9 @@ package android.view {
     method public default CharSequence getContentDescription();
     method public int getGroupId();
     method public android.graphics.drawable.Drawable getIcon();
+    method @Nullable public default android.graphics.BlendMode getIconTintBlendMode();
     method @Nullable public default android.content.res.ColorStateList getIconTintList();
-    method @Nullable public default android.graphics.PorterDuff.Mode getIconTintMode();
+    method @Deprecated @Nullable public default android.graphics.PorterDuff.Mode getIconTintMode();
     method public android.content.Intent getIntent();
     method public int getItemId();
     method public android.view.ContextMenu.ContextMenuInfo getMenuInfo();
@@ -49749,7 +49759,8 @@ package android.view {
     method public android.view.MenuItem setIcon(android.graphics.drawable.Drawable);
     method public android.view.MenuItem setIcon(@DrawableRes int);
     method public default android.view.MenuItem setIconTintList(@Nullable android.content.res.ColorStateList);
-    method public default android.view.MenuItem setIconTintMode(@Nullable android.graphics.PorterDuff.Mode);
+    method @Deprecated @NonNull public default android.view.MenuItem setIconTintMode(@Nullable android.graphics.PorterDuff.Mode);
+    method @NonNull public default android.view.MenuItem setIconTintMode(@Nullable android.graphics.BlendMode);
     method public android.view.MenuItem setIntent(android.content.Intent);
     method public android.view.MenuItem setNumericShortcut(char);
     method public default android.view.MenuItem setNumericShortcut(char, int);
@@ -50402,8 +50413,9 @@ package android.view {
     method public int getAutofillType();
     method @Nullable public android.view.autofill.AutofillValue getAutofillValue();
     method public android.graphics.drawable.Drawable getBackground();
+    method @Nullable public android.graphics.BlendMode getBackgroundBlendMode();
     method @Nullable public android.content.res.ColorStateList getBackgroundTintList();
-    method @Nullable public android.graphics.PorterDuff.Mode getBackgroundTintMode();
+    method @Deprecated @Nullable public android.graphics.PorterDuff.Mode getBackgroundTintMode();
     method @android.view.ViewDebug.ExportedProperty(category="layout") public int getBaseline();
     method @android.view.ViewDebug.CapturedViewProperty public final int getBottom();
     method protected float getBottomFadingEdgeStrength();
@@ -50434,9 +50446,10 @@ package android.view {
     method public java.util.ArrayList<android.view.View> getFocusables(int);
     method public void getFocusedRect(android.graphics.Rect);
     method public android.graphics.drawable.Drawable getForeground();
+    method @Nullable public android.graphics.BlendMode getForegroundBlendMode();
     method public int getForegroundGravity();
     method @Nullable public android.content.res.ColorStateList getForegroundTintList();
-    method @Nullable public android.graphics.PorterDuff.Mode getForegroundTintMode();
+    method @Deprecated @Nullable public android.graphics.PorterDuff.Mode getForegroundTintMode();
     method public boolean getGlobalVisibleRect(android.graphics.Rect, android.graphics.Point);
     method public final boolean getGlobalVisibleRect(android.graphics.Rect);
     method public android.os.Handler getHandler();
@@ -50752,7 +50765,8 @@ package android.view {
     method @Deprecated public void setBackgroundDrawable(android.graphics.drawable.Drawable);
     method public void setBackgroundResource(@DrawableRes int);
     method public void setBackgroundTintList(@Nullable android.content.res.ColorStateList);
-    method public void setBackgroundTintMode(@Nullable android.graphics.PorterDuff.Mode);
+    method @Deprecated public void setBackgroundTintMode(@Nullable android.graphics.PorterDuff.Mode);
+    method public void setBackgroundTintMode(@Nullable android.graphics.BlendMode);
     method public final void setBottom(int);
     method public void setCameraDistance(float);
     method public void setClickable(boolean);
@@ -50779,7 +50793,8 @@ package android.view {
     method public void setForeground(android.graphics.drawable.Drawable);
     method public void setForegroundGravity(int);
     method public void setForegroundTintList(@Nullable android.content.res.ColorStateList);
-    method public void setForegroundTintMode(@Nullable android.graphics.PorterDuff.Mode);
+    method @Deprecated public void setForegroundTintMode(@Nullable android.graphics.PorterDuff.Mode);
+    method public void setForegroundTintMode(@Nullable android.graphics.BlendMode);
     method public void setHapticFeedbackEnabled(boolean);
     method public void setHasTransientState(boolean);
     method public void setHorizontalFadingEdgeEnabled(boolean);
@@ -52299,7 +52314,7 @@ package android.view.accessibility {
     method public java.util.List<android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction> getActionList();
     method @Deprecated public int getActions();
     method public java.util.List<java.lang.String> getAvailableExtraData();
-    method public void getBoundsInParent(android.graphics.Rect);
+    method @Deprecated public void getBoundsInParent(android.graphics.Rect);
     method public void getBoundsInScreen(android.graphics.Rect);
     method public android.view.accessibility.AccessibilityNodeInfo getChild(int);
     method public int getChildCount();
@@ -52368,7 +52383,7 @@ package android.view.accessibility {
     method public boolean removeChild(android.view.View, int);
     method public void setAccessibilityFocused(boolean);
     method public void setAvailableExtraData(java.util.List<java.lang.String>);
-    method public void setBoundsInParent(android.graphics.Rect);
+    method @Deprecated public void setBoundsInParent(android.graphics.Rect);
     method public void setBoundsInScreen(android.graphics.Rect);
     method public void setCanOpenPopup(boolean);
     method public void setCheckable(boolean);
@@ -53048,6 +53063,16 @@ package android.view.autofill {
 
 package android.view.contentcapture {
 
+  public final class ContentCaptureCondition implements android.os.Parcelable {
+    ctor public ContentCaptureCondition(@NonNull android.content.LocusId, int);
+    method public int describeContents();
+    method public int getFlags();
+    method @NonNull public android.content.LocusId getLocusId();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.contentcapture.ContentCaptureCondition> CREATOR;
+    field public static final int FLAG_IS_REGEX = 2; // 0x2
+  }
+
   public final class ContentCaptureContext implements android.os.Parcelable {
     method public int describeContents();
     method @NonNull public static android.view.contentcapture.ContentCaptureContext forLocusId(@NonNull String);
@@ -53064,6 +53089,7 @@ package android.view.contentcapture {
   }
 
   public final class ContentCaptureManager {
+    method @Nullable public java.util.Set<android.view.contentcapture.ContentCaptureCondition> getContentCaptureConditions();
     method @Nullable public android.content.ComponentName getServiceComponentName();
     method public boolean isContentCaptureEnabled();
     method public void removeUserData(@NonNull android.view.contentcapture.UserDataRemovalRequest);
