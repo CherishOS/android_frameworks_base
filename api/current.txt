@@ -102,16 +102,13 @@ package android {
     field public static final String NFC_TRANSACTION_EVENT = "android.permission.NFC_TRANSACTION_EVENT";
     field public static final String PACKAGE_USAGE_STATS = "android.permission.PACKAGE_USAGE_STATS";
     field @Deprecated public static final String PERSISTENT_ACTIVITY = "android.permission.PERSISTENT_ACTIVITY";
-    field public static final String PROCESS_OUTGOING_CALLS = "android.permission.PROCESS_OUTGOING_CALLS";
+    field @Deprecated public static final String PROCESS_OUTGOING_CALLS = "android.permission.PROCESS_OUTGOING_CALLS";
     field public static final String READ_CALENDAR = "android.permission.READ_CALENDAR";
     field public static final String READ_CALL_LOG = "android.permission.READ_CALL_LOG";
     field public static final String READ_CONTACTS = "android.permission.READ_CONTACTS";
-    field @Deprecated public static final String READ_EXTERNAL_STORAGE = "android.permission.READ_EXTERNAL_STORAGE";
+    field public static final String READ_EXTERNAL_STORAGE = "android.permission.READ_EXTERNAL_STORAGE";
     field @Deprecated public static final String READ_INPUT_STATE = "android.permission.READ_INPUT_STATE";
     field public static final String READ_LOGS = "android.permission.READ_LOGS";
-    field public static final String READ_MEDIA_AUDIO = "android.permission.READ_MEDIA_AUDIO";
-    field public static final String READ_MEDIA_IMAGES = "android.permission.READ_MEDIA_IMAGES";
-    field public static final String READ_MEDIA_VIDEO = "android.permission.READ_MEDIA_VIDEO";
     field public static final String READ_PHONE_NUMBERS = "android.permission.READ_PHONE_NUMBERS";
     field public static final String READ_PHONE_STATE = "android.permission.READ_PHONE_STATE";
     field public static final String READ_SMS = "android.permission.READ_SMS";
@@ -161,7 +158,7 @@ package android {
     field public static final String WRITE_CALENDAR = "android.permission.WRITE_CALENDAR";
     field public static final String WRITE_CALL_LOG = "android.permission.WRITE_CALL_LOG";
     field public static final String WRITE_CONTACTS = "android.permission.WRITE_CONTACTS";
-    field @Deprecated public static final String WRITE_EXTERNAL_STORAGE = "android.permission.WRITE_EXTERNAL_STORAGE";
+    field public static final String WRITE_EXTERNAL_STORAGE = "android.permission.WRITE_EXTERNAL_STORAGE";
     field public static final String WRITE_GSERVICES = "android.permission.WRITE_GSERVICES";
     field public static final String WRITE_SECURE_SETTINGS = "android.permission.WRITE_SECURE_SETTINGS";
     field public static final String WRITE_SETTINGS = "android.permission.WRITE_SETTINGS";
@@ -177,13 +174,11 @@ package android {
     field public static final String CAMERA = "android.permission-group.CAMERA";
     field public static final String CONTACTS = "android.permission-group.CONTACTS";
     field public static final String LOCATION = "android.permission-group.LOCATION";
-    field public static final String MEDIA_AURAL = "android.permission-group.MEDIA_AURAL";
-    field public static final String MEDIA_VISUAL = "android.permission-group.MEDIA_VISUAL";
     field public static final String MICROPHONE = "android.permission-group.MICROPHONE";
     field public static final String PHONE = "android.permission-group.PHONE";
     field public static final String SENSORS = "android.permission-group.SENSORS";
     field public static final String SMS = "android.permission-group.SMS";
-    field @Deprecated public static final String STORAGE = "android.permission-group.STORAGE";
+    field public static final String STORAGE = "android.permission-group.STORAGE";
   }
 
   public final class R {
@@ -6274,7 +6269,7 @@ package android.app {
 
   public final class UiAutomation {
     method public void adoptShellPermissionIdentity();
-    method public void adoptShellPermissionIdentity(java.lang.String...);
+    method public void adoptShellPermissionIdentity(@Nullable java.lang.String...);
     method public void clearWindowAnimationFrameStats();
     method public boolean clearWindowContentFrameStats(int);
     method public void dropShellPermissionIdentity();
@@ -8605,7 +8600,6 @@ package android.bluetooth {
   }
 
   @Deprecated public final class BluetoothHealth implements android.bluetooth.BluetoothProfile {
-    ctor @Deprecated public BluetoothHealth();
     method @Deprecated public boolean connectChannelToSource(android.bluetooth.BluetoothDevice, android.bluetooth.BluetoothHealthAppConfiguration);
     method @Deprecated public boolean disconnectChannel(android.bluetooth.BluetoothDevice, android.bluetooth.BluetoothHealthAppConfiguration, int);
     method @Deprecated public java.util.List<android.bluetooth.BluetoothDevice> getConnectedDevices();
@@ -8629,7 +8623,6 @@ package android.bluetooth {
   }
 
   @Deprecated public final class BluetoothHealthAppConfiguration implements android.os.Parcelable {
-    ctor @Deprecated public BluetoothHealthAppConfiguration();
     method @Deprecated public int describeContents();
     method @Deprecated public int getDataType();
     method @Deprecated public String getName();
@@ -11252,7 +11245,6 @@ package android.content.pm {
   public class LauncherApps {
     method public java.util.List<android.content.pm.LauncherActivityInfo> getActivityList(String, android.os.UserHandle);
     method @NonNull public java.util.List<android.content.pm.PackageInstaller.SessionInfo> getAllPackageInstallerSessions();
-    method @Nullable public android.content.pm.LauncherApps.AppUsageLimit getAppUsageLimit(@NonNull String, @NonNull android.os.UserHandle);
     method public android.content.pm.ApplicationInfo getApplicationInfo(@NonNull String, int, @NonNull android.os.UserHandle) throws android.content.pm.PackageManager.NameNotFoundException;
     method public android.content.pm.LauncherApps.PinItemRequest getPinItemRequest(android.content.Intent);
     method public java.util.List<android.os.UserHandle> getProfiles();
@@ -11281,14 +11273,6 @@ package android.content.pm {
     field public static final String ACTION_CONFIRM_PIN_APPWIDGET = "android.content.pm.action.CONFIRM_PIN_APPWIDGET";
     field public static final String ACTION_CONFIRM_PIN_SHORTCUT = "android.content.pm.action.CONFIRM_PIN_SHORTCUT";
     field public static final String EXTRA_PIN_ITEM_REQUEST = "android.content.pm.extra.PIN_ITEM_REQUEST";
-  }
-
-  public static final class LauncherApps.AppUsageLimit implements android.os.Parcelable {
-    method public int describeContents();
-    method public long getTotalUsageLimit();
-    method public long getUsageRemaining();
-    method public void writeToParcel(android.os.Parcel, int);
-    field @NonNull public static final android.os.Parcelable.Creator<android.content.pm.LauncherApps.AppUsageLimit> CREATOR;
   }
 
   public abstract static class LauncherApps.Callback {
@@ -11454,7 +11438,7 @@ package android.content.pm {
     method @Nullable public android.graphics.Bitmap getAppIcon();
     method @Nullable public CharSequence getAppLabel();
     method @Nullable public String getAppPackageName();
-    method public int[] getChildSessionIds();
+    method @NonNull public int[] getChildSessionIds();
     method public int getInstallLocation();
     method public int getInstallReason();
     method @Nullable public String getInstallerPackageName();
@@ -17058,6 +17042,7 @@ package android.hardware.camera2 {
 
   public class CaptureFailure {
     method public long getFrameNumber();
+    method @Nullable public String getPhysicalCameraId();
     method public int getReason();
     method @NonNull public android.hardware.camera2.CaptureRequest getRequest();
     method public int getSequenceId();
@@ -28792,11 +28777,11 @@ package android.net {
   }
 
   public final class IpPrefix implements android.os.Parcelable {
-    method public boolean contains(java.net.InetAddress);
+    method public boolean contains(@NonNull java.net.InetAddress);
     method public int describeContents();
-    method public java.net.InetAddress getAddress();
-    method public int getPrefixLength();
-    method public byte[] getRawAddress();
+    method @NonNull public java.net.InetAddress getAddress();
+    method @IntRange(from=0, to=128) public int getPrefixLength();
+    method @NonNull public byte[] getRawAddress();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.IpPrefix> CREATOR;
   }
@@ -28869,7 +28854,7 @@ package android.net {
     method public int describeContents();
     method public java.net.InetAddress getAddress();
     method public int getFlags();
-    method public int getPrefixLength();
+    method @IntRange(from=0, to=128) public int getPrefixLength();
     method public int getScope();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.LinkAddress> CREATOR;
@@ -29139,9 +29124,9 @@ package android.net {
 
   public final class RouteInfo implements android.os.Parcelable {
     method public int describeContents();
-    method public android.net.IpPrefix getDestination();
-    method public java.net.InetAddress getGateway();
-    method public String getInterface();
+    method @NonNull public android.net.IpPrefix getDestination();
+    method @Nullable public java.net.InetAddress getGateway();
+    method @Nullable public String getInterface();
     method public boolean hasGateway();
     method public boolean isDefaultRoute();
     method public boolean matches(java.net.InetAddress);
@@ -42534,6 +42519,7 @@ package android.system {
     method public static int getpid();
     method public static int getppid();
     method public static java.net.SocketAddress getsockname(java.io.FileDescriptor) throws android.system.ErrnoException;
+    method @NonNull public static android.system.StructTimeval getsockoptTimeval(@NonNull java.io.FileDescriptor, int, int) throws android.system.ErrnoException;
     method public static int gettid();
     method public static int getuid();
     method public static byte[] getxattr(String, String) throws android.system.ErrnoException;
@@ -42584,6 +42570,7 @@ package android.system {
     method @Deprecated public static void setgid(int) throws android.system.ErrnoException;
     method public static int setsid() throws android.system.ErrnoException;
     method public static void setsockoptInt(java.io.FileDescriptor, int, int, int) throws android.system.ErrnoException;
+    method public static void setsockoptTimeval(@NonNull java.io.FileDescriptor, int, int, @NonNull android.system.StructTimeval) throws android.system.ErrnoException;
     method @Deprecated public static void setuid(int) throws android.system.ErrnoException;
     method public static void setxattr(String, String, byte[], int) throws android.system.ErrnoException;
     method public static void shutdown(java.io.FileDescriptor, int) throws android.system.ErrnoException;
@@ -42789,6 +42776,10 @@ package android.system {
     field public static final int F_SETOWN;
     field public static final int F_UNLCK;
     field public static final int F_WRLCK;
+    field public static final int ICMP6_ECHO_REPLY;
+    field public static final int ICMP6_ECHO_REQUEST;
+    field public static final int ICMP_ECHO;
+    field public static final int ICMP_ECHOREPLY;
     field public static final int IFA_F_DADFAILED;
     field public static final int IFA_F_DEPRECATED;
     field public static final int IFA_F_HOMEADDRESS;
@@ -43159,6 +43150,13 @@ package android.system {
     method public int compareTo(android.system.StructTimespec);
     field public final long tv_nsec;
     field public final long tv_sec;
+  }
+
+  public final class StructTimeval {
+    method @NonNull public static android.system.StructTimeval fromMillis(long);
+    method public long toMillis();
+    field public final long tv_sec;
+    field public final long tv_usec;
   }
 
   public final class StructUtsname {
