@@ -24658,13 +24658,18 @@ package android.media {
   }
 
   public class MediaController2 implements java.lang.AutoCloseable {
-    ctor public MediaController2(@NonNull android.content.Context, @NonNull android.media.Session2Token);
-    ctor public MediaController2(@NonNull android.content.Context, @NonNull android.media.Session2Token, @NonNull java.util.concurrent.Executor, @NonNull android.media.MediaController2.ControllerCallback);
     method public void cancelSessionCommand(@NonNull Object);
     method public void close();
     method @Nullable public android.media.Session2Token getConnectedSessionToken();
     method public boolean isPlaybackActive();
     method @NonNull public Object sendSessionCommand(@NonNull android.media.Session2Command, @Nullable android.os.Bundle);
+  }
+
+  public static final class MediaController2.Builder {
+    ctor public MediaController2.Builder(@NonNull android.content.Context, @NonNull android.media.Session2Token);
+    method @NonNull public android.media.MediaController2 build();
+    method @NonNull public android.media.MediaController2.Builder setConnectionHints(@NonNull android.os.Bundle);
+    method @NonNull public android.media.MediaController2.Builder setControllerCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaController2.ControllerCallback);
   }
 
   public abstract static class MediaController2.ControllerCallback {
@@ -26075,6 +26080,7 @@ package android.media {
   }
 
   public static final class MediaSession2.ControllerInfo {
+    method @NonNull public android.os.Bundle getConnectionHints();
     method @NonNull public String getPackageName();
     method @NonNull public android.media.session.MediaSessionManager.RemoteUserInfo getRemoteUserInfo();
     method public int getUid();
@@ -26094,7 +26100,7 @@ package android.media {
     method public final void addSession(@NonNull android.media.MediaSession2);
     method @NonNull public final java.util.List<android.media.MediaSession2> getSessions();
     method @CallSuper @Nullable public android.os.IBinder onBind(@NonNull android.content.Intent);
-    method @NonNull public abstract android.media.MediaSession2 onGetPrimarySession();
+    method @Nullable public abstract android.media.MediaSession2 onGetSession(@NonNull android.media.MediaSession2.ControllerInfo);
     method @Nullable public abstract android.media.MediaSession2Service.MediaNotification onUpdateNotification(@NonNull android.media.MediaSession2);
     method public final void removeSession(@NonNull android.media.MediaSession2);
     field public static final String SERVICE_INTERFACE = "android.media.MediaSession2Service";
