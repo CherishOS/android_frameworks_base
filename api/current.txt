@@ -35179,12 +35179,6 @@ package android.provider {
     field public static final String CACHED_NUMBER_TYPE = "numbertype";
     field public static final String CACHED_PHOTO_ID = "photo_id";
     field public static final String CACHED_PHOTO_URI = "photo_uri";
-    field public static final String CALL_ID_APP_NAME = "call_id_app_name";
-    field public static final String CALL_ID_DESCRIPTION = "call_id_description";
-    field public static final String CALL_ID_DETAILS = "call_id_details";
-    field public static final String CALL_ID_NAME = "call_id_name";
-    field public static final String CALL_ID_NUISANCE_CONFIDENCE = "call_id_nuisance_confidence";
-    field public static final String CALL_ID_PACKAGE_NAME = "call_id_package_name";
     field public static final String CALL_SCREENING_APP_NAME = "call_screening_app_name";
     field public static final String CALL_SCREENING_COMPONENT_NAME = "call_screening_component_name";
     field public static final android.net.Uri CONTENT_FILTER_URI;
@@ -41200,7 +41194,6 @@ package android.telecom {
     method public android.telecom.PhoneAccountHandle getAccountHandle();
     method public int getCallCapabilities();
     method public int getCallDirection();
-    method @Nullable public android.telecom.CallIdentification getCallIdentification();
     method public int getCallProperties();
     method public String getCallerDisplayName();
     method public int getCallerDisplayNamePresentation();
@@ -41282,34 +41275,6 @@ package android.telecom {
     field public static final int ROUTE_WIRED_OR_EARPIECE = 5; // 0x5
   }
 
-  public final class CallIdentification implements android.os.Parcelable {
-    method public int describeContents();
-    method @NonNull public CharSequence getCallScreeningAppName();
-    method @NonNull public String getCallScreeningPackageName();
-    method @Nullable public CharSequence getDescription();
-    method @Nullable public CharSequence getDetails();
-    method @Nullable public CharSequence getName();
-    method public int getNuisanceConfidence();
-    method @Nullable public android.graphics.drawable.Icon getPhoto();
-    method public void writeToParcel(android.os.Parcel, int);
-    field public static final int CONFIDENCE_LIKELY_NOT_NUISANCE = -1; // 0xffffffff
-    field public static final int CONFIDENCE_LIKELY_NUISANCE = 1; // 0x1
-    field public static final int CONFIDENCE_NOT_NUISANCE = -2; // 0xfffffffe
-    field public static final int CONFIDENCE_NUISANCE = 2; // 0x2
-    field public static final int CONFIDENCE_UNKNOWN = 0; // 0x0
-    field public static final android.os.Parcelable.Creator<android.telecom.CallIdentification> CREATOR;
-  }
-
-  public static class CallIdentification.Builder {
-    ctor public CallIdentification.Builder();
-    method public android.telecom.CallIdentification build();
-    method public android.telecom.CallIdentification.Builder setDescription(@Nullable CharSequence);
-    method public android.telecom.CallIdentification.Builder setDetails(@Nullable CharSequence);
-    method public android.telecom.CallIdentification.Builder setName(@Nullable CharSequence);
-    method public android.telecom.CallIdentification.Builder setNuisanceConfidence(int);
-    method public android.telecom.CallIdentification.Builder setPhoto(@Nullable android.graphics.drawable.Icon);
-  }
-
   public abstract class CallRedirectionService extends android.app.Service {
     ctor public CallRedirectionService();
     method public final void cancelCall();
@@ -41325,17 +41290,7 @@ package android.telecom {
     ctor public CallScreeningService();
     method public android.os.IBinder onBind(android.content.Intent);
     method public abstract void onScreenCall(@NonNull android.telecom.Call.Details);
-    method public final void provideCallIdentification(@NonNull android.telecom.Call.Details, @NonNull android.telecom.CallIdentification);
     method public final void respondToCall(@NonNull android.telecom.Call.Details, @NonNull android.telecom.CallScreeningService.CallResponse);
-    field public static final String ACTION_NUISANCE_CALL_STATUS_CHANGED = "android.telecom.action.NUISANCE_CALL_STATUS_CHANGED";
-    field public static final int CALL_DURATION_LONG = 4; // 0x4
-    field public static final int CALL_DURATION_MEDIUM = 3; // 0x3
-    field public static final int CALL_DURATION_SHORT = 2; // 0x2
-    field public static final int CALL_DURATION_VERY_SHORT = 1; // 0x1
-    field public static final String EXTRA_CALL_DURATION = "android.telecom.extra.CALL_DURATION";
-    field public static final String EXTRA_CALL_HANDLE = "android.telecom.extra.CALL_HANDLE";
-    field public static final String EXTRA_CALL_TYPE = "android.telecom.extra.CALL_TYPE";
-    field public static final String EXTRA_IS_NUISANCE = "android.telecom.extra.IS_NUISANCE";
     field public static final String SERVICE_INTERFACE = "android.telecom.CallScreeningService";
   }
 
@@ -41942,7 +41897,6 @@ package android.telecom {
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public boolean isVoiceMailNumber(android.telecom.PhoneAccountHandle, String);
     method @RequiresPermission(anyOf={android.Manifest.permission.CALL_PHONE, android.Manifest.permission.MANAGE_OWN_CALLS}) public void placeCall(android.net.Uri, android.os.Bundle);
     method public void registerPhoneAccount(android.telecom.PhoneAccount);
-    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public void reportNuisanceCallStatus(@NonNull android.net.Uri, boolean);
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public void showInCallScreen(boolean);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public void silenceRinger();
     method public void unregisterPhoneAccount(android.telecom.PhoneAccountHandle);
