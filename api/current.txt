@@ -6836,7 +6836,6 @@ package android.app.admin {
     field public static final String DELEGATION_KEEP_UNINSTALLED_PACKAGES = "delegation-keep-uninstalled-packages";
     field public static final String DELEGATION_NETWORK_LOGGING = "delegation-network-logging";
     field public static final String DELEGATION_PACKAGE_ACCESS = "delegation-package-access";
-    field public static final String DELEGATION_PACKAGE_INSTALLATION = "delegation-package-installation";
     field public static final String DELEGATION_PERMISSION_GRANT = "delegation-permission-grant";
     field public static final int ENCRYPTION_STATUS_ACTIVATING = 2; // 0x2
     field public static final int ENCRYPTION_STATUS_ACTIVE = 3; // 0x3
@@ -11483,10 +11482,12 @@ package android.content.pm {
     method public void setOriginatingUri(@Nullable android.net.Uri);
     method public void setReferrerUri(@Nullable android.net.Uri);
     method public void setSize(long);
+    method public void setWhitelistedRestrictedPermissions(@Nullable java.util.Set<java.lang.String>);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.PackageInstaller.SessionParams> CREATOR;
     field public static final int MODE_FULL_INSTALL = 1; // 0x1
     field public static final int MODE_INHERIT_EXISTING = 2; // 0x2
+    field @NonNull public static final java.util.Set<java.lang.String> RESTRICTED_PERMISSIONS_ALL;
   }
 
   public class PackageItemInfo {
@@ -11523,6 +11524,7 @@ package android.content.pm {
     method public abstract boolean addPermission(@NonNull android.content.pm.PermissionInfo);
     method public abstract boolean addPermissionAsync(@NonNull android.content.pm.PermissionInfo);
     method @Deprecated public abstract void addPreferredActivity(@NonNull android.content.IntentFilter, int, @Nullable android.content.ComponentName[], @NonNull android.content.ComponentName);
+    method @RequiresPermission(value="android.permission.WHITELIST_RESTRICTED_PERMISSIONS", conditional=true) public boolean addWhitelistedRestrictedPermission(@NonNull String, @NonNull String, int);
     method public abstract boolean canRequestPackageInstalls();
     method public abstract String[] canonicalToCurrentPackageNames(@NonNull String[]);
     method @CheckResult public abstract int checkPermission(@NonNull String, @NonNull String);
@@ -11592,11 +11594,13 @@ package android.content.pm {
     method @NonNull public abstract android.graphics.drawable.Drawable getUserBadgedDrawableForDensity(@NonNull android.graphics.drawable.Drawable, @NonNull android.os.UserHandle, @Nullable android.graphics.Rect, int);
     method @NonNull public abstract android.graphics.drawable.Drawable getUserBadgedIcon(@NonNull android.graphics.drawable.Drawable, @NonNull android.os.UserHandle);
     method @NonNull public abstract CharSequence getUserBadgedLabel(@NonNull CharSequence, @NonNull android.os.UserHandle);
+    method @RequiresPermission(value="android.permission.WHITELIST_RESTRICTED_PERMISSIONS", conditional=true) @NonNull public java.util.Set<java.lang.String> getWhitelistedRestrictedPermissions(@NonNull String, int);
     method @Nullable public abstract android.content.res.XmlResourceParser getXml(@NonNull String, @XmlRes int, @Nullable android.content.pm.ApplicationInfo);
     method public boolean hasSigningCertificate(@NonNull String, @NonNull byte[], int);
     method public boolean hasSigningCertificate(int, @NonNull byte[], int);
     method public abstract boolean hasSystemFeature(@NonNull String);
     method public abstract boolean hasSystemFeature(@NonNull String, int);
+    method public boolean isDeviceUpgrading();
     method public abstract boolean isInstantApp();
     method public abstract boolean isInstantApp(@NonNull String);
     method public boolean isPackageSuspended(@NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
@@ -11613,6 +11617,7 @@ package android.content.pm {
     method @NonNull public abstract java.util.List<android.content.pm.PermissionInfo> queryPermissionsByGroup(@NonNull String, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method @Deprecated public abstract void removePackageFromPreferred(@NonNull String);
     method public abstract void removePermission(@NonNull String);
+    method @RequiresPermission(value="android.permission.WHITELIST_RESTRICTED_PERMISSIONS", conditional=true) public boolean removeWhitelistedRestrictedPermission(@NonNull String, @NonNull String, int);
     method @Nullable public abstract android.content.pm.ResolveInfo resolveActivity(@NonNull android.content.Intent, int);
     method @Nullable public abstract android.content.pm.ProviderInfo resolveContentProvider(@NonNull String, int);
     method @Nullable public abstract android.content.pm.ResolveInfo resolveService(@NonNull android.content.Intent, int);
@@ -11740,6 +11745,9 @@ package android.content.pm {
     field public static final String FEATURE_WIFI_DIRECT = "android.hardware.wifi.direct";
     field public static final String FEATURE_WIFI_PASSPOINT = "android.hardware.wifi.passpoint";
     field public static final String FEATURE_WIFI_RTT = "android.hardware.wifi.rtt";
+    field public static final int FLAG_PERMISSION_WHITELIST_INSTALLER = 2; // 0x2
+    field public static final int FLAG_PERMISSION_WHITELIST_SYSTEM = 1; // 0x1
+    field public static final int FLAG_PERMISSION_WHITELIST_UPGRADE = 4; // 0x4
     field public static final int GET_ACTIVITIES = 1; // 0x1
     field public static final int GET_CONFIGURATIONS = 16384; // 0x4000
     field @Deprecated public static final int GET_DISABLED_COMPONENTS = 512; // 0x200
@@ -11840,7 +11848,9 @@ package android.content.pm {
     method @Nullable public CharSequence loadDescription(@NonNull android.content.pm.PackageManager);
     field @NonNull public static final android.os.Parcelable.Creator<android.content.pm.PermissionInfo> CREATOR;
     field public static final int FLAG_COSTS_MONEY = 1; // 0x1
+    field public static final int FLAG_HARD_RESTRICTED = 4; // 0x4
     field public static final int FLAG_INSTALLED = 1073741824; // 0x40000000
+    field public static final int FLAG_SOFT_RESTRICTED = 8; // 0x8
     field public static final int PROTECTION_DANGEROUS = 1; // 0x1
     field public static final int PROTECTION_FLAG_APPOP = 64; // 0x40
     field public static final int PROTECTION_FLAG_DEVELOPMENT = 32; // 0x20
@@ -42478,6 +42488,8 @@ package android.system {
   public final class ErrnoException extends java.lang.Exception {
     ctor public ErrnoException(String, int);
     ctor public ErrnoException(String, int, Throwable);
+    method @NonNull public java.io.IOException rethrowAsIOException() throws java.io.IOException;
+    method @NonNull public java.net.SocketException rethrowAsSocketException() throws java.net.SocketException;
     field public final int errno;
   }
 
@@ -52348,18 +52360,18 @@ package android.view.accessibility {
     method public void setCheckable(boolean);
     method public void setChecked(boolean);
     method public void setClassName(CharSequence);
-    method @Deprecated public void setClickable(boolean);
+    method public void setClickable(boolean);
     method public void setCollectionInfo(android.view.accessibility.AccessibilityNodeInfo.CollectionInfo);
     method public void setCollectionItemInfo(android.view.accessibility.AccessibilityNodeInfo.CollectionItemInfo);
     method public void setContentDescription(CharSequence);
     method public void setContentInvalid(boolean);
-    method @Deprecated public void setContextClickable(boolean);
-    method @Deprecated public void setDismissable(boolean);
+    method public void setContextClickable(boolean);
+    method public void setDismissable(boolean);
     method public void setDrawingOrder(int);
     method public void setEditable(boolean);
     method public void setEnabled(boolean);
     method public void setError(CharSequence);
-    method @Deprecated public void setFocusable(boolean);
+    method public void setFocusable(boolean);
     method public void setFocused(boolean);
     method public void setHeading(boolean);
     method public void setHintText(CharSequence);
@@ -52370,7 +52382,7 @@ package android.view.accessibility {
     method public void setLabeledBy(android.view.View);
     method public void setLabeledBy(android.view.View, int);
     method public void setLiveRegion(int);
-    method @Deprecated public void setLongClickable(boolean);
+    method public void setLongClickable(boolean);
     method public void setMaxTextLength(int);
     method public void setMovementGranularities(int);
     method public void setMultiLine(boolean);
@@ -52381,7 +52393,7 @@ package android.view.accessibility {
     method public void setPassword(boolean);
     method public void setRangeInfo(android.view.accessibility.AccessibilityNodeInfo.RangeInfo);
     method public void setScreenReaderFocusable(boolean);
-    method @Deprecated public void setScrollable(boolean);
+    method public void setScrollable(boolean);
     method public void setSelected(boolean);
     method public void setShowingHintText(boolean);
     method public void setSource(android.view.View);
