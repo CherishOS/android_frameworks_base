@@ -91,6 +91,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private final Handler mHandler = new Handler();
     private int mShowCarrierLabel;
     private boolean mHasCarrierLabel;
+	private View mCustomCarrierLabel;
 	 // Statusbar Weather Image
     private View mWeatherImageView;
     private View mWeatherTextView;
@@ -129,6 +130,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
            updateSettings(true);
        }
     }
+	}
     private SettingsObserver mSettingsObserver = new SettingsObserver(mHandler);
     private ContentResolver mContentResolver;
 
@@ -296,7 +298,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             if ((state1 & DISABLE_NOTIFICATION_ICONS) != 0) {
                 hideNotificationIconArea(animate);
                 hideCarrierName(animate);
-                animateHide(mClockView, animate, false);
+                animateHide(mClockView, animate, mClockStyle == 0);
             } else {
                 showNotificationIconArea(animate);
                 updateClockStyle(animate);
@@ -399,7 +401,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         animateHide(mNotificationIconAreaInner, animate, true);
         animateHide(mCenteredIconArea, animate, true);
 	animateHide(mCenterClockLayout, animate, true);
-        animateHide(mCustomIconArea, animate);
+        animateHide(mCustomIconArea, animate,true);
     }
 
     public void showNotificationIconArea(boolean animate) {
@@ -447,7 +449,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
         public void hideCarrierName(boolean animate) {
         if (mCustomCarrierLabel != null) {
-            animateHide(mCustomCarrierLabel, animate, true);
+            animateHide(mCustomCarrierLabel, animate, mHasCarrierLabel);
         }
     }
 
@@ -562,11 +564,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mShowClock = Settings.System.getIntForUser(mContentResolver,
                 Settings.System.STATUS_BAR_CLOCK, 1,
                 UserHandle.USER_CURRENT) == 1;
-        mShowCarrierLabel = Settings.System.getIntForUser(mContentResolver,
-                Settings.System.STATUS_BAR_SHOW_CARRIER, 1,
-                UserHandle.USER_CURRENT);
-        mHasCarrierLabel = (mShowCarrierLabel == 2 || mShowCarrierLabel == 3);
-        if (!mShowClock) {
+		if (!mShowClock) {
             mClockStyle = 1; // internally switch to centered clock layout because
                              // left & right will show up again after QS pulldown
         } else {
@@ -574,6 +572,10 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
                     Settings.System.STATUSBAR_CLOCK_STYLE, 0,
                     UserHandle.USER_CURRENT);
         }
+        mShowCarrierLabel = Settings.System.getIntForUser(mContentResolver,
+                Settings.System.STATUS_BAR_SHOW_CARRIER, 1,
+                UserHandle.USER_CURRENT);
+        mHasCarrierLabel = (mShowCarrierLabel == 2 || mShowCarrierLabel == 3);
         updateClockStyle(animate);
         setCarrierLabel(animate);
 		updateSBWeather(animate);
