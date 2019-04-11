@@ -5335,6 +5335,7 @@ package android.app {
     field public static final String EXTRA_TITLE = "android.title";
     field public static final String EXTRA_TITLE_BIG = "android.title.big";
     field public static final int FLAG_AUTO_CANCEL = 16; // 0x10
+    field public static final int FLAG_BUBBLE = 4096; // 0x1000
     field public static final int FLAG_FOREGROUND_SERVICE = 64; // 0x40
     field public static final int FLAG_GROUP_SUMMARY = 512; // 0x200
     field @Deprecated public static final int FLAG_HIGH_PRIORITY = 128; // 0x80
@@ -9515,7 +9516,7 @@ package android.content {
     method public static android.content.SyncAdapterType[] getSyncAdapterTypes();
     method public static boolean getSyncAutomatically(android.accounts.Account, String);
     method @Nullable public final String getType(@NonNull android.net.Uri);
-    method @NonNull public final android.content.ContentResolver.TypeInfo getTypeInfo(@NonNull String);
+    method @NonNull public final android.content.ContentResolver.MimeTypeInfo getTypeInfo(@NonNull String);
     method @Nullable public final android.net.Uri insert(@RequiresPermission.Write @NonNull android.net.Uri, @Nullable android.content.ContentValues);
     method public static boolean isSyncActive(android.accounts.Account, String);
     method public static boolean isSyncPending(android.accounts.Account, String);
@@ -9595,7 +9596,7 @@ package android.content {
     field public static final int SYNC_OBSERVER_TYPE_SETTINGS = 1; // 0x1
   }
 
-  public static final class ContentResolver.TypeInfo {
+  public static final class ContentResolver.MimeTypeInfo {
     method @NonNull public CharSequence getContentDescription();
     method @NonNull public android.graphics.drawable.Icon getIcon();
     method @NonNull public CharSequence getLabel();
@@ -23078,8 +23079,8 @@ package android.media {
     method @NonNull public android.media.AudioAttributes.Builder setAllowedCapturePolicy(int);
     method public android.media.AudioAttributes.Builder setContentType(int);
     method public android.media.AudioAttributes.Builder setFlags(int);
+    method @NonNull public android.media.AudioAttributes.Builder setHapticChannelsMuted(boolean);
     method public android.media.AudioAttributes.Builder setLegacyStreamType(int);
-    method public android.media.AudioAttributes.Builder setMuteHapticChannels(boolean);
     method public android.media.AudioAttributes.Builder setUsage(int);
   }
 
@@ -38478,8 +38479,8 @@ package android.provider {
 
   public final class MediaStore {
     ctor public MediaStore();
-    method @NonNull public static java.util.Set<java.lang.String> getAllVolumeNames(@NonNull android.content.Context);
     method @Nullable public static android.net.Uri getDocumentUri(@NonNull android.content.Context, @NonNull android.net.Uri);
+    method @NonNull public static java.util.Set<java.lang.String> getExternalVolumeNames(@NonNull android.content.Context);
     method public static android.net.Uri getMediaScannerUri();
     method @Nullable public static android.net.Uri getMediaUri(@NonNull android.content.Context, @NonNull android.net.Uri);
     method @NonNull public static String getVersion(@NonNull android.content.Context);
@@ -38523,6 +38524,7 @@ package android.provider {
     field public static final String META_DATA_STILL_IMAGE_CAMERA_PREWARM_SERVICE = "android.media.still_image_camera_preview_service";
     field public static final String UNKNOWN_STRING = "<unknown>";
     field public static final String VOLUME_EXTERNAL = "external";
+    field public static final String VOLUME_EXTERNAL_PRIMARY = "external_primary";
     field public static final String VOLUME_INTERNAL = "internal";
   }
 
@@ -38537,6 +38539,7 @@ package android.provider {
     field public static final String ALBUM_ID = "album_id";
     field public static final String ALBUM_KEY = "album_key";
     field public static final String ARTIST = "artist";
+    field public static final String ARTIST_ID = "artist_id";
     field public static final String FIRST_YEAR = "minyear";
     field public static final String LAST_YEAR = "maxyear";
     field public static final String NUMBER_OF_SONGS = "numsongs";
@@ -38770,6 +38773,7 @@ package android.provider {
     field public static final String RELATIVE_PATH = "relative_path";
     field public static final String SIZE = "_size";
     field public static final String TITLE = "title";
+    field public static final String VOLUME_NAME = "volume_name";
     field public static final String WIDTH = "width";
   }
 
@@ -51672,7 +51676,7 @@ package android.view {
     method public void addOnGlobalLayoutListener(android.view.ViewTreeObserver.OnGlobalLayoutListener);
     method public void addOnPreDrawListener(android.view.ViewTreeObserver.OnPreDrawListener);
     method public void addOnScrollChangedListener(android.view.ViewTreeObserver.OnScrollChangedListener);
-    method public void addOnSystemGestureExclusionRectsChangedListener(java.util.function.Consumer<java.util.List<android.graphics.Rect>>);
+    method public void addOnSystemGestureExclusionRectsChangedListener(@NonNull java.util.function.Consumer<java.util.List<android.graphics.Rect>>);
     method public void addOnTouchModeChangeListener(android.view.ViewTreeObserver.OnTouchModeChangeListener);
     method public void addOnWindowAttachListener(android.view.ViewTreeObserver.OnWindowAttachListener);
     method public void addOnWindowFocusChangeListener(android.view.ViewTreeObserver.OnWindowFocusChangeListener);
@@ -51687,7 +51691,7 @@ package android.view {
     method public void removeOnGlobalLayoutListener(android.view.ViewTreeObserver.OnGlobalLayoutListener);
     method public void removeOnPreDrawListener(android.view.ViewTreeObserver.OnPreDrawListener);
     method public void removeOnScrollChangedListener(android.view.ViewTreeObserver.OnScrollChangedListener);
-    method public void removeOnSystemGestureExclusionRectsChangedListener(java.util.function.Consumer<java.util.List<android.graphics.Rect>>);
+    method public void removeOnSystemGestureExclusionRectsChangedListener(@NonNull java.util.function.Consumer<java.util.List<android.graphics.Rect>>);
     method public void removeOnTouchModeChangeListener(android.view.ViewTreeObserver.OnTouchModeChangeListener);
     method public void removeOnWindowAttachListener(android.view.ViewTreeObserver.OnWindowAttachListener);
     method public void removeOnWindowFocusChangeListener(android.view.ViewTreeObserver.OnWindowFocusChangeListener);
