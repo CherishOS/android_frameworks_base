@@ -5335,6 +5335,7 @@ package android.app {
     field public static final String EXTRA_TITLE = "android.title";
     field public static final String EXTRA_TITLE_BIG = "android.title.big";
     field public static final int FLAG_AUTO_CANCEL = 16; // 0x10
+    field public static final int FLAG_BUBBLE = 4096; // 0x1000
     field public static final int FLAG_FOREGROUND_SERVICE = 64; // 0x40
     field public static final int FLAG_GROUP_SUMMARY = 512; // 0x200
     field @Deprecated public static final int FLAG_HIGH_PRIORITY = 128; // 0x80
@@ -9515,7 +9516,7 @@ package android.content {
     method public static android.content.SyncAdapterType[] getSyncAdapterTypes();
     method public static boolean getSyncAutomatically(android.accounts.Account, String);
     method @Nullable public final String getType(@NonNull android.net.Uri);
-    method @NonNull public final android.content.ContentResolver.TypeInfo getTypeInfo(@NonNull String);
+    method @NonNull public final android.content.ContentResolver.MimeTypeInfo getTypeInfo(@NonNull String);
     method @Nullable public final android.net.Uri insert(@RequiresPermission.Write @NonNull android.net.Uri, @Nullable android.content.ContentValues);
     method public static boolean isSyncActive(android.accounts.Account, String);
     method public static boolean isSyncPending(android.accounts.Account, String);
@@ -9595,7 +9596,7 @@ package android.content {
     field public static final int SYNC_OBSERVER_TYPE_SETTINGS = 1; // 0x1
   }
 
-  public static final class ContentResolver.TypeInfo {
+  public static final class ContentResolver.MimeTypeInfo {
     method @NonNull public CharSequence getContentDescription();
     method @NonNull public android.graphics.drawable.Icon getIcon();
     method @NonNull public CharSequence getLabel();
@@ -10307,6 +10308,7 @@ package android.content {
     field public static final String CATEGORY_APP_CALENDAR = "android.intent.category.APP_CALENDAR";
     field public static final String CATEGORY_APP_CONTACTS = "android.intent.category.APP_CONTACTS";
     field public static final String CATEGORY_APP_EMAIL = "android.intent.category.APP_EMAIL";
+    field public static final String CATEGORY_APP_FILES = "android.intent.category.APP_FILES";
     field public static final String CATEGORY_APP_GALLERY = "android.intent.category.APP_GALLERY";
     field public static final String CATEGORY_APP_MAPS = "android.intent.category.APP_MAPS";
     field public static final String CATEGORY_APP_MARKET = "android.intent.category.APP_MARKET";
@@ -38477,8 +38479,8 @@ package android.provider {
 
   public final class MediaStore {
     ctor public MediaStore();
-    method @NonNull public static java.util.Set<java.lang.String> getAllVolumeNames(@NonNull android.content.Context);
     method @Nullable public static android.net.Uri getDocumentUri(@NonNull android.content.Context, @NonNull android.net.Uri);
+    method @NonNull public static java.util.Set<java.lang.String> getExternalVolumeNames(@NonNull android.content.Context);
     method public static android.net.Uri getMediaScannerUri();
     method @Nullable public static android.net.Uri getMediaUri(@NonNull android.content.Context, @NonNull android.net.Uri);
     method @NonNull public static String getVersion(@NonNull android.content.Context);
@@ -38522,6 +38524,7 @@ package android.provider {
     field public static final String META_DATA_STILL_IMAGE_CAMERA_PREWARM_SERVICE = "android.media.still_image_camera_preview_service";
     field public static final String UNKNOWN_STRING = "<unknown>";
     field public static final String VOLUME_EXTERNAL = "external";
+    field public static final String VOLUME_EXTERNAL_PRIMARY = "external_primary";
     field public static final String VOLUME_INTERNAL = "internal";
   }
 
@@ -38536,6 +38539,7 @@ package android.provider {
     field public static final String ALBUM_ID = "album_id";
     field public static final String ALBUM_KEY = "album_key";
     field public static final String ARTIST = "artist";
+    field public static final String ARTIST_ID = "artist_id";
     field public static final String FIRST_YEAR = "minyear";
     field public static final String LAST_YEAR = "maxyear";
     field public static final String NUMBER_OF_SONGS = "numsongs";
@@ -38769,6 +38773,7 @@ package android.provider {
     field public static final String RELATIVE_PATH = "relative_path";
     field public static final String SIZE = "_size";
     field public static final String TITLE = "title";
+    field public static final String VOLUME_NAME = "volume_name";
     field public static final String WIDTH = "width";
   }
 
@@ -44382,9 +44387,9 @@ package android.telephony {
     method public int getCid();
     method public int getLac();
     method @Deprecated public int getMcc();
-    method public String getMccString();
+    method @Nullable public String getMccString();
     method @Deprecated public int getMnc();
-    method public String getMncString();
+    method @Nullable public String getMncString();
     method @Nullable public String getMobileNetworkOperator();
     method @Deprecated public int getPsc();
     method public void writeToParcel(android.os.Parcel, int);
@@ -44396,9 +44401,9 @@ package android.telephony {
     method public int getCi();
     method public int getEarfcn();
     method @Deprecated public int getMcc();
-    method public String getMccString();
+    method @Nullable public String getMccString();
     method @Deprecated public int getMnc();
-    method public String getMncString();
+    method @Nullable public String getMncString();
     method @Nullable public String getMobileNetworkOperator();
     method public int getPci();
     method public int getTac();
@@ -44421,8 +44426,8 @@ package android.telephony {
     method public int getCid();
     method public int getCpid();
     method public int getLac();
-    method public String getMccString();
-    method public String getMncString();
+    method @Nullable public String getMccString();
+    method @Nullable public String getMncString();
     method @Nullable public String getMobileNetworkOperator();
     method public int getUarfcn();
     method public void writeToParcel(android.os.Parcel, int);
@@ -44433,9 +44438,9 @@ package android.telephony {
     method public int getCid();
     method public int getLac();
     method @Deprecated public int getMcc();
-    method public String getMccString();
+    method @Nullable public String getMccString();
     method @Deprecated public int getMnc();
-    method public String getMncString();
+    method @Nullable public String getMncString();
     method @Nullable public String getMobileNetworkOperator();
     method public int getPsc();
     method public int getUarfcn();
@@ -44458,22 +44463,22 @@ package android.telephony {
   }
 
   public final class CellInfoCdma extends android.telephony.CellInfo implements android.os.Parcelable {
-    method public android.telephony.CellIdentityCdma getCellIdentity();
-    method public android.telephony.CellSignalStrengthCdma getCellSignalStrength();
+    method @NonNull public android.telephony.CellIdentityCdma getCellIdentity();
+    method @NonNull public android.telephony.CellSignalStrengthCdma getCellSignalStrength();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.telephony.CellInfoCdma> CREATOR;
   }
 
   public final class CellInfoGsm extends android.telephony.CellInfo implements android.os.Parcelable {
-    method public android.telephony.CellIdentityGsm getCellIdentity();
-    method public android.telephony.CellSignalStrengthGsm getCellSignalStrength();
+    method @NonNull public android.telephony.CellIdentityGsm getCellIdentity();
+    method @NonNull public android.telephony.CellSignalStrengthGsm getCellSignalStrength();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.telephony.CellInfoGsm> CREATOR;
   }
 
   public final class CellInfoLte extends android.telephony.CellInfo implements android.os.Parcelable {
-    method public android.telephony.CellIdentityLte getCellIdentity();
-    method public android.telephony.CellSignalStrengthLte getCellSignalStrength();
+    method @NonNull public android.telephony.CellIdentityLte getCellIdentity();
+    method @NonNull public android.telephony.CellSignalStrengthLte getCellSignalStrength();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.telephony.CellInfoLte> CREATOR;
   }
@@ -44509,7 +44514,7 @@ package android.telephony {
     method public abstract boolean equals(Object);
     method public abstract int getAsuLevel();
     method public abstract int getDbm();
-    method public abstract int getLevel();
+    method @IntRange(from=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN, to=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_GREAT) public abstract int getLevel();
     method public abstract int hashCode();
     field public static final int SIGNAL_STRENGTH_GOOD = 3; // 0x3
     field public static final int SIGNAL_STRENGTH_GREAT = 4; // 0x4
@@ -44529,7 +44534,7 @@ package android.telephony {
     method public int getEvdoEcio();
     method public int getEvdoLevel();
     method public int getEvdoSnr();
-    method public int getLevel();
+    method @IntRange(from=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN, to=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_GREAT) public int getLevel();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.telephony.CellSignalStrengthCdma> CREATOR;
   }
@@ -44539,7 +44544,7 @@ package android.telephony {
     method public int getAsuLevel();
     method public int getBitErrorRate();
     method public int getDbm();
-    method public int getLevel();
+    method @IntRange(from=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN, to=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_GREAT) public int getLevel();
     method public int getTimingAdvance();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.telephony.CellSignalStrengthGsm> CREATOR;
@@ -44550,7 +44555,7 @@ package android.telephony {
     method public int getAsuLevel();
     method public int getCqi();
     method public int getDbm();
-    method public int getLevel();
+    method @IntRange(from=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN, to=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_GREAT) public int getLevel();
     method public int getRsrp();
     method public int getRsrq();
     method public int getRssi();
@@ -44567,7 +44572,7 @@ package android.telephony {
     method public int getCsiRsrq();
     method public int getCsiSinr();
     method public int getDbm();
-    method public int getLevel();
+    method @IntRange(from=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN, to=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_GREAT) public int getLevel();
     method public int getSsRsrp();
     method public int getSsRsrq();
     method public int getSsSinr();
@@ -44579,7 +44584,7 @@ package android.telephony {
     method public int describeContents();
     method public int getAsuLevel();
     method public int getDbm();
-    method public int getLevel();
+    method @IntRange(from=0, to=4) public int getLevel();
     method public int getRscp();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.telephony.CellSignalStrengthTdscdma> CREATOR;
@@ -44589,7 +44594,7 @@ package android.telephony {
     method public int describeContents();
     method public int getAsuLevel();
     method public int getDbm();
-    method public int getLevel();
+    method @IntRange(from=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN, to=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_GREAT) public int getLevel();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.telephony.CellSignalStrengthWcdma> CREATOR;
   }
