@@ -28754,10 +28754,13 @@ package android.net {
 
   public final class DnsResolver {
     method @NonNull public static android.net.DnsResolver getInstance();
-    method public <T> void query(@Nullable android.net.Network, @NonNull byte[], int, @NonNull java.util.concurrent.Executor, @Nullable android.os.CancellationSignal, @NonNull android.net.DnsResolver.AnswerCallback<T>);
-    method public <T> void query(@Nullable android.net.Network, @NonNull String, int, int, int, @NonNull java.util.concurrent.Executor, @Nullable android.os.CancellationSignal, @NonNull android.net.DnsResolver.AnswerCallback<T>);
-    method public void query(@Nullable android.net.Network, @NonNull String, int, @NonNull java.util.concurrent.Executor, @Nullable android.os.CancellationSignal, @NonNull android.net.DnsResolver.InetAddressAnswerCallback);
+    method public void query(@Nullable android.net.Network, @NonNull String, int, @NonNull java.util.concurrent.Executor, @Nullable android.os.CancellationSignal, @NonNull android.net.DnsResolver.Callback<? super java.util.List<java.net.InetAddress>>);
+    method public void query(@Nullable android.net.Network, @NonNull String, int, int, @NonNull java.util.concurrent.Executor, @Nullable android.os.CancellationSignal, @NonNull android.net.DnsResolver.Callback<? super java.util.List<java.net.InetAddress>>);
+    method public void rawQuery(@Nullable android.net.Network, @NonNull byte[], int, @NonNull java.util.concurrent.Executor, @Nullable android.os.CancellationSignal, @NonNull android.net.DnsResolver.Callback<? super byte[]>);
+    method public void rawQuery(@Nullable android.net.Network, @NonNull String, int, int, int, @NonNull java.util.concurrent.Executor, @Nullable android.os.CancellationSignal, @NonNull android.net.DnsResolver.Callback<? super byte[]>);
     field public static final int CLASS_IN = 1; // 0x1
+    field public static final int ERROR_PARSE = 0; // 0x0
+    field public static final int ERROR_SYSTEM = 1; // 0x1
     field public static final int FLAG_EMPTY = 0; // 0x0
     field public static final int FLAG_NO_CACHE_LOOKUP = 4; // 0x4
     field public static final int FLAG_NO_CACHE_STORE = 2; // 0x2
@@ -28766,23 +28769,13 @@ package android.net {
     field public static final int TYPE_AAAA = 28; // 0x1c
   }
 
-  public abstract static class DnsResolver.AnswerCallback<T> {
-    ctor public DnsResolver.AnswerCallback(@NonNull android.net.DnsResolver.AnswerParser<T>);
-    method public abstract void onAnswer(@NonNull T);
-    method public abstract void onParseException(@NonNull android.net.ParseException);
-    method public abstract void onQueryException(@NonNull android.system.ErrnoException);
+  public static interface DnsResolver.Callback<T> {
+    method public void onAnswer(@NonNull T, int);
+    method public void onError(@NonNull android.net.DnsResolver.DnsException);
   }
 
-  public static interface DnsResolver.AnswerParser<T> {
-    method @NonNull public T parse(@NonNull byte[]) throws android.net.ParseException;
-  }
-
-  public abstract static class DnsResolver.InetAddressAnswerCallback extends android.net.DnsResolver.AnswerCallback<java.util.List<java.net.InetAddress>> {
-    ctor public DnsResolver.InetAddressAnswerCallback();
-  }
-
-  public abstract static class DnsResolver.RawAnswerCallback extends android.net.DnsResolver.AnswerCallback<byte[]> {
-    ctor public DnsResolver.RawAnswerCallback();
+  public static class DnsResolver.DnsException extends java.lang.Exception {
+    field public final int code;
   }
 
   public class InetAddresses {
@@ -29108,8 +29101,6 @@ package android.net {
   }
 
   public class ParseException extends java.lang.RuntimeException {
-    ctor public ParseException(@NonNull String);
-    ctor public ParseException(@NonNull String, @NonNull Throwable);
     field public String response;
   }
 
