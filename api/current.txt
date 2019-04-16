@@ -224,6 +224,7 @@ package android {
     field public static final int __removed3 = 16844187; // 0x101059b
     field public static final int __removed4 = 16844188; // 0x101059c
     field public static final int __removed5 = 16844189; // 0x101059d
+    field public static final int __removed6 = 16844182; // 0x1010596
     field public static final int absListViewStyle = 16842858; // 0x101006a
     field public static final int accessibilityEventTypes = 16843648; // 0x1010380
     field public static final int accessibilityFeedbackType = 16843650; // 0x1010382
@@ -750,7 +751,6 @@ package android {
     field public static final int immersive = 16843456; // 0x10102c0
     field public static final int importantForAccessibility = 16843690; // 0x10103aa
     field public static final int importantForAutofill = 16844120; // 0x1010558
-    field public static final int importantForContentCapture = 16844182; // 0x1010596
     field public static final int inAnimation = 16843127; // 0x1010177
     field public static final int includeFontPadding = 16843103; // 0x101015f
     field public static final int includeInGlobalSearch = 16843374; // 0x101026e
@@ -6235,14 +6235,14 @@ package android.app {
   }
 
   public class TaskInfo {
-    field public android.content.ComponentName baseActivity;
-    field public android.content.Intent baseIntent;
+    field @Nullable public android.content.ComponentName baseActivity;
+    field @NonNull public android.content.Intent baseIntent;
     field public boolean isRunning;
     field public int numActivities;
-    field public android.content.ComponentName origActivity;
-    field public android.app.ActivityManager.TaskDescription taskDescription;
+    field @Nullable public android.content.ComponentName origActivity;
+    field @Nullable public android.app.ActivityManager.TaskDescription taskDescription;
     field public int taskId;
-    field public android.content.ComponentName topActivity;
+    field @Nullable public android.content.ComponentName topActivity;
   }
 
   public class TaskStackBuilder {
@@ -9001,7 +9001,7 @@ package android.bluetooth.le {
     method @Nullable public byte[] getManufacturerSpecificData(int);
     method public java.util.Map<android.os.ParcelUuid,byte[]> getServiceData();
     method @Nullable public byte[] getServiceData(android.os.ParcelUuid);
-    method @Nullable public java.util.List<android.os.ParcelUuid> getServiceSolicitationUuids();
+    method @NonNull public java.util.List<android.os.ParcelUuid> getServiceSolicitationUuids();
     method public java.util.List<android.os.ParcelUuid> getServiceUuids();
     method public int getTxPowerLevel();
   }
@@ -23424,6 +23424,10 @@ package android.media {
   }
 
   public final class AudioPlaybackCaptureConfiguration {
+    method @NonNull public int[] getExcludeUids();
+    method @NonNull public int[] getExcludeUsages();
+    method @NonNull public int[] getMatchingUids();
+    method @NonNull public int[] getMatchingUsages();
     method @NonNull public android.media.projection.MediaProjection getMediaProjection();
   }
 
@@ -39092,7 +39096,7 @@ package android.provider {
     field @Deprecated public static final String BEARER = "bearer";
     field public static final String CARRIER_ENABLED = "carrier_enabled";
     field public static final String CARRIER_ID = "carrier_id";
-    field public static final android.net.Uri CONTENT_URI;
+    field @NonNull public static final android.net.Uri CONTENT_URI;
     field public static final String CURRENT = "current";
     field public static final String DEFAULT_SORT_ORDER = "name ASC";
     field @Deprecated public static final String MCC = "mcc";
@@ -39111,7 +39115,7 @@ package android.provider {
     field public static final String PROXY = "proxy";
     field public static final String ROAMING_PROTOCOL = "roaming_protocol";
     field public static final String SERVER = "server";
-    field public static final android.net.Uri SIM_APN_URI;
+    field @NonNull public static final android.net.Uri SIM_APN_URI;
     field public static final String SUBSCRIPTION_ID = "sub_id";
     field public static final String TYPE = "type";
     field public static final String USER = "user";
@@ -47814,6 +47818,10 @@ package android.util {
     method public boolean equals(android.util.DisplayMetrics);
     method public void setTo(android.util.DisplayMetrics);
     method public void setToDefaults();
+    field public static final int DENSITY_140 = 140; // 0x8c
+    field public static final int DENSITY_180 = 180; // 0xb4
+    field public static final int DENSITY_200 = 200; // 0xc8
+    field public static final int DENSITY_220 = 220; // 0xdc
     field public static final int DENSITY_260 = 260; // 0x104
     field public static final int DENSITY_280 = 280; // 0x118
     field public static final int DENSITY_300 = 300; // 0x12c
@@ -50197,7 +50205,6 @@ package android.view {
     method @android.view.ViewDebug.CapturedViewProperty @IdRes public int getId();
     method @android.view.ViewDebug.ExportedProperty(category="accessibility", mapping={@android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_ACCESSIBILITY_AUTO, to="auto"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_ACCESSIBILITY_YES, to="yes"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_ACCESSIBILITY_NO, to="no"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS, to="noHideDescendants")}) public int getImportantForAccessibility();
     method @android.view.ViewDebug.ExportedProperty(mapping={@android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_AUTOFILL_AUTO, to="auto"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_AUTOFILL_YES, to="yes"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_AUTOFILL_NO, to="no"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_AUTOFILL_YES_EXCLUDE_DESCENDANTS, to="yesExcludeDescendants"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS, to="noExcludeDescendants")}) public int getImportantForAutofill();
-    method @android.view.ViewDebug.ExportedProperty(mapping={@android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_CONTENT_CAPTURE_AUTO, to="auto"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_CONTENT_CAPTURE_YES, to="yes"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_CONTENT_CAPTURE_NO, to="no"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_CONTENT_CAPTURE_YES_EXCLUDE_DESCENDANTS, to="yesExcludeDescendants"), @android.view.ViewDebug.IntToString(from=android.view.View.IMPORTANT_FOR_CONTENT_CAPTURE_NO_EXCLUDE_DESCENDANTS, to="noExcludeDescendants")}) public int getImportantForContentCapture();
     method public boolean getKeepScreenOn();
     method public android.view.KeyEvent.DispatcherState getKeyDispatcherState();
     method @android.view.ViewDebug.ExportedProperty(category="accessibility") @IdRes public int getLabelFor();
@@ -50338,7 +50345,6 @@ package android.view {
     method @android.view.ViewDebug.ExportedProperty public boolean isHovered();
     method public boolean isImportantForAccessibility();
     method public final boolean isImportantForAutofill();
-    method public final boolean isImportantForContentCapture();
     method public boolean isInEditMode();
     method public boolean isInLayout();
     method @android.view.ViewDebug.ExportedProperty public boolean isInTouchMode();
@@ -50413,7 +50419,6 @@ package android.view {
     method @CallSuper public void onPopulateAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
     method public void onProvideAutofillStructure(android.view.ViewStructure, int);
     method public void onProvideAutofillVirtualStructure(android.view.ViewStructure, int);
-    method public void onProvideContentCaptureStructure(@NonNull android.view.ViewStructure, int);
     method public void onProvideStructure(android.view.ViewStructure);
     method public void onProvideVirtualStructure(android.view.ViewStructure);
     method public android.view.PointerIcon onResolvePointerIcon(android.view.MotionEvent, int);
@@ -50539,7 +50544,6 @@ package android.view {
     method public void setId(@IdRes int);
     method public void setImportantForAccessibility(int);
     method public void setImportantForAutofill(int);
-    method public void setImportantForContentCapture(int);
     method public void setKeepScreenOn(boolean);
     method public void setKeyboardNavigationCluster(boolean);
     method public void setLabelFor(@IdRes int);
@@ -50718,11 +50722,6 @@ package android.view {
     field public static final int IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS = 8; // 0x8
     field public static final int IMPORTANT_FOR_AUTOFILL_YES = 1; // 0x1
     field public static final int IMPORTANT_FOR_AUTOFILL_YES_EXCLUDE_DESCENDANTS = 4; // 0x4
-    field public static final int IMPORTANT_FOR_CONTENT_CAPTURE_AUTO = 0; // 0x0
-    field public static final int IMPORTANT_FOR_CONTENT_CAPTURE_NO = 2; // 0x2
-    field public static final int IMPORTANT_FOR_CONTENT_CAPTURE_NO_EXCLUDE_DESCENDANTS = 8; // 0x8
-    field public static final int IMPORTANT_FOR_CONTENT_CAPTURE_YES = 1; // 0x1
-    field public static final int IMPORTANT_FOR_CONTENT_CAPTURE_YES_EXCLUDE_DESCENDANTS = 4; // 0x4
     field public static final int INVISIBLE = 4; // 0x4
     field public static final int KEEP_SCREEN_ON = 67108864; // 0x4000000
     field public static final int LAYER_TYPE_HARDWARE = 2; // 0x2
@@ -52830,7 +52829,7 @@ package android.view.contentcapture {
     method @Nullable public java.util.Set<android.view.contentcapture.ContentCaptureCondition> getContentCaptureConditions();
     method @Nullable public android.content.ComponentName getServiceComponentName();
     method public boolean isContentCaptureEnabled();
-    method public void removeUserData(@NonNull android.view.contentcapture.UserDataRemovalRequest);
+    method public void removeData(@NonNull android.view.contentcapture.DataRemovalRequest);
     method public void setContentCaptureEnabled(boolean);
   }
 
@@ -52841,6 +52840,7 @@ package android.view.contentcapture {
     method @Nullable public final android.view.contentcapture.ContentCaptureContext getContentCaptureContext();
     method @NonNull public final android.view.contentcapture.ContentCaptureSessionId getContentCaptureSessionId();
     method @NonNull public android.view.autofill.AutofillId newAutofillId(@NonNull android.view.autofill.AutofillId, long);
+    method @NonNull public final android.view.ViewStructure newViewStructure(@NonNull android.view.View);
     method @NonNull public final android.view.ViewStructure newVirtualViewStructure(@NonNull android.view.autofill.AutofillId, long);
     method public final void notifyViewAppeared(@NonNull android.view.ViewStructure);
     method public final void notifyViewDisappeared(@NonNull android.view.autofill.AutofillId);
@@ -52855,24 +52855,24 @@ package android.view.contentcapture {
     field @NonNull public static final android.os.Parcelable.Creator<android.view.contentcapture.ContentCaptureSessionId> CREATOR;
   }
 
-  public final class UserDataRemovalRequest implements android.os.Parcelable {
+  public final class DataRemovalRequest implements android.os.Parcelable {
     method public int describeContents();
-    method @NonNull public java.util.List<android.view.contentcapture.UserDataRemovalRequest.LocusIdRequest> getLocusIdRequests();
+    method @NonNull public java.util.List<android.view.contentcapture.DataRemovalRequest.LocusIdRequest> getLocusIdRequests();
     method @NonNull public String getPackageName();
     method public boolean isForEverything();
     method public void writeToParcel(android.os.Parcel, int);
-    field @NonNull public static final android.os.Parcelable.Creator<android.view.contentcapture.UserDataRemovalRequest> CREATOR;
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.contentcapture.DataRemovalRequest> CREATOR;
     field public static final int FLAG_IS_PREFIX = 1; // 0x1
   }
 
-  public static final class UserDataRemovalRequest.Builder {
-    ctor public UserDataRemovalRequest.Builder();
-    method @NonNull public android.view.contentcapture.UserDataRemovalRequest.Builder addLocusId(@NonNull android.content.LocusId, int);
-    method @NonNull public android.view.contentcapture.UserDataRemovalRequest build();
-    method @NonNull public android.view.contentcapture.UserDataRemovalRequest.Builder forEverything();
+  public static final class DataRemovalRequest.Builder {
+    ctor public DataRemovalRequest.Builder();
+    method @NonNull public android.view.contentcapture.DataRemovalRequest.Builder addLocusId(@NonNull android.content.LocusId, int);
+    method @NonNull public android.view.contentcapture.DataRemovalRequest build();
+    method @NonNull public android.view.contentcapture.DataRemovalRequest.Builder forEverything();
   }
 
-  public final class UserDataRemovalRequest.LocusIdRequest {
+  public final class DataRemovalRequest.LocusIdRequest {
     method @NonNull public int getFlags();
     method @NonNull public android.content.LocusId getLocusId();
   }
@@ -53422,6 +53422,7 @@ package android.view.textclassifier {
     method public int describeContents();
     method @Nullable public String getCallingPackageName();
     method @NonNull public java.util.List<android.view.textclassifier.ConversationActions.Message> getConversation();
+    method @NonNull public android.os.Bundle getExtras();
     method @Nullable public java.util.List<java.lang.String> getHints();
     method @IntRange(from=0xffffffff) public int getMaxSuggestions();
     method @NonNull public android.view.textclassifier.TextClassifier.EntityConfig getTypeConfig();
@@ -53434,6 +53435,7 @@ package android.view.textclassifier {
   public static final class ConversationActions.Request.Builder {
     ctor public ConversationActions.Request.Builder(@NonNull java.util.List<android.view.textclassifier.ConversationActions.Message>);
     method @NonNull public android.view.textclassifier.ConversationActions.Request build();
+    method @NonNull public android.view.textclassifier.ConversationActions.Request.Builder setExtras(@Nullable android.os.Bundle);
     method @NonNull public android.view.textclassifier.ConversationActions.Request.Builder setHints(@Nullable java.util.List<java.lang.String>);
     method @NonNull public android.view.textclassifier.ConversationActions.Request.Builder setMaxSuggestions(@IntRange(from=0xffffffff) int);
     method @NonNull public android.view.textclassifier.ConversationActions.Request.Builder setTypeConfig(@Nullable android.view.textclassifier.TextClassifier.EntityConfig);
