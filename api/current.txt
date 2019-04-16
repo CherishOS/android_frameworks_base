@@ -734,6 +734,7 @@ package android {
     field public static final int iconTintMode = 16844127; // 0x101055f
     field public static final int iconifiedByDefault = 16843514; // 0x10102fa
     field public static final int id = 16842960; // 0x10100d0
+    field public static final int identifier = 16844204; // 0x10105ac
     field public static final int ignoreGravity = 16843263; // 0x10101ff
     field public static final int imageButtonStyle = 16842866; // 0x1010072
     field public static final int imageWellStyle = 16842867; // 0x1010073
@@ -10085,6 +10086,7 @@ package android.content {
     method public int getFlags();
     method @Nullable public float[] getFloatArrayExtra(String);
     method public float getFloatExtra(String, float);
+    method @Nullable public String getIdentifier();
     method @Nullable public int[] getIntArrayExtra(String);
     method public int getIntExtra(String, int);
     method @Nullable public java.util.ArrayList<java.lang.Integer> getIntegerArrayListExtra(String);
@@ -10168,6 +10170,7 @@ package android.content {
     method @NonNull public android.content.Intent setDataAndTypeAndNormalize(@NonNull android.net.Uri, @Nullable String);
     method public void setExtrasClassLoader(@Nullable ClassLoader);
     method @NonNull public android.content.Intent setFlags(int);
+    method @NonNull public android.content.Intent setIdentifier(@Nullable String);
     method @NonNull public android.content.Intent setPackage(@Nullable String);
     method public void setSelector(@Nullable android.content.Intent);
     method public void setSourceBounds(@Nullable android.graphics.Rect);
@@ -10428,6 +10431,7 @@ package android.content {
     field public static final int FILL_IN_CLIP_DATA = 128; // 0x80
     field public static final int FILL_IN_COMPONENT = 8; // 0x8
     field public static final int FILL_IN_DATA = 2; // 0x2
+    field public static final int FILL_IN_IDENTIFIER = 256; // 0x100
     field public static final int FILL_IN_PACKAGE = 16; // 0x10
     field public static final int FILL_IN_SELECTOR = 64; // 0x40
     field public static final int FILL_IN_SOURCE_BOUNDS = 32; // 0x20
@@ -23041,6 +23045,7 @@ package android.media {
   public final class AudioAttributes implements android.os.Parcelable {
     method public boolean areHapticChannelsMuted();
     method public int describeContents();
+    method public int getAllowedCapturePolicy();
     method public int getContentType();
     method public int getFlags();
     method public int getUsage();
@@ -23246,6 +23251,7 @@ package android.media {
     method public int generateAudioSessionId();
     method @NonNull public java.util.List<android.media.AudioPlaybackConfiguration> getActivePlaybackConfigurations();
     method @NonNull public java.util.List<android.media.AudioRecordingConfiguration> getActiveRecordingConfigurations();
+    method public int getAllowedCapturePolicy();
     method public android.media.AudioDeviceInfo[] getDevices(int);
     method public java.util.List<android.media.MicrophoneInfo> getMicrophones() throws java.io.IOException;
     method public int getMode();
@@ -23418,6 +23424,10 @@ package android.media {
   }
 
   public final class AudioPlaybackCaptureConfiguration {
+    method @NonNull public int[] getExcludeUids();
+    method @NonNull public int[] getExcludeUsages();
+    method @NonNull public int[] getMatchingUids();
+    method @NonNull public int[] getMatchingUsages();
     method @NonNull public android.media.projection.MediaProjection getMediaProjection();
   }
 
@@ -24642,13 +24652,18 @@ package android.media {
   }
 
   public class MediaController2 implements java.lang.AutoCloseable {
-    ctor public MediaController2(@NonNull android.content.Context, @NonNull android.media.Session2Token);
-    ctor public MediaController2(@NonNull android.content.Context, @NonNull android.media.Session2Token, @NonNull java.util.concurrent.Executor, @NonNull android.media.MediaController2.ControllerCallback);
     method public void cancelSessionCommand(@NonNull Object);
     method public void close();
     method @Nullable public android.media.Session2Token getConnectedSessionToken();
     method public boolean isPlaybackActive();
     method @NonNull public Object sendSessionCommand(@NonNull android.media.Session2Command, @Nullable android.os.Bundle);
+  }
+
+  public static final class MediaController2.Builder {
+    ctor public MediaController2.Builder(@NonNull android.content.Context, @NonNull android.media.Session2Token);
+    method @NonNull public android.media.MediaController2 build();
+    method @NonNull public android.media.MediaController2.Builder setConnectionHints(@NonNull android.os.Bundle);
+    method @NonNull public android.media.MediaController2.Builder setControllerCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaController2.ControllerCallback);
   }
 
   public abstract static class MediaController2.ControllerCallback {
@@ -25840,6 +25855,7 @@ package android.media {
   }
 
   public static final class MediaSession2.ControllerInfo {
+    method @NonNull public android.os.Bundle getConnectionHints();
     method @NonNull public String getPackageName();
     method @NonNull public android.media.session.MediaSessionManager.RemoteUserInfo getRemoteUserInfo();
     method public int getUid();
@@ -25859,7 +25875,7 @@ package android.media {
     method public final void addSession(@NonNull android.media.MediaSession2);
     method @NonNull public final java.util.List<android.media.MediaSession2> getSessions();
     method @CallSuper @Nullable public android.os.IBinder onBind(@NonNull android.content.Intent);
-    method @NonNull public abstract android.media.MediaSession2 onGetPrimarySession();
+    method @Nullable public abstract android.media.MediaSession2 onGetSession(@NonNull android.media.MediaSession2.ControllerInfo);
     method @Nullable public abstract android.media.MediaSession2Service.MediaNotification onUpdateNotification(@NonNull android.media.MediaSession2);
     method public final void removeSession(@NonNull android.media.MediaSession2);
     field public static final String SERVICE_INTERFACE = "android.media.MediaSession2Service";
@@ -39080,7 +39096,7 @@ package android.provider {
     field @Deprecated public static final String BEARER = "bearer";
     field public static final String CARRIER_ENABLED = "carrier_enabled";
     field public static final String CARRIER_ID = "carrier_id";
-    field public static final android.net.Uri CONTENT_URI;
+    field @NonNull public static final android.net.Uri CONTENT_URI;
     field public static final String CURRENT = "current";
     field public static final String DEFAULT_SORT_ORDER = "name ASC";
     field @Deprecated public static final String MCC = "mcc";
@@ -39099,7 +39115,7 @@ package android.provider {
     field public static final String PROXY = "proxy";
     field public static final String ROAMING_PROTOCOL = "roaming_protocol";
     field public static final String SERVER = "server";
-    field public static final android.net.Uri SIM_APN_URI;
+    field @NonNull public static final android.net.Uri SIM_APN_URI;
     field public static final String SUBSCRIPTION_ID = "sub_id";
     field public static final String TYPE = "type";
     field public static final String USER = "user";
