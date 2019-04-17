@@ -6235,14 +6235,14 @@ package android.app {
   }
 
   public class TaskInfo {
-    field public android.content.ComponentName baseActivity;
-    field public android.content.Intent baseIntent;
+    field @Nullable public android.content.ComponentName baseActivity;
+    field @NonNull public android.content.Intent baseIntent;
     field public boolean isRunning;
     field public int numActivities;
-    field public android.content.ComponentName origActivity;
-    field public android.app.ActivityManager.TaskDescription taskDescription;
+    field @Nullable public android.content.ComponentName origActivity;
+    field @Nullable public android.app.ActivityManager.TaskDescription taskDescription;
     field public int taskId;
-    field public android.content.ComponentName topActivity;
+    field @Nullable public android.content.ComponentName topActivity;
   }
 
   public class TaskStackBuilder {
@@ -25138,25 +25138,6 @@ package android.media {
     field public static final int TYPE_STRING = 4; // 0x4
   }
 
-  public final class MediaItem2 implements android.os.Parcelable {
-    method public int describeContents();
-    method public long getEndPosition();
-    method @Nullable public android.media.MediaMetadata getMetadata();
-    method public long getStartPosition();
-    method public void setMetadata(@Nullable android.media.MediaMetadata);
-    method public void writeToParcel(android.os.Parcel, int);
-    field @NonNull public static final android.os.Parcelable.Creator<android.media.MediaItem2> CREATOR;
-    field public static final long POSITION_UNKNOWN = 576460752303423487L; // 0x7ffffffffffffffL
-  }
-
-  public static final class MediaItem2.Builder {
-    ctor public MediaItem2.Builder();
-    method @NonNull public android.media.MediaItem2 build();
-    method @NonNull public android.media.MediaItem2.Builder setEndPosition(long);
-    method @NonNull public android.media.MediaItem2.Builder setMetadata(@Nullable android.media.MediaMetadata);
-    method @NonNull public android.media.MediaItem2.Builder setStartPosition(long);
-  }
-
   public final class MediaMetadata implements android.os.Parcelable {
     method public boolean containsKey(String);
     method public int describeContents();
@@ -26177,8 +26158,8 @@ package android.media {
     ctor public Session2Command(@NonNull String, @Nullable android.os.Bundle);
     method public int describeContents();
     method public int getCommandCode();
-    method @Nullable public String getCustomCommand();
-    method @Nullable public android.os.Bundle getExtras();
+    method @Nullable public String getCustomAction();
+    method @Nullable public android.os.Bundle getCustomExtras();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field public static final int COMMAND_CODE_CUSTOM = 0; // 0x0
     field @NonNull public static final android.os.Parcelable.Creator<android.media.Session2Command> CREATOR;
@@ -29812,7 +29793,7 @@ package android.net.wifi {
     method @Deprecated public boolean reconnect();
     method @Deprecated public boolean removeNetwork(int);
     method @RequiresPermission(android.Manifest.permission.CHANGE_WIFI_STATE) public int removeNetworkSuggestions(@NonNull java.util.List<android.net.wifi.WifiNetworkSuggestion>);
-    method @Deprecated @RequiresPermission("android.permission.NETWORK_SETTINGS") public void removePasspointConfiguration(String);
+    method @Deprecated @RequiresPermission(anyOf={"android.permission.NETWORK_SETTINGS", "android.permission.NETWORK_CARRIER_PROVISIONING"}) public void removePasspointConfiguration(String);
     method @Deprecated public boolean saveConfiguration();
     method public void setTdlsEnabled(java.net.InetAddress, boolean);
     method public void setTdlsEnabledWithMacAddress(String, boolean);
@@ -38625,6 +38606,7 @@ package android.provider {
     field public static final String ACTION_APPLICATION_DETAILS_SETTINGS = "android.settings.APPLICATION_DETAILS_SETTINGS";
     field public static final String ACTION_APPLICATION_DEVELOPMENT_SETTINGS = "android.settings.APPLICATION_DEVELOPMENT_SETTINGS";
     field public static final String ACTION_APPLICATION_SETTINGS = "android.settings.APPLICATION_SETTINGS";
+    field public static final String ACTION_APP_BATTERY_SETTINGS = "android.settings.APP_BATTERY_SETTINGS";
     field public static final String ACTION_APP_NOTIFICATION_BUBBLE_SETTINGS = "android.settings.APP_NOTIFICATION_BUBBLE_SETTINGS";
     field public static final String ACTION_APP_NOTIFICATION_SETTINGS = "android.settings.APP_NOTIFICATION_SETTINGS";
     field public static final String ACTION_APP_SEARCH_SETTINGS = "android.settings.APP_SEARCH_SETTINGS";
@@ -41776,7 +41758,7 @@ package android.service.voice {
     method public int getDisabledShowContext();
     method public static boolean isActiveService(android.content.Context, android.content.ComponentName);
     method public android.os.IBinder onBind(android.content.Intent);
-    method @Nullable public java.util.Set<java.lang.String> onGetSupportedVoiceActions(@NonNull java.util.Set<java.lang.String>);
+    method @NonNull public java.util.Set<java.lang.String> onGetSupportedVoiceActions(@NonNull java.util.Set<java.lang.String>);
     method public void onLaunchVoiceAssistFromKeyguard();
     method public void onReady();
     method public void onShutdown();
@@ -47820,6 +47802,10 @@ package android.util {
     method public boolean equals(android.util.DisplayMetrics);
     method public void setTo(android.util.DisplayMetrics);
     method public void setToDefaults();
+    field public static final int DENSITY_140 = 140; // 0x8c
+    field public static final int DENSITY_180 = 180; // 0xb4
+    field public static final int DENSITY_200 = 200; // 0xc8
+    field public static final int DENSITY_220 = 220; // 0xdc
     field public static final int DENSITY_260 = 260; // 0x104
     field public static final int DENSITY_280 = 280; // 0x118
     field public static final int DENSITY_300 = 300; // 0x12c
@@ -53428,6 +53414,7 @@ package android.view.textclassifier {
     method public int describeContents();
     method @Nullable public String getCallingPackageName();
     method @NonNull public java.util.List<android.view.textclassifier.ConversationActions.Message> getConversation();
+    method @NonNull public android.os.Bundle getExtras();
     method @Nullable public java.util.List<java.lang.String> getHints();
     method @IntRange(from=0xffffffff) public int getMaxSuggestions();
     method @NonNull public android.view.textclassifier.TextClassifier.EntityConfig getTypeConfig();
@@ -53440,6 +53427,7 @@ package android.view.textclassifier {
   public static final class ConversationActions.Request.Builder {
     ctor public ConversationActions.Request.Builder(@NonNull java.util.List<android.view.textclassifier.ConversationActions.Message>);
     method @NonNull public android.view.textclassifier.ConversationActions.Request build();
+    method @NonNull public android.view.textclassifier.ConversationActions.Request.Builder setExtras(@Nullable android.os.Bundle);
     method @NonNull public android.view.textclassifier.ConversationActions.Request.Builder setHints(@Nullable java.util.List<java.lang.String>);
     method @NonNull public android.view.textclassifier.ConversationActions.Request.Builder setMaxSuggestions(@IntRange(from=0xffffffff) int);
     method @NonNull public android.view.textclassifier.ConversationActions.Request.Builder setTypeConfig(@Nullable android.view.textclassifier.TextClassifier.EntityConfig);
