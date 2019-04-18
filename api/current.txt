@@ -287,7 +287,6 @@ package android {
     field public static final int allowBackup = 16843392; // 0x1010280
     field public static final int allowClearUserData = 16842757; // 0x1010005
     field public static final int allowEmbedded = 16843765; // 0x10103f5
-    field public static final int allowExternalStorageSandbox = 16844201; // 0x10105a9
     field public static final int allowParallelSyncs = 16843570; // 0x1010332
     field public static final int allowSingleTap = 16843353; // 0x1010259
     field public static final int allowTaskReparenting = 16843268; // 0x1010204
@@ -1125,6 +1124,7 @@ package android {
     field public static final int reqKeyboardType = 16843304; // 0x1010228
     field public static final int reqNavigation = 16843306; // 0x101022a
     field public static final int reqTouchScreen = 16843303; // 0x1010227
+    field public static final int requestLegacyExternalStorage = 16844201; // 0x10105a9
     field public static final int requireDeviceUnlock = 16843756; // 0x10103ec
     field public static final int required = 16843406; // 0x101028e
     field public static final int requiredAccountType = 16843734; // 0x10103d6
@@ -11859,6 +11859,7 @@ package android.content.pm {
     field @NonNull public static final android.os.Parcelable.Creator<android.content.pm.PermissionInfo> CREATOR;
     field public static final int FLAG_COSTS_MONEY = 1; // 0x1
     field public static final int FLAG_HARD_RESTRICTED = 4; // 0x4
+    field public static final int FLAG_IMMUTABLY_RESTRICTED = 16; // 0x10
     field public static final int FLAG_INSTALLED = 1073741824; // 0x40000000
     field public static final int FLAG_SOFT_RESTRICTED = 8; // 0x8
     field public static final int PROTECTION_DANGEROUS = 1; // 0x1
@@ -38606,7 +38607,6 @@ package android.provider {
     field public static final String ACTION_APPLICATION_DETAILS_SETTINGS = "android.settings.APPLICATION_DETAILS_SETTINGS";
     field public static final String ACTION_APPLICATION_DEVELOPMENT_SETTINGS = "android.settings.APPLICATION_DEVELOPMENT_SETTINGS";
     field public static final String ACTION_APPLICATION_SETTINGS = "android.settings.APPLICATION_SETTINGS";
-    field public static final String ACTION_APP_BATTERY_SETTINGS = "android.settings.APP_BATTERY_SETTINGS";
     field public static final String ACTION_APP_NOTIFICATION_BUBBLE_SETTINGS = "android.settings.APP_NOTIFICATION_BUBBLE_SETTINGS";
     field public static final String ACTION_APP_NOTIFICATION_SETTINGS = "android.settings.APP_NOTIFICATION_SETTINGS";
     field public static final String ACTION_APP_SEARCH_SETTINGS = "android.settings.APP_SEARCH_SETTINGS";
@@ -39144,7 +39144,7 @@ package android.provider {
     field public static final String CONTENT_ID = "cid";
     field public static final String CONTENT_LOCATION = "cl";
     field public static final String CONTENT_TYPE = "ct";
-    field public static final android.net.Uri CONTENT_URI;
+    field @NonNull public static final android.net.Uri CONTENT_URI;
     field public static final String CT_START = "ctt_s";
     field public static final String CT_TYPE = "ctt_t";
     field public static final String FILENAME = "fn";
@@ -51509,6 +51509,7 @@ package android.view {
     method public android.transition.Transition getSharedElementReturnTransition();
     method public boolean getSharedElementsUseOverlay();
     method @ColorInt public abstract int getStatusBarColor();
+    method @NonNull public java.util.List<android.graphics.Rect> getSystemGestureExclusionRects();
     method public long getTransitionBackgroundFadeDuration();
     method public android.transition.TransitionManager getTransitionManager();
     method public abstract int getVolumeControlStream();
@@ -51587,6 +51588,7 @@ package android.view {
     method public void setSoftInputMode(int);
     method public abstract void setStatusBarColor(@ColorInt int);
     method public void setSustainedPerformanceMode(boolean);
+    method public void setSystemGestureExclusionRects(@NonNull java.util.List<android.graphics.Rect>);
     method public abstract void setTitle(CharSequence);
     method @Deprecated public abstract void setTitleColor(@ColorInt int);
     method public void setTransitionBackgroundFadeDuration(long);
@@ -53614,29 +53616,23 @@ package android.view.textclassifier {
     method @NonNull public android.view.textclassifier.TextClassifier.EntityConfig.Builder setIncludedTypes(@Nullable java.util.Collection<java.lang.String>);
   }
 
-  public final class TextClassifierEvent implements android.os.Parcelable {
+  public abstract class TextClassifierEvent implements android.os.Parcelable {
     method public int describeContents();
     method @NonNull public int[] getActionIndices();
     method @NonNull public String[] getEntityTypes();
     method public int getEventCategory();
     method @Nullable public android.view.textclassifier.TextClassificationContext getEventContext();
     method public int getEventIndex();
-    method public long getEventTime();
     method public int getEventType();
     method @NonNull public android.os.Bundle getExtras();
-    method @Nullable public String getLanguage();
-    method public int getRelativeSuggestedWordEndIndex();
-    method public int getRelativeSuggestedWordStartIndex();
-    method public int getRelativeWordEndIndex();
-    method public int getRelativeWordStartIndex();
+    method @Nullable public String getModelName();
     method @Nullable public String getResultId();
-    method public float getScore();
+    method @NonNull public float[] getScores();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int CATEGORY_CONVERSATION_ACTIONS = 3; // 0x3
     field public static final int CATEGORY_LANGUAGE_DETECTION = 4; // 0x4
     field public static final int CATEGORY_LINKIFY = 2; // 0x2
     field public static final int CATEGORY_SELECTION = 1; // 0x1
-    field public static final int CATEGORY_UNDEFINED = 0; // 0x0
     field @NonNull public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassifierEvent> CREATOR;
     field public static final int TYPE_ACTIONS_GENERATED = 20; // 0x14
     field public static final int TYPE_ACTIONS_SHOWN = 6; // 0x6
@@ -53658,25 +53654,63 @@ package android.view.textclassifier {
     field public static final int TYPE_SMART_ACTION = 13; // 0xd
     field public static final int TYPE_SMART_SELECTION_MULTI = 4; // 0x4
     field public static final int TYPE_SMART_SELECTION_SINGLE = 3; // 0x3
-    field public static final int TYPE_UNDEFINED = 0; // 0x0
   }
 
-  public static final class TextClassifierEvent.Builder {
-    ctor public TextClassifierEvent.Builder(int, int);
-    method @NonNull public android.view.textclassifier.TextClassifierEvent build();
-    method @NonNull public android.view.textclassifier.TextClassifierEvent.Builder setActionIndices(@NonNull int...);
-    method @NonNull public android.view.textclassifier.TextClassifierEvent.Builder setEntityTypes(@NonNull java.lang.String...);
-    method @NonNull public android.view.textclassifier.TextClassifierEvent.Builder setEventContext(@Nullable android.view.textclassifier.TextClassificationContext);
-    method @NonNull public android.view.textclassifier.TextClassifierEvent.Builder setEventIndex(int);
-    method @NonNull public android.view.textclassifier.TextClassifierEvent.Builder setEventTime(long);
-    method @NonNull public android.view.textclassifier.TextClassifierEvent.Builder setExtras(@NonNull android.os.Bundle);
-    method @NonNull public android.view.textclassifier.TextClassifierEvent.Builder setLanguage(@Nullable String);
-    method @NonNull public android.view.textclassifier.TextClassifierEvent.Builder setRelativeSuggestedWordEndIndex(int);
-    method @NonNull public android.view.textclassifier.TextClassifierEvent.Builder setRelativeSuggestedWordStartIndex(int);
-    method @NonNull public android.view.textclassifier.TextClassifierEvent.Builder setRelativeWordEndIndex(int);
-    method @NonNull public android.view.textclassifier.TextClassifierEvent.Builder setRelativeWordStartIndex(int);
-    method @NonNull public android.view.textclassifier.TextClassifierEvent.Builder setResultId(@Nullable String);
-    method @NonNull public android.view.textclassifier.TextClassifierEvent.Builder setScore(float);
+  public abstract static class TextClassifierEvent.Builder<T extends android.view.textclassifier.TextClassifierEvent.Builder<T>> {
+    method @NonNull public T setActionIndices(@NonNull int...);
+    method @NonNull public T setEntityTypes(@NonNull java.lang.String...);
+    method @NonNull public T setEventContext(@Nullable android.view.textclassifier.TextClassificationContext);
+    method @NonNull public T setEventIndex(int);
+    method @NonNull public T setExtras(@NonNull android.os.Bundle);
+    method @NonNull public T setModelName(@Nullable String);
+    method @NonNull public T setResultId(@Nullable String);
+    method @NonNull public T setScores(@NonNull float...);
+  }
+
+  public static final class TextClassifierEvent.ConversationActionsEvent extends android.view.textclassifier.TextClassifierEvent implements android.os.Parcelable {
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassifierEvent.ConversationActionsEvent> CREATOR;
+  }
+
+  public static final class TextClassifierEvent.ConversationActionsEvent.Builder extends android.view.textclassifier.TextClassifierEvent.Builder<android.view.textclassifier.TextClassifierEvent.ConversationActionsEvent.Builder> {
+    ctor public TextClassifierEvent.ConversationActionsEvent.Builder(int);
+    method @NonNull public android.view.textclassifier.TextClassifierEvent.ConversationActionsEvent build();
+  }
+
+  public static final class TextClassifierEvent.LanguageDetectionEvent extends android.view.textclassifier.TextClassifierEvent implements android.os.Parcelable {
+    method @Nullable public android.icu.util.ULocale getLocale();
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassifierEvent.LanguageDetectionEvent> CREATOR;
+  }
+
+  public static final class TextClassifierEvent.LanguageDetectionEvent.Builder extends android.view.textclassifier.TextClassifierEvent.Builder<android.view.textclassifier.TextClassifierEvent.LanguageDetectionEvent.Builder> {
+    ctor public TextClassifierEvent.LanguageDetectionEvent.Builder(int);
+    method @NonNull public android.view.textclassifier.TextClassifierEvent.LanguageDetectionEvent build();
+    method @NonNull public android.view.textclassifier.TextClassifierEvent.LanguageDetectionEvent.Builder setLocale(@Nullable android.icu.util.ULocale);
+  }
+
+  public static final class TextClassifierEvent.TextLinkifyEvent extends android.view.textclassifier.TextClassifierEvent implements android.os.Parcelable {
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassifierEvent.TextLinkifyEvent> CREATOR;
+  }
+
+  public static final class TextClassifierEvent.TextLinkifyEvent.Builder extends android.view.textclassifier.TextClassifierEvent.Builder<android.view.textclassifier.TextClassifierEvent.TextLinkifyEvent.Builder> {
+    ctor public TextClassifierEvent.TextLinkifyEvent.Builder(int);
+    method @NonNull public android.view.textclassifier.TextClassifierEvent.TextLinkifyEvent build();
+  }
+
+  public static final class TextClassifierEvent.TextSelectionEvent extends android.view.textclassifier.TextClassifierEvent implements android.os.Parcelable {
+    method public int getRelativeSuggestedWordEndIndex();
+    method public int getRelativeSuggestedWordStartIndex();
+    method public int getRelativeWordEndIndex();
+    method public int getRelativeWordStartIndex();
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.textclassifier.TextClassifierEvent.TextSelectionEvent> CREATOR;
+  }
+
+  public static final class TextClassifierEvent.TextSelectionEvent.Builder extends android.view.textclassifier.TextClassifierEvent.Builder<android.view.textclassifier.TextClassifierEvent.TextSelectionEvent.Builder> {
+    ctor public TextClassifierEvent.TextSelectionEvent.Builder(int);
+    method @NonNull public android.view.textclassifier.TextClassifierEvent.TextSelectionEvent build();
+    method @NonNull public android.view.textclassifier.TextClassifierEvent.TextSelectionEvent.Builder setRelativeSuggestedWordEndIndex(int);
+    method @NonNull public android.view.textclassifier.TextClassifierEvent.TextSelectionEvent.Builder setRelativeSuggestedWordStartIndex(int);
+    method @NonNull public android.view.textclassifier.TextClassifierEvent.TextSelectionEvent.Builder setRelativeWordEndIndex(int);
+    method @NonNull public android.view.textclassifier.TextClassifierEvent.TextSelectionEvent.Builder setRelativeWordStartIndex(int);
   }
 
   public final class TextLanguage implements android.os.Parcelable {
