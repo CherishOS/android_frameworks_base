@@ -571,8 +571,8 @@ package android {
     field public static final int endX = 16844050; // 0x1010512
     field public static final int endY = 16844051; // 0x1010513
     field @Deprecated public static final int endYear = 16843133; // 0x101017d
-    field public static final int ensuringNavigationBarContrastWhenTransparent = 16844203; // 0x10105ab
-    field public static final int ensuringStatusBarContrastWhenTransparent = 16844202; // 0x10105aa
+    field public static final int enforceNavigationBarContrast = 16844203; // 0x10105ab
+    field public static final int enforceStatusBarContrast = 16844202; // 0x10105aa
     field public static final int enterFadeDuration = 16843532; // 0x101030c
     field public static final int entries = 16842930; // 0x10100b2
     field public static final int entryValues = 16843256; // 0x10101f8
@@ -5485,7 +5485,8 @@ package android.app {
     method @NonNull public android.graphics.drawable.Icon getIcon();
     method @NonNull public android.app.PendingIntent getIntent();
     method @Deprecated public boolean getSuppressInitialNotification();
-    method public boolean getSuppressNotification();
+    method @Deprecated public boolean getSuppressNotification();
+    method public boolean isNotificationSuppressed();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.app.Notification.BubbleMetadata> CREATOR;
   }
@@ -13790,7 +13791,7 @@ package android.graphics {
     method public void drawCircle(float, float, float, @NonNull android.graphics.Paint);
     method public void drawColor(@ColorInt int);
     method public void drawColor(@ColorLong long);
-    method @Deprecated public void drawColor(@ColorInt int, @NonNull android.graphics.PorterDuff.Mode);
+    method public void drawColor(@ColorInt int, @NonNull android.graphics.PorterDuff.Mode);
     method public void drawColor(@ColorInt int, @NonNull android.graphics.BlendMode);
     method public void drawColor(@ColorLong long, @NonNull android.graphics.BlendMode);
     method public void drawDoubleRoundRect(@NonNull android.graphics.RectF, float, float, @NonNull android.graphics.RectF, float, float, @NonNull android.graphics.Paint);
@@ -14107,7 +14108,7 @@ package android.graphics {
 
   public class ComposeShader extends android.graphics.Shader {
     ctor @Deprecated public ComposeShader(@NonNull android.graphics.Shader, @NonNull android.graphics.Shader, @NonNull android.graphics.Xfermode);
-    ctor @Deprecated public ComposeShader(@NonNull android.graphics.Shader, @NonNull android.graphics.Shader, @NonNull android.graphics.PorterDuff.Mode);
+    ctor public ComposeShader(@NonNull android.graphics.Shader, @NonNull android.graphics.Shader, @NonNull android.graphics.PorterDuff.Mode);
     ctor public ComposeShader(@NonNull android.graphics.Shader, @NonNull android.graphics.Shader, @NonNull android.graphics.BlendMode);
   }
 
@@ -14496,7 +14497,7 @@ package android.graphics {
     method @Px public float getUnderlinePosition();
     method @Px public float getUnderlineThickness();
     method @Px public float getWordSpacing();
-    method @Deprecated public android.graphics.Xfermode getXfermode();
+    method public android.graphics.Xfermode getXfermode();
     method public boolean hasGlyph(String);
     method public final boolean isAntiAlias();
     method public final boolean isDither();
@@ -14553,7 +14554,7 @@ package android.graphics {
     method public android.graphics.Typeface setTypeface(android.graphics.Typeface);
     method public void setUnderlineText(boolean);
     method public void setWordSpacing(@Px float);
-    method @Deprecated public android.graphics.Xfermode setXfermode(android.graphics.Xfermode);
+    method public android.graphics.Xfermode setXfermode(android.graphics.Xfermode);
     field public static final int ANTI_ALIAS_FLAG = 1; // 0x1
     field public static final int CURSOR_AFTER = 0; // 0x0
     field public static final int CURSOR_AT = 4; // 0x4
@@ -14802,37 +14803,37 @@ package android.graphics {
     field public float y;
   }
 
-  @Deprecated public class PorterDuff {
-    ctor @Deprecated public PorterDuff();
+  public class PorterDuff {
+    ctor public PorterDuff();
   }
 
-  @Deprecated public enum PorterDuff.Mode {
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode ADD;
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode CLEAR;
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DARKEN;
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DST;
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DST_ATOP;
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DST_IN;
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DST_OUT;
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode DST_OVER;
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode LIGHTEN;
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode MULTIPLY;
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode OVERLAY;
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SCREEN;
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SRC;
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SRC_ATOP;
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SRC_IN;
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SRC_OUT;
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode SRC_OVER;
-    enum_constant @Deprecated public static final android.graphics.PorterDuff.Mode XOR;
+  public enum PorterDuff.Mode {
+    enum_constant public static final android.graphics.PorterDuff.Mode ADD;
+    enum_constant public static final android.graphics.PorterDuff.Mode CLEAR;
+    enum_constant public static final android.graphics.PorterDuff.Mode DARKEN;
+    enum_constant public static final android.graphics.PorterDuff.Mode DST;
+    enum_constant public static final android.graphics.PorterDuff.Mode DST_ATOP;
+    enum_constant public static final android.graphics.PorterDuff.Mode DST_IN;
+    enum_constant public static final android.graphics.PorterDuff.Mode DST_OUT;
+    enum_constant public static final android.graphics.PorterDuff.Mode DST_OVER;
+    enum_constant public static final android.graphics.PorterDuff.Mode LIGHTEN;
+    enum_constant public static final android.graphics.PorterDuff.Mode MULTIPLY;
+    enum_constant public static final android.graphics.PorterDuff.Mode OVERLAY;
+    enum_constant public static final android.graphics.PorterDuff.Mode SCREEN;
+    enum_constant public static final android.graphics.PorterDuff.Mode SRC;
+    enum_constant public static final android.graphics.PorterDuff.Mode SRC_ATOP;
+    enum_constant public static final android.graphics.PorterDuff.Mode SRC_IN;
+    enum_constant public static final android.graphics.PorterDuff.Mode SRC_OUT;
+    enum_constant public static final android.graphics.PorterDuff.Mode SRC_OVER;
+    enum_constant public static final android.graphics.PorterDuff.Mode XOR;
   }
 
-  @Deprecated public class PorterDuffColorFilter extends android.graphics.ColorFilter {
-    ctor @Deprecated public PorterDuffColorFilter(@ColorInt int, @NonNull android.graphics.PorterDuff.Mode);
+  public class PorterDuffColorFilter extends android.graphics.ColorFilter {
+    ctor public PorterDuffColorFilter(@ColorInt int, @NonNull android.graphics.PorterDuff.Mode);
   }
 
-  @Deprecated public class PorterDuffXfermode extends android.graphics.Xfermode {
-    ctor @Deprecated public PorterDuffXfermode(android.graphics.PorterDuff.Mode);
+  public class PorterDuffXfermode extends android.graphics.Xfermode {
+    ctor public PorterDuffXfermode(android.graphics.PorterDuff.Mode);
   }
 
   public interface PostProcessor {
@@ -15393,9 +15394,9 @@ package android.graphics.drawable {
     method public final boolean setLevel(@IntRange(from=0, to=10000) int);
     method public boolean setState(@NonNull int[]);
     method public void setTint(@ColorInt int);
+    method public void setTintBlendMode(@Nullable android.graphics.BlendMode);
     method public void setTintList(@Nullable android.content.res.ColorStateList);
-    method @Deprecated public void setTintMode(@Nullable android.graphics.PorterDuff.Mode);
-    method public void setTintMode(@Nullable android.graphics.BlendMode);
+    method public void setTintMode(@Nullable android.graphics.PorterDuff.Mode);
     method public boolean setVisible(boolean, boolean);
     method public void unscheduleSelf(@NonNull Runnable);
   }
@@ -15552,9 +15553,9 @@ package android.graphics.drawable {
     method public void loadDrawableAsync(android.content.Context, android.os.Message);
     method public void loadDrawableAsync(android.content.Context, android.graphics.drawable.Icon.OnDrawableLoadedListener, android.os.Handler);
     method public android.graphics.drawable.Icon setTint(@ColorInt int);
+    method @NonNull public android.graphics.drawable.Icon setTintBlendMode(@NonNull android.graphics.BlendMode);
     method public android.graphics.drawable.Icon setTintList(android.content.res.ColorStateList);
-    method @Deprecated @NonNull public android.graphics.drawable.Icon setTintMode(@NonNull android.graphics.PorterDuff.Mode);
-    method @NonNull public android.graphics.drawable.Icon setTintMode(@NonNull android.graphics.BlendMode);
+    method @NonNull public android.graphics.drawable.Icon setTintMode(@NonNull android.graphics.PorterDuff.Mode);
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.graphics.drawable.Icon> CREATOR;
     field public static final int TYPE_ADAPTIVE_BITMAP = 5; // 0x5
@@ -24655,7 +24656,7 @@ package android.media {
   public class MediaController2 implements java.lang.AutoCloseable {
     method public void cancelSessionCommand(@NonNull Object);
     method public void close();
-    method @Nullable public android.media.Session2Token getConnectedSessionToken();
+    method @Nullable public android.media.Session2Token getConnectedToken();
     method public boolean isPlaybackActive();
     method @NonNull public Object sendSessionCommand(@NonNull android.media.Session2Command, @Nullable android.os.Bundle);
   }
@@ -25820,8 +25821,8 @@ package android.media {
     method public void cancelSessionCommand(@NonNull android.media.MediaSession2.ControllerInfo, @NonNull Object);
     method public void close();
     method @NonNull public java.util.List<android.media.MediaSession2.ControllerInfo> getConnectedControllers();
-    method @NonNull public String getSessionId();
-    method @NonNull public android.media.Session2Token getSessionToken();
+    method @NonNull public String getId();
+    method @NonNull public android.media.Session2Token getToken();
     method public boolean isPlaybackActive();
     method @NonNull public Object sendSessionCommand(@NonNull android.media.MediaSession2.ControllerInfo, @NonNull android.media.Session2Command, @Nullable android.os.Bundle);
     method public void setPlaybackActive(boolean);
@@ -30623,7 +30624,6 @@ package android.nfc {
     method @Deprecated public void enableForegroundNdefPush(android.app.Activity, android.nfc.NdefMessage);
     method public void enableReaderMode(android.app.Activity, android.nfc.NfcAdapter.ReaderCallback, int, android.os.Bundle);
     method public static android.nfc.NfcAdapter getDefaultAdapter(android.content.Context);
-    method @NonNull public java.util.List<java.lang.String> getSupportedOffHostSecureElements();
     method public boolean ignore(android.nfc.Tag, int, android.nfc.NfcAdapter.OnTagRemovedListener, android.os.Handler);
     method @Deprecated public boolean invokeBeam(android.app.Activity);
     method public boolean isEnabled();
@@ -30717,10 +30717,10 @@ package android.nfc.cardemulation {
     method public boolean isDefaultServiceForCategory(android.content.ComponentName, String);
     method public boolean registerAidsForService(android.content.ComponentName, String, java.util.List<java.lang.String>);
     method public boolean removeAidsForService(android.content.ComponentName, String);
-    method public boolean setOffHostForService(@NonNull android.content.ComponentName, @NonNull String);
+    method @RequiresPermission(android.Manifest.permission.NFC) @NonNull public boolean setOffHostForService(@NonNull android.content.ComponentName, @NonNull String);
     method public boolean setPreferredService(android.app.Activity, android.content.ComponentName);
     method public boolean supportsAidPrefixRegistration();
-    method public boolean unsetOffHostForService(@NonNull android.content.ComponentName);
+    method @RequiresPermission(android.Manifest.permission.NFC) @NonNull public boolean unsetOffHostForService(@NonNull android.content.ComponentName);
     method public boolean unsetPreferredService(android.app.Activity);
     field public static final String ACTION_CHANGE_DEFAULT = "android.nfc.cardemulation.action.ACTION_CHANGE_DEFAULT";
     field public static final String CATEGORY_OTHER = "other";
@@ -34595,6 +34595,7 @@ package android.os {
     method @Nullable public java.util.Locale getFirstMatch(String[]);
     method @IntRange(from=0xffffffff) public int indexOf(java.util.Locale);
     method public boolean isEmpty();
+    method public static boolean isPseudoLocale(@Nullable android.icu.util.ULocale);
     method public static void setDefault(@NonNull @Size(min=1) android.os.LocaleList);
     method @IntRange(from=0) public int size();
     method @NonNull public String toLanguageTags();
@@ -38514,7 +38515,6 @@ package android.provider {
     field public static final String DISPLAY_NAME = "_display_name";
     field public static final String DOCUMENT_ID = "document_id";
     field public static final String DURATION = "duration";
-    field public static final String GROUP_ID = "group_id";
     field public static final String HEIGHT = "height";
     field public static final String INSTANCE_ID = "instance_id";
     field public static final String IS_PENDING = "is_pending";
@@ -49454,7 +49454,7 @@ package android.view {
     method public android.graphics.drawable.Drawable getIcon();
     method @Nullable public default android.graphics.BlendMode getIconTintBlendMode();
     method @Nullable public default android.content.res.ColorStateList getIconTintList();
-    method @Deprecated @Nullable public default android.graphics.PorterDuff.Mode getIconTintMode();
+    method @Nullable public default android.graphics.PorterDuff.Mode getIconTintMode();
     method public android.content.Intent getIntent();
     method public int getItemId();
     method public android.view.ContextMenu.ContextMenuInfo getMenuInfo();
@@ -49482,9 +49482,9 @@ package android.view {
     method public android.view.MenuItem setEnabled(boolean);
     method public android.view.MenuItem setIcon(android.graphics.drawable.Drawable);
     method public android.view.MenuItem setIcon(@DrawableRes int);
+    method @NonNull public default android.view.MenuItem setIconTintBlendMode(@Nullable android.graphics.BlendMode);
     method public default android.view.MenuItem setIconTintList(@Nullable android.content.res.ColorStateList);
-    method @Deprecated @NonNull public default android.view.MenuItem setIconTintMode(@Nullable android.graphics.PorterDuff.Mode);
-    method @NonNull public default android.view.MenuItem setIconTintMode(@Nullable android.graphics.BlendMode);
+    method @NonNull public default android.view.MenuItem setIconTintMode(@Nullable android.graphics.PorterDuff.Mode);
     method public android.view.MenuItem setIntent(android.content.Intent);
     method public android.view.MenuItem setNumericShortcut(char);
     method public default android.view.MenuItem setNumericShortcut(char, int);
@@ -50137,9 +50137,9 @@ package android.view {
     method public int getAutofillType();
     method @Nullable public android.view.autofill.AutofillValue getAutofillValue();
     method public android.graphics.drawable.Drawable getBackground();
-    method @Nullable public android.graphics.BlendMode getBackgroundBlendMode();
+    method @Nullable public android.graphics.BlendMode getBackgroundTintBlendMode();
     method @Nullable public android.content.res.ColorStateList getBackgroundTintList();
-    method @Deprecated @Nullable public android.graphics.PorterDuff.Mode getBackgroundTintMode();
+    method @Nullable public android.graphics.PorterDuff.Mode getBackgroundTintMode();
     method @android.view.ViewDebug.ExportedProperty(category="layout") public int getBaseline();
     method @android.view.ViewDebug.CapturedViewProperty public final int getBottom();
     method protected float getBottomFadingEdgeStrength();
@@ -50170,10 +50170,10 @@ package android.view {
     method public java.util.ArrayList<android.view.View> getFocusables(int);
     method public void getFocusedRect(android.graphics.Rect);
     method public android.graphics.drawable.Drawable getForeground();
-    method @Nullable public android.graphics.BlendMode getForegroundBlendMode();
     method public int getForegroundGravity();
+    method @Nullable public android.graphics.BlendMode getForegroundTintBlendMode();
     method @Nullable public android.content.res.ColorStateList getForegroundTintList();
-    method @Deprecated @Nullable public android.graphics.PorterDuff.Mode getForegroundTintMode();
+    method @Nullable public android.graphics.PorterDuff.Mode getForegroundTintMode();
     method public boolean getGlobalVisibleRect(android.graphics.Rect, android.graphics.Point);
     method public final boolean getGlobalVisibleRect(android.graphics.Rect);
     method public android.os.Handler getHandler();
@@ -50485,9 +50485,9 @@ package android.view {
     method public void setBackgroundColor(@ColorInt int);
     method @Deprecated public void setBackgroundDrawable(android.graphics.drawable.Drawable);
     method public void setBackgroundResource(@DrawableRes int);
+    method public void setBackgroundTintBlendMode(@Nullable android.graphics.BlendMode);
     method public void setBackgroundTintList(@Nullable android.content.res.ColorStateList);
-    method @Deprecated public void setBackgroundTintMode(@Nullable android.graphics.PorterDuff.Mode);
-    method public void setBackgroundTintMode(@Nullable android.graphics.BlendMode);
+    method public void setBackgroundTintMode(@Nullable android.graphics.PorterDuff.Mode);
     method public final void setBottom(int);
     method public void setCameraDistance(float);
     method public void setClickable(boolean);
@@ -50513,9 +50513,9 @@ package android.view {
     method public void setForceDarkAllowed(boolean);
     method public void setForeground(android.graphics.drawable.Drawable);
     method public void setForegroundGravity(int);
+    method public void setForegroundTintBlendMode(@Nullable android.graphics.BlendMode);
     method public void setForegroundTintList(@Nullable android.content.res.ColorStateList);
-    method @Deprecated public void setForegroundTintMode(@Nullable android.graphics.PorterDuff.Mode);
-    method public void setForegroundTintMode(@Nullable android.graphics.BlendMode);
+    method public void setForegroundTintMode(@Nullable android.graphics.PorterDuff.Mode);
     method public void setHapticFeedbackEnabled(boolean);
     method public void setHasTransientState(boolean);
     method public void setHorizontalFadingEdgeEnabled(boolean);
@@ -51521,10 +51521,10 @@ package android.view {
     method public void injectInputEvent(android.view.InputEvent);
     method public abstract void invalidatePanelMenu(int);
     method public final boolean isActive();
-    method public boolean isEnsuringNavigationBarContrastWhenTransparent();
-    method public boolean isEnsuringStatusBarContrastWhenTransparent();
     method public abstract boolean isFloating();
+    method public boolean isNavigationBarContrastEnforced();
     method public abstract boolean isShortcutKey(int, android.view.KeyEvent);
+    method public boolean isStatusBarContrastEnforced();
     method public boolean isWideColorGamut();
     method public final void makeActive();
     method protected abstract void onActive();
@@ -51557,8 +51557,6 @@ package android.view {
     method protected void setDefaultWindowFormat(int);
     method public void setDimAmount(float);
     method public void setElevation(float);
-    method public void setEnsuringNavigationBarContrastWhenTransparent(boolean);
-    method public void setEnsuringStatusBarContrastWhenTransparent(boolean);
     method public void setEnterTransition(android.transition.Transition);
     method public void setExitTransition(android.transition.Transition);
     method public abstract void setFeatureDrawable(int, android.graphics.drawable.Drawable);
@@ -51575,6 +51573,7 @@ package android.view {
     method public void setLogo(@DrawableRes int);
     method public void setMediaController(android.media.session.MediaController);
     method public abstract void setNavigationBarColor(@ColorInt int);
+    method public void setNavigationBarContrastEnforced(boolean);
     method public void setNavigationBarDividerColor(@ColorInt int);
     method public void setReenterTransition(android.transition.Transition);
     method public abstract void setResizingCaptionDrawable(android.graphics.drawable.Drawable);
@@ -51587,6 +51586,7 @@ package android.view {
     method public void setSharedElementsUseOverlay(boolean);
     method public void setSoftInputMode(int);
     method public abstract void setStatusBarColor(@ColorInt int);
+    method public void setStatusBarContrastEnforced(boolean);
     method public void setSustainedPerformanceMode(boolean);
     method public void setSystemGestureExclusionRects(@NonNull java.util.List<android.graphics.Rect>);
     method public abstract void setTitle(CharSequence);
@@ -54851,18 +54851,22 @@ package android.widget {
     method public boolean getSplitTrack();
     method public android.graphics.drawable.Drawable getThumb();
     method public int getThumbOffset();
+    method @Nullable public android.graphics.BlendMode getThumbTintBlendMode();
     method @Nullable public android.content.res.ColorStateList getThumbTintList();
     method @Nullable public android.graphics.PorterDuff.Mode getThumbTintMode();
     method public android.graphics.drawable.Drawable getTickMark();
+    method @Nullable public android.graphics.BlendMode getTickMarkTintBlendMode();
     method @Nullable public android.content.res.ColorStateList getTickMarkTintList();
     method @Nullable public android.graphics.PorterDuff.Mode getTickMarkTintMode();
     method public void setKeyProgressIncrement(int);
     method public void setSplitTrack(boolean);
     method public void setThumb(android.graphics.drawable.Drawable);
     method public void setThumbOffset(int);
+    method public void setThumbTintBlendMode(@Nullable android.graphics.BlendMode);
     method public void setThumbTintList(@Nullable android.content.res.ColorStateList);
     method public void setThumbTintMode(@Nullable android.graphics.PorterDuff.Mode);
     method public void setTickMark(android.graphics.drawable.Drawable);
+    method public void setTickMarkTintBlendMode(@Nullable android.graphics.BlendMode);
     method public void setTickMarkTintList(@Nullable android.content.res.ColorStateList);
     method public void setTickMarkTintMode(@Nullable android.graphics.PorterDuff.Mode);
   }
@@ -55261,11 +55265,13 @@ package android.widget {
     ctor public CheckedTextView(android.content.Context, android.util.AttributeSet, int);
     ctor public CheckedTextView(android.content.Context, android.util.AttributeSet, int, int);
     method public android.graphics.drawable.Drawable getCheckMarkDrawable();
+    method @Nullable public android.graphics.BlendMode getCheckMarkTintBlendMode();
     method @Nullable public android.content.res.ColorStateList getCheckMarkTintList();
     method @Nullable public android.graphics.PorterDuff.Mode getCheckMarkTintMode();
     method @android.view.ViewDebug.ExportedProperty public boolean isChecked();
     method public void setCheckMarkDrawable(@DrawableRes int);
     method public void setCheckMarkDrawable(@Nullable android.graphics.drawable.Drawable);
+    method public void setCheckMarkTintBlendMode(@Nullable android.graphics.BlendMode);
     method public void setCheckMarkTintList(@Nullable android.content.res.ColorStateList);
     method public void setCheckMarkTintMode(@Nullable android.graphics.PorterDuff.Mode);
     method public void setChecked(boolean);
@@ -55300,11 +55306,13 @@ package android.widget {
     ctor public CompoundButton(android.content.Context, android.util.AttributeSet, int);
     ctor public CompoundButton(android.content.Context, android.util.AttributeSet, int, int);
     method @Nullable public android.graphics.drawable.Drawable getButtonDrawable();
+    method @Nullable public android.graphics.BlendMode getButtonTintBlendMode();
     method @Nullable public android.content.res.ColorStateList getButtonTintList();
     method @Nullable public android.graphics.PorterDuff.Mode getButtonTintMode();
     method @android.view.ViewDebug.ExportedProperty public boolean isChecked();
     method public void setButtonDrawable(@DrawableRes int);
     method public void setButtonDrawable(@Nullable android.graphics.drawable.Drawable);
+    method public void setButtonTintBlendMode(@Nullable android.graphics.BlendMode);
     method public void setButtonTintList(@Nullable android.content.res.ColorStateList);
     method public void setButtonTintMode(@Nullable android.graphics.PorterDuff.Mode);
     method public void setChecked(boolean);
@@ -55793,6 +55801,7 @@ package android.widget {
     method public android.graphics.drawable.Drawable getDrawable();
     method public int getImageAlpha();
     method public android.graphics.Matrix getImageMatrix();
+    method @Nullable public android.graphics.BlendMode getImageTintBlendMode();
     method @Nullable public android.content.res.ColorStateList getImageTintList();
     method @Nullable public android.graphics.PorterDuff.Mode getImageTintMode();
     method public int getMaxHeight();
@@ -55816,6 +55825,7 @@ package android.widget {
     method public void setImageMatrix(android.graphics.Matrix);
     method public void setImageResource(@DrawableRes int);
     method public void setImageState(int[], boolean);
+    method public void setImageTintBlendMode(@Nullable android.graphics.BlendMode);
     method public void setImageTintList(@Nullable android.content.res.ColorStateList);
     method public void setImageTintMode(@Nullable android.graphics.PorterDuff.Mode);
     method public void setImageURI(@Nullable android.net.Uri);
@@ -56269,6 +56279,7 @@ package android.widget {
     ctor public ProgressBar(android.content.Context, android.util.AttributeSet, int, int);
     method @Nullable public android.graphics.drawable.Drawable getCurrentDrawable();
     method public android.graphics.drawable.Drawable getIndeterminateDrawable();
+    method @Nullable public android.graphics.BlendMode getIndeterminateTintBlendMode();
     method @Nullable public android.content.res.ColorStateList getIndeterminateTintList();
     method @Nullable public android.graphics.PorterDuff.Mode getIndeterminateTintMode();
     method public android.view.animation.Interpolator getInterpolator();
@@ -56279,12 +56290,15 @@ package android.widget {
     method @Px public int getMinHeight();
     method @Px public int getMinWidth();
     method @android.view.ViewDebug.ExportedProperty(category="progress") public int getProgress();
+    method @Nullable public android.graphics.BlendMode getProgressBackgroundTintBlendMode();
     method @Nullable public android.content.res.ColorStateList getProgressBackgroundTintList();
     method @Nullable public android.graphics.PorterDuff.Mode getProgressBackgroundTintMode();
     method public android.graphics.drawable.Drawable getProgressDrawable();
+    method @Nullable public android.graphics.BlendMode getProgressTintBlendMode();
     method @Nullable public android.content.res.ColorStateList getProgressTintList();
     method @Nullable public android.graphics.PorterDuff.Mode getProgressTintMode();
     method @android.view.ViewDebug.ExportedProperty(category="progress") public int getSecondaryProgress();
+    method @Nullable public android.graphics.BlendMode getSecondaryProgressTintBlendMode();
     method @Nullable public android.content.res.ColorStateList getSecondaryProgressTintList();
     method @Nullable public android.graphics.PorterDuff.Mode getSecondaryProgressTintMode();
     method public final void incrementProgressBy(int);
@@ -56296,6 +56310,7 @@ package android.widget {
     method public void setIndeterminate(boolean);
     method public void setIndeterminateDrawable(android.graphics.drawable.Drawable);
     method public void setIndeterminateDrawableTiled(android.graphics.drawable.Drawable);
+    method public void setIndeterminateTintBlendMode(@Nullable android.graphics.BlendMode);
     method public void setIndeterminateTintList(@Nullable android.content.res.ColorStateList);
     method public void setIndeterminateTintMode(@Nullable android.graphics.PorterDuff.Mode);
     method public void setInterpolator(android.content.Context, @InterpolatorRes int);
@@ -56308,13 +56323,16 @@ package android.widget {
     method public void setMinWidth(@Px int);
     method public void setProgress(int);
     method public void setProgress(int, boolean);
+    method public void setProgressBackgroundTintBlendMode(@Nullable android.graphics.BlendMode);
     method public void setProgressBackgroundTintList(@Nullable android.content.res.ColorStateList);
     method public void setProgressBackgroundTintMode(@Nullable android.graphics.PorterDuff.Mode);
     method public void setProgressDrawable(android.graphics.drawable.Drawable);
     method public void setProgressDrawableTiled(android.graphics.drawable.Drawable);
+    method public void setProgressTintBlendMode(@Nullable android.graphics.BlendMode);
     method public void setProgressTintList(@Nullable android.content.res.ColorStateList);
     method public void setProgressTintMode(@Nullable android.graphics.PorterDuff.Mode);
     method public void setSecondaryProgress(int);
+    method public void setSecondaryProgressTintBlendMode(@Nullable android.graphics.BlendMode);
     method public void setSecondaryProgressTintList(@Nullable android.content.res.ColorStateList);
     method public void setSecondaryProgressTintMode(@Nullable android.graphics.PorterDuff.Mode);
   }
@@ -56863,9 +56881,11 @@ package android.widget {
     method public CharSequence getTextOn();
     method public android.graphics.drawable.Drawable getThumbDrawable();
     method public int getThumbTextPadding();
+    method @Nullable public android.graphics.BlendMode getThumbTintBlendMode();
     method @Nullable public android.content.res.ColorStateList getThumbTintList();
     method @Nullable public android.graphics.PorterDuff.Mode getThumbTintMode();
     method public android.graphics.drawable.Drawable getTrackDrawable();
+    method @Nullable public android.graphics.BlendMode getTrackTintBlendMode();
     method @Nullable public android.content.res.ColorStateList getTrackTintList();
     method @Nullable public android.graphics.PorterDuff.Mode getTrackTintMode();
     method public void onMeasure(int, int);
@@ -56881,10 +56901,12 @@ package android.widget {
     method public void setThumbDrawable(android.graphics.drawable.Drawable);
     method public void setThumbResource(@DrawableRes int);
     method public void setThumbTextPadding(int);
+    method public void setThumbTintBlendMode(@Nullable android.graphics.BlendMode);
     method public void setThumbTintList(@Nullable android.content.res.ColorStateList);
     method public void setThumbTintMode(@Nullable android.graphics.PorterDuff.Mode);
     method public void setTrackDrawable(android.graphics.drawable.Drawable);
     method public void setTrackResource(@DrawableRes int);
+    method public void setTrackTintBlendMode(@Nullable android.graphics.BlendMode);
     method public void setTrackTintList(@Nullable android.content.res.ColorStateList);
     method public void setTrackTintMode(@Nullable android.graphics.PorterDuff.Mode);
   }
@@ -57042,6 +57064,7 @@ package android.widget {
     method public int getAutoSizeTextType();
     method public int getBreakStrategy();
     method public int getCompoundDrawablePadding();
+    method @Nullable public android.graphics.BlendMode getCompoundDrawableTintBlendMode();
     method public android.content.res.ColorStateList getCompoundDrawableTintList();
     method public android.graphics.PorterDuff.Mode getCompoundDrawableTintMode();
     method @NonNull public android.graphics.drawable.Drawable[] getCompoundDrawables();
@@ -57167,6 +57190,7 @@ package android.widget {
     method public void setAutoSizeTextTypeWithDefaults(int);
     method public void setBreakStrategy(int);
     method public void setCompoundDrawablePadding(int);
+    method public void setCompoundDrawableTintBlendMode(@Nullable android.graphics.BlendMode);
     method public void setCompoundDrawableTintList(@Nullable android.content.res.ColorStateList);
     method public void setCompoundDrawableTintMode(@Nullable android.graphics.PorterDuff.Mode);
     method public void setCompoundDrawables(@Nullable android.graphics.drawable.Drawable, @Nullable android.graphics.drawable.Drawable, @Nullable android.graphics.drawable.Drawable, @Nullable android.graphics.drawable.Drawable);
