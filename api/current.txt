@@ -3763,6 +3763,7 @@ package android.app {
     method public void onDetachedFromWindow();
     method public void onEnterAnimationComplete();
     method public boolean onGenericMotionEvent(android.view.MotionEvent);
+    method @NonNull public java.util.List<android.app.DirectAction> onGetDirectActions();
     method public boolean onKeyDown(int, android.view.KeyEvent);
     method public boolean onKeyLongPress(int, android.view.KeyEvent);
     method public boolean onKeyMultiple(int, int, android.view.KeyEvent);
@@ -3782,6 +3783,7 @@ package android.app {
     method public void onOptionsMenuClosed(android.view.Menu);
     method public void onPanelClosed(int, @NonNull android.view.Menu);
     method @CallSuper protected void onPause();
+    method public void onPerformDirectAction(@NonNull String, @Nullable android.os.Bundle, @Nullable android.os.CancellationSignal, @NonNull java.util.function.Consumer<android.os.Bundle>);
     method public void onPictureInPictureModeChanged(boolean, android.content.res.Configuration);
     method @Deprecated public void onPictureInPictureModeChanged(boolean);
     method @CallSuper protected void onPostCreate(@Nullable android.os.Bundle);
@@ -4601,6 +4603,22 @@ package android.app {
     field @Deprecated public static final int STYLE_NO_FRAME = 2; // 0x2
     field @Deprecated public static final int STYLE_NO_INPUT = 3; // 0x3
     field @Deprecated public static final int STYLE_NO_TITLE = 1; // 0x1
+  }
+
+  public final class DirectAction implements android.os.Parcelable {
+    method public int describeContents();
+    method @Nullable public android.os.Bundle getExtras();
+    method @NonNull public String getId();
+    method @Nullable public android.content.LocusId getLocusId();
+    method public void writeToParcel(android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.app.DirectAction> CREATOR;
+  }
+
+  public static final class DirectAction.Builder {
+    ctor public DirectAction.Builder(@NonNull String);
+    method @NonNull public android.app.DirectAction build();
+    method @NonNull public android.app.DirectAction.Builder setExtras(@Nullable android.os.Bundle);
+    method @NonNull public android.app.DirectAction.Builder setLocusId(@Nullable android.content.LocusId);
   }
 
   public class DownloadManager {
@@ -6338,9 +6356,13 @@ package android.app {
   public final class VoiceInteractor {
     method public android.app.VoiceInteractor.Request getActiveRequest(String);
     method public android.app.VoiceInteractor.Request[] getActiveRequests();
+    method public boolean isDestroyed();
+    method public void notifyDirectActionsChanged();
+    method public boolean registerOnDestroyedCallback(@NonNull java.util.concurrent.Executor, @NonNull Runnable);
     method public boolean submitRequest(android.app.VoiceInteractor.Request);
     method public boolean submitRequest(android.app.VoiceInteractor.Request, String);
     method public boolean[] supportsCommands(String[]);
+    method public boolean unregisterOnDestroyedCallback(@NonNull Runnable);
   }
 
   public static class VoiceInteractor.AbortVoiceRequest extends android.app.VoiceInteractor.Request {
@@ -41790,9 +41812,11 @@ package android.service.voice {
     method public void onCreate();
     method public android.view.View onCreateContentView();
     method public void onDestroy();
+    method public void onDirectActionsInvalidated(@NonNull android.service.voice.VoiceInteractionSession.ActivityId);
     method public boolean[] onGetSupportedCommands(String[]);
-    method public void onHandleAssist(@Nullable android.os.Bundle, @Nullable android.app.assist.AssistStructure, @Nullable android.app.assist.AssistContent);
-    method public void onHandleAssistSecondary(@Nullable android.os.Bundle, @Nullable android.app.assist.AssistStructure, @Nullable android.app.assist.AssistContent, int, int);
+    method @Deprecated public void onHandleAssist(@Nullable android.os.Bundle, @Nullable android.app.assist.AssistStructure, @Nullable android.app.assist.AssistContent);
+    method public void onHandleAssist(@NonNull android.service.voice.VoiceInteractionSession.AssistState);
+    method @Deprecated public void onHandleAssistSecondary(@Nullable android.os.Bundle, @Nullable android.app.assist.AssistStructure, @Nullable android.app.assist.AssistContent, int, int);
     method public void onHandleScreenshot(@Nullable android.graphics.Bitmap);
     method public void onHide();
     method public boolean onKeyDown(int, android.view.KeyEvent);
@@ -41811,6 +41835,8 @@ package android.service.voice {
     method public void onTaskFinished(android.content.Intent, int);
     method public void onTaskStarted(android.content.Intent, int);
     method public void onTrimMemory(int);
+    method public final void performDirectAction(@NonNull android.app.DirectAction, @Nullable android.os.Bundle, @Nullable android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.os.Bundle>);
+    method public final void requestDirectActions(@NonNull android.service.voice.VoiceInteractionSession.ActivityId, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<java.util.List<android.app.DirectAction>>);
     method public void setContentView(android.view.View);
     method public void setDisabledShowContext(int);
     method public void setKeepAwake(boolean);
@@ -41833,6 +41859,19 @@ package android.service.voice {
     method @Deprecated @Nullable public CharSequence getMessage();
     method @Nullable public android.app.VoiceInteractor.Prompt getVoicePrompt();
     method public void sendAbortResult(android.os.Bundle);
+  }
+
+  public static class VoiceInteractionSession.ActivityId {
+  }
+
+  public static final class VoiceInteractionSession.AssistState {
+    method @NonNull public android.service.voice.VoiceInteractionSession.ActivityId getActivityId();
+    method @Nullable public android.app.assist.AssistContent getAssistContent();
+    method @Nullable public android.os.Bundle getAssistData();
+    method @Nullable public android.app.assist.AssistStructure getAssistStructure();
+    method @IntRange(from=0) public int getCount();
+    method @IntRange(from=0xffffffff) public int getIndex();
+    method public boolean isFocused();
   }
 
   public static final class VoiceInteractionSession.CommandRequest extends android.service.voice.VoiceInteractionSession.Request {
