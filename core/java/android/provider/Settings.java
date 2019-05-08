@@ -5519,6 +5519,12 @@ public final class Settings {
          */
         @Readable
         public static final String DESKTOP_MODE = "desktop_mode";
+		
+		/**
+         * Swipe to screenshot
+         * @hide
+         */
+        public static final String SWIPE_TO_SCREENSHOT = "swipe_to_screenshot";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
