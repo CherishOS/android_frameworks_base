@@ -5498,6 +5498,12 @@ public final class Settings {
          * @hide
          */
         public static final String SCREENSHOT_SHUTTER_SOUND = "screenshot_shutter_sound";
+		
+		/**
+         * Swipe to screenshot
+         * @hide
+         */
+        public static final String SWIPE_TO_SCREENSHOT = "swipe_to_screenshot";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
