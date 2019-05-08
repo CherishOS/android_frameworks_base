@@ -5736,6 +5736,12 @@ public final class Settings {
          */
         @Readable
         public static final String DESKTOP_MODE = "desktop_mode";
+		
+		/**
+         * Swipe to screenshot
+         * @hide
+         */
+        public static final String SWIPE_TO_SCREENSHOT = "swipe_to_screenshot";
 
         /**
          * The information of locale preference. This records user's preference to avoid
