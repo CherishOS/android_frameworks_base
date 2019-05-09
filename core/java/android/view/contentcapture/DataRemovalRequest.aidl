@@ -14,12 +14,6 @@
  * limitations under the License.
  */
 
-syntax = "proto2";
+package android.view.contentcapture;
 
-package android.os.incidentd;
-
-// This proto is never instantiated anywhere. It only exists to keep a record of the format of the
-// encrypted data on disk.
-message CipherBlocks {
-    repeated string blocks = 1;
-}
+parcelable DataRemovalRequest;
