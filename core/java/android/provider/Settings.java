@@ -5526,6 +5526,12 @@ public final class Settings {
         public static final String CHARGING_ANIMATION = "charging_animation";
 
         /**
+         * Whether to show charging animation on lock screen
+         * @hide
+         */
+        public static final String LOCKSCREEN_CHARGING_ANIMATION = "lockscreen_charging_animation";
+
+        /**
          * Whether to take partial screenshot with volume down + power click.
          */
         public static final String CLICK_PARTIAL_SCREENSHOT = "click_partial_screenshot";
