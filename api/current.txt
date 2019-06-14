@@ -47850,6 +47850,7 @@ package android.util {
     field public static final int DENSITY_400 = 400; // 0x190
     field public static final int DENSITY_420 = 420; // 0x1a4
     field public static final int DENSITY_440 = 440; // 0x1b8
+    field public static final int DENSITY_450 = 450; // 0x1c2
     field public static final int DENSITY_560 = 560; // 0x230
     field public static final int DENSITY_600 = 600; // 0x258
     field public static final int DENSITY_DEFAULT = 160; // 0xa0
@@ -49940,10 +49941,11 @@ package android.view {
     method @NonNull public android.view.SurfaceControl.Builder setParent(@Nullable android.view.SurfaceControl);
   }
 
-  public static class SurfaceControl.Transaction implements java.io.Closeable {
+  public static class SurfaceControl.Transaction implements java.io.Closeable android.os.Parcelable {
     ctor public SurfaceControl.Transaction();
     method public void apply();
     method public void close();
+    method public int describeContents();
     method @NonNull public android.view.SurfaceControl.Transaction merge(@NonNull android.view.SurfaceControl.Transaction);
     method @NonNull public android.view.SurfaceControl.Transaction reparent(@NonNull android.view.SurfaceControl, @Nullable android.view.SurfaceControl);
     method @NonNull public android.view.SurfaceControl.Transaction setAlpha(@NonNull android.view.SurfaceControl, @FloatRange(from=0.0, to=1.0) float);
@@ -49951,6 +49953,8 @@ package android.view {
     method @NonNull public android.view.SurfaceControl.Transaction setGeometry(@NonNull android.view.SurfaceControl, @Nullable android.graphics.Rect, @Nullable android.graphics.Rect, int);
     method @NonNull public android.view.SurfaceControl.Transaction setLayer(@NonNull android.view.SurfaceControl, @IntRange(from=java.lang.Integer.MIN_VALUE, to=java.lang.Integer.MAX_VALUE) int);
     method @NonNull public android.view.SurfaceControl.Transaction setVisibility(@NonNull android.view.SurfaceControl, boolean);
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.SurfaceControl.Transaction> CREATOR;
   }
 
   public interface SurfaceHolder {
@@ -52417,6 +52421,7 @@ package android.view.accessibility {
     method public void getBoundsInScreen(android.graphics.Rect);
     method public android.view.accessibility.AccessibilityWindowInfo getChild(int);
     method public int getChildCount();
+    method public int getDisplayId();
     method public int getId();
     method public int getLayer();
     method public android.view.accessibility.AccessibilityWindowInfo getParent();
