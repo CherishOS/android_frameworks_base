@@ -505,6 +505,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     private final DisplayMetrics mDisplayMetrics;
 
     private PackageMonitor mPackageMonitor;
+    private boolean mHeadsUpDisabled, mGamingModeActivated;
 
     // XXX: gesture research
     private final GestureRecorder mGestureRec = DEBUG_GESTURES
@@ -4405,6 +4406,12 @@ public class StatusBar extends SystemUI implements DemoMode,
 			resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_MATERIAL_DISMISS),
                     false, this, UserHandle.USER_ALL);
+			resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.GAMING_MODE_ACTIVE),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.GAMING_MODE_HEADSUP_TOGGLE),
+                    false, this, UserHandle.USER_ALL);
         }
          @Override
         public void onChange(boolean selfChange, Uri uri) {
@@ -4471,7 +4478,19 @@ public class StatusBar extends SystemUI implements DemoMode,
 			setQsBatteryPercentMode();
 			setQsBatteryEstimate();
 			updateDismissAllVisibility(true);
+			setGamingMode();
         }
+    }
+	
+	private void setGamingMode() {
+        mGamingModeActivated = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.GAMING_MODE_ACTIVE, 0,
+                UserHandle.USER_CURRENT) == 1;
+        mHeadsUpDisabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.GAMING_MODE_HEADSUP_TOGGLE, 1,
+                UserHandle.USER_CURRENT) == 1;
+        if (mNotificationInterruptStateProvider != null)
+            mNotificationInterruptStateProvider.setGamingPeekMode(mGamingModeActivated && mHeadsUpDisabled);
     }
 
     private void setQsBatteryPercentMode() {
