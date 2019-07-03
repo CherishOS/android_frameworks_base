@@ -28,6 +28,7 @@ import com.android.systemui.qs.tiles.SoundTile
 import com.android.systemui.qs.tiles.SyncTile
 import com.android.systemui.qs.tiles.UsbTetherTile
 import com.android.systemui.qs.tiles.VolumeTile
+import com.android.systemui.qs.tiles.VpnTile
 
 import dagger.Binds
 import dagger.Module
@@ -95,6 +96,12 @@ interface CherishModule {
     @IntoMap
     @StringKey(UsbTetherTile.TILE_SPEC)
     fun bindUsbTetherTile(usbTetherTile: UsbTetherTile): QSTileImpl<*>
+
+    /** Inject VpnTile into tileMap in QSModule */
+    @Binds  
+    @IntoMap
+    @StringKey(VpnTile.TILE_SPEC)
+    fun bindVpnTile(vpnTile: VpnTile): QSTileImpl<*>
 
     /** Inject VolumeTile into tileMap in QSModule */
     @Binds  
