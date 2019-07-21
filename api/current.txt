@@ -10834,7 +10834,9 @@ package android.content {
     method @Nullable public String getString(String, @Nullable String);
     method @Nullable public java.util.Set<java.lang.String> getStringSet(String, @Nullable java.util.Set<java.lang.String>);
     method public void registerOnSharedPreferenceChangeListener(android.content.SharedPreferences.OnSharedPreferenceChangeListener);
+    method public default void registerOnSharedPreferencesClearListener(@NonNull android.content.SharedPreferences.OnSharedPreferencesClearListener);
     method public void unregisterOnSharedPreferenceChangeListener(android.content.SharedPreferences.OnSharedPreferenceChangeListener);
+    method public default void unregisterOnSharedPreferencesClearListener(@NonNull android.content.SharedPreferences.OnSharedPreferencesClearListener);
   }
 
   public static interface SharedPreferences.Editor {
@@ -10852,6 +10854,10 @@ package android.content {
 
   public static interface SharedPreferences.OnSharedPreferenceChangeListener {
     method public void onSharedPreferenceChanged(android.content.SharedPreferences, String);
+  }
+
+  public static interface SharedPreferences.OnSharedPreferencesClearListener {
+    method public void onSharedPreferencesClear(@NonNull android.content.SharedPreferences, @NonNull java.util.Set<java.lang.String>);
   }
 
   public class SyncAdapterType implements android.os.Parcelable {
@@ -13123,8 +13129,11 @@ package android.database.sqlite {
     method @Nullable public android.database.sqlite.SQLiteDatabase.CursorFactory getCursorFactory();
     method @Nullable public java.util.Map<java.lang.String,java.lang.String> getProjectionMap();
     method @Nullable public String getTables();
+    method public long insert(@NonNull android.database.sqlite.SQLiteDatabase, @NonNull android.content.ContentValues);
     method public boolean isDistinct();
     method public boolean isStrict();
+    method public boolean isStrictColumns();
+    method public boolean isStrictGrammar();
     method public android.database.Cursor query(android.database.sqlite.SQLiteDatabase, String[], String, String[], String, String, String);
     method public android.database.Cursor query(android.database.sqlite.SQLiteDatabase, String[], String, String[], String, String, String, String);
     method public android.database.Cursor query(android.database.sqlite.SQLiteDatabase, String[], String, String[], String, String, String, String, android.os.CancellationSignal);
@@ -13132,6 +13141,8 @@ package android.database.sqlite {
     method public void setDistinct(boolean);
     method public void setProjectionMap(@Nullable java.util.Map<java.lang.String,java.lang.String>);
     method public void setStrict(boolean);
+    method public void setStrictColumns(boolean);
+    method public void setStrictGrammar(boolean);
     method public void setTables(@Nullable String);
     method public int update(@NonNull android.database.sqlite.SQLiteDatabase, @NonNull android.content.ContentValues, @Nullable String, @Nullable String[]);
   }
@@ -41053,6 +41064,7 @@ package android.service.autofill {
     method public int getType();
     field public static final int TYPE_AUTHENTICATION_SELECTED = 2; // 0x2
     field public static final int TYPE_CONTEXT_COMMITTED = 4; // 0x4
+    field public static final int TYPE_DATASETS_SHOWN = 5; // 0x5
     field public static final int TYPE_DATASET_AUTHENTICATION_SELECTED = 1; // 0x1
     field public static final int TYPE_DATASET_SELECTED = 0; // 0x0
     field public static final int TYPE_SAVE_SHOWN = 3; // 0x3
