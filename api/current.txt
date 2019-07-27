@@ -2810,6 +2810,14 @@ package android.accessibilityservice {
     method public void onClicked(android.accessibilityservice.AccessibilityButtonController);
   }
 
+  public final class AccessibilityGestureInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getDisplayId();
+    method public int getGestureId();
+    method public void writeToParcel(android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.accessibilityservice.AccessibilityGestureInfo> CREATOR;
+  }
+
   public abstract class AccessibilityService extends android.app.Service {
     ctor public AccessibilityService();
     method public final void disableSelf();
@@ -2824,7 +2832,8 @@ package android.accessibilityservice {
     method public java.util.List<android.view.accessibility.AccessibilityWindowInfo> getWindows();
     method public abstract void onAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
     method public final android.os.IBinder onBind(android.content.Intent);
-    method protected boolean onGesture(int);
+    method @Deprecated protected boolean onGesture(int);
+    method public boolean onGesture(@NonNull android.accessibilityservice.AccessibilityGestureInfo);
     method public abstract void onInterrupt();
     method protected boolean onKeyEvent(android.view.KeyEvent);
     method protected void onServiceConnected();
@@ -44360,6 +44369,7 @@ package android.telephony {
     method public int getBitErrorRate();
     method public int getDbm();
     method @IntRange(from=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN, to=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_GREAT) public int getLevel();
+    method public int getRssi();
     method public int getTimingAdvance();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.telephony.CellSignalStrengthGsm> CREATOR;
