@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (c) 2018 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,7 @@
  * limitations under the License.
  */
 
-#pragma once
 
-#include "hwui/Canvas.h"
-#include "hwui/Paint.h"
-#include "RenderNode.h"
-#include "tests/common/TestContext.h"
-#include "tests/common/TestScene.h"
-#include "tests/common/TestUtils.h"
-#include "utils/Color.h"
+package android.telephony.ims;
 
-#include <functional>
-
-using namespace android;
-using namespace android::uirenderer;
-using namespace android::uirenderer::renderthread;
-using namespace android::uirenderer::test;
+parcelable RcsContactUceCapability;
