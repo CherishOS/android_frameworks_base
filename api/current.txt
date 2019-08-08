@@ -9482,16 +9482,20 @@ package android.content {
     method public int describeContents();
     method @NonNull public android.net.Uri getUri();
     method public boolean isAssertQuery();
+    method public boolean isCall();
     method public boolean isDelete();
+    method public boolean isExceptionAllowed();
     method public boolean isInsert();
     method public boolean isReadOperation();
     method public boolean isUpdate();
     method public boolean isWriteOperation();
     method public boolean isYieldAllowed();
     method @NonNull public static android.content.ContentProviderOperation.Builder newAssertQuery(@NonNull android.net.Uri);
+    method @NonNull public static android.content.ContentProviderOperation.Builder newCall(@NonNull android.net.Uri, @Nullable String, @Nullable String);
     method @NonNull public static android.content.ContentProviderOperation.Builder newDelete(@NonNull android.net.Uri);
     method @NonNull public static android.content.ContentProviderOperation.Builder newInsert(@NonNull android.net.Uri);
     method @NonNull public static android.content.ContentProviderOperation.Builder newUpdate(@NonNull android.net.Uri);
+    method @Nullable public android.os.Bundle resolveExtrasBackReferences(@NonNull android.content.ContentProviderResult[], int);
     method @Nullable public String[] resolveSelectionArgsBackReferences(@NonNull android.content.ContentProviderResult[], int);
     method @Nullable public android.content.ContentValues resolveValueBackReferences(@NonNull android.content.ContentProviderResult[], int);
     method public void writeToParcel(android.os.Parcel, int);
@@ -9500,11 +9504,18 @@ package android.content {
 
   public static class ContentProviderOperation.Builder {
     method @NonNull public android.content.ContentProviderOperation build();
+    method @NonNull public android.content.ContentProviderOperation.Builder withExceptionAllowed(boolean);
     method @NonNull public android.content.ContentProviderOperation.Builder withExpectedCount(int);
+    method @NonNull public android.content.ContentProviderOperation.Builder withExtra(@NonNull String, @Nullable Object);
+    method @NonNull public android.content.ContentProviderOperation.Builder withExtraBackReference(@NonNull String, int);
+    method @NonNull public android.content.ContentProviderOperation.Builder withExtraBackReference(@NonNull String, int, @NonNull String);
+    method @NonNull public android.content.ContentProviderOperation.Builder withExtras(@NonNull android.os.Bundle);
     method @NonNull public android.content.ContentProviderOperation.Builder withSelection(@Nullable String, @Nullable String[]);
     method @NonNull public android.content.ContentProviderOperation.Builder withSelectionBackReference(int, int);
+    method @NonNull public android.content.ContentProviderOperation.Builder withSelectionBackReference(int, int, @NonNull String);
     method @NonNull public android.content.ContentProviderOperation.Builder withValue(@NonNull String, @Nullable Object);
     method @NonNull public android.content.ContentProviderOperation.Builder withValueBackReference(@NonNull String, int);
+    method @NonNull public android.content.ContentProviderOperation.Builder withValueBackReference(@NonNull String, int, @NonNull String);
     method @NonNull public android.content.ContentProviderOperation.Builder withValueBackReferences(@NonNull android.content.ContentValues);
     method @NonNull public android.content.ContentProviderOperation.Builder withValues(@NonNull android.content.ContentValues);
     method @NonNull public android.content.ContentProviderOperation.Builder withYieldAllowed(boolean);
@@ -9513,11 +9524,15 @@ package android.content {
   public class ContentProviderResult implements android.os.Parcelable {
     ctor public ContentProviderResult(@NonNull android.net.Uri);
     ctor public ContentProviderResult(int);
+    ctor public ContentProviderResult(@NonNull android.os.Bundle);
+    ctor public ContentProviderResult(@NonNull Exception);
     ctor public ContentProviderResult(android.os.Parcel);
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.content.ContentProviderResult> CREATOR;
     field @Nullable public final Integer count;
+    field @Nullable public final Exception exception;
+    field @Nullable public final android.os.Bundle extras;
     field @Nullable public final android.net.Uri uri;
   }
 
