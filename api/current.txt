@@ -12402,6 +12402,8 @@ package android.content.res {
 
   public class Resources {
     ctor @Deprecated public Resources(android.content.res.AssetManager, android.util.DisplayMetrics, android.content.res.Configuration);
+    method public void addLoader(@NonNull android.content.res.loader.ResourceLoader, @NonNull android.content.res.loader.ResourcesProvider, @IntRange(from=0) int);
+    method public int addLoader(@NonNull android.content.res.loader.ResourceLoader, @NonNull android.content.res.loader.ResourcesProvider);
     method public final void finishPreloading();
     method public final void flushLayoutCache();
     method @NonNull public android.content.res.XmlResourceParser getAnimation(@AnimatorRes @AnimRes int) throws android.content.res.Resources.NotFoundException;
@@ -12428,6 +12430,7 @@ package android.content.res {
     method @NonNull public int[] getIntArray(@ArrayRes int) throws android.content.res.Resources.NotFoundException;
     method public int getInteger(@IntegerRes int) throws android.content.res.Resources.NotFoundException;
     method @NonNull public android.content.res.XmlResourceParser getLayout(@LayoutRes int) throws android.content.res.Resources.NotFoundException;
+    method @NonNull public java.util.List<android.util.Pair<android.content.res.loader.ResourceLoader,android.content.res.loader.ResourcesProvider>> getLoaders();
     method @Deprecated public android.graphics.Movie getMovie(@RawRes int) throws android.content.res.Resources.NotFoundException;
     method @NonNull public String getQuantityString(@PluralsRes int, int, java.lang.Object...) throws android.content.res.Resources.NotFoundException;
     method @NonNull public String getQuantityString(@PluralsRes int, int) throws android.content.res.Resources.NotFoundException;
@@ -12455,6 +12458,8 @@ package android.content.res {
     method public android.content.res.AssetFileDescriptor openRawResourceFd(@RawRes int) throws android.content.res.Resources.NotFoundException;
     method public void parseBundleExtra(String, android.util.AttributeSet, android.os.Bundle) throws org.xmlpull.v1.XmlPullParserException;
     method public void parseBundleExtras(android.content.res.XmlResourceParser, android.os.Bundle) throws java.io.IOException, org.xmlpull.v1.XmlPullParserException;
+    method public int removeLoader(@NonNull android.content.res.loader.ResourceLoader);
+    method public void setLoaders(@Nullable java.util.List<android.util.Pair<android.content.res.loader.ResourceLoader,android.content.res.loader.ResourcesProvider>>);
     method @Deprecated public void updateConfiguration(android.content.res.Configuration, android.util.DisplayMetrics);
     field @AnyRes public static final int ID_NULL = 0; // 0x0
   }
@@ -12518,6 +12523,33 @@ package android.content.res {
 
   public interface XmlResourceParser extends org.xmlpull.v1.XmlPullParser android.util.AttributeSet java.lang.AutoCloseable {
     method public void close();
+  }
+
+}
+
+package android.content.res.loader {
+
+  public class DirectoryResourceLoader implements android.content.res.loader.ResourceLoader {
+    ctor public DirectoryResourceLoader(@NonNull java.io.File);
+    method @Nullable public java.io.File findFile(@NonNull String);
+    method @NonNull public java.io.File getDirectory();
+  }
+
+  public interface ResourceLoader {
+    method @Nullable public default java.io.InputStream loadAsset(@NonNull String, int) throws java.io.IOException;
+    method @Nullable public default android.os.ParcelFileDescriptor loadAssetFd(@NonNull String) throws java.io.IOException;
+    method @Nullable public default android.graphics.drawable.Drawable loadDrawable(@NonNull android.util.TypedValue, int, int, @Nullable android.content.res.Resources.Theme);
+    method @Nullable public default android.content.res.XmlResourceParser loadXmlResourceParser(@NonNull String, @AnyRes int);
+  }
+
+  public final class ResourcesProvider implements java.lang.AutoCloseable java.io.Closeable {
+    method public void close();
+    method @NonNull public static android.content.res.loader.ResourcesProvider empty();
+    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromApk(@NonNull android.os.ParcelFileDescriptor) throws java.io.IOException;
+    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromApk(@NonNull android.os.SharedMemory) throws java.io.IOException;
+    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromArsc(@NonNull android.os.ParcelFileDescriptor) throws java.io.IOException;
+    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromArsc(@NonNull android.os.SharedMemory) throws java.io.IOException;
+    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromSplit(@NonNull android.content.Context, @NonNull String) throws java.io.IOException;
   }
 
 }
