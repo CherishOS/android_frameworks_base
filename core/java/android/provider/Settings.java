@@ -5328,6 +5328,13 @@ public final class Settings {
          * @hide
          */
         public static final String QS_TILES_BG_DISCO = "qs_tiles_bg_disco";
+		
+		/**
+         * Setting to hold the current set overlay for color bucket.
+         * overlay package name (String)
+         * @hide
+         */
+        public static final String COLOR_BUCKET_OVERLAY = "color_bucket_overlay";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
@@ -6779,6 +6786,7 @@ public final class Settings {
 			 PRIVATE_SETTINGS.add(QS_TILES_BG_DISCO);
             PRIVATE_SETTINGS.add(STATUSBAR_ICONS_STYLE);
             PRIVATE_SETTINGS.add(HEADER_ICONS_STYLE);
+            PRIVATE_SETTINGS.add(COLOR_BUCKET_OVERLAY);
         }
 
         /**

@@ -228,5 +228,16 @@ public class SystemSettingsValidators {
         VALIDATORS.put(System.KEYGAURD_BATTERY_BAR_COLOR_MODE, ANY_INTEGER_VALIDATOR);
         VALIDATORS.put(System.KEYGAURD_BATTERY_BAR_COLOR_CUSTOM, ANY_INTEGER_VALIDATOR);
         VALIDATORS.put(System.LOCKSCREEN_BATTERY_INFO_FONT, ANY_INTEGER_VALIDATOR);
+		 VALIDATORS.put(
+                System.COLOR_BUCKET_OVERLAY,
+                new Validator() {
+                    @Override
+                    public boolean validate(String value) {
+                        if (value == null && value.isEmpty()) {
+                            return false;
+                        }
+                        return true;
+                    }
+                });
     }
 }
