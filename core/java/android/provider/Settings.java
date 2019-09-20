@@ -6223,6 +6223,14 @@ public final class Settings {
          * @hide
          */
         public static final String FORCE_SHOW_NAVBAR = "force_show_navbar";
+		
+		/**
+         * Whether to inverse keys in navigation bar
+         * Default 0
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_INVERSE = "navigation_bar_inverse";
+
 
         /**
          * @hide
