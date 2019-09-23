@@ -5011,6 +5011,24 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_STATUS_BAR = "lockscreen_status_bar";
+		
+		/**
+         * Expand immediately arrow
+         */
+        public static final String EXPAND_IMMEDIATELY = "expand_immediately";
+
+
+        /** Whether to resume audio stream if it was paused by user interaction over volume bar
+         *
+         * @hide
+         */
+        public static final String RESUME_AUDIO_STREAM = "resume_audio_stream";
+
+        /** Whether to pause audio stream if it was paused by user interaction over volume bar
+         *
+         * @hide
+         */
+        public static final String PAUSE_AUDIO_STREAM = "pause_audio_stream";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to

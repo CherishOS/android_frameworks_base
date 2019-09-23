@@ -64,9 +64,7 @@ public class VolumeToolTipView extends LinearLayout {
         ShapeDrawable arrowDrawable = new ShapeDrawable(TriangleShape.createHorizontal(
                 arrowLp.width, arrowLp.height, false));
         Paint arrowPaint = arrowDrawable.getPaint();
-        TypedValue typedValue = new TypedValue();
-        getContext().getTheme().resolveAttribute(android.R.attr.colorAccent, typedValue, true);
-        arrowPaint.setColor(ContextCompat.getColor(getContext(), typedValue.resourceId));
+        arrowPaint.setColor(ContextCompat.getColor(getContext(), R.color.vol_pan_bkg));
         // The corner path effect won't be reflected in the shadow, but shouldn't be noticeable.
         arrowPaint.setPathEffect(new CornerPathEffect(
                 getResources().getDimension(R.dimen.volume_tool_tip_arrow_corner_radius)));

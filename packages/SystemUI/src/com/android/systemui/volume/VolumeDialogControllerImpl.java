@@ -52,6 +52,7 @@ import android.service.notification.ZenModeConfig;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.util.Slog;
 import android.view.accessibility.AccessibilityManager;
 
@@ -136,6 +137,10 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
     private boolean mShowA11yStream;
     private boolean mShowVolumeDialog;
     private boolean mShowSafetyWarning;
+    private boolean wasMusicActive;
+
+    private Handler musicStateHandler;
+
     private long mLastToggledRingerOn;
     private final NotificationManager mNotificationManager;
 
@@ -558,8 +563,29 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
 
     private boolean updateStreamLevelW(int stream, int level) {
         final StreamState ss = streamStateW(stream);
+        int pauseAudioStreamStatus = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.PAUSE_AUDIO_STREAM, 0, UserHandle.USER_CURRENT);
+        int resumeAudioStreamStatus = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.RESUME_AUDIO_STREAM, 0, UserHandle.USER_CURRENT);
         if (ss.level == level) return false;
         ss.level = level;
+        if (stream == AudioSystem.STREAM_MUSIC && level == 0 && mAudio.isMusicActive() && pauseAudioStreamStatus == 1) {
+            mAudio.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, 127));
+            mAudio.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, 127));
+            if (resumeAudioStreamStatus == 1) {
+                wasMusicActive = true;
+                musicStateHandler = new Handler();
+                    musicStateHandler.postDelayed(() -> {
+                        wasMusicActive = false;
+                    }, 180000);
+            }
+        }
+        if (stream == AudioSystem.STREAM_MUSIC && level > 0 && wasMusicActive && resumeAudioStreamStatus == 1) {
+            musicStateHandler.removeCallbacksAndMessages(null);
+            wasMusicActive = false;
+            mAudio.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, 126));
+            mAudio.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, 126));
+        }
         if (isLogWorthy(stream)) {
             Events.writeEvent(Events.EVENT_LEVEL_CHANGED, stream, level);
         }
@@ -1144,6 +1170,7 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 if (D.BUG) Log.d(TAG, "onReceive ACTION_SCREEN_OFF");
                 mCallbacks.onScreenOff();
+                dismiss();
             } else if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
                 if (D.BUG) Log.d(TAG, "onReceive ACTION_CLOSE_SYSTEM_DIALOGS");
                 dismiss();

@@ -29,7 +29,7 @@ public class SystemUIInterpolators {
             this(400f, 1.4f, 0);
         }
 
-        private LogDecelerateInterpolator(float base, float timeScale, float drift) {
+        protected LogDecelerateInterpolator(float base, float timeScale, float drift) {
             mBase = base;
             mDrift = drift;
             mTimeScale = 1f / timeScale;
@@ -56,7 +56,7 @@ public class SystemUIInterpolators {
             this(100, 0);
         }
 
-        private LogAccelerateInterpolator(int base, int drift) {
+        protected LogAccelerateInterpolator(int base, int drift) {
             mBase = base;
             mDrift = drift;
             mLogScale = 1f / computeLog(1, mBase, mDrift);
