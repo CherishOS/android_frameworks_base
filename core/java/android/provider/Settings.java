@@ -6280,12 +6280,11 @@ public final class Settings {
          */
         public static final String SHOW_CLIPBOARD_TOAST = "show_clipboard_toast";
 
+        /** @hide */
+        public static final String BACK_GESTURE_HEIGHT = "back_gesture_height";
+
         /**
-<<<<<<< HEAD
          * Display cutout
-=======
-         * Adaptive playback's timeout in ms
->>>>>>> parent of 6e7a1250373 (Adaptive Playback: Convert to seconds)
          * @hide
          */
         public static final String DISPLAY_CUTOUT_HIDDEN = "display_cutout_hidden";
