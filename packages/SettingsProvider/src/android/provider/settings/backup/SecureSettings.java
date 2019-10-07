@@ -220,5 +220,6 @@ public class SecureSettings {
         Settings.Secure.GESTURE_NAVBAR_LENGTH_MODE,
         Settings.Secure.TETHERING_ALLOW_VPN_UPSTREAMS,
         Settings.Secure.SHOW_BACK_ARROW_GESTURE,
+        Settings.Secure.DOZE_ON_CHARGE,
     };
 }
