@@ -5991,6 +5991,12 @@ public final class Settings {
          * @hide
          */
         public static final String SHOW_LOCKSCREEN_MEDIA_ART = "show_lockscreen_media_art";
+		
+		/**
+         * Enable and disable Lockscreen visualizer
+         * @hide
+         */
+        public static final String LOCKSCREEN_VISUALIZER_ENABLED = "lockscreen_visualizer_enabled";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
