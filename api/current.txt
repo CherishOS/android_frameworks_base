@@ -38280,6 +38280,7 @@ package android.provider {
     field public static final String COLUMN_MIME_TYPE = "mime_type";
     field public static final String COLUMN_SIZE = "_size";
     field public static final String COLUMN_SUMMARY = "summary";
+    field public static final int FLAG_DIR_BLOCKS_TREE = 32768; // 0x8000
     field public static final int FLAG_DIR_PREFERS_GRID = 16; // 0x10
     field public static final int FLAG_DIR_PREFERS_LAST_MODIFIED = 32; // 0x20
     field public static final int FLAG_DIR_SUPPORTS_CREATE = 8; // 0x8
@@ -38498,16 +38499,17 @@ package android.provider {
 
   public static final class MediaStore.Audio {
     ctor public MediaStore.Audio();
-    method public static String keyFor(String);
+    method @Deprecated @Nullable public static String keyFor(@Nullable String);
   }
 
   public static interface MediaStore.Audio.AlbumColumns {
     field public static final String ALBUM = "album";
     field @Deprecated public static final String ALBUM_ART = "album_art";
     field public static final String ALBUM_ID = "album_id";
-    field public static final String ALBUM_KEY = "album_key";
+    field @Deprecated public static final String ALBUM_KEY = "album_key";
     field public static final String ARTIST = "artist";
     field public static final String ARTIST_ID = "artist_id";
+    field @Deprecated public static final String ARTIST_KEY = "artist_key";
     field public static final String FIRST_YEAR = "minyear";
     field public static final String LAST_YEAR = "maxyear";
     field public static final String NUMBER_OF_SONGS = "numsongs";
@@ -38526,7 +38528,7 @@ package android.provider {
 
   public static interface MediaStore.Audio.ArtistColumns {
     field public static final String ARTIST = "artist";
-    field public static final String ARTIST_KEY = "artist_key";
+    field @Deprecated public static final String ARTIST_KEY = "artist_key";
     field public static final String NUMBER_OF_ALBUMS = "number_of_albums";
     field public static final String NUMBER_OF_TRACKS = "number_of_tracks";
   }
@@ -38549,19 +38551,23 @@ package android.provider {
   public static interface MediaStore.Audio.AudioColumns extends android.provider.MediaStore.MediaColumns {
     field public static final String ALBUM = "album";
     field public static final String ALBUM_ID = "album_id";
-    field public static final String ALBUM_KEY = "album_key";
+    field @Deprecated public static final String ALBUM_KEY = "album_key";
     field public static final String ARTIST = "artist";
     field public static final String ARTIST_ID = "artist_id";
-    field public static final String ARTIST_KEY = "artist_key";
+    field @Deprecated public static final String ARTIST_KEY = "artist_key";
     field public static final String BOOKMARK = "bookmark";
     field public static final String COMPOSER = "composer";
+    field public static final String GENRE = "genre";
+    field public static final String GENRE_ID = "genre_id";
+    field @Deprecated public static final String GENRE_KEY = "genre_key";
     field public static final String IS_ALARM = "is_alarm";
     field public static final String IS_AUDIOBOOK = "is_audiobook";
     field public static final String IS_MUSIC = "is_music";
     field public static final String IS_NOTIFICATION = "is_notification";
     field public static final String IS_PODCAST = "is_podcast";
     field public static final String IS_RINGTONE = "is_ringtone";
-    field public static final String TITLE_KEY = "title_key";
+    field @Deprecated public static final String TITLE_KEY = "title_key";
+    field public static final String TITLE_RESOURCE_URI = "title_resource_uri";
     field public static final String TRACK = "track";
     field public static final String YEAR = "year";
   }
@@ -45100,6 +45106,7 @@ package android.telephony {
     method public long getDataLimitBytes();
     method public long getDataUsageBytes();
     method public long getDataUsageTime();
+    method @Nullable public int[] getNetworkTypes();
     method @Nullable public CharSequence getSummary();
     method @Nullable public CharSequence getTitle();
     method public void writeToParcel(android.os.Parcel, int);
@@ -45119,6 +45126,7 @@ package android.telephony {
     method public static android.telephony.SubscriptionPlan.Builder createRecurring(java.time.ZonedDateTime, java.time.Period);
     method public android.telephony.SubscriptionPlan.Builder setDataLimit(long, int);
     method public android.telephony.SubscriptionPlan.Builder setDataUsage(long, long);
+    method @NonNull public android.telephony.SubscriptionPlan.Builder setNetworkTypes(@Nullable int[]);
     method public android.telephony.SubscriptionPlan.Builder setSummary(@Nullable CharSequence);
     method public android.telephony.SubscriptionPlan.Builder setTitle(@Nullable CharSequence);
   }
