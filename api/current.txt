@@ -4280,23 +4280,24 @@ package android.app {
     method @Deprecated public int checkOp(@NonNull String, int, @NonNull String);
     method @Deprecated public int checkOpNoThrow(@NonNull String, int, @NonNull String);
     method public void checkPackage(int, @NonNull String);
-    method public void finishOp(@NonNull String, int, @NonNull String);
+    method @Deprecated public void finishOp(@NonNull String, int, @NonNull String);
+    method public void finishOp(@NonNull String, int, @NonNull String, @Nullable String);
     method public boolean isOpActive(@NonNull String, int, @NonNull String);
     method @Deprecated public int noteOp(@NonNull String, int, @NonNull String);
-    method public int noteOp(@NonNull String, int, @Nullable String, @Nullable String);
+    method public int noteOp(@NonNull String, int, @Nullable String, @Nullable String, @Nullable String);
     method @Deprecated public int noteOpNoThrow(@NonNull String, int, @NonNull String);
-    method public int noteOpNoThrow(@NonNull String, int, @NonNull String, @Nullable String);
+    method public int noteOpNoThrow(@NonNull String, int, @NonNull String, @Nullable String, @Nullable String);
     method @Deprecated public int noteProxyOp(@NonNull String, @NonNull String);
-    method public int noteProxyOp(@NonNull String, @Nullable String, int, @Nullable String);
+    method public int noteProxyOp(@NonNull String, @Nullable String, int, @Nullable String, @Nullable String);
     method @Deprecated public int noteProxyOpNoThrow(@NonNull String, @NonNull String);
     method @Deprecated public int noteProxyOpNoThrow(@NonNull String, @Nullable String, int);
-    method public int noteProxyOpNoThrow(@NonNull String, @Nullable String, int, @Nullable String);
+    method public int noteProxyOpNoThrow(@NonNull String, @Nullable String, int, @Nullable String, @Nullable String);
     method public static String permissionToOp(String);
     method public void setNotedAppOpsCollector(@Nullable android.app.AppOpsManager.AppOpsCollector);
     method @Deprecated public int startOp(@NonNull String, int, @NonNull String);
-    method public int startOp(@NonNull String, int, @Nullable String, @Nullable String);
+    method public int startOp(@NonNull String, int, @Nullable String, @NonNull String, @Nullable String);
     method @Deprecated public int startOpNoThrow(@NonNull String, int, @NonNull String);
-    method public int startOpNoThrow(@NonNull String, int, @NonNull String, @Nullable String);
+    method public int startOpNoThrow(@NonNull String, int, @NonNull String, @NonNull String, @Nullable String);
     method public void startWatchingActive(@NonNull String[], @NonNull java.util.concurrent.Executor, @NonNull android.app.AppOpsManager.OnOpActiveChangedListener);
     method public void startWatchingMode(@NonNull String, @Nullable String, @NonNull android.app.AppOpsManager.OnOpChangedListener);
     method public void startWatchingMode(@NonNull String, @Nullable String, int, @NonNull android.app.AppOpsManager.OnOpChangedListener);
@@ -4478,6 +4479,7 @@ package android.app {
 
   public final class AsyncNotedAppOp implements android.os.Parcelable {
     method public int describeContents();
+    method @Nullable public String getFeatureId();
     method @NonNull public String getMessage();
     method @Nullable public String getNotingPackageName();
     method @IntRange(from=0) public int getNotingUid();
@@ -6302,6 +6304,7 @@ package android.app {
   }
 
   public final class SyncNotedAppOp {
+    method @Nullable public String getFeatureId();
     method @NonNull public String getOp();
   }
 
@@ -9778,6 +9781,7 @@ package android.content {
     method public abstract android.content.Context createContextForSplit(String) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract android.content.Context createDeviceProtectedStorageContext();
     method public abstract android.content.Context createDisplayContext(@NonNull android.view.Display);
+    method @NonNull public android.content.Context createFeatureContext(@Nullable String);
     method public abstract android.content.Context createPackageContext(String, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract String[] databaseList();
     method public abstract boolean deleteDatabase(String);
@@ -9809,6 +9813,7 @@ package android.content {
     method @Nullable public abstract java.io.File getExternalFilesDir(@Nullable String);
     method public abstract java.io.File[] getExternalFilesDirs(String);
     method @Deprecated public abstract java.io.File[] getExternalMediaDirs();
+    method @Nullable public String getFeatureId();
     method public abstract java.io.File getFileStreamPath(String);
     method public abstract java.io.File getFilesDir();
     method public java.util.concurrent.Executor getMainExecutor();
