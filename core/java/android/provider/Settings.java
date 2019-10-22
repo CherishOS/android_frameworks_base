@@ -5204,6 +5204,13 @@ public final class Settings {
         public static final String POWER_MENU_ANIMATIONS = "power_menu_animations";
 
         /**
+	 * Change fonts for the system lockscreen clock widget
+	 *
+	 * @hide
+	 */
+        public static final String LOCK_CLOCK_FONTS = "lock_clock_fonts";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
