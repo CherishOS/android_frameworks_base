@@ -16782,9 +16782,21 @@ package android.hardware.biometrics {
     field public static final int BIOMETRIC_SUCCESS = 0; // 0x0
   }
 
+  public static interface BiometricManager.Authenticators {
+    field public static final int BIOMETRIC_STRONG = 15; // 0xf
+    field public static final int BIOMETRIC_WEAK = 255; // 0xff
+    field public static final int DEVICE_CREDENTIAL = 32768; // 0x8000
+  }
+
   public class BiometricPrompt {
     method @RequiresPermission(android.Manifest.permission.USE_BIOMETRIC) public void authenticate(@NonNull android.hardware.biometrics.BiometricPrompt.CryptoObject, @NonNull android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull android.hardware.biometrics.BiometricPrompt.AuthenticationCallback);
     method @RequiresPermission(android.Manifest.permission.USE_BIOMETRIC) public void authenticate(@NonNull android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull android.hardware.biometrics.BiometricPrompt.AuthenticationCallback);
+    method @Nullable public int getAllowedAuthenticators();
+    method @Nullable public CharSequence getDescription();
+    method @Nullable public CharSequence getNegativeButtonText();
+    method @Nullable public CharSequence getSubtitle();
+    method @NonNull public CharSequence getTitle();
+    method public boolean isConfirmationRequired();
     field public static final int BIOMETRIC_ACQUIRED_GOOD = 0; // 0x0
     field public static final int BIOMETRIC_ACQUIRED_IMAGER_DIRTY = 3; // 0x3
     field public static final int BIOMETRIC_ACQUIRED_INSUFFICIENT = 2; // 0x2
@@ -16820,9 +16832,10 @@ package android.hardware.biometrics {
   public static class BiometricPrompt.Builder {
     ctor public BiometricPrompt.Builder(android.content.Context);
     method @NonNull public android.hardware.biometrics.BiometricPrompt build();
+    method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setAllowedAuthenticators(int);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setConfirmationRequired(boolean);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setDescription(@NonNull CharSequence);
-    method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setDeviceCredentialAllowed(boolean);
+    method @Deprecated @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setDeviceCredentialAllowed(boolean);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setNegativeButton(@NonNull CharSequence, @NonNull java.util.concurrent.Executor, @NonNull android.content.DialogInterface.OnClickListener);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setSubtitle(@NonNull CharSequence);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setTitle(@NonNull CharSequence);
