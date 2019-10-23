@@ -6851,6 +6851,7 @@ package android.app.admin {
     method public boolean setKeyPairCertificate(@Nullable android.content.ComponentName, @NonNull String, @NonNull java.util.List<java.security.cert.Certificate>, boolean);
     method public boolean setKeyguardDisabled(@NonNull android.content.ComponentName, boolean);
     method public void setKeyguardDisabledFeatures(@NonNull android.content.ComponentName, int);
+    method public void setLocationEnabled(@NonNull android.content.ComponentName, boolean);
     method public void setLockTaskFeatures(@NonNull android.content.ComponentName, int);
     method public void setLockTaskPackages(@NonNull android.content.ComponentName, @NonNull String[]) throws java.lang.SecurityException;
     method public void setLogoutEnabled(@NonNull android.content.ComponentName, boolean);
@@ -29975,10 +29976,16 @@ package android.net.wifi {
     method public String getSSID();
     method public android.net.wifi.SupplicantState getSupplicantState();
     method @IntRange(from=0xffffffff) public int getTxLinkSpeedMbps();
+    method public int getWifiTechnology();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final String FREQUENCY_UNITS = "MHz";
     field public static final String LINK_SPEED_UNITS = "Mbps";
     field public static final int LINK_SPEED_UNKNOWN = -1; // 0xffffffff
+    field public static final int WIFI_TECHNOLOGY_11AC = 5; // 0x5
+    field public static final int WIFI_TECHNOLOGY_11AX = 6; // 0x6
+    field public static final int WIFI_TECHNOLOGY_11N = 4; // 0x4
+    field public static final int WIFI_TECHNOLOGY_LEGACY = 1; // 0x1
+    field public static final int WIFI_TECHNOLOGY_UNKNOWN = 0; // 0x0
   }
 
   public class WifiManager {
@@ -41368,11 +41375,16 @@ package android.service.autofill {
     field public static final int FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE = 1; // 0x1
     field public static final int NEGATIVE_BUTTON_STYLE_CANCEL = 0; // 0x0
     field public static final int NEGATIVE_BUTTON_STYLE_REJECT = 1; // 0x1
+    field public static final int POSITIVE_BUTTON_STYLE_CONTINUE = 1; // 0x1
+    field public static final int POSITIVE_BUTTON_STYLE_SAVE = 0; // 0x0
     field public static final int SAVE_DATA_TYPE_ADDRESS = 2; // 0x2
     field public static final int SAVE_DATA_TYPE_CREDIT_CARD = 4; // 0x4
+    field public static final int SAVE_DATA_TYPE_DEBIT_CARD = 32; // 0x20
     field public static final int SAVE_DATA_TYPE_EMAIL_ADDRESS = 16; // 0x10
     field public static final int SAVE_DATA_TYPE_GENERIC = 0; // 0x0
+    field public static final int SAVE_DATA_TYPE_GENERIC_CARD = 128; // 0x80
     field public static final int SAVE_DATA_TYPE_PASSWORD = 1; // 0x1
+    field public static final int SAVE_DATA_TYPE_PAYMENT_CARD = 64; // 0x40
     field public static final int SAVE_DATA_TYPE_USERNAME = 8; // 0x8
   }
 
@@ -41386,6 +41398,7 @@ package android.service.autofill {
     method @NonNull public android.service.autofill.SaveInfo.Builder setFlags(int);
     method @NonNull public android.service.autofill.SaveInfo.Builder setNegativeAction(int, @Nullable android.content.IntentSender);
     method @NonNull public android.service.autofill.SaveInfo.Builder setOptionalIds(@NonNull android.view.autofill.AutofillId[]);
+    method @NonNull public android.service.autofill.SaveInfo.Builder setPositiveAction(int);
     method @NonNull public android.service.autofill.SaveInfo.Builder setTriggerId(@NonNull android.view.autofill.AutofillId);
     method @NonNull public android.service.autofill.SaveInfo.Builder setValidator(@NonNull android.service.autofill.Validator);
   }
