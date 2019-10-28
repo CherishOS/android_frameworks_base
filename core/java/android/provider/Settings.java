@@ -5696,6 +5696,11 @@ public final class Settings {
         * @hide
         */
        public static final String BATTERY_LIGHT_REALLYFULL_COLOR = "battery_light_reallyfull_color";
+	   
+	   /**
+         * @hide
+         */
+        public static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
