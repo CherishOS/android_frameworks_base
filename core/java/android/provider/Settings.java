@@ -4967,6 +4967,15 @@ public final class Settings {
         public static final String THREE_FINGER_GESTURE = "three_finger_gesture";
 
         public static final String SYSTEMUI_PLUGIN_VOLUME = "systemui_plugin_volume";
+		
+		/**
+         * Whether allowing pocket service to register sensors and dispatch informations.
+         *   0 = disabled
+         *   1 = enabled
+         * @author Carlo Savignano
+         * @hide
+         */
+        public static final String POCKET_JUDGE = "pocket_judge";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
@@ -6082,6 +6091,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_ADJUSTMENT);
             PRIVATE_SETTINGS.add(DISPLAY_PICTURE_ADJUSTMENT);
             PRIVATE_SETTINGS.add(LIVE_DISPLAY_HINTED);
+			 PRIVATE_SETTINGS.add(POCKET_JUDGE);
         }
 
         /**
