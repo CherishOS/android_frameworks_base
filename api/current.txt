@@ -38491,7 +38491,11 @@ package android.provider {
     method @NonNull public static String getVersion(@NonNull android.content.Context, @NonNull String);
     method @NonNull public static String getVolumeName(@NonNull android.net.Uri);
     method @NonNull public static android.net.Uri setIncludePending(@NonNull android.net.Uri);
+    method @NonNull public static android.net.Uri setIncludeTrashed(@NonNull android.net.Uri);
     method @NonNull public static android.net.Uri setRequireOriginal(@NonNull android.net.Uri);
+    method public static void trash(@NonNull android.content.Context, @NonNull android.net.Uri);
+    method public static void trash(@NonNull android.content.Context, @NonNull android.net.Uri, long);
+    method public static void untrash(@NonNull android.content.Context, @NonNull android.net.Uri);
     field public static final String ACTION_IMAGE_CAPTURE = "android.media.action.IMAGE_CAPTURE";
     field public static final String ACTION_IMAGE_CAPTURE_SECURE = "android.media.action.IMAGE_CAPTURE_SECURE";
     field public static final String ACTION_REVIEW = "android.provider.action.REVIEW";
@@ -38584,14 +38588,11 @@ package android.provider {
   }
 
   public static interface MediaStore.Audio.AudioColumns extends android.provider.MediaStore.MediaColumns {
-    field public static final String ALBUM = "album";
     field public static final String ALBUM_ID = "album_id";
     field @Deprecated public static final String ALBUM_KEY = "album_key";
-    field public static final String ARTIST = "artist";
     field public static final String ARTIST_ID = "artist_id";
     field @Deprecated public static final String ARTIST_KEY = "artist_key";
     field public static final String BOOKMARK = "bookmark";
-    field public static final String COMPOSER = "composer";
     field public static final String GENRE = "genre";
     field public static final String GENRE_ID = "genre_id";
     field @Deprecated public static final String GENRE_KEY = "genre_key";
@@ -38706,7 +38707,6 @@ package android.provider {
     field public static final int MEDIA_TYPE_VIDEO = 3; // 0x3
     field public static final String MIME_TYPE = "mime_type";
     field public static final String PARENT = "parent";
-    field public static final String TITLE = "title";
   }
 
   public static final class MediaStore.Images {
@@ -38715,6 +38715,9 @@ package android.provider {
 
   public static interface MediaStore.Images.ImageColumns extends android.provider.MediaStore.MediaColumns {
     field public static final String DESCRIPTION = "description";
+    field public static final String EXPOSURE_TIME = "exposure_time";
+    field public static final String F_NUMBER = "f_number";
+    field public static final String ISO = "iso";
     field public static final String IS_PRIVATE = "isprivate";
     field @Deprecated public static final String LATITUDE = "latitude";
     field @Deprecated public static final String LONGITUDE = "longitude";
@@ -38763,28 +38766,45 @@ package android.provider {
   }
 
   public static interface MediaStore.MediaColumns extends android.provider.BaseColumns {
+    field public static final String ALBUM = "album";
+    field public static final String ALBUM_ARTIST = "album_artist";
+    field public static final String ARTIST = "artist";
+    field public static final String AUTHOR = "author";
+    field public static final String BITRATE = "bitrate";
     field public static final String BUCKET_DISPLAY_NAME = "bucket_display_name";
     field public static final String BUCKET_ID = "bucket_id";
+    field public static final String CAPTURE_FRAMERATE = "capture_framerate";
+    field public static final String CD_TRACK_NUMBER = "cd_track_number";
+    field public static final String COMPILATION = "compilation";
+    field public static final String COMPOSER = "composer";
     field @Deprecated public static final String DATA = "_data";
     field public static final String DATE_ADDED = "date_added";
     field public static final String DATE_EXPIRES = "date_expires";
     field public static final String DATE_MODIFIED = "date_modified";
     field public static final String DATE_TAKEN = "datetaken";
+    field public static final String DISC_NUMBER = "disc_number";
     field public static final String DISPLAY_NAME = "_display_name";
     field public static final String DOCUMENT_ID = "document_id";
     field public static final String DURATION = "duration";
+    field public static final String GENRE = "genre";
     field public static final String HEIGHT = "height";
     field public static final String INSTANCE_ID = "instance_id";
+    field public static final String IS_FAVORITE = "is_favorite";
     field public static final String IS_PENDING = "is_pending";
+    field public static final String IS_TRASHED = "is_trashed";
     field public static final String MIME_TYPE = "mime_type";
+    field public static final String NUM_TRACKS = "num_tracks";
     field public static final String ORIENTATION = "orientation";
     field public static final String ORIGINAL_DOCUMENT_ID = "original_document_id";
     field public static final String OWNER_PACKAGE_NAME = "owner_package_name";
     field public static final String RELATIVE_PATH = "relative_path";
+    field public static final String RESOLUTION = "resolution";
     field public static final String SIZE = "_size";
     field public static final String TITLE = "title";
     field public static final String VOLUME_NAME = "volume_name";
     field public static final String WIDTH = "width";
+    field public static final String WRITER = "writer";
+    field public static final String YEAR = "year";
   }
 
   public static final class MediaStore.Video {
@@ -38824,8 +38844,6 @@ package android.provider {
   }
 
   public static interface MediaStore.Video.VideoColumns extends android.provider.MediaStore.MediaColumns {
-    field public static final String ALBUM = "album";
-    field public static final String ARTIST = "artist";
     field public static final String BOOKMARK = "bookmark";
     field public static final String CATEGORY = "category";
     field public static final String COLOR_RANGE = "color_range";
@@ -38837,7 +38855,6 @@ package android.provider {
     field @Deprecated public static final String LATITUDE = "latitude";
     field @Deprecated public static final String LONGITUDE = "longitude";
     field @Deprecated public static final String MINI_THUMB_MAGIC = "mini_thumb_magic";
-    field public static final String RESOLUTION = "resolution";
     field public static final String TAGS = "tags";
   }
 
