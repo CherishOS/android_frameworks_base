@@ -14,18 +14,6 @@
  * limitations under the License.
  */
 
-package com.android.systemui.dagger;
+package android.net.wifi;
 
-import dagger.Binds;
-import dagger.Module;
-
-/**
- * Dagger Module that collects related sub-modules together.
- */
-@Module(includes = {ActivityBinder.class, ServiceBinder.class, SystemUIBinder.class})
-public abstract class ComponentBinder {
-    /** */
-    @Binds
-    public abstract ContextComponentHelper bindComponentHelper(
-            ContextComponentResolver componentHelper);
-}
+parcelable SoftApConfiguration;
