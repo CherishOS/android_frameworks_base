@@ -2827,7 +2827,7 @@ package android.accessibilityservice {
     method public android.view.accessibility.AccessibilityNodeInfo findFocus(int);
     method @NonNull public final android.accessibilityservice.AccessibilityButtonController getAccessibilityButtonController();
     method @NonNull public final android.accessibilityservice.AccessibilityButtonController getAccessibilityButtonController(int);
-    method @RequiresPermission(android.Manifest.permission.USE_FINGERPRINT) @NonNull public final android.accessibilityservice.FingerprintGestureController getFingerprintGestureController();
+    method @NonNull @RequiresPermission(android.Manifest.permission.USE_FINGERPRINT) public final android.accessibilityservice.FingerprintGestureController getFingerprintGestureController();
     method @NonNull public final android.accessibilityservice.AccessibilityService.MagnificationController getMagnificationController();
     method public android.view.accessibility.AccessibilityNodeInfo getRootInActiveWindow();
     method public final android.accessibilityservice.AccessibilityServiceInfo getServiceInfo();
@@ -3541,11 +3541,11 @@ package android.animation {
 
 package android.annotation {
 
-  @java.lang.annotation.Target({java.lang.annotation.ElementType.TYPE, java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.METHOD, java.lang.annotation.ElementType.PARAMETER, java.lang.annotation.ElementType.CONSTRUCTOR, java.lang.annotation.ElementType.LOCAL_VARIABLE}) @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.CLASS) public @interface SuppressLint {
+  @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.CLASS) @java.lang.annotation.Target({java.lang.annotation.ElementType.TYPE, java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.METHOD, java.lang.annotation.ElementType.PARAMETER, java.lang.annotation.ElementType.CONSTRUCTOR, java.lang.annotation.ElementType.LOCAL_VARIABLE}) public @interface SuppressLint {
     method public abstract String[] value();
   }
 
-  @java.lang.annotation.Target({java.lang.annotation.ElementType.TYPE, java.lang.annotation.ElementType.METHOD, java.lang.annotation.ElementType.CONSTRUCTOR, java.lang.annotation.ElementType.FIELD}) @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.CLASS) public @interface TargetApi {
+  @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.CLASS) @java.lang.annotation.Target({java.lang.annotation.ElementType.TYPE, java.lang.annotation.ElementType.METHOD, java.lang.annotation.ElementType.CONSTRUCTOR, java.lang.annotation.ElementType.FIELD}) public @interface TargetApi {
     method public abstract int value();
   }
 
@@ -3758,7 +3758,7 @@ package android.app {
     method public void onContentChanged();
     method public boolean onContextItemSelected(@NonNull android.view.MenuItem);
     method public void onContextMenuClosed(@NonNull android.view.Menu);
-    method @MainThread @CallSuper protected void onCreate(@Nullable android.os.Bundle);
+    method @CallSuper @MainThread protected void onCreate(@Nullable android.os.Bundle);
     method public void onCreate(@Nullable android.os.Bundle, @Nullable android.os.PersistableBundle);
     method public void onCreateContextMenu(android.view.ContextMenu, android.view.View, android.view.ContextMenu.ContextMenuInfo);
     method @Nullable public CharSequence onCreateDescription();
@@ -3901,8 +3901,8 @@ package android.app {
     method @Deprecated public void startActivityFromChild(@NonNull android.app.Activity, @RequiresPermission android.content.Intent, int, @Nullable android.os.Bundle);
     method @Deprecated public void startActivityFromFragment(@NonNull android.app.Fragment, @RequiresPermission android.content.Intent, int);
     method @Deprecated public void startActivityFromFragment(@NonNull android.app.Fragment, @RequiresPermission android.content.Intent, int, @Nullable android.os.Bundle);
-    method public boolean startActivityIfNeeded(@RequiresPermission @NonNull android.content.Intent, int);
-    method public boolean startActivityIfNeeded(@RequiresPermission @NonNull android.content.Intent, int, @Nullable android.os.Bundle);
+    method public boolean startActivityIfNeeded(@NonNull @RequiresPermission android.content.Intent, int);
+    method public boolean startActivityIfNeeded(@NonNull @RequiresPermission android.content.Intent, int, @Nullable android.os.Bundle);
     method public void startIntentSenderForResult(android.content.IntentSender, int, @Nullable android.content.Intent, int, int, int) throws android.content.IntentSender.SendIntentException;
     method public void startIntentSenderForResult(android.content.IntentSender, int, @Nullable android.content.Intent, int, int, int, android.os.Bundle) throws android.content.IntentSender.SendIntentException;
     method @Deprecated public void startIntentSenderFromChild(android.app.Activity, android.content.IntentSender, int, android.content.Intent, int, int, int) throws android.content.IntentSender.SendIntentException;
@@ -3910,8 +3910,8 @@ package android.app {
     method public void startLocalVoiceInteraction(android.os.Bundle);
     method public void startLockTask();
     method @Deprecated public void startManagingCursor(android.database.Cursor);
-    method public boolean startNextMatchingActivity(@RequiresPermission @NonNull android.content.Intent);
-    method public boolean startNextMatchingActivity(@RequiresPermission @NonNull android.content.Intent, @Nullable android.os.Bundle);
+    method public boolean startNextMatchingActivity(@NonNull @RequiresPermission android.content.Intent);
+    method public boolean startNextMatchingActivity(@NonNull @RequiresPermission android.content.Intent, @Nullable android.os.Bundle);
     method public void startPostponedEnterTransition();
     method public void startSearch(@Nullable String, boolean, @Nullable android.os.Bundle, boolean);
     method public void stopLocalVoiceInteraction();
@@ -6714,7 +6714,7 @@ package android.app.admin {
     method @NonNull public java.util.Set<java.lang.String> getAffiliationIds(@NonNull android.content.ComponentName);
     method @Nullable public java.util.Set<java.lang.String> getAlwaysOnVpnLockdownWhitelist(@NonNull android.content.ComponentName);
     method @Nullable public String getAlwaysOnVpnPackage(@NonNull android.content.ComponentName);
-    method @WorkerThread @NonNull public android.os.Bundle getApplicationRestrictions(@Nullable android.content.ComponentName, String);
+    method @NonNull @WorkerThread public android.os.Bundle getApplicationRestrictions(@Nullable android.content.ComponentName, String);
     method @Deprecated @Nullable public String getApplicationRestrictionsManagingPackage(@NonNull android.content.ComponentName);
     method public boolean getAutoTimeRequired();
     method @NonNull public java.util.List<android.os.UserHandle> getBindDeviceAdminTargetUsers(@NonNull android.content.ComponentName);
@@ -7640,7 +7640,7 @@ package android.app.slice {
     method public int checkSlicePermission(@NonNull android.net.Uri, int, int);
     method @NonNull public java.util.List<android.net.Uri> getPinnedSlices();
     method @NonNull public java.util.Set<android.app.slice.SliceSpec> getPinnedSpecs(android.net.Uri);
-    method @WorkerThread @NonNull public java.util.Collection<android.net.Uri> getSliceDescendants(@NonNull android.net.Uri);
+    method @NonNull @WorkerThread public java.util.Collection<android.net.Uri> getSliceDescendants(@NonNull android.net.Uri);
     method public void grantSlicePermission(@NonNull String, @NonNull android.net.Uri);
     method @Nullable public android.net.Uri mapIntentToUri(@NonNull android.content.Intent);
     method public void pinSlice(@NonNull android.net.Uri, @NonNull java.util.Set<android.app.slice.SliceSpec>);
@@ -7796,10 +7796,10 @@ package android.app.usage {
   public class StorageStatsManager {
     method @WorkerThread public long getFreeBytes(@NonNull java.util.UUID) throws java.io.IOException;
     method @WorkerThread public long getTotalBytes(@NonNull java.util.UUID) throws java.io.IOException;
-    method @WorkerThread @NonNull public android.app.usage.ExternalStorageStats queryExternalStatsForUser(@NonNull java.util.UUID, @NonNull android.os.UserHandle) throws java.io.IOException;
-    method @WorkerThread @NonNull public android.app.usage.StorageStats queryStatsForPackage(@NonNull java.util.UUID, @NonNull String, @NonNull android.os.UserHandle) throws java.io.IOException, android.content.pm.PackageManager.NameNotFoundException;
-    method @WorkerThread @NonNull public android.app.usage.StorageStats queryStatsForUid(@NonNull java.util.UUID, int) throws java.io.IOException;
-    method @WorkerThread @NonNull public android.app.usage.StorageStats queryStatsForUser(@NonNull java.util.UUID, @NonNull android.os.UserHandle) throws java.io.IOException;
+    method @NonNull @WorkerThread public android.app.usage.ExternalStorageStats queryExternalStatsForUser(@NonNull java.util.UUID, @NonNull android.os.UserHandle) throws java.io.IOException;
+    method @NonNull @WorkerThread public android.app.usage.StorageStats queryStatsForPackage(@NonNull java.util.UUID, @NonNull String, @NonNull android.os.UserHandle) throws java.io.IOException, android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull @WorkerThread public android.app.usage.StorageStats queryStatsForUid(@NonNull java.util.UUID, int) throws java.io.IOException;
+    method @NonNull @WorkerThread public android.app.usage.StorageStats queryStatsForUser(@NonNull java.util.UUID, @NonNull android.os.UserHandle) throws java.io.IOException;
   }
 
   public final class UsageEvents implements android.os.Parcelable {
@@ -8059,9 +8059,9 @@ package android.bluetooth {
     method public boolean isMultipleAdvertisementSupported();
     method public boolean isOffloadedFilteringSupported();
     method public boolean isOffloadedScanBatchingSupported();
-    method @RequiresPermission(android.Manifest.permission.BLUETOOTH) @NonNull public android.bluetooth.BluetoothServerSocket listenUsingInsecureL2capChannel() throws java.io.IOException;
+    method @NonNull @RequiresPermission(android.Manifest.permission.BLUETOOTH) public android.bluetooth.BluetoothServerSocket listenUsingInsecureL2capChannel() throws java.io.IOException;
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public android.bluetooth.BluetoothServerSocket listenUsingInsecureRfcommWithServiceRecord(String, java.util.UUID) throws java.io.IOException;
-    method @RequiresPermission(android.Manifest.permission.BLUETOOTH) @NonNull public android.bluetooth.BluetoothServerSocket listenUsingL2capChannel() throws java.io.IOException;
+    method @NonNull @RequiresPermission(android.Manifest.permission.BLUETOOTH) public android.bluetooth.BluetoothServerSocket listenUsingL2capChannel() throws java.io.IOException;
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public android.bluetooth.BluetoothServerSocket listenUsingRfcommWithServiceRecord(String, java.util.UUID) throws java.io.IOException;
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH_ADMIN) public boolean setName(String);
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH_ADMIN) public boolean startDiscovery();
@@ -8429,9 +8429,9 @@ package android.bluetooth {
     method public android.bluetooth.BluetoothGatt connectGatt(android.content.Context, boolean, android.bluetooth.BluetoothGattCallback, int, int);
     method public android.bluetooth.BluetoothGatt connectGatt(android.content.Context, boolean, android.bluetooth.BluetoothGattCallback, int, int, android.os.Handler);
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH_ADMIN) public boolean createBond();
-    method @RequiresPermission(android.Manifest.permission.BLUETOOTH) @NonNull public android.bluetooth.BluetoothSocket createInsecureL2capChannel(int) throws java.io.IOException;
+    method @NonNull @RequiresPermission(android.Manifest.permission.BLUETOOTH) public android.bluetooth.BluetoothSocket createInsecureL2capChannel(int) throws java.io.IOException;
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public android.bluetooth.BluetoothSocket createInsecureRfcommSocketToServiceRecord(java.util.UUID) throws java.io.IOException;
-    method @RequiresPermission(android.Manifest.permission.BLUETOOTH) @NonNull public android.bluetooth.BluetoothSocket createL2capChannel(int) throws java.io.IOException;
+    method @NonNull @RequiresPermission(android.Manifest.permission.BLUETOOTH) public android.bluetooth.BluetoothSocket createL2capChannel(int) throws java.io.IOException;
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public android.bluetooth.BluetoothSocket createRfcommSocketToServiceRecord(java.util.UUID) throws java.io.IOException;
     method public int describeContents();
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public boolean fetchUuidsWithSdp();
@@ -9616,14 +9616,14 @@ package android.content {
     method public static void addPeriodicSync(android.accounts.Account, String, android.os.Bundle, long);
     method public static Object addStatusChangeListener(int, android.content.SyncStatusObserver);
     method @NonNull public android.content.ContentProviderResult[] applyBatch(@NonNull String, @NonNull java.util.ArrayList<android.content.ContentProviderOperation>) throws android.content.OperationApplicationException, android.os.RemoteException;
-    method public final int bulkInsert(@RequiresPermission.Write @NonNull android.net.Uri, @NonNull android.content.ContentValues[]);
+    method public final int bulkInsert(@NonNull @RequiresPermission.Write android.net.Uri, @NonNull android.content.ContentValues[]);
     method @Nullable public final android.os.Bundle call(@NonNull android.net.Uri, @NonNull String, @Nullable String, @Nullable android.os.Bundle);
     method @Nullable public final android.os.Bundle call(@NonNull String, @NonNull String, @Nullable String, @Nullable android.os.Bundle);
     method @Deprecated public void cancelSync(android.net.Uri);
     method public static void cancelSync(android.accounts.Account, String);
     method public static void cancelSync(android.content.SyncRequest);
     method @Nullable public final android.net.Uri canonicalize(@NonNull android.net.Uri);
-    method public final int delete(@RequiresPermission.Write @NonNull android.net.Uri, @Nullable String, @Nullable String[]);
+    method public final int delete(@NonNull @RequiresPermission.Write android.net.Uri, @Nullable String, @Nullable String[]);
     method @Deprecated public static android.content.SyncInfo getCurrentSync();
     method public static java.util.List<android.content.SyncInfo> getCurrentSyncs();
     method public static int getIsSyncable(android.accounts.Account, String);
@@ -9636,7 +9636,7 @@ package android.content {
     method public static boolean getSyncAutomatically(android.accounts.Account, String);
     method @Nullable public final String getType(@NonNull android.net.Uri);
     method @NonNull public final android.content.ContentResolver.MimeTypeInfo getTypeInfo(@NonNull String);
-    method @Nullable public final android.net.Uri insert(@RequiresPermission.Write @NonNull android.net.Uri, @Nullable android.content.ContentValues);
+    method @Nullable public final android.net.Uri insert(@NonNull @RequiresPermission.Write android.net.Uri, @Nullable android.content.ContentValues);
     method public static boolean isSyncActive(android.accounts.Account, String);
     method public static boolean isSyncPending(android.accounts.Account, String);
     method @NonNull public android.graphics.Bitmap loadThumbnail(@NonNull android.net.Uri, @NonNull android.util.Size, @Nullable android.os.CancellationSignal) throws java.io.IOException;
@@ -9655,9 +9655,9 @@ package android.content {
     method @Nullable public final android.content.res.AssetFileDescriptor openTypedAssetFile(@NonNull android.net.Uri, @NonNull String, @Nullable android.os.Bundle, @Nullable android.os.CancellationSignal) throws java.io.FileNotFoundException;
     method @Nullable public final android.content.res.AssetFileDescriptor openTypedAssetFileDescriptor(@NonNull android.net.Uri, @NonNull String, @Nullable android.os.Bundle) throws java.io.FileNotFoundException;
     method @Nullable public final android.content.res.AssetFileDescriptor openTypedAssetFileDescriptor(@NonNull android.net.Uri, @NonNull String, @Nullable android.os.Bundle, @Nullable android.os.CancellationSignal) throws java.io.FileNotFoundException;
-    method @Nullable public final android.database.Cursor query(@RequiresPermission.Read @NonNull android.net.Uri, @Nullable String[], @Nullable String, @Nullable String[], @Nullable String);
-    method @Nullable public final android.database.Cursor query(@RequiresPermission.Read @NonNull android.net.Uri, @Nullable String[], @Nullable String, @Nullable String[], @Nullable String, @Nullable android.os.CancellationSignal);
-    method @Nullable public final android.database.Cursor query(@RequiresPermission.Read @NonNull android.net.Uri, @Nullable String[], @Nullable android.os.Bundle, @Nullable android.os.CancellationSignal);
+    method @Nullable public final android.database.Cursor query(@NonNull @RequiresPermission.Read android.net.Uri, @Nullable String[], @Nullable String, @Nullable String[], @Nullable String);
+    method @Nullable public final android.database.Cursor query(@NonNull @RequiresPermission.Read android.net.Uri, @Nullable String[], @Nullable String, @Nullable String[], @Nullable String, @Nullable android.os.CancellationSignal);
+    method @Nullable public final android.database.Cursor query(@NonNull @RequiresPermission.Read android.net.Uri, @Nullable String[], @Nullable android.os.Bundle, @Nullable android.os.CancellationSignal);
     method public final boolean refresh(@NonNull android.net.Uri, @Nullable android.os.Bundle, @Nullable android.os.CancellationSignal);
     method public final void registerContentObserver(@NonNull android.net.Uri, boolean, @NonNull android.database.ContentObserver);
     method public void releasePersistableUriPermission(@NonNull android.net.Uri, int);
@@ -9672,7 +9672,7 @@ package android.content {
     method public void takePersistableUriPermission(@NonNull android.net.Uri, int);
     method @Nullable public final android.net.Uri uncanonicalize(@NonNull android.net.Uri);
     method public final void unregisterContentObserver(@NonNull android.database.ContentObserver);
-    method public final int update(@RequiresPermission.Write @NonNull android.net.Uri, @Nullable android.content.ContentValues, @Nullable String, @Nullable String[]);
+    method public final int update(@NonNull @RequiresPermission.Write android.net.Uri, @Nullable android.content.ContentValues, @Nullable String, @Nullable String[]);
     method public static void validateSyncExtrasBundle(android.os.Bundle);
     method @NonNull public static android.content.ContentResolver wrap(@NonNull android.content.ContentProvider);
     method @NonNull public static android.content.ContentResolver wrap(@NonNull android.content.ContentProviderClient);
@@ -9770,9 +9770,9 @@ package android.content {
 
   public abstract class Context {
     ctor public Context();
-    method public boolean bindIsolatedService(@RequiresPermission @NonNull android.content.Intent, int, @NonNull String, @NonNull java.util.concurrent.Executor, @NonNull android.content.ServiceConnection);
+    method public boolean bindIsolatedService(@NonNull @RequiresPermission android.content.Intent, int, @NonNull String, @NonNull java.util.concurrent.Executor, @NonNull android.content.ServiceConnection);
     method public abstract boolean bindService(@RequiresPermission android.content.Intent, @NonNull android.content.ServiceConnection, int);
-    method public boolean bindService(@RequiresPermission @NonNull android.content.Intent, int, @NonNull java.util.concurrent.Executor, @NonNull android.content.ServiceConnection);
+    method public boolean bindService(@NonNull @RequiresPermission android.content.Intent, int, @NonNull java.util.concurrent.Executor, @NonNull android.content.ServiceConnection);
     method @CheckResult(suggest="#enforceCallingOrSelfPermission(String,String)") public abstract int checkCallingOrSelfPermission(@NonNull String);
     method @CheckResult(suggest="#enforceCallingOrSelfUriPermission(Uri,int,String)") public abstract int checkCallingOrSelfUriPermission(android.net.Uri, int);
     method @CheckResult(suggest="#enforceCallingPermission(String,String)") public abstract int checkCallingPermission(@NonNull String);
@@ -9871,7 +9871,8 @@ package android.content {
     method @RequiresPermission("android.permission.INTERACT_ACROSS_USERS") public abstract void sendBroadcastAsUser(@RequiresPermission android.content.Intent, android.os.UserHandle);
     method @RequiresPermission("android.permission.INTERACT_ACROSS_USERS") public abstract void sendBroadcastAsUser(@RequiresPermission android.content.Intent, android.os.UserHandle, @Nullable String);
     method public abstract void sendOrderedBroadcast(@RequiresPermission android.content.Intent, @Nullable String);
-    method public abstract void sendOrderedBroadcast(@RequiresPermission @NonNull android.content.Intent, @Nullable String, @Nullable android.content.BroadcastReceiver, @Nullable android.os.Handler, int, @Nullable String, @Nullable android.os.Bundle);
+    method public abstract void sendOrderedBroadcast(@NonNull @RequiresPermission android.content.Intent, @Nullable String, @Nullable android.content.BroadcastReceiver, @Nullable android.os.Handler, int, @Nullable String, @Nullable android.os.Bundle);
+    method public void sendOrderedBroadcast(@NonNull @RequiresPermission android.content.Intent, @Nullable String, @Nullable String, @Nullable android.content.BroadcastReceiver, @Nullable android.os.Handler, int, @Nullable String, @Nullable android.os.Bundle);
     method @RequiresPermission("android.permission.INTERACT_ACROSS_USERS") public abstract void sendOrderedBroadcastAsUser(@RequiresPermission android.content.Intent, android.os.UserHandle, @Nullable String, android.content.BroadcastReceiver, @Nullable android.os.Handler, int, @Nullable String, @Nullable android.os.Bundle);
     method @Deprecated @RequiresPermission(android.Manifest.permission.BROADCAST_STICKY) public abstract void sendStickyBroadcast(@RequiresPermission android.content.Intent);
     method @Deprecated @RequiresPermission(allOf={"android.permission.INTERACT_ACROSS_USERS", android.Manifest.permission.BROADCAST_STICKY}) public abstract void sendStickyBroadcastAsUser(@RequiresPermission android.content.Intent, android.os.UserHandle);
@@ -11725,7 +11726,7 @@ package android.content.pm {
     method @NonNull public abstract android.graphics.drawable.Drawable getUserBadgedDrawableForDensity(@NonNull android.graphics.drawable.Drawable, @NonNull android.os.UserHandle, @Nullable android.graphics.Rect, int);
     method @NonNull public abstract android.graphics.drawable.Drawable getUserBadgedIcon(@NonNull android.graphics.drawable.Drawable, @NonNull android.os.UserHandle);
     method @NonNull public abstract CharSequence getUserBadgedLabel(@NonNull CharSequence, @NonNull android.os.UserHandle);
-    method @RequiresPermission(value="android.permission.WHITELIST_RESTRICTED_PERMISSIONS", conditional=true) @NonNull public java.util.Set<java.lang.String> getWhitelistedRestrictedPermissions(@NonNull String, int);
+    method @NonNull @RequiresPermission(value="android.permission.WHITELIST_RESTRICTED_PERMISSIONS", conditional=true) public java.util.Set<java.lang.String> getWhitelistedRestrictedPermissions(@NonNull String, int);
     method @Nullable public abstract android.content.res.XmlResourceParser getXml(@NonNull String, @XmlRes int, @Nullable android.content.pm.ApplicationInfo);
     method public boolean hasSigningCertificate(@NonNull String, @NonNull byte[], int);
     method public boolean hasSigningCertificate(int, @NonNull byte[], int);
@@ -12419,7 +12420,7 @@ package android.content.res {
     method public int addLoader(@NonNull android.content.res.loader.ResourceLoader, @NonNull android.content.res.loader.ResourcesProvider);
     method public final void finishPreloading();
     method public final void flushLayoutCache();
-    method @NonNull public android.content.res.XmlResourceParser getAnimation(@AnimatorRes @AnimRes int) throws android.content.res.Resources.NotFoundException;
+    method @NonNull public android.content.res.XmlResourceParser getAnimation(@AnimRes @AnimatorRes int) throws android.content.res.Resources.NotFoundException;
     method public final android.content.res.AssetManager getAssets();
     method @AnyRes public static int getAttributeSetSourceResId(@Nullable android.util.AttributeSet);
     method public boolean getBoolean(@BoolRes int) throws android.content.res.Resources.NotFoundException;
@@ -13725,10 +13726,10 @@ package android.graphics {
     method public static android.graphics.Bitmap createBitmap(int, int, @NonNull android.graphics.Bitmap.Config, boolean, @NonNull android.graphics.ColorSpace);
     method public static android.graphics.Bitmap createBitmap(@Nullable android.util.DisplayMetrics, int, int, @NonNull android.graphics.Bitmap.Config, boolean);
     method public static android.graphics.Bitmap createBitmap(@Nullable android.util.DisplayMetrics, int, int, @NonNull android.graphics.Bitmap.Config, boolean, @NonNull android.graphics.ColorSpace);
-    method public static android.graphics.Bitmap createBitmap(@NonNull @ColorInt int[], int, int, int, int, @NonNull android.graphics.Bitmap.Config);
-    method public static android.graphics.Bitmap createBitmap(@NonNull android.util.DisplayMetrics, @NonNull @ColorInt int[], int, int, int, int, @NonNull android.graphics.Bitmap.Config);
-    method public static android.graphics.Bitmap createBitmap(@NonNull @ColorInt int[], int, int, android.graphics.Bitmap.Config);
-    method public static android.graphics.Bitmap createBitmap(@Nullable android.util.DisplayMetrics, @NonNull @ColorInt int[], int, int, @NonNull android.graphics.Bitmap.Config);
+    method public static android.graphics.Bitmap createBitmap(@ColorInt @NonNull int[], int, int, int, int, @NonNull android.graphics.Bitmap.Config);
+    method public static android.graphics.Bitmap createBitmap(@NonNull android.util.DisplayMetrics, @ColorInt @NonNull int[], int, int, int, int, @NonNull android.graphics.Bitmap.Config);
+    method public static android.graphics.Bitmap createBitmap(@ColorInt @NonNull int[], int, int, android.graphics.Bitmap.Config);
+    method public static android.graphics.Bitmap createBitmap(@Nullable android.util.DisplayMetrics, @ColorInt @NonNull int[], int, int, @NonNull android.graphics.Bitmap.Config);
     method @NonNull public static android.graphics.Bitmap createBitmap(@NonNull android.graphics.Picture);
     method @NonNull public static android.graphics.Bitmap createBitmap(@NonNull android.graphics.Picture, int, int, @NonNull android.graphics.Bitmap.Config);
     method public static android.graphics.Bitmap createScaledBitmap(@NonNull android.graphics.Bitmap, int, int, boolean);
@@ -13961,8 +13962,8 @@ package android.graphics {
     method public void drawDoubleRoundRect(@NonNull android.graphics.RectF, float, float, @NonNull android.graphics.RectF, float, float, @NonNull android.graphics.Paint);
     method public void drawDoubleRoundRect(@NonNull android.graphics.RectF, @NonNull float[], @NonNull android.graphics.RectF, @NonNull float[], @NonNull android.graphics.Paint);
     method public void drawLine(float, float, float, float, @NonNull android.graphics.Paint);
-    method public void drawLines(@Size(multiple=4) @NonNull float[], int, int, @NonNull android.graphics.Paint);
-    method public void drawLines(@Size(multiple=4) @NonNull float[], @NonNull android.graphics.Paint);
+    method public void drawLines(@NonNull @Size(multiple=4) float[], int, int, @NonNull android.graphics.Paint);
+    method public void drawLines(@NonNull @Size(multiple=4) float[], @NonNull android.graphics.Paint);
     method public void drawOval(@NonNull android.graphics.RectF, @NonNull android.graphics.Paint);
     method public void drawOval(float, float, float, float, @NonNull android.graphics.Paint);
     method public void drawPaint(@NonNull android.graphics.Paint);
@@ -13972,7 +13973,7 @@ package android.graphics {
     method public void drawPicture(@NonNull android.graphics.Picture, @NonNull android.graphics.Rect);
     method public void drawPoint(float, float, @NonNull android.graphics.Paint);
     method public void drawPoints(@Size(multiple=2) float[], int, int, @NonNull android.graphics.Paint);
-    method public void drawPoints(@Size(multiple=2) @NonNull float[], @NonNull android.graphics.Paint);
+    method public void drawPoints(@NonNull @Size(multiple=2) float[], @NonNull android.graphics.Paint);
     method @Deprecated public void drawPosText(@NonNull char[], int, int, @NonNull @Size(multiple=2) float[], @NonNull android.graphics.Paint);
     method @Deprecated public void drawPosText(@NonNull String, @NonNull @Size(multiple=2) float[], @NonNull android.graphics.Paint);
     method public void drawRGB(int, int, int);
@@ -14333,10 +14334,10 @@ package android.graphics {
     method @AnyThread @NonNull public static android.graphics.ImageDecoder.Source createSource(@NonNull java.nio.ByteBuffer);
     method @AnyThread @NonNull public static android.graphics.ImageDecoder.Source createSource(@NonNull java.io.File);
     method @AnyThread @NonNull public static android.graphics.ImageDecoder.Source createSource(@NonNull java.util.concurrent.Callable<android.content.res.AssetFileDescriptor>);
-    method @WorkerThread @NonNull public static android.graphics.Bitmap decodeBitmap(@NonNull android.graphics.ImageDecoder.Source, @NonNull android.graphics.ImageDecoder.OnHeaderDecodedListener) throws java.io.IOException;
-    method @WorkerThread @NonNull public static android.graphics.Bitmap decodeBitmap(@NonNull android.graphics.ImageDecoder.Source) throws java.io.IOException;
-    method @WorkerThread @NonNull public static android.graphics.drawable.Drawable decodeDrawable(@NonNull android.graphics.ImageDecoder.Source, @NonNull android.graphics.ImageDecoder.OnHeaderDecodedListener) throws java.io.IOException;
-    method @WorkerThread @NonNull public static android.graphics.drawable.Drawable decodeDrawable(@NonNull android.graphics.ImageDecoder.Source) throws java.io.IOException;
+    method @NonNull @WorkerThread public static android.graphics.Bitmap decodeBitmap(@NonNull android.graphics.ImageDecoder.Source, @NonNull android.graphics.ImageDecoder.OnHeaderDecodedListener) throws java.io.IOException;
+    method @NonNull @WorkerThread public static android.graphics.Bitmap decodeBitmap(@NonNull android.graphics.ImageDecoder.Source) throws java.io.IOException;
+    method @NonNull @WorkerThread public static android.graphics.drawable.Drawable decodeDrawable(@NonNull android.graphics.ImageDecoder.Source, @NonNull android.graphics.ImageDecoder.OnHeaderDecodedListener) throws java.io.IOException;
+    method @NonNull @WorkerThread public static android.graphics.drawable.Drawable decodeDrawable(@NonNull android.graphics.ImageDecoder.Source) throws java.io.IOException;
     method public int getAllocator();
     method @Nullable public android.graphics.Rect getCrop();
     method public int getMemorySizePolicy();
@@ -14355,7 +14356,7 @@ package android.graphics {
     method public void setPostProcessor(@Nullable android.graphics.PostProcessor);
     method public void setTargetColorSpace(android.graphics.ColorSpace);
     method public void setTargetSampleSize(@IntRange(from=1) int);
-    method public void setTargetSize(@Px @IntRange(from=1) int, @Px @IntRange(from=1) int);
+    method public void setTargetSize(@IntRange(from=1) @Px int, @IntRange(from=1) @Px int);
     method public void setUnpremultipliedRequired(boolean);
     field public static final int ALLOCATOR_DEFAULT = 0; // 0x0
     field public static final int ALLOCATOR_HARDWARE = 3; // 0x3
@@ -14462,8 +14463,8 @@ package android.graphics {
   }
 
   public class LinearGradient extends android.graphics.Shader {
-    ctor public LinearGradient(float, float, float, float, @NonNull @ColorInt int[], @Nullable float[], @NonNull android.graphics.Shader.TileMode);
-    ctor public LinearGradient(float, float, float, float, @NonNull @ColorLong long[], @Nullable float[], @NonNull android.graphics.Shader.TileMode);
+    ctor public LinearGradient(float, float, float, float, @ColorInt @NonNull int[], @Nullable float[], @NonNull android.graphics.Shader.TileMode);
+    ctor public LinearGradient(float, float, float, float, @ColorLong @NonNull long[], @Nullable float[], @NonNull android.graphics.Shader.TileMode);
     ctor public LinearGradient(float, float, float, float, @ColorInt int, @ColorInt int, @NonNull android.graphics.Shader.TileMode);
     ctor public LinearGradient(float, float, float, float, @ColorLong long, @ColorLong long, @NonNull android.graphics.Shader.TileMode);
   }
@@ -15006,8 +15007,8 @@ package android.graphics {
   }
 
   public class RadialGradient extends android.graphics.Shader {
-    ctor public RadialGradient(float, float, float, @NonNull @ColorInt int[], @Nullable float[], @NonNull android.graphics.Shader.TileMode);
-    ctor public RadialGradient(float, float, float, @NonNull @ColorLong long[], @Nullable float[], @NonNull android.graphics.Shader.TileMode);
+    ctor public RadialGradient(float, float, float, @ColorInt @NonNull int[], @Nullable float[], @NonNull android.graphics.Shader.TileMode);
+    ctor public RadialGradient(float, float, float, @ColorLong @NonNull long[], @Nullable float[], @NonNull android.graphics.Shader.TileMode);
     ctor public RadialGradient(float, float, float, @ColorInt int, @ColorInt int, @NonNull android.graphics.Shader.TileMode);
     ctor public RadialGradient(float, float, float, @ColorLong long, @ColorLong long, @NonNull android.graphics.Shader.TileMode);
   }
@@ -15265,8 +15266,8 @@ package android.graphics {
   }
 
   public class SweepGradient extends android.graphics.Shader {
-    ctor public SweepGradient(float, float, @NonNull @ColorInt int[], @Nullable float[]);
-    ctor public SweepGradient(float, float, @NonNull @ColorLong long[], @Nullable float[]);
+    ctor public SweepGradient(float, float, @ColorInt @NonNull int[], @Nullable float[]);
+    ctor public SweepGradient(float, float, @ColorLong @NonNull long[], @Nullable float[]);
     ctor public SweepGradient(float, float, @ColorInt int, @ColorInt int);
     ctor public SweepGradient(float, float, @ColorLong long, @ColorLong long);
   }
@@ -15659,8 +15660,8 @@ package android.graphics.drawable {
     method public void setColor(@ColorInt int);
     method public void setColor(@Nullable android.content.res.ColorStateList);
     method public void setColorFilter(@Nullable android.graphics.ColorFilter);
-    method public void setColors(@Nullable @ColorInt int[]);
-    method public void setColors(@Nullable @ColorInt int[], @Nullable float[]);
+    method public void setColors(@ColorInt @Nullable int[]);
+    method public void setColors(@ColorInt @Nullable int[], @Nullable float[]);
     method public void setCornerRadii(@Nullable float[]);
     method public void setCornerRadius(float);
     method public void setDither(boolean);
@@ -16108,14 +16109,14 @@ package android.graphics.text {
 
   public static class LineBreaker.ParagraphConstraints {
     ctor public LineBreaker.ParagraphConstraints();
-    method @Px @FloatRange(from=0) public float getDefaultTabStop();
-    method @Px @FloatRange(from=0.0f) public float getFirstWidth();
-    method @Px @IntRange(from=0) public int getFirstWidthLineCount();
+    method @FloatRange(from=0) @Px public float getDefaultTabStop();
+    method @FloatRange(from=0.0f) @Px public float getFirstWidth();
+    method @IntRange(from=0) @Px public int getFirstWidthLineCount();
     method @Nullable public float[] getTabStops();
-    method @Px @FloatRange(from=0.0f) public float getWidth();
-    method public void setIndent(@Px @FloatRange(from=0.0f) float, @Px @IntRange(from=0) int);
-    method public void setTabStops(@Nullable float[], @Px @FloatRange(from=0) float);
-    method public void setWidth(@Px @FloatRange(from=0.0f) float);
+    method @FloatRange(from=0.0f) @Px public float getWidth();
+    method public void setIndent(@FloatRange(from=0.0f) @Px float, @IntRange(from=0) @Px int);
+    method public void setTabStops(@Nullable float[], @FloatRange(from=0) @Px float);
+    method public void setWidth(@FloatRange(from=0.0f) @Px float);
   }
 
   public static class LineBreaker.Result {
@@ -16138,7 +16139,7 @@ package android.graphics.text {
   public static final class MeasuredText.Builder {
     ctor public MeasuredText.Builder(@NonNull char[]);
     ctor public MeasuredText.Builder(@NonNull android.graphics.text.MeasuredText);
-    method @NonNull public android.graphics.text.MeasuredText.Builder appendReplacementRun(@NonNull android.graphics.Paint, @IntRange(from=0) int, @Px @FloatRange(from=0) float);
+    method @NonNull public android.graphics.text.MeasuredText.Builder appendReplacementRun(@NonNull android.graphics.Paint, @IntRange(from=0) int, @FloatRange(from=0) @Px float);
     method @NonNull public android.graphics.text.MeasuredText.Builder appendStyleRun(@NonNull android.graphics.Paint, @IntRange(from=0) int, boolean);
     method @NonNull public android.graphics.text.MeasuredText build();
     method @NonNull public android.graphics.text.MeasuredText.Builder setComputeHyphenation(boolean);
@@ -16859,6 +16860,7 @@ package android.hardware.camera2 {
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<android.util.Rational> CONTROL_AE_COMPENSATION_STEP;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Boolean> CONTROL_AE_LOCK_AVAILABLE;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AF_AVAILABLE_MODES;
+    field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<android.hardware.camera2.params.CapabilityAndMaxSize[]> CONTROL_AVAILABLE_BOKEH_CAPABILITIES;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AVAILABLE_EFFECTS;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AVAILABLE_MODES;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AVAILABLE_SCENE_MODES;
@@ -17074,6 +17076,9 @@ package android.hardware.camera2 {
     field public static final int CONTROL_AWB_STATE_INACTIVE = 0; // 0x0
     field public static final int CONTROL_AWB_STATE_LOCKED = 3; // 0x3
     field public static final int CONTROL_AWB_STATE_SEARCHING = 1; // 0x1
+    field public static final int CONTROL_BOKEH_MODE_CONTINUOUS = 2; // 0x2
+    field public static final int CONTROL_BOKEH_MODE_OFF = 0; // 0x0
+    field public static final int CONTROL_BOKEH_MODE_STILL_CAPTURE = 1; // 0x1
     field public static final int CONTROL_CAPTURE_INTENT_CUSTOM = 0; // 0x0
     field public static final int CONTROL_CAPTURE_INTENT_MANUAL = 6; // 0x6
     field public static final int CONTROL_CAPTURE_INTENT_MOTION_TRACKING = 7; // 0x7
@@ -17269,6 +17274,7 @@ package android.hardware.camera2 {
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Boolean> CONTROL_AWB_LOCK;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> CONTROL_AWB_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<android.hardware.camera2.params.MeteringRectangle[]> CONTROL_AWB_REGIONS;
+    field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> CONTROL_BOKEH_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> CONTROL_CAPTURE_INTENT;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> CONTROL_EFFECT_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Boolean> CONTROL_ENABLE_ZSL;
@@ -17354,6 +17360,7 @@ package android.hardware.camera2 {
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_AWB_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<android.hardware.camera2.params.MeteringRectangle[]> CONTROL_AWB_REGIONS;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_AWB_STATE;
+    field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_BOKEH_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_CAPTURE_INTENT;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_EFFECT_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Boolean> CONTROL_ENABLE_ZSL;
@@ -17448,6 +17455,11 @@ package android.hardware.camera2.params {
     method public void copyTo(int[], int);
     method public int getOffsetForIndex(int, int);
     field public static final int COUNT = 4; // 0x4
+  }
+
+  public final class CapabilityAndMaxSize {
+    method @NonNull public android.util.Size getMaxStreamingSize();
+    method public int getMode();
   }
 
   public final class ColorSpaceTransform {
@@ -23157,7 +23169,7 @@ package android.location {
     method @Nullable public String getGnssHardwareModelName();
     method public int getGnssYearOfHardware();
     method @Deprecated @Nullable @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public android.location.GpsStatus getGpsStatus(@Nullable android.location.GpsStatus);
-    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) @Nullable public android.location.Location getLastKnownLocation(@NonNull String);
+    method @Nullable @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public android.location.Location getLastKnownLocation(@NonNull String);
     method @Nullable public android.location.LocationProvider getProvider(@NonNull String);
     method @NonNull public java.util.List<java.lang.String> getProviders(boolean);
     method @NonNull public java.util.List<java.lang.String> getProviders(@NonNull android.location.Criteria, boolean);
@@ -28628,17 +28640,17 @@ package android.net {
     method public void addDefaultNetworkActiveListener(android.net.ConnectivityManager.OnNetworkActiveListener);
     method public boolean bindProcessToNetwork(@Nullable android.net.Network);
     method @NonNull public android.net.SocketKeepalive createSocketKeepalive(@NonNull android.net.Network, @NonNull android.net.IpSecManager.UdpEncapsulationSocket, @NonNull java.net.InetAddress, @NonNull java.net.InetAddress, @NonNull java.util.concurrent.Executor, @NonNull android.net.SocketKeepalive.Callback);
-    method @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) @Nullable public android.net.Network getActiveNetwork();
+    method @Nullable @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) public android.net.Network getActiveNetwork();
     method @Deprecated @Nullable @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) public android.net.NetworkInfo getActiveNetworkInfo();
     method @Deprecated @NonNull @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) public android.net.NetworkInfo[] getAllNetworkInfo();
-    method @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) @NonNull public android.net.Network[] getAllNetworks();
+    method @NonNull @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) public android.net.Network[] getAllNetworks();
     method @Deprecated public boolean getBackgroundDataSetting();
     method @Nullable public android.net.Network getBoundNetworkForProcess();
     method public int getConnectionOwnerUid(int, @NonNull java.net.InetSocketAddress, @NonNull java.net.InetSocketAddress);
     method @Nullable public android.net.ProxyInfo getDefaultProxy();
-    method @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) @Nullable public android.net.LinkProperties getLinkProperties(@Nullable android.net.Network);
+    method @Nullable @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) public android.net.LinkProperties getLinkProperties(@Nullable android.net.Network);
     method @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) public int getMultipathPreference(@Nullable android.net.Network);
-    method @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) @Nullable public android.net.NetworkCapabilities getNetworkCapabilities(@Nullable android.net.Network);
+    method @Nullable @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) public android.net.NetworkCapabilities getNetworkCapabilities(@Nullable android.net.Network);
     method @Deprecated @Nullable @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) public android.net.NetworkInfo getNetworkInfo(int);
     method @Deprecated @Nullable @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) public android.net.NetworkInfo getNetworkInfo(@Nullable android.net.Network);
     method @Deprecated @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE) public int getNetworkPreference();
@@ -30010,7 +30022,7 @@ package android.net.wifi {
     method public android.net.wifi.WifiInfo getConnectionInfo();
     method public android.net.DhcpInfo getDhcpInfo();
     method public int getMaxNumberOfNetworkSuggestionsPerApp();
-    method @RequiresPermission(android.Manifest.permission.ACCESS_WIFI_STATE) @NonNull public java.util.List<android.net.wifi.WifiNetworkSuggestion> getNetworkSuggestions();
+    method @NonNull @RequiresPermission(android.Manifest.permission.ACCESS_WIFI_STATE) public java.util.List<android.net.wifi.WifiNetworkSuggestion> getNetworkSuggestions();
     method @Deprecated @RequiresPermission(anyOf={"android.permission.NETWORK_SETTINGS", "android.permission.NETWORK_SETUP_WIZARD"}) public java.util.List<android.net.wifi.hotspot2.PasspointConfiguration> getPasspointConfigurations();
     method public java.util.List<android.net.wifi.ScanResult> getScanResults();
     method public int getWifiState();
@@ -30961,10 +30973,10 @@ package android.nfc.cardemulation {
     method public boolean isDefaultServiceForCategory(android.content.ComponentName, String);
     method public boolean registerAidsForService(android.content.ComponentName, String, java.util.List<java.lang.String>);
     method public boolean removeAidsForService(android.content.ComponentName, String);
-    method @RequiresPermission(android.Manifest.permission.NFC) @NonNull public boolean setOffHostForService(@NonNull android.content.ComponentName, @NonNull String);
+    method @NonNull @RequiresPermission(android.Manifest.permission.NFC) public boolean setOffHostForService(@NonNull android.content.ComponentName, @NonNull String);
     method public boolean setPreferredService(android.app.Activity, android.content.ComponentName);
     method public boolean supportsAidPrefixRegistration();
-    method @RequiresPermission(android.Manifest.permission.NFC) @NonNull public boolean unsetOffHostForService(@NonNull android.content.ComponentName);
+    method @NonNull @RequiresPermission(android.Manifest.permission.NFC) public boolean unsetOffHostForService(@NonNull android.content.ComponentName);
     method public boolean unsetPreferredService(android.app.Activity);
     field public static final String ACTION_CHANGE_DEFAULT = "android.nfc.cardemulation.action.ACTION_CHANGE_DEFAULT";
     field public static final String CATEGORY_OTHER = "other";
@@ -34620,7 +34632,7 @@ package android.os {
     method public void addData(String, byte[], int);
     method public void addFile(String, java.io.File, int) throws java.io.IOException;
     method public void addText(String, String);
-    method @RequiresPermission(allOf={android.Manifest.permission.READ_LOGS, android.Manifest.permission.PACKAGE_USAGE_STATS}) @Nullable public android.os.DropBoxManager.Entry getNextEntry(String, long);
+    method @Nullable @RequiresPermission(allOf={android.Manifest.permission.READ_LOGS, android.Manifest.permission.PACKAGE_USAGE_STATS}) public android.os.DropBoxManager.Entry getNextEntry(String, long);
     method public boolean isTagEnabled(String);
     field public static final String ACTION_DROPBOX_ENTRY_ADDED = "android.intent.action.DROPBOX_ENTRY_ADDED";
     field public static final String EXTRA_DROPPED_COUNT = "android.os.extra.DROPPED_COUNT";
@@ -35506,7 +35518,7 @@ package android.os {
     method public String getUserName();
     method public java.util.List<android.os.UserHandle> getUserProfiles();
     method public android.os.Bundle getUserRestrictions();
-    method public android.os.Bundle getUserRestrictions(android.os.UserHandle);
+    method @RequiresPermission(anyOf={"android.permission.MANAGE_USERS", "android.permission.INTERACT_ACROSS_USERS"}, conditional=true) public android.os.Bundle getUserRestrictions(android.os.UserHandle);
     method public boolean hasUserRestriction(String);
     method public boolean isDemoUser();
     method public boolean isQuietModeEnabled(android.os.UserHandle);
@@ -44037,7 +44049,7 @@ package android.telecom {
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public java.util.List<android.telecom.PhoneAccountHandle> getSelfManagedPhoneAccounts();
     method public android.telecom.PhoneAccountHandle getSimCallManager();
     method @Nullable public String getSystemDialerPackage();
-    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @Nullable public android.telecom.PhoneAccountHandle getUserSelectedOutgoingPhoneAccount();
+    method @Nullable @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public android.telecom.PhoneAccountHandle getUserSelectedOutgoingPhoneAccount();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getVoiceMailNumber(android.telecom.PhoneAccountHandle);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public boolean handleMmi(String);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public boolean handleMmi(String, android.telecom.PhoneAccountHandle);
@@ -44966,6 +44978,7 @@ package android.telephony {
     method public static int getDefaultSmsSubscriptionId();
     method public static android.telephony.SmsManager getSmsManagerForSubscriptionId(int);
     method @RequiresPermission(android.Manifest.permission.SMS_FINANCIAL_TRANSACTIONS) public void getSmsMessagesForFinancialApp(android.os.Bundle, @NonNull java.util.concurrent.Executor, @NonNull android.telephony.SmsManager.FinancialSmsCallback);
+    method @Nullable @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public String getSmscAddress();
     method public int getSubscriptionId();
     method public void injectSmsPdu(byte[], String, android.app.PendingIntent);
     method public void sendDataMessage(String, String, short, byte[], android.app.PendingIntent, android.app.PendingIntent);
@@ -44973,6 +44986,7 @@ package android.telephony {
     method public void sendMultipartTextMessage(String, String, java.util.ArrayList<java.lang.String>, java.util.ArrayList<android.app.PendingIntent>, java.util.ArrayList<android.app.PendingIntent>);
     method public void sendTextMessage(String, String, String, android.app.PendingIntent, android.app.PendingIntent);
     method @RequiresPermission(allOf={android.Manifest.permission.MODIFY_PHONE_STATE, android.Manifest.permission.SEND_SMS}) public void sendTextMessageWithoutPersisting(String, String, String, android.app.PendingIntent, android.app.PendingIntent);
+    method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public boolean setSmscAddress(@NonNull String);
     field public static final String EXTRA_MMS_DATA = "android.telephony.extra.MMS_DATA";
     field public static final String EXTRA_MMS_HTTP_STATUS = "android.telephony.extra.MMS_HTTP_STATUS";
     field public static final String MMS_CONFIG_ALIAS_ENABLED = "aliasEnabled";
@@ -45273,9 +45287,9 @@ package android.telephony {
     method public int getDataState();
     method @Deprecated @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public String getDeviceId();
     method @Deprecated @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public String getDeviceId(int);
-    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @Nullable public String getDeviceSoftwareVersion();
-    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @NonNull public java.util.Map<java.lang.Integer,java.util.List<android.telephony.emergency.EmergencyNumber>> getEmergencyNumberList();
-    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @NonNull public java.util.Map<java.lang.Integer,java.util.List<android.telephony.emergency.EmergencyNumber>> getEmergencyNumberList(int);
+    method @Nullable @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getDeviceSoftwareVersion();
+    method @NonNull @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public java.util.Map<java.lang.Integer,java.util.List<android.telephony.emergency.EmergencyNumber>> getEmergencyNumberList();
+    method @NonNull @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public java.util.Map<java.lang.Integer,java.util.List<android.telephony.emergency.EmergencyNumber>> getEmergencyNumberList(int);
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String[] getForbiddenPlmns();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getGroupIdLevel1();
     method public String getIccAuthentication(int, int, String);
@@ -45309,11 +45323,12 @@ package android.telephony {
     method @Nullable public CharSequence getSimSpecificCarrierIdName();
     method public int getSimState();
     method public int getSimState(int);
+    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public int getSubIdForPhoneAccountHandle(@NonNull android.telecom.PhoneAccountHandle);
     method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public String getSubscriberId();
     method public int getSupportedModemCount();
     method @Nullable public String getTypeAllocationCode();
     method @Nullable public String getTypeAllocationCode(int);
-    method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") @NonNull public java.util.List<android.telephony.UiccCardInfo> getUiccCardsInfo();
+    method @NonNull @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public java.util.List<android.telephony.UiccCardInfo> getUiccCardsInfo();
     method @Nullable @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getVisualVoicemailPackageName();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getVoiceMailAlphaTag();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getVoiceMailNumber();
@@ -47247,7 +47262,7 @@ package android.text.style {
   }
 
   public static class LineHeightSpan.Standard implements android.text.style.LineHeightSpan android.text.ParcelableSpan {
-    ctor public LineHeightSpan.Standard(@Px @IntRange(from=1) int);
+    ctor public LineHeightSpan.Standard(@IntRange(from=1) @Px int);
     ctor public LineHeightSpan.Standard(@NonNull android.os.Parcel);
     method public void chooseHeight(@NonNull CharSequence, int, int, int, int, @NonNull android.graphics.Paint.FontMetricsInt);
     method public int describeContents();
@@ -49178,6 +49193,7 @@ package android.view {
 
   public class HapticFeedbackConstants {
     field public static final int CLOCK_TICK = 4; // 0x4
+    field public static final int CONFIRM = 16; // 0x10
     field public static final int CONTEXT_CLICK = 6; // 0x6
     field public static final int FLAG_IGNORE_GLOBAL_SETTING = 2; // 0x2
     field public static final int FLAG_IGNORE_VIEW_SETTING = 1; // 0x1
@@ -49185,6 +49201,7 @@ package android.view {
     field public static final int KEYBOARD_RELEASE = 7; // 0x7
     field public static final int KEYBOARD_TAP = 3; // 0x3
     field public static final int LONG_PRESS = 0; // 0x0
+    field public static final int REJECT = 17; // 0x11
     field public static final int TEXT_HANDLE_MOVE = 9; // 0x9
     field public static final int VIRTUAL_KEY = 1; // 0x1
     field public static final int VIRTUAL_KEY_RELEASE = 8; // 0x8
@@ -51393,11 +51410,11 @@ package android.view {
     field @Deprecated public static final boolean TRACE_RECYCLER = false;
   }
 
-  @java.lang.annotation.Target({java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.METHOD}) @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME) public static @interface ViewDebug.CapturedViewProperty {
+  @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME) @java.lang.annotation.Target({java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.METHOD}) public static @interface ViewDebug.CapturedViewProperty {
     method public abstract boolean retrieveReturn() default false;
   }
 
-  @java.lang.annotation.Target({java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.METHOD}) @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME) public static @interface ViewDebug.ExportedProperty {
+  @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME) @java.lang.annotation.Target({java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.METHOD}) public static @interface ViewDebug.ExportedProperty {
     method public abstract String category() default "";
     method public abstract boolean deepExport() default false;
     method public abstract android.view.ViewDebug.FlagToString[] flagMapping() default {};
@@ -51409,7 +51426,7 @@ package android.view {
     method public abstract boolean resolveId() default false;
   }
 
-  @java.lang.annotation.Target({java.lang.annotation.ElementType.TYPE}) @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME) public static @interface ViewDebug.FlagToString {
+  @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME) @java.lang.annotation.Target({java.lang.annotation.ElementType.TYPE}) public static @interface ViewDebug.FlagToString {
     method public abstract int equals();
     method public abstract int mask();
     method public abstract String name();
@@ -51427,7 +51444,7 @@ package android.view {
     enum_constant @Deprecated public static final android.view.ViewDebug.HierarchyTraceType REQUEST_LAYOUT;
   }
 
-  @java.lang.annotation.Target({java.lang.annotation.ElementType.TYPE}) @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME) public static @interface ViewDebug.IntToString {
+  @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME) @java.lang.annotation.Target({java.lang.annotation.ElementType.TYPE}) public static @interface ViewDebug.IntToString {
     method public abstract int from();
     method public abstract String to();
   }
@@ -53985,18 +54002,18 @@ package android.view.textclassifier {
   }
 
   public interface TextClassifier {
-    method @WorkerThread @NonNull public default android.view.textclassifier.TextClassification classifyText(@NonNull android.view.textclassifier.TextClassification.Request);
-    method @WorkerThread @NonNull public default android.view.textclassifier.TextClassification classifyText(@NonNull CharSequence, @IntRange(from=0) int, @IntRange(from=0) int, @Nullable android.os.LocaleList);
+    method @NonNull @WorkerThread public default android.view.textclassifier.TextClassification classifyText(@NonNull android.view.textclassifier.TextClassification.Request);
+    method @NonNull @WorkerThread public default android.view.textclassifier.TextClassification classifyText(@NonNull CharSequence, @IntRange(from=0) int, @IntRange(from=0) int, @Nullable android.os.LocaleList);
     method public default void destroy();
-    method @WorkerThread @NonNull public default android.view.textclassifier.TextLanguage detectLanguage(@NonNull android.view.textclassifier.TextLanguage.Request);
-    method @WorkerThread @NonNull public default android.view.textclassifier.TextLinks generateLinks(@NonNull android.view.textclassifier.TextLinks.Request);
+    method @NonNull @WorkerThread public default android.view.textclassifier.TextLanguage detectLanguage(@NonNull android.view.textclassifier.TextLanguage.Request);
+    method @NonNull @WorkerThread public default android.view.textclassifier.TextLinks generateLinks(@NonNull android.view.textclassifier.TextLinks.Request);
     method @WorkerThread public default int getMaxGenerateLinksTextLength();
     method public default boolean isDestroyed();
     method public default void onSelectionEvent(@NonNull android.view.textclassifier.SelectionEvent);
     method public default void onTextClassifierEvent(@NonNull android.view.textclassifier.TextClassifierEvent);
-    method @WorkerThread @NonNull public default android.view.textclassifier.ConversationActions suggestConversationActions(@NonNull android.view.textclassifier.ConversationActions.Request);
-    method @WorkerThread @NonNull public default android.view.textclassifier.TextSelection suggestSelection(@NonNull android.view.textclassifier.TextSelection.Request);
-    method @WorkerThread @NonNull public default android.view.textclassifier.TextSelection suggestSelection(@NonNull CharSequence, @IntRange(from=0) int, @IntRange(from=0) int, @Nullable android.os.LocaleList);
+    method @NonNull @WorkerThread public default android.view.textclassifier.ConversationActions suggestConversationActions(@NonNull android.view.textclassifier.ConversationActions.Request);
+    method @NonNull @WorkerThread public default android.view.textclassifier.TextSelection suggestSelection(@NonNull android.view.textclassifier.TextSelection.Request);
+    method @NonNull @WorkerThread public default android.view.textclassifier.TextSelection suggestSelection(@NonNull CharSequence, @IntRange(from=0) int, @IntRange(from=0) int, @Nullable android.os.LocaleList);
     field public static final String EXTRA_FROM_TEXT_CLASSIFIER = "android.view.textclassifier.extra.FROM_TEXT_CLASSIFIER";
     field public static final String HINT_TEXT_IS_EDITABLE = "android.text_is_editable";
     field public static final String HINT_TEXT_IS_NOT_EDITABLE = "android.text_is_not_editable";
@@ -56460,12 +56477,12 @@ package android.widget {
     ctor public Magnifier.Builder(@NonNull android.view.View);
     method @NonNull public android.widget.Magnifier build();
     method @NonNull public android.widget.Magnifier.Builder setClippingEnabled(boolean);
-    method @NonNull public android.widget.Magnifier.Builder setCornerRadius(@Px @FloatRange(from=0) float);
+    method @NonNull public android.widget.Magnifier.Builder setCornerRadius(@FloatRange(from=0) @Px float);
     method @NonNull public android.widget.Magnifier.Builder setDefaultSourceToMagnifierOffset(@Px int, @Px int);
-    method @NonNull public android.widget.Magnifier.Builder setElevation(@Px @FloatRange(from=0) float);
+    method @NonNull public android.widget.Magnifier.Builder setElevation(@FloatRange(from=0) @Px float);
     method @NonNull public android.widget.Magnifier.Builder setInitialZoom(@FloatRange(from=0.0f) float);
     method @NonNull public android.widget.Magnifier.Builder setOverlay(@Nullable android.graphics.drawable.Drawable);
-    method @NonNull public android.widget.Magnifier.Builder setSize(@Px @IntRange(from=0) int, @Px @IntRange(from=0) int);
+    method @NonNull public android.widget.Magnifier.Builder setSize(@IntRange(from=0) @Px int, @IntRange(from=0) @Px int);
     method @NonNull public android.widget.Magnifier.Builder setSourceBounds(int, int, int, int);
   }
 
@@ -56959,7 +56976,7 @@ package android.widget {
     method @NonNull public static android.widget.RemoteViews.RemoteResponse fromPendingIntent(@NonNull android.app.PendingIntent);
   }
 
-  @java.lang.annotation.Target({java.lang.annotation.ElementType.TYPE}) @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME) public static @interface RemoteViews.RemoteView {
+  @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.RUNTIME) @java.lang.annotation.Target({java.lang.annotation.ElementType.TYPE}) public static @interface RemoteViews.RemoteView {
   }
 
   public abstract class RemoteViewsService extends android.app.Service {
@@ -57636,7 +57653,7 @@ package android.widget {
     method public void setExtractedText(android.view.inputmethod.ExtractedText);
     method public void setFallbackLineSpacing(boolean);
     method public void setFilters(android.text.InputFilter[]);
-    method public void setFirstBaselineToTopHeight(@Px @IntRange(from=0) int);
+    method public void setFirstBaselineToTopHeight(@IntRange(from=0) @Px int);
     method public void setFontFeatureSettings(@Nullable String);
     method public boolean setFontVariationSettings(@Nullable String);
     method protected boolean setFrame(int, int, int, int);
@@ -57658,9 +57675,9 @@ package android.widget {
     method public void setInputType(int);
     method public void setJustificationMode(int);
     method public void setKeyListener(android.text.method.KeyListener);
-    method public void setLastBaselineToBottomHeight(@Px @IntRange(from=0) int);
+    method public void setLastBaselineToBottomHeight(@IntRange(from=0) @Px int);
     method public void setLetterSpacing(float);
-    method public void setLineHeight(@Px @IntRange(from=0) int);
+    method public void setLineHeight(@IntRange(from=0) @Px int);
     method public void setLineSpacing(float, float);
     method public void setLines(int);
     method public final void setLinkTextColor(@ColorInt int);
@@ -60715,7 +60732,7 @@ package java.lang {
     ctor public OutOfMemoryError(String);
   }
 
-  @java.lang.annotation.Target(java.lang.annotation.ElementType.METHOD) @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.SOURCE) public @interface Override {
+  @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.SOURCE) @java.lang.annotation.Target(java.lang.annotation.ElementType.METHOD) public @interface Override {
   }
 
   public class Package implements java.lang.reflect.AnnotatedElement {
@@ -61219,7 +61236,7 @@ package java.lang {
     ctor public StringIndexOutOfBoundsException(int);
   }
 
-  @java.lang.annotation.Target({java.lang.annotation.ElementType.TYPE, java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.METHOD, java.lang.annotation.ElementType.PARAMETER, java.lang.annotation.ElementType.CONSTRUCTOR, java.lang.annotation.ElementType.LOCAL_VARIABLE}) @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.SOURCE) public @interface SuppressWarnings {
+  @java.lang.annotation.Retention(java.lang.annotation.RetentionPolicy.SOURCE) @java.lang.annotation.Target({java.lang.annotation.ElementType.TYPE, java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.METHOD, java.lang.annotation.ElementType.PARAMETER, java.lang.annotation.ElementType.CONSTRUCTOR, java.lang.annotation.ElementType.LOCAL_VARIABLE}) public @interface SuppressWarnings {
     method public abstract String[] value();
   }
 
