@@ -167,6 +167,7 @@ import com.android.systemui.fragments.ExtensionFragmentListener;
 import com.android.systemui.fragments.FragmentHostManager;
 import com.android.systemui.fragments.FragmentService;
 import com.android.systemui.keyguard.KeyguardService;
+import com.android.systemui.keyguard.KeyguardSliceProvider;
 import com.android.systemui.keyguard.KeyguardUnlockAnimationController;
 import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.keyguard.ScreenLifecycle;
@@ -299,6 +300,8 @@ public class CentralSurfacesImpl implements
             "system:" + Settings.System.QS_TRANSPARENCY;
     private static final String FORCE_SHOW_NAVBAR =
             "system:" + Settings.System.FORCE_SHOW_NAVBAR;
+    private static final String PULSE_ON_NEW_TRACKS =
+            Settings.Secure.PULSE_ON_NEW_TRACKS;
 
     private static final String BANNER_ACTION_CANCEL =
             "com.android.systemui.statusbar.banner_action_cancel";
@@ -974,6 +977,7 @@ public class CentralSurfacesImpl implements
         mTunerService.addTunable(this, FORCE_SHOW_NAVBAR);
         mTunerService.addTunable(this, LESS_BORING_HEADS_UP);
         mTunerService.addTunable(this, RETICKER_STATUS);
+        mTunerService.addTunable(this, PULSE_ON_NEW_TRACKS);
 
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
 
@@ -4256,6 +4260,13 @@ public class CentralSurfacesImpl implements
                 boolean reTicker =
                         TunerService.parseIntegerSwitch(newValue, false);
                 mNotificationInterruptStateProvider.setUseReticker(reTicker);
+                break;
+            case PULSE_ON_NEW_TRACKS:
+                boolean showPulseOnNewTracks =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                KeyguardSliceProvider sliceProvider = KeyguardSliceProvider.getAttachedInstance();
+                if (sliceProvider != null)
+                    sliceProvider.setPulseOnNewTracks(showPulseOnNewTracks);
                 break;
             default:
                 break;
