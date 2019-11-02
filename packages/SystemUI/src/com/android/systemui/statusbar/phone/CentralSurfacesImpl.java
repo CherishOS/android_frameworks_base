@@ -168,6 +168,7 @@ import com.android.systemui.fragments.ExtensionFragmentListener;
 import com.android.systemui.fragments.FragmentHostManager;
 import com.android.systemui.fragments.FragmentService;
 import com.android.systemui.keyguard.KeyguardService;
+import com.android.systemui.keyguard.KeyguardSliceProvider;
 import com.android.systemui.keyguard.KeyguardUnlockAnimationController;
 import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.keyguard.ScreenLifecycle;
@@ -309,6 +310,8 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
             "system:" + Settings.System.LESS_BORING_HEADS_UP;
     private static final String RETICKER_STATUS =
             "system:" + Settings.System.RETICKER_STATUS;
+    private static final String PULSE_ON_NEW_TRACKS =
+            Settings.Secure.PULSE_ON_NEW_TRACKS;
 
     private static final int MSG_OPEN_SETTINGS_PANEL = 1002;
     private static final int MSG_LAUNCH_TRANSITION_TIMEOUT = 1003;
@@ -981,6 +984,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
         mTunerService.addTunable(this, FORCE_SHOW_NAVBAR);
         mTunerService.addTunable(this, LESS_BORING_HEADS_UP);
         mTunerService.addTunable(this, RETICKER_STATUS);
+        mTunerService.addTunable(this, PULSE_ON_NEW_TRACKS);
 
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
 
@@ -4312,6 +4316,13 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
                 boolean reTicker =
                         TunerService.parseIntegerSwitch(newValue, false);
                 mNotificationInterruptStateProvider.setUseReticker(reTicker);
+               break;
+            case PULSE_ON_NEW_TRACKS:
+                boolean showPulseOnNewTracks =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                KeyguardSliceProvider sliceProvider = KeyguardSliceProvider.getAttachedInstance();
+                if (sliceProvider != null)
+                    sliceProvider.setPulseOnNewTracks(showPulseOnNewTracks);
                 break;
             default:
                 break;
