@@ -4878,21 +4878,12 @@ public final class Settings {
         public static final String SHOW_BATTERY_PERCENT = "dummy_show_battery_percent";
 
         /**
-         * Display style of the battery percentage in the quick status bar header.
-         *    0: Hide the battery percentage (default)
-         *    1: Display the battery percentage next to the icon
-         *    2: Display the battery percentage inside the icon
+         * Setting to determine whether or not to show the battery percentage in the qs status bar header.
+         *    0 - Show remaining time
+         *    1 - Show percentage
          * @hide
          */
-        public static final String QS_SHOW_BATTERY_PERCENT = "qs_show_battery_percent";
-
-        /**
-         * QS battery estimate
-         * 0: Hide the battery estimate
-         * 1: Display the battery estimate
-         * @hide
-         */
-        public static final String QS_SHOW_BATTERY_ESTIMATE = "qs_show_battery_estimate";
+        public static final String QS_SHOW_BATTERY_PERCENT = "qs_header_show_battery_percent";
 
         /**
          * The time in ms to keep the button backlight on after pressing a button.
@@ -6462,19 +6453,13 @@ public final class Settings {
         public static final String STATUS_BAR_BATTERY_STYLE = "status_bar_battery_style";
 
         /**
-         * Statusbar Battery %
-         * 0: Hide the battery percentage
-         * 1: Display the battery percentage inside the icon
-         * 2: Display the battery percentage next to Icon
-         * @hide
-         */
+          * Statusbar Battery %
+          * 0: Hide the battery percentage
+          * 1: Display the battery percentage inside the icon
+          * 2: Display the battery percentage next to Icon
+          * @hide
+          */
         public static final String STATUS_BAR_SHOW_BATTERY_PERCENT = "status_bar_show_battery_percent";
-
-        /**
-         * Whether or not to show battery percentage when charging
-         * @hide
-         */
-        public static final String STATUS_BAR_BATTERY_TEXT_CHARGING = "status_bar_battery_text_charging";
 
         /**
          * Whether to show media player in QS

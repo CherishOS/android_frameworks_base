@@ -4727,9 +4727,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Settings.System.QS_SHOW_BATTERY_PERCENT),
                     false, this, UserHandle.USER_ALL);
 			resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.QS_SHOW_BATTERY_ESTIMATE),
-                    false, this, UserHandle.USER_ALL);
-			resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_MATERIAL_DISMISS),
                     false, this, UserHandle.USER_ALL);
 			resolver.registerContentObserver(Settings.System.getUriFor(
@@ -4813,8 +4810,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                 updateQsPanelResources();
 			} else if (uri.equals(Settings.System.getUriFor(Settings.System.QS_SHOW_BATTERY_PERCENT))) {
                 setQsBatteryPercentMode();
-			} else if (uri.equals(Settings.System.getUriFor(Settings.System.QS_SHOW_BATTERY_ESTIMATE))) {
-                setQsBatteryEstimate();
 			} else if (uri.equals(Settings.System.getUriFor(Settings.System.GAMING_MODE_ACTIVE)) ||
                     uri.equals(Settings.System.getUriFor(Settings.System.GAMING_MODE_HEADSUP_TOGGLE))) {
                 setGamingMode();
@@ -4844,7 +4839,6 @@ public class StatusBar extends SystemUI implements DemoMode,
 			setFpToDismissNotifications();
 			updateQsPanelResources();
 			setQsBatteryPercentMode();
-			setQsBatteryEstimate();
 			updateDismissAllVisibility(true);
 			setGamingMode();
 			updateTickerAnimation();
@@ -4907,13 +4901,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     private void setQsBatteryPercentMode() {
         if (mQSBarHeader != null) {
-            ((QuickStatusBarHeader) mQSBarHeader).updateQSBatteryPercent();
-        }
-    }
-
-    private void setQsBatteryEstimate() {
-        if (mQSBarHeader != null) {
-            ((QuickStatusBarHeader) mQSBarHeader).updateQSBatteryEstimate();
+            ((QuickStatusBarHeader) mQSBarHeader).setBatteryPercentMode();
         }
     }
 	
