@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 The Android Open Source Project
+ * Copyright (C) 2019 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,24 @@
  * limitations under the License.
  */
 
-package com.android.settingslib.search;
+package com.android.systemui.statusbar;
 
-import java.util.Collection;
+import android.content.Context;
 
-public interface SearchIndexableResources {
+import dagger.Module;
+import dagger.Provides;
 
+/**
+ * Dagger Module providing common dependencies of StatusBar.
+ */
+@Module
+public class StatusBarDependenciesModule {
     /**
-     * Returns a Collection of {@link SearchIndexableData} that should be indexed for search.
+     * Provides our instance of CommandQueue which is considered optional.
      */
-    Collection<SearchIndexableData> getProviderValues();
+    @Provides
+    public CommandQueue provideCommandQueue(Context context) {
+        return new CommandQueue(context);
+    }
 
-    /**
-     * Add {@link SearchIndexableData} for search in Android Settings.
-     */
-    void addIndex(SearchIndexableData indexBundle);
 }
