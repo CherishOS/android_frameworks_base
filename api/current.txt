@@ -30010,6 +30010,7 @@ package android.net.wifi {
     method @RequiresPermission(android.Manifest.permission.CHANGE_WIFI_STATE) public int addNetworkSuggestions(@NonNull java.util.List<android.net.wifi.WifiNetworkSuggestion>);
     method public void addOrUpdatePasspointConfiguration(android.net.wifi.hotspot2.PasspointConfiguration);
     method @RequiresPermission(android.Manifest.permission.ACCESS_WIFI_STATE) public void addScanResultsListener(@NonNull java.util.concurrent.Executor, @NonNull android.net.wifi.WifiManager.ScanResultsListener);
+    method @RequiresPermission(allOf={android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_WIFI_STATE}) public void addSuggestionConnectionStatusListener(@NonNull java.util.concurrent.Executor, @NonNull android.net.wifi.WifiManager.SuggestionConnectionStatusListener);
     method public static int calculateSignalLevel(int, int);
     method @Deprecated public void cancelWps(android.net.wifi.WifiManager.WpsCallback);
     method public static int compareSignalLevel(int, int);
@@ -30046,6 +30047,7 @@ package android.net.wifi {
     method @RequiresPermission(android.Manifest.permission.CHANGE_WIFI_STATE) public int removeNetworkSuggestions(@NonNull java.util.List<android.net.wifi.WifiNetworkSuggestion>);
     method @Deprecated @RequiresPermission(anyOf={"android.permission.NETWORK_SETTINGS", "android.permission.NETWORK_CARRIER_PROVISIONING"}) public void removePasspointConfiguration(String);
     method @RequiresPermission(android.Manifest.permission.ACCESS_WIFI_STATE) public void removeScanResultsListener(@NonNull android.net.wifi.WifiManager.ScanResultsListener);
+    method @RequiresPermission(android.Manifest.permission.ACCESS_WIFI_STATE) public void removeSuggestionConnectionStatusListener(@NonNull android.net.wifi.WifiManager.SuggestionConnectionStatusListener);
     method @Deprecated public boolean saveConfiguration();
     method public void setTdlsEnabled(java.net.InetAddress, boolean);
     method public void setTdlsEnabledWithMacAddress(String, boolean);
@@ -30079,6 +30081,10 @@ package android.net.wifi {
     field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_INTERNAL = 1; // 0x1
     field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_REMOVE_INVALID = 5; // 0x5
     field public static final int STATUS_NETWORK_SUGGESTIONS_SUCCESS = 0; // 0x0
+    field public static final int STATUS_SUGGESTION_CONNECTION_FAILURE_ASSOCIATION = 1; // 0x1
+    field public static final int STATUS_SUGGESTION_CONNECTION_FAILURE_AUTHENTICATION = 2; // 0x2
+    field public static final int STATUS_SUGGESTION_CONNECTION_FAILURE_IP_PROVISIONING = 3; // 0x3
+    field public static final int STATUS_SUGGESTION_CONNECTION_FAILURE_UNKNOWN = 0; // 0x0
     field @Deprecated public static final String SUPPLICANT_CONNECTION_CHANGE_ACTION = "android.net.wifi.supplicant.CONNECTION_CHANGE";
     field @Deprecated public static final String SUPPLICANT_STATE_CHANGED_ACTION = "android.net.wifi.supplicant.STATE_CHANGE";
     field @Deprecated public static final int WIFI_MODE_FULL = 1; // 0x1
@@ -30123,6 +30129,10 @@ package android.net.wifi {
 
   public static interface WifiManager.ScanResultsListener {
     method public void onScanResultsAvailable();
+  }
+
+  public static interface WifiManager.SuggestionConnectionStatusListener {
+    method public void onConnectionStatus(@NonNull android.net.wifi.WifiNetworkSuggestion, int);
   }
 
   public class WifiManager.WifiLock {
@@ -34183,31 +34193,31 @@ package android.opengl {
 
 package android.os {
 
-  public abstract class AsyncTask<Params, Progress, Result> {
-    ctor public AsyncTask();
-    method public final boolean cancel(boolean);
-    method @WorkerThread protected abstract Result doInBackground(Params...);
-    method @MainThread public final android.os.AsyncTask<Params,Progress,Result> execute(Params...);
-    method @MainThread public static void execute(Runnable);
-    method @MainThread public final android.os.AsyncTask<Params,Progress,Result> executeOnExecutor(java.util.concurrent.Executor, Params...);
-    method public final Result get() throws java.util.concurrent.ExecutionException, java.lang.InterruptedException;
-    method public final Result get(long, java.util.concurrent.TimeUnit) throws java.util.concurrent.ExecutionException, java.lang.InterruptedException, java.util.concurrent.TimeoutException;
-    method public final android.os.AsyncTask.Status getStatus();
-    method public final boolean isCancelled();
-    method @MainThread protected void onCancelled(Result);
-    method @MainThread protected void onCancelled();
-    method @MainThread protected void onPostExecute(Result);
-    method @MainThread protected void onPreExecute();
-    method @MainThread protected void onProgressUpdate(Progress...);
-    method @WorkerThread protected final void publishProgress(Progress...);
-    field public static final java.util.concurrent.Executor SERIAL_EXECUTOR;
-    field public static final java.util.concurrent.Executor THREAD_POOL_EXECUTOR;
+  @Deprecated public abstract class AsyncTask<Params, Progress, Result> {
+    ctor @Deprecated public AsyncTask();
+    method @Deprecated public final boolean cancel(boolean);
+    method @Deprecated @WorkerThread protected abstract Result doInBackground(Params...);
+    method @Deprecated @MainThread public final android.os.AsyncTask<Params,Progress,Result> execute(Params...);
+    method @Deprecated @MainThread public static void execute(Runnable);
+    method @Deprecated @MainThread public final android.os.AsyncTask<Params,Progress,Result> executeOnExecutor(java.util.concurrent.Executor, Params...);
+    method @Deprecated public final Result get() throws java.util.concurrent.ExecutionException, java.lang.InterruptedException;
+    method @Deprecated public final Result get(long, java.util.concurrent.TimeUnit) throws java.util.concurrent.ExecutionException, java.lang.InterruptedException, java.util.concurrent.TimeoutException;
+    method @Deprecated public final android.os.AsyncTask.Status getStatus();
+    method @Deprecated public final boolean isCancelled();
+    method @Deprecated @MainThread protected void onCancelled(Result);
+    method @Deprecated @MainThread protected void onCancelled();
+    method @Deprecated @MainThread protected void onPostExecute(Result);
+    method @Deprecated @MainThread protected void onPreExecute();
+    method @Deprecated @MainThread protected void onProgressUpdate(Progress...);
+    method @Deprecated @WorkerThread protected final void publishProgress(Progress...);
+    field @Deprecated public static final java.util.concurrent.Executor SERIAL_EXECUTOR;
+    field @Deprecated public static final java.util.concurrent.Executor THREAD_POOL_EXECUTOR;
   }
 
-  public enum AsyncTask.Status {
-    enum_constant public static final android.os.AsyncTask.Status FINISHED;
-    enum_constant public static final android.os.AsyncTask.Status PENDING;
-    enum_constant public static final android.os.AsyncTask.Status RUNNING;
+  @Deprecated public enum AsyncTask.Status {
+    enum_constant @Deprecated public static final android.os.AsyncTask.Status FINISHED;
+    enum_constant @Deprecated public static final android.os.AsyncTask.Status PENDING;
+    enum_constant @Deprecated public static final android.os.AsyncTask.Status RUNNING;
   }
 
   public class BadParcelableException extends android.util.AndroidRuntimeException {
@@ -44280,6 +44290,9 @@ package android.telephony {
     field public static final int DATA_CYCLE_THRESHOLD_DISABLED = -2; // 0xfffffffe
     field public static final String EXTRA_SLOT_INDEX = "android.telephony.extra.SLOT_INDEX";
     field public static final String EXTRA_SUBSCRIPTION_INDEX = "android.telephony.extra.SUBSCRIPTION_INDEX";
+    field public static final String KEY_5G_NR_SSRSRP_THRESHOLDS_INT_ARRAY = "5g_nr_ssrsrp_thresholds_int_array";
+    field public static final String KEY_5G_NR_SSRSRQ_THRESHOLDS_INT_ARRAY = "5g_nr_ssrsrq_thresholds_int_array";
+    field public static final String KEY_5G_NR_SSSINR_THRESHOLDS_INT_ARRAY = "5g_nr_sssinr_thresholds_int_array";
     field public static final String KEY_ADDITIONAL_CALL_SETTING_BOOL = "additional_call_setting_bool";
     field public static final String KEY_ALLOW_ADDING_APNS_BOOL = "allow_adding_apns_bool";
     field public static final String KEY_ALLOW_ADD_CALL_DURING_VIDEO_CALL_BOOL = "allow_add_call_during_video_call";
@@ -44411,6 +44424,7 @@ package android.telephony {
     field public static final String KEY_OPPORTUNISTIC_NETWORK_ENTRY_THRESHOLD_RSSNR_INT = "opportunistic_network_entry_threshold_rssnr_int";
     field public static final String KEY_OPPORTUNISTIC_NETWORK_EXIT_THRESHOLD_RSRP_INT = "opportunistic_network_exit_threshold_rsrp_int";
     field public static final String KEY_OPPORTUNISTIC_NETWORK_EXIT_THRESHOLD_RSSNR_INT = "opportunistic_network_exit_threshold_rssnr_int";
+    field public static final String KEY_PARAMETERS_USE_FOR_5G_NR_SIGNAL_BAR_INT = "parameters_use_for_5g_nr_signal_bar_int";
     field public static final String KEY_PREFER_2G_BOOL = "prefer_2g_bool";
     field public static final String KEY_PREVENT_CLIR_ACTIVATION_AND_DEACTIVATION_CODE_BOOL = "prevent_clir_activation_and_deactivation_code_bool";
     field public static final String KEY_RADIO_RESTART_FAILURE_CAUSES_INT_ARRAY = "radio_restart_failure_causes_int_array";
@@ -52647,10 +52661,12 @@ package android.view.accessibility {
     field public static final int MOVEMENT_GRANULARITY_WORD = 2; // 0x2
   }
 
-  public static final class AccessibilityNodeInfo.AccessibilityAction {
+  public static final class AccessibilityNodeInfo.AccessibilityAction implements android.os.Parcelable {
     ctor public AccessibilityNodeInfo.AccessibilityAction(int, @Nullable CharSequence);
+    method public int describeContents();
     method public int getId();
     method public CharSequence getLabel();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_ACCESSIBILITY_FOCUS;
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_CLEAR_ACCESSIBILITY_FOCUS;
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_CLEAR_FOCUS;
@@ -52688,6 +52704,7 @@ package android.view.accessibility {
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_SET_TEXT;
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_SHOW_ON_SCREEN;
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_SHOW_TOOLTIP;
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction> CREATOR;
   }
 
   public static final class AccessibilityNodeInfo.CollectionInfo {
