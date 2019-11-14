@@ -23039,17 +23039,17 @@ package android.location {
   }
 
   public final class GnssStatus {
-    method public float getAzimuthDegrees(int);
-    method public float getCarrierFrequencyHz(int);
-    method public float getCn0DbHz(int);
-    method public int getConstellationType(int);
-    method public float getElevationDegrees(int);
-    method public int getSatelliteCount();
-    method public int getSvid(int);
-    method public boolean hasAlmanacData(int);
-    method public boolean hasCarrierFrequencyHz(int);
-    method public boolean hasEphemerisData(int);
-    method public boolean usedInFix(int);
+    method @FloatRange(from=0, to=360) public float getAzimuthDegrees(@IntRange(from=0) int);
+    method @FloatRange(from=0) public float getCarrierFrequencyHz(@IntRange(from=0) int);
+    method @FloatRange(from=0, to=63) public float getCn0DbHz(@IntRange(from=0) int);
+    method public int getConstellationType(@IntRange(from=0) int);
+    method @FloatRange(from=0xffffffa6, to=90) public float getElevationDegrees(@IntRange(from=0) int);
+    method @IntRange(from=0) public int getSatelliteCount();
+    method @IntRange(from=1, to=200) public int getSvid(@IntRange(from=0) int);
+    method public boolean hasAlmanacData(@IntRange(from=0) int);
+    method public boolean hasCarrierFrequencyHz(@IntRange(from=0) int);
+    method public boolean hasEphemerisData(@IntRange(from=0) int);
+    method public boolean usedInFix(@IntRange(from=0) int);
     field public static final int CONSTELLATION_BEIDOU = 5; // 0x5
     field public static final int CONSTELLATION_GALILEO = 6; // 0x6
     field public static final int CONSTELLATION_GLONASS = 3; // 0x3
@@ -23060,10 +23060,17 @@ package android.location {
     field public static final int CONSTELLATION_UNKNOWN = 0; // 0x0
   }
 
+  public static final class GnssStatus.Builder {
+    ctor public GnssStatus.Builder();
+    method @NonNull public android.location.GnssStatus.Builder addSatellite(int, @IntRange(from=1, to=200) int, @FloatRange(from=0, to=63) float, @FloatRange(from=0xffffffa6, to=90) float, @FloatRange(from=0, to=360) float, boolean, boolean, boolean, boolean, @FloatRange(from=0) float);
+    method @NonNull public android.location.GnssStatus build();
+    method @NonNull public android.location.GnssStatus.Builder clearSatellites();
+  }
+
   public abstract static class GnssStatus.Callback {
     ctor public GnssStatus.Callback();
     method public void onFirstFix(int);
-    method public void onSatelliteStatusChanged(android.location.GnssStatus);
+    method public void onSatelliteStatusChanged(@NonNull android.location.GnssStatus);
     method public void onStarted();
     method public void onStopped();
   }
@@ -23079,6 +23086,7 @@ package android.location {
   }
 
   @Deprecated public final class GpsStatus {
+    method @Deprecated @NonNull public static android.location.GpsStatus create(@NonNull android.location.GnssStatus, int);
     method @Deprecated public int getMaxSatellites();
     method @Deprecated public Iterable<android.location.GpsSatellite> getSatellites();
     method @Deprecated public int getTimeToFirstFix();
