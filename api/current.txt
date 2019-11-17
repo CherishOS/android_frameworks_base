@@ -4271,8 +4271,8 @@ package android.app {
     method public android.app.AlertDialog show();
   }
 
-  public class AliasActivity extends android.app.Activity {
-    ctor public AliasActivity();
+  @Deprecated public class AliasActivity extends android.app.Activity {
+    ctor @Deprecated public AliasActivity();
   }
 
   public class AppComponentFactory {
@@ -8445,6 +8445,7 @@ package android.bluetooth {
     method public int describeContents();
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public boolean fetchUuidsWithSdp();
     method public String getAddress();
+    method @Nullable @RequiresPermission(android.Manifest.permission.BLUETOOTH) public String getAlias();
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public android.bluetooth.BluetoothClass getBluetoothClass();
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public int getBondState();
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public String getName();
@@ -8456,6 +8457,7 @@ package android.bluetooth {
     field public static final String ACTION_ACL_CONNECTED = "android.bluetooth.device.action.ACL_CONNECTED";
     field public static final String ACTION_ACL_DISCONNECTED = "android.bluetooth.device.action.ACL_DISCONNECTED";
     field public static final String ACTION_ACL_DISCONNECT_REQUESTED = "android.bluetooth.device.action.ACL_DISCONNECT_REQUESTED";
+    field public static final String ACTION_ALIAS_CHANGED = "android.bluetooth.action.ALIAS_CHANGED";
     field public static final String ACTION_BOND_STATE_CHANGED = "android.bluetooth.device.action.BOND_STATE_CHANGED";
     field public static final String ACTION_CLASS_CHANGED = "android.bluetooth.device.action.CLASS_CHANGED";
     field public static final String ACTION_FOUND = "android.bluetooth.device.action.FOUND";
@@ -9475,6 +9477,7 @@ package android.content {
     method @Nullable public android.net.Uri canonicalize(@NonNull android.net.Uri);
     method @NonNull public final android.content.ContentProvider.CallingIdentity clearCallingIdentity();
     method public abstract int delete(@NonNull android.net.Uri, @Nullable String, @Nullable String[]);
+    method public int delete(@NonNull android.net.Uri, @Nullable android.os.Bundle);
     method public void dump(java.io.FileDescriptor, java.io.PrintWriter, String[]);
     method @Nullable public final String getCallingFeatureId();
     method @Nullable public final String getCallingPackage();
@@ -9485,6 +9488,7 @@ package android.content {
     method @Nullable public abstract String getType(@NonNull android.net.Uri);
     method @Nullable public final String getWritePermission();
     method @Nullable public abstract android.net.Uri insert(@NonNull android.net.Uri, @Nullable android.content.ContentValues);
+    method @Nullable public android.net.Uri insert(@NonNull android.net.Uri, @Nullable android.content.ContentValues, @Nullable android.os.Bundle);
     method protected boolean isTemporary();
     method public void onConfigurationChanged(android.content.res.Configuration);
     method public abstract boolean onCreate();
@@ -9510,6 +9514,7 @@ package android.content {
     method public void shutdown();
     method @Nullable public android.net.Uri uncanonicalize(@NonNull android.net.Uri);
     method public abstract int update(@NonNull android.net.Uri, @Nullable android.content.ContentValues, @Nullable String, @Nullable String[]);
+    method public int update(@NonNull android.net.Uri, @Nullable android.content.ContentValues, @Nullable android.os.Bundle);
   }
 
   public final class ContentProvider.CallingIdentity {
@@ -9528,10 +9533,12 @@ package android.content {
     method @Nullable public final android.net.Uri canonicalize(@NonNull android.net.Uri) throws android.os.RemoteException;
     method public void close();
     method public int delete(@NonNull android.net.Uri, @Nullable String, @Nullable String[]) throws android.os.RemoteException;
+    method public int delete(@NonNull android.net.Uri, @Nullable android.os.Bundle) throws android.os.RemoteException;
     method @Nullable public android.content.ContentProvider getLocalContentProvider();
     method @Nullable public String[] getStreamTypes(@NonNull android.net.Uri, @NonNull String) throws android.os.RemoteException;
     method @Nullable public String getType(@NonNull android.net.Uri) throws android.os.RemoteException;
     method @Nullable public android.net.Uri insert(@NonNull android.net.Uri, @Nullable android.content.ContentValues) throws android.os.RemoteException;
+    method @Nullable public android.net.Uri insert(@NonNull android.net.Uri, @Nullable android.content.ContentValues, @Nullable android.os.Bundle) throws android.os.RemoteException;
     method @Nullable public android.content.res.AssetFileDescriptor openAssetFile(@NonNull android.net.Uri, @NonNull String) throws java.io.FileNotFoundException, android.os.RemoteException;
     method @Nullable public android.content.res.AssetFileDescriptor openAssetFile(@NonNull android.net.Uri, @NonNull String, @Nullable android.os.CancellationSignal) throws java.io.FileNotFoundException, android.os.RemoteException;
     method @Nullable public android.os.ParcelFileDescriptor openFile(@NonNull android.net.Uri, @NonNull String) throws java.io.FileNotFoundException, android.os.RemoteException;
@@ -9546,6 +9553,7 @@ package android.content {
     method @Deprecated public boolean release();
     method @Nullable public final android.net.Uri uncanonicalize(@NonNull android.net.Uri) throws android.os.RemoteException;
     method public int update(@NonNull android.net.Uri, @Nullable android.content.ContentValues, @Nullable String, @Nullable String[]) throws android.os.RemoteException;
+    method public int update(@NonNull android.net.Uri, @Nullable android.content.ContentValues, @Nullable android.os.Bundle) throws android.os.RemoteException;
   }
 
   public class ContentProviderOperation implements android.os.Parcelable {
@@ -9633,6 +9641,7 @@ package android.content {
     method public static void cancelSync(android.content.SyncRequest);
     method @Nullable public final android.net.Uri canonicalize(@NonNull android.net.Uri);
     method public final int delete(@NonNull @RequiresPermission.Write android.net.Uri, @Nullable String, @Nullable String[]);
+    method public final int delete(@NonNull @RequiresPermission.Write android.net.Uri, @Nullable android.os.Bundle);
     method @Deprecated public static android.content.SyncInfo getCurrentSync();
     method public static java.util.List<android.content.SyncInfo> getCurrentSyncs();
     method public static int getIsSyncable(android.accounts.Account, String);
@@ -9646,12 +9655,14 @@ package android.content {
     method @Nullable public final String getType(@NonNull android.net.Uri);
     method @NonNull public final android.content.ContentResolver.MimeTypeInfo getTypeInfo(@NonNull String);
     method @Nullable public final android.net.Uri insert(@NonNull @RequiresPermission.Write android.net.Uri, @Nullable android.content.ContentValues);
+    method @Nullable public final android.net.Uri insert(@NonNull @RequiresPermission.Write android.net.Uri, @Nullable android.content.ContentValues, @Nullable android.os.Bundle);
     method public static boolean isSyncActive(android.accounts.Account, String);
     method public static boolean isSyncPending(android.accounts.Account, String);
     method @NonNull public android.graphics.Bitmap loadThumbnail(@NonNull android.net.Uri, @NonNull android.util.Size, @Nullable android.os.CancellationSignal) throws java.io.IOException;
     method public void notifyChange(@NonNull android.net.Uri, @Nullable android.database.ContentObserver);
-    method public void notifyChange(@NonNull android.net.Uri, @Nullable android.database.ContentObserver, boolean);
+    method @Deprecated public void notifyChange(@NonNull android.net.Uri, @Nullable android.database.ContentObserver, boolean);
     method public void notifyChange(@NonNull android.net.Uri, @Nullable android.database.ContentObserver, int);
+    method public void notifyChange(@NonNull Iterable<android.net.Uri>, @Nullable android.database.ContentObserver, int);
     method @Nullable public final android.content.res.AssetFileDescriptor openAssetFile(@NonNull android.net.Uri, @NonNull String, @Nullable android.os.CancellationSignal) throws java.io.FileNotFoundException;
     method @Nullable public final android.content.res.AssetFileDescriptor openAssetFileDescriptor(@NonNull android.net.Uri, @NonNull String) throws java.io.FileNotFoundException;
     method @Nullable public final android.content.res.AssetFileDescriptor openAssetFileDescriptor(@NonNull android.net.Uri, @NonNull String, @Nullable android.os.CancellationSignal) throws java.io.FileNotFoundException;
@@ -9682,6 +9693,7 @@ package android.content {
     method @Nullable public final android.net.Uri uncanonicalize(@NonNull android.net.Uri);
     method public final void unregisterContentObserver(@NonNull android.database.ContentObserver);
     method public final int update(@NonNull @RequiresPermission.Write android.net.Uri, @Nullable android.content.ContentValues, @Nullable String, @Nullable String[]);
+    method public final int update(@NonNull @RequiresPermission.Write android.net.Uri, @Nullable android.content.ContentValues, @Nullable android.os.Bundle);
     method public static void validateSyncExtrasBundle(android.os.Bundle);
     method @NonNull public static android.content.ContentResolver wrap(@NonNull android.content.ContentProvider);
     method @NonNull public static android.content.ContentResolver wrap(@NonNull android.content.ContentProviderClient);
@@ -9694,12 +9706,16 @@ package android.content {
     field public static final String EXTRA_TOTAL_COUNT = "android.content.extra.TOTAL_COUNT";
     field public static final int NOTIFY_SKIP_NOTIFY_FOR_DESCENDANTS = 2; // 0x2
     field public static final int NOTIFY_SYNC_TO_NETWORK = 1; // 0x1
+    field public static final String QUERY_ARG_GROUP_COLUMNS = "android:query-arg-group-columns";
     field public static final String QUERY_ARG_LIMIT = "android:query-arg-limit";
     field public static final String QUERY_ARG_OFFSET = "android:query-arg-offset";
     field public static final String QUERY_ARG_SORT_COLLATION = "android:query-arg-sort-collation";
     field public static final String QUERY_ARG_SORT_COLUMNS = "android:query-arg-sort-columns";
     field public static final String QUERY_ARG_SORT_DIRECTION = "android:query-arg-sort-direction";
     field public static final String QUERY_ARG_SORT_LOCALE = "android:query-arg-sort-locale";
+    field public static final String QUERY_ARG_SQL_GROUP_BY = "android:query-arg-sql-group-by";
+    field public static final String QUERY_ARG_SQL_HAVING = "android:query-arg-sql-having";
+    field public static final String QUERY_ARG_SQL_LIMIT = "android:query-arg-sql-limit";
     field public static final String QUERY_ARG_SQL_SELECTION = "android:query-arg-sql-selection";
     field public static final String QUERY_ARG_SQL_SELECTION_ARGS = "android:query-arg-sql-selection-args";
     field public static final String QUERY_ARG_SQL_SORT_ORDER = "android:query-arg-sql-sort-order";
@@ -15712,6 +15728,8 @@ package android.graphics.drawable {
 
   public final class Icon implements android.os.Parcelable {
     method public static android.graphics.drawable.Icon createWithAdaptiveBitmap(android.graphics.Bitmap);
+    method @NonNull public static android.graphics.drawable.Icon createWithAdaptiveBitmapContentUri(@NonNull String);
+    method @NonNull public static android.graphics.drawable.Icon createWithAdaptiveBitmapContentUri(@NonNull android.net.Uri);
     method public static android.graphics.drawable.Icon createWithBitmap(android.graphics.Bitmap);
     method public static android.graphics.drawable.Icon createWithContentUri(String);
     method public static android.graphics.drawable.Icon createWithContentUri(android.net.Uri);
@@ -15738,6 +15756,7 @@ package android.graphics.drawable {
     field public static final int TYPE_DATA = 3; // 0x3
     field public static final int TYPE_RESOURCE = 2; // 0x2
     field public static final int TYPE_URI = 4; // 0x4
+    field public static final int TYPE_URI_ADAPTIVE_BITMAP = 6; // 0x6
   }
 
   public static interface Icon.OnDrawableLoadedListener {
@@ -23038,17 +23057,17 @@ package android.location {
   }
 
   public final class GnssStatus {
-    method public float getAzimuthDegrees(int);
-    method public float getCarrierFrequencyHz(int);
-    method public float getCn0DbHz(int);
-    method public int getConstellationType(int);
-    method public float getElevationDegrees(int);
-    method public int getSatelliteCount();
-    method public int getSvid(int);
-    method public boolean hasAlmanacData(int);
-    method public boolean hasCarrierFrequencyHz(int);
-    method public boolean hasEphemerisData(int);
-    method public boolean usedInFix(int);
+    method @FloatRange(from=0, to=360) public float getAzimuthDegrees(@IntRange(from=0) int);
+    method @FloatRange(from=0) public float getCarrierFrequencyHz(@IntRange(from=0) int);
+    method @FloatRange(from=0, to=63) public float getCn0DbHz(@IntRange(from=0) int);
+    method public int getConstellationType(@IntRange(from=0) int);
+    method @FloatRange(from=0xffffffa6, to=90) public float getElevationDegrees(@IntRange(from=0) int);
+    method @IntRange(from=0) public int getSatelliteCount();
+    method @IntRange(from=1, to=200) public int getSvid(@IntRange(from=0) int);
+    method public boolean hasAlmanacData(@IntRange(from=0) int);
+    method public boolean hasCarrierFrequencyHz(@IntRange(from=0) int);
+    method public boolean hasEphemerisData(@IntRange(from=0) int);
+    method public boolean usedInFix(@IntRange(from=0) int);
     field public static final int CONSTELLATION_BEIDOU = 5; // 0x5
     field public static final int CONSTELLATION_GALILEO = 6; // 0x6
     field public static final int CONSTELLATION_GLONASS = 3; // 0x3
@@ -23059,10 +23078,17 @@ package android.location {
     field public static final int CONSTELLATION_UNKNOWN = 0; // 0x0
   }
 
+  public static final class GnssStatus.Builder {
+    ctor public GnssStatus.Builder();
+    method @NonNull public android.location.GnssStatus.Builder addSatellite(int, @IntRange(from=1, to=200) int, @FloatRange(from=0, to=63) float, @FloatRange(from=0xffffffa6, to=90) float, @FloatRange(from=0, to=360) float, boolean, boolean, boolean, boolean, @FloatRange(from=0) float);
+    method @NonNull public android.location.GnssStatus build();
+    method @NonNull public android.location.GnssStatus.Builder clearSatellites();
+  }
+
   public abstract static class GnssStatus.Callback {
     ctor public GnssStatus.Callback();
     method public void onFirstFix(int);
-    method public void onSatelliteStatusChanged(android.location.GnssStatus);
+    method public void onSatelliteStatusChanged(@NonNull android.location.GnssStatus);
     method public void onStarted();
     method public void onStopped();
   }
@@ -23078,6 +23104,7 @@ package android.location {
   }
 
   @Deprecated public final class GpsStatus {
+    method @Deprecated @NonNull public static android.location.GpsStatus create(@NonNull android.location.GnssStatus, int);
     method @Deprecated public int getMaxSatellites();
     method @Deprecated public Iterable<android.location.GpsSatellite> getSatellites();
     method @Deprecated public int getTimeToFirstFix();
@@ -24041,7 +24068,7 @@ package android.media {
     ctor public ExifInterface(@NonNull String) throws java.io.IOException;
     ctor public ExifInterface(@NonNull java.io.FileDescriptor) throws java.io.IOException;
     ctor public ExifInterface(@NonNull java.io.InputStream) throws java.io.IOException;
-    method @NonNull public static android.media.ExifInterface fromStandalone(@NonNull java.io.InputStream) throws java.io.IOException;
+    ctor public ExifInterface(@NonNull java.io.InputStream, int) throws java.io.IOException;
     method public double getAltitude(double);
     method @Nullable public String getAttribute(@NonNull String);
     method @Nullable public byte[] getAttributeBytes(@NonNull String);
@@ -24068,6 +24095,8 @@ package android.media {
     field public static final int ORIENTATION_TRANSPOSE = 5; // 0x5
     field public static final int ORIENTATION_TRANSVERSE = 7; // 0x7
     field public static final int ORIENTATION_UNDEFINED = 0; // 0x0
+    field public static final int STREAM_TYPE_EXIF_DATA_ONLY = 1; // 0x1
+    field public static final int STREAM_TYPE_FULL_IMAGE_DATA = 0; // 0x0
     field @Deprecated public static final String TAG_APERTURE = "FNumber";
     field public static final String TAG_APERTURE_VALUE = "ApertureValue";
     field public static final String TAG_ARTIST = "Artist";
@@ -30045,6 +30074,7 @@ package android.net.wifi {
     method public java.util.List<android.net.wifi.ScanResult> getScanResults();
     method public int getWifiState();
     method public boolean is5GHzBandSupported();
+    method public boolean is6GHzBandSupported();
     method @Deprecated public boolean isDeviceToApRttSupported();
     method public boolean isEasyConnectSupported();
     method public boolean isEnhancedOpenSupported();
@@ -30359,6 +30389,7 @@ package android.net.wifi.aware {
   public static final class WifiAwareNetworkSpecifier.Builder {
     ctor public WifiAwareNetworkSpecifier.Builder(@NonNull android.net.wifi.aware.DiscoverySession, @NonNull android.net.wifi.aware.PeerHandle);
     method @NonNull public android.net.wifi.aware.WifiAwareNetworkSpecifier build();
+    method @NonNull public android.net.wifi.aware.WifiAwareNetworkSpecifier.Builder setPmk(@NonNull byte[]);
     method @NonNull public android.net.wifi.aware.WifiAwareNetworkSpecifier.Builder setPort(@IntRange(from=0, to=65535) int);
     method @NonNull public android.net.wifi.aware.WifiAwareNetworkSpecifier.Builder setPskPassphrase(@NonNull String);
     method @NonNull public android.net.wifi.aware.WifiAwareNetworkSpecifier.Builder setTransportProtocol(@IntRange(from=0, to=255) int);
@@ -35358,6 +35389,8 @@ package android.os {
   public class RemoteException extends android.util.AndroidException {
     ctor public RemoteException();
     ctor public RemoteException(String);
+    method @NonNull public RuntimeException rethrowAsRuntimeException();
+    method @NonNull public RuntimeException rethrowFromSystemServer();
   }
 
   public class ResultReceiver implements android.os.Parcelable {
@@ -45227,6 +45260,8 @@ package android.telephony {
     method @NonNull @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public android.os.ParcelUuid createSubscriptionGroup(@NonNull java.util.List<java.lang.Integer>);
     method @Deprecated public static android.telephony.SubscriptionManager from(android.content.Context);
     method public java.util.List<android.telephony.SubscriptionInfo> getAccessibleSubscriptionInfoList();
+    method @Nullable public java.util.List<android.telephony.SubscriptionInfo> getActiveAndHiddenSubscriptionInfoList();
+    method public static int getActiveDataSubscriptionId();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public android.telephony.SubscriptionInfo getActiveSubscriptionInfo(int);
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public int getActiveSubscriptionInfoCount();
     method public int getActiveSubscriptionInfoCountMax();
