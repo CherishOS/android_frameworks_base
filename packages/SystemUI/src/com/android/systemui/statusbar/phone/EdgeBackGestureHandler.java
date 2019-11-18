@@ -196,6 +196,8 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
     private boolean mEdgeHapticEnabled;
     private static final int HAPTIC_DURATION = 20;
 
+    private boolean mIsBackGestureArrowEnabled;
+
     private final GestureNavigationSettingsObserver mGestureNavigationSettingsObserver;
 
     private final NavigationEdgeBackPlugin.BackCallback mBackCallback =
@@ -280,6 +282,7 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
         mEdgeHapticEnabled = mGestureNavigationSettingsObserver.getEdgeHaptic();
         mIsBackGestureAllowed =
                 !mGestureNavigationSettingsObserver.areNavigationButtonForcedVisible();
+        mIsBackGestureArrowEnabled = mGestureNavigationSettingsObserver.getBackArrowGesture();
 
         mYDeadzoneDivider = mGestureNavigationSettingsObserver.getDeadZoneMode();
 
@@ -584,6 +587,7 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
                     && isWithinTouchRegion((int) ev.getX(), (int) ev.getY());
             if (mAllowGesture) {
                 mEdgeBackPlugin.setIsLeftPanel(mIsOnLeftEdge);
+                mEdgeBackPlugin.setBackArrowVisibility(mIsBackGestureArrowEnabled);
                 mEdgeBackPlugin.onMotionEvent(ev);
             }
             if (mLogGesture) {
