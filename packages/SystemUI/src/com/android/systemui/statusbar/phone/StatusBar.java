@@ -4865,6 +4865,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.FORCE_SHOW_NAVBAR),
                     false, this, UserHandle.USER_ALL);
+			resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_MEDIA_BLUR),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -4885,6 +4888,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.FORCE_SHOW_NAVBAR))) {
                 updateNavigationBarVisibility();
+			} else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_MEDIA_BLUR))) {
+                setLockScreenMediaBlurLevel();
             }
             update();
         }
@@ -4898,6 +4904,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             setScreenBrightnessMode();
             setUseLessBoringHeadsUp();
             updateNavigationBarVisibility();
+            setLockScreenMediaBlurLevel();            
         }
     }
 
@@ -4976,6 +4983,12 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
     }
 }
+
+    private void setLockScreenMediaBlurLevel() {
+        if (mMediaManager != null) {
+            mMediaManager.setLockScreenMediaBlurLevel();
+        }
+    }
 
     private final BroadcastReceiver mBannerActionBroadcastReceiver = new BroadcastReceiver() {
         @Override
