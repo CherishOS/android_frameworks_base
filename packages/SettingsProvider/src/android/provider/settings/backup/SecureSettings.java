@@ -210,5 +210,6 @@ public class SecureSettings {
         Settings.Secure.DISABLE_SECURE_TILES_ON_LOCKSCREEN,
         Settings.Secure.SECURE_LOCKSCREEN_QS_DISABLED,
         Settings.Secure.TETHERING_ALLOW_VPN_UPSTREAMS,
+        Settings.Secure.SHOW_BACK_ARROW_GESTURE,
     };
 }
