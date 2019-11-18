@@ -30526,6 +30526,9 @@ package android.net.wifi.p2p {
     field public static final int GROUP_OWNER_BAND_2GHZ = 1; // 0x1
     field public static final int GROUP_OWNER_BAND_5GHZ = 2; // 0x2
     field public static final int GROUP_OWNER_BAND_AUTO = 0; // 0x0
+    field public static final int GROUP_OWNER_INTENT_AUTO = -1; // 0xffffffff
+    field public static final int GROUP_OWNER_INTENT_MAX = 15; // 0xf
+    field public static final int GROUP_OWNER_INTENT_MIN = 0; // 0x0
     field public String deviceAddress;
     field public int groupOwnerIntent;
     field public android.net.wifi.WpsInfo wps;
@@ -30546,6 +30549,7 @@ package android.net.wifi.p2p {
     ctor public WifiP2pDevice();
     ctor public WifiP2pDevice(android.net.wifi.p2p.WifiP2pDevice);
     method public int describeContents();
+    method @Nullable public android.net.wifi.p2p.WifiP2pWfdInfo getWfdInfo();
     method public boolean isGroupOwner();
     method public boolean isServiceDiscoveryCapable();
     method public boolean wpsDisplaySupported();
@@ -30582,6 +30586,7 @@ package android.net.wifi.p2p {
     method public java.util.Collection<android.net.wifi.p2p.WifiP2pDevice> getClientList();
     method public int getFrequency();
     method public String getInterface();
+    method public int getNetworkId();
     method public String getNetworkName();
     method public android.net.wifi.p2p.WifiP2pDevice getOwner();
     method public String getPassphrase();
@@ -30704,6 +30709,28 @@ package android.net.wifi.p2p {
 
   public static interface WifiP2pManager.UpnpServiceResponseListener {
     method public void onUpnpServiceAvailable(java.util.List<java.lang.String>, android.net.wifi.p2p.WifiP2pDevice);
+  }
+
+  public final class WifiP2pWfdInfo implements android.os.Parcelable {
+    ctor public WifiP2pWfdInfo();
+    ctor public WifiP2pWfdInfo(@Nullable android.net.wifi.p2p.WifiP2pWfdInfo);
+    method public int describeContents();
+    method public int getControlPort();
+    method public int getDeviceType();
+    method public int getMaxThroughput();
+    method public boolean isSessionAvailable();
+    method public boolean isWfdEnabled();
+    method public void setControlPort(int);
+    method public boolean setDeviceType(int);
+    method public void setMaxThroughput(int);
+    method public void setSessionAvailable(boolean);
+    method public void setWfdEnabled(boolean);
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.net.wifi.p2p.WifiP2pWfdInfo> CREATOR;
+    field public static final int DEVICE_TYPE_PRIMARY_SINK = 1; // 0x1
+    field public static final int DEVICE_TYPE_SECONDARY_SINK = 2; // 0x2
+    field public static final int DEVICE_TYPE_SOURCE_OR_PRIMARY_SINK = 3; // 0x3
+    field public static final int DEVICE_TYPE_WFD_SOURCE = 0; // 0x0
   }
 
 }
