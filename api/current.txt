@@ -11524,7 +11524,8 @@ package android.content.pm {
   public class PackageInstaller {
     method public void abandonSession(int);
     method public int createSession(@NonNull android.content.pm.PackageInstaller.SessionParams) throws java.io.IOException;
-    method @Nullable public android.content.pm.PackageInstaller.SessionInfo getActiveStagedSession();
+    method @Deprecated @Nullable public android.content.pm.PackageInstaller.SessionInfo getActiveStagedSession();
+    method @NonNull public java.util.List<android.content.pm.PackageInstaller.SessionInfo> getActiveStagedSessions();
     method @NonNull public java.util.List<android.content.pm.PackageInstaller.SessionInfo> getAllSessions();
     method @NonNull public java.util.List<android.content.pm.PackageInstaller.SessionInfo> getMySessions();
     method @Nullable public android.content.pm.PackageInstaller.SessionInfo getSessionInfo(int);
@@ -11609,11 +11610,13 @@ package android.content.pm {
     method @NonNull public String getStagedSessionErrorMessage();
     method public long getUpdatedMillis();
     method @NonNull public android.os.UserHandle getUser();
+    method public boolean hasParentSessionId();
     method public boolean isActive();
     method public boolean isCommitted();
     method public boolean isMultiPackage();
     method public boolean isSealed();
     method public boolean isStaged();
+    method public boolean isStagedSessionActive();
     method public boolean isStagedSessionApplied();
     method public boolean isStagedSessionFailed();
     method public boolean isStagedSessionReady();
@@ -39630,10 +39633,16 @@ package android.provider {
     field public static final String DATA_SMS_RECEIVED_ACTION = "android.intent.action.DATA_SMS_RECEIVED";
     field public static final String EXTRA_IS_DEFAULT_SMS_APP = "android.provider.extra.IS_DEFAULT_SMS_APP";
     field public static final String EXTRA_PACKAGE_NAME = "package";
+    field public static final int RESULT_SMS_DATABASE_ERROR = 10; // 0xa
+    field public static final int RESULT_SMS_DISPATCH_FAILURE = 6; // 0x6
     field public static final int RESULT_SMS_DUPLICATED = 5; // 0x5
     field public static final int RESULT_SMS_GENERIC_ERROR = 2; // 0x2
     field public static final int RESULT_SMS_HANDLED = 1; // 0x1
+    field public static final int RESULT_SMS_INVALID_URI = 11; // 0xb
+    field public static final int RESULT_SMS_NULL_MESSAGE = 8; // 0x8
+    field public static final int RESULT_SMS_NULL_PDU = 7; // 0x7
     field public static final int RESULT_SMS_OUT_OF_MEMORY = 3; // 0x3
+    field public static final int RESULT_SMS_RECEIVED_WHILE_ENCRYPTED = 9; // 0x9
     field public static final int RESULT_SMS_UNSUPPORTED = 4; // 0x4
     field @Deprecated public static final String SECRET_CODE_ACTION = "android.provider.Telephony.SECRET_CODE";
     field public static final String SIM_FULL_ACTION = "android.provider.Telephony.SIM_FULL";
@@ -45161,6 +45170,13 @@ package android.telephony {
     field public static final int RESULT_NO_RESOURCES = 22; // 0x16
     field public static final int RESULT_OPERATION_NOT_ALLOWED = 20; // 0x14
     field public static final int RESULT_RADIO_NOT_AVAILABLE = 9; // 0x9
+    field public static final int RESULT_RECEIVE_DISPATCH_FAILURE = 500; // 0x1f4
+    field public static final int RESULT_RECEIVE_INJECTED_NULL_PDU = 501; // 0x1f5
+    field public static final int RESULT_RECEIVE_NULL_MESSAGE_FROM_RIL = 503; // 0x1f7
+    field public static final int RESULT_RECEIVE_RUNTIME_EXCEPTION = 502; // 0x1f6
+    field public static final int RESULT_RECEIVE_SQL_EXCEPTION = 505; // 0x1f9
+    field public static final int RESULT_RECEIVE_URI_EXCEPTION = 506; // 0x1fa
+    field public static final int RESULT_RECEIVE_WHILE_ENCRYPTED = 504; // 0x1f8
     field public static final int RESULT_REMOTE_EXCEPTION = 31; // 0x1f
     field public static final int RESULT_REQUEST_NOT_SUPPORTED = 24; // 0x18
     field public static final int RESULT_RIL_CANCELLED = 119; // 0x77
@@ -48766,6 +48782,7 @@ package android.util {
     method public void append(int, E);
     method public void clear();
     method public android.util.SparseArray<E> clone();
+    method public boolean contains(int);
     method public void delete(int);
     method public E get(int);
     method public E get(int, E);
