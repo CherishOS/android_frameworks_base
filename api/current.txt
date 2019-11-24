@@ -2955,7 +2955,6 @@ package android.accessibilityservice {
     field public static final int FEEDBACK_SPOKEN = 1; // 0x1
     field public static final int FEEDBACK_VISUAL = 8; // 0x8
     field public static final int FLAG_ENABLE_ACCESSIBILITY_VOLUME = 128; // 0x80
-    field public static final int FLAG_HANDLE_SHORTCUT = 2048; // 0x800
     field public static final int FLAG_INCLUDE_NOT_IMPORTANT_VIEWS = 2; // 0x2
     field public static final int FLAG_REPORT_VIEW_IDS = 16; // 0x10
     field public static final int FLAG_REQUEST_ACCESSIBILITY_BUTTON = 256; // 0x100
@@ -5616,6 +5615,7 @@ package android.app {
     method @Deprecated public android.app.Notification.Builder setDefaults(int);
     method @NonNull public android.app.Notification.Builder setDeleteIntent(android.app.PendingIntent);
     method @NonNull public android.app.Notification.Builder setExtras(android.os.Bundle);
+    method @NonNull public android.app.Notification.Builder setFlag(int, boolean);
     method @NonNull public android.app.Notification.Builder setFullScreenIntent(android.app.PendingIntent, boolean);
     method @NonNull public android.app.Notification.Builder setGroup(String);
     method @NonNull public android.app.Notification.Builder setGroupAlertBehavior(int);
@@ -9895,6 +9895,7 @@ package android.content {
     method public abstract void sendBroadcast(@RequiresPermission android.content.Intent, @Nullable String);
     method @RequiresPermission("android.permission.INTERACT_ACROSS_USERS") public abstract void sendBroadcastAsUser(@RequiresPermission android.content.Intent, android.os.UserHandle);
     method @RequiresPermission("android.permission.INTERACT_ACROSS_USERS") public abstract void sendBroadcastAsUser(@RequiresPermission android.content.Intent, android.os.UserHandle, @Nullable String);
+    method public void sendBroadcastWithMultiplePermissions(@NonNull android.content.Intent, @NonNull String[]);
     method public abstract void sendOrderedBroadcast(@RequiresPermission android.content.Intent, @Nullable String);
     method public abstract void sendOrderedBroadcast(@NonNull @RequiresPermission android.content.Intent, @Nullable String, @Nullable android.content.BroadcastReceiver, @Nullable android.os.Handler, int, @Nullable String, @Nullable android.os.Bundle);
     method public void sendOrderedBroadcast(@NonNull android.content.Intent, @Nullable String, @Nullable String, @Nullable android.content.BroadcastReceiver, @Nullable android.os.Handler, int, @Nullable String, @Nullable android.os.Bundle);
@@ -9926,6 +9927,7 @@ package android.content {
     field public static final String ALARM_SERVICE = "alarm";
     field public static final String APPWIDGET_SERVICE = "appwidget";
     field public static final String APP_OPS_SERVICE = "appops";
+    field public static final String APP_SEARCH_SERVICE = "app_search";
     field public static final String AUDIO_SERVICE = "audio";
     field public static final String BATTERY_SERVICE = "batterymanager";
     field public static final int BIND_ABOVE_CLIENT = 8; // 0x8
@@ -30059,7 +30061,8 @@ package android.net.wifi {
     method public void addOrUpdatePasspointConfiguration(android.net.wifi.hotspot2.PasspointConfiguration);
     method @RequiresPermission(android.Manifest.permission.ACCESS_WIFI_STATE) public void addScanResultsListener(@NonNull java.util.concurrent.Executor, @NonNull android.net.wifi.WifiManager.ScanResultsListener);
     method @RequiresPermission(allOf={android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_WIFI_STATE}) public void addSuggestionConnectionStatusListener(@NonNull java.util.concurrent.Executor, @NonNull android.net.wifi.WifiManager.SuggestionConnectionStatusListener);
-    method public static int calculateSignalLevel(int, int);
+    method @Deprecated public static int calculateSignalLevel(int, int);
+    method public int calculateSignalLevel(int);
     method @Deprecated public void cancelWps(android.net.wifi.WifiManager.WpsCallback);
     method public static int compareSignalLevel(int, int);
     method public android.net.wifi.WifiManager.MulticastLock createMulticastLock(String);
@@ -30072,6 +30075,7 @@ package android.net.wifi {
     method public android.net.wifi.WifiInfo getConnectionInfo();
     method public android.net.DhcpInfo getDhcpInfo();
     method public int getMaxNumberOfNetworkSuggestionsPerApp();
+    method public int getMaxSignalLevel();
     method @NonNull @RequiresPermission(android.Manifest.permission.ACCESS_WIFI_STATE) public java.util.List<android.net.wifi.WifiNetworkSuggestion> getNetworkSuggestions();
     method @Deprecated @RequiresPermission(anyOf={"android.permission.NETWORK_SETTINGS", "android.permission.NETWORK_SETUP_WIZARD"}) public java.util.List<android.net.wifi.hotspot2.PasspointConfiguration> getPasspointConfigurations();
     method public java.util.List<android.net.wifi.ScanResult> getScanResults();
@@ -35907,6 +35911,7 @@ package android.os.storage {
     method public boolean isAllocationSupported(@NonNull java.io.FileDescriptor);
     method public boolean isCacheBehaviorGroup(java.io.File) throws java.io.IOException;
     method public boolean isCacheBehaviorTombstone(java.io.File) throws java.io.IOException;
+    method public boolean isCheckpointSupported();
     method public boolean isEncrypted(java.io.File);
     method public boolean isObbMounted(String);
     method public boolean mountObb(String, String, android.os.storage.OnObbStateChangeListener);
@@ -41457,6 +41462,7 @@ package android.service.autofill {
     method @NonNull public android.service.autofill.FillResponse build();
     method @NonNull public android.service.autofill.FillResponse.Builder disableAutofill(long);
     method @NonNull public android.service.autofill.FillResponse.Builder setAuthentication(@NonNull android.view.autofill.AutofillId[], @Nullable android.content.IntentSender, @Nullable android.widget.RemoteViews);
+    method @NonNull public android.service.autofill.FillResponse.Builder setCancelTargetIds(@Nullable int[]);
     method @NonNull public android.service.autofill.FillResponse.Builder setClientState(@Nullable android.os.Bundle);
     method @NonNull public android.service.autofill.FillResponse.Builder setFieldClassificationIds(@NonNull android.view.autofill.AutofillId...);
     method @NonNull public android.service.autofill.FillResponse.Builder setFlags(int);
@@ -45588,6 +45594,8 @@ package android.telephony {
     field public static final int PHONE_TYPE_NONE = 0; // 0x0
     field public static final int PHONE_TYPE_SIP = 3; // 0x3
     field public static final int SET_OPPORTUNISTIC_SUB_INACTIVE_SUBSCRIPTION = 2; // 0x2
+    field public static final int SET_OPPORTUNISTIC_SUB_NO_OPPORTUNISTIC_SUB_AVAILABLE = 3; // 0x3
+    field public static final int SET_OPPORTUNISTIC_SUB_REMOTE_SERVICE_EXCEPTION = 4; // 0x4
     field public static final int SET_OPPORTUNISTIC_SUB_SUCCESS = 0; // 0x0
     field public static final int SET_OPPORTUNISTIC_SUB_VALIDATION_FAILED = 1; // 0x1
     field public static final int SIM_STATE_ABSENT = 1; // 0x1
@@ -45604,8 +45612,14 @@ package android.telephony {
     field public static final int UNKNOWN_CARRIER_ID = -1; // 0xffffffff
     field public static final int UNSUPPORTED_CARD_ID = -1; // 0xffffffff
     field public static final int UPDATE_AVAILABLE_NETWORKS_ABORTED = 2; // 0x2
+    field public static final int UPDATE_AVAILABLE_NETWORKS_DISABLE_MODEM_FAIL = 5; // 0x5
+    field public static final int UPDATE_AVAILABLE_NETWORKS_ENABLE_MODEM_FAIL = 6; // 0x6
     field public static final int UPDATE_AVAILABLE_NETWORKS_INVALID_ARGUMENTS = 3; // 0x3
+    field public static final int UPDATE_AVAILABLE_NETWORKS_MULTIPLE_NETWORKS_NOT_SUPPORTED = 7; // 0x7
     field public static final int UPDATE_AVAILABLE_NETWORKS_NO_CARRIER_PRIVILEGE = 4; // 0x4
+    field public static final int UPDATE_AVAILABLE_NETWORKS_NO_OPPORTUNISTIC_SUB_AVAILABLE = 8; // 0x8
+    field public static final int UPDATE_AVAILABLE_NETWORKS_REMOTE_SERVICE_EXCEPTION = 9; // 0x9
+    field public static final int UPDATE_AVAILABLE_NETWORKS_SERVICE_IS_DISABLED = 10; // 0xa
     field public static final int UPDATE_AVAILABLE_NETWORKS_SUCCESS = 0; // 0x0
     field public static final int UPDATE_AVAILABLE_NETWORKS_UNKNOWN_FAILURE = 1; // 0x1
     field public static final int USSD_ERROR_SERVICE_UNAVAIL = -2; // 0xfffffffe
@@ -50805,7 +50819,7 @@ package android.view {
     method public final int getScrollY();
     method @android.view.ViewDebug.ExportedProperty(category="drawing") @ColorInt public int getSolidColor();
     method @LayoutRes public int getSourceLayoutResId();
-    method @android.view.ViewDebug.ExportedProperty(category="accessibility") @Nullable public CharSequence getStateDescription();
+    method @android.view.ViewDebug.ExportedProperty(category="accessibility") @Nullable public final CharSequence getStateDescription();
     method public android.animation.StateListAnimator getStateListAnimator();
     method protected int getSuggestedMinimumHeight();
     method protected int getSuggestedMinimumWidth();
@@ -53438,6 +53452,23 @@ package android.view.contentcapture {
 
 }
 
+package android.view.inline {
+
+  public final class InlinePresentationSpec implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public android.util.Size getMaxSize();
+    method @NonNull public android.util.Size getMinSize();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.inline.InlinePresentationSpec> CREATOR;
+  }
+
+  public static final class InlinePresentationSpec.Builder {
+    ctor public InlinePresentationSpec.Builder(@NonNull android.util.Size, @NonNull android.util.Size);
+    method @NonNull public android.view.inline.InlinePresentationSpec build();
+  }
+
+}
+
 package android.view.inputmethod {
 
   public class BaseInputConnection implements android.view.inputmethod.InputConnection {
@@ -53599,6 +53630,48 @@ package android.view.inputmethod {
     field public int hintMaxChars;
     field public int hintMaxLines;
     field public int token;
+  }
+
+  public final class InlineSuggestion implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public android.view.inputmethod.InlineSuggestionInfo getInfo();
+    method public void inflate(@NonNull android.content.Context, @NonNull android.util.Size, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.view.View>);
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.inputmethod.InlineSuggestion> CREATOR;
+  }
+
+  public final class InlineSuggestionInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method @Nullable public String[] getAutofillHints();
+    method @NonNull public android.view.inline.InlinePresentationSpec getPresentationSpec();
+    method @NonNull public String getSource();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.inputmethod.InlineSuggestionInfo> CREATOR;
+    field public static final String SOURCE_AUTOFILL = "android:autofill";
+    field public static final String SOURCE_PLATFORM = "android:platform";
+  }
+
+  public final class InlineSuggestionsRequest implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getMaxSuggestionCount();
+    method @NonNull public java.util.List<android.view.inline.InlinePresentationSpec> getPresentationSpecs();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.inputmethod.InlineSuggestionsRequest> CREATOR;
+    field public static final int SUGGESTION_COUNT_UNLIMITED = 2147483647; // 0x7fffffff
+  }
+
+  public static final class InlineSuggestionsRequest.Builder {
+    ctor public InlineSuggestionsRequest.Builder(@NonNull java.util.List<android.view.inline.InlinePresentationSpec>);
+    method @NonNull public android.view.inputmethod.InlineSuggestionsRequest.Builder addPresentationSpecs(@NonNull android.view.inline.InlinePresentationSpec);
+    method @NonNull public android.view.inputmethod.InlineSuggestionsRequest build();
+    method @NonNull public android.view.inputmethod.InlineSuggestionsRequest.Builder setMaxSuggestionCount(int);
+  }
+
+  public final class InlineSuggestionsResponse implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public java.util.List<android.view.inputmethod.InlineSuggestion> getInlineSuggestions();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.inputmethod.InlineSuggestionsResponse> CREATOR;
   }
 
   public final class InputBinding implements android.os.Parcelable {
@@ -57042,7 +57115,7 @@ package android.widget {
     method public int describeContents();
     method public int getLayoutId();
     method public String getPackage();
-    method public boolean onLoadClass(Class);
+    method @Deprecated public boolean onLoadClass(Class);
     method public void reapply(android.content.Context, android.view.View);
     method public void removeAllViews(int);
     method public void setAccessibilityTraversalAfter(int, int);
