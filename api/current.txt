@@ -23063,6 +23063,7 @@ package android.location {
 
   public final class GnssStatus {
     method @FloatRange(from=0, to=360) public float getAzimuthDegrees(@IntRange(from=0) int);
+    method @FloatRange(from=0, to=63) public float getBasebandCn0DbHz(@IntRange(from=0) int);
     method @FloatRange(from=0) public float getCarrierFrequencyHz(@IntRange(from=0) int);
     method @FloatRange(from=0, to=63) public float getCn0DbHz(@IntRange(from=0) int);
     method public int getConstellationType(@IntRange(from=0) int);
@@ -23070,6 +23071,7 @@ package android.location {
     method @IntRange(from=0) public int getSatelliteCount();
     method @IntRange(from=1, to=200) public int getSvid(@IntRange(from=0) int);
     method public boolean hasAlmanacData(@IntRange(from=0) int);
+    method public boolean hasBasebandCn0DbHz(@IntRange(from=0) int);
     method public boolean hasCarrierFrequencyHz(@IntRange(from=0) int);
     method public boolean hasEphemerisData(@IntRange(from=0) int);
     method public boolean usedInFix(@IntRange(from=0) int);
@@ -23085,7 +23087,7 @@ package android.location {
 
   public static final class GnssStatus.Builder {
     ctor public GnssStatus.Builder();
-    method @NonNull public android.location.GnssStatus.Builder addSatellite(int, @IntRange(from=1, to=200) int, @FloatRange(from=0, to=63) float, @FloatRange(from=0xffffffa6, to=90) float, @FloatRange(from=0, to=360) float, boolean, boolean, boolean, boolean, @FloatRange(from=0) float);
+    method @NonNull public android.location.GnssStatus.Builder addSatellite(int, @IntRange(from=1, to=200) int, @FloatRange(from=0, to=63) float, @FloatRange(from=0xffffffa6, to=90) float, @FloatRange(from=0, to=360) float, boolean, boolean, boolean, boolean, @FloatRange(from=0) float, boolean, @FloatRange(from=0, to=63) float);
     method @NonNull public android.location.GnssStatus build();
     method @NonNull public android.location.GnssStatus.Builder clearSatellites();
   }
@@ -29889,6 +29891,7 @@ package android.net.wifi {
     ctor @Deprecated public WifiConfiguration();
     method public int describeContents();
     method @Deprecated public android.net.ProxyInfo getHttpProxy();
+    method @Deprecated @NonNull public String getKey();
     method @Deprecated @NonNull public android.net.MacAddress getRandomizedMacAddress();
     method @Deprecated public boolean isPasspoint();
     method @Deprecated public void setHttpProxy(android.net.ProxyInfo);
@@ -30243,6 +30246,7 @@ package android.net.wifi {
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsEnhancedOpen(boolean);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsHiddenSsid(boolean);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsMetered(boolean);
+    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsUserAllowedToManuallyConnect(boolean);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsUserInteractionRequired(boolean);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setPasspointConfig(@NonNull android.net.wifi.hotspot2.PasspointConfiguration);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setPriority(@IntRange(from=0) int);
@@ -41525,6 +41529,7 @@ package android.service.autofill {
     field public static final int FLAG_DONT_SAVE_ON_FINISH = 2; // 0x2
     field public static final int FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE = 1; // 0x1
     field public static final int NEGATIVE_BUTTON_STYLE_CANCEL = 0; // 0x0
+    field public static final int NEGATIVE_BUTTON_STYLE_NEVER = 2; // 0x2
     field public static final int NEGATIVE_BUTTON_STYLE_REJECT = 1; // 0x1
     field public static final int POSITIVE_BUTTON_STYLE_CONTINUE = 1; // 0x1
     field public static final int POSITIVE_BUTTON_STYLE_SAVE = 0; // 0x0
@@ -52497,6 +52502,9 @@ package android.view {
 package android.view.accessibility {
 
   public final class AccessibilityEvent extends android.view.accessibility.AccessibilityRecord implements android.os.Parcelable {
+    ctor public AccessibilityEvent();
+    ctor public AccessibilityEvent(int);
+    ctor public AccessibilityEvent(@NonNull android.view.accessibility.AccessibilityEvent);
     method public void appendRecord(android.view.accessibility.AccessibilityRecord);
     method public int describeContents();
     method public static String eventTypeToString(int);
@@ -52607,6 +52615,10 @@ package android.view.accessibility {
   }
 
   public class AccessibilityNodeInfo implements android.os.Parcelable {
+    ctor public AccessibilityNodeInfo();
+    ctor public AccessibilityNodeInfo(@NonNull android.view.View);
+    ctor public AccessibilityNodeInfo(@NonNull android.view.View, int);
+    ctor public AccessibilityNodeInfo(@NonNull android.view.accessibility.AccessibilityNodeInfo);
     method public void addAction(android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction);
     method @Deprecated public void addAction(int);
     method public void addChild(android.view.View);
@@ -52840,6 +52852,8 @@ package android.view.accessibility {
   }
 
   public static final class AccessibilityNodeInfo.CollectionInfo {
+    ctor public AccessibilityNodeInfo.CollectionInfo(int, int, boolean);
+    ctor public AccessibilityNodeInfo.CollectionInfo(int, int, boolean, int);
     method public int getColumnCount();
     method public int getRowCount();
     method public int getSelectionMode();
@@ -52852,6 +52866,8 @@ package android.view.accessibility {
   }
 
   public static final class AccessibilityNodeInfo.CollectionItemInfo {
+    ctor public AccessibilityNodeInfo.CollectionItemInfo(int, int, int, int, boolean);
+    ctor public AccessibilityNodeInfo.CollectionItemInfo(int, int, int, int, boolean, boolean);
     method public int getColumnIndex();
     method public int getColumnSpan();
     method public int getRowIndex();
@@ -52863,6 +52879,7 @@ package android.view.accessibility {
   }
 
   public static final class AccessibilityNodeInfo.RangeInfo {
+    ctor public AccessibilityNodeInfo.RangeInfo(int, float, float, float);
     method public float getCurrent();
     method public float getMax();
     method public float getMin();
@@ -52894,6 +52911,8 @@ package android.view.accessibility {
   }
 
   public class AccessibilityRecord {
+    ctor public AccessibilityRecord();
+    ctor public AccessibilityRecord(@NonNull android.view.accessibility.AccessibilityRecord);
     method public int getAddedCount();
     method public CharSequence getBeforeText();
     method public CharSequence getClassName();
@@ -52954,6 +52973,8 @@ package android.view.accessibility {
   }
 
   public final class AccessibilityWindowInfo implements android.os.Parcelable {
+    ctor public AccessibilityWindowInfo();
+    ctor public AccessibilityWindowInfo(@NonNull android.view.accessibility.AccessibilityWindowInfo);
     method public int describeContents();
     method public android.view.accessibility.AccessibilityNodeInfo getAnchor();
     method public void getBoundsInScreen(android.graphics.Rect);
