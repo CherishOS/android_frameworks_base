@@ -167,11 +167,19 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
         boolean isShow = Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.OMNI_FOOTER_TEXT_SHOW, 0,
                         UserHandle.USER_CURRENT) == 1;
+        String text = Settings.System.getStringForUser(mContext.getContentResolver(),
+                        Settings.System.FOOTER_TEXT_STRING,
+                        UserHandle.USER_CURRENT);
         if (isShow) {
-            v.setText("#Xtended");
-            v.setVisibility(View.VISIBLE);
+            if (text == null || text == "") {
+                v.setText("#KeepTheLove");
+                v.setVisibility(View.VISIBLE);
+            } else {
+                v.setText(text);
+                v.setVisibility(View.VISIBLE);
+            }
         } else {
-            v.setVisibility(View.GONE);
+              v.setVisibility(View.GONE);
         }
     }
 
@@ -254,6 +262,10 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
         super.onAttachedToWindow();
         mContext.getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.OMNI_FOOTER_TEXT_SHOW), false,
+                mSettingsObserver, UserHandle.USER_ALL);
+
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.FOOTER_TEXT_STRING), false,
                 mSettingsObserver, UserHandle.USER_ALL);
     }
 
