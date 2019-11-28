@@ -6023,6 +6023,12 @@ public final class Settings {
          * @hide
          */
         public static final String QS_FOOTER_TEXT_SHOW = "qs_footer_text_show";
+		
+		/**
+         * QS footer text
+         * @hide
+         */
+        public static final String QS_FOOTER_TEXT_STRING = "qs_footer_text_string";
 
         /**
          * These are all public system settings
