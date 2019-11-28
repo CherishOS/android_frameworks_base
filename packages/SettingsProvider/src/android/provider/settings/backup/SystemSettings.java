@@ -100,5 +100,6 @@ public class SystemSettings {
         Settings.System.NOTIFICATION_PULSE_DURATION,
         Settings.System.NOTIFICATION_HEADERS,
         Settings.System.QS_FOOTER_TEXT_SHOW,
+        Settings.System.QS_FOOTER_TEXT_STRING,
     };
 }
