@@ -4824,9 +4824,9 @@ public final class Settings {
          *    1 - Show percentage
          * @hide
          */
-        public static final String SHOW_BATTERY_PERCENT = "status_bar_show_battery_percent";
-		
-		/**
+        public static final String SHOW_BATTERY_PERCENT = "dummy_show_battery_percent";
+
+        /**
          * Setting to determine whether or not to show the battery percentage in the qs status bar header.
          *    0 - Show remaining time
          *    1 - Show percentage
@@ -6391,6 +6391,21 @@ public final class Settings {
          * @hide
          */
         public static final String DISPLAY_CUTOUT_HIDDEN = "display_cutout_hidden";
+
+        /**
+         * Battery style
+         * @hide
+         */
+        public static final String STATUS_BAR_BATTERY_STYLE = "status_bar_battery_style";
+
+        /**
+          * Statusbar Battery %
+          * 0: Hide the battery percentage
+          * 1: Display the battery percentage inside the icon
+          * 2: Display the battery percentage next to Icon
+          * @hide
+          */
+        public static final String STATUS_BAR_SHOW_BATTERY_PERCENT = "status_bar_show_battery_percent";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
