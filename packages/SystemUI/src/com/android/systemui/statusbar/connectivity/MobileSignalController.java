@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.graphics.drawable.Drawable;
 import android.net.NetworkCapabilities;
 import android.os.Handler;
 import android.os.Looper;
@@ -139,6 +140,11 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
             "system:" + Settings.System.DATA_DISABLED_ICON;
 	private static final String SHOW_VOLTE_ICON =
             "system:" + Settings.System.SHOW_VOLTE_ICON;
+	private static final String VOLTE_ICON_STYLE =
+            "system:" + Settings.System.VOLTE_ICON_STYLE;
+
+    // Volte Icon Style
+    private int mVoLTEstyle;
 
     private final MobileStatusTracker.Callback mMobileCallback =
             new MobileStatusTracker.Callback() {
@@ -307,6 +313,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
         Dependency.get(TunerService.class).addTunable(this, SHOW_FOURG_ICON);
         Dependency.get(TunerService.class).addTunable(this, DATA_DISABLED_ICON);
 		Dependency.get(TunerService.class).addTunable(this, SHOW_VOLTE_ICON);
+		 Dependency.get(TunerService.class).addTunable(this, VOLTE_ICON_STYLE);
     }
 
     @Override
@@ -330,6 +337,11 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
 			case SHOW_VOLTE_ICON:
                 mVolteIcon =
                     TunerService.parseIntegerSwitch(newValue, false);
+                notifyListeners();
+                break;
+			case VOLTE_ICON_STYLE:
+                mVoLTEstyle =
+                    TunerService.parseIntegerSwitch(newValue, true);
                 notifyListeners();
                 break;
             default:
@@ -466,6 +478,33 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
         return mImsManager != null && mImsManager.isEnhanced4gLteModeSettingEnabledByUser();
     }
 
+    private int getVolteResId() {
+        int resId = 0;
+
+        if (mCurrentState.imsRegistered && mVolteIcon) {
+            switch(mVoLTEstyle) {
+                // VoLTE
+                case 1:
+                    resId = R.drawable.ic_volte1;
+                    break;
+                // OOS VoLTE
+                case 2:
+                    resId = R.drawable.ic_volte2;
+                    break;
+                // HD Icon
+                case 3:
+                    resId = R.drawable.ic_hd_volte;
+                    break;
+                //Vo
+                case 0:
+                default:
+                    resId = R.drawable.ic_volte;
+                    break;
+            }
+        }
+        return resId;
+    }
+
     private void setListeners() {
         if (mImsManager == null) {
             Log.e(mTag, "setListeners mImsManager is null");
@@ -537,7 +576,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
 
         int resId = 0;
         if (mCurrentState.imsRegistered && mVolteIcon) {
-            resId = R.drawable.ic_volte;
+            resId = getVolteResId();
         }
 
         int volteId = mShowVolteIcon && isVolteSwitchOn() && mVolteIcon ? resId : 0;
