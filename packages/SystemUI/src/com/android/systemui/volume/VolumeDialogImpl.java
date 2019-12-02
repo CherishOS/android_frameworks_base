@@ -103,6 +103,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
+import android.view.View.OnLongClickListener;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -150,7 +151,7 @@ import java.util.function.Consumer;
  */
 public class VolumeDialogImpl implements VolumeDialog,
         ConfigurationController.ConfigurationListener,
-        ViewTreeObserver.OnComputeInternalInsetsListener {
+        ViewTreeObserver.OnComputeInternalInsetsListener, OnLongClickListener {
     private static final String TAG = Util.logTag(VolumeDialogImpl.class);
 
     private static final long USER_ATTEMPT_GRACE_PERIOD = 1000;
@@ -657,6 +658,7 @@ public class VolumeDialogImpl implements VolumeDialog,
 
         mSettingsView = mDialog.findViewById(R.id.settings_container);
         mSettingsIcon = mDialog.findViewById(R.id.settings);
+        mSettingsIcon.setOnLongClickListener(this);
 
         mAppVolumeView = mDialog.findViewById(R.id.app_volume_container);
         mAppVolumeIcon = mDialog.findViewById(R.id.app_volume);
@@ -2642,6 +2644,22 @@ public class VolumeDialogImpl implements VolumeDialog,
             }
             return false;
         }
+    }
+
+    public boolean onLongClick(View v) {
+        if (v == mSettingsIcon) {
+            startSoundActivity();
+        }
+        return false;
+    }
+
+    private void startSoundActivity() {
+        dismissH(Events.DISMISS_REASON_TOUCH_OUTSIDE);
+        Intent nIntent = new Intent(Intent.ACTION_MAIN);
+        nIntent.setClassName("com.android.settings",
+            "com.android.settings.Settings$SoundSettingsActivity");
+        mMediaOutputDialogFactory.dismiss();
+        mActivityStarter.startActivity(nIntent, true /* dismissShade */);
     }
 
     private final class VolumeSeekBarChangeListener implements OnSeekBarChangeListener {
