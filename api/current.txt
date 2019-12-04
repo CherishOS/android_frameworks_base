@@ -11556,8 +11556,11 @@ package android.content.pm {
     field public static final int STATUS_FAILURE_ABORTED = 3; // 0x3
     field public static final int STATUS_FAILURE_BLOCKED = 2; // 0x2
     field public static final int STATUS_FAILURE_CONFLICT = 5; // 0x5
+    field public static final int STATUS_FAILURE_ILLEGAL_STATE = 9; // 0x9
     field public static final int STATUS_FAILURE_INCOMPATIBLE = 7; // 0x7
     field public static final int STATUS_FAILURE_INVALID = 4; // 0x4
+    field public static final int STATUS_FAILURE_NAME_NOT_FOUND = 8; // 0x8
+    field public static final int STATUS_FAILURE_SECURITY = 10; // 0xa
     field public static final int STATUS_FAILURE_STORAGE = 6; // 0x6
     field public static final int STATUS_PENDING_USER_ACTION = -1; // 0xffffffff
     field public static final int STATUS_SUCCESS = 0; // 0x0
@@ -11579,6 +11582,7 @@ package android.content.pm {
     method public void removeChildSessionId(int);
     method public void removeSplit(@NonNull String) throws java.io.IOException;
     method public void setStagingProgress(float);
+    method public void transfer(@NonNull String, @NonNull android.content.IntentSender) throws android.content.pm.PackageManager.NameNotFoundException;
     method public void transfer(@NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
   }
 
@@ -22956,6 +22960,7 @@ package android.location {
     method public int getAccumulatedDeltaRangeState();
     method public double getAccumulatedDeltaRangeUncertaintyMeters();
     method public double getAutomaticGainControlLevelDb();
+    method @FloatRange(from=0, to=50) public double getBasebandCn0DbHz();
     method @Deprecated public long getCarrierCycles();
     method public float getCarrierFrequencyHz();
     method @Deprecated public double getCarrierPhase();
@@ -22973,6 +22978,7 @@ package android.location {
     method public int getSvid();
     method public double getTimeOffsetNanos();
     method public boolean hasAutomaticGainControlLevelDb();
+    method public boolean hasBasebandCn0DbHz();
     method @Deprecated public boolean hasCarrierCycles();
     method public boolean hasCarrierFrequencyHz();
     method @Deprecated public boolean hasCarrierPhase();
@@ -44290,6 +44296,7 @@ package android.telephony {
     field public static final int EUTRAN = 3; // 0x3
     field public static final int GERAN = 1; // 0x1
     field public static final int IWLAN = 5; // 0x5
+    field public static final int NGRAN = 6; // 0x6
     field public static final int UNKNOWN = 0; // 0x0
     field public static final int UTRAN = 2; // 0x2
   }
@@ -44360,6 +44367,45 @@ package android.telephony {
     field public static final int BAND_T380 = 1; // 0x1
     field public static final int BAND_T410 = 2; // 0x2
     field public static final int BAND_T810 = 7; // 0x7
+  }
+
+  public static final class AccessNetworkConstants.NgranBands {
+    field public static final int BAND_1 = 1; // 0x1
+    field public static final int BAND_12 = 12; // 0xc
+    field public static final int BAND_2 = 2; // 0x2
+    field public static final int BAND_20 = 20; // 0x14
+    field public static final int BAND_25 = 25; // 0x19
+    field public static final int BAND_257 = 257; // 0x101
+    field public static final int BAND_258 = 258; // 0x102
+    field public static final int BAND_260 = 260; // 0x104
+    field public static final int BAND_261 = 261; // 0x105
+    field public static final int BAND_28 = 28; // 0x1c
+    field public static final int BAND_3 = 3; // 0x3
+    field public static final int BAND_34 = 34; // 0x22
+    field public static final int BAND_38 = 38; // 0x26
+    field public static final int BAND_39 = 39; // 0x27
+    field public static final int BAND_40 = 40; // 0x28
+    field public static final int BAND_41 = 41; // 0x29
+    field public static final int BAND_5 = 5; // 0x5
+    field public static final int BAND_50 = 50; // 0x32
+    field public static final int BAND_51 = 51; // 0x33
+    field public static final int BAND_66 = 66; // 0x42
+    field public static final int BAND_7 = 7; // 0x7
+    field public static final int BAND_70 = 70; // 0x46
+    field public static final int BAND_71 = 71; // 0x47
+    field public static final int BAND_74 = 74; // 0x4a
+    field public static final int BAND_75 = 75; // 0x4b
+    field public static final int BAND_76 = 76; // 0x4c
+    field public static final int BAND_77 = 77; // 0x4d
+    field public static final int BAND_78 = 78; // 0x4e
+    field public static final int BAND_79 = 79; // 0x4f
+    field public static final int BAND_8 = 8; // 0x8
+    field public static final int BAND_80 = 80; // 0x50
+    field public static final int BAND_81 = 81; // 0x51
+    field public static final int BAND_82 = 82; // 0x52
+    field public static final int BAND_83 = 83; // 0x53
+    field public static final int BAND_84 = 84; // 0x54
+    field public static final int BAND_86 = 86; // 0x56
   }
 
   public static final class AccessNetworkConstants.UtranBand {
@@ -44747,6 +44793,7 @@ package android.telephony {
     method public abstract int getAsuLevel();
     method public abstract int getDbm();
     method @IntRange(from=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN, to=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_GREAT) public abstract int getLevel();
+    method public static final int getNumSignalStrengthLevels();
     method public abstract int hashCode();
     field public static final int SIGNAL_STRENGTH_GOOD = 3; // 0x3
     field public static final int SIGNAL_STRENGTH_GREAT = 4; // 0x4
@@ -55161,12 +55208,12 @@ package android.webkit {
   }
 
   public class WebView extends android.widget.AbsoluteLayout implements android.view.ViewGroup.OnHierarchyChangeListener android.view.ViewTreeObserver.OnGlobalFocusChangeListener {
-    ctor public WebView(android.content.Context);
-    ctor public WebView(android.content.Context, android.util.AttributeSet);
-    ctor public WebView(android.content.Context, android.util.AttributeSet, int);
-    ctor public WebView(android.content.Context, android.util.AttributeSet, int, int);
-    ctor @Deprecated public WebView(android.content.Context, android.util.AttributeSet, int, boolean);
-    method public void addJavascriptInterface(Object, String);
+    ctor public WebView(@NonNull android.content.Context);
+    ctor public WebView(@NonNull android.content.Context, @Nullable android.util.AttributeSet);
+    ctor public WebView(@NonNull android.content.Context, @Nullable android.util.AttributeSet, int);
+    ctor public WebView(@NonNull android.content.Context, @Nullable android.util.AttributeSet, int, int);
+    ctor @Deprecated public WebView(@NonNull android.content.Context, @Nullable android.util.AttributeSet, int, boolean);
+    method public void addJavascriptInterface(@NonNull Object, @NonNull String);
     method public boolean canGoBack();
     method public boolean canGoBackOrForward(int);
     method public boolean canGoForward();
@@ -55180,40 +55227,40 @@ package android.webkit {
     method public void clearMatches();
     method public void clearSslPreferences();
     method @Deprecated public void clearView();
-    method public android.webkit.WebBackForwardList copyBackForwardList();
+    method @NonNull public android.webkit.WebBackForwardList copyBackForwardList();
     method @Deprecated public android.print.PrintDocumentAdapter createPrintDocumentAdapter();
-    method public android.print.PrintDocumentAdapter createPrintDocumentAdapter(String);
-    method public android.webkit.WebMessagePort[] createWebMessageChannel();
+    method @NonNull public android.print.PrintDocumentAdapter createPrintDocumentAdapter(@NonNull String);
+    method @NonNull public android.webkit.WebMessagePort[] createWebMessageChannel();
     method public void destroy();
     method public static void disableWebView();
-    method public void documentHasImages(android.os.Message);
+    method public void documentHasImages(@NonNull android.os.Message);
     method public static void enableSlowWholeDocumentDraw();
-    method public void evaluateJavascript(String, @Nullable android.webkit.ValueCallback<java.lang.String>);
+    method public void evaluateJavascript(@NonNull String, @Nullable android.webkit.ValueCallback<java.lang.String>);
     method @Deprecated @Nullable public static String findAddress(String);
     method @Deprecated public int findAll(String);
-    method public void findAllAsync(String);
+    method public void findAllAsync(@NonNull String);
     method public void findNext(boolean);
     method public void flingScroll(int, int);
     method @Deprecated public void freeMemory();
     method @Nullable public android.net.http.SslCertificate getCertificate();
     method @android.view.ViewDebug.ExportedProperty(category="webview") public int getContentHeight();
     method @Nullable public static android.content.pm.PackageInfo getCurrentWebViewPackage();
-    method public android.graphics.Bitmap getFavicon();
-    method public android.webkit.WebView.HitTestResult getHitTestResult();
+    method @Nullable public android.graphics.Bitmap getFavicon();
+    method @NonNull public android.webkit.WebView.HitTestResult getHitTestResult();
     method @Deprecated @Nullable public String[] getHttpAuthUsernamePassword(String, String);
-    method @android.view.ViewDebug.ExportedProperty(category="webview") public String getOriginalUrl();
+    method @android.view.ViewDebug.ExportedProperty(category="webview") @Nullable public String getOriginalUrl();
     method public int getProgress();
     method public boolean getRendererPriorityWaivedWhenNotVisible();
     method public int getRendererRequestedPriority();
     method @NonNull public static android.net.Uri getSafeBrowsingPrivacyPolicyUrl();
     method @Deprecated @android.view.ViewDebug.ExportedProperty(category="webview") public float getScale();
-    method public android.webkit.WebSettings getSettings();
+    method @NonNull public android.webkit.WebSettings getSettings();
     method @NonNull public android.view.textclassifier.TextClassifier getTextClassifier();
-    method @android.view.ViewDebug.ExportedProperty(category="webview") public String getTitle();
-    method @android.view.ViewDebug.ExportedProperty(category="webview") public String getUrl();
+    method @android.view.ViewDebug.ExportedProperty(category="webview") @Nullable public String getTitle();
+    method @android.view.ViewDebug.ExportedProperty(category="webview") @Nullable public String getUrl();
     method @Nullable public android.webkit.WebChromeClient getWebChromeClient();
     method @NonNull public static ClassLoader getWebViewClassLoader();
-    method public android.webkit.WebViewClient getWebViewClient();
+    method @NonNull public android.webkit.WebViewClient getWebViewClient();
     method @NonNull public android.os.Looper getWebViewLooper();
     method @Nullable public android.webkit.WebViewRenderProcess getWebViewRenderProcess();
     method @Nullable public android.webkit.WebViewRenderProcessClient getWebViewRenderProcessClient();
@@ -55222,10 +55269,10 @@ package android.webkit {
     method public void goForward();
     method public void invokeZoomPicker();
     method public boolean isPrivateBrowsingEnabled();
-    method public void loadData(String, @Nullable String, @Nullable String);
-    method public void loadDataWithBaseURL(@Nullable String, String, @Nullable String, @Nullable String, @Nullable String);
-    method public void loadUrl(String, java.util.Map<java.lang.String,java.lang.String>);
-    method public void loadUrl(String);
+    method public void loadData(@NonNull String, @Nullable String, @Nullable String);
+    method public void loadDataWithBaseURL(@Nullable String, @NonNull String, @Nullable String, @Nullable String, @Nullable String);
+    method public void loadUrl(@NonNull String, @NonNull java.util.Map<java.lang.String,java.lang.String>);
+    method public void loadUrl(@NonNull String);
     method @Deprecated public void onChildViewAdded(android.view.View, android.view.View);
     method @Deprecated public void onChildViewRemoved(android.view.View, android.view.View);
     method @Deprecated public void onGlobalFocusChanged(android.view.View, android.view.View);
@@ -55236,23 +55283,23 @@ package android.webkit {
     method public boolean pageDown(boolean);
     method public boolean pageUp(boolean);
     method public void pauseTimers();
-    method public void postUrl(String, byte[]);
-    method public void postVisualStateCallback(long, android.webkit.WebView.VisualStateCallback);
-    method public void postWebMessage(android.webkit.WebMessage, android.net.Uri);
+    method public void postUrl(@NonNull String, @NonNull byte[]);
+    method public void postVisualStateCallback(long, @NonNull android.webkit.WebView.VisualStateCallback);
+    method public void postWebMessage(@NonNull android.webkit.WebMessage, @NonNull android.net.Uri);
     method public void reload();
     method public void removeJavascriptInterface(@NonNull String);
     method public void requestFocusNodeHref(@Nullable android.os.Message);
-    method public void requestImageRef(android.os.Message);
-    method @Nullable public android.webkit.WebBackForwardList restoreState(android.os.Bundle);
+    method public void requestImageRef(@NonNull android.os.Message);
+    method @Nullable public android.webkit.WebBackForwardList restoreState(@NonNull android.os.Bundle);
     method public void resumeTimers();
     method @Deprecated public void savePassword(String, String, String);
-    method @Nullable public android.webkit.WebBackForwardList saveState(android.os.Bundle);
-    method public void saveWebArchive(String);
-    method public void saveWebArchive(String, boolean, @Nullable android.webkit.ValueCallback<java.lang.String>);
+    method @Nullable public android.webkit.WebBackForwardList saveState(@NonNull android.os.Bundle);
+    method public void saveWebArchive(@NonNull String);
+    method public void saveWebArchive(@NonNull String, boolean, @Nullable android.webkit.ValueCallback<java.lang.String>);
     method @Deprecated public void setCertificate(android.net.http.SslCertificate);
-    method public static void setDataDirectorySuffix(String);
-    method public void setDownloadListener(android.webkit.DownloadListener);
-    method public void setFindListener(android.webkit.WebView.FindListener);
+    method public static void setDataDirectorySuffix(@NonNull String);
+    method public void setDownloadListener(@Nullable android.webkit.DownloadListener);
+    method public void setFindListener(@Nullable android.webkit.WebView.FindListener);
     method @Deprecated public void setHorizontalScrollbarOverlay(boolean);
     method @Deprecated public void setHttpAuthUsernamePassword(String, String, String, String);
     method public void setInitialScale(int);
@@ -55263,9 +55310,9 @@ package android.webkit {
     method public static void setSafeBrowsingWhitelist(@NonNull java.util.List<java.lang.String>, @Nullable android.webkit.ValueCallback<java.lang.Boolean>);
     method public void setTextClassifier(@Nullable android.view.textclassifier.TextClassifier);
     method @Deprecated public void setVerticalScrollbarOverlay(boolean);
-    method public void setWebChromeClient(android.webkit.WebChromeClient);
+    method public void setWebChromeClient(@Nullable android.webkit.WebChromeClient);
     method public static void setWebContentsDebuggingEnabled(boolean);
-    method public void setWebViewClient(android.webkit.WebViewClient);
+    method public void setWebViewClient(@NonNull android.webkit.WebViewClient);
     method public void setWebViewRenderProcessClient(@NonNull java.util.concurrent.Executor, @NonNull android.webkit.WebViewRenderProcessClient);
     method public void setWebViewRenderProcessClient(@Nullable android.webkit.WebViewRenderProcessClient);
     method @Deprecated public boolean shouldDelayChildPressedState();
@@ -55313,8 +55360,8 @@ package android.webkit {
 
   public class WebView.WebViewTransport {
     ctor public WebView.WebViewTransport();
-    method public android.webkit.WebView getWebView();
-    method public void setWebView(android.webkit.WebView);
+    method @Nullable public android.webkit.WebView getWebView();
+    method public void setWebView(@Nullable android.webkit.WebView);
   }
 
   public class WebViewClient {
