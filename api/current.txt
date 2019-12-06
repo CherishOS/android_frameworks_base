@@ -299,6 +299,7 @@ package android {
     field public static final int animateFirstView = 16843477; // 0x10102d5
     field public static final int animateLayoutChanges = 16843506; // 0x10102f2
     field public static final int animateOnClick = 16843356; // 0x101025c
+    field public static final int animatedImageDrawable = 16844298; // 0x101060a
     field public static final int animation = 16843213; // 0x10101cd
     field public static final int animationCache = 16842989; // 0x10100ed
     field public static final int animationDuration = 16843026; // 0x1010112
@@ -723,6 +724,7 @@ package android {
     field public static final int host = 16842792; // 0x1010028
     field public static final int hotSpotX = 16844055; // 0x1010517
     field public static final int hotSpotY = 16844056; // 0x1010518
+    field public static final int htmlDescription = 16844299; // 0x101060b
     field public static final int hyphenationFrequency = 16843998; // 0x10104de
     field public static final int icon = 16842754; // 0x1010002
     field @Deprecated public static final int iconPreview = 16843337; // 0x1010249
@@ -2926,6 +2928,7 @@ package android.accessibilityservice {
     method public int describeContents();
     method public static String feedbackTypeToString(int);
     method public static String flagToString(int);
+    method public int getAnimatedImageRes();
     method @Deprecated public boolean getCanRetrieveWindowContent();
     method public int getCapabilities();
     method @Deprecated public String getDescription();
@@ -2935,6 +2938,7 @@ package android.accessibilityservice {
     method public android.content.pm.ResolveInfo getResolveInfo();
     method public String getSettingsActivityName();
     method public String loadDescription(android.content.pm.PackageManager);
+    method @Nullable public String loadHtmlDescription(@NonNull android.content.pm.PackageManager);
     method public CharSequence loadSummary(android.content.pm.PackageManager);
     method public void setInteractiveUiTimeoutMillis(@IntRange(from=0) int);
     method public void setNonInteractiveUiTimeoutMillis(@IntRange(from=0) int);
@@ -5177,12 +5181,12 @@ package android.app {
     method public android.content.Intent getResultData();
   }
 
-  public abstract class IntentService extends android.app.Service {
-    ctor public IntentService(String);
-    method @Nullable public android.os.IBinder onBind(android.content.Intent);
-    method @WorkerThread protected abstract void onHandleIntent(@Nullable android.content.Intent);
-    method public void onStart(@Nullable android.content.Intent, int);
-    method public void setIntentRedelivery(boolean);
+  @Deprecated public abstract class IntentService extends android.app.Service {
+    ctor @Deprecated public IntentService(String);
+    method @Deprecated @Nullable public android.os.IBinder onBind(android.content.Intent);
+    method @Deprecated @WorkerThread protected abstract void onHandleIntent(@Nullable android.content.Intent);
+    method @Deprecated public void onStart(@Nullable android.content.Intent, int);
+    method @Deprecated public void setIntentRedelivery(boolean);
   }
 
   public class KeyguardManager {
@@ -11361,6 +11365,15 @@ package android.content.pm {
     field public int version;
   }
 
+  public final class InstallSourceInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method @Nullable public String getInitiatingPackageName();
+    method @Nullable public String getInstallingPackageName();
+    method @Nullable public String getOriginatingPackageName();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.content.pm.InstallSourceInfo> CREATOR;
+  }
+
   public class InstrumentationInfo extends android.content.pm.PackageItemInfo implements android.os.Parcelable {
     ctor public InstrumentationInfo();
     ctor public InstrumentationInfo(android.content.pm.InstrumentationInfo);
@@ -11725,10 +11738,11 @@ package android.content.pm {
     method public abstract int getComponentEnabledSetting(@NonNull android.content.ComponentName);
     method @NonNull public abstract android.graphics.drawable.Drawable getDefaultActivityIcon();
     method @Nullable public abstract android.graphics.drawable.Drawable getDrawable(@NonNull String, @DrawableRes int, @Nullable android.content.pm.ApplicationInfo);
+    method @NonNull public android.content.pm.InstallSourceInfo getInstallSourceInfo(@NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
     method @NonNull public abstract java.util.List<android.content.pm.ApplicationInfo> getInstalledApplications(int);
     method @NonNull public java.util.List<android.content.pm.ModuleInfo> getInstalledModules(int);
     method @NonNull public abstract java.util.List<android.content.pm.PackageInfo> getInstalledPackages(int);
-    method @Nullable public abstract String getInstallerPackageName(@NonNull String);
+    method @Deprecated @Nullable public abstract String getInstallerPackageName(@NonNull String);
     method @NonNull public abstract byte[] getInstantAppCookie();
     method public abstract int getInstantAppCookieMaxBytes();
     method @NonNull public abstract android.content.pm.InstrumentationInfo getInstrumentationInfo(@NonNull android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
@@ -25601,6 +25615,50 @@ package android.media {
     field public static final int MUXER_OUTPUT_WEBM = 1; // 0x1
   }
 
+  public final class MediaParser {
+    method public boolean advance(@NonNull android.media.MediaParser.SeekableInputReader) throws java.io.IOException, java.lang.InterruptedException;
+    method @NonNull public static android.media.MediaParser create(@NonNull android.media.MediaParser.OutputConsumer, @NonNull java.lang.String...);
+    method @NonNull public static android.media.MediaParser createByName(@NonNull String, @NonNull android.media.MediaParser.OutputConsumer);
+    method @Nullable public String getExtractorName();
+    method @NonNull public static java.util.List<java.lang.String> getExtractorNames(@NonNull android.media.MediaFormat);
+    method public void release();
+    method public void seek(@NonNull android.media.MediaParser.SeekPoint);
+  }
+
+  public static interface MediaParser.InputReader {
+    method public long getLength();
+    method public long getPosition();
+    method public int read(@NonNull byte[], int, int) throws java.io.IOException, java.lang.InterruptedException;
+  }
+
+  public static interface MediaParser.OutputConsumer {
+    method public void onFormat(int, @NonNull android.media.MediaFormat);
+    method public void onSampleCompleted(int, long, int, int, int, @Nullable android.media.MediaCodec.CryptoInfo);
+    method public void onSampleData(int, @NonNull android.media.MediaParser.InputReader) throws java.io.IOException, java.lang.InterruptedException;
+    method public void onSeekMap(@NonNull android.media.MediaParser.SeekMap);
+    method public void onTracksFound(int);
+  }
+
+  public static interface MediaParser.SeekMap {
+    method public long getDurationUs();
+    method @NonNull public android.util.Pair<android.media.MediaParser.SeekPoint,android.media.MediaParser.SeekPoint> getSeekPoints(long);
+    method public boolean isSeekable();
+    field public static final int UNKNOWN_DURATION = -2147483648; // 0x80000000
+  }
+
+  public static final class MediaParser.SeekPoint {
+    field @NonNull public static final android.media.MediaParser.SeekPoint START;
+    field public final long position;
+    field public final long timeUs;
+  }
+
+  public static interface MediaParser.SeekableInputReader extends android.media.MediaParser.InputReader {
+    method public void seekToPosition(long);
+  }
+
+  public static final class MediaParser.UnrecognizedInputFormatException extends java.io.IOException {
+  }
+
   public class MediaPlayer implements android.media.AudioRouting android.media.VolumeAutomation {
     ctor public MediaPlayer();
     method public void addOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener, android.os.Handler);
@@ -36874,6 +36932,7 @@ package android.provider {
     method @WorkerThread public static boolean isBlocked(android.content.Context, String);
     method @WorkerThread public static int unblock(android.content.Context, String);
     field public static final String AUTHORITY = "com.android.blockednumber";
+    field public static final android.net.Uri AUTHORITY_URI;
   }
 
   public static class BlockedNumberContract.BlockedNumbers {
@@ -38613,15 +38672,13 @@ package android.provider {
     ctor public MediaStore();
     method @Nullable public static android.net.Uri getDocumentUri(@NonNull android.content.Context, @NonNull android.net.Uri);
     method @NonNull public static java.util.Set<java.lang.String> getExternalVolumeNames(@NonNull android.content.Context);
-    method public static boolean getIncludePending(@NonNull android.net.Uri);
     method public static android.net.Uri getMediaScannerUri();
     method @Nullable public static android.net.Uri getMediaUri(@NonNull android.content.Context, @NonNull android.net.Uri);
     method public static boolean getRequireOriginal(@NonNull android.net.Uri);
     method @NonNull public static String getVersion(@NonNull android.content.Context);
     method @NonNull public static String getVersion(@NonNull android.content.Context, @NonNull String);
     method @NonNull public static String getVolumeName(@NonNull android.net.Uri);
-    method @NonNull public static android.net.Uri setIncludePending(@NonNull android.net.Uri);
-    method @NonNull public static android.net.Uri setIncludeTrashed(@NonNull android.net.Uri);
+    method @Deprecated @NonNull public static android.net.Uri setIncludePending(@NonNull android.net.Uri);
     method @NonNull public static android.net.Uri setRequireOriginal(@NonNull android.net.Uri);
     method public static void trash(@NonNull android.content.Context, @NonNull android.net.Uri);
     method public static void trash(@NonNull android.content.Context, @NonNull android.net.Uri, long);
@@ -38657,9 +38714,17 @@ package android.provider {
     field public static final String INTENT_ACTION_TEXT_OPEN_FROM_SEARCH = "android.media.action.TEXT_OPEN_FROM_SEARCH";
     field public static final String INTENT_ACTION_VIDEO_CAMERA = "android.media.action.VIDEO_CAMERA";
     field public static final String INTENT_ACTION_VIDEO_PLAY_FROM_SEARCH = "android.media.action.VIDEO_PLAY_FROM_SEARCH";
+    field public static final int MATCH_DEFAULT = 0; // 0x0
+    field public static final int MATCH_EXCLUDE = 2; // 0x2
+    field public static final int MATCH_INCLUDE = 1; // 0x1
+    field public static final int MATCH_ONLY = 3; // 0x3
     field public static final String MEDIA_IGNORE_FILENAME = ".nomedia";
     field public static final String MEDIA_SCANNER_VOLUME = "volume";
     field public static final String META_DATA_STILL_IMAGE_CAMERA_PREWARM_SERVICE = "android.media.still_image_camera_preview_service";
+    field public static final String QUERY_ARG_MATCH_FAVORITE = "android:query-arg-match-favorite";
+    field public static final String QUERY_ARG_MATCH_PENDING = "android:query-arg-match-pending";
+    field public static final String QUERY_ARG_MATCH_TRASHED = "android:query-arg-match-trashed";
+    field public static final String QUERY_ARG_RELATED_URI = "android:query-arg-related-uri";
     field public static final String UNKNOWN_STRING = "<unknown>";
     field public static final String VOLUME_EXTERNAL = "external";
     field public static final String VOLUME_EXTERNAL_PRIMARY = "external_primary";
@@ -43733,6 +43798,27 @@ package android.telecom {
     method public final void setVideoProvider(android.telecom.Connection.VideoProvider);
     method public final void setVideoState(int);
     method public static String stateToString(int);
+    field public static final int AUDIO_CODEC_AMR = 1; // 0x1
+    field public static final int AUDIO_CODEC_AMR_WB = 2; // 0x2
+    field public static final int AUDIO_CODEC_EVRC = 4; // 0x4
+    field public static final int AUDIO_CODEC_EVRC_B = 5; // 0x5
+    field public static final int AUDIO_CODEC_EVRC_NW = 7; // 0x7
+    field public static final int AUDIO_CODEC_EVRC_WB = 6; // 0x6
+    field public static final int AUDIO_CODEC_EVS_FB = 20; // 0x14
+    field public static final int AUDIO_CODEC_EVS_NB = 17; // 0x11
+    field public static final int AUDIO_CODEC_EVS_SWB = 19; // 0x13
+    field public static final int AUDIO_CODEC_EVS_WB = 18; // 0x12
+    field public static final int AUDIO_CODEC_G711A = 13; // 0xd
+    field public static final int AUDIO_CODEC_G711AB = 15; // 0xf
+    field public static final int AUDIO_CODEC_G711U = 11; // 0xb
+    field public static final int AUDIO_CODEC_G722 = 14; // 0xe
+    field public static final int AUDIO_CODEC_G723 = 12; // 0xc
+    field public static final int AUDIO_CODEC_G729 = 16; // 0x10
+    field public static final int AUDIO_CODEC_GSM_EFR = 8; // 0x8
+    field public static final int AUDIO_CODEC_GSM_FR = 9; // 0x9
+    field public static final int AUDIO_CODEC_GSM_HR = 10; // 0xa
+    field public static final int AUDIO_CODEC_NONE = 0; // 0x0
+    field public static final int AUDIO_CODEC_QCELP13K = 3; // 0x3
     field public static final int CAPABILITY_CANNOT_DOWNGRADE_VIDEO_TO_AUDIO = 8388608; // 0x800000
     field public static final int CAPABILITY_CAN_PAUSE_VIDEO = 1048576; // 0x100000
     field public static final int CAPABILITY_CAN_PULL_CALL = 16777216; // 0x1000000
@@ -43766,6 +43852,7 @@ package android.telecom {
     field public static final String EVENT_RTT_AUDIO_INDICATION_CHANGED = "android.telecom.event.RTT_AUDIO_INDICATION_CHANGED";
     field public static final String EXTRA_ANSWERING_DROPS_FG_CALL = "android.telecom.extra.ANSWERING_DROPS_FG_CALL";
     field public static final String EXTRA_ANSWERING_DROPS_FG_CALL_APP_NAME = "android.telecom.extra.ANSWERING_DROPS_FG_CALL_APP_NAME";
+    field public static final String EXTRA_AUDIO_CODEC = "android.telecom.extra.AUDIO_CODEC";
     field public static final String EXTRA_CALL_SUBJECT = "android.telecom.extra.CALL_SUBJECT";
     field public static final String EXTRA_CHILD_ADDRESS = "android.telecom.extra.CHILD_ADDRESS";
     field public static final String EXTRA_IS_RTT_AUDIO_PRESENT = "android.telecom.extra.IS_RTT_AUDIO_PRESENT";
@@ -44534,6 +44621,7 @@ package android.telephony {
     field public static final String KEY_DEFAULT_VM_NUMBER_STRING = "default_vm_number_string";
     field public static final String KEY_DIAL_STRING_REPLACE_STRING_ARRAY = "dial_string_replace_string_array";
     field public static final String KEY_DISABLE_CDMA_ACTIVATION_CODE_BOOL = "disable_cdma_activation_code_bool";
+    field public static final String KEY_DISABLE_SUPPLEMENTARY_SERVICES_IN_AIRPLANE_MODE_BOOL = "disable_supplementary_services_in_airplane_mode_bool";
     field public static final String KEY_DISCONNECT_CAUSE_PLAY_BUSYTONE_INT_ARRAY = "disconnect_cause_play_busytone_int_array";
     field public static final String KEY_DISPLAY_HD_AUDIO_PROPERTY_BOOL = "display_hd_audio_property_bool";
     field public static final String KEY_DROP_VIDEO_CALL_WHEN_ANSWERING_AUDIO_CALL_BOOL = "drop_video_call_when_answering_audio_call_bool";
