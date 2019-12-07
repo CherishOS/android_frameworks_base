@@ -13453,6 +13453,7 @@ package android.drm {
     method public android.drm.DrmConvertedStatus closeConvertSession(int);
     method public android.drm.DrmConvertedStatus convertData(int, byte[]);
     method public String[] getAvailableDrmEngines();
+    method @NonNull public java.util.Collection<android.drm.DrmSupportInfo> getAvailableDrmSupportInfo();
     method public android.content.ContentValues getConstraints(String, int);
     method public android.content.ContentValues getConstraints(android.net.Uri, int);
     method public int getDrmObjectType(String, String);
@@ -23277,6 +23278,8 @@ package android.location {
     method public void unregisterGnssMeasurementsCallback(@NonNull android.location.GnssMeasurementsEvent.Callback);
     method public void unregisterGnssNavigationMessageCallback(@NonNull android.location.GnssNavigationMessage.Callback);
     method public void unregisterGnssStatusCallback(@NonNull android.location.GnssStatus.Callback);
+    field public static final String EXTRA_LOCATION_ENABLED = "android.location.extra.LOCATION_ENABLED";
+    field public static final String EXTRA_PROVIDER_ENABLED = "android.location.extra.PROVIDER_ENABLED";
     field public static final String EXTRA_PROVIDER_NAME = "android.location.extra.PROVIDER_NAME";
     field public static final String GPS_PROVIDER = "gps";
     field public static final String KEY_LOCATION_CHANGED = "location";
@@ -23794,6 +23797,7 @@ package android.media {
     method public int getSampleRate();
     method public int getState();
     method public int getTimestamp(@NonNull android.media.AudioTimestamp, int);
+    method public boolean isPrivacySensitive();
     method public int read(@NonNull byte[], int, int);
     method public int read(@NonNull byte[], int, int, int);
     method public int read(@NonNull short[], int, int);
@@ -23836,6 +23840,7 @@ package android.media {
     method @NonNull public android.media.AudioRecord.Builder setAudioPlaybackCaptureConfig(@NonNull android.media.AudioPlaybackCaptureConfiguration);
     method public android.media.AudioRecord.Builder setAudioSource(int) throws java.lang.IllegalArgumentException;
     method public android.media.AudioRecord.Builder setBufferSizeInBytes(int) throws java.lang.IllegalArgumentException;
+    method @NonNull public android.media.AudioRecord.Builder setPrivacySensitive(boolean);
   }
 
   public static final class AudioRecord.MetricsConstants {
@@ -25899,6 +25904,7 @@ package android.media {
     method public android.media.AudioDeviceInfo getPreferredDevice();
     method public android.media.AudioDeviceInfo getRoutedDevice();
     method public android.view.Surface getSurface();
+    method public boolean isPrivacySensitive();
     method public void pause() throws java.lang.IllegalStateException;
     method public void prepare() throws java.io.IOException, java.lang.IllegalStateException;
     method public void registerAudioRecordingCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.AudioManager.AudioRecordingCallback);
@@ -25930,6 +25936,7 @@ package android.media {
     method public boolean setPreferredMicrophoneDirection(int);
     method public boolean setPreferredMicrophoneFieldDimension(@FloatRange(from=-1.0, to=1.0) float);
     method public void setPreviewDisplay(android.view.Surface);
+    method public void setPrivacySensitive(boolean);
     method public void setProfile(android.media.CamcorderProfile);
     method public void setVideoEncoder(int) throws java.lang.IllegalStateException;
     method public void setVideoEncodingBitRate(int);
@@ -29323,12 +29330,14 @@ package android.net {
     method public static long getMobileRxPackets();
     method public static long getMobileTxBytes();
     method public static long getMobileTxPackets();
+    method public static long getRxPackets(@NonNull String);
     method public static int getThreadStatsTag();
     method public static int getThreadStatsUid();
     method public static long getTotalRxBytes();
     method public static long getTotalRxPackets();
     method public static long getTotalTxBytes();
     method public static long getTotalTxPackets();
+    method public static long getTxPackets(@NonNull String);
     method public static long getUidRxBytes(int);
     method public static long getUidRxPackets(int);
     method @Deprecated public static long getUidTcpRxBytes(int);
@@ -43137,6 +43146,7 @@ package android.system {
     field public static final int MS_INVALIDATE;
     field public static final int MS_SYNC;
     field public static final int NETLINK_INET_DIAG;
+    field public static final int NETLINK_NETFILTER;
     field public static final int NETLINK_ROUTE;
     field public static final int NI_DGRAM;
     field public static final int NI_NAMEREQD;
@@ -43547,6 +43557,7 @@ package android.telecom {
     method public int getCallProperties();
     method public String getCallerDisplayName();
     method public int getCallerDisplayNamePresentation();
+    method public int getCallerNumberVerificationStatus();
     method public final long getConnectTimeMillis();
     method public long getCreationTimeMillis();
     method public android.telecom.DisconnectCause getDisconnectCause();
@@ -43728,6 +43739,7 @@ package android.telecom {
     method public final android.telecom.CallAudioState getCallAudioState();
     method public final String getCallerDisplayName();
     method public final int getCallerDisplayNamePresentation();
+    method public int getCallerNumberVerificationStatus();
     method public final android.telecom.Conference getConference();
     method public final java.util.List<android.telecom.Conferenceable> getConferenceables();
     method public final int getConnectionCapabilities();
@@ -43779,6 +43791,7 @@ package android.telecom {
     method public final void setAudioModeIsVoip(boolean);
     method public final void setAudioRoute(int);
     method public final void setCallerDisplayName(String, int);
+    method public void setCallerNumberVerificationStatus(int);
     method public final void setConferenceableConnections(java.util.List<android.telecom.Connection>);
     method public final void setConferenceables(java.util.List<android.telecom.Conferenceable>);
     method public final void setConnectionCapabilities(int);
@@ -43874,6 +43887,9 @@ package android.telecom {
     field public static final int STATE_NEW = 1; // 0x1
     field public static final int STATE_PULLING_CALL = 7; // 0x7
     field public static final int STATE_RINGING = 2; // 0x2
+    field public static final int VERIFICATION_STATUS_FAILED = 2; // 0x2
+    field public static final int VERIFICATION_STATUS_NOT_VERIFIED = 0; // 0x0
+    field public static final int VERIFICATION_STATUS_PASSED = 1; // 0x1
   }
 
   public static final class Connection.RttModifyStatus {
