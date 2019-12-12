@@ -25641,10 +25641,10 @@ package android.media {
   }
 
   public static interface MediaParser.OutputConsumer {
-    method public void onFormat(int, @NonNull android.media.MediaFormat);
     method public void onSampleCompleted(int, long, int, int, int, @Nullable android.media.MediaCodec.CryptoInfo);
     method public void onSampleData(int, @NonNull android.media.MediaParser.InputReader) throws java.io.IOException, java.lang.InterruptedException;
     method public void onSeekMap(@NonNull android.media.MediaParser.SeekMap);
+    method public void onTrackData(int, @NonNull android.media.MediaParser.TrackData);
     method public void onTracksFound(int);
   }
 
@@ -25663,6 +25663,11 @@ package android.media {
 
   public static interface MediaParser.SeekableInputReader extends android.media.MediaParser.InputReader {
     method public void seekToPosition(long);
+  }
+
+  public static final class MediaParser.TrackData {
+    field @Nullable public final android.media.DrmInitData drmInitData;
+    field @NonNull public final android.media.MediaFormat mediaFormat;
   }
 
   public static final class MediaParser.UnrecognizedInputFormatException extends java.io.IOException {
