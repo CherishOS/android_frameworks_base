@@ -6739,6 +6739,7 @@ package android.app.admin {
     method @Nullable public java.util.Set<java.lang.String> getCrossProfileCalendarPackages(@NonNull android.content.ComponentName);
     method public boolean getCrossProfileCallerIdDisabled(@NonNull android.content.ComponentName);
     method public boolean getCrossProfileContactsSearchDisabled(@NonNull android.content.ComponentName);
+    method @NonNull public java.util.Set<java.lang.String> getCrossProfilePackages(@NonNull android.content.ComponentName);
     method @NonNull public java.util.List<java.lang.String> getCrossProfileWidgetProviders(@NonNull android.content.ComponentName);
     method public int getCurrentFailedPasswordAttempts();
     method @Nullable public java.util.List<java.lang.String> getDelegatePackages(@NonNull android.content.ComponentName, @NonNull String);
@@ -6856,6 +6857,7 @@ package android.app.admin {
     method public void setCrossProfileCalendarPackages(@NonNull android.content.ComponentName, @Nullable java.util.Set<java.lang.String>);
     method public void setCrossProfileCallerIdDisabled(@NonNull android.content.ComponentName, boolean);
     method public void setCrossProfileContactsSearchDisabled(@NonNull android.content.ComponentName, boolean);
+    method public void setCrossProfilePackages(@NonNull android.content.ComponentName, @NonNull java.util.Set<java.lang.String>);
     method public void setDefaultSmsApplication(@NonNull android.content.ComponentName, @NonNull String);
     method public void setDelegatedScopes(@NonNull android.content.ComponentName, @NonNull String, @NonNull java.util.List<java.lang.String>);
     method public void setDeviceOwnerLockScreenInfo(@NonNull android.content.ComponentName, CharSequence);
@@ -25397,6 +25399,8 @@ package android.media {
     field public static final String KEY_OPERATING_RATE = "operating-rate";
     field public static final String KEY_OUTPUT_REORDER_DEPTH = "output-reorder-depth";
     field public static final String KEY_PCM_ENCODING = "pcm-encoding";
+    field public static final String KEY_PIXEL_ASPECT_RATIO_HEIGHT = "sar-height";
+    field public static final String KEY_PIXEL_ASPECT_RATIO_WIDTH = "sar-width";
     field public static final String KEY_PREPEND_HEADER_TO_SYNC_FRAMES = "prepend-sps-pps-to-idr-frames";
     field public static final String KEY_PRIORITY = "priority";
     field public static final String KEY_PROFILE = "profile";
@@ -29211,6 +29215,7 @@ package android.net {
 
   public class NetworkRequest implements android.os.Parcelable {
     method public int describeContents();
+    method @Nullable public android.net.NetworkSpecifier getNetworkSpecifier();
     method public boolean hasCapability(int);
     method public boolean hasTransport(int);
     method public void writeToParcel(android.os.Parcel, int);
@@ -45597,6 +45602,7 @@ package android.telephony {
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public boolean doesSwitchMultiSimConfigTriggerReboot();
     method public int getActiveModemCount();
     method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public java.util.List<android.telephony.CellInfo> getAllCellInfo();
+    method @NonNull public static int[] getAllNetworkTypes();
     method public int getCallState();
     method public int getCardIdForDefaultEuicc();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @WorkerThread public android.os.PersistableBundle getCarrierConfig();
@@ -45969,6 +45975,7 @@ package android.telephony.data {
     field public static final int TYPE_MCX = 1024; // 0x400
     field public static final int TYPE_MMS = 2; // 0x2
     field public static final int TYPE_SUPL = 4; // 0x4
+    field public static final int TYPE_XCAP = 2048; // 0x800
   }
 
   public static class ApnSetting.Builder {
@@ -47278,7 +47285,7 @@ package android.text.format {
     field public static final long WEEK_IN_MILLIS = 604800000L; // 0x240c8400L
     field public static final String YEAR_FORMAT = "%Y";
     field public static final String YEAR_FORMAT_TWO_DIGITS = "%g";
-    field public static final long YEAR_IN_MILLIS = 31449600000L; // 0x7528ad000L
+    field @Deprecated public static final long YEAR_IN_MILLIS = 31449600000L; // 0x7528ad000L
     field @Deprecated public static final int[] sameMonthTable;
     field @Deprecated public static final int[] sameYearTable;
   }
@@ -48715,6 +48722,13 @@ package android.util {
 
   public class Base64OutputStream extends java.io.FilterOutputStream {
     ctor public Base64OutputStream(java.io.OutputStream, int);
+  }
+
+  public final class CloseGuard {
+    ctor public CloseGuard();
+    method public void close();
+    method public void open(@NonNull String);
+    method public void warnIfOpen();
   }
 
   @Deprecated public final class Config {
