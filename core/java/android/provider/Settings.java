@@ -5933,6 +5933,12 @@ public final class Settings {
          * @hide
          */
         public static final String FULLSCREEN_GESTURES = "fullscreen_gestures";
+		
+		/**
+         * Whether to show arrow keys in navigation bar
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_ARROW_KEYS = "navigation_bar_menu_arrow_keys";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
