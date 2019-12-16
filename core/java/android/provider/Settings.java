@@ -5511,6 +5511,17 @@ public final class Settings {
           */
         @Readable
         public static final String VOLUME_KEY_CURSOR_CONTROL = "volume_key_cursor_control";
+		
+		/**
+         * Whether to blink flashlight for incoming calls
+         * 0 = Disabled (Default)
+         * 1 = Blink flashlight only in Ringer mode
+         * 2 = Blink flashlight only when ringer is not audible
+         * 3 = Blink flashlight always regardless of ringer mode
+         * @hide
+         */
+        @Readable
+        public static final String FLASHLIGHT_ON_CALL = "flashlight_on_call";
 
         /**
          * Whether to display cross sign for a data disabled connection
@@ -5805,6 +5816,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(BATTERY_LIGHT_MEDIUM_COLOR);
             PRIVATE_SETTINGS.add(BATTERY_LIGHT_FULL_COLOR);
             PRIVATE_SETTINGS.add(BATTERY_LIGHT_REALLYFULL_COLOR);
+            PRIVATE_SETTINGS.add(FLASHLIGHT_ON_CALL);
         }
 
         /**
