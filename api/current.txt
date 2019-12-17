@@ -28683,8 +28683,6 @@ package android.net {
   public class ConnectivityDiagnosticsManager {
     method public void registerConnectivityDiagnosticsCallback(@NonNull android.net.NetworkRequest, @NonNull java.util.concurrent.Executor, @NonNull android.net.ConnectivityDiagnosticsManager.ConnectivityDiagnosticsCallback);
     method public void unregisterConnectivityDiagnosticsCallback(@NonNull android.net.ConnectivityDiagnosticsManager.ConnectivityDiagnosticsCallback);
-    field public static final int DETECTION_METHOD_DNS_EVENTS = 1; // 0x1
-    field public static final int DETECTION_METHOD_TCP_METRICS = 2; // 0x2
   }
 
   public abstract static class ConnectivityDiagnosticsManager.ConnectivityDiagnosticsCallback {
@@ -28706,12 +28704,17 @@ package android.net {
     field @NonNull public static final android.os.Parcelable.Creator<android.net.ConnectivityDiagnosticsManager.ConnectivityReport> CREATOR;
   }
 
-  public static class ConnectivityDiagnosticsManager.DataStallReport {
+  public static final class ConnectivityDiagnosticsManager.DataStallReport implements android.os.Parcelable {
     ctor public ConnectivityDiagnosticsManager.DataStallReport(@NonNull android.net.Network, long, int, @NonNull android.os.PersistableBundle);
-    field public final int detectionMethod;
-    field @NonNull public final android.net.Network network;
-    field public final long reportTimestamp;
-    field @NonNull public final android.os.PersistableBundle stallDetails;
+    method public int describeContents();
+    method public int getDetectionMethod();
+    method @NonNull public android.net.Network getNetwork();
+    method public long getReportTimestamp();
+    method @NonNull public android.os.PersistableBundle getStallDetails();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.net.ConnectivityDiagnosticsManager.DataStallReport> CREATOR;
+    field public static final int DETECTION_METHOD_DNS_EVENTS = 1; // 0x1
+    field public static final int DETECTION_METHOD_TCP_METRICS = 2; // 0x2
   }
 
   public class ConnectivityManager {
