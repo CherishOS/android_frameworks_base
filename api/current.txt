@@ -6732,6 +6732,7 @@ package android.app.admin {
     method @Deprecated @Nullable public String getApplicationRestrictionsManagingPackage(@NonNull android.content.ComponentName);
     method public boolean getAutoTime(@NonNull android.content.ComponentName);
     method @Deprecated public boolean getAutoTimeRequired();
+    method public boolean getAutoTimeZone(@NonNull android.content.ComponentName);
     method @NonNull public java.util.List<android.os.UserHandle> getBindDeviceAdminTargetUsers(@NonNull android.content.ComponentName);
     method public boolean getBluetoothContactSharingDisabled(@NonNull android.content.ComponentName);
     method public boolean getCameraDisabled(@Nullable android.content.ComponentName);
@@ -6850,6 +6851,7 @@ package android.app.admin {
     method @Deprecated public void setApplicationRestrictionsManagingPackage(@NonNull android.content.ComponentName, @Nullable String) throws android.content.pm.PackageManager.NameNotFoundException;
     method public void setAutoTime(@NonNull android.content.ComponentName, boolean);
     method @Deprecated public void setAutoTimeRequired(@NonNull android.content.ComponentName, boolean);
+    method public void setAutoTimeZone(@NonNull android.content.ComponentName, boolean);
     method public void setBackupServiceEnabled(@NonNull android.content.ComponentName, boolean);
     method public void setBluetoothContactSharingDisabled(@NonNull android.content.ComponentName, boolean);
     method public void setCameraDisabled(@NonNull android.content.ComponentName, boolean);
@@ -16778,16 +16780,29 @@ package android.hardware {
 package android.hardware.biometrics {
 
   public class BiometricManager {
-    method @RequiresPermission(android.Manifest.permission.USE_BIOMETRIC) public int canAuthenticate();
+    method @Deprecated @RequiresPermission(android.Manifest.permission.USE_BIOMETRIC) public int canAuthenticate();
+    method @RequiresPermission(android.Manifest.permission.USE_BIOMETRIC) public int canAuthenticate(int);
     field public static final int BIOMETRIC_ERROR_HW_UNAVAILABLE = 1; // 0x1
     field public static final int BIOMETRIC_ERROR_NONE_ENROLLED = 11; // 0xb
     field public static final int BIOMETRIC_ERROR_NO_HARDWARE = 12; // 0xc
     field public static final int BIOMETRIC_SUCCESS = 0; // 0x0
   }
 
+  public static interface BiometricManager.Authenticators {
+    field public static final int BIOMETRIC_STRONG = 15; // 0xf
+    field public static final int BIOMETRIC_WEAK = 255; // 0xff
+    field public static final int DEVICE_CREDENTIAL = 32768; // 0x8000
+  }
+
   public class BiometricPrompt {
     method @RequiresPermission(android.Manifest.permission.USE_BIOMETRIC) public void authenticate(@NonNull android.hardware.biometrics.BiometricPrompt.CryptoObject, @NonNull android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull android.hardware.biometrics.BiometricPrompt.AuthenticationCallback);
     method @RequiresPermission(android.Manifest.permission.USE_BIOMETRIC) public void authenticate(@NonNull android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull android.hardware.biometrics.BiometricPrompt.AuthenticationCallback);
+    method @Nullable public int getAllowedAuthenticators();
+    method @Nullable public CharSequence getDescription();
+    method @Nullable public CharSequence getNegativeButtonText();
+    method @Nullable public CharSequence getSubtitle();
+    method @NonNull public CharSequence getTitle();
+    method public boolean isConfirmationRequired();
     field public static final int BIOMETRIC_ACQUIRED_GOOD = 0; // 0x0
     field public static final int BIOMETRIC_ACQUIRED_IMAGER_DIRTY = 3; // 0x3
     field public static final int BIOMETRIC_ACQUIRED_INSUFFICIENT = 2; // 0x2
@@ -16823,9 +16838,10 @@ package android.hardware.biometrics {
   public static class BiometricPrompt.Builder {
     ctor public BiometricPrompt.Builder(android.content.Context);
     method @NonNull public android.hardware.biometrics.BiometricPrompt build();
+    method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setAllowedAuthenticators(int);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setConfirmationRequired(boolean);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setDescription(@NonNull CharSequence);
-    method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setDeviceCredentialAllowed(boolean);
+    method @Deprecated @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setDeviceCredentialAllowed(boolean);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setNegativeButton(@NonNull CharSequence, @NonNull java.util.concurrent.Executor, @NonNull android.content.DialogInterface.OnClickListener);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setSubtitle(@NonNull CharSequence);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setTitle(@NonNull CharSequence);
@@ -38382,11 +38398,11 @@ package android.provider {
   protected static interface ContactsContract.RawContactsColumns {
     field public static final String ACCOUNT_TYPE_AND_DATA_SET = "account_type_and_data_set";
     field public static final String AGGREGATION_MODE = "aggregation_mode";
-    field public static final String BACKUP_ID = "backup_id";
+    field @Deprecated public static final String BACKUP_ID = "backup_id";
     field public static final String CONTACT_ID = "contact_id";
     field public static final String DATA_SET = "data_set";
     field public static final String DELETED = "deleted";
-    field public static final String METADATA_DIRTY = "metadata_dirty";
+    field @Deprecated public static final String METADATA_DIRTY = "metadata_dirty";
     field public static final String RAW_CONTACT_IS_READ_ONLY = "raw_contact_is_read_only";
     field public static final String RAW_CONTACT_IS_USER_PROFILE = "raw_contact_is_user_profile";
   }
