@@ -51082,6 +51082,9 @@ package android.view {
     method public boolean dispatchUnhandledMove(android.view.View, int);
     method protected void dispatchVisibilityChanged(@NonNull android.view.View, int);
     method public void dispatchWindowFocusChanged(boolean);
+    method public void dispatchWindowInsetsAnimationFinished(@NonNull android.view.WindowInsetsAnimationCallback.InsetsAnimation);
+    method @NonNull public android.view.WindowInsets dispatchWindowInsetsAnimationProgress(@NonNull android.view.WindowInsets);
+    method @NonNull public android.view.WindowInsetsAnimationCallback.AnimationBounds dispatchWindowInsetsAnimationStarted(@NonNull android.view.WindowInsetsAnimationCallback.InsetsAnimation, @NonNull android.view.WindowInsetsAnimationCallback.AnimationBounds);
     method public void dispatchWindowSystemUiVisiblityChanged(int);
     method public void dispatchWindowVisibilityChanged(int);
     method @CallSuper public void draw(android.graphics.Canvas);
@@ -51262,6 +51265,7 @@ package android.view {
     method @android.view.ViewDebug.ExportedProperty(category="layout") public final int getWidth();
     method protected int getWindowAttachCount();
     method public android.view.WindowId getWindowId();
+    method @Nullable public android.view.WindowInsetsController getWindowInsetsController();
     method public int getWindowSystemUiVisibility();
     method public android.os.IBinder getWindowToken();
     method public int getWindowVisibility();
@@ -51600,6 +51604,7 @@ package android.view {
     method public void setVisibility(int);
     method @Deprecated public void setWillNotCacheDrawing(boolean);
     method public void setWillNotDraw(boolean);
+    method public void setWindowInsetsAnimationCallback(@Nullable android.view.WindowInsetsAnimationCallback);
     method public void setX(float);
     method public void setY(float);
     method public void setZ(float);
@@ -52486,6 +52491,7 @@ package android.view {
     method public android.transition.Transition getExitTransition();
     method protected final int getFeatures();
     method protected final int getForcedWindowFlags();
+    method @Nullable public android.view.WindowInsetsController getInsetsController();
     method @NonNull public abstract android.view.LayoutInflater getLayoutInflater();
     method protected final int getLocalFeatures();
     method public android.media.session.MediaController getMediaController();
@@ -52701,7 +52707,9 @@ package android.view {
     method @NonNull public android.view.WindowInsets consumeStableInsets();
     method @NonNull public android.view.WindowInsets consumeSystemWindowInsets();
     method @Nullable public android.view.DisplayCutout getDisplayCutout();
+    method @NonNull public android.graphics.Insets getInsets(int);
     method @NonNull public android.graphics.Insets getMandatorySystemGestureInsets();
+    method @NonNull public android.graphics.Insets getMaxInsets(int) throws java.lang.IllegalArgumentException;
     method public int getStableInsetBottom();
     method public int getStableInsetLeft();
     method public int getStableInsetRight();
@@ -52720,6 +52728,7 @@ package android.view {
     method @NonNull public android.view.WindowInsets inset(@IntRange(from=0) int, @IntRange(from=0) int, @IntRange(from=0) int, @IntRange(from=0) int);
     method public boolean isConsumed();
     method public boolean isRound();
+    method public boolean isVisible(int);
     method @Deprecated @NonNull public android.view.WindowInsets replaceSystemWindowInsets(int, int, int, int);
     method @Deprecated @NonNull public android.view.WindowInsets replaceSystemWindowInsets(android.graphics.Rect);
   }
@@ -52729,11 +52738,76 @@ package android.view {
     ctor public WindowInsets.Builder(@NonNull android.view.WindowInsets);
     method @NonNull public android.view.WindowInsets build();
     method @NonNull public android.view.WindowInsets.Builder setDisplayCutout(@Nullable android.view.DisplayCutout);
+    method @NonNull public android.view.WindowInsets.Builder setInsets(int, @NonNull android.graphics.Insets);
     method @NonNull public android.view.WindowInsets.Builder setMandatorySystemGestureInsets(@NonNull android.graphics.Insets);
+    method @NonNull public android.view.WindowInsets.Builder setMaxInsets(int, @NonNull android.graphics.Insets) throws java.lang.IllegalArgumentException;
     method @NonNull public android.view.WindowInsets.Builder setStableInsets(@NonNull android.graphics.Insets);
     method @NonNull public android.view.WindowInsets.Builder setSystemGestureInsets(@NonNull android.graphics.Insets);
     method @NonNull public android.view.WindowInsets.Builder setSystemWindowInsets(@NonNull android.graphics.Insets);
     method @NonNull public android.view.WindowInsets.Builder setTappableElementInsets(@NonNull android.graphics.Insets);
+    method @NonNull public android.view.WindowInsets.Builder setVisible(int, boolean);
+  }
+
+  public static final class WindowInsets.Type {
+    method public static int all();
+    method public static int captionBar();
+    method public static int ime();
+    method public static int mandatorySystemGestures();
+    method public static int navigationBars();
+    method public static int statusBars();
+    method public static int systemBars();
+    method public static int systemGestures();
+    method public static int tappableElement();
+    method public static int windowDecor();
+  }
+
+  public interface WindowInsetsAnimationCallback {
+    method public default void onFinished(@NonNull android.view.WindowInsetsAnimationCallback.InsetsAnimation);
+    method @NonNull public android.view.WindowInsets onProgress(@NonNull android.view.WindowInsets);
+    method @NonNull public default android.view.WindowInsetsAnimationCallback.AnimationBounds onStarted(@NonNull android.view.WindowInsetsAnimationCallback.InsetsAnimation, @NonNull android.view.WindowInsetsAnimationCallback.AnimationBounds);
+  }
+
+  public static final class WindowInsetsAnimationCallback.AnimationBounds {
+    ctor public WindowInsetsAnimationCallback.AnimationBounds(@NonNull android.graphics.Insets, @NonNull android.graphics.Insets);
+    method @NonNull public android.graphics.Insets getLowerBound();
+    method @NonNull public android.graphics.Insets getUpperBound();
+    method @NonNull public android.view.WindowInsetsAnimationCallback.AnimationBounds inset(@NonNull android.graphics.Insets);
+  }
+
+  public static final class WindowInsetsAnimationCallback.InsetsAnimation {
+    ctor public WindowInsetsAnimationCallback.InsetsAnimation(int, @Nullable android.view.animation.Interpolator, long);
+    method public long getDurationMillis();
+    method @FloatRange(from=0.0f, to=1.0f) public float getFraction();
+    method public float getInterpolatedFraction();
+    method @Nullable public android.view.animation.Interpolator getInterpolator();
+    method public int getTypeMask();
+    method public void setDuration(long);
+    method public void setFraction(@FloatRange(from=0.0f, to=1.0f) float);
+  }
+
+  public interface WindowInsetsAnimationControlListener {
+    method public void onCancelled();
+    method public void onReady(@NonNull android.view.WindowInsetsAnimationController, int);
+  }
+
+  public interface WindowInsetsAnimationController {
+    method public void finish(boolean);
+    method @FloatRange(from=0.0f, to=1.0f) public float getCurrentFraction();
+    method @NonNull public android.graphics.Insets getCurrentInsets();
+    method @NonNull public android.graphics.Insets getHiddenStateInsets();
+    method @NonNull public android.graphics.Insets getShownStateInsets();
+    method public int getTypes();
+    method public void setInsetsAndAlpha(@Nullable android.graphics.Insets, @FloatRange(from=0.0f, to=1.0f) float, @FloatRange(from=0.0f, to=1.0f) float);
+  }
+
+  public interface WindowInsetsController {
+    method public default void controlInputMethodAnimation(long, @NonNull android.view.WindowInsetsAnimationControlListener);
+    method public default void hideInputMethod();
+    method public void setSystemBarsAppearance(int);
+    method public void setSystemBarsBehavior(int);
+    method public default void showInputMethod();
+    field public static final int APPEARANCE_LIGHT_NAVIGATION_BARS = 16; // 0x10
+    field public static final int APPEARANCE_LIGHT_STATUS_BARS = 8; // 0x8
   }
 
   public interface WindowManager extends android.view.ViewManager {
