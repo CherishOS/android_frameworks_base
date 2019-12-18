@@ -17246,6 +17246,7 @@ package android.hardware.camera2 {
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR = 1; // 0x1
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_MONOCHROME = 12; // 0xc
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_MOTION_TRACKING = 10; // 0xa
+    field public static final int REQUEST_AVAILABLE_CAPABILITIES_OFFLINE_PROCESSING = 15; // 0xf
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_PRIVATE_REPROCESSING = 4; // 0x4
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_RAW = 3; // 0x3
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_READ_SENSOR_SETTINGS = 5; // 0x5
@@ -22652,6 +22653,7 @@ package android.inputmethodservice {
     method public void onConfigureWindow(android.view.Window, boolean, boolean);
     method public android.view.View onCreateCandidatesView();
     method public android.view.View onCreateExtractTextView();
+    method @Nullable public android.view.inputmethod.InlineSuggestionsRequest onCreateInlineSuggestionsRequest();
     method public android.inputmethodservice.AbstractInputMethodService.AbstractInputMethodImpl onCreateInputMethodInterface();
     method public android.inputmethodservice.AbstractInputMethodService.AbstractInputMethodSessionImpl onCreateInputMethodSessionInterface();
     method public android.view.View onCreateInputView();
@@ -22668,6 +22670,7 @@ package android.inputmethodservice {
     method public void onFinishInput();
     method public void onFinishInputView(boolean);
     method public void onInitializeInterface();
+    method public boolean onInlineSuggestionsResponse(@NonNull android.view.inputmethod.InlineSuggestionsResponse);
     method public boolean onKeyDown(int, android.view.KeyEvent);
     method public boolean onKeyLongPress(int, android.view.KeyEvent);
     method public boolean onKeyMultiple(int, int, android.view.KeyEvent);
@@ -35028,6 +35031,7 @@ package android.os {
     method public void dump(@NonNull java.io.FileDescriptor, @Nullable String[]) throws android.os.RemoteException;
     method public void dumpAsync(@NonNull java.io.FileDescriptor, @Nullable String[]) throws android.os.RemoteException;
     method @Nullable public String getInterfaceDescriptor() throws android.os.RemoteException;
+    method public static int getSuggestedMaxIpcSizeBytes();
     method public boolean isBinderAlive();
     method public void linkToDeath(@NonNull android.os.IBinder.DeathRecipient, int) throws android.os.RemoteException;
     method public boolean pingBinder();
@@ -35224,6 +35228,7 @@ package android.os {
     method public void readMap(@NonNull java.util.Map, @Nullable ClassLoader);
     method @Nullable public <T extends android.os.Parcelable> T readParcelable(@Nullable ClassLoader);
     method @Nullable public android.os.Parcelable[] readParcelableArray(@Nullable ClassLoader);
+    method @Nullable public android.os.Parcelable.Creator<?> readParcelableCreator(@Nullable ClassLoader);
     method @NonNull public <T extends android.os.Parcelable> java.util.List<T> readParcelableList(@NonNull java.util.List<T>, @Nullable ClassLoader);
     method @Nullable public android.os.PersistableBundle readPersistableBundle();
     method @Nullable public android.os.PersistableBundle readPersistableBundle(@Nullable ClassLoader);
@@ -35271,6 +35276,7 @@ package android.os {
     method public void writeNoException();
     method public void writeParcelable(@Nullable android.os.Parcelable, int);
     method public <T extends android.os.Parcelable> void writeParcelableArray(@Nullable T[], int);
+    method public void writeParcelableCreator(@NonNull android.os.Parcelable);
     method public <T extends android.os.Parcelable> void writeParcelableList(@Nullable java.util.List<T>, int);
     method public void writePersistableBundle(@Nullable android.os.PersistableBundle);
     method public void writeSerializable(@Nullable java.io.Serializable);
@@ -38709,6 +38715,10 @@ package android.provider {
 
   public final class MediaStore {
     ctor public MediaStore();
+    method @NonNull public static android.app.PendingIntent createDeleteRequest(@NonNull android.content.ContentResolver, @NonNull java.util.Collection<android.net.Uri>);
+    method @NonNull public static android.app.PendingIntent createFavoriteRequest(@NonNull android.content.ContentResolver, @NonNull java.util.Collection<android.net.Uri>, boolean);
+    method @NonNull public static android.app.PendingIntent createTrashRequest(@NonNull android.content.ContentResolver, @NonNull java.util.Collection<android.net.Uri>, boolean);
+    method @NonNull public static android.app.PendingIntent createWriteRequest(@NonNull android.content.ContentResolver, @NonNull java.util.Collection<android.net.Uri>);
     method @Nullable public static android.net.Uri getDocumentUri(@NonNull android.content.Context, @NonNull android.net.Uri);
     method @NonNull public static java.util.Set<java.lang.String> getExternalVolumeNames(@NonNull android.content.Context);
     method public static android.net.Uri getMediaScannerUri();
@@ -38719,9 +38729,6 @@ package android.provider {
     method @NonNull public static String getVolumeName(@NonNull android.net.Uri);
     method @Deprecated @NonNull public static android.net.Uri setIncludePending(@NonNull android.net.Uri);
     method @NonNull public static android.net.Uri setRequireOriginal(@NonNull android.net.Uri);
-    method public static void trash(@NonNull android.content.Context, @NonNull android.net.Uri);
-    method public static void trash(@NonNull android.content.Context, @NonNull android.net.Uri, long);
-    method public static void untrash(@NonNull android.content.Context, @NonNull android.net.Uri);
     field public static final String ACTION_IMAGE_CAPTURE = "android.media.action.IMAGE_CAPTURE";
     field public static final String ACTION_IMAGE_CAPTURE_SECURE = "android.media.action.IMAGE_CAPTURE_SECURE";
     field public static final String ACTION_REVIEW = "android.provider.action.REVIEW";
@@ -41569,7 +41576,8 @@ package android.service.autofill {
     method @NonNull public java.util.List<android.service.autofill.FillContext> getFillContexts();
     method public int getFlags();
     method public int getId();
-    method public void writeToParcel(android.os.Parcel, int);
+    method @Nullable public android.view.inputmethod.InlineSuggestionsRequest getInlineSuggestionsRequest();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.service.autofill.FillRequest> CREATOR;
     field public static final int FLAG_COMPATIBILITY_MODE_REQUEST = 2; // 0x2
     field public static final int FLAG_MANUAL_REQUEST = 1; // 0x1
@@ -41586,6 +41594,7 @@ package android.service.autofill {
   public static final class FillResponse.Builder {
     ctor public FillResponse.Builder();
     method @NonNull public android.service.autofill.FillResponse.Builder addDataset(@Nullable android.service.autofill.Dataset);
+    method @NonNull public android.service.autofill.FillResponse.Builder addInlineSuggestionSlice(@NonNull android.app.slice.Slice);
     method @NonNull public android.service.autofill.FillResponse build();
     method @NonNull public android.service.autofill.FillResponse.Builder disableAutofill(long);
     method @NonNull public android.service.autofill.FillResponse.Builder setAuthentication(@NonNull android.view.autofill.AutofillId[], @Nullable android.content.IntentSender, @Nullable android.widget.RemoteViews);
@@ -43891,6 +43900,7 @@ package android.telecom {
     field public static final String EVENT_CALL_PULL_FAILED = "android.telecom.event.CALL_PULL_FAILED";
     field public static final String EVENT_CALL_REMOTELY_HELD = "android.telecom.event.CALL_REMOTELY_HELD";
     field public static final String EVENT_CALL_REMOTELY_UNHELD = "android.telecom.event.CALL_REMOTELY_UNHELD";
+    field public static final String EVENT_CALL_SWITCH_FAILED = "android.telecom.event.CALL_SWITCH_FAILED";
     field public static final String EVENT_MERGE_COMPLETE = "android.telecom.event.MERGE_COMPLETE";
     field public static final String EVENT_MERGE_START = "android.telecom.event.MERGE_START";
     field public static final String EVENT_ON_HOLD_TONE_END = "android.telecom.event.ON_HOLD_TONE_END";
@@ -44600,6 +44610,7 @@ package android.telephony {
     method public void notifyConfigChangedForSubId(int);
     field public static final String ACTION_CARRIER_CONFIG_CHANGED = "android.telephony.action.CARRIER_CONFIG_CHANGED";
     field public static final int DATA_CYCLE_THRESHOLD_DISABLED = -2; // 0xfffffffe
+    field public static final int DATA_CYCLE_USE_PLATFORM_DEFAULT = -1; // 0xffffffff
     field public static final String EXTRA_SLOT_INDEX = "android.telephony.extra.SLOT_INDEX";
     field public static final String EXTRA_SUBSCRIPTION_INDEX = "android.telephony.extra.SUBSCRIPTION_INDEX";
     field public static final String KEY_5G_NR_SSRSRP_THRESHOLDS_INT_ARRAY = "5g_nr_ssrsrp_thresholds_int_array";
@@ -44610,6 +44621,7 @@ package android.telephony {
     field public static final String KEY_ALLOW_ADD_CALL_DURING_VIDEO_CALL_BOOL = "allow_add_call_during_video_call";
     field public static final String KEY_ALLOW_EMERGENCY_NUMBERS_IN_CALL_LOG_BOOL = "allow_emergency_numbers_in_call_log_bool";
     field public static final String KEY_ALLOW_EMERGENCY_VIDEO_CALLS_BOOL = "allow_emergency_video_calls_bool";
+    field public static final String KEY_ALLOW_HOLDING_VIDEO_CALL_BOOL = "allow_holding_video_call";
     field public static final String KEY_ALLOW_HOLD_CALL_DURING_EMERGENCY_BOOL = "allow_hold_call_during_emergency_bool";
     field public static final String KEY_ALLOW_LOCAL_DTMF_TONES_BOOL = "allow_local_dtmf_tones_bool";
     field public static final String KEY_ALLOW_MERGE_WIFI_CALLS_WHEN_VOWIFI_OFF_BOOL = "allow_merge_wifi_calls_when_vowifi_off_bool";
@@ -44659,11 +44671,16 @@ package android.telephony {
     field public static final String KEY_CI_ACTION_ON_SYS_UPDATE_EXTRA_STRING = "ci_action_on_sys_update_extra_string";
     field public static final String KEY_CI_ACTION_ON_SYS_UPDATE_EXTRA_VAL_STRING = "ci_action_on_sys_update_extra_val_string";
     field public static final String KEY_CI_ACTION_ON_SYS_UPDATE_INTENT_STRING = "ci_action_on_sys_update_intent_string";
-    field public static final String KEY_CONFIG_IMS_PACKAGE_OVERRIDE_STRING = "config_ims_package_override_string";
+    field public static final String KEY_CONFIG_IMS_MMTEL_PACKAGE_OVERRIDE_STRING = "config_ims_mmtel_package_override_string";
+    field @Deprecated public static final String KEY_CONFIG_IMS_PACKAGE_OVERRIDE_STRING = "config_ims_package_override_string";
+    field public static final String KEY_CONFIG_IMS_RCS_PACKAGE_OVERRIDE_STRING = "config_ims_rcs_package_override_string";
     field public static final String KEY_CONFIG_PLANS_PACKAGE_OVERRIDE_STRING = "config_plans_package_override_string";
     field public static final String KEY_CONFIG_TELEPHONY_USE_OWN_NUMBER_FOR_VOICEMAIL_BOOL = "config_telephony_use_own_number_for_voicemail_bool";
     field public static final String KEY_CSP_ENABLED_BOOL = "csp_enabled_bool";
+    field public static final String KEY_DATA_LIMIT_NOTIFICATION_BOOL = "data_limit_notification_bool";
     field public static final String KEY_DATA_LIMIT_THRESHOLD_BYTES_LONG = "data_limit_threshold_bytes_long";
+    field public static final String KEY_DATA_RAPID_NOTIFICATION_BOOL = "data_rapid_notification_bool";
+    field public static final String KEY_DATA_WARNING_NOTIFICATION_BOOL = "data_warning_notification_bool";
     field public static final String KEY_DATA_WARNING_THRESHOLD_BYTES_LONG = "data_warning_threshold_bytes_long";
     field public static final String KEY_DEFAULT_SIM_CALL_MANAGER_STRING = "default_sim_call_manager_string";
     field public static final String KEY_DEFAULT_VM_NUMBER_ROAMING_AND_IMS_UNREGISTERED_STRING = "default_vm_number_roaming_and_ims_unregistered_string";
@@ -45223,6 +45240,7 @@ package android.telephony {
     method public void onDataConnectionStateChanged(int);
     method public void onDataConnectionStateChanged(int, int);
     method public void onMessageWaitingIndicatorChanged(boolean);
+    method @RequiresPermission("android.permission.MODIFY_PHONE_STATE") public void onPreciseDataConnectionStateChanged(@NonNull android.telephony.PreciseDataConnectionState);
     method public void onServiceStateChanged(android.telephony.ServiceState);
     method @Deprecated public void onSignalStrengthChanged(int);
     method public void onSignalStrengthsChanged(android.telephony.SignalStrength);
@@ -45237,10 +45255,21 @@ package android.telephony {
     field public static final int LISTEN_EMERGENCY_NUMBER_LIST = 16777216; // 0x1000000
     field public static final int LISTEN_MESSAGE_WAITING_INDICATOR = 4; // 0x4
     field public static final int LISTEN_NONE = 0; // 0x0
+    field @RequiresPermission("android.permission.MODIFY_PHONE_STATE") public static final int LISTEN_PRECISE_DATA_CONNECTION_STATE = 4096; // 0x1000
     field public static final int LISTEN_SERVICE_STATE = 1; // 0x1
     field @Deprecated public static final int LISTEN_SIGNAL_STRENGTH = 2; // 0x2
     field public static final int LISTEN_SIGNAL_STRENGTHS = 256; // 0x100
     field public static final int LISTEN_USER_MOBILE_DATA_STATE = 524288; // 0x80000
+  }
+
+  public final class PreciseDataConnectionState implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getLastCauseCode();
+    method @Nullable public android.net.LinkProperties getLinkProperties();
+    method public int getNetworkType();
+    method public int getState();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.telephony.PreciseDataConnectionState> CREATOR;
   }
 
   public final class RadioAccessSpecifier implements android.os.Parcelable {
@@ -45755,6 +45784,7 @@ package android.telephony {
     field public static final int DATA_CONNECTED = 2; // 0x2
     field public static final int DATA_CONNECTING = 1; // 0x1
     field public static final int DATA_DISCONNECTED = 0; // 0x0
+    field public static final int DATA_DISCONNECTING = 4; // 0x4
     field public static final int DATA_SUSPENDED = 3; // 0x3
     field public static final int DATA_UNKNOWN = -1; // 0xffffffff
     field public static final String EXTRA_CALL_VOICEMAIL_INTENT = "android.telephony.extra.CALL_VOICEMAIL_INTENT";
@@ -51081,6 +51111,9 @@ package android.view {
     method public boolean dispatchUnhandledMove(android.view.View, int);
     method protected void dispatchVisibilityChanged(@NonNull android.view.View, int);
     method public void dispatchWindowFocusChanged(boolean);
+    method public void dispatchWindowInsetsAnimationFinished(@NonNull android.view.WindowInsetsAnimationCallback.InsetsAnimation);
+    method @NonNull public android.view.WindowInsets dispatchWindowInsetsAnimationProgress(@NonNull android.view.WindowInsets);
+    method @NonNull public android.view.WindowInsetsAnimationCallback.AnimationBounds dispatchWindowInsetsAnimationStarted(@NonNull android.view.WindowInsetsAnimationCallback.InsetsAnimation, @NonNull android.view.WindowInsetsAnimationCallback.AnimationBounds);
     method public void dispatchWindowSystemUiVisiblityChanged(int);
     method public void dispatchWindowVisibilityChanged(int);
     method @CallSuper public void draw(android.graphics.Canvas);
@@ -51261,6 +51294,7 @@ package android.view {
     method @android.view.ViewDebug.ExportedProperty(category="layout") public final int getWidth();
     method protected int getWindowAttachCount();
     method public android.view.WindowId getWindowId();
+    method @Nullable public android.view.WindowInsetsController getWindowInsetsController();
     method public int getWindowSystemUiVisibility();
     method public android.os.IBinder getWindowToken();
     method public int getWindowVisibility();
@@ -51599,6 +51633,7 @@ package android.view {
     method public void setVisibility(int);
     method @Deprecated public void setWillNotCacheDrawing(boolean);
     method public void setWillNotDraw(boolean);
+    method public void setWindowInsetsAnimationCallback(@Nullable android.view.WindowInsetsAnimationCallback);
     method public void setX(float);
     method public void setY(float);
     method public void setZ(float);
@@ -52485,6 +52520,7 @@ package android.view {
     method public android.transition.Transition getExitTransition();
     method protected final int getFeatures();
     method protected final int getForcedWindowFlags();
+    method @Nullable public android.view.WindowInsetsController getInsetsController();
     method @NonNull public abstract android.view.LayoutInflater getLayoutInflater();
     method protected final int getLocalFeatures();
     method public android.media.session.MediaController getMediaController();
@@ -52700,7 +52736,9 @@ package android.view {
     method @NonNull public android.view.WindowInsets consumeStableInsets();
     method @NonNull public android.view.WindowInsets consumeSystemWindowInsets();
     method @Nullable public android.view.DisplayCutout getDisplayCutout();
+    method @NonNull public android.graphics.Insets getInsets(int);
     method @NonNull public android.graphics.Insets getMandatorySystemGestureInsets();
+    method @NonNull public android.graphics.Insets getMaxInsets(int) throws java.lang.IllegalArgumentException;
     method public int getStableInsetBottom();
     method public int getStableInsetLeft();
     method public int getStableInsetRight();
@@ -52719,6 +52757,7 @@ package android.view {
     method @NonNull public android.view.WindowInsets inset(@IntRange(from=0) int, @IntRange(from=0) int, @IntRange(from=0) int, @IntRange(from=0) int);
     method public boolean isConsumed();
     method public boolean isRound();
+    method public boolean isVisible(int);
     method @Deprecated @NonNull public android.view.WindowInsets replaceSystemWindowInsets(int, int, int, int);
     method @Deprecated @NonNull public android.view.WindowInsets replaceSystemWindowInsets(android.graphics.Rect);
   }
@@ -52728,11 +52767,78 @@ package android.view {
     ctor public WindowInsets.Builder(@NonNull android.view.WindowInsets);
     method @NonNull public android.view.WindowInsets build();
     method @NonNull public android.view.WindowInsets.Builder setDisplayCutout(@Nullable android.view.DisplayCutout);
+    method @NonNull public android.view.WindowInsets.Builder setInsets(int, @NonNull android.graphics.Insets);
     method @NonNull public android.view.WindowInsets.Builder setMandatorySystemGestureInsets(@NonNull android.graphics.Insets);
+    method @NonNull public android.view.WindowInsets.Builder setMaxInsets(int, @NonNull android.graphics.Insets) throws java.lang.IllegalArgumentException;
     method @NonNull public android.view.WindowInsets.Builder setStableInsets(@NonNull android.graphics.Insets);
     method @NonNull public android.view.WindowInsets.Builder setSystemGestureInsets(@NonNull android.graphics.Insets);
     method @NonNull public android.view.WindowInsets.Builder setSystemWindowInsets(@NonNull android.graphics.Insets);
     method @NonNull public android.view.WindowInsets.Builder setTappableElementInsets(@NonNull android.graphics.Insets);
+    method @NonNull public android.view.WindowInsets.Builder setVisible(int, boolean);
+  }
+
+  public static final class WindowInsets.Type {
+    method public static int all();
+    method public static int captionBar();
+    method public static int ime();
+    method public static int mandatorySystemGestures();
+    method public static int navigationBars();
+    method public static int statusBars();
+    method public static int systemBars();
+    method public static int systemGestures();
+    method public static int tappableElement();
+    method public static int windowDecor();
+  }
+
+  public interface WindowInsetsAnimationCallback {
+    method public default void onFinished(@NonNull android.view.WindowInsetsAnimationCallback.InsetsAnimation);
+    method @NonNull public android.view.WindowInsets onProgress(@NonNull android.view.WindowInsets);
+    method @NonNull public default android.view.WindowInsetsAnimationCallback.AnimationBounds onStarted(@NonNull android.view.WindowInsetsAnimationCallback.InsetsAnimation, @NonNull android.view.WindowInsetsAnimationCallback.AnimationBounds);
+  }
+
+  public static final class WindowInsetsAnimationCallback.AnimationBounds {
+    ctor public WindowInsetsAnimationCallback.AnimationBounds(@NonNull android.graphics.Insets, @NonNull android.graphics.Insets);
+    method @NonNull public android.graphics.Insets getLowerBound();
+    method @NonNull public android.graphics.Insets getUpperBound();
+    method @NonNull public android.view.WindowInsetsAnimationCallback.AnimationBounds inset(@NonNull android.graphics.Insets);
+  }
+
+  public static final class WindowInsetsAnimationCallback.InsetsAnimation {
+    ctor public WindowInsetsAnimationCallback.InsetsAnimation(int, @Nullable android.view.animation.Interpolator, long);
+    method @FloatRange(from=0.0f, to=1.0f) public float getAlpha();
+    method public long getDurationMillis();
+    method @FloatRange(from=0.0f, to=1.0f) public float getFraction();
+    method public float getInterpolatedFraction();
+    method @Nullable public android.view.animation.Interpolator getInterpolator();
+    method public int getTypeMask();
+    method public void setDuration(long);
+    method public void setFraction(@FloatRange(from=0.0f, to=1.0f) float);
+  }
+
+  public interface WindowInsetsAnimationControlListener {
+    method public void onCancelled();
+    method public void onReady(@NonNull android.view.WindowInsetsAnimationController, int);
+  }
+
+  public interface WindowInsetsAnimationController {
+    method public void finish(boolean);
+    method public float getCurrentAlpha();
+    method @FloatRange(from=0.0f, to=1.0f) public float getCurrentFraction();
+    method @NonNull public android.graphics.Insets getCurrentInsets();
+    method @NonNull public android.graphics.Insets getHiddenStateInsets();
+    method @NonNull public android.graphics.Insets getShownStateInsets();
+    method public int getTypes();
+    method public void setInsetsAndAlpha(@Nullable android.graphics.Insets, @FloatRange(from=0.0f, to=1.0f) float, @FloatRange(from=0.0f, to=1.0f) float);
+  }
+
+  public interface WindowInsetsController {
+    method public default void controlInputMethodAnimation(long, @NonNull android.view.WindowInsetsAnimationControlListener);
+    method public default void hideInputMethod();
+    method public void setSystemBarsAppearance(int);
+    method public void setSystemBarsBehavior(int);
+    method public default void showInputMethod();
+    field public static final int APPEARANCE_LIGHT_NAVIGATION_BARS = 16; // 0x10
+    field public static final int APPEARANCE_LIGHT_STATUS_BARS = 8; // 0x8
   }
 
   public interface WindowManager extends android.view.ViewManager {
