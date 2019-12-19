@@ -5029,6 +5029,12 @@ public final class Settings {
          * @hide
          */
         public static final String PAUSE_AUDIO_STREAM = "pause_audio_stream";
+		
+		/**
+         * Whether to use new QS panel bg tint or not
+         * @hide
+         */
+        public static final String QS_PANEL_BG_USE_NEW_TINT = "qs_panel_bg_use_new_tint";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
@@ -6488,6 +6494,7 @@ public final class Settings {
 			PRIVATE_SETTINGS.add(QS_HEADER_STYLE);
            PRIVATE_SETTINGS.add(BACK_GESTURE_HAPTIC);
             PRIVATE_SETTINGS.add(DISPLAY_CUTOUT_HIDDEN);
+			PRIVATE_SETTINGS.add(QS_PANEL_BG_USE_NEW_TINT);
         }
 
         /**
