@@ -99,6 +99,7 @@ package android {
     field public static final String MOUNT_FORMAT_FILESYSTEMS = "android.permission.MOUNT_FORMAT_FILESYSTEMS";
     field public static final String MOUNT_UNMOUNT_FILESYSTEMS = "android.permission.MOUNT_UNMOUNT_FILESYSTEMS";
     field public static final String NFC = "android.permission.NFC";
+    field public static final String NFC_PREFERRED_PAYMENT_INFO = "android.permission.NFC_PREFERRED_PAYMENT_INFO";
     field public static final String NFC_TRANSACTION_EVENT = "android.permission.NFC_TRANSACTION_EVENT";
     field public static final String PACKAGE_USAGE_STATS = "android.permission.PACKAGE_USAGE_STATS";
     field @Deprecated public static final String PERSISTENT_ACTIVITY = "android.permission.PERSISTENT_ACTIVITY";
@@ -31133,6 +31134,7 @@ package android.nfc {
     method @Deprecated public void setOnNdefPushCompleteCallback(android.nfc.NfcAdapter.OnNdefPushCompleteCallback, android.app.Activity, android.app.Activity...);
     field public static final String ACTION_ADAPTER_STATE_CHANGED = "android.nfc.action.ADAPTER_STATE_CHANGED";
     field public static final String ACTION_NDEF_DISCOVERED = "android.nfc.action.NDEF_DISCOVERED";
+    field @RequiresPermission(android.Manifest.permission.NFC_PREFERRED_PAYMENT_INFO) public static final String ACTION_PREFERRED_PAYMENT_CHANGED = "android.nfc.action.PREFERRED_PAYMENT_CHANGED";
     field public static final String ACTION_TAG_DISCOVERED = "android.nfc.action.TAG_DISCOVERED";
     field public static final String ACTION_TECH_DISCOVERED = "android.nfc.action.TECH_DISCOVERED";
     field @RequiresPermission(android.Manifest.permission.NFC_TRANSACTION_EVENT) public static final String ACTION_TRANSACTION_DETECTED = "android.nfc.action.TRANSACTION_DETECTED";
@@ -31141,6 +31143,7 @@ package android.nfc {
     field public static final String EXTRA_DATA = "android.nfc.extra.DATA";
     field public static final String EXTRA_ID = "android.nfc.extra.ID";
     field public static final String EXTRA_NDEF_MESSAGES = "android.nfc.extra.NDEF_MESSAGES";
+    field public static final String EXTRA_PREFERRED_PAYMENT_CHANGED_REASON = "android.nfc.extra.PREFERRED_PAYMENT_CHANGED_REASON";
     field public static final String EXTRA_READER_PRESENCE_CHECK_DELAY = "presence";
     field public static final String EXTRA_SECURE_ELEMENT_NAME = "android.nfc.extra.SECURE_ELEMENT_NAME";
     field public static final String EXTRA_TAG = "android.nfc.extra.TAG";
@@ -31151,6 +31154,9 @@ package android.nfc {
     field public static final int FLAG_READER_NFC_V = 8; // 0x8
     field public static final int FLAG_READER_NO_PLATFORM_SOUNDS = 256; // 0x100
     field public static final int FLAG_READER_SKIP_NDEF_CHECK = 128; // 0x80
+    field public static final int PREFERRED_PAYMENT_CHANGED = 2; // 0x2
+    field public static final int PREFERRED_PAYMENT_LOADED = 1; // 0x1
+    field public static final int PREFERRED_PAYMENT_UPDATED = 3; // 0x3
     field public static final int STATE_OFF = 1; // 0x1
     field public static final int STATE_ON = 3; // 0x3
     field public static final int STATE_TURNING_OFF = 4; // 0x4
@@ -31206,8 +31212,11 @@ package android.nfc.cardemulation {
 
   public final class CardEmulation {
     method public boolean categoryAllowsForegroundPreference(String);
+    method @Nullable @RequiresPermission(android.Manifest.permission.NFC_PREFERRED_PAYMENT_INFO) public java.util.List<java.lang.String> getAidsForPreferredPaymentService();
     method public java.util.List<java.lang.String> getAidsForService(android.content.ComponentName, String);
+    method @Nullable @RequiresPermission(android.Manifest.permission.NFC_PREFERRED_PAYMENT_INFO) public String getDescriptionForPreferredPaymentService();
     method public static android.nfc.cardemulation.CardEmulation getInstance(android.nfc.NfcAdapter);
+    method @Nullable @RequiresPermission(android.Manifest.permission.NFC_PREFERRED_PAYMENT_INFO) public String getRouteDestinationForPreferredPaymentService();
     method public int getSelectionModeForCategory(String);
     method public boolean isDefaultServiceForAid(android.content.ComponentName, String);
     method public boolean isDefaultServiceForCategory(android.content.ComponentName, String);
