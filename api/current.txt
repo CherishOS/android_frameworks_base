@@ -16934,7 +16934,7 @@ package android.hardware.camera2 {
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<android.util.Rational> CONTROL_AE_COMPENSATION_STEP;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Boolean> CONTROL_AE_LOCK_AVAILABLE;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AF_AVAILABLE_MODES;
-    field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<android.hardware.camera2.params.CapabilityAndMaxSize[]> CONTROL_AVAILABLE_BOKEH_CAPABILITIES;
+    field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<android.hardware.camera2.params.Capability[]> CONTROL_AVAILABLE_BOKEH_CAPABILITIES;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AVAILABLE_EFFECTS;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AVAILABLE_MODES;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AVAILABLE_SCENE_MODES;
@@ -16945,6 +16945,7 @@ package android.hardware.camera2 {
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> CONTROL_MAX_REGIONS_AF;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> CONTROL_MAX_REGIONS_AWB;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<android.util.Range<java.lang.Integer>> CONTROL_POST_RAW_SENSITIVITY_BOOST_RANGE;
+    field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<android.util.Range<java.lang.Float>> CONTROL_ZOOM_RATIO_RANGE;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Boolean> DEPTH_DEPTH_IS_EXCLUSIVE;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> DISTORTION_CORRECTION_AVAILABLE_MODES;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> EDGE_AVAILABLE_EDGE_MODES;
@@ -17357,6 +17358,7 @@ package android.hardware.camera2 {
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> CONTROL_POST_RAW_SENSITIVITY_BOOST;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> CONTROL_SCENE_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> CONTROL_VIDEO_STABILIZATION_MODE;
+    field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Float> CONTROL_ZOOM_RATIO;
     field @NonNull public static final android.os.Parcelable.Creator<android.hardware.camera2.CaptureRequest> CREATOR;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> DISTORTION_CORRECTION_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> EDGE_MODE;
@@ -17443,6 +17445,7 @@ package android.hardware.camera2 {
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_POST_RAW_SENSITIVITY_BOOST;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_SCENE_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_VIDEO_STABILIZATION_MODE;
+    field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Float> CONTROL_ZOOM_RATIO;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> DISTORTION_CORRECTION_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> EDGE_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> FLASH_MODE;
@@ -17532,9 +17535,10 @@ package android.hardware.camera2.params {
     field public static final int COUNT = 4; // 0x4
   }
 
-  public final class CapabilityAndMaxSize {
+  public final class Capability {
     method @NonNull public android.util.Size getMaxStreamingSize();
     method public int getMode();
+    method @NonNull public android.util.Range<java.lang.Float> getZoomRatioRange();
   }
 
   public final class ColorSpaceTransform {
@@ -23236,10 +23240,10 @@ package android.location {
   }
 
   public interface LocationListener {
-    method public void onLocationChanged(android.location.Location);
-    method public void onProviderDisabled(String);
-    method public void onProviderEnabled(String);
-    method @Deprecated public void onStatusChanged(String, int, android.os.Bundle);
+    method public void onLocationChanged(@NonNull android.location.Location);
+    method public default void onProviderDisabled(@NonNull String);
+    method public default void onProviderEnabled(@NonNull String);
+    method @Deprecated public default void onStatusChanged(String, int, android.os.Bundle);
   }
 
   public class LocationManager {
@@ -27639,6 +27643,7 @@ package android.media.session {
     method @Nullable public android.app.PendingIntent getSessionActivity();
     method @NonNull public android.os.Bundle getSessionInfo();
     method @NonNull public android.media.session.MediaSession.Token getSessionToken();
+    method @NonNull public String getTag();
     method @NonNull public android.media.session.MediaController.TransportControls getTransportControls();
     method public void registerCallback(@NonNull android.media.session.MediaController.Callback);
     method public void registerCallback(@NonNull android.media.session.MediaController.Callback, @Nullable android.os.Handler);
@@ -30041,6 +30046,7 @@ package android.net.wifi {
   @Deprecated public static class WifiConfiguration.GroupCipher {
     field @Deprecated public static final int CCMP = 3; // 0x3
     field @Deprecated public static final int GCMP_256 = 5; // 0x5
+    field @Deprecated public static final int SMS4 = 6; // 0x6
     field @Deprecated public static final int TKIP = 2; // 0x2
     field @Deprecated public static final int WEP104 = 1; // 0x1
     field @Deprecated public static final int WEP40 = 0; // 0x0
@@ -30070,6 +30076,7 @@ package android.net.wifi {
     field @Deprecated public static final int CCMP = 2; // 0x2
     field @Deprecated public static final int GCMP_256 = 3; // 0x3
     field @Deprecated public static final int NONE = 0; // 0x0
+    field @Deprecated public static final int SMS4 = 4; // 0x4
     field @Deprecated public static final int TKIP = 1; // 0x1
     field @Deprecated public static final String[] strings;
     field @Deprecated public static final String varName = "pairwise";
@@ -30077,6 +30084,7 @@ package android.net.wifi {
 
   @Deprecated public static class WifiConfiguration.Protocol {
     field @Deprecated public static final int RSN = 1; // 0x1
+    field @Deprecated public static final int WAPI = 3; // 0x3
     field @Deprecated public static final int WPA = 0; // 0x0
     field @Deprecated public static final String[] strings;
     field @Deprecated public static final String varName = "proto";
@@ -30123,6 +30131,12 @@ package android.net.wifi {
     method @Deprecated public void setSubjectMatch(String);
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.wifi.WifiEnterpriseConfig> CREATOR;
+    field public static final String EXTRA_WAPI_AS_CERTIFICATE_DATA = "android.net.wifi.extra.WAPI_AS_CERTIFICATE_DATA";
+    field public static final String EXTRA_WAPI_AS_CERTIFICATE_NAME = "android.net.wifi.extra.WAPI_AS_CERTIFICATE_NAME";
+    field public static final String EXTRA_WAPI_USER_CERTIFICATE_DATA = "android.net.wifi.extra.WAPI_USER_CERTIFICATE_DATA";
+    field public static final String EXTRA_WAPI_USER_CERTIFICATE_NAME = "android.net.wifi.extra.WAPI_USER_CERTIFICATE_NAME";
+    field public static final String WAPI_AS_CERTIFICATE = "WAPIAS_";
+    field public static final String WAPI_USER_CERTIFICATE = "WAPIUSR_";
   }
 
   public static final class WifiEnterpriseConfig.Eap {
@@ -30135,6 +30149,7 @@ package android.net.wifi {
     field public static final int TLS = 1; // 0x1
     field public static final int TTLS = 2; // 0x2
     field public static final int UNAUTH_TLS = 7; // 0x7
+    field public static final int WAPI_CERT = 8; // 0x8
   }
 
   public static final class WifiEnterpriseConfig.Phase2 {
@@ -30206,6 +30221,7 @@ package android.net.wifi {
     method public boolean isPreferredNetworkOffloadSupported();
     method @Deprecated public boolean isScanAlwaysAvailable();
     method public boolean isTdlsSupported();
+    method public boolean isWapiSupported();
     method public boolean isWifiEnabled();
     method public boolean isWpa3SaeSupported();
     method public boolean isWpa3SuiteBSupported();
@@ -30362,6 +30378,8 @@ package android.net.wifi {
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setPasspointConfig(@NonNull android.net.wifi.hotspot2.PasspointConfiguration);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setPriority(@IntRange(from=0) int);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setSsid(@NonNull String);
+    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setWapiEnterpriseConfig(@NonNull android.net.wifi.WifiEnterpriseConfig);
+    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setWapiPassphrase(@NonNull String);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setWpa2EnterpriseConfig(@NonNull android.net.wifi.WifiEnterpriseConfig);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setWpa2Passphrase(@NonNull String);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setWpa3EnterpriseConfig(@NonNull android.net.wifi.WifiEnterpriseConfig);
@@ -30399,8 +30417,11 @@ package android.net.wifi.aware {
     method public int getMaxMatchFilterLength();
     method public int getMaxServiceNameLength();
     method public int getMaxServiceSpecificInfoLength();
+    method public int getSupportedCipherSuites();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.wifi.aware.Characteristics> CREATOR;
+    field public static final int WIFI_AWARE_CIPHER_SUITE_NCS_SK_128 = 1; // 0x1
+    field public static final int WIFI_AWARE_CIPHER_SUITE_NCS_SK_256 = 2; // 0x2
   }
 
   public class DiscoverySession implements java.lang.AutoCloseable {
@@ -35759,7 +35780,7 @@ package android.os {
     method @Deprecated public void setUserRestrictions(android.os.Bundle, android.os.UserHandle);
     method public static boolean supportsMultipleUsers();
     field public static final String ALLOW_PARENT_PROFILE_APP_LINKING = "allow_parent_profile_app_linking";
-    field public static final String DISALLOW_ADD_MANAGED_PROFILE = "no_add_managed_profile";
+    field @Deprecated public static final String DISALLOW_ADD_MANAGED_PROFILE = "no_add_managed_profile";
     field public static final String DISALLOW_ADD_USER = "no_add_user";
     field public static final String DISALLOW_ADJUST_VOLUME = "no_adjust_volume";
     field public static final String DISALLOW_AIRPLANE_MODE = "no_airplane_mode";
@@ -35798,7 +35819,7 @@ package android.os {
     field public static final String DISALLOW_OUTGOING_BEAM = "no_outgoing_beam";
     field public static final String DISALLOW_OUTGOING_CALLS = "no_outgoing_calls";
     field public static final String DISALLOW_PRINTING = "no_printing";
-    field public static final String DISALLOW_REMOVE_MANAGED_PROFILE = "no_remove_managed_profile";
+    field @Deprecated public static final String DISALLOW_REMOVE_MANAGED_PROFILE = "no_remove_managed_profile";
     field public static final String DISALLOW_REMOVE_USER = "no_remove_user";
     field public static final String DISALLOW_SAFE_BOOT = "no_safe_boot";
     field public static final String DISALLOW_SET_USER_ICON = "no_set_user_icon";
@@ -39042,6 +39063,8 @@ package android.provider {
     field public static final String GENRE = "genre";
     field public static final String HEIGHT = "height";
     field public static final String INSTANCE_ID = "instance_id";
+    field public static final String IS_DOWNLOAD = "is_download";
+    field public static final String IS_DRM = "is_drm";
     field public static final String IS_FAVORITE = "is_favorite";
     field public static final String IS_PENDING = "is_pending";
     field public static final String IS_TRASHED = "is_trashed";
@@ -49453,6 +49476,71 @@ package android.util {
     enum_constant public static final android.util.Xml.Encoding US_ASCII;
     enum_constant public static final android.util.Xml.Encoding UTF_16;
     enum_constant public static final android.util.Xml.Encoding UTF_8;
+  }
+
+}
+
+package android.util.proto {
+
+  public final class ProtoOutputStream {
+    ctor public ProtoOutputStream();
+    ctor public ProtoOutputStream(int);
+    ctor public ProtoOutputStream(@NonNull java.io.OutputStream);
+    method public static int checkFieldId(long, long);
+    method public void dump(@NonNull String);
+    method public void end(long);
+    method public void flush();
+    method @NonNull public byte[] getBytes();
+    method @Nullable public static String getFieldCountString(long);
+    method @NonNull public static String getFieldIdString(long);
+    method @Nullable public static String getFieldTypeString(long);
+    method public int getRawSize();
+    method @Nullable public static String getWireTypeString(int);
+    method public static long makeFieldId(int, long);
+    method public static long makeToken(int, boolean, int, int, int);
+    method public long start(long);
+    method @NonNull public static String token2String(long);
+    method public void write(long, double);
+    method public void write(long, float);
+    method public void write(long, int);
+    method public void write(long, long);
+    method public void write(long, boolean);
+    method public void write(long, @Nullable String);
+    method public void write(long, @Nullable byte[]);
+    method public void writeTag(int, int);
+    field public static final long FIELD_COUNT_MASK = 16492674416640L; // 0xf0000000000L
+    field public static final long FIELD_COUNT_PACKED = 5497558138880L; // 0x50000000000L
+    field public static final long FIELD_COUNT_REPEATED = 2199023255552L; // 0x20000000000L
+    field public static final int FIELD_COUNT_SHIFT = 40; // 0x28
+    field public static final long FIELD_COUNT_SINGLE = 1099511627776L; // 0x10000000000L
+    field public static final long FIELD_COUNT_UNKNOWN = 0L; // 0x0L
+    field public static final int FIELD_ID_SHIFT = 3; // 0x3
+    field public static final long FIELD_TYPE_BOOL = 34359738368L; // 0x800000000L
+    field public static final long FIELD_TYPE_BYTES = 51539607552L; // 0xc00000000L
+    field public static final long FIELD_TYPE_DOUBLE = 4294967296L; // 0x100000000L
+    field public static final long FIELD_TYPE_ENUM = 60129542144L; // 0xe00000000L
+    field public static final long FIELD_TYPE_FIXED32 = 30064771072L; // 0x700000000L
+    field public static final long FIELD_TYPE_FIXED64 = 25769803776L; // 0x600000000L
+    field public static final long FIELD_TYPE_FLOAT = 8589934592L; // 0x200000000L
+    field public static final long FIELD_TYPE_INT32 = 21474836480L; // 0x500000000L
+    field public static final long FIELD_TYPE_INT64 = 12884901888L; // 0x300000000L
+    field public static final long FIELD_TYPE_MASK = 1095216660480L; // 0xff00000000L
+    field public static final long FIELD_TYPE_MESSAGE = 47244640256L; // 0xb00000000L
+    field public static final long FIELD_TYPE_SFIXED32 = 64424509440L; // 0xf00000000L
+    field public static final long FIELD_TYPE_SFIXED64 = 68719476736L; // 0x1000000000L
+    field public static final int FIELD_TYPE_SHIFT = 32; // 0x20
+    field public static final long FIELD_TYPE_SINT32 = 73014444032L; // 0x1100000000L
+    field public static final long FIELD_TYPE_SINT64 = 77309411328L; // 0x1200000000L
+    field public static final long FIELD_TYPE_STRING = 38654705664L; // 0x900000000L
+    field public static final long FIELD_TYPE_UINT32 = 55834574848L; // 0xd00000000L
+    field public static final long FIELD_TYPE_UINT64 = 17179869184L; // 0x400000000L
+    field public static final int WIRE_TYPE_END_GROUP = 4; // 0x4
+    field public static final int WIRE_TYPE_FIXED32 = 5; // 0x5
+    field public static final int WIRE_TYPE_FIXED64 = 1; // 0x1
+    field public static final int WIRE_TYPE_LENGTH_DELIMITED = 2; // 0x2
+    field public static final int WIRE_TYPE_MASK = 7; // 0x7
+    field public static final int WIRE_TYPE_START_GROUP = 3; // 0x3
+    field public static final int WIRE_TYPE_VARINT = 0; // 0x0
   }
 
 }
