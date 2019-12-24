@@ -3812,6 +3812,7 @@ package android.app {
     method public void onPerformDirectAction(@NonNull String, @NonNull android.os.Bundle, @NonNull android.os.CancellationSignal, @NonNull java.util.function.Consumer<android.os.Bundle>);
     method public void onPictureInPictureModeChanged(boolean, android.content.res.Configuration);
     method @Deprecated public void onPictureInPictureModeChanged(boolean);
+    method public void onPictureInPictureRequested();
     method @CallSuper protected void onPostCreate(@Nullable android.os.Bundle);
     method public void onPostCreate(@Nullable android.os.Bundle, @Nullable android.os.PersistableBundle);
     method @CallSuper protected void onPostResume();
@@ -5102,6 +5103,7 @@ package android.app {
     method public void callActivityOnDestroy(android.app.Activity);
     method public void callActivityOnNewIntent(android.app.Activity, android.content.Intent);
     method public void callActivityOnPause(android.app.Activity);
+    method public void callActivityOnPictureInPictureRequested(@NonNull android.app.Activity);
     method public void callActivityOnPostCreate(@NonNull android.app.Activity, @Nullable android.os.Bundle);
     method public void callActivityOnPostCreate(@NonNull android.app.Activity, @Nullable android.os.Bundle, @Nullable android.os.PersistableBundle);
     method public void callActivityOnRestart(android.app.Activity);
@@ -9973,6 +9975,7 @@ package android.content {
     field public static final String DOWNLOAD_SERVICE = "download";
     field public static final String DROPBOX_SERVICE = "dropbox";
     field public static final String EUICC_SERVICE = "euicc";
+    field public static final String FILE_INTEGRITY_SERVICE = "file_integrity";
     field public static final String FINGERPRINT_SERVICE = "fingerprint";
     field public static final String HARDWARE_PROPERTIES_SERVICE = "hardware_properties";
     field public static final String INPUT_METHOD_SERVICE = "input_method";
@@ -23743,6 +23746,7 @@ package android.media {
     field public static final int ENCODING_IEC61937 = 13; // 0xd
     field public static final int ENCODING_INVALID = 0; // 0x0
     field public static final int ENCODING_MP3 = 9; // 0x9
+    field public static final int ENCODING_OPUS = 20; // 0x14
     field public static final int ENCODING_PCM_16BIT = 2; // 0x2
     field public static final int ENCODING_PCM_8BIT = 3; // 0x3
     field public static final int ENCODING_PCM_FLOAT = 4; // 0x4
@@ -41388,6 +41392,11 @@ package android.security {
     method public android.security.ConfirmationPrompt.Builder setPromptText(CharSequence);
   }
 
+  public final class FileIntegrityManager {
+    method public boolean isApkVeritySupported();
+    method @RequiresPermission(anyOf={android.Manifest.permission.INSTALL_PACKAGES, android.Manifest.permission.REQUEST_INSTALL_PACKAGES}) public boolean isAppSourceCertificateTrusted(@NonNull java.security.cert.X509Certificate) throws java.security.cert.CertificateEncodingException;
+  }
+
   public final class KeyChain {
     ctor public KeyChain();
     method public static void choosePrivateKeyAlias(@NonNull android.app.Activity, @NonNull android.security.KeyChainAliasCallback, @Nullable String[], @Nullable java.security.Principal[], @Nullable String, int, @Nullable String);
@@ -54325,6 +54334,7 @@ package android.view.inline {
   public static final class InlinePresentationSpec.Builder {
     ctor public InlinePresentationSpec.Builder(@NonNull android.util.Size, @NonNull android.util.Size);
     method @NonNull public android.view.inline.InlinePresentationSpec build();
+    method @NonNull public android.view.inline.InlinePresentationSpec.Builder setStyle(@Nullable String);
   }
 
 }
@@ -55262,6 +55272,7 @@ package android.view.textclassifier {
     method public int describeContents();
     method @NonNull public android.os.Bundle getExtras();
     method @NonNull public java.util.Collection<android.view.textclassifier.TextLinks.TextLink> getLinks();
+    method @NonNull public String getText();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int APPLY_STRATEGY_IGNORE = 0; // 0x0
     field public static final int APPLY_STRATEGY_REPLACE = 1; // 0x1
@@ -55288,6 +55299,7 @@ package android.view.textclassifier {
     method @Nullable public android.os.LocaleList getDefaultLocales();
     method @Nullable public android.view.textclassifier.TextClassifier.EntityConfig getEntityConfig();
     method @NonNull public android.os.Bundle getExtras();
+    method @Nullable public java.time.ZonedDateTime getReferenceTime();
     method @NonNull public CharSequence getText();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.view.textclassifier.TextLinks.Request> CREATOR;
@@ -55299,6 +55311,7 @@ package android.view.textclassifier {
     method @NonNull public android.view.textclassifier.TextLinks.Request.Builder setDefaultLocales(@Nullable android.os.LocaleList);
     method @NonNull public android.view.textclassifier.TextLinks.Request.Builder setEntityConfig(@Nullable android.view.textclassifier.TextClassifier.EntityConfig);
     method public android.view.textclassifier.TextLinks.Request.Builder setExtras(@Nullable android.os.Bundle);
+    method @NonNull public android.view.textclassifier.TextLinks.Request.Builder setReferenceTime(@Nullable java.time.ZonedDateTime);
   }
 
   public static final class TextLinks.TextLink implements android.os.Parcelable {
