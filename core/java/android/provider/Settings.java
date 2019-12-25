@@ -5242,6 +5242,12 @@ public final class Settings {
          * @hide
          */
         public static final String ADVANCED_REBOOT = "advanced_reboot";
+		
+		/**
+         * Whether to vibrate on notifications
+         * @hide
+         */
+        public static final String VIBRATE_ON_NOTIFICATIONS = "vibrate_on_notifications";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
