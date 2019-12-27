@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 The Android Open Source Project
+ * Copyright (C) 2019 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,28 @@
  * limitations under the License.
  */
 
-package android.media;
+package com.android.systemui.stackdivider;
 
-import android.media.MediaRoute2Info;
-import android.media.RouteSessionInfo;
-import android.os.Bundle;
+import android.content.Context;
+
+import com.android.systemui.recents.Recents;
+
+import java.util.Optional;
+
+import javax.inject.Singleton;
+
+import dagger.Lazy;
+import dagger.Module;
+import dagger.Provides;
 
 /**
- * @hide
+ * Module which provides a Divider.
  */
-oneway interface IMediaRouter2Client {
-    void notifyRestoreRoute();
-    void notifyRoutesAdded(in List<MediaRoute2Info> routes);
-    void notifyRoutesRemoved(in List<MediaRoute2Info> routes);
-    void notifyRoutesChanged(in List<MediaRoute2Info> routes);
-    void notifySessionCreated(in @nullable RouteSessionInfo sessionInfo, int requestId);
+@Module
+public class DividerModule {
+    @Singleton
+    @Provides
+    static Divider provideDivider(Context context, Optional<Lazy<Recents>> recentsOptionalLazy) {
+        return new Divider(context, recentsOptionalLazy);
+    }
 }
