@@ -24793,11 +24793,13 @@ package android.media {
 
   public final class MediaCas implements java.lang.AutoCloseable {
     ctor public MediaCas(int) throws android.media.MediaCasException.UnsupportedCasException;
+    ctor public MediaCas(int, @Nullable String, int) throws android.media.MediaCasException.UnsupportedCasException;
     method public void close();
     method public static android.media.MediaCas.PluginDescriptor[] enumeratePlugins();
     method protected void finalize();
     method public static boolean isSystemIdSupported(int);
     method public android.media.MediaCas.Session openSession() throws android.media.MediaCasException;
+    method @Nullable public android.media.MediaCas.Session openSession(int, int) throws android.media.MediaCasException;
     method public void processEmm(@NonNull byte[], int, int) throws android.media.MediaCasException;
     method public void processEmm(@NonNull byte[]) throws android.media.MediaCasException;
     method public void provision(@NonNull String) throws android.media.MediaCasException;
@@ -24805,10 +24807,32 @@ package android.media {
     method public void sendEvent(int, int, @Nullable byte[]) throws android.media.MediaCasException;
     method public void setEventListener(@Nullable android.media.MediaCas.EventListener, @Nullable android.os.Handler);
     method public void setPrivateData(@NonNull byte[]) throws android.media.MediaCasException;
+    field public static final int PLUGIN_STATUS_PHYSICAL_MODULE_CHANGED = 0; // 0x0
+    field public static final int PLUGIN_STATUS_SESSION_NUMBER_CHANGED = 1; // 0x1
+    field public static final int SCRAMBLING_MODE_AES128 = 9; // 0x9
+    field public static final int SCRAMBLING_MODE_AES_ECB = 10; // 0xa
+    field public static final int SCRAMBLING_MODE_AES_SCTE52 = 11; // 0xb
+    field public static final int SCRAMBLING_MODE_DVB_CISSA_V1 = 6; // 0x6
+    field public static final int SCRAMBLING_MODE_DVB_CSA1 = 1; // 0x1
+    field public static final int SCRAMBLING_MODE_DVB_CSA2 = 2; // 0x2
+    field public static final int SCRAMBLING_MODE_DVB_CSA3_ENHANCE = 5; // 0x5
+    field public static final int SCRAMBLING_MODE_DVB_CSA3_MINIMAL = 4; // 0x4
+    field public static final int SCRAMBLING_MODE_DVB_CSA3_STANDARD = 3; // 0x3
+    field public static final int SCRAMBLING_MODE_DVB_IDSA = 7; // 0x7
+    field public static final int SCRAMBLING_MODE_MULTI2 = 8; // 0x8
+    field public static final int SCRAMBLING_MODE_RESERVED = 0; // 0x0
+    field public static final int SCRAMBLING_MODE_TDES_ECB = 12; // 0xc
+    field public static final int SCRAMBLING_MODE_TDES_SCTE52 = 13; // 0xd
+    field public static final int SESSION_USAGE_LIVE = 0; // 0x0
+    field public static final int SESSION_USAGE_PLAYBACK = 1; // 0x1
+    field public static final int SESSION_USAGE_RECORD = 2; // 0x2
+    field public static final int SESSION_USAGE_TIMESHIFT = 3; // 0x3
   }
 
   public static interface MediaCas.EventListener {
     method public void onEvent(@NonNull android.media.MediaCas, int, int, @Nullable byte[]);
+    method public default void onPluginStatusUpdate(@NonNull android.media.MediaCas, int, int);
+    method public default void onResourceLost(@NonNull android.media.MediaCas);
     method public default void onSessionEvent(@NonNull android.media.MediaCas, @NonNull android.media.MediaCas.Session, int, int, @Nullable byte[]);
   }
 
@@ -24819,6 +24843,7 @@ package android.media {
 
   public final class MediaCas.Session implements java.lang.AutoCloseable {
     method public void close();
+    method @NonNull public byte[] getSessionId();
     method public void processEcm(@NonNull byte[], int, int) throws android.media.MediaCasException;
     method public void processEcm(@NonNull byte[]) throws android.media.MediaCasException;
     method public void sendSessionEvent(int, int, @Nullable byte[]) throws android.media.MediaCasException;
@@ -24829,6 +24854,9 @@ package android.media {
   }
 
   public static final class MediaCasException.DeniedByServerException extends android.media.MediaCasException {
+  }
+
+  public static final class MediaCasException.InsufficientResourceException extends android.media.MediaCasException {
   }
 
   public static final class MediaCasException.NotProvisionedException extends android.media.MediaCasException {
@@ -28817,6 +28845,19 @@ package android.media.tv {
     field public static final int TIME_SHIFT_STATUS_UNSUPPORTED = 1; // 0x1
     field public static final int VIDEO_UNAVAILABLE_REASON_AUDIO_ONLY = 4; // 0x4
     field public static final int VIDEO_UNAVAILABLE_REASON_BUFFERING = 3; // 0x3
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_BLACKOUT = 16; // 0x10
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_CARD_INVALID = 15; // 0xf
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_CARD_MUTE = 14; // 0xe
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_INSUFFICIENT_OUTPUT_PROTECTION = 7; // 0x7
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_LICENSE_EXPIRED = 10; // 0xa
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_NEED_ACTIVATION = 11; // 0xb
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_NEED_PAIRING = 12; // 0xc
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_NO_CARD = 13; // 0xd
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_PVR_RECORDING_NOT_ALLOWED = 8; // 0x8
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_REBOOTING = 17; // 0x11
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_UNKNOWN = 18; // 0x12
+    field public static final int VIDEO_UNAVAILABLE_REASON_INSUFFICIENT_RESOURCE = 6; // 0x6
+    field public static final int VIDEO_UNAVAILABLE_REASON_NOT_CONNECTED = 5; // 0x5
     field public static final int VIDEO_UNAVAILABLE_REASON_TUNING = 1; // 0x1
     field public static final int VIDEO_UNAVAILABLE_REASON_UNKNOWN = 0; // 0x0
     field public static final int VIDEO_UNAVAILABLE_REASON_WEAK_SIGNAL = 2; // 0x2
@@ -28838,6 +28879,11 @@ package android.media.tv {
     method @Nullable public android.media.tv.TvInputService.RecordingSession onCreateRecordingSession(@NonNull String, @NonNull String);
     method @Nullable public abstract android.media.tv.TvInputService.Session onCreateSession(String);
     method @Nullable public android.media.tv.TvInputService.Session onCreateSession(@NonNull String, @NonNull String);
+    field public static final int PRIORITY_HINT_USE_CASE_TYPE_BACKGROUND = 100; // 0x64
+    field public static final int PRIORITY_HINT_USE_CASE_TYPE_LIVE = 400; // 0x190
+    field public static final int PRIORITY_HINT_USE_CASE_TYPE_PLAYBACK = 300; // 0x12c
+    field public static final int PRIORITY_HINT_USE_CASE_TYPE_RECORD = 500; // 0x1f4
+    field public static final int PRIORITY_HINT_USE_CASE_TYPE_SCAN = 200; // 0xc8
     field public static final String SERVICE_INTERFACE = "android.media.tv.TvInputService";
     field public static final String SERVICE_META_DATA = "android.media.tv.input";
   }
