@@ -24737,7 +24737,9 @@ package android.media {
     method @Deprecated @NonNull public java.nio.ByteBuffer[] getOutputBuffers();
     method @NonNull public android.media.MediaFormat getOutputFormat();
     method @NonNull public android.media.MediaFormat getOutputFormat(int);
+    method @NonNull public android.media.MediaCodec.OutputFrame getOutputFrame(int);
     method @Nullable public android.media.Image getOutputImage(int);
+    method @NonNull public android.media.MediaCodec.QueueRequest getQueueRequest(int);
     method public void queueInputBuffer(int, int, int, long, int) throws android.media.MediaCodec.CryptoException;
     method public void queueSecureInputBuffer(int, int, @NonNull android.media.MediaCodec.CryptoInfo, long, int) throws android.media.MediaCodec.CryptoException;
     method public void release();
@@ -24761,6 +24763,7 @@ package android.media {
     field public static final int BUFFER_FLAG_PARTIAL_FRAME = 8; // 0x8
     field @Deprecated public static final int BUFFER_FLAG_SYNC_FRAME = 1; // 0x1
     field public static final int CONFIGURE_FLAG_ENCODE = 1; // 0x1
+    field public static final int CONFIGURE_FLAG_USE_BLOCK_MODEL = 2; // 0x2
     field public static final int CRYPTO_MODE_AES_CBC = 2; // 0x2
     field public static final int CRYPTO_MODE_AES_CTR = 1; // 0x1
     field public static final int CRYPTO_MODE_UNENCRYPTED = 0; // 0x0
@@ -24837,6 +24840,24 @@ package android.media {
     method public void set(int, int);
   }
 
+  public static final class MediaCodec.GraphicBlock {
+    method protected void finalize();
+    method public static boolean isCodecCopyFreeCompatible(@NonNull String[]);
+    method public boolean isMappable();
+    method @NonNull public android.media.Image map();
+    method @NonNull public static android.media.MediaCodec.GraphicBlock obtain(int, int, int, long, @NonNull String[]);
+    method public void recycle();
+  }
+
+  public static final class MediaCodec.LinearBlock {
+    method protected void finalize();
+    method public static boolean isCodecCopyFreeCompatible(@NonNull String[]);
+    method public boolean isMappable();
+    method @NonNull public java.nio.ByteBuffer map();
+    method @Nullable public static android.media.MediaCodec.LinearBlock obtain(int, @NonNull String[]);
+    method public void recycle();
+  }
+
   public static final class MediaCodec.MetricsConstants {
     field public static final String CODEC = "android.media.mediacodec.codec";
     field public static final String ENCODER = "android.media.mediacodec.encoder";
@@ -24852,6 +24873,27 @@ package android.media {
 
   public static interface MediaCodec.OnFrameRenderedListener {
     method public void onFrameRendered(@NonNull android.media.MediaCodec, long, long);
+  }
+
+  public static final class MediaCodec.OutputFrame {
+    method public void getChangedKeys(@NonNull java.util.Set<java.lang.String>);
+    method public int getFlags();
+    method @NonNull public android.media.MediaFormat getFormat();
+    method @Nullable public android.media.MediaCodec.GraphicBlock getGraphicBlock();
+    method @Nullable public android.media.MediaCodec.LinearBlock getLinearBlock();
+    method public long getPresentationTimeUs();
+  }
+
+  public final class MediaCodec.QueueRequest {
+    method public void queue();
+    method @NonNull public android.media.MediaCodec.QueueRequest setByteBufferParameter(@NonNull String, @NonNull java.nio.ByteBuffer);
+    method @NonNull public android.media.MediaCodec.QueueRequest setEncryptedLinearBlock(@NonNull android.media.MediaCodec.LinearBlock, int, @NonNull android.media.MediaCodec.CryptoInfo, long, int);
+    method @NonNull public android.media.MediaCodec.QueueRequest setFloatParameter(@NonNull String, float);
+    method @NonNull public android.media.MediaCodec.QueueRequest setGraphicBlock(@NonNull android.media.MediaCodec.GraphicBlock, long, int);
+    method @NonNull public android.media.MediaCodec.QueueRequest setIntegerParameter(@NonNull String, int);
+    method @NonNull public android.media.MediaCodec.QueueRequest setLinearBlock(@NonNull android.media.MediaCodec.LinearBlock, int, int, long, int);
+    method @NonNull public android.media.MediaCodec.QueueRequest setLongParameter(@NonNull String, long);
+    method @NonNull public android.media.MediaCodec.QueueRequest setStringParameter(@NonNull String, @NonNull String);
   }
 
   public final class MediaCodecInfo {
