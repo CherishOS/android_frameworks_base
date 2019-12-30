@@ -54,6 +54,8 @@ LOCAL_REQUIRED_MODULES := \
         FontLinotte \
 	FontOneplusSlateSource \
 	FontSamsungOneSourceOverlay \
+	FontNokiaPureSourceOverlay \
+	FontFifa2018SourceOverlay \
 	IconPackCircularAndroidOverlay \
 	IconPackCircularPixelLauncherOverlay \
 	IconPackCircularPixelThemePickerOverlay \
