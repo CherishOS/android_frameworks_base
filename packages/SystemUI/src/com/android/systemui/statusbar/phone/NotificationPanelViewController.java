@@ -209,6 +209,9 @@ public class NotificationPanelViewController extends PanelViewController {
     private static final String STATUS_BAR_QUICK_QS_PULLDOWN =
             Settings.Secure.STATUS_BAR_QUICK_QS_PULLDOWN;
 
+    private static final String LOCKSCREEN_STATUS_BAR =
+            "system:" + Settings.System.LOCKSCREEN_STATUS_BAR;
+
     private static final Rect M_DUMMY_DIRTY_RECT = new Rect(0, 0, 1, 1);
     private static final Rect EMPTY_RECT = new Rect();
 
@@ -434,6 +437,8 @@ public class NotificationPanelViewController extends PanelViewController {
     private final NotificationLockscreenUserManager mLockscreenUserManager;
     private final ShadeController mShadeController;
     private int mDisplayId;
+
+    private boolean mShowLockscreenStatusBar;
 
     /**
      * Cache the resource id of the theme to avoid unnecessary work in onThemeChanged.
@@ -1667,6 +1672,7 @@ public class NotificationPanelViewController extends PanelViewController {
             };
 
     private void animateKeyguardStatusBarIn(long duration) {
+        if (!mShowLockscreenStatusBar) return;
         mKeyguardStatusBar.setVisibility(View.VISIBLE);
         mKeyguardStatusBar.setAlpha(0f);
         ValueAnimator anim = ValueAnimator.ofFloat(0f, 1f);
@@ -2291,7 +2297,7 @@ public class NotificationPanelViewController extends PanelViewController {
                 mFirstBypassAttempt && mUpdateMonitor.shouldListenForFace()
                         || mDelayShowingKeyguardStatusBar;
         mKeyguardStatusBar.setVisibility(
-                newAlpha != 0f && !mDozing && !hideForBypass ? View.VISIBLE : View.INVISIBLE);
+                newAlpha != 0f && !mDozing && !hideForBypass && mShowLockscreenStatusBar ? View.VISIBLE : View.INVISIBLE);
     }
 
     private void updateKeyguardBottomAreaAlpha() {
@@ -3781,7 +3787,7 @@ public class NotificationPanelViewController extends PanelViewController {
                 }
             } else {
                 mKeyguardStatusBar.setAlpha(1f);
-                mKeyguardStatusBar.setVisibility(keyguardShowing ? View.VISIBLE : View.INVISIBLE);
+                mKeyguardStatusBar.setVisibility(keyguardShowing && mShowLockscreenStatusBar ? View.VISIBLE : View.INVISIBLE);
                 if (keyguardShowing && oldState != mBarState) {
                     if (mQs != null) {
                         mQs.hideImmediately();
@@ -3826,6 +3832,7 @@ public class NotificationPanelViewController extends PanelViewController {
             mZenModeController.addCallback(mZenModeControllerCallback);
             mConfigurationController.addCallback(mConfigurationListener);
             mTunerService.addTunable(this, STATUS_BAR_QUICK_QS_PULLDOWN);
+            mTunerService.addTunable(this, LOCKSCREEN_STATUS_BAR);
             mUpdateMonitor.registerCallback(mKeyguardUpdateCallback);
             // Theme might have changed between inflating this view and attaching it to the
             // window, so
@@ -3847,6 +3854,8 @@ public class NotificationPanelViewController extends PanelViewController {
         public void onTuningChanged(String key, String newValue) {
             if (STATUS_BAR_QUICK_QS_PULLDOWN.equals(key)) {
                 mOneFingerQuickSettingsIntercept = TunerService.parseIntegerSwitch(newValue, true);
+			} else if (LOCKSCREEN_STATUS_BAR.equals(key)) {
+                mShowLockscreenStatusBar = TunerService.parseIntegerSwitch(newValue, true);
             }
         }
     }

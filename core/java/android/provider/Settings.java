@@ -4995,6 +4995,12 @@ public final class Settings {
          * @hide
          */
         public static final String QS_PANEL_BG_ALPHA = "qs_panel_bg_alpha";
+		
+		/**
+         * Whether to show status bar on lockscreen
+         * @hide
+         */
+        public static final String LOCKSCREEN_STATUS_BAR = "lockscreen_status_bar";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
