@@ -9996,6 +9996,7 @@ package android.content {
     field public static final String MEDIA_ROUTER_SERVICE = "media_router";
     field public static final String MEDIA_SESSION_SERVICE = "media_session";
     field public static final String MIDI_SERVICE = "midi";
+    field public static final String MMS_SERVICE = "mms";
     field public static final int MODE_APPEND = 32768; // 0x8000
     field public static final int MODE_ENABLE_WRITE_AHEAD_LOGGING = 8; // 0x8
     field @Deprecated public static final int MODE_MULTI_PROCESS = 4; // 0x4
@@ -45459,6 +45460,11 @@ package android.telephony {
     method @Nullable public android.telephony.mbms.StreamingService startStreaming(android.telephony.mbms.StreamingServiceInfo, @NonNull java.util.concurrent.Executor, android.telephony.mbms.StreamingServiceCallback);
   }
 
+  public final class MmsManager {
+    method public void downloadMultimediaMessage(int, @NonNull String, @NonNull android.net.Uri, @Nullable android.os.Bundle, @Nullable android.app.PendingIntent);
+    method public void sendMultimediaMessage(int, @NonNull android.net.Uri, @Nullable String, @Nullable android.os.Bundle, @Nullable android.app.PendingIntent);
+  }
+
   @Deprecated public class NeighboringCellInfo implements android.os.Parcelable {
     ctor @Deprecated public NeighboringCellInfo();
     ctor @Deprecated public NeighboringCellInfo(int, int);
@@ -45695,8 +45701,8 @@ package android.telephony {
     method public String createAppSpecificSmsToken(android.app.PendingIntent);
     method @Nullable public String createAppSpecificSmsTokenWithPackageInfo(@Nullable String, @NonNull android.app.PendingIntent);
     method public java.util.ArrayList<java.lang.String> divideMessage(String);
-    method public void downloadMultimediaMessage(android.content.Context, String, android.net.Uri, android.os.Bundle, android.app.PendingIntent);
-    method @Nullable public android.os.Bundle getCarrierConfigValues();
+    method @Deprecated public void downloadMultimediaMessage(android.content.Context, String, android.net.Uri, android.os.Bundle, android.app.PendingIntent);
+    method @NonNull public android.os.Bundle getCarrierConfigValues();
     method public static android.telephony.SmsManager getDefault();
     method public static int getDefaultSmsSubscriptionId();
     method public static android.telephony.SmsManager getSmsManagerForSubscriptionId(int);
@@ -45705,7 +45711,7 @@ package android.telephony {
     method public int getSubscriptionId();
     method public void injectSmsPdu(byte[], String, android.app.PendingIntent);
     method public void sendDataMessage(String, String, short, byte[], android.app.PendingIntent, android.app.PendingIntent);
-    method public void sendMultimediaMessage(android.content.Context, android.net.Uri, String, android.os.Bundle, android.app.PendingIntent);
+    method @Deprecated public void sendMultimediaMessage(android.content.Context, android.net.Uri, String, android.os.Bundle, android.app.PendingIntent);
     method public void sendMultipartTextMessage(String, String, java.util.ArrayList<java.lang.String>, java.util.ArrayList<android.app.PendingIntent>, java.util.ArrayList<android.app.PendingIntent>);
     method public void sendTextMessage(String, String, String, android.app.PendingIntent, android.app.PendingIntent);
     method @RequiresPermission(allOf={android.Manifest.permission.MODIFY_PHONE_STATE, android.Manifest.permission.SEND_SMS}) public void sendTextMessageWithoutPersisting(String, String, String, android.app.PendingIntent, android.app.PendingIntent);
