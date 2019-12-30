@@ -4426,6 +4426,9 @@ public class StatusBar extends SystemUI implements DemoMode,
 			resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_SHOW_BATTERY_PERCENT),
                     false, this, UserHandle.USER_ALL);
+			resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_SHOW_BATTERY_ESTIMATE),
+                    false, this, UserHandle.USER_ALL);
         }
          @Override
         public void onChange(boolean selfChange, Uri uri) {
@@ -4470,6 +4473,8 @@ public class StatusBar extends SystemUI implements DemoMode,
                 updateQsPanelResources();
 			} else if (uri.equals(Settings.System.getUriFor(Settings.System.QS_SHOW_BATTERY_PERCENT))) {
                 setQsBatteryPercentMode();
+			} else if (uri.equals(Settings.System.getUriFor(Settings.System.QS_SHOW_BATTERY_ESTIMATE))) {
+                setQsBatteryEstimate();
             }
             update();
         }
@@ -4491,12 +4496,19 @@ public class StatusBar extends SystemUI implements DemoMode,
 			setFpToDismissNotifications();
 			updateQsPanelResources();
 			setQsBatteryPercentMode();
+			setQsBatteryEstimate();
         }
     }
 
     private void setQsBatteryPercentMode() {
         if (mQSBarHeader != null) {
-            ((QuickStatusBarHeader) mQSBarHeader).setBatteryPercentMode();
+            ((QuickStatusBarHeader) mQSBarHeader).updateQSBatteryPercent();
+        }
+    }
+
+    private void setQsBatteryEstimate() {
+        if (mQSBarHeader != null) {
+            ((QuickStatusBarHeader) mQSBarHeader).updateQSBatteryEstimate();
         }
     }
 	
