@@ -3943,14 +3943,21 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Settings.System.HEADS_UP_STOPLIST_VALUES), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HEADS_UP_BLACKLIST_VALUES), false, this);
+			resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.LOCKSCREEN_CLOCK_SELECTION),
+                    false, this, UserHandle.USER_ALL);
         }
          @Override
         public void onChange(boolean selfChange, Uri uri) {
+			if (uri.equals(Settings.Secure.getUriFor(Settings.Secure.LOCKSCREEN_CLOCK_SELECTION))) {
+                updateKeyguardStatusSettings();
+            }
             update();
         }
          public void update() {
             setHeadsUpStoplist();
             setHeadsUpBlacklist();
+			updateKeyguardStatusSettings();
         }
     }
 
@@ -3962,6 +3969,10 @@ public class StatusBar extends SystemUI implements DemoMode,
     private void setHeadsUpBlacklist() {
         if (mPresenter != null)
             mPresenter.setHeadsUpBlacklist();
+    }
+	
+	private void updateKeyguardStatusSettings() {
+        mNotificationPanelViewController.updateKeyguardStatusSettings();
     }
 
     public int getWakefulnessState() {
