@@ -4886,6 +4886,12 @@ public final class Settings {
         public static final String ANIMATOR_DURATION_SCALE = Global.ANIMATOR_DURATION_SCALE;
 		
 		/**
+         * Whether or not to vibrate when a touchscreen gesture is detected
+         * @hide
+         */
+        public static final String TOUCHSCREEN_GESTURE_HAPTIC_FEEDBACK = "touchscreen_gesture_haptic_feedback";
+		
+		/**
          * Control the type of rotation which can be performed using the
          * accelerometer if ACCELEROMETER_ROTATION is enabled.
          * Value is a bitwise combination of:
@@ -6541,6 +6547,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(OPTIMIZED_CHARGE_CEILING);
             PRIVATE_SETTINGS.add(OPTIMIZED_CHARGE_FLOOR);
             PRIVATE_SETTINGS.add(BATTERY_LEVEL_COLORS);
+			PRIVATE_SETTINGS.add(TOUCHSCREEN_GESTURE_HAPTIC_FEEDBACK);
         }
 
         /**
