@@ -100,5 +100,6 @@ public class SystemSettings {
         Settings.System.INCALL_FEEDBACK_VIBRATE,
         Settings.System.PROXIMITY_ON_WAKE,
         Settings.System.ACCENT_COLOR,
+        Settings.System.GRADIENT_COLOR,
     };
 }
