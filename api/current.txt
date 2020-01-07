@@ -91,6 +91,7 @@ package android {
     field public static final String KILL_BACKGROUND_PROCESSES = "android.permission.KILL_BACKGROUND_PROCESSES";
     field public static final String LOCATION_HARDWARE = "android.permission.LOCATION_HARDWARE";
     field public static final String MANAGE_DOCUMENTS = "android.permission.MANAGE_DOCUMENTS";
+    field public static final String MANAGE_EXTERNAL_STORAGE = "android.permission.MANAGE_EXTERNAL_STORAGE";
     field public static final String MANAGE_OWN_CALLS = "android.permission.MANAGE_OWN_CALLS";
     field public static final String MASTER_CLEAR = "android.permission.MASTER_CLEAR";
     field public static final String MEDIA_CONTENT_CONTROL = "android.permission.MEDIA_CONTENT_CONTROL";
@@ -30235,6 +30236,7 @@ package android.net.wifi {
 
   @Deprecated public class WifiConfiguration implements android.os.Parcelable {
     ctor @Deprecated public WifiConfiguration();
+    ctor @Deprecated public WifiConfiguration(@NonNull android.net.wifi.WifiConfiguration);
     method public int describeContents();
     method @Deprecated public android.net.ProxyInfo getHttpProxy();
     method @Deprecated @NonNull public String getKey();
@@ -41782,6 +41784,7 @@ package android.service.autofill {
   }
 
   public static final class Dataset.Builder {
+    ctor public Dataset.Builder(@NonNull android.widget.RemoteViews, @NonNull android.service.autofill.InlinePresentation);
     ctor public Dataset.Builder(@NonNull android.widget.RemoteViews);
     ctor public Dataset.Builder();
     method @NonNull public android.service.autofill.Dataset build();
@@ -41791,6 +41794,8 @@ package android.service.autofill {
     method @NonNull public android.service.autofill.Dataset.Builder setValue(@NonNull android.view.autofill.AutofillId, @Nullable android.view.autofill.AutofillValue, @NonNull android.widget.RemoteViews);
     method @NonNull public android.service.autofill.Dataset.Builder setValue(@NonNull android.view.autofill.AutofillId, @Nullable android.view.autofill.AutofillValue, @Nullable java.util.regex.Pattern);
     method @NonNull public android.service.autofill.Dataset.Builder setValue(@NonNull android.view.autofill.AutofillId, @Nullable android.view.autofill.AutofillValue, @Nullable java.util.regex.Pattern, @NonNull android.widget.RemoteViews);
+    method @NonNull public android.service.autofill.Dataset.Builder setValue(@NonNull android.view.autofill.AutofillId, @Nullable android.view.autofill.AutofillValue, @NonNull android.widget.RemoteViews, @NonNull android.service.autofill.InlinePresentation);
+    method @NonNull public android.service.autofill.Dataset.Builder setValue(@NonNull android.view.autofill.AutofillId, @Nullable android.view.autofill.AutofillValue, @Nullable java.util.regex.Pattern, @NonNull android.widget.RemoteViews, @NonNull android.service.autofill.InlinePresentation);
   }
 
   public final class DateTransformation implements android.os.Parcelable android.service.autofill.Transformation {
@@ -41879,7 +41884,6 @@ package android.service.autofill {
   public static final class FillResponse.Builder {
     ctor public FillResponse.Builder();
     method @NonNull public android.service.autofill.FillResponse.Builder addDataset(@Nullable android.service.autofill.Dataset);
-    method @NonNull public android.service.autofill.FillResponse.Builder addInlineSuggestionSlice(@NonNull android.app.slice.Slice);
     method @NonNull public android.service.autofill.FillResponse build();
     method @NonNull public android.service.autofill.FillResponse.Builder disableAutofill(long);
     method @NonNull public android.service.autofill.FillResponse.Builder setAuthentication(@NonNull android.view.autofill.AutofillId[], @Nullable android.content.IntentSender, @Nullable android.widget.RemoteViews);
@@ -41906,6 +41910,15 @@ package android.service.autofill {
     method @Deprecated public android.service.autofill.ImageTransformation.Builder addOption(@NonNull java.util.regex.Pattern, @DrawableRes int);
     method public android.service.autofill.ImageTransformation.Builder addOption(@NonNull java.util.regex.Pattern, @DrawableRes int, @NonNull CharSequence);
     method public android.service.autofill.ImageTransformation build();
+  }
+
+  public final class InlinePresentation implements android.os.Parcelable {
+    ctor public InlinePresentation(@NonNull android.app.slice.Slice, @NonNull android.view.inline.InlinePresentationSpec);
+    method public int describeContents();
+    method @NonNull public android.view.inline.InlinePresentationSpec getInlinePresentationSpec();
+    method @NonNull public android.app.slice.Slice getSlice();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.autofill.InlinePresentation> CREATOR;
   }
 
   public final class LuhnChecksumValidator implements android.os.Parcelable android.service.autofill.Validator {
@@ -43123,6 +43136,7 @@ package android.system {
     method public static void execve(String, String[], String[]) throws android.system.ErrnoException;
     method public static void fchmod(java.io.FileDescriptor, int) throws android.system.ErrnoException;
     method public static void fchown(java.io.FileDescriptor, int, int) throws android.system.ErrnoException;
+    method public static int fcntlInt(@NonNull java.io.FileDescriptor, int, int) throws android.system.ErrnoException;
     method public static void fdatasync(java.io.FileDescriptor) throws android.system.ErrnoException;
     method public static android.system.StructStat fstat(java.io.FileDescriptor) throws android.system.ErrnoException;
     method public static android.system.StructStatVfs fstatvfs(java.io.FileDescriptor) throws android.system.ErrnoException;
@@ -45635,6 +45649,7 @@ package android.telephony {
     method public int getLevel();
     method @Deprecated public boolean isGsm();
     method public void writeToParcel(android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.telephony.SignalStrength> CREATOR;
     field public static final int INVALID = 2147483647; // 0x7fffffff
   }
 
@@ -45643,7 +45658,7 @@ package android.telephony {
     method @Nullable public String createAppSpecificSmsTokenWithPackageInfo(@Nullable String, @NonNull android.app.PendingIntent);
     method public java.util.ArrayList<java.lang.String> divideMessage(String);
     method public void downloadMultimediaMessage(android.content.Context, String, android.net.Uri, android.os.Bundle, android.app.PendingIntent);
-    method public android.os.Bundle getCarrierConfigValues();
+    method @Nullable public android.os.Bundle getCarrierConfigValues();
     method public static android.telephony.SmsManager getDefault();
     method public static int getDefaultSmsSubscriptionId();
     method public static android.telephony.SmsManager getSmsManagerForSubscriptionId(int);
