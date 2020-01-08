@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 The Android Open Source Project
+ * Copyright (C) 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.service.controls;
+package android.service.controls.templates;
 
 import static junit.framework.Assert.assertTrue;
 
@@ -24,16 +24,6 @@ import static org.junit.Assert.assertNotNull;
 import android.annotation.DrawableRes;
 import android.graphics.drawable.Icon;
 import android.os.Parcel;
-import android.service.controls.templates.ControlButton;
-import android.service.controls.templates.ControlTemplate;
-import android.service.controls.templates.CoordinatedRangeTemplate;
-import android.service.controls.templates.DiscreteToggleTemplate;
-import android.service.controls.templates.RangeTemplate;
-import android.service.controls.templates.StatelessTemplate;
-import android.service.controls.templates.TemperatureControlTemplate;
-import android.service.controls.templates.ThumbnailTemplate;
-import android.service.controls.templates.ToggleRangeTemplate;
-import android.service.controls.templates.ToggleTemplate;
 
 import androidx.test.filters.SmallTest;
 import androidx.test.runner.AndroidJUnit4;
@@ -65,8 +55,7 @@ public class ControlTemplateTest {
 
     @Test
     public void testUnparcelingCorrectClass_none() {
-        ControlTemplate
-                toParcel = ControlTemplate.NO_TEMPLATE;
+        ControlTemplate toParcel = ControlTemplate.NO_TEMPLATE;
 
         ControlTemplate fromParcel = parcelAndUnparcel(toParcel);
 
@@ -75,8 +64,7 @@ public class ControlTemplateTest {
 
     @Test
     public void testUnparcelingCorrectClass_toggle() {
-        ControlTemplate
-                toParcel = new android.service.controls.templates.ToggleTemplate(TEST_ID, mControlButton);
+        ControlTemplate toParcel = new ToggleTemplate(TEST_ID, mControlButton);
 
         ControlTemplate fromParcel = parcelAndUnparcel(toParcel);
 
@@ -86,8 +74,7 @@ public class ControlTemplateTest {
 
     @Test
     public void testUnparcelingCorrectClass_range() {
-        ControlTemplate
-                toParcel = new RangeTemplate(TEST_ID, 0, 2, 1, 1, "%f");
+        ControlTemplate toParcel = new RangeTemplate(TEST_ID, 0, 2, 1, 1, "%f");
 
         ControlTemplate fromParcel = parcelAndUnparcel(toParcel);
 
@@ -117,8 +104,7 @@ public class ControlTemplateTest {
 
     @Test
     public void testUnparcelingCorrectClass_thumbnail() {
-        ControlTemplate
-                toParcel = new ThumbnailTemplate(TEST_ID, mIcon, TEST_ACTION_DESCRIPTION);
+        ControlTemplate toParcel = new ThumbnailTemplate(TEST_ID, mIcon, TEST_ACTION_DESCRIPTION);
 
         ControlTemplate fromParcel = parcelAndUnparcel(toParcel);
 
@@ -140,7 +126,7 @@ public class ControlTemplateTest {
     @Test
     public void testUnparcelingCorrectClass_coordRange() {
         ControlTemplate toParcel =
-                new CoordinatedRangeTemplate(TEST_ID,0.1f,  0, 1, 0.5f, 1, 2, 1.5f, 0.1f, "%f");
+                new CoordinatedRangeTemplate(TEST_ID, 0.1f,  0, 1, 0.5f, 1, 2, 1.5f, 0.1f, "%f");
         ControlTemplate fromParcel = parcelAndUnparcel(toParcel);
         assertEquals(ControlTemplate.TYPE_COORD_RANGE, fromParcel.getTemplateType());
         assertTrue(fromParcel instanceof CoordinatedRangeTemplate);
@@ -149,7 +135,7 @@ public class ControlTemplateTest {
     @Test
     public void testCoordRangeParameters_negativeMinGap() {
         CoordinatedRangeTemplate template =
-                new CoordinatedRangeTemplate(TEST_ID,-0.1f,  0, 1, 0.5f, 1, 2, 1.5f, 0.1f, "%f");
+                new CoordinatedRangeTemplate(TEST_ID, -0.1f,  0, 1, 0.5f, 1, 2, 1.5f, 0.1f, "%f");
         assertEquals(0, template.getMinGap(), 0);
     }
 
@@ -176,9 +162,8 @@ public class ControlTemplateTest {
 
     @Test
     public void testUnparcelingCorrectClass_toggleRange() {
-        ControlTemplate toParcel =
-                new ToggleRangeTemplate(TEST_ID, mControlButton,
-                        new RangeTemplate(TEST_ID, 0, 2, 1, 1, "%f"));
+        ControlTemplate toParcel = new ToggleRangeTemplate(TEST_ID, mControlButton,
+                new RangeTemplate(TEST_ID, 0, 2, 1, 1, "%f"));
 
         ControlTemplate fromParcel = parcelAndUnparcel(toParcel);
 
@@ -198,11 +183,12 @@ public class ControlTemplateTest {
 
     @Test
     public void testUnparcelingCorrectClass_thermostat() {
-        ControlTemplate toParcel = new TemperatureControlTemplate(TEST_ID,
-            new ToggleTemplate("", mControlButton),
-            TemperatureControlTemplate.MODE_OFF,
-            TemperatureControlTemplate.MODE_OFF,
-            TemperatureControlTemplate.FLAG_MODE_OFF);
+        ControlTemplate toParcel = new TemperatureControlTemplate(
+                TEST_ID,
+                new ToggleTemplate("", mControlButton),
+                TemperatureControlTemplate.MODE_OFF,
+                TemperatureControlTemplate.MODE_OFF,
+                TemperatureControlTemplate.FLAG_MODE_OFF);
 
         ControlTemplate fromParcel = parcelAndUnparcel(toParcel);
 
@@ -212,48 +198,70 @@ public class ControlTemplateTest {
 
     @Test
     public void testThermostatParams_wrongMode() {
-        TemperatureControlTemplate thermostat = new TemperatureControlTemplate(TEST_ID, ControlTemplate.NO_TEMPLATE, -1,
-                TemperatureControlTemplate.MODE_OFF, TemperatureControlTemplate.FLAG_MODE_OFF);
+        TemperatureControlTemplate thermostat = new TemperatureControlTemplate(
+                TEST_ID,
+                ControlTemplate.NO_TEMPLATE,
+                -1,
+                TemperatureControlTemplate.MODE_OFF,
+                TemperatureControlTemplate.FLAG_MODE_OFF);
         assertEquals(TemperatureControlTemplate.MODE_UNKNOWN, thermostat.getCurrentMode());
 
-        thermostat = new TemperatureControlTemplate(TEST_ID, ControlTemplate.NO_TEMPLATE, 100,
-                TemperatureControlTemplate.MODE_OFF, TemperatureControlTemplate.FLAG_MODE_OFF);
+        thermostat = new TemperatureControlTemplate(
+                TEST_ID,
+                ControlTemplate.NO_TEMPLATE,
+                100,
+                TemperatureControlTemplate.MODE_OFF,
+                TemperatureControlTemplate.FLAG_MODE_OFF);
         assertEquals(TemperatureControlTemplate.MODE_UNKNOWN, thermostat.getCurrentMode());
     }
 
     @Test
     public void testThermostatParams_wrongActiveMode() {
-        TemperatureControlTemplate thermostat = new TemperatureControlTemplate(TEST_ID, ControlTemplate.NO_TEMPLATE,
-                TemperatureControlTemplate.MODE_OFF,-1, TemperatureControlTemplate.FLAG_MODE_OFF);
+        TemperatureControlTemplate thermostat = new TemperatureControlTemplate(
+                TEST_ID,
+                ControlTemplate.NO_TEMPLATE,
+                TemperatureControlTemplate.MODE_OFF,
+                -1,
+                TemperatureControlTemplate.FLAG_MODE_OFF);
         assertEquals(TemperatureControlTemplate.MODE_UNKNOWN, thermostat.getCurrentActiveMode());
 
-        thermostat = new TemperatureControlTemplate(TEST_ID, ControlTemplate.NO_TEMPLATE,
-                TemperatureControlTemplate.MODE_OFF,100, TemperatureControlTemplate.FLAG_MODE_OFF);
+        thermostat = new TemperatureControlTemplate(
+                TEST_ID,
+                ControlTemplate.NO_TEMPLATE,
+                TemperatureControlTemplate.MODE_OFF,
+                100,
+                TemperatureControlTemplate.FLAG_MODE_OFF);
         assertEquals(TemperatureControlTemplate.MODE_UNKNOWN, thermostat.getCurrentActiveMode());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testThermostatParams_wrongFlags_currentMode() {
-        new TemperatureControlTemplate(TEST_ID, ControlTemplate.NO_TEMPLATE, TemperatureControlTemplate.MODE_HEAT,
-                TemperatureControlTemplate.MODE_OFF, TemperatureControlTemplate.FLAG_MODE_OFF);
+        new TemperatureControlTemplate(
+                TEST_ID,
+                ControlTemplate.NO_TEMPLATE,
+                TemperatureControlTemplate.MODE_HEAT,
+                TemperatureControlTemplate.MODE_OFF,
+                TemperatureControlTemplate.FLAG_MODE_OFF);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testThermostatParams_wrongFlags_currentActiveMode() {
-        new TemperatureControlTemplate(TEST_ID, ControlTemplate.NO_TEMPLATE, TemperatureControlTemplate.MODE_HEAT,
-                TemperatureControlTemplate.MODE_OFF, TemperatureControlTemplate.FLAG_MODE_HEAT);
+        new TemperatureControlTemplate(TEST_ID,
+                ControlTemplate.NO_TEMPLATE,
+                TemperatureControlTemplate.MODE_HEAT,
+                TemperatureControlTemplate.MODE_OFF,
+                TemperatureControlTemplate.FLAG_MODE_HEAT);
     }
 
-    private ControlTemplate parcelAndUnparcel(
-            ControlTemplate toParcel) {
+    private ControlTemplate parcelAndUnparcel(ControlTemplate toParcel) {
         Parcel parcel = Parcel.obtain();
 
         assertNotNull(parcel);
 
         parcel.setDataPosition(0);
-        toParcel.writeToParcel(parcel, 0);
+        new ControlTemplateWrapper(toParcel).writeToParcel(parcel, 0);
         parcel.setDataPosition(0);
 
-        return ControlTemplate.CREATOR.createFromParcel(parcel);
+        return ControlTemplateWrapper.CREATOR.createFromParcel(parcel).getWrappedTemplate();
     }
 }
