@@ -28659,6 +28659,37 @@ package android.net {
     field @NonNull public static final android.os.Parcelable.Creator<android.net.CaptivePortal> CREATOR;
   }
 
+  public class ConnectivityDiagnosticsManager {
+    method public void registerConnectivityDiagnosticsCallback(@NonNull android.net.NetworkRequest, @NonNull java.util.concurrent.Executor, @NonNull android.net.ConnectivityDiagnosticsManager.ConnectivityDiagnosticsCallback);
+    method public void unregisterConnectivityDiagnosticsCallback(@NonNull android.net.ConnectivityDiagnosticsManager.ConnectivityDiagnosticsCallback);
+    field public static final int DETECTION_METHOD_DNS_EVENTS = 1; // 0x1
+    field public static final int DETECTION_METHOD_TCP_METRICS = 2; // 0x2
+  }
+
+  public abstract static class ConnectivityDiagnosticsManager.ConnectivityDiagnosticsCallback {
+    ctor public ConnectivityDiagnosticsManager.ConnectivityDiagnosticsCallback();
+    method public void onConnectivityReport(@NonNull android.net.ConnectivityDiagnosticsManager.ConnectivityReport);
+    method public void onDataStallSuspected(@NonNull android.net.ConnectivityDiagnosticsManager.DataStallReport);
+    method public void onNetworkConnectivityReported(@NonNull android.net.Network, boolean);
+  }
+
+  public static class ConnectivityDiagnosticsManager.ConnectivityReport {
+    ctor public ConnectivityDiagnosticsManager.ConnectivityReport(@NonNull android.net.Network, long, @NonNull android.net.LinkProperties, @NonNull android.net.NetworkCapabilities, @NonNull android.os.PersistableBundle);
+    field @NonNull public final android.os.PersistableBundle additionalInfo;
+    field @NonNull public final android.net.LinkProperties linkProperties;
+    field @NonNull public final android.net.Network network;
+    field @NonNull public final android.net.NetworkCapabilities networkCapabilities;
+    field public final long reportTimestamp;
+  }
+
+  public static class ConnectivityDiagnosticsManager.DataStallReport {
+    ctor public ConnectivityDiagnosticsManager.DataStallReport(@NonNull android.net.Network, long, int, @NonNull android.os.PersistableBundle);
+    field public final int detectionMethod;
+    field @NonNull public final android.net.Network network;
+    field public final long reportTimestamp;
+    field @NonNull public final android.os.PersistableBundle stallDetails;
+  }
+
   public class ConnectivityManager {
     method public void addDefaultNetworkActiveListener(android.net.ConnectivityManager.OnNetworkActiveListener);
     method public boolean bindProcessToNetwork(@Nullable android.net.Network);
