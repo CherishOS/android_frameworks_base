@@ -87,6 +87,7 @@ package android {
     field public static final String INSTALL_PACKAGES = "android.permission.INSTALL_PACKAGES";
     field public static final String INSTALL_SHORTCUT = "com.android.launcher.permission.INSTALL_SHORTCUT";
     field public static final String INSTANT_APP_FOREGROUND_SERVICE = "android.permission.INSTANT_APP_FOREGROUND_SERVICE";
+    field public static final String INTERACT_ACROSS_PROFILES = "android.permission.INTERACT_ACROSS_PROFILES";
     field public static final String INTERNET = "android.permission.INTERNET";
     field public static final String KILL_BACKGROUND_PROCESSES = "android.permission.KILL_BACKGROUND_PROCESSES";
     field public static final String LOCATION_HARDWARE = "android.permission.LOCATION_HARDWARE";
@@ -478,6 +479,7 @@ package android {
     field public static final int countDown = 16844059; // 0x101051b
     field public static final int country = 16843962; // 0x10104ba
     field public static final int cropToPadding = 16843043; // 0x1010123
+    field public static final int crossProfile = 16844303; // 0x101060f
     field public static final int cursorVisible = 16843090; // 0x1010152
     field public static final int customNavigationLayout = 16843474; // 0x10102d2
     field public static final int customTokens = 16843579; // 0x101033b
@@ -6788,6 +6790,7 @@ package android.app.admin {
     method @Nullable public java.util.List<java.lang.String> getPermittedAccessibilityServices(@NonNull android.content.ComponentName);
     method @Nullable public java.util.List<java.lang.String> getPermittedCrossProfileNotificationListeners(@NonNull android.content.ComponentName);
     method @Nullable public java.util.List<java.lang.String> getPermittedInputMethods(@NonNull android.content.ComponentName);
+    method @NonNull public java.util.List<java.lang.String> getProtectedPackages(@NonNull android.content.ComponentName);
     method public long getRequiredStrongAuthTimeout(@Nullable android.content.ComponentName);
     method public boolean getScreenCaptureDisabled(@Nullable android.content.ComponentName);
     method public java.util.List<android.os.UserHandle> getSecondaryUsers(@NonNull android.content.ComponentName);
@@ -6909,6 +6912,7 @@ package android.app.admin {
     method public boolean setPermittedInputMethods(@NonNull android.content.ComponentName, java.util.List<java.lang.String>);
     method public void setProfileEnabled(@NonNull android.content.ComponentName);
     method public void setProfileName(@NonNull android.content.ComponentName, String);
+    method public void setProtectedPackages(@NonNull android.content.ComponentName, @NonNull java.util.List<java.lang.String>);
     method public void setRecommendedGlobalProxy(@NonNull android.content.ComponentName, @Nullable android.net.ProxyInfo);
     method public void setRequiredStrongAuthTimeout(@NonNull android.content.ComponentName, long);
     method public boolean setResetPasswordToken(android.content.ComponentName, byte[]);
@@ -7126,6 +7130,7 @@ package android.app.admin {
     field public static final int TAG_ADB_SHELL_CMD = 210002; // 0x33452
     field public static final int TAG_ADB_SHELL_INTERACTIVE = 210001; // 0x33451
     field public static final int TAG_APP_PROCESS_START = 210005; // 0x33455
+    field public static final int TAG_CAMERA_POLICY_SET = 210034; // 0x33472
     field public static final int TAG_CERT_AUTHORITY_INSTALLED = 210029; // 0x3346d
     field public static final int TAG_CERT_AUTHORITY_REMOVED = 210030; // 0x3346e
     field public static final int TAG_CERT_VALIDATION_FAILURE = 210033; // 0x33471
@@ -29237,6 +29242,7 @@ package android.net {
     method public boolean addRoute(@NonNull android.net.RouteInfo);
     method public void clear();
     method public int describeContents();
+    method @Nullable public java.net.Inet4Address getDhcpServerAddress();
     method @NonNull public java.util.List<java.net.InetAddress> getDnsServers();
     method @Nullable public String getDomains();
     method @Nullable public android.net.ProxyInfo getHttpProxy();
@@ -29248,6 +29254,7 @@ package android.net {
     method @NonNull public java.util.List<android.net.RouteInfo> getRoutes();
     method public boolean isPrivateDnsActive();
     method public boolean isWakeOnLanSupported();
+    method public void setDhcpServerAddress(@Nullable java.net.Inet4Address);
     method public void setDnsServers(@NonNull java.util.Collection<java.net.InetAddress>);
     method public void setDomains(@Nullable String);
     method public void setHttpProxy(@Nullable android.net.ProxyInfo);
@@ -36089,6 +36096,37 @@ package android.os {
 
   public static class UserManager.UserOperationException extends java.lang.RuntimeException {
     method public int getUserOperationResult();
+  }
+
+  public final class VibrationAttributes implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getFlags();
+    method public int getUsage();
+    method public int getUsageClass();
+    method public boolean isFlagSet(int);
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.os.VibrationAttributes> CREATOR;
+    field public static final int FLAG_BYPASS_INTERRUPTION_POLICY = 1; // 0x1
+    field public static final int USAGE_ALARM = 17; // 0x11
+    field public static final int USAGE_CLASS_ALARM = 1; // 0x1
+    field public static final int USAGE_CLASS_FEEDBACK = 2; // 0x2
+    field public static final int USAGE_CLASS_MASK = 15; // 0xf
+    field public static final int USAGE_CLASS_UNKNOWN = 0; // 0x0
+    field public static final int USAGE_COMMUNICATION_REQUEST = 65; // 0x41
+    field public static final int USAGE_HARDWARE_FEEDBACK = 50; // 0x32
+    field public static final int USAGE_NOTIFICATION = 49; // 0x31
+    field public static final int USAGE_PHYSICAL_EMULATION = 34; // 0x22
+    field public static final int USAGE_RINGTONE = 33; // 0x21
+    field public static final int USAGE_TOUCH = 18; // 0x12
+    field public static final int USAGE_UNKNOWN = 0; // 0x0
+  }
+
+  public static final class VibrationAttributes.Builder {
+    ctor public VibrationAttributes.Builder();
+    ctor public VibrationAttributes.Builder(@Nullable android.os.VibrationAttributes);
+    method @NonNull public android.os.VibrationAttributes build();
+    method @NonNull public android.os.VibrationAttributes.Builder replaceFlags(int);
+    method @NonNull public android.os.VibrationAttributes.Builder setUsage(int);
   }
 
   public abstract class VibrationEffect implements android.os.Parcelable {
@@ -45557,6 +45595,7 @@ package android.telephony {
     method @RequiresPermission("android.permission.READ_PRECISE_PHONE_STATE") public void onImsCallDisconnectCauseChanged(@NonNull android.telephony.ims.ImsReasonInfo);
     method public void onMessageWaitingIndicatorChanged(boolean);
     method @RequiresPermission("android.permission.MODIFY_PHONE_STATE") public void onPreciseDataConnectionStateChanged(@NonNull android.telephony.PreciseDataConnectionState);
+    method public void onRegistrationFailed(@NonNull android.telephony.CellIdentity, @NonNull String, int, int, int);
     method public void onServiceStateChanged(android.telephony.ServiceState);
     method @Deprecated public void onSignalStrengthChanged(int);
     method public void onSignalStrengthsChanged(android.telephony.SignalStrength);
@@ -45574,6 +45613,7 @@ package android.telephony {
     field public static final int LISTEN_MESSAGE_WAITING_INDICATOR = 4; // 0x4
     field public static final int LISTEN_NONE = 0; // 0x0
     field @RequiresPermission("android.permission.MODIFY_PHONE_STATE") public static final int LISTEN_PRECISE_DATA_CONNECTION_STATE = 4096; // 0x1000
+    field @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public static final int LISTEN_REGISTRATION_FAILURE = 1073741824; // 0x40000000
     field public static final int LISTEN_SERVICE_STATE = 1; // 0x1
     field @Deprecated public static final int LISTEN_SIGNAL_STRENGTH = 2; // 0x2
     field public static final int LISTEN_SIGNAL_STRENGTHS = 256; // 0x100
