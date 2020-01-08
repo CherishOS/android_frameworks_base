@@ -43006,6 +43006,307 @@ package android.service.chooser {
 
 }
 
+package android.service.controls {
+
+  public final class Control implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public android.app.PendingIntent getAppIntent();
+    method @NonNull public String getControlId();
+    method @NonNull public android.service.controls.templates.ControlTemplate getControlTemplate();
+    method @Nullable public android.content.res.ColorStateList getCustomColor();
+    method @Nullable public android.graphics.drawable.Icon getCustomIcon();
+    method public int getDeviceType();
+    method public int getStatus();
+    method @NonNull public CharSequence getStatusText();
+    method @Nullable public CharSequence getStructure();
+    method @NonNull public CharSequence getSubtitle();
+    method @NonNull public CharSequence getTitle();
+    method @Nullable public CharSequence getZone();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.controls.Control> CREATOR;
+    field public static final int STATUS_DISABLED = 4; // 0x4
+    field public static final int STATUS_ERROR = 3; // 0x3
+    field public static final int STATUS_NOT_FOUND = 2; // 0x2
+    field public static final int STATUS_OK = 1; // 0x1
+    field public static final int STATUS_UNKNOWN = 0; // 0x0
+  }
+
+  public static final class Control.StatefulBuilder {
+    ctor public Control.StatefulBuilder(@NonNull String, @NonNull android.app.PendingIntent);
+    ctor public Control.StatefulBuilder(@NonNull android.service.controls.Control);
+    method @NonNull public android.service.controls.Control build();
+    method @NonNull public android.service.controls.Control.StatefulBuilder setAppIntent(@NonNull android.app.PendingIntent);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setControlId(@NonNull String);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setControlTemplate(@NonNull android.service.controls.templates.ControlTemplate);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setCustomColor(@Nullable android.content.res.ColorStateList);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setCustomIcon(@Nullable android.graphics.drawable.Icon);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setDeviceType(int);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setStatus(int);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setStatusText(@NonNull CharSequence);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setStructure(@Nullable CharSequence);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setSubtitle(@NonNull CharSequence);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setTitle(@NonNull CharSequence);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setZone(@Nullable CharSequence);
+  }
+
+  public static final class Control.StatelessBuilder {
+    ctor public Control.StatelessBuilder(@NonNull String, @NonNull android.app.PendingIntent);
+    ctor public Control.StatelessBuilder(@NonNull android.service.controls.Control);
+    method @NonNull public android.service.controls.Control build();
+    method @NonNull public android.service.controls.Control.StatelessBuilder setAppIntent(@NonNull android.app.PendingIntent);
+    method @NonNull public android.service.controls.Control.StatelessBuilder setControlId(@NonNull String);
+    method @NonNull public android.service.controls.Control.StatelessBuilder setCustomColor(@Nullable android.content.res.ColorStateList);
+    method @NonNull public android.service.controls.Control.StatelessBuilder setCustomIcon(@Nullable android.graphics.drawable.Icon);
+    method @NonNull public android.service.controls.Control.StatelessBuilder setDeviceType(int);
+    method @NonNull public android.service.controls.Control.StatelessBuilder setStructure(@Nullable CharSequence);
+    method @NonNull public android.service.controls.Control.StatelessBuilder setSubtitle(@NonNull CharSequence);
+    method @NonNull public android.service.controls.Control.StatelessBuilder setTitle(@NonNull CharSequence);
+    method @NonNull public android.service.controls.Control.StatelessBuilder setZone(@Nullable CharSequence);
+  }
+
+  public abstract class ControlsProviderService extends android.app.Service {
+    ctor public ControlsProviderService();
+    method public abstract void loadAvailableControls(@NonNull java.util.function.Consumer<java.util.List<android.service.controls.Control>>);
+    method @NonNull public final android.os.IBinder onBind(@NonNull android.content.Intent);
+    method public abstract void performControlAction(@NonNull String, @NonNull android.service.controls.actions.ControlAction, @NonNull java.util.function.Consumer<java.lang.Integer>);
+    method @NonNull public abstract java.util.concurrent.Flow.Publisher<android.service.controls.Control> publisherFor(@NonNull java.util.List<java.lang.String>);
+    field public static final String SERVICE_CONTROLS = "android.service.controls.ControlsProviderService";
+    field @NonNull public static final String TAG = "ControlsProviderService";
+  }
+
+  public class DeviceTypes {
+    method public static boolean validDeviceType(int);
+    field public static final int TYPE_AC_HEATER = 1; // 0x1
+    field public static final int TYPE_AC_UNIT = 2; // 0x2
+    field public static final int TYPE_AIR_FRESHENER = 3; // 0x3
+    field public static final int TYPE_AIR_PURIFIER = 4; // 0x4
+    field public static final int TYPE_AWNING = 33; // 0x21
+    field public static final int TYPE_BLINDS = 34; // 0x22
+    field public static final int TYPE_CAMERA = 50; // 0x32
+    field public static final int TYPE_CLOSET = 35; // 0x23
+    field public static final int TYPE_COFFEE_MAKER = 5; // 0x5
+    field public static final int TYPE_CURTAIN = 36; // 0x24
+    field public static final int TYPE_DEHUMIDIFIER = 6; // 0x6
+    field public static final int TYPE_DISHWASHER = 24; // 0x18
+    field public static final int TYPE_DISPLAY = 7; // 0x7
+    field public static final int TYPE_DOOR = 37; // 0x25
+    field public static final int TYPE_DOORBELL = 51; // 0x33
+    field public static final int TYPE_DRAWER = 38; // 0x26
+    field public static final int TYPE_DRYER = 25; // 0x19
+    field public static final int TYPE_FAN = 8; // 0x8
+    field public static final int TYPE_GARAGE = 39; // 0x27
+    field public static final int TYPE_GATE = 40; // 0x28
+    field public static final int TYPE_GENERIC_ARM_DISARM = -5; // 0xfffffffb
+    field public static final int TYPE_GENERIC_LOCK_UNLOCK = -4; // 0xfffffffc
+    field public static final int TYPE_GENERIC_ON_OFF = -1; // 0xffffffff
+    field public static final int TYPE_GENERIC_OPEN_CLOSE = -3; // 0xfffffffd
+    field public static final int TYPE_GENERIC_START_STOP = -2; // 0xfffffffe
+    field public static final int TYPE_GENERIC_TEMP_SETTING = -6; // 0xfffffffa
+    field public static final int TYPE_GENERIC_VIEWSTREAM = -7; // 0xfffffff9
+    field public static final int TYPE_HEATER = 47; // 0x2f
+    field public static final int TYPE_HOOD = 10; // 0xa
+    field public static final int TYPE_HUMIDIFIER = 11; // 0xb
+    field public static final int TYPE_KETTLE = 12; // 0xc
+    field public static final int TYPE_LIGHT = 13; // 0xd
+    field public static final int TYPE_LOCK = 45; // 0x2d
+    field public static final int TYPE_MICROWAVE = 14; // 0xe
+    field public static final int TYPE_MOP = 26; // 0x1a
+    field public static final int TYPE_MOWER = 27; // 0x1b
+    field public static final int TYPE_MULTICOOKER = 28; // 0x1c
+    field public static final int TYPE_OUTLET = 15; // 0xf
+    field public static final int TYPE_PERGOLA = 41; // 0x29
+    field public static final int TYPE_RADIATOR = 16; // 0x10
+    field public static final int TYPE_REFRIGERATOR = 48; // 0x30
+    field public static final int TYPE_REMOTE_CONTROL = 17; // 0x11
+    field public static final int TYPE_SECURITY_SYSTEM = 46; // 0x2e
+    field public static final int TYPE_SET_TOP = 18; // 0x12
+    field public static final int TYPE_SHOWER = 29; // 0x1d
+    field public static final int TYPE_SHUTTER = 42; // 0x2a
+    field public static final int TYPE_SPRINKLER = 30; // 0x1e
+    field public static final int TYPE_STANDMIXER = 19; // 0x13
+    field public static final int TYPE_STYLER = 20; // 0x14
+    field public static final int TYPE_SWITCH = 21; // 0x15
+    field public static final int TYPE_THERMOSTAT = 49; // 0x31
+    field public static final int TYPE_TV = 22; // 0x16
+    field public static final int TYPE_UNKNOWN = 0; // 0x0
+    field public static final int TYPE_VACUUM = 32; // 0x20
+    field public static final int TYPE_VALVE = 44; // 0x2c
+    field public static final int TYPE_WASHER = 31; // 0x1f
+    field public static final int TYPE_WATER_HEATER = 23; // 0x17
+    field public static final int TYPE_WINDOW = 43; // 0x2b
+  }
+
+}
+
+package android.service.controls.actions {
+
+  public final class BooleanAction extends android.service.controls.actions.ControlAction {
+    ctor public BooleanAction(@NonNull String, boolean);
+    ctor public BooleanAction(@NonNull String, boolean, @Nullable String);
+    method public int getActionType();
+    method public boolean getNewState();
+  }
+
+  public final class CommandAction extends android.service.controls.actions.ControlAction {
+    ctor public CommandAction(@NonNull String, @Nullable String);
+    ctor public CommandAction(@NonNull String);
+    method public int getActionType();
+  }
+
+  public abstract class ControlAction {
+    method public abstract int getActionType();
+    method @Nullable public String getChallengeValue();
+    method @NonNull public String getTemplateId();
+    method public static final boolean isValidResponse(int);
+    field @NonNull public static final android.service.controls.actions.ControlAction ERROR_ACTION;
+    field public static final int RESPONSE_CHALLENGE_ACK = 3; // 0x3
+    field public static final int RESPONSE_CHALLENGE_PASSPHRASE = 5; // 0x5
+    field public static final int RESPONSE_CHALLENGE_PIN = 4; // 0x4
+    field public static final int RESPONSE_FAIL = 2; // 0x2
+    field public static final int RESPONSE_OK = 1; // 0x1
+    field public static final int RESPONSE_UNKNOWN = 0; // 0x0
+    field public static final int TYPE_BOOLEAN = 1; // 0x1
+    field public static final int TYPE_COMMAND = 5; // 0x5
+    field public static final int TYPE_ERROR = -1; // 0xffffffff
+    field public static final int TYPE_FLOAT = 2; // 0x2
+    field public static final int TYPE_MODE = 4; // 0x4
+    field public static final int TYPE_MULTI_FLOAT = 3; // 0x3
+  }
+
+  public final class FloatAction extends android.service.controls.actions.ControlAction {
+    ctor public FloatAction(@NonNull String, float);
+    ctor public FloatAction(@NonNull String, float, @Nullable String);
+    method public int getActionType();
+    method public float getNewValue();
+  }
+
+  public final class ModeAction extends android.service.controls.actions.ControlAction {
+    ctor public ModeAction(@NonNull String, int, @Nullable String);
+    ctor public ModeAction(@NonNull String, int);
+    method public int getActionType();
+    method public int getNewMode();
+  }
+
+  public final class MultiFloatAction extends android.service.controls.actions.ControlAction {
+    ctor public MultiFloatAction(@NonNull String, @NonNull float[], @Nullable String);
+    ctor public MultiFloatAction(@NonNull String, @NonNull float[]);
+    method public int getActionType();
+    method @NonNull public float[] getNewValues();
+  }
+
+}
+
+package android.service.controls.templates {
+
+  public final class ControlButton implements android.os.Parcelable {
+    ctor public ControlButton(boolean, @NonNull CharSequence);
+    method public int describeContents();
+    method @NonNull public CharSequence getActionDescription();
+    method public boolean isChecked();
+    method @NonNull public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.controls.templates.ControlButton> CREATOR;
+  }
+
+  public abstract class ControlTemplate {
+    method @NonNull public String getTemplateId();
+    method public abstract int getTemplateType();
+    field @NonNull public static final android.service.controls.templates.ControlTemplate ERROR_TEMPLATE;
+    field @NonNull public static final android.service.controls.templates.ControlTemplate NO_TEMPLATE;
+    field public static final int TYPE_DISCRETE_TOGGLE = 4; // 0x4
+    field public static final int TYPE_ERROR = -1; // 0xffffffff
+    field public static final int TYPE_NONE = 0; // 0x0
+    field public static final int TYPE_RANGE = 2; // 0x2
+    field public static final int TYPE_STATELESS = 8; // 0x8
+    field public static final int TYPE_TEMPERATURE = 7; // 0x7
+    field public static final int TYPE_THUMBNAIL = 3; // 0x3
+    field public static final int TYPE_TOGGLE = 1; // 0x1
+    field public static final int TYPE_TOGGLE_RANGE = 6; // 0x6
+  }
+
+  public final class CoordinatedRangeTemplate extends android.service.controls.templates.ControlTemplate {
+    ctor public CoordinatedRangeTemplate(@NonNull String, float, @NonNull android.service.controls.templates.RangeTemplate, @NonNull android.service.controls.templates.RangeTemplate);
+    ctor public CoordinatedRangeTemplate(@NonNull String, float, float, float, float, float, float, float, float, @Nullable CharSequence);
+    method public float getCurrentValueHigh();
+    method public float getCurrentValueLow();
+    method @NonNull public CharSequence getFormatString();
+    method public float getMaxValueHigh();
+    method public float getMaxValueLow();
+    method public float getMinGap();
+    method public float getMinValueHigh();
+    method public float getMinValueLow();
+    method @NonNull public android.service.controls.templates.RangeTemplate getRangeHigh();
+    method @NonNull public android.service.controls.templates.RangeTemplate getRangeLow();
+    method public float getStepValue();
+    method public int getTemplateType();
+  }
+
+  public final class DiscreteToggleTemplate extends android.service.controls.templates.ControlTemplate {
+    ctor public DiscreteToggleTemplate(@NonNull String, @NonNull android.service.controls.templates.ControlButton, @NonNull android.service.controls.templates.ControlButton);
+    method @NonNull public android.service.controls.templates.ControlButton getNegativeButton();
+    method @NonNull public android.service.controls.templates.ControlButton getPositiveButton();
+    method public int getTemplateType();
+  }
+
+  public final class RangeTemplate extends android.service.controls.templates.ControlTemplate {
+    ctor public RangeTemplate(@NonNull String, float, float, float, float, @Nullable CharSequence);
+    method public float getCurrentValue();
+    method @NonNull public CharSequence getFormatString();
+    method public float getMaxValue();
+    method public float getMinValue();
+    method public float getStepValue();
+    method public int getTemplateType();
+  }
+
+  public final class StatelessTemplate extends android.service.controls.templates.ControlTemplate {
+    ctor public StatelessTemplate(@NonNull String);
+    method public int getTemplateType();
+  }
+
+  public final class TemperatureControlTemplate extends android.service.controls.templates.ControlTemplate {
+    ctor public TemperatureControlTemplate(@NonNull String, @NonNull android.service.controls.templates.ControlTemplate, int, int, int);
+    method public int getCurrentActiveMode();
+    method public int getCurrentMode();
+    method public int getModes();
+    method @NonNull public android.service.controls.templates.ControlTemplate getTemplate();
+    method public int getTemplateType();
+    field public static final int FLAG_MODE_COOL = 8; // 0x8
+    field public static final int FLAG_MODE_ECO = 32; // 0x20
+    field public static final int FLAG_MODE_HEAT = 4; // 0x4
+    field public static final int FLAG_MODE_HEAT_COOL = 16; // 0x10
+    field public static final int FLAG_MODE_OFF = 2; // 0x2
+    field public static final int MODE_COOL = 3; // 0x3
+    field public static final int MODE_ECO = 5; // 0x5
+    field public static final int MODE_HEAT = 2; // 0x2
+    field public static final int MODE_HEAT_COOL = 4; // 0x4
+    field public static final int MODE_OFF = 1; // 0x1
+    field public static final int MODE_UNKNOWN = 0; // 0x0
+  }
+
+  public final class ThumbnailTemplate extends android.service.controls.templates.ControlTemplate {
+    ctor public ThumbnailTemplate(@NonNull String, @NonNull android.graphics.drawable.Icon, @NonNull CharSequence);
+    method @NonNull public CharSequence getContentDescription();
+    method public int getTemplateType();
+    method @NonNull public android.graphics.drawable.Icon getThumbnail();
+  }
+
+  public final class ToggleRangeTemplate extends android.service.controls.templates.ControlTemplate {
+    ctor public ToggleRangeTemplate(@NonNull String, @NonNull android.service.controls.templates.ControlButton, @NonNull android.service.controls.templates.RangeTemplate);
+    ctor public ToggleRangeTemplate(@NonNull String, boolean, @NonNull CharSequence, @NonNull android.service.controls.templates.RangeTemplate);
+    method @NonNull public CharSequence getActionDescription();
+    method @NonNull public android.service.controls.templates.RangeTemplate getRange();
+    method public int getTemplateType();
+    method public boolean isChecked();
+  }
+
+  public final class ToggleTemplate extends android.service.controls.templates.ControlTemplate {
+    ctor public ToggleTemplate(@NonNull String, @NonNull android.service.controls.templates.ControlButton);
+    method @NonNull public CharSequence getContentDescription();
+    method public int getTemplateType();
+    method public boolean isChecked();
+  }
+
+}
+
 package android.service.dreams {
 
   public class DreamService extends android.app.Service implements android.view.Window.Callback {

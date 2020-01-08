@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 The Android Open Source Project
+ * Copyright (C) 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.service.controls;
+package android.service.controls.actions;
 
 import static junit.framework.Assert.assertTrue;
 
@@ -22,12 +22,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import android.os.Parcel;
-import android.service.controls.actions.BooleanAction;
-import android.service.controls.actions.CommandAction;
-import android.service.controls.actions.ControlAction;
-import android.service.controls.actions.FloatAction;
-import android.service.controls.actions.ModeAction;
-import android.service.controls.actions.MultiFloatAction;
 
 import androidx.test.filters.SmallTest;
 import androidx.test.runner.AndroidJUnit4;
@@ -97,9 +91,9 @@ public class ControlActionTest {
         assertNotNull(parcel);
 
         parcel.setDataPosition(0);
-        toParcel.writeToParcel(parcel, 0);
+        new ControlActionWrapper(toParcel).writeToParcel(parcel, 0);
         parcel.setDataPosition(0);
 
-        return ControlAction.CREATOR.createFromParcel(parcel);
+        return ControlActionWrapper.CREATOR.createFromParcel(parcel).getWrappedAction();
     }
 }
