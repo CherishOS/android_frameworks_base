@@ -16,4 +16,4 @@
 
 package android.media;
 
-parcelable RouteDiscoveryRequest;
+parcelable RouteDiscoveryPreference;
