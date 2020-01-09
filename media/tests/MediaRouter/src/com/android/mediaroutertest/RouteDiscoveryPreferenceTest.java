@@ -19,7 +19,7 @@ package com.android.mediaroutertest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import android.media.RouteDiscoveryRequest;
+import android.media.RouteDiscoveryPreference;
 import android.os.Parcel;
 import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
@@ -34,7 +34,7 @@ import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 @SmallTest
-public class RouteDiscoveryRequestTest {
+public class RouteDiscoveryPreferenceTest {
     @Before
     public void setUp() throws Exception { }
 
@@ -46,10 +46,10 @@ public class RouteDiscoveryRequestTest {
         List<String> testTypes = new ArrayList<>();
         testTypes.add("TEST_TYPE_1");
         testTypes.add("TEST_TYPE_2");
-        RouteDiscoveryRequest request = new RouteDiscoveryRequest.Builder(testTypes, true)
+        RouteDiscoveryPreference request = new RouteDiscoveryPreference.Builder(testTypes, true)
                 .build();
 
-        RouteDiscoveryRequest requestRebuilt = new RouteDiscoveryRequest.Builder(request)
+        RouteDiscoveryPreference requestRebuilt = new RouteDiscoveryPreference.Builder(request)
                 .build();
 
         assertEquals(request, requestRebuilt);
@@ -57,7 +57,7 @@ public class RouteDiscoveryRequestTest {
         Parcel parcel = Parcel.obtain();
         parcel.writeParcelable(request, 0);
         parcel.setDataPosition(0);
-        RouteDiscoveryRequest requestFromParcel = parcel.readParcelable(null);
+        RouteDiscoveryPreference requestFromParcel = parcel.readParcelable(null);
 
         assertEquals(request, requestFromParcel);
     }
@@ -71,15 +71,15 @@ public class RouteDiscoveryRequestTest {
         List<String> testTypes2 = new ArrayList<>();
         testTypes.add("TEST_TYPE_3");
 
-        RouteDiscoveryRequest request = new RouteDiscoveryRequest.Builder(testTypes, true)
+        RouteDiscoveryPreference request = new RouteDiscoveryPreference.Builder(testTypes, true)
                 .build();
 
-        RouteDiscoveryRequest requestTypes = new RouteDiscoveryRequest.Builder(request)
-                .setRouteTypes(testTypes2)
+        RouteDiscoveryPreference requestTypes = new RouteDiscoveryPreference.Builder(request)
+                .setPreferredFeatures(testTypes2)
                 .build();
         assertNotEquals(request, requestTypes);
 
-        RouteDiscoveryRequest requestActiveScan = new RouteDiscoveryRequest.Builder(request)
+        RouteDiscoveryPreference requestActiveScan = new RouteDiscoveryPreference.Builder(request)
                 .setActiveScan(false)
                 .build();
         assertNotEquals(request, requestActiveScan);
