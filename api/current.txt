@@ -9504,6 +9504,7 @@ package android.content {
     method public void dump(java.io.FileDescriptor, java.io.PrintWriter, String[]);
     method @Nullable public final String getCallingFeatureId();
     method @Nullable public final String getCallingPackage();
+    method @Nullable public final String getCallingPackageUnchecked();
     method @Nullable public final android.content.Context getContext();
     method @Nullable public final android.content.pm.PathPermission[] getPathPermissions();
     method @Nullable public final String getReadPermission();
@@ -9513,6 +9514,7 @@ package android.content {
     method @Nullable public abstract android.net.Uri insert(@NonNull android.net.Uri, @Nullable android.content.ContentValues);
     method @Nullable public android.net.Uri insert(@NonNull android.net.Uri, @Nullable android.content.ContentValues, @Nullable android.os.Bundle);
     method protected boolean isTemporary();
+    method public void onCallingPackageChanged();
     method public void onConfigurationChanged(android.content.res.Configuration);
     method public abstract boolean onCreate();
     method public void onLowMemory();
@@ -9627,13 +9629,13 @@ package android.content {
     ctor public ContentProviderResult(@NonNull android.net.Uri);
     ctor public ContentProviderResult(int);
     ctor public ContentProviderResult(@NonNull android.os.Bundle);
-    ctor public ContentProviderResult(@NonNull Exception);
+    ctor public ContentProviderResult(@NonNull Throwable);
     ctor public ContentProviderResult(android.os.Parcel);
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.content.ContentProviderResult> CREATOR;
     field @Nullable public final Integer count;
-    field @Nullable public final Exception exception;
+    field @Nullable public final Throwable exception;
     field @Nullable public final android.os.Bundle extras;
     field @Nullable public final android.net.Uri uri;
   }
@@ -13324,6 +13326,7 @@ package android.database.sqlite {
     method @Deprecated public String buildUnionSubQuery(String, String[], java.util.Set<java.lang.String>, int, String, String, String[], String, String);
     method public int delete(@NonNull android.database.sqlite.SQLiteDatabase, @Nullable String, @Nullable String[]);
     method @Nullable public android.database.sqlite.SQLiteDatabase.CursorFactory getCursorFactory();
+    method @Nullable public java.util.Collection<java.util.regex.Pattern> getProjectionGreylist();
     method @Nullable public java.util.Map<java.lang.String,java.lang.String> getProjectionMap();
     method @Nullable public String getTables();
     method public long insert(@NonNull android.database.sqlite.SQLiteDatabase, @NonNull android.content.ContentValues);
@@ -13336,6 +13339,7 @@ package android.database.sqlite {
     method public android.database.Cursor query(android.database.sqlite.SQLiteDatabase, String[], String, String[], String, String, String, String, android.os.CancellationSignal);
     method public void setCursorFactory(@Nullable android.database.sqlite.SQLiteDatabase.CursorFactory);
     method public void setDistinct(boolean);
+    method public void setProjectionGreylist(@Nullable java.util.Collection<java.util.regex.Pattern>);
     method public void setProjectionMap(@Nullable java.util.Map<java.lang.String,java.lang.String>);
     method public void setStrict(boolean);
     method public void setStrictColumns(boolean);
@@ -36389,13 +36393,20 @@ package android.os.storage {
     method public boolean isObbMounted(String);
     method public boolean mountObb(String, String, android.os.storage.OnObbStateChangeListener);
     method @NonNull public android.os.ParcelFileDescriptor openProxyFileDescriptor(int, android.os.ProxyFileDescriptorCallback, android.os.Handler) throws java.io.IOException;
+    method public void registerStorageVolumeCallback(@NonNull java.util.concurrent.Executor, @NonNull android.os.storage.StorageManager.StorageVolumeCallback);
     method public void setCacheBehaviorGroup(java.io.File, boolean) throws java.io.IOException;
     method public void setCacheBehaviorTombstone(java.io.File, boolean) throws java.io.IOException;
     method public boolean unmountObb(String, boolean, android.os.storage.OnObbStateChangeListener);
+    method public void unregisterStorageVolumeCallback(@NonNull android.os.storage.StorageManager.StorageVolumeCallback);
     field public static final String ACTION_MANAGE_STORAGE = "android.os.storage.action.MANAGE_STORAGE";
     field public static final String EXTRA_REQUESTED_BYTES = "android.os.storage.extra.REQUESTED_BYTES";
     field public static final String EXTRA_UUID = "android.os.storage.extra.UUID";
     field public static final java.util.UUID UUID_DEFAULT;
+  }
+
+  public static class StorageManager.StorageVolumeCallback {
+    ctor public StorageManager.StorageVolumeCallback();
+    method public void onStateChanged(@NonNull android.os.storage.StorageVolume);
   }
 
   public final class StorageVolume implements android.os.Parcelable {
