@@ -9504,6 +9504,7 @@ package android.content {
     method public void dump(java.io.FileDescriptor, java.io.PrintWriter, String[]);
     method @Nullable public final String getCallingFeatureId();
     method @Nullable public final String getCallingPackage();
+    method @Nullable public final String getCallingPackageUnchecked();
     method @Nullable public final android.content.Context getContext();
     method @Nullable public final android.content.pm.PathPermission[] getPathPermissions();
     method @Nullable public final String getReadPermission();
@@ -9513,6 +9514,7 @@ package android.content {
     method @Nullable public abstract android.net.Uri insert(@NonNull android.net.Uri, @Nullable android.content.ContentValues);
     method @Nullable public android.net.Uri insert(@NonNull android.net.Uri, @Nullable android.content.ContentValues, @Nullable android.os.Bundle);
     method protected boolean isTemporary();
+    method public void onCallingPackageChanged();
     method public void onConfigurationChanged(android.content.res.Configuration);
     method public abstract boolean onCreate();
     method public void onLowMemory();
@@ -9627,13 +9629,13 @@ package android.content {
     ctor public ContentProviderResult(@NonNull android.net.Uri);
     ctor public ContentProviderResult(int);
     ctor public ContentProviderResult(@NonNull android.os.Bundle);
-    ctor public ContentProviderResult(@NonNull Exception);
+    ctor public ContentProviderResult(@NonNull Throwable);
     ctor public ContentProviderResult(android.os.Parcel);
     method public int describeContents();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.content.ContentProviderResult> CREATOR;
     field @Nullable public final Integer count;
-    field @Nullable public final Exception exception;
+    field @Nullable public final Throwable exception;
     field @Nullable public final android.os.Bundle extras;
     field @Nullable public final android.net.Uri uri;
   }
@@ -9998,6 +10000,7 @@ package android.content {
     field public static final String MEDIA_ROUTER_SERVICE = "media_router";
     field public static final String MEDIA_SESSION_SERVICE = "media_session";
     field public static final String MIDI_SERVICE = "midi";
+    field public static final String MMS_SERVICE = "mms";
     field public static final int MODE_APPEND = 32768; // 0x8000
     field public static final int MODE_ENABLE_WRITE_AHEAD_LOGGING = 8; // 0x8
     field @Deprecated public static final int MODE_MULTI_PROCESS = 4; // 0x4
@@ -11925,6 +11928,7 @@ package android.content.pm {
     field public static final String FEATURE_STRONGBOX_KEYSTORE = "android.hardware.strongbox_keystore";
     field public static final String FEATURE_TELEPHONY = "android.hardware.telephony";
     field public static final String FEATURE_TELEPHONY_CDMA = "android.hardware.telephony.cdma";
+    field public static final String FEATURE_TELEPHONY_DATA = "android.hardware.telephony.data";
     field public static final String FEATURE_TELEPHONY_EUICC = "android.hardware.telephony.euicc";
     field public static final String FEATURE_TELEPHONY_GSM = "android.hardware.telephony.gsm";
     field public static final String FEATURE_TELEPHONY_IMS = "android.hardware.telephony.ims";
@@ -13323,6 +13327,7 @@ package android.database.sqlite {
     method @Deprecated public String buildUnionSubQuery(String, String[], java.util.Set<java.lang.String>, int, String, String, String[], String, String);
     method public int delete(@NonNull android.database.sqlite.SQLiteDatabase, @Nullable String, @Nullable String[]);
     method @Nullable public android.database.sqlite.SQLiteDatabase.CursorFactory getCursorFactory();
+    method @Nullable public java.util.Collection<java.util.regex.Pattern> getProjectionGreylist();
     method @Nullable public java.util.Map<java.lang.String,java.lang.String> getProjectionMap();
     method @Nullable public String getTables();
     method public long insert(@NonNull android.database.sqlite.SQLiteDatabase, @NonNull android.content.ContentValues);
@@ -13335,6 +13340,7 @@ package android.database.sqlite {
     method public android.database.Cursor query(android.database.sqlite.SQLiteDatabase, String[], String, String[], String, String, String, String, android.os.CancellationSignal);
     method public void setCursorFactory(@Nullable android.database.sqlite.SQLiteDatabase.CursorFactory);
     method public void setDistinct(boolean);
+    method public void setProjectionGreylist(@Nullable java.util.Collection<java.util.regex.Pattern>);
     method public void setProjectionMap(@Nullable java.util.Map<java.lang.String,java.lang.String>);
     method public void setStrict(boolean);
     method public void setStrictColumns(boolean);
@@ -28684,6 +28690,7 @@ package android.media.tv {
     method public boolean isAudioDescription();
     method public boolean isEncrypted();
     method public boolean isHardOfHearing();
+    method public boolean isSpokenSubtitle();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.media.tv.TvTrackInfo> CREATOR;
     field public static final int TYPE_AUDIO = 0; // 0x0
@@ -28702,6 +28709,7 @@ package android.media.tv {
     method public android.media.tv.TvTrackInfo.Builder setExtra(android.os.Bundle);
     method @NonNull public android.media.tv.TvTrackInfo.Builder setHardOfHearing(boolean);
     method public android.media.tv.TvTrackInfo.Builder setLanguage(String);
+    method @NonNull public android.media.tv.TvTrackInfo.Builder setSpokenSubtitle(boolean);
     method public android.media.tv.TvTrackInfo.Builder setVideoActiveFormatDescription(byte);
     method public android.media.tv.TvTrackInfo.Builder setVideoFrameRate(float);
     method public android.media.tv.TvTrackInfo.Builder setVideoHeight(int);
@@ -36386,13 +36394,20 @@ package android.os.storage {
     method public boolean isObbMounted(String);
     method public boolean mountObb(String, String, android.os.storage.OnObbStateChangeListener);
     method @NonNull public android.os.ParcelFileDescriptor openProxyFileDescriptor(int, android.os.ProxyFileDescriptorCallback, android.os.Handler) throws java.io.IOException;
+    method public void registerStorageVolumeCallback(@NonNull java.util.concurrent.Executor, @NonNull android.os.storage.StorageManager.StorageVolumeCallback);
     method public void setCacheBehaviorGroup(java.io.File, boolean) throws java.io.IOException;
     method public void setCacheBehaviorTombstone(java.io.File, boolean) throws java.io.IOException;
     method public boolean unmountObb(String, boolean, android.os.storage.OnObbStateChangeListener);
+    method public void unregisterStorageVolumeCallback(@NonNull android.os.storage.StorageManager.StorageVolumeCallback);
     field public static final String ACTION_MANAGE_STORAGE = "android.os.storage.action.MANAGE_STORAGE";
     field public static final String EXTRA_REQUESTED_BYTES = "android.os.storage.extra.REQUESTED_BYTES";
     field public static final String EXTRA_UUID = "android.os.storage.extra.UUID";
     field public static final java.util.UUID UUID_DEFAULT;
+  }
+
+  public static class StorageManager.StorageVolumeCallback {
+    ctor public StorageManager.StorageVolumeCallback();
+    method public void onStateChanged(@NonNull android.os.storage.StorageVolume);
   }
 
   public final class StorageVolume implements android.os.Parcelable {
@@ -45501,6 +45516,11 @@ package android.telephony {
     method @Nullable public android.telephony.mbms.StreamingService startStreaming(android.telephony.mbms.StreamingServiceInfo, @NonNull java.util.concurrent.Executor, android.telephony.mbms.StreamingServiceCallback);
   }
 
+  public final class MmsManager {
+    method public void downloadMultimediaMessage(int, @NonNull String, @NonNull android.net.Uri, @Nullable android.os.Bundle, @Nullable android.app.PendingIntent);
+    method public void sendMultimediaMessage(int, @NonNull android.net.Uri, @Nullable String, @Nullable android.os.Bundle, @Nullable android.app.PendingIntent);
+  }
+
   @Deprecated public class NeighboringCellInfo implements android.os.Parcelable {
     ctor @Deprecated public NeighboringCellInfo();
     ctor @Deprecated public NeighboringCellInfo(int, int);
@@ -45697,6 +45717,7 @@ package android.telephony {
     method public String getOperatorNumeric();
     method public boolean getRoaming();
     method public int getState();
+    method public boolean isSearching();
     method public void setIsManualSelection(boolean);
     method public void setOperatorName(String, String, String);
     method public void setRoaming(boolean);
@@ -45737,8 +45758,8 @@ package android.telephony {
     method public String createAppSpecificSmsToken(android.app.PendingIntent);
     method @Nullable public String createAppSpecificSmsTokenWithPackageInfo(@Nullable String, @NonNull android.app.PendingIntent);
     method public java.util.ArrayList<java.lang.String> divideMessage(String);
-    method public void downloadMultimediaMessage(android.content.Context, String, android.net.Uri, android.os.Bundle, android.app.PendingIntent);
-    method @Nullable public android.os.Bundle getCarrierConfigValues();
+    method @Deprecated public void downloadMultimediaMessage(android.content.Context, String, android.net.Uri, android.os.Bundle, android.app.PendingIntent);
+    method @NonNull public android.os.Bundle getCarrierConfigValues();
     method public static android.telephony.SmsManager getDefault();
     method public static int getDefaultSmsSubscriptionId();
     method public static android.telephony.SmsManager getSmsManagerForSubscriptionId(int);
@@ -45747,7 +45768,7 @@ package android.telephony {
     method public int getSubscriptionId();
     method public void injectSmsPdu(byte[], String, android.app.PendingIntent);
     method public void sendDataMessage(String, String, short, byte[], android.app.PendingIntent, android.app.PendingIntent);
-    method public void sendMultimediaMessage(android.content.Context, android.net.Uri, String, android.os.Bundle, android.app.PendingIntent);
+    method @Deprecated public void sendMultimediaMessage(android.content.Context, android.net.Uri, String, android.os.Bundle, android.app.PendingIntent);
     method public void sendMultipartTextMessage(String, String, java.util.ArrayList<java.lang.String>, java.util.ArrayList<android.app.PendingIntent>, java.util.ArrayList<android.app.PendingIntent>);
     method public void sendTextMessage(String, String, String, android.app.PendingIntent, android.app.PendingIntent);
     method @RequiresPermission(allOf={android.Manifest.permission.MODIFY_PHONE_STATE, android.Manifest.permission.SEND_SMS}) public void sendTextMessageWithoutPersisting(String, String, String, android.app.PendingIntent, android.app.PendingIntent);
@@ -45955,6 +45976,7 @@ package android.telephony {
   public class SubscriptionManager {
     method public void addOnOpportunisticSubscriptionsChangedListener(@NonNull java.util.concurrent.Executor, @NonNull android.telephony.SubscriptionManager.OnOpportunisticSubscriptionsChangedListener);
     method public void addOnSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnSubscriptionsChangedListener);
+    method public void addOnSubscriptionsChangedListener(@NonNull java.util.concurrent.Executor, @NonNull android.telephony.SubscriptionManager.OnSubscriptionsChangedListener);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public void addSubscriptionsIntoGroup(@NonNull java.util.List<java.lang.Integer>, @NonNull android.os.ParcelUuid);
     method public boolean canManageSubscription(android.telephony.SubscriptionInfo);
     method @NonNull @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public android.os.ParcelUuid createSubscriptionGroup(@NonNull java.util.List<java.lang.Integer>);
@@ -46113,12 +46135,12 @@ package android.telephony {
     method public android.net.Uri getVoicemailRingtoneUri(android.telecom.PhoneAccountHandle);
     method public boolean hasCarrierPrivileges();
     method public boolean hasIccCard();
-    method public boolean iccCloseLogicalChannel(int);
-    method public byte[] iccExchangeSimIO(int, int, int, int, int, String);
+    method @Deprecated public boolean iccCloseLogicalChannel(int);
+    method @Deprecated public byte[] iccExchangeSimIO(int, int, int, int, int, String);
     method @Deprecated public android.telephony.IccOpenLogicalChannelResponse iccOpenLogicalChannel(String);
-    method public android.telephony.IccOpenLogicalChannelResponse iccOpenLogicalChannel(String, int);
-    method public String iccTransmitApduBasicChannel(int, int, int, int, int, String);
-    method public String iccTransmitApduLogicalChannel(int, int, int, int, int, int, String);
+    method @Deprecated public android.telephony.IccOpenLogicalChannelResponse iccOpenLogicalChannel(String, int);
+    method @Deprecated public String iccTransmitApduBasicChannel(int, int, int, int, int, String);
+    method @Deprecated public String iccTransmitApduLogicalChannel(int, int, int, int, int, int, String);
     method public boolean isConcurrentVoiceAndDataSupported();
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.MODIFY_PHONE_STATE}) public boolean isDataEnabled();
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.READ_PHONE_STATE}) public boolean isDataRoamingEnabled();
@@ -46136,7 +46158,7 @@ package android.telephony {
     method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public void requestCellInfoUpdate(@NonNull java.util.concurrent.Executor, @NonNull android.telephony.TelephonyManager.CellInfoCallback);
     method @RequiresPermission(allOf={android.Manifest.permission.MODIFY_PHONE_STATE, android.Manifest.permission.ACCESS_FINE_LOCATION}) public android.telephony.NetworkScan requestNetworkScan(android.telephony.NetworkScanRequest, java.util.concurrent.Executor, android.telephony.TelephonyScanManager.NetworkScanCallback);
     method public void sendDialerSpecialCode(String);
-    method public String sendEnvelopeWithStatus(String);
+    method @Deprecated public String sendEnvelopeWithStatus(String);
     method @RequiresPermission(android.Manifest.permission.CALL_PHONE) public void sendUssdRequest(String, android.telephony.TelephonyManager.UssdResponseCallback, android.os.Handler);
     method public void sendVisualVoicemailSms(String, int, String, android.app.PendingIntent);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public void setDataEnabled(boolean);
