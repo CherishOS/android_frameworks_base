@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 The Android Open Source Project
+ * Copyright (C) 2019 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package android.media.soundtrigger_middleware;
 
-package android.media;
-
-parcelable RouteDiscoveryRequest;
+/**
+ * AudioCapabilities supported by the implemented HAL driver.
+ * @hide
+ */
+@Backing(type="int")
+enum AudioCapabilities {
+    /**
+     * If set the underlying module supports AEC.
+     */
+    ECHO_CANCELLATION = 1 << 0,
+    /**
+     * If set, the underlying module supports noise suppression.
+     */
+    NOISE_SUPPRESSION = 1 << 1,
+}

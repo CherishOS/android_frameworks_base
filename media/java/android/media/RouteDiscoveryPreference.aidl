@@ -14,18 +14,6 @@
  * limitations under the License.
  */
 
-package android.media.tv.tuner.filter;
+package android.media;
 
-/**
- * Extra Meta Data from AD (Audio Descriptor) according to
- * ETSI TS 101 154 V2.1.1.
- * @hide
- */
-public class AudioExtraMetaData {
-    private byte mAdFade;
-    private byte mAdPan;
-    private byte mVersionTextTag;
-    private byte mAdGainCenter;
-    private byte mAdGainFront;
-    private byte mAdGainSurround;
-}
+parcelable RouteDiscoveryPreference;

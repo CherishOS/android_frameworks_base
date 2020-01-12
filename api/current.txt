@@ -23663,6 +23663,7 @@ package android.media {
     field public static final int TYPE_BUILTIN_EARPIECE = 1; // 0x1
     field public static final int TYPE_BUILTIN_MIC = 15; // 0xf
     field public static final int TYPE_BUILTIN_SPEAKER = 2; // 0x2
+    field public static final int TYPE_BUILTIN_SPEAKER_SAFE = 24; // 0x18
     field public static final int TYPE_BUS = 21; // 0x15
     field public static final int TYPE_DOCK = 13; // 0xd
     field public static final int TYPE_FM = 14; // 0xe
@@ -26296,6 +26297,59 @@ package android.media {
     field public static final int SURFACE = 2; // 0x2
   }
 
+  public final class MediaRoute2Info implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getConnectionState();
+    method @Nullable public CharSequence getDescription();
+    method public int getDeviceType();
+    method @Nullable public android.os.Bundle getExtras();
+    method @NonNull public java.util.List<java.lang.String> getFeatures();
+    method @Nullable public android.net.Uri getIconUri();
+    method @NonNull public String getId();
+    method @NonNull public CharSequence getName();
+    method public int getVolume();
+    method public int getVolumeHandling();
+    method public int getVolumeMax();
+    method public boolean hasAnyFeatures(@NonNull java.util.Collection<java.lang.String>);
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field public static final int CONNECTION_STATE_CONNECTED = 2; // 0x2
+    field public static final int CONNECTION_STATE_CONNECTING = 1; // 0x1
+    field public static final int CONNECTION_STATE_DISCONNECTED = 0; // 0x0
+    field @NonNull public static final android.os.Parcelable.Creator<android.media.MediaRoute2Info> CREATOR;
+    field public static final int DEVICE_TYPE_BLUETOOTH = 3; // 0x3
+    field public static final int DEVICE_TYPE_REMOTE_SPEAKER = 2; // 0x2
+    field public static final int DEVICE_TYPE_REMOTE_TV = 1; // 0x1
+    field public static final int DEVICE_TYPE_UNKNOWN = 0; // 0x0
+    field public static final int PLAYBACK_VOLUME_FIXED = 0; // 0x0
+    field public static final int PLAYBACK_VOLUME_VARIABLE = 1; // 0x1
+  }
+
+  public static final class MediaRoute2Info.Builder {
+    ctor public MediaRoute2Info.Builder(@NonNull String, @NonNull CharSequence);
+    ctor public MediaRoute2Info.Builder(@NonNull android.media.MediaRoute2Info);
+    method @NonNull public android.media.MediaRoute2Info.Builder addFeature(@NonNull String);
+    method @NonNull public android.media.MediaRoute2Info.Builder addFeatures(@NonNull java.util.Collection<java.lang.String>);
+    method @NonNull public android.media.MediaRoute2Info build();
+    method @NonNull public android.media.MediaRoute2Info.Builder clearFeatures();
+    method @NonNull public android.media.MediaRoute2Info.Builder setClientPackageName(@Nullable String);
+    method @NonNull public android.media.MediaRoute2Info.Builder setConnectionState(int);
+    method @NonNull public android.media.MediaRoute2Info.Builder setDescription(@Nullable CharSequence);
+    method @NonNull public android.media.MediaRoute2Info.Builder setDeviceType(int);
+    method @NonNull public android.media.MediaRoute2Info.Builder setExtras(@Nullable android.os.Bundle);
+    method @NonNull public android.media.MediaRoute2Info.Builder setIconUri(@Nullable android.net.Uri);
+    method @NonNull public android.media.MediaRoute2Info.Builder setVolume(int);
+    method @NonNull public android.media.MediaRoute2Info.Builder setVolumeHandling(int);
+    method @NonNull public android.media.MediaRoute2Info.Builder setVolumeMax(int);
+  }
+
+  public abstract class MediaRoute2ProviderService extends android.app.Service {
+    ctor public MediaRoute2ProviderService();
+    method public final void notifyRoutes(@NonNull java.util.Collection<android.media.MediaRoute2Info>);
+    method @NonNull public android.os.IBinder onBind(@NonNull android.content.Intent);
+    method public void onDiscoveryPreferenceChanged(@NonNull android.media.RouteDiscoveryPreference);
+    field public static final String SERVICE_INTERFACE = "android.media.MediaRoute2ProviderService";
+  }
+
   public class MediaRouter {
     method public void addCallback(int, android.media.MediaRouter.Callback);
     method public void addCallback(int, android.media.MediaRouter.Callback, int);
@@ -26417,6 +26471,20 @@ package android.media {
     ctor public MediaRouter.VolumeCallback();
     method public abstract void onVolumeSetRequest(android.media.MediaRouter.RouteInfo, int);
     method public abstract void onVolumeUpdateRequest(android.media.MediaRouter.RouteInfo, int);
+  }
+
+  public class MediaRouter2 {
+    method @NonNull public static android.media.MediaRouter2 getInstance(@NonNull android.content.Context);
+    method @NonNull public java.util.List<android.media.MediaRoute2Info> getRoutes();
+    method public void registerRouteCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaRouter2.RouteCallback, @NonNull android.media.RouteDiscoveryPreference);
+    method public void unregisterRouteCallback(@NonNull android.media.MediaRouter2.RouteCallback);
+  }
+
+  public static class MediaRouter2.RouteCallback {
+    ctor public MediaRouter2.RouteCallback();
+    method public void onRoutesAdded(@NonNull java.util.List<android.media.MediaRoute2Info>);
+    method public void onRoutesChanged(@NonNull java.util.List<android.media.MediaRoute2Info>);
+    method public void onRoutesRemoved(@NonNull java.util.List<android.media.MediaRoute2Info>);
   }
 
   public class MediaScannerConnection implements android.content.ServiceConnection {
@@ -26775,6 +26843,22 @@ package android.media {
     field public static final int TYPE_NOTIFICATION = 2; // 0x2
     field public static final int TYPE_RINGTONE = 1; // 0x1
     field public static final int URI_COLUMN_INDEX = 2; // 0x2
+  }
+
+  public final class RouteDiscoveryPreference implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public java.util.List<java.lang.String> getPreferredFeatures();
+    method public boolean isActiveScan();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.media.RouteDiscoveryPreference> CREATOR;
+  }
+
+  public static final class RouteDiscoveryPreference.Builder {
+    ctor public RouteDiscoveryPreference.Builder(@NonNull java.util.List<java.lang.String>, boolean);
+    ctor public RouteDiscoveryPreference.Builder(@NonNull android.media.RouteDiscoveryPreference);
+    method @NonNull public android.media.RouteDiscoveryPreference build();
+    method @NonNull public android.media.RouteDiscoveryPreference.Builder setActiveScan(boolean);
+    method @NonNull public android.media.RouteDiscoveryPreference.Builder setPreferredFeatures(@NonNull java.util.List<java.lang.String>);
   }
 
   public final class Session2Command implements android.os.Parcelable {
@@ -42686,14 +42770,19 @@ package android.service.voice {
     method public android.content.Intent createReEnrollIntent();
     method public android.content.Intent createUnEnrollIntent();
     method public int getParameter(int);
+    method public int getSupportedAudioCapabilities();
     method public int getSupportedRecognitionModes();
     method @Nullable public android.service.voice.AlwaysOnHotwordDetector.ModelParamRange queryParameter(int);
     method public int setParameter(int, int);
     method public boolean startRecognition(int);
     method public boolean stopRecognition();
+    field public static final int AUDIO_CAPABILITY_ECHO_CANCELLATION = 1; // 0x1
+    field public static final int AUDIO_CAPABILITY_NOISE_SUPPRESSION = 2; // 0x2
     field public static final int MODEL_PARAM_THRESHOLD_FACTOR = 0; // 0x0
     field public static final int RECOGNITION_FLAG_ALLOW_MULTIPLE_TRIGGERS = 2; // 0x2
     field public static final int RECOGNITION_FLAG_CAPTURE_TRIGGER_AUDIO = 1; // 0x1
+    field public static final int RECOGNITION_FLAG_ENABLE_AUDIO_ECHO_CANCELLATION = 4; // 0x4
+    field public static final int RECOGNITION_FLAG_ENABLE_AUDIO_NOISE_SUPPRESSION = 8; // 0x8
     field public static final int RECOGNITION_MODE_USER_IDENTIFICATION = 2; // 0x2
     field public static final int RECOGNITION_MODE_VOICE_TRIGGER = 1; // 0x1
     field public static final int STATE_HARDWARE_UNAVAILABLE = -2; // 0xfffffffe
