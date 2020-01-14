@@ -2925,6 +2925,7 @@ package android.accessibilityservice {
     method public int getShowMode();
     method public boolean removeOnShowModeChangedListener(@NonNull android.accessibilityservice.AccessibilityService.SoftKeyboardController.OnShowModeChangedListener);
     method public boolean setShowMode(int);
+    method public boolean switchToInputMethod(@NonNull String);
   }
 
   public static interface AccessibilityService.SoftKeyboardController.OnShowModeChangedListener {
@@ -6763,6 +6764,7 @@ package android.app.admin {
     method @NonNull public java.util.List<java.lang.String> getDelegatedScopes(@Nullable android.content.ComponentName, @NonNull String);
     method public CharSequence getDeviceOwnerLockScreenInfo();
     method public CharSequence getEndUserSessionMessage(@NonNull android.content.ComponentName);
+    method @Nullable public android.app.admin.FactoryResetProtectionPolicy getFactoryResetProtectionPolicy(@Nullable android.content.ComponentName);
     method @Nullable public String getGlobalPrivateDnsHost(@NonNull android.content.ComponentName);
     method public int getGlobalPrivateDnsMode(@NonNull android.content.ComponentName);
     method @NonNull public java.util.List<byte[]> getInstalledCaCerts(@Nullable android.content.ComponentName);
@@ -6881,6 +6883,7 @@ package android.app.admin {
     method public void setDelegatedScopes(@NonNull android.content.ComponentName, @NonNull String, @NonNull java.util.List<java.lang.String>);
     method public void setDeviceOwnerLockScreenInfo(@NonNull android.content.ComponentName, CharSequence);
     method public void setEndUserSessionMessage(@NonNull android.content.ComponentName, @Nullable CharSequence);
+    method public void setFactoryResetProtectionPolicy(@NonNull android.content.ComponentName, @Nullable android.app.admin.FactoryResetProtectionPolicy);
     method public int setGlobalPrivateDnsModeOpportunistic(@NonNull android.content.ComponentName);
     method @WorkerThread public int setGlobalPrivateDnsModeSpecifiedHost(@NonNull android.content.ComponentName, @NonNull String);
     method public void setGlobalSetting(@NonNull android.content.ComponentName, String, String);
@@ -7113,6 +7116,21 @@ package android.app.admin {
     method public int getTotalResolvedAddressCount();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.app.admin.DnsEvent> CREATOR;
+  }
+
+  public final class FactoryResetProtectionPolicy implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public java.util.List<java.lang.String> getFactoryResetProtectionAccounts();
+    method public boolean isFactoryResetProtectionDisabled();
+    method public void writeToParcel(@NonNull android.os.Parcel, @Nullable int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.app.admin.FactoryResetProtectionPolicy> CREATOR;
+  }
+
+  public static class FactoryResetProtectionPolicy.Builder {
+    ctor public FactoryResetProtectionPolicy.Builder();
+    method @NonNull public android.app.admin.FactoryResetProtectionPolicy build();
+    method @NonNull public android.app.admin.FactoryResetProtectionPolicy.Builder setFactoryResetProtectionAccounts(@NonNull java.util.List<java.lang.String>);
+    method @NonNull public android.app.admin.FactoryResetProtectionPolicy.Builder setFactoryResetProtectionDisabled(boolean);
   }
 
   public class FreezePeriod {
@@ -10008,6 +10026,7 @@ package android.content {
     field public static final String MEDIA_ROUTER_SERVICE = "media_router";
     field public static final String MEDIA_SESSION_SERVICE = "media_session";
     field public static final String MIDI_SERVICE = "midi";
+    field public static final String MMS_SERVICE = "mms";
     field public static final int MODE_APPEND = 32768; // 0x8000
     field public static final int MODE_ENABLE_WRITE_AHEAD_LOGGING = 8; // 0x8
     field @Deprecated public static final int MODE_MULTI_PROCESS = 4; // 0x4
@@ -17061,13 +17080,13 @@ package android.hardware.camera2 {
     method public abstract void close();
     method @NonNull public abstract android.hardware.camera2.CaptureRequest.Builder createCaptureRequest(int) throws android.hardware.camera2.CameraAccessException;
     method @NonNull public android.hardware.camera2.CaptureRequest.Builder createCaptureRequest(int, java.util.Set<java.lang.String>) throws android.hardware.camera2.CameraAccessException;
-    method public abstract void createCaptureSession(@NonNull java.util.List<android.view.Surface>, @NonNull android.hardware.camera2.CameraCaptureSession.StateCallback, @Nullable android.os.Handler) throws android.hardware.camera2.CameraAccessException;
+    method @Deprecated public abstract void createCaptureSession(@NonNull java.util.List<android.view.Surface>, @NonNull android.hardware.camera2.CameraCaptureSession.StateCallback, @Nullable android.os.Handler) throws android.hardware.camera2.CameraAccessException;
     method public void createCaptureSession(android.hardware.camera2.params.SessionConfiguration) throws android.hardware.camera2.CameraAccessException;
-    method public abstract void createCaptureSessionByOutputConfigurations(java.util.List<android.hardware.camera2.params.OutputConfiguration>, android.hardware.camera2.CameraCaptureSession.StateCallback, @Nullable android.os.Handler) throws android.hardware.camera2.CameraAccessException;
-    method public abstract void createConstrainedHighSpeedCaptureSession(@NonNull java.util.List<android.view.Surface>, @NonNull android.hardware.camera2.CameraCaptureSession.StateCallback, @Nullable android.os.Handler) throws android.hardware.camera2.CameraAccessException;
+    method @Deprecated public abstract void createCaptureSessionByOutputConfigurations(java.util.List<android.hardware.camera2.params.OutputConfiguration>, android.hardware.camera2.CameraCaptureSession.StateCallback, @Nullable android.os.Handler) throws android.hardware.camera2.CameraAccessException;
+    method @Deprecated public abstract void createConstrainedHighSpeedCaptureSession(@NonNull java.util.List<android.view.Surface>, @NonNull android.hardware.camera2.CameraCaptureSession.StateCallback, @Nullable android.os.Handler) throws android.hardware.camera2.CameraAccessException;
     method @NonNull public abstract android.hardware.camera2.CaptureRequest.Builder createReprocessCaptureRequest(@NonNull android.hardware.camera2.TotalCaptureResult) throws android.hardware.camera2.CameraAccessException;
-    method public abstract void createReprocessableCaptureSession(@NonNull android.hardware.camera2.params.InputConfiguration, @NonNull java.util.List<android.view.Surface>, @NonNull android.hardware.camera2.CameraCaptureSession.StateCallback, @Nullable android.os.Handler) throws android.hardware.camera2.CameraAccessException;
-    method public abstract void createReprocessableCaptureSessionByConfigurations(@NonNull android.hardware.camera2.params.InputConfiguration, @NonNull java.util.List<android.hardware.camera2.params.OutputConfiguration>, @NonNull android.hardware.camera2.CameraCaptureSession.StateCallback, @Nullable android.os.Handler) throws android.hardware.camera2.CameraAccessException;
+    method @Deprecated public abstract void createReprocessableCaptureSession(@NonNull android.hardware.camera2.params.InputConfiguration, @NonNull java.util.List<android.view.Surface>, @NonNull android.hardware.camera2.CameraCaptureSession.StateCallback, @Nullable android.os.Handler) throws android.hardware.camera2.CameraAccessException;
+    method @Deprecated public abstract void createReprocessableCaptureSessionByConfigurations(@NonNull android.hardware.camera2.params.InputConfiguration, @NonNull java.util.List<android.hardware.camera2.params.OutputConfiguration>, @NonNull android.hardware.camera2.CameraCaptureSession.StateCallback, @Nullable android.os.Handler) throws android.hardware.camera2.CameraAccessException;
     method public int getCameraAudioRestriction() throws android.hardware.camera2.CameraAccessException;
     method @NonNull public abstract String getId();
     method public boolean isSessionConfigurationSupported(@NonNull android.hardware.camera2.params.SessionConfiguration) throws android.hardware.camera2.CameraAccessException;
@@ -28682,7 +28701,9 @@ package android.media.tv {
     ctor public TvInputService();
     method public final android.os.IBinder onBind(android.content.Intent);
     method @Nullable public android.media.tv.TvInputService.RecordingSession onCreateRecordingSession(String);
+    method @Nullable public android.media.tv.TvInputService.RecordingSession onCreateRecordingSession(@NonNull String, @NonNull String);
     method @Nullable public abstract android.media.tv.TvInputService.Session onCreateSession(String);
+    method @Nullable public android.media.tv.TvInputService.Session onCreateSession(@NonNull String, @NonNull String);
     field public static final String SERVICE_INTERFACE = "android.media.tv.TvInputService";
     field public static final String SERVICE_META_DATA = "android.media.tv.input";
   }
@@ -30625,6 +30646,7 @@ package android.net.wifi {
     field public static final String ACTION_PICK_WIFI_NETWORK = "android.net.wifi.PICK_WIFI_NETWORK";
     field public static final String ACTION_REQUEST_SCAN_ALWAYS_AVAILABLE = "android.net.wifi.action.REQUEST_SCAN_ALWAYS_AVAILABLE";
     field public static final String ACTION_WIFI_NETWORK_SUGGESTION_POST_CONNECTION = "android.net.wifi.action.WIFI_NETWORK_SUGGESTION_POST_CONNECTION";
+    field public static final String ACTION_WIFI_SCAN_AVAILABLE = "android.net.wifi.action.WIFI_SCAN_AVAILABLE";
     field @Deprecated public static final int ERROR_AUTHENTICATING = 1; // 0x1
     field @Deprecated public static final String EXTRA_BSSID = "bssid";
     field public static final String EXTRA_NETWORK_INFO = "networkInfo";
@@ -30633,6 +30655,7 @@ package android.net.wifi {
     field @Deprecated public static final String EXTRA_NEW_STATE = "newState";
     field public static final String EXTRA_PREVIOUS_WIFI_STATE = "previous_wifi_state";
     field public static final String EXTRA_RESULTS_UPDATED = "resultsUpdated";
+    field public static final String EXTRA_SCAN_AVAILABLE = "android.net.wifi.extra.SCAN_AVAILABLE";
     field @Deprecated public static final String EXTRA_SUPPLICANT_CONNECTED = "connected";
     field @Deprecated public static final String EXTRA_SUPPLICANT_ERROR = "supplicantError";
     field @Deprecated public static final String EXTRA_WIFI_INFO = "wifiInfo";
@@ -45141,7 +45164,7 @@ package android.telephony {
     field public static final String KEY_ALLOW_LOCAL_DTMF_TONES_BOOL = "allow_local_dtmf_tones_bool";
     field public static final String KEY_ALLOW_MERGE_WIFI_CALLS_WHEN_VOWIFI_OFF_BOOL = "allow_merge_wifi_calls_when_vowifi_off_bool";
     field public static final String KEY_ALLOW_NON_EMERGENCY_CALLS_IN_ECM_BOOL = "allow_non_emergency_calls_in_ecm_bool";
-    field public static final String KEY_ALWAYS_SHOW_EMERGENCY_ALERT_ONOFF_BOOL = "always_show_emergency_alert_onoff_bool";
+    field @Deprecated public static final String KEY_ALWAYS_SHOW_EMERGENCY_ALERT_ONOFF_BOOL = "always_show_emergency_alert_onoff_bool";
     field public static final String KEY_APN_EXPAND_BOOL = "apn_expand_bool";
     field public static final String KEY_AUTO_RETRY_ENABLED_BOOL = "auto_retry_enabled_bool";
     field public static final String KEY_CALL_BARRING_SUPPORTS_DEACTIVATE_ALL_BOOL = "call_barring_supports_deactivate_all_bool";
@@ -45164,6 +45187,7 @@ package android.telephony {
     field public static final String KEY_CARRIER_INSTANT_LETTERING_LENGTH_LIMIT_INT = "carrier_instant_lettering_length_limit_int";
     field public static final String KEY_CARRIER_NAME_OVERRIDE_BOOL = "carrier_name_override_bool";
     field public static final String KEY_CARRIER_NAME_STRING = "carrier_name_string";
+    field public static final String KEY_CARRIER_RCS_PROVISIONING_REQUIRED_BOOL = "carrier_rcs_provisioning_required_bool";
     field public static final String KEY_CARRIER_SETTINGS_ENABLE_BOOL = "carrier_settings_enable_bool";
     field public static final String KEY_CARRIER_SUPPORTS_SS_OVER_UT_BOOL = "carrier_supports_ss_over_ut_bool";
     field public static final String KEY_CARRIER_USE_IMS_FIRST_FOR_EMERGENCY_BOOL = "carrier_use_ims_first_for_emergency_bool";
@@ -45632,6 +45656,11 @@ package android.telephony {
     method @Nullable public android.telephony.mbms.StreamingService startStreaming(android.telephony.mbms.StreamingServiceInfo, @NonNull java.util.concurrent.Executor, android.telephony.mbms.StreamingServiceCallback);
   }
 
+  public class MmsManager {
+    method public void downloadMultimediaMessage(int, @NonNull String, @NonNull android.net.Uri, @Nullable android.os.Bundle, @Nullable android.app.PendingIntent);
+    method public void sendMultimediaMessage(int, @NonNull android.net.Uri, @Nullable String, @Nullable android.os.Bundle, @Nullable android.app.PendingIntent);
+  }
+
   @Deprecated public class NeighboringCellInfo implements android.os.Parcelable {
     ctor @Deprecated public NeighboringCellInfo();
     ctor @Deprecated public NeighboringCellInfo(int, int);
@@ -45869,8 +45898,8 @@ package android.telephony {
     method public String createAppSpecificSmsToken(android.app.PendingIntent);
     method @Nullable public String createAppSpecificSmsTokenWithPackageInfo(@Nullable String, @NonNull android.app.PendingIntent);
     method public java.util.ArrayList<java.lang.String> divideMessage(String);
-    method public void downloadMultimediaMessage(android.content.Context, String, android.net.Uri, android.os.Bundle, android.app.PendingIntent);
-    method @Nullable public android.os.Bundle getCarrierConfigValues();
+    method @Deprecated public void downloadMultimediaMessage(android.content.Context, String, android.net.Uri, android.os.Bundle, android.app.PendingIntent);
+    method @NonNull public android.os.Bundle getCarrierConfigValues();
     method public static android.telephony.SmsManager getDefault();
     method public static int getDefaultSmsSubscriptionId();
     method public static android.telephony.SmsManager getSmsManagerForSubscriptionId(int);
@@ -45879,7 +45908,7 @@ package android.telephony {
     method public int getSubscriptionId();
     method public void injectSmsPdu(byte[], String, android.app.PendingIntent);
     method public void sendDataMessage(String, String, short, byte[], android.app.PendingIntent, android.app.PendingIntent);
-    method public void sendMultimediaMessage(android.content.Context, android.net.Uri, String, android.os.Bundle, android.app.PendingIntent);
+    method @Deprecated public void sendMultimediaMessage(android.content.Context, android.net.Uri, String, android.os.Bundle, android.app.PendingIntent);
     method public void sendMultipartTextMessage(String, String, java.util.ArrayList<java.lang.String>, java.util.ArrayList<android.app.PendingIntent>, java.util.ArrayList<android.app.PendingIntent>);
     method public void sendTextMessage(String, String, String, android.app.PendingIntent, android.app.PendingIntent);
     method @RequiresPermission(allOf={android.Manifest.permission.MODIFY_PHONE_STATE, android.Manifest.permission.SEND_SMS}) public void sendTextMessageWithoutPersisting(String, String, String, android.app.PendingIntent, android.app.PendingIntent);
