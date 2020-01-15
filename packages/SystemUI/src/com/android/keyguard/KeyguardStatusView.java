@@ -306,6 +306,12 @@ public class KeyguardStatusView extends GridLayout implements
             mClockView.setFormat12Hour("hh\nmm");
             mClockView.setFormat24Hour("kk\nmm");
         } else if (mClockSelection == 6) {
+            mClockView.setFormat12Hour(Html.fromHtml("<font color=" + getResources().getColor(R.color.accent_device_default_light) + ">hh</font><br>mm"));
+            mClockView.setFormat24Hour(Html.fromHtml("<font color=" + getResources().getColor(R.color.accent_device_default_light) + ">kk</font><br>mm"));
+        } else if (mClockSelection == 7) {
+            mClockView.setFormat12Hour(Html.fromHtml("hh<br><font color=" + getResources().getColor(R.color.accent_device_default_light) + ">mm</font>"));
+            mClockView.setFormat24Hour(Html.fromHtml("kk<br><font color=" + getResources().getColor(R.color.accent_device_default_light) + ">mm</font>"));
+        } else if (mClockSelection == 8) {
             mTextClock.onTimeChanged();
         } else {
             mClockView.setFormat12Hour(Html.fromHtml("<strong>hh</strong><br>mm"));
@@ -763,7 +769,17 @@ public class KeyguardStatusView extends GridLayout implements
                 mTextClock.setVisibility(View.GONE);
                 params.addRule(RelativeLayout.BELOW, R.id.clock_view);
                 break;
-            case 6: // custom text clock
+            case 6: // sammy (hour accent)
+                mSmallClockView.setVisibility(View.VISIBLE);
+                mTextClock.setVisibility(View.GONE);
+                params.addRule(RelativeLayout.BELOW, R.id.clock_view);
+                break;
+            case 7: // sammy (minute accent)
+                mSmallClockView.setVisibility(View.VISIBLE);
+                mTextClock.setVisibility(View.GONE);
+                params.addRule(RelativeLayout.BELOW, R.id.clock_view);
+                break;
+            case 8: // custom text clock
                 mTextClock.setVisibility(View.VISIBLE);
                 mSmallClockView.setVisibility(View.GONE);
                 params.addRule(RelativeLayout.BELOW, R.id.custom_text_clock_view);
