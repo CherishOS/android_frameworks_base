@@ -66,6 +66,7 @@ public class KeyguardStatusView extends GridLayout implements
     private KeyguardSliceView mKeyguardSlice;
     private View mNotificationIcons;
     private View mKeyguardSliceView;
+    private View mSmallClockView;
     private Runnable mPendingMarqueeStart;
     private Handler mHandler;
 
@@ -724,23 +725,23 @@ public class KeyguardStatusView extends GridLayout implements
         mClockSelection = Settings.Secure.getIntForUser(resolver,
                 Settings.Secure.LOCKSCREEN_CLOCK_SELECTION, 2, UserHandle.USER_CURRENT);
 
-        mClockView = findViewById(R.id.keyguard_clock_container);
+        mSmallClockView = findViewById(R.id.clock_view);
 
         switch (mClockSelection) {
             case 1: // hidden
-                mClockView.setVisibility(View.GONE);
+                mSmallClockView.setVisibility(View.GONE);
                 break;
             case 2: // default
-                mClockView.setVisibility(View.VISIBLE);
+                mSmallClockView.setVisibility(View.VISIBLE);
                 break;
             case 3: // default (bold)
-                mClockView.setVisibility(View.VISIBLE);
+                mSmallClockView.setVisibility(View.VISIBLE);
                 break;
             case 4: // sammy
-                mClockView.setVisibility(View.VISIBLE);
+                mSmallClockView.setVisibility(View.VISIBLE);
                 break;
             case 5: // sammy (bold)
-                mClockView.setVisibility(View.VISIBLE);
+                mSmallClockView.setVisibility(View.VISIBLE);
                 break;
         }
     }
