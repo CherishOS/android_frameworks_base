@@ -38,6 +38,7 @@ import android.view.View;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextClock;
 import android.widget.TextView;
 import androidx.core.graphics.ColorUtils;
 
@@ -66,6 +67,7 @@ public class KeyguardStatusView extends GridLayout implements
     private KeyguardClockSwitch mClockView;
     private CustomTextClock mTextClock;
     private TextView mOwnerInfo;
+    private TextClock mDefaultClockView;
     private KeyguardSliceView mKeyguardSlice;
     private View mNotificationIcons;
     private View mKeyguardSliceView;
@@ -741,6 +743,7 @@ public class KeyguardStatusView extends GridLayout implements
                 mKeyguardSlice.getLayoutParams();
 
         mSmallClockView = findViewById(R.id.clock_view);
+        mDefaultClockView = findViewById(R.id.default_clock_view);
         mTextClock = findViewById(R.id.custom_text_clock_view);
 
         switch (mClockSelection) {
@@ -761,21 +764,25 @@ public class KeyguardStatusView extends GridLayout implements
                 break;
             case 4: // sammy
                 mSmallClockView.setVisibility(View.VISIBLE);
+		mDefaultClockView.setLineSpacing(0, 0.8f);
                 mTextClock.setVisibility(View.GONE);
                 params.addRule(RelativeLayout.BELOW, R.id.clock_view);
                 break;
             case 5: // sammy (bold)
                 mSmallClockView.setVisibility(View.VISIBLE);
+		mDefaultClockView.setLineSpacing(0, 0.8f);
                 mTextClock.setVisibility(View.GONE);
                 params.addRule(RelativeLayout.BELOW, R.id.clock_view);
                 break;
             case 6: // sammy (hour accent)
                 mSmallClockView.setVisibility(View.VISIBLE);
+		mDefaultClockView.setLineSpacing(0, 0.8f);
                 mTextClock.setVisibility(View.GONE);
                 params.addRule(RelativeLayout.BELOW, R.id.clock_view);
                 break;
             case 7: // sammy (minute accent)
                 mSmallClockView.setVisibility(View.VISIBLE);
+		mDefaultClockView.setLineSpacing(0, 0.8f);
                 mTextClock.setVisibility(View.GONE);
                 params.addRule(RelativeLayout.BELOW, R.id.clock_view);
                 break;
