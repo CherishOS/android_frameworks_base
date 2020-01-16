@@ -53682,9 +53682,9 @@ package android.view {
 
   public final class WindowInsets {
     ctor public WindowInsets(android.view.WindowInsets);
-    method @NonNull public android.view.WindowInsets consumeDisplayCutout();
-    method @NonNull public android.view.WindowInsets consumeStableInsets();
-    method @NonNull public android.view.WindowInsets consumeSystemWindowInsets();
+    method @Deprecated @NonNull public android.view.WindowInsets consumeDisplayCutout();
+    method @Deprecated @NonNull public android.view.WindowInsets consumeStableInsets();
+    method @Deprecated @NonNull public android.view.WindowInsets consumeSystemWindowInsets();
     method @Nullable public android.view.DisplayCutout getDisplayCutout();
     method @NonNull public android.graphics.Insets getInsets(int);
     method @NonNull public android.graphics.Insets getMandatorySystemGestureInsets();
@@ -53710,6 +53710,7 @@ package android.view {
     method public boolean isVisible(int);
     method @Deprecated @NonNull public android.view.WindowInsets replaceSystemWindowInsets(int, int, int, int);
     method @Deprecated @NonNull public android.view.WindowInsets replaceSystemWindowInsets(android.graphics.Rect);
+    field @NonNull public static final android.view.WindowInsets CONSUMED;
   }
 
   public static final class WindowInsets.Builder {
@@ -53741,10 +53742,13 @@ package android.view {
   }
 
   public interface WindowInsetsAnimationCallback {
+    method public int getDispatchMode();
     method public default void onFinish(@NonNull android.view.WindowInsetsAnimationCallback.InsetsAnimation);
     method public default void onPrepare(@NonNull android.view.WindowInsetsAnimationCallback.InsetsAnimation);
     method @NonNull public android.view.WindowInsets onProgress(@NonNull android.view.WindowInsets);
     method @NonNull public default android.view.WindowInsetsAnimationCallback.AnimationBounds onStart(@NonNull android.view.WindowInsetsAnimationCallback.InsetsAnimation, @NonNull android.view.WindowInsetsAnimationCallback.AnimationBounds);
+    field public static final int DISPATCH_MODE_CONTINUE_ON_SUBTREE = 1; // 0x1
+    field public static final int DISPATCH_MODE_STOP = 0; // 0x0
   }
 
   public static final class WindowInsetsAnimationCallback.AnimationBounds {
