@@ -24006,6 +24006,37 @@ package android.media {
     method public void onAudioFocusChange(int);
   }
 
+  public final class AudioMetadata {
+    method @NonNull public static android.media.AudioMetadata.Map createMap();
+  }
+
+  public static class AudioMetadata.Format {
+    field @NonNull public static final android.media.AudioMetadata.Key<java.lang.Boolean> KEY_ATMOS_PRESENT;
+    field @NonNull public static final android.media.AudioMetadata.Key<java.lang.Integer> KEY_AUDIO_ENCODING;
+    field @NonNull public static final android.media.AudioMetadata.Key<java.lang.Integer> KEY_BIT_RATE;
+    field @NonNull public static final android.media.AudioMetadata.Key<java.lang.Integer> KEY_BIT_WIDTH;
+    field @NonNull public static final android.media.AudioMetadata.Key<java.lang.Integer> KEY_CHANNEL_MASK;
+    field @NonNull public static final android.media.AudioMetadata.Key<java.lang.String> KEY_MIME;
+    field @NonNull public static final android.media.AudioMetadata.Key<java.lang.Integer> KEY_SAMPLE_RATE;
+  }
+
+  public static interface AudioMetadata.Key<T> {
+    method @NonNull public String getName();
+    method @NonNull public Class<T> getValueClass();
+  }
+
+  public static interface AudioMetadata.Map extends android.media.AudioMetadata.ReadMap {
+    method @Nullable public <T> T remove(@NonNull android.media.AudioMetadata.Key<T>);
+    method @Nullable public <T> T set(@NonNull android.media.AudioMetadata.Key<T>, @NonNull T);
+  }
+
+  public static interface AudioMetadata.ReadMap {
+    method public <T> boolean containsKey(@NonNull android.media.AudioMetadata.Key<T>);
+    method @NonNull public android.media.AudioMetadata.Map dup();
+    method @Nullable public <T> T get(@NonNull android.media.AudioMetadata.Key<T>);
+    method public int size();
+  }
+
   public final class AudioPlaybackCaptureConfiguration {
     method @NonNull public int[] getExcludeUids();
     method @NonNull public int[] getExcludeUsages();
@@ -24191,6 +24222,7 @@ package android.media {
     ctor @Deprecated public AudioTrack(int, int, int, int, int, int) throws java.lang.IllegalArgumentException;
     ctor @Deprecated public AudioTrack(int, int, int, int, int, int, int) throws java.lang.IllegalArgumentException;
     ctor public AudioTrack(android.media.AudioAttributes, android.media.AudioFormat, int, int, int) throws java.lang.IllegalArgumentException;
+    method public void addOnCodecFormatChangedListener(@NonNull java.util.concurrent.Executor, @NonNull android.media.AudioTrack.OnCodecFormatChangedListener);
     method public void addOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener, android.os.Handler);
     method @Deprecated public void addOnRoutingChangedListener(android.media.AudioTrack.OnRoutingChangedListener, android.os.Handler);
     method public int attachAuxEffect(int);
@@ -24234,6 +24266,7 @@ package android.media {
     method public void registerStreamEventCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.AudioTrack.StreamEventCallback);
     method public void release();
     method public int reloadStaticData();
+    method public void removeOnCodecFormatChangedListener(@NonNull android.media.AudioTrack.OnCodecFormatChangedListener);
     method public void removeOnRoutingChangedListener(android.media.AudioRouting.OnRoutingChangedListener);
     method @Deprecated public void removeOnRoutingChangedListener(android.media.AudioTrack.OnRoutingChangedListener);
     method public int setAuxEffectSendLevel(@FloatRange(from=0.0) float);
@@ -24305,6 +24338,10 @@ package android.media {
     field @Deprecated public static final String SAMPLERATE = "android.media.audiorecord.samplerate";
     field public static final String STREAMTYPE = "android.media.audiotrack.streamtype";
     field public static final String USAGE = "android.media.audiotrack.usage";
+  }
+
+  public static interface AudioTrack.OnCodecFormatChangedListener {
+    method public void onCodecFormatChanged(@NonNull android.media.AudioTrack, @Nullable android.media.AudioMetadata.ReadMap);
   }
 
   public static interface AudioTrack.OnPlaybackPositionUpdateListener {
