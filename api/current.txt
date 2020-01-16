@@ -23465,6 +23465,69 @@ package android.location {
     method public static boolean isPresent();
   }
 
+  public final class GnssAntennaInfo implements android.os.Parcelable {
+    ctor public GnssAntennaInfo(double, @NonNull android.location.GnssAntennaInfo.PhaseCenterOffsetCoordinates, @Nullable android.location.GnssAntennaInfo.PhaseCenterVariationCorrections, @Nullable android.location.GnssAntennaInfo.SignalGainCorrections);
+    method public int describeContents();
+    method public double getCarrierFrequencyMHz();
+    method @NonNull public android.location.GnssAntennaInfo.PhaseCenterOffsetCoordinates getPhaseCenterOffsetCoordinates();
+    method @Nullable public android.location.GnssAntennaInfo.PhaseCenterVariationCorrections getPhaseCenterVariationCorrections();
+    method @Nullable public android.location.GnssAntennaInfo.SignalGainCorrections getSignalGainCorrections();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.location.GnssAntennaInfo> CREATOR;
+  }
+
+  public abstract static class GnssAntennaInfo.Callback {
+    ctor public GnssAntennaInfo.Callback();
+    method public void onGnssAntennaInfoReceived(@NonNull java.util.List<android.location.GnssAntennaInfo>);
+    method public void onStatusChanged(int);
+    field public static final int STATUS_LOCATION_DISABLED = 2; // 0x2
+    field public static final int STATUS_NOT_SUPPORTED = 0; // 0x0
+    field public static final int STATUS_READY = 1; // 0x1
+  }
+
+  public static final class GnssAntennaInfo.PhaseCenterOffsetCoordinates implements android.os.Parcelable {
+    ctor public GnssAntennaInfo.PhaseCenterOffsetCoordinates(double, double, double, double, double, double);
+    method public int describeContents();
+    method public double getXCoordMillimeters();
+    method public double getXCoordUncertaintyMillimeters();
+    method public double getYCoordMillimeters();
+    method public double getYCoordUncertaintyMillimeters();
+    method public double getZCoordMillimeters();
+    method public double getZCoordUncertaintyMillimeters();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.location.GnssAntennaInfo.PhaseCenterOffsetCoordinates> CREATOR;
+  }
+
+  public static final class GnssAntennaInfo.PhaseCenterVariationCorrections implements android.os.Parcelable {
+    ctor public GnssAntennaInfo.PhaseCenterVariationCorrections(@NonNull double[][], @NonNull double[][]);
+    method public int describeContents();
+    method public double getDeltaPhi();
+    method public double getDeltaTheta();
+    method public int getNumColumns();
+    method public int getNumRows();
+    method public double getPhaseCenterVariationCorrectionMillimetersAt(int, int);
+    method public double getPhaseCenterVariationCorrectionUncertaintyMillimetersAt(int, int);
+    method @NonNull public double[][] getRawCorrectionUncertaintiesArray();
+    method @NonNull public double[][] getRawCorrectionsArray();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.location.GnssAntennaInfo.PhaseCenterVariationCorrections> CREATOR;
+  }
+
+  public static final class GnssAntennaInfo.SignalGainCorrections implements android.os.Parcelable {
+    ctor public GnssAntennaInfo.SignalGainCorrections(@NonNull double[][], @NonNull double[][]);
+    method public int describeContents();
+    method public double getDeltaPhi();
+    method public double getDeltaTheta();
+    method public int getNumColumns();
+    method public int getNumRows();
+    method @NonNull public double[][] getRawCorrectionUncertaintiesArray();
+    method @NonNull public double[][] getRawCorrectionsArray();
+    method public double getSignalGainCorrectionDbiAt(int, int);
+    method public double getSignalGainCorrectionUncertaintyDbiAt(int, int);
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.location.GnssAntennaInfo.SignalGainCorrections> CREATOR;
+  }
+
   public final class GnssClock implements android.os.Parcelable {
     method public int describeContents();
     method public double getBiasNanos();
@@ -23782,6 +23845,7 @@ package android.location {
     method @NonNull public java.util.List<java.lang.String> getProviders(@NonNull android.location.Criteria, boolean);
     method public boolean isLocationEnabled();
     method public boolean isProviderEnabled(@NonNull String);
+    method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerAntennaInfoCallback(@NonNull java.util.concurrent.Executor, @NonNull android.location.GnssAntennaInfo.Callback);
     method @Deprecated @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssMeasurementsCallback(@NonNull android.location.GnssMeasurementsEvent.Callback);
     method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssMeasurementsCallback(@NonNull android.location.GnssMeasurementsEvent.Callback, @Nullable android.os.Handler);
     method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssMeasurementsCallback(@NonNull java.util.concurrent.Executor, @NonNull android.location.GnssMeasurementsEvent.Callback);
@@ -23813,6 +23877,7 @@ package android.location {
     method public void setTestProviderEnabled(@NonNull String, boolean);
     method public void setTestProviderLocation(@NonNull String, @NonNull android.location.Location);
     method @Deprecated public void setTestProviderStatus(@NonNull String, int, @Nullable android.os.Bundle, long);
+    method public void unregisterAntennaInfoCallback(@NonNull android.location.GnssAntennaInfo.Callback);
     method public void unregisterGnssMeasurementsCallback(@NonNull android.location.GnssMeasurementsEvent.Callback);
     method public void unregisterGnssNavigationMessageCallback(@NonNull android.location.GnssNavigationMessage.Callback);
     method public void unregisterGnssStatusCallback(@NonNull android.location.GnssStatus.Callback);
