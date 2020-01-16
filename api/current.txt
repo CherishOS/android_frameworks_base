@@ -386,6 +386,7 @@ package android {
     field public static final int canRequestFingerprintGestures = 16844109; // 0x101054d
     field public static final int canRequestTouchExplorationMode = 16843735; // 0x10103d7
     field public static final int canRetrieveWindowContent = 16843653; // 0x1010385
+    field public static final int canTakeScreenshot = 16844304; // 0x1010610
     field public static final int candidatesTextStyleSpans = 16843312; // 0x1010230
     field public static final int cantSaveState = 16844142; // 0x101056e
     field @Deprecated public static final int capitalize = 16843113; // 0x1010169
@@ -2864,6 +2865,7 @@ package android.accessibilityservice {
     method protected void onServiceConnected();
     method public final boolean performGlobalAction(int);
     method public final void setServiceInfo(android.accessibilityservice.AccessibilityServiceInfo);
+    method public boolean takeScreenshot(int, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.graphics.Bitmap>);
     field public static final int GESTURE_SWIPE_DOWN = 2; // 0x2
     field public static final int GESTURE_SWIPE_DOWN_AND_LEFT = 15; // 0xf
     field public static final int GESTURE_SWIPE_DOWN_AND_RIGHT = 16; // 0x10
@@ -2960,6 +2962,7 @@ package android.accessibilityservice {
     field public static final int CAPABILITY_CAN_REQUEST_FINGERPRINT_GESTURES = 64; // 0x40
     field public static final int CAPABILITY_CAN_REQUEST_TOUCH_EXPLORATION = 2; // 0x2
     field public static final int CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT = 1; // 0x1
+    field public static final int CAPABILITY_CAN_TAKE_SCREENSHOT = 128; // 0x80
     field @NonNull public static final android.os.Parcelable.Creator<android.accessibilityservice.AccessibilityServiceInfo> CREATOR;
     field public static final int DEFAULT = 1; // 0x1
     field public static final int FEEDBACK_ALL_MASK = -1; // 0xffffffff
@@ -11418,6 +11421,7 @@ package android.content.pm {
   public final class InstallSourceInfo implements android.os.Parcelable {
     method public int describeContents();
     method @Nullable public String getInitiatingPackageName();
+    method @Nullable public android.content.pm.SigningInfo getInitiatingPackageSigningInfo();
     method @Nullable public String getInstallingPackageName();
     method @Nullable public String getOriginatingPackageName();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
@@ -11784,6 +11788,7 @@ package android.content.pm {
     method @NonNull public abstract CharSequence getApplicationLabel(@NonNull android.content.pm.ApplicationInfo);
     method @Nullable public abstract android.graphics.drawable.Drawable getApplicationLogo(@NonNull android.content.pm.ApplicationInfo);
     method @Nullable public abstract android.graphics.drawable.Drawable getApplicationLogo(@NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull public CharSequence getBackgroundPermissionButtonLabel();
     method @Nullable public abstract android.content.pm.ChangedPackages getChangedPackages(@IntRange(from=0) int);
     method public abstract int getComponentEnabledSetting(@NonNull android.content.ComponentName);
     method @NonNull public abstract android.graphics.drawable.Drawable getDefaultActivityIcon();
@@ -16852,6 +16857,8 @@ package android.hardware.biometrics {
     method @Nullable public CharSequence getSubtitle();
     method @NonNull public CharSequence getTitle();
     method public boolean isConfirmationRequired();
+    field public static final int AUTHENTICATION_RESULT_TYPE_BIOMETRIC = 2; // 0x2
+    field public static final int AUTHENTICATION_RESULT_TYPE_DEVICE_CREDENTIAL = 1; // 0x1
     field public static final int BIOMETRIC_ACQUIRED_GOOD = 0; // 0x0
     field public static final int BIOMETRIC_ACQUIRED_IMAGER_DIRTY = 3; // 0x3
     field public static final int BIOMETRIC_ACQUIRED_INSUFFICIENT = 2; // 0x2
@@ -16881,6 +16888,7 @@ package android.hardware.biometrics {
   }
 
   public static class BiometricPrompt.AuthenticationResult {
+    method public int getAuthenticationType();
     method public android.hardware.biometrics.BiometricPrompt.CryptoObject getCryptoObject();
   }
 
@@ -27138,9 +27146,11 @@ package android.media {
 
   public abstract class VolumeProvider {
     ctor public VolumeProvider(int, int, int);
+    ctor public VolumeProvider(int, int, int, @Nullable String);
     method public final int getCurrentVolume();
     method public final int getMaxVolume();
     method public final int getVolumeControl();
+    method @Nullable public final String getVolumeControlId();
     method public void onAdjustVolume(int);
     method public void onSetVolumeTo(int);
     method public final void setCurrentVolume(int);
@@ -28000,6 +28010,7 @@ package android.media.session {
     method public int getMaxVolume();
     method public int getPlaybackType();
     method public int getVolumeControl();
+    method @Nullable public String getVolumeControlId();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.media.session.MediaController.PlaybackInfo> CREATOR;
     field public static final int PLAYBACK_TYPE_LOCAL = 1; // 0x1
@@ -29641,7 +29652,7 @@ package android.net {
     method @NonNull public android.net.NetworkRequest.Builder clearCapabilities();
     method public android.net.NetworkRequest.Builder removeCapability(int);
     method public android.net.NetworkRequest.Builder removeTransportType(int);
-    method public android.net.NetworkRequest.Builder setNetworkSpecifier(String);
+    method @Deprecated public android.net.NetworkRequest.Builder setNetworkSpecifier(String);
     method public android.net.NetworkRequest.Builder setNetworkSpecifier(android.net.NetworkSpecifier);
   }
 
@@ -29738,6 +29749,19 @@ package android.net {
     method public void onError(int);
     method public void onStarted();
     method public void onStopped();
+  }
+
+  public final class TelephonyNetworkSpecifier extends android.net.NetworkSpecifier implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getSubscriptionId();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.net.TelephonyNetworkSpecifier> CREATOR;
+  }
+
+  public static final class TelephonyNetworkSpecifier.Builder {
+    ctor public TelephonyNetworkSpecifier.Builder();
+    method @NonNull public android.net.TelephonyNetworkSpecifier build();
+    method @NonNull public android.net.TelephonyNetworkSpecifier.Builder setSubscriptionId(int);
   }
 
   public class TrafficStats {
@@ -30495,6 +30519,11 @@ package android.net.wifi {
     field @Deprecated public static final int DISABLED = 1; // 0x1
     field @Deprecated public static final int ENABLED = 2; // 0x2
     field @Deprecated public static final String[] strings;
+  }
+
+  @Deprecated public static class WifiConfiguration.SuiteBCipher {
+    field @Deprecated public static final int ECDHE_ECDSA = 0; // 0x0
+    field @Deprecated public static final int ECDHE_RSA = 1; // 0x1
   }
 
   public class WifiEnterpriseConfig implements android.os.Parcelable {
@@ -39517,7 +39546,8 @@ package android.provider {
     field public static final String DISPLAY_NAME = "_display_name";
     field public static final String DOCUMENT_ID = "document_id";
     field public static final String DURATION = "duration";
-    field public static final String GENERATION = "generation";
+    field public static final String GENERATION_ADDED = "generation_added";
+    field public static final String GENERATION_MODIFIED = "generation_modified";
     field public static final String GENRE = "genre";
     field public static final String HEIGHT = "height";
     field public static final String INSTANCE_ID = "instance_id";
@@ -44050,6 +44080,7 @@ package android.telecom {
     method public java.util.List<android.telecom.Call> getChildren();
     method public java.util.List<android.telecom.Call> getConferenceableCalls();
     method public android.telecom.Call.Details getDetails();
+    method @Nullable public android.telecom.Call getGenericConferenceActiveChildCall();
     method public android.telecom.Call getParent();
     method public String getRemainingPostDialSequence();
     method @Nullable public android.telecom.Call.RttCall getRttCall();
@@ -44133,6 +44164,7 @@ package android.telecom {
     method public int getCallerDisplayNamePresentation();
     method public int getCallerNumberVerificationStatus();
     method public final long getConnectTimeMillis();
+    method @Nullable public String getContactDisplayName();
     method public long getCreationTimeMillis();
     method public android.telecom.DisconnectCause getDisconnectCause();
     method public android.os.Bundle getExtras();
@@ -45142,6 +45174,39 @@ package android.telephony {
     field public static final int PRIORITY_MED = 2; // 0x2
   }
 
+  public final class BarringInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public android.telephony.BarringInfo.BarringServiceInfo getBarringServiceInfo(int);
+    method public boolean isServiceBarred(int);
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field public static final int BARRING_SERVICE_TYPE_CS_FALLBACK = 5; // 0x5
+    field public static final int BARRING_SERVICE_TYPE_CS_SERVICE = 0; // 0x0
+    field public static final int BARRING_SERVICE_TYPE_CS_VOICE = 2; // 0x2
+    field public static final int BARRING_SERVICE_TYPE_EMERGENCY = 8; // 0x8
+    field public static final int BARRING_SERVICE_TYPE_MMTEL_VIDEO = 7; // 0x7
+    field public static final int BARRING_SERVICE_TYPE_MMTEL_VOICE = 6; // 0x6
+    field public static final int BARRING_SERVICE_TYPE_MO_DATA = 4; // 0x4
+    field public static final int BARRING_SERVICE_TYPE_MO_SIGNALLING = 3; // 0x3
+    field public static final int BARRING_SERVICE_TYPE_PS_SERVICE = 1; // 0x1
+    field public static final int BARRING_SERVICE_TYPE_SMS = 9; // 0x9
+    field @NonNull public static final android.os.Parcelable.Creator<android.telephony.BarringInfo> CREATOR;
+  }
+
+  public static final class BarringInfo.BarringServiceInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getBarringType();
+    method public int getConditionalBarringFactor();
+    method public int getConditionalBarringTimeSeconds();
+    method public boolean isBarred();
+    method public boolean isConditionallyBarred();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field public static final int BARRING_TYPE_CONDITIONAL = 1; // 0x1
+    field public static final int BARRING_TYPE_NONE = 0; // 0x0
+    field public static final int BARRING_TYPE_UNCONDITIONAL = 2; // 0x2
+    field public static final int BARRING_TYPE_UNKNOWN = -1; // 0xffffffff
+    field @NonNull public static final android.os.Parcelable.Creator<android.telephony.BarringInfo.BarringServiceInfo> CREATOR;
+  }
+
   public class CarrierConfigManager {
     method @Nullable public android.os.PersistableBundle getConfig();
     method @Nullable public android.os.PersistableBundle getConfigByComponentForSubId(@NonNull String, int);
@@ -45835,6 +45900,7 @@ package android.telephony {
     ctor public PhoneStateListener();
     ctor public PhoneStateListener(@NonNull java.util.concurrent.Executor);
     method public void onActiveDataSubscriptionIdChanged(int);
+    method public void onBarringInfoChanged(@NonNull android.telephony.BarringInfo);
     method @RequiresPermission("android.permission.READ_PRECISE_PHONE_STATE") public void onCallDisconnectCauseChanged(int, int);
     method public void onCallForwardingIndicatorChanged(boolean);
     method public void onCallStateChanged(int, String);
@@ -45852,6 +45918,7 @@ package android.telephony {
     method public void onSignalStrengthsChanged(android.telephony.SignalStrength);
     method public void onUserMobileDataStateChanged(boolean);
     field public static final int LISTEN_ACTIVE_DATA_SUBSCRIPTION_ID_CHANGE = 4194304; // 0x400000
+    field @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public static final int LISTEN_BARRING_INFO = -2147483648; // 0x80000000
     field @RequiresPermission("android.permission.READ_PRECISE_PHONE_STATE") public static final int LISTEN_CALL_DISCONNECT_CAUSES = 33554432; // 0x2000000
     field public static final int LISTEN_CALL_FORWARDING_INDICATOR = 8; // 0x8
     field public static final int LISTEN_CALL_STATE = 32; // 0x20
@@ -58897,7 +58964,7 @@ package android.widget {
     method @android.view.ViewDebug.ExportedProperty public CharSequence getFormat24Hour();
     method public String getTimeZone();
     method public boolean is24HourModeEnabled();
-    method public void refresh();
+    method public void refreshTime();
     method public void setFormat12Hour(CharSequence);
     method public void setFormat24Hour(CharSequence);
     method public void setTimeZone(String);
@@ -59212,6 +59279,7 @@ package android.widget {
 
   public class Toast {
     ctor public Toast(android.content.Context);
+    method public void addCallback(@NonNull android.widget.Toast.Callback);
     method public void cancel();
     method public int getDuration();
     method public int getGravity();
@@ -59222,6 +59290,7 @@ package android.widget {
     method public int getYOffset();
     method public static android.widget.Toast makeText(android.content.Context, CharSequence, int);
     method public static android.widget.Toast makeText(android.content.Context, @StringRes int, int) throws android.content.res.Resources.NotFoundException;
+    method public void removeCallback(@NonNull android.widget.Toast.Callback);
     method public void setDuration(int);
     method public void setGravity(int, int, int);
     method public void setMargin(float, float);
@@ -59231,6 +59300,12 @@ package android.widget {
     method public void show();
     field public static final int LENGTH_LONG = 1; // 0x1
     field public static final int LENGTH_SHORT = 0; // 0x0
+  }
+
+  public abstract static class Toast.Callback {
+    ctor public Toast.Callback();
+    method public void onToastHidden();
+    method public void onToastShown();
   }
 
   public class ToggleButton extends android.widget.CompoundButton {
