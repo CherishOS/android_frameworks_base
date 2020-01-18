@@ -2854,6 +2854,7 @@ package android.accessibilityservice {
     method public android.view.accessibility.AccessibilityNodeInfo getRootInActiveWindow();
     method public final android.accessibilityservice.AccessibilityServiceInfo getServiceInfo();
     method @NonNull public final android.accessibilityservice.AccessibilityService.SoftKeyboardController getSoftKeyboardController();
+    method @NonNull public final java.util.List<android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction> getSystemActions();
     method public java.util.List<android.view.accessibility.AccessibilityWindowInfo> getWindows();
     method @NonNull public final android.util.SparseArray<java.util.List<android.view.accessibility.AccessibilityWindowInfo>> getWindowsOnAllDisplays();
     method public abstract void onAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
@@ -2863,6 +2864,7 @@ package android.accessibilityservice {
     method public abstract void onInterrupt();
     method protected boolean onKeyEvent(android.view.KeyEvent);
     method protected void onServiceConnected();
+    method public void onSystemActionsChanged();
     method public final boolean performGlobalAction(int);
     method public final void setServiceInfo(android.accessibilityservice.AccessibilityServiceInfo);
     method public boolean takeScreenshot(int, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.graphics.Bitmap>);
@@ -6831,6 +6833,7 @@ package android.app.admin {
     method public boolean isApplicationHidden(@NonNull android.content.ComponentName, String);
     method public boolean isBackupServiceEnabled(@NonNull android.content.ComponentName);
     method @Deprecated public boolean isCallerApplicationRestrictionsManagingPackage();
+    method public boolean isCommonCriteriaModeEnabled(@NonNull android.content.ComponentName);
     method public boolean isDeviceIdAttestationSupported();
     method public boolean isDeviceOwnerApp(String);
     method public boolean isEphemeralUser(@NonNull android.content.ComponentName);
@@ -6879,6 +6882,7 @@ package android.app.admin {
     method public void setBluetoothContactSharingDisabled(@NonNull android.content.ComponentName, boolean);
     method public void setCameraDisabled(@NonNull android.content.ComponentName, boolean);
     method @Deprecated public void setCertInstallerPackage(@NonNull android.content.ComponentName, @Nullable String) throws java.lang.SecurityException;
+    method public void setCommonCriteriaModeEnabled(@NonNull android.content.ComponentName, boolean);
     method public void setCrossProfileCalendarPackages(@NonNull android.content.ComponentName, @Nullable java.util.Set<java.lang.String>);
     method public void setCrossProfileCallerIdDisabled(@NonNull android.content.ComponentName, boolean);
     method public void setCrossProfileContactsSearchDisabled(@NonNull android.content.ComponentName, boolean);
@@ -7443,6 +7447,41 @@ package android.app.backup {
     method public void performBackup(android.os.ParcelFileDescriptor, android.app.backup.BackupDataOutput, android.os.ParcelFileDescriptor);
     method public void restoreEntity(android.app.backup.BackupDataInputStream);
     method public void writeNewStateDescription(android.os.ParcelFileDescriptor);
+  }
+
+}
+
+package android.app.blob {
+
+  public final class BlobHandle implements android.os.Parcelable {
+    method @NonNull public static android.app.blob.BlobHandle createWithSha256(@NonNull byte[], @NonNull CharSequence, long, @NonNull String);
+    method public int describeContents();
+    method public long getExpiryTimeMillis();
+    method @NonNull public CharSequence getLabel();
+    method @NonNull public byte[] getSha256Digest();
+    method @NonNull public String getTag();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.app.blob.BlobHandle> CREATOR;
+  }
+
+  public class BlobStoreManager {
+    method public void acquireLease(@NonNull android.app.blob.BlobHandle, @IdRes int, long) throws java.io.IOException;
+    method public void acquireLease(@NonNull android.app.blob.BlobHandle, @IdRes int) throws java.io.IOException;
+    method @IntRange(from=1) public long createSession(@NonNull android.app.blob.BlobHandle) throws java.io.IOException;
+    method @NonNull public android.os.ParcelFileDescriptor openBlob(@NonNull android.app.blob.BlobHandle) throws java.io.IOException;
+    method @NonNull public android.app.blob.BlobStoreManager.Session openSession(@IntRange(from=1) long) throws java.io.IOException;
+    method public void releaseLease(@NonNull android.app.blob.BlobHandle) throws java.io.IOException;
+  }
+
+  public static class BlobStoreManager.Session implements java.io.Closeable {
+    method public void abandon() throws java.io.IOException;
+    method public void allowPackageAccess(@NonNull String, @NonNull byte[]) throws java.io.IOException;
+    method public void allowPublicAccess() throws java.io.IOException;
+    method public void allowSameSignatureAccess() throws java.io.IOException;
+    method public void close() throws java.io.IOException;
+    method public void commit(@NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<java.lang.Integer>) throws java.io.IOException;
+    method public long getSize() throws java.io.IOException;
+    method @NonNull public android.os.ParcelFileDescriptor openWrite(long, long) throws java.io.IOException;
   }
 
 }
@@ -11395,6 +11434,7 @@ package android.content.pm {
     method @NonNull public CharSequence getProfileSwitchingLabel(@NonNull android.os.UserHandle);
     method @NonNull public java.util.List<android.os.UserHandle> getTargetUserProfiles();
     method public void startMainActivity(@NonNull android.content.ComponentName, @NonNull android.os.UserHandle);
+    field public static final String ACTION_CAN_INTERACT_ACROSS_PROFILES_CHANGED = "android.content.pm.action.CAN_INTERACT_ACROSS_PROFILES_CHANGED";
   }
 
   public final class FeatureGroupInfo implements android.os.Parcelable {
@@ -13211,6 +13251,8 @@ package android.database.sqlite {
     method public static int releaseMemory();
     method public long replace(String, String, android.content.ContentValues);
     method public long replaceOrThrow(String, String, android.content.ContentValues) throws android.database.SQLException;
+    method public void setCustomAggregateFunction(@NonNull String, @NonNull java.util.function.BinaryOperator<java.lang.String>) throws android.database.sqlite.SQLiteException;
+    method public void setCustomScalarFunction(@NonNull String, @NonNull java.util.function.UnaryOperator<java.lang.String>) throws android.database.sqlite.SQLiteException;
     method public void setForeignKeyConstraintsEnabled(boolean);
     method public void setLocale(java.util.Locale);
     method @Deprecated public void setLockingEnabled(boolean);
@@ -18261,6 +18303,7 @@ package android.icu.lang {
     field public static final int RIGHT = 7; // 0x7
     field public static final int TOP = 8; // 0x8
     field public static final int TOP_AND_BOTTOM = 9; // 0x9
+    field public static final int TOP_AND_BOTTOM_AND_LEFT = 15; // 0xf
     field public static final int TOP_AND_BOTTOM_AND_RIGHT = 10; // 0xa
     field public static final int TOP_AND_LEFT = 11; // 0xb
     field public static final int TOP_AND_LEFT_AND_RIGHT = 12; // 0xc
@@ -18583,6 +18626,7 @@ package android.icu.lang {
     field public static final int CHEROKEE_SUPPLEMENT_ID = 255; // 0xff
     field public static final android.icu.lang.UCharacter.UnicodeBlock CHESS_SYMBOLS;
     field public static final int CHESS_SYMBOLS_ID = 281; // 0x119
+    field public static final int CHORASMIAN_ID = 301; // 0x12d
     field public static final android.icu.lang.UCharacter.UnicodeBlock CJK_COMPATIBILITY;
     field public static final android.icu.lang.UCharacter.UnicodeBlock CJK_COMPATIBILITY_FORMS;
     field public static final int CJK_COMPATIBILITY_FORMS_ID = 83; // 0x53
@@ -18610,6 +18654,7 @@ package android.icu.lang {
     field public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_E_ID = 256; // 0x100
     field public static final android.icu.lang.UCharacter.UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F;
     field public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F_ID = 274; // 0x112
+    field public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_G_ID = 302; // 0x12e
     field public static final int CJK_UNIFIED_IDEOGRAPHS_ID = 71; // 0x47
     field public static final android.icu.lang.UCharacter.UnicodeBlock COMBINING_DIACRITICAL_MARKS;
     field public static final android.icu.lang.UCharacter.UnicodeBlock COMBINING_DIACRITICAL_MARKS_EXTENDED;
@@ -18659,6 +18704,7 @@ package android.icu.lang {
     field public static final int DEVANAGARI_ID = 15; // 0xf
     field public static final android.icu.lang.UCharacter.UnicodeBlock DINGBATS;
     field public static final int DINGBATS_ID = 56; // 0x38
+    field public static final int DIVES_AKURU_ID = 303; // 0x12f
     field public static final android.icu.lang.UCharacter.UnicodeBlock DOGRA;
     field public static final int DOGRA_ID = 282; // 0x11a
     field public static final android.icu.lang.UCharacter.UnicodeBlock DOMINO_TILES;
@@ -18787,6 +18833,8 @@ package android.icu.lang {
     field public static final int KAYAH_LI_ID = 162; // 0xa2
     field public static final android.icu.lang.UCharacter.UnicodeBlock KHAROSHTHI;
     field public static final int KHAROSHTHI_ID = 137; // 0x89
+    field public static final android.icu.lang.UCharacter.UnicodeBlock KHITAN_SMALL_SCRIPT;
+    field public static final int KHITAN_SMALL_SCRIPT_ID = 304; // 0x130
     field public static final android.icu.lang.UCharacter.UnicodeBlock KHMER;
     field public static final int KHMER_ID = 36; // 0x24
     field public static final android.icu.lang.UCharacter.UnicodeBlock KHMER_SYMBOLS;
@@ -18825,6 +18873,8 @@ package android.icu.lang {
     field public static final int LINEAR_B_SYLLABARY_ID = 117; // 0x75
     field public static final android.icu.lang.UCharacter.UnicodeBlock LISU;
     field public static final int LISU_ID = 176; // 0xb0
+    field public static final android.icu.lang.UCharacter.UnicodeBlock LISU_SUPPLEMENT;
+    field public static final int LISU_SUPPLEMENT_ID = 305; // 0x131
     field public static final android.icu.lang.UCharacter.UnicodeBlock LOW_SURROGATES;
     field public static final int LOW_SURROGATES_ID = 77; // 0x4d
     field public static final android.icu.lang.UCharacter.UnicodeBlock LYCIAN;
@@ -19036,6 +19086,8 @@ package android.icu.lang {
     field public static final int SYLOTI_NAGRI_ID = 143; // 0x8f
     field public static final android.icu.lang.UCharacter.UnicodeBlock SYMBOLS_AND_PICTOGRAPHS_EXTENDED_A;
     field public static final int SYMBOLS_AND_PICTOGRAPHS_EXTENDED_A_ID = 298; // 0x12a
+    field public static final android.icu.lang.UCharacter.UnicodeBlock SYMBOLS_FOR_LEGACY_COMPUTING;
+    field public static final int SYMBOLS_FOR_LEGACY_COMPUTING_ID = 306; // 0x132
     field public static final android.icu.lang.UCharacter.UnicodeBlock SYRIAC;
     field public static final int SYRIAC_ID = 13; // 0xd
     field public static final android.icu.lang.UCharacter.UnicodeBlock SYRIAC_SUPPLEMENT;
@@ -19064,6 +19116,8 @@ package android.icu.lang {
     field public static final android.icu.lang.UCharacter.UnicodeBlock TANGUT_COMPONENTS;
     field public static final int TANGUT_COMPONENTS_ID = 273; // 0x111
     field public static final int TANGUT_ID = 272; // 0x110
+    field public static final android.icu.lang.UCharacter.UnicodeBlock TANGUT_SUPPLEMENT;
+    field public static final int TANGUT_SUPPLEMENT_ID = 307; // 0x133
     field public static final android.icu.lang.UCharacter.UnicodeBlock TELUGU;
     field public static final int TELUGU_ID = 21; // 0x15
     field public static final android.icu.lang.UCharacter.UnicodeBlock THAANA;
@@ -19098,6 +19152,8 @@ package android.icu.lang {
     field public static final int WANCHO_ID = 300; // 0x12c
     field public static final android.icu.lang.UCharacter.UnicodeBlock WARANG_CITI;
     field public static final int WARANG_CITI_ID = 252; // 0xfc
+    field public static final android.icu.lang.UCharacter.UnicodeBlock YEZIDI;
+    field public static final int YEZIDI_ID = 308; // 0x134
     field public static final android.icu.lang.UCharacter.UnicodeBlock YIJING_HEXAGRAM_SYMBOLS;
     field public static final int YIJING_HEXAGRAM_SYMBOLS_ID = 116; // 0x74
     field public static final android.icu.lang.UCharacter.UnicodeBlock YI_RADICALS;
@@ -19394,6 +19450,7 @@ package android.icu.lang {
     field public static final int CHAKMA = 118; // 0x76
     field public static final int CHAM = 66; // 0x42
     field public static final int CHEROKEE = 6; // 0x6
+    field public static final int CHORASMIAN = 189; // 0xbd
     field public static final int CIRTH = 67; // 0x43
     field public static final int COMMON = 0; // 0x0
     field public static final int COPTIC = 7; // 0x7
@@ -19403,6 +19460,7 @@ package android.icu.lang {
     field public static final int DEMOTIC_EGYPTIAN = 69; // 0x45
     field public static final int DESERET = 9; // 0x9
     field public static final int DEVANAGARI = 10; // 0xa
+    field public static final int DIVES_AKURU = 190; // 0xbe
     field public static final int DOGRA = 178; // 0xb2
     field public static final int DUPLOYAN = 135; // 0x87
     field public static final int EASTERN_SYRIAC = 97; // 0x61
@@ -19444,6 +19502,7 @@ package android.icu.lang {
     field public static final int KATAKANA_OR_HIRAGANA = 54; // 0x36
     field public static final int KAYAH_LI = 79; // 0x4f
     field public static final int KHAROSHTHI = 57; // 0x39
+    field public static final int KHITAN_SMALL_SCRIPT = 191; // 0xbf
     field public static final int KHMER = 23; // 0x17
     field public static final int KHOJKI = 157; // 0x9d
     field public static final int KHUDAWADI = 145; // 0x91
@@ -19561,6 +19620,7 @@ package android.icu.lang {
     field public static final int WARANG_CITI = 146; // 0x92
     field public static final int WESTERN_SYRIAC = 96; // 0x60
     field public static final int WOLEAI = 155; // 0x9b
+    field public static final int YEZIDI = 192; // 0xc0
     field public static final int YI = 41; // 0x29
     field public static final int ZANABAZAR_SQUARE = 177; // 0xb1
   }
@@ -24260,6 +24320,9 @@ package android.media {
     method public int write(@NonNull float[], int, int, int);
     method public int write(@NonNull java.nio.ByteBuffer, int, int);
     method public int write(@NonNull java.nio.ByteBuffer, int, int, long);
+    field public static final int ENCAPSULATION_MODE_ELEMENTARY_STREAM = 1; // 0x1
+    field public static final int ENCAPSULATION_MODE_HANDLE = 2; // 0x2
+    field public static final int ENCAPSULATION_MODE_NONE = 0; // 0x0
     field public static final int ERROR = -1; // 0xffffffff
     field public static final int ERROR_BAD_VALUE = -2; // 0xfffffffe
     field public static final int ERROR_DEAD_OBJECT = -6; // 0xfffffffa
@@ -24286,10 +24349,12 @@ package android.media {
     method @NonNull public android.media.AudioTrack.Builder setAudioAttributes(@NonNull android.media.AudioAttributes) throws java.lang.IllegalArgumentException;
     method @NonNull public android.media.AudioTrack.Builder setAudioFormat(@NonNull android.media.AudioFormat) throws java.lang.IllegalArgumentException;
     method @NonNull public android.media.AudioTrack.Builder setBufferSizeInBytes(@IntRange(from=0) int) throws java.lang.IllegalArgumentException;
+    method @NonNull public android.media.AudioTrack.Builder setEncapsulationMode(int);
     method @NonNull public android.media.AudioTrack.Builder setOffloadedPlayback(boolean);
     method @NonNull public android.media.AudioTrack.Builder setPerformanceMode(int);
     method @NonNull public android.media.AudioTrack.Builder setSessionId(@IntRange(from=1) int) throws java.lang.IllegalArgumentException;
     method @NonNull public android.media.AudioTrack.Builder setTransferMode(int) throws java.lang.IllegalArgumentException;
+    method @NonNull public android.media.AudioTrack.Builder setTunerConfiguration(@NonNull android.media.AudioTrack.TunerConfiguration);
   }
 
   public static final class AudioTrack.MetricsConstants {
@@ -24317,6 +24382,18 @@ package android.media {
     method public void onTearDown(@NonNull android.media.AudioTrack);
   }
 
+  public static class AudioTrack.TunerConfiguration {
+    method public int getContentId();
+    method public int getSyncId();
+  }
+
+  public static class AudioTrack.TunerConfiguration.Builder {
+    ctor public AudioTrack.TunerConfiguration.Builder();
+    method @NonNull public android.media.AudioTrack.TunerConfiguration build();
+    method @NonNull public android.media.AudioTrack.TunerConfiguration.Builder setContentId(@IntRange(from=1) int);
+    method @NonNull public android.media.AudioTrack.TunerConfiguration.Builder setSyncId(@IntRange(from=1) int);
+  }
+
   public class CamcorderProfile {
     method public static android.media.CamcorderProfile get(int);
     method public static android.media.CamcorderProfile get(int, int);
@@ -24324,28 +24401,39 @@ package android.media {
     method public static boolean hasProfile(int, int);
     field public static final int QUALITY_1080P = 6; // 0x6
     field public static final int QUALITY_2160P = 8; // 0x8
+    field public static final int QUALITY_2K = 12; // 0xc
     field public static final int QUALITY_480P = 4; // 0x4
+    field public static final int QUALITY_4KDCI = 10; // 0xa
     field public static final int QUALITY_720P = 5; // 0x5
     field public static final int QUALITY_CIF = 3; // 0x3
     field public static final int QUALITY_HIGH = 1; // 0x1
     field public static final int QUALITY_HIGH_SPEED_1080P = 2004; // 0x7d4
     field public static final int QUALITY_HIGH_SPEED_2160P = 2005; // 0x7d5
     field public static final int QUALITY_HIGH_SPEED_480P = 2002; // 0x7d2
+    field public static final int QUALITY_HIGH_SPEED_4KDCI = 2008; // 0x7d8
     field public static final int QUALITY_HIGH_SPEED_720P = 2003; // 0x7d3
+    field public static final int QUALITY_HIGH_SPEED_CIF = 2006; // 0x7d6
     field public static final int QUALITY_HIGH_SPEED_HIGH = 2001; // 0x7d1
     field public static final int QUALITY_HIGH_SPEED_LOW = 2000; // 0x7d0
+    field public static final int QUALITY_HIGH_SPEED_VGA = 2007; // 0x7d7
     field public static final int QUALITY_LOW = 0; // 0x0
     field public static final int QUALITY_QCIF = 2; // 0x2
+    field public static final int QUALITY_QHD = 11; // 0xb
     field public static final int QUALITY_QVGA = 7; // 0x7
     field public static final int QUALITY_TIME_LAPSE_1080P = 1006; // 0x3ee
     field public static final int QUALITY_TIME_LAPSE_2160P = 1008; // 0x3f0
+    field public static final int QUALITY_TIME_LAPSE_2K = 1012; // 0x3f4
     field public static final int QUALITY_TIME_LAPSE_480P = 1004; // 0x3ec
+    field public static final int QUALITY_TIME_LAPSE_4KDCI = 1010; // 0x3f2
     field public static final int QUALITY_TIME_LAPSE_720P = 1005; // 0x3ed
     field public static final int QUALITY_TIME_LAPSE_CIF = 1003; // 0x3eb
     field public static final int QUALITY_TIME_LAPSE_HIGH = 1001; // 0x3e9
     field public static final int QUALITY_TIME_LAPSE_LOW = 1000; // 0x3e8
     field public static final int QUALITY_TIME_LAPSE_QCIF = 1002; // 0x3ea
+    field public static final int QUALITY_TIME_LAPSE_QHD = 1011; // 0x3f3
     field public static final int QUALITY_TIME_LAPSE_QVGA = 1007; // 0x3ef
+    field public static final int QUALITY_TIME_LAPSE_VGA = 1009; // 0x3f1
+    field public static final int QUALITY_VGA = 9; // 0x9
     field public int audioBitRate;
     field public int audioChannels;
     field public int audioCodec;
@@ -30181,6 +30269,7 @@ package android.net.sip {
     method public void close();
     method public void continueCall(int) throws android.net.sip.SipException;
     method public void endCall() throws android.net.sip.SipException;
+    method @Nullable public android.net.rtp.AudioGroup getAudioGroup();
     method public android.net.sip.SipProfile getLocalProfile();
     method public android.net.sip.SipProfile getPeerProfile();
     method public int getState();
@@ -30191,6 +30280,7 @@ package android.net.sip {
     method public void makeCall(android.net.sip.SipProfile, android.net.sip.SipSession, int) throws android.net.sip.SipException;
     method public void sendDtmf(int);
     method public void sendDtmf(int, android.os.Message);
+    method public void setAudioGroup(@NonNull android.net.rtp.AudioGroup);
     method public void setListener(android.net.sip.SipAudioCall.Listener);
     method public void setListener(android.net.sip.SipAudioCall.Listener, boolean);
     method public void setSpeakerMode(boolean);
@@ -30239,6 +30329,7 @@ package android.net.sip {
     method public void close(String) throws android.net.sip.SipException;
     method public android.net.sip.SipSession createSipSession(android.net.sip.SipProfile, android.net.sip.SipSession.Listener) throws android.net.sip.SipException;
     method public static String getCallId(android.content.Intent);
+    method @NonNull public java.util.List<android.net.sip.SipProfile> getListOfProfiles() throws android.net.sip.SipException;
     method public static String getOfferSessionDescription(android.content.Intent);
     method public android.net.sip.SipSession getSessionFor(android.content.Intent) throws android.net.sip.SipException;
     method public static boolean isApiSupported(android.content.Context);
@@ -30256,6 +30347,11 @@ package android.net.sip {
     method public void setRegistrationListener(String, android.net.sip.SipRegistrationListener) throws android.net.sip.SipException;
     method public android.net.sip.SipAudioCall takeAudioCall(android.content.Intent, android.net.sip.SipAudioCall.Listener) throws android.net.sip.SipException;
     method public void unregister(android.net.sip.SipProfile, android.net.sip.SipRegistrationListener) throws android.net.sip.SipException;
+    field public static final String ACTION_SIP_CALL_OPTION_CHANGED = "android.net.sip.action.SIP_CALL_OPTION_CHANGED";
+    field public static final String ACTION_SIP_INCOMING_CALL = "android.net.sip.action.SIP_INCOMING_CALL";
+    field public static final String ACTION_SIP_REMOVE_PROFILE = "android.net.sip.action.SIP_REMOVE_PROFILE";
+    field public static final String ACTION_SIP_SERVICE_UP = "android.net.sip.action.SIP_SERVICE_UP";
+    field public static final String ACTION_START_SIP = "android.net.sip.action.START_SIP";
     field public static final String EXTRA_CALL_ID = "android:sipCallID";
     field public static final String EXTRA_OFFER_SD = "android:sipOfferSD";
     field public static final int INCOMING_CALL_RESULT_CODE = 101; // 0x65
@@ -30265,6 +30361,7 @@ package android.net.sip {
     method public int describeContents();
     method public String getAuthUserName();
     method public boolean getAutoRegistration();
+    method public int getCallingUid();
     method public String getDisplayName();
     method public String getPassword();
     method public int getPort();
@@ -30275,6 +30372,7 @@ package android.net.sip {
     method public String getSipDomain();
     method public String getUriString();
     method public String getUserName();
+    method public void setCallingUid(int);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.net.sip.SipProfile> CREATOR;
   }
@@ -30607,6 +30705,8 @@ package android.net.wifi {
     method public int getIpAddress();
     method public int getLinkSpeed();
     method public String getMacAddress();
+    method public int getMaxSupportedRxLinkSpeedMbps();
+    method public int getMaxSupportedTxLinkSpeedMbps();
     method public int getNetworkId();
     method @Nullable public String getPasspointFqdn();
     method @Nullable public String getPasspointProviderFriendlyName();
@@ -36226,6 +36326,7 @@ package android.os {
     method public boolean isUserUnlocked();
     method public boolean isUserUnlocked(android.os.UserHandle);
     method public boolean requestQuietModeEnabled(boolean, @NonNull android.os.UserHandle);
+    method public boolean requestQuietModeEnabled(boolean, @NonNull android.os.UserHandle, int);
     method @Deprecated public boolean setRestrictionsChallenge(String);
     method @Deprecated public void setUserRestriction(String, boolean);
     method @Deprecated public void setUserRestrictions(android.os.Bundle);
@@ -36287,6 +36388,7 @@ package android.os {
     field public static final String DISALLOW_USER_SWITCH = "no_user_switch";
     field public static final String ENSURE_VERIFY_APPS = "ensure_verify_apps";
     field public static final String KEY_RESTRICTIONS_PENDING = "restrictions_pending";
+    field public static final int QUIET_MODE_DISABLE_ONLY_IF_CREDENTIAL_NOT_REQUIRED = 1; // 0x1
     field public static final int USER_CREATION_FAILED_NOT_PERMITTED = 1; // 0x1
     field public static final int USER_CREATION_FAILED_NO_MORE_USERS = 2; // 0x2
     field public static final int USER_OPERATION_ERROR_CURRENT_USER = 4; // 0x4
@@ -39750,8 +39852,8 @@ package android.provider {
     field public static final String EXTRA_INPUT_METHOD_ID = "input_method_id";
     field public static final String EXTRA_NOTIFICATION_LISTENER_COMPONENT_NAME = "android.provider.extra.NOTIFICATION_LISTENER_COMPONENT_NAME";
     field public static final String EXTRA_SUB_ID = "android.provider.extra.SUB_ID";
-    field public static final String EXTRA_WIFI_CONFIGURATION_LIST = "android.provider.extra.WIFI_CONFIGURATION_LIST";
-    field public static final String EXTRA_WIFI_CONFIGURATION_RESULT_LIST = "android.provider.extra.WIFI_CONFIGURATION_RESULT_LIST";
+    field public static final String EXTRA_WIFI_NETWORK_LIST = "android.provider.extra.WIFI_NETWORK_LIST";
+    field public static final String EXTRA_WIFI_NETWORK_RESULT_LIST = "android.provider.extra.WIFI_NETWORK_RESULT_LIST";
     field public static final String INTENT_CATEGORY_USAGE_ACCESS_CONFIG = "android.intent.category.USAGE_ACCESS_CONFIG";
     field public static final String METADATA_USAGE_ACCESS_REASON = "android.settings.metadata.USAGE_ACCESS_REASON";
   }
@@ -45017,6 +45119,8 @@ package android.telecom {
 package android.telephony {
 
   public final class AccessNetworkConstants {
+    field public static final int TRANSPORT_TYPE_WLAN = 2; // 0x2
+    field public static final int TRANSPORT_TYPE_WWAN = 1; // 0x1
   }
 
   public static final class AccessNetworkConstants.AccessNetworkType {
@@ -45365,6 +45469,7 @@ package android.telephony {
     field public static final String KEY_MMS_ALIAS_MIN_CHARS_INT = "aliasMinChars";
     field public static final String KEY_MMS_ALLOW_ATTACH_AUDIO_BOOL = "allowAttachAudio";
     field public static final String KEY_MMS_APPEND_TRANSACTION_ID_BOOL = "enabledTransID";
+    field public static final String KEY_MMS_CLOSE_CONNECTION_BOOL = "mmsCloseConnection";
     field public static final String KEY_MMS_EMAIL_GATEWAY_NUMBER_STRING = "emailGatewayNumber";
     field public static final String KEY_MMS_GROUP_MMS_ENABLED_BOOL = "enableGroupMms";
     field public static final String KEY_MMS_HTTP_PARAMS_STRING = "httpParams";
@@ -45562,7 +45667,8 @@ package android.telephony {
     method public int getCellConnectionStatus();
     method @NonNull public abstract android.telephony.CellIdentity getCellIdentity();
     method @NonNull public abstract android.telephony.CellSignalStrength getCellSignalStrength();
-    method public long getTimeStamp();
+    method @Deprecated public long getTimeStamp();
+    method public long getTimestampNanos();
     method public boolean isRegistered();
     field public static final int CONNECTION_NONE = 0; // 0x0
     field public static final int CONNECTION_PRIMARY_SERVING = 1; // 0x1
@@ -45802,6 +45908,35 @@ package android.telephony {
     field @Deprecated public static final int UNKNOWN_RSSI = 99; // 0x63
   }
 
+  public final class NetworkRegistrationInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getAccessNetworkTechnology();
+    method @NonNull public java.util.List<java.lang.Integer> getAvailableServices();
+    method @Nullable public android.telephony.CellIdentity getCellIdentity();
+    method public int getDomain();
+    method public int getNrState();
+    method public int getTransportType();
+    method public boolean isRegistered();
+    method public boolean isRoaming();
+    method public boolean isSearching();
+    method public void writeToParcel(android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.telephony.NetworkRegistrationInfo> CREATOR;
+    field public static final int DOMAIN_CS = 1; // 0x1
+    field public static final int DOMAIN_CS_PS = 3; // 0x3
+    field public static final int DOMAIN_PS = 2; // 0x2
+    field public static final int DOMAIN_UNKNOWN = 0; // 0x0
+    field public static final int NR_STATE_CONNECTED = 3; // 0x3
+    field public static final int NR_STATE_NONE = 0; // 0x0
+    field public static final int NR_STATE_NOT_RESTRICTED = 2; // 0x2
+    field public static final int NR_STATE_RESTRICTED = 1; // 0x1
+    field public static final int SERVICE_TYPE_DATA = 2; // 0x2
+    field public static final int SERVICE_TYPE_EMERGENCY = 5; // 0x5
+    field public static final int SERVICE_TYPE_SMS = 3; // 0x3
+    field public static final int SERVICE_TYPE_UNKNOWN = 0; // 0x0
+    field public static final int SERVICE_TYPE_VIDEO = 4; // 0x4
+    field public static final int SERVICE_TYPE_VOICE = 1; // 0x1
+  }
+
   public class NetworkScan {
     method public void stopScan();
     field public static final int ERROR_INTERRUPTED = 10002; // 0x2712
@@ -45976,6 +46111,7 @@ package android.telephony {
     method public int getChannelNumber();
     method public int getDuplexMode();
     method public boolean getIsManualSelection();
+    method @NonNull public java.util.List<android.telephony.NetworkRegistrationInfo> getNetworkRegistrationInfoList();
     method public String getOperatorAlphaLong();
     method public String getOperatorAlphaShort();
     method public String getOperatorNumeric();
@@ -46012,6 +46148,7 @@ package android.telephony {
     method @Deprecated public int getGsmBitErrorRate();
     method @Deprecated public int getGsmSignalStrength();
     method public int getLevel();
+    method public long getTimestampNanos();
     method @Deprecated public boolean isGsm();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.telephony.SignalStrength> CREATOR;
@@ -46034,7 +46171,9 @@ package android.telephony {
     method public void sendDataMessage(String, String, short, byte[], android.app.PendingIntent, android.app.PendingIntent);
     method @Deprecated public void sendMultimediaMessage(android.content.Context, android.net.Uri, String, android.os.Bundle, android.app.PendingIntent);
     method public void sendMultipartTextMessage(String, String, java.util.ArrayList<java.lang.String>, java.util.ArrayList<android.app.PendingIntent>, java.util.ArrayList<android.app.PendingIntent>);
+    method public void sendMultipartTextMessage(@NonNull String, @Nullable String, @NonNull java.util.List<java.lang.String>, @Nullable java.util.List<android.app.PendingIntent>, @Nullable java.util.List<android.app.PendingIntent>, long);
     method public void sendTextMessage(String, String, String, android.app.PendingIntent, android.app.PendingIntent);
+    method public void sendTextMessage(@NonNull String, @Nullable String, @NonNull String, @Nullable android.app.PendingIntent, @Nullable android.app.PendingIntent, long);
     method @RequiresPermission(allOf={android.Manifest.permission.MODIFY_PHONE_STATE, android.Manifest.permission.SEND_SMS}) public void sendTextMessageWithoutPersisting(String, String, String, android.app.PendingIntent, android.app.PendingIntent);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public boolean setSmscAddress(@NonNull String);
     field public static final String EXTRA_MMS_DATA = "android.telephony.extra.MMS_DATA";
@@ -46406,6 +46545,7 @@ package android.telephony {
     method @Deprecated public String iccTransmitApduBasicChannel(int, int, int, int, int, String);
     method @Deprecated public String iccTransmitApduLogicalChannel(int, int, int, int, int, int, String);
     method public boolean isConcurrentVoiceAndDataSupported();
+    method public boolean isDataCapable();
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.MODIFY_PHONE_STATE}) public boolean isDataEnabled();
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.READ_PHONE_STATE}) public boolean isDataRoamingEnabled();
     method public boolean isEmergencyNumber(@NonNull String);
@@ -55697,7 +55837,7 @@ package android.view.textclassifier {
     method public int describeContents();
     method @NonNull public android.os.Bundle getExtras();
     method @NonNull public java.util.Collection<android.view.textclassifier.TextLinks.TextLink> getLinks();
-    method @NonNull public String getText();
+    method @NonNull public CharSequence getText();
     method public void writeToParcel(android.os.Parcel, int);
     field public static final int APPLY_STRATEGY_IGNORE = 0; // 0x0
     field public static final int APPLY_STRATEGY_REPLACE = 1; // 0x1
@@ -71884,6 +72024,18 @@ package java.util {
     method public int lastIndexOf(@Nullable Object);
     method @NonNull public java.util.ListIterator<E> listIterator();
     method @NonNull public java.util.ListIterator<E> listIterator(int);
+    method @NonNull public static <E> java.util.List<E> of();
+    method @NonNull public static <E> java.util.List<E> of(@NonNull E);
+    method @NonNull public static <E> java.util.List<E> of(@NonNull E, @NonNull E);
+    method @NonNull public static <E> java.util.List<E> of(@NonNull E, @NonNull E, @NonNull E);
+    method @NonNull public static <E> java.util.List<E> of(@NonNull E, @NonNull E, @NonNull E, @NonNull E);
+    method @NonNull public static <E> java.util.List<E> of(@NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E);
+    method @NonNull public static <E> java.util.List<E> of(@NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E);
+    method @NonNull public static <E> java.util.List<E> of(@NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E);
+    method @NonNull public static <E> java.util.List<E> of(@NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E);
+    method @NonNull public static <E> java.util.List<E> of(@NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E);
+    method @NonNull public static <E> java.util.List<E> of(@NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E);
+    method @NonNull @java.lang.SafeVarargs public static <E> java.util.List<E> of(@NonNull E...);
     method public E remove(int);
     method public default void replaceAll(@NonNull java.util.function.UnaryOperator<E>);
     method public E set(int, E);
@@ -72038,6 +72190,7 @@ package java.util {
     method @Nullable public default V computeIfPresent(K, @NonNull java.util.function.BiFunction<? super K,? super V,? extends V>);
     method public boolean containsKey(@Nullable Object);
     method public boolean containsValue(@Nullable Object);
+    method @NonNull public static <K, V> java.util.Map.Entry<K,V> entry(@NonNull K, @NonNull V);
     method @NonNull public java.util.Set<java.util.Map.Entry<K,V>> entrySet();
     method public boolean equals(@Nullable Object);
     method public default void forEach(@NonNull java.util.function.BiConsumer<? super K,? super V>);
@@ -72047,6 +72200,18 @@ package java.util {
     method public boolean isEmpty();
     method @NonNull public java.util.Set<K> keySet();
     method @Nullable public default V merge(K, @NonNull V, @NonNull java.util.function.BiFunction<? super V,? super V,? extends V>);
+    method @NonNull public static <K, V> java.util.Map<K,V> of();
+    method @NonNull public static <K, V> java.util.Map<K,V> of(@NonNull K, @NonNull V);
+    method @NonNull public static <K, V> java.util.Map<K,V> of(@NonNull K, @NonNull V, @NonNull K, @NonNull V);
+    method @NonNull public static <K, V> java.util.Map<K,V> of(@NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V);
+    method @NonNull public static <K, V> java.util.Map<K,V> of(@NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V);
+    method @NonNull public static <K, V> java.util.Map<K,V> of(@NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V);
+    method @NonNull public static <K, V> java.util.Map<K,V> of(@NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V);
+    method @NonNull public static <K, V> java.util.Map<K,V> of(@NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V);
+    method @NonNull public static <K, V> java.util.Map<K,V> of(@NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V);
+    method @NonNull public static <K, V> java.util.Map<K,V> of(@NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V);
+    method @NonNull public static <K, V> java.util.Map<K,V> of(@NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V, @NonNull K, @NonNull V);
+    method @NonNull @java.lang.SafeVarargs public static <K, V> java.util.Map<K,V> ofEntries(@NonNull java.util.Map.Entry<? extends K,? extends V>...);
     method @Nullable public V put(K, V);
     method public void putAll(@NonNull java.util.Map<? extends K,? extends V>);
     method @Nullable public default V putIfAbsent(K, V);
@@ -72128,6 +72293,9 @@ package java.util {
   }
 
   public final class Objects {
+    method public static int checkFromIndexSize(int, int, int);
+    method public static int checkFromToIndex(int, int, int);
+    method public static int checkIndex(int, int);
     method public static <T> int compare(T, T, @NonNull java.util.Comparator<? super T>);
     method public static boolean deepEquals(@Nullable Object, @Nullable Object);
     method public static boolean equals(@Nullable Object, @Nullable Object);
@@ -72138,6 +72306,8 @@ package java.util {
     method @NonNull public static <T> T requireNonNull(@Nullable T);
     method @NonNull public static <T> T requireNonNull(@Nullable T, @NonNull String);
     method @NonNull public static <T> T requireNonNull(@Nullable T, @NonNull java.util.function.Supplier<java.lang.String>);
+    method @NonNull public static <T> T requireNonNullElse(@Nullable T, @NonNull T);
+    method @NonNull public static <T> T requireNonNullElseGet(@Nullable T, @NonNull java.util.function.Supplier<? extends T>);
     method @NonNull public static String toString(@Nullable Object);
     method @NonNull public static String toString(@Nullable Object, @NonNull String);
   }
@@ -72442,6 +72612,18 @@ package java.util {
   }
 
   public interface Set<E> extends java.util.Collection<E> {
+    method @NonNull public static <E> java.util.Set<E> of();
+    method @NonNull public static <E> java.util.Set<E> of(@NonNull E);
+    method @NonNull public static <E> java.util.Set<E> of(@NonNull E, @NonNull E);
+    method @NonNull public static <E> java.util.Set<E> of(@NonNull E, @NonNull E, @NonNull E);
+    method @NonNull public static <E> java.util.Set<E> of(@NonNull E, @NonNull E, @NonNull E, @NonNull E);
+    method @NonNull public static <E> java.util.Set<E> of(@NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E);
+    method @NonNull public static <E> java.util.Set<E> of(@NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E);
+    method @NonNull public static <E> java.util.Set<E> of(@NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E);
+    method @NonNull public static <E> java.util.Set<E> of(@NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E);
+    method @NonNull public static <E> java.util.Set<E> of(@NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E);
+    method @NonNull public static <E> java.util.Set<E> of(@NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E, @NonNull E);
+    method @NonNull @java.lang.SafeVarargs public static <E> java.util.Set<E> of(@NonNull E...);
   }
 
   public class SimpleTimeZone extends java.util.TimeZone {
@@ -73378,6 +73560,29 @@ package java.util.concurrent {
     method public static java.util.concurrent.ThreadFactory privilegedThreadFactory();
     method public static java.util.concurrent.ExecutorService unconfigurableExecutorService(java.util.concurrent.ExecutorService);
     method public static java.util.concurrent.ScheduledExecutorService unconfigurableScheduledExecutorService(java.util.concurrent.ScheduledExecutorService);
+  }
+
+  public final class Flow {
+    method public static int defaultBufferSize();
+  }
+
+  public static interface Flow.Processor<T, R> extends java.util.concurrent.Flow.Subscriber<T> java.util.concurrent.Flow.Publisher<R> {
+  }
+
+  @java.lang.FunctionalInterface public static interface Flow.Publisher<T> {
+    method public void subscribe(java.util.concurrent.Flow.Subscriber<? super T>);
+  }
+
+  public static interface Flow.Subscriber<T> {
+    method public void onComplete();
+    method public void onError(Throwable);
+    method public void onNext(T);
+    method public void onSubscribe(java.util.concurrent.Flow.Subscription);
+  }
+
+  public static interface Flow.Subscription {
+    method public void cancel();
+    method public void request(long);
   }
 
   public class ForkJoinPool extends java.util.concurrent.AbstractExecutorService {
