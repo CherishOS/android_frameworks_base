@@ -9311,6 +9311,12 @@ public final class Settings {
         public static final String LOCKSCREEN_DATE_SELECTION = "lockscreen_date_selection";
 
         /**
+         * Center the lockscreen text clock
+         * @hide
+         */
+        public static final String CENTER_TEXT_CLOCK = "center_text_clock";
+
+        /**
          * Whether the Lockdown button should be shown in the power menu.
          * @hide
          */

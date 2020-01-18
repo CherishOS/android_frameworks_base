@@ -34,6 +34,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Slog;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
@@ -92,6 +93,7 @@ public class KeyguardStatusView extends GridLayout implements
 
     private int mClockSelection;
     private int mDateSelection;
+    private boolean mIsCenterAligned;
 
     // Date styles paddings
     private int mDateVerPadding;
@@ -843,8 +845,17 @@ public class KeyguardStatusView extends GridLayout implements
         mClockSelection = Settings.Secure.getIntForUser(resolver,
                 Settings.Secure.LOCKSCREEN_CLOCK_SELECTION, 2, UserHandle.USER_CURRENT);
 
+        mIsCenterAligned = Settings.Secure.getIntForUser(resolver,
+                Settings.Secure.CENTER_TEXT_CLOCK, 0, UserHandle.USER_CURRENT) == 1;
+
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)
                 mKeyguardSlice.getLayoutParams();
+
+        RelativeLayout.LayoutParams textClockParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+        int leftPadding = (int) getResources().getDimension(R.dimen.custom_clock_left_padding);
 
         mSmallClockView = findViewById(R.id.clock_view);
         mDefaultClockView = findViewById(R.id.default_clock_view);
@@ -926,6 +937,19 @@ public class KeyguardStatusView extends GridLayout implements
                 mCustomClockView.setVisibility(View.GONE);
                 params.addRule(RelativeLayout.BELOW, R.id.custom_num_clock_view);
                 break;
+        }
+        if (mTextClock != null && mIsCenterAligned) {
+            mTextClock.setGravity(Gravity.CENTER);
+            textClockParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            textClockParams.removeRule(RelativeLayout.ALIGN_PARENT_START);
+            mTextClock.setLayoutParams(textClockParams);
+            mTextClock.setPaddingRelative(0, 0, 0, 0);
+        } else {
+            mTextClock.setGravity(Gravity.LEFT);
+            textClockParams.removeRule(RelativeLayout.CENTER_HORIZONTAL);
+            textClockParams.addRule(RelativeLayout.ALIGN_PARENT_START);
+            mTextClock.setLayoutParams(textClockParams);
+            mTextClock.setPaddingRelative(leftPadding, 0, 0, 0);
         }
     }
 
