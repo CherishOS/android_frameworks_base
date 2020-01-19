@@ -4151,6 +4151,13 @@ public class StatusBar extends SystemUI implements DemoMode,
             updateIsKeyguard();
         }
     };
+	
+	@Override
+    public void setBlockedGesturalNavigation(boolean blocked) {
+        if (getNavigationBarView() != null) {
+            getNavigationBarView().setBlockedGesturalNavigation(blocked);
+        }
+    }
 
     private CherishSettingsObserver mCherishSettingsObserver = new CherishSettingsObserver(mHandler);
     private class CherishSettingsObserver extends ContentObserver {
