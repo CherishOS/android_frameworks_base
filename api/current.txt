@@ -3977,6 +3977,7 @@ package android.app {
     method public android.util.Size getAppTaskThumbnailSize();
     method public java.util.List<android.app.ActivityManager.AppTask> getAppTasks();
     method public android.content.pm.ConfigurationInfo getDeviceConfigurationInfo();
+    method @Nullable public java.util.List<android.app.ApplicationExitInfo> getHistoricalProcessExitReasons(@Nullable String, @IntRange(from=0) int, @IntRange(from=0) int);
     method public int getLargeMemoryClass();
     method public int getLauncherLargeIconDensity();
     method public int getLauncherLargeIconSize();
@@ -3994,6 +3995,7 @@ package android.app {
     method public boolean isActivityStartAllowedOnDisplay(@NonNull android.content.Context, int, @NonNull android.content.Intent);
     method public boolean isBackgroundRestricted();
     method @Deprecated public boolean isInLockTaskMode();
+    method public static boolean isLowMemoryKillReportSupported();
     method public boolean isLowRamDevice();
     method @Deprecated public static boolean isRunningInTestHarness();
     method public static boolean isRunningInUserTestHarness();
@@ -4505,6 +4507,35 @@ package android.app {
     method public void writeToParcel(android.os.Parcel, int);
     field public long durationMillis;
     field public String serviceDetails;
+  }
+
+  public final class ApplicationExitInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getDefiningUid();
+    method @Nullable public String getDescription();
+    method public int getImportance();
+    method public int getPackageUid();
+    method public int getPid();
+    method @NonNull public String getProcessName();
+    method public int getPss();
+    method public int getRealUid();
+    method public int getReason();
+    method public int getRss();
+    method public int getStatus();
+    method public long getTimestamp();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.app.ApplicationExitInfo> CREATOR;
+    field public static final int REASON_ANR = 6; // 0x6
+    field public static final int REASON_CRASH = 4; // 0x4
+    field public static final int REASON_CRASH_NATIVE = 5; // 0x5
+    field public static final int REASON_EXCESSIVE_RESOURCE_USAGE = 9; // 0x9
+    field public static final int REASON_EXIT_SELF = 1; // 0x1
+    field public static final int REASON_INITIALIZATION_FAILURE = 7; // 0x7
+    field public static final int REASON_LOW_MEMORY = 3; // 0x3
+    field public static final int REASON_OTHER = 10; // 0xa
+    field public static final int REASON_PERMISSION_CHANGE = 8; // 0x8
+    field public static final int REASON_SIGNALED = 2; // 0x2
+    field public static final int REASON_UNKNOWN = 0; // 0x0
   }
 
   public final class AsyncNotedAppOp implements android.os.Parcelable {
@@ -30508,6 +30539,21 @@ package android.net.wifi {
     field public CharSequence venueName;
   }
 
+  public final class SoftApConfiguration implements android.os.Parcelable {
+    method public int describeContents();
+    method @Nullable public android.net.MacAddress getBssid();
+    method @Nullable public String getPassphrase();
+    method public int getSecurityType();
+    method @Nullable public String getSsid();
+    method public boolean isHiddenSsid();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.net.wifi.SoftApConfiguration> CREATOR;
+    field public static final int SECURITY_TYPE_OPEN = 0; // 0x0
+    field public static final int SECURITY_TYPE_WPA2_PSK = 1; // 0x1
+    field public static final int SECURITY_TYPE_WPA3_SAE = 3; // 0x3
+    field public static final int SECURITY_TYPE_WPA3_SAE_TRANSITION = 2; // 0x2
+  }
+
   public enum SupplicantState implements android.os.Parcelable {
     method public int describeContents();
     method public static boolean isValidState(android.net.wifi.SupplicantState);
@@ -30759,6 +30805,7 @@ package android.net.wifi {
     method public boolean isTdlsSupported();
     method public boolean isWapiSupported();
     method public boolean isWifiEnabled();
+    method public boolean isWifiStandardSupported(int);
     method public boolean isWpa3SaeSupported();
     method public boolean isWpa3SuiteBSupported();
     method @Deprecated public boolean pingSupplicant();
@@ -30842,7 +30889,8 @@ package android.net.wifi {
 
   public class WifiManager.LocalOnlyHotspotReservation implements java.lang.AutoCloseable {
     method public void close();
-    method public android.net.wifi.WifiConfiguration getWifiConfiguration();
+    method @NonNull public android.net.wifi.SoftApConfiguration getSoftApConfiguration();
+    method @Deprecated @Nullable public android.net.wifi.WifiConfiguration getWifiConfiguration();
   }
 
   public class WifiManager.MulticastLock {
@@ -50509,6 +50557,7 @@ package android.view {
 
   public final class DisplayCutout {
     ctor public DisplayCutout(@NonNull android.graphics.Insets, @Nullable android.graphics.Rect, @Nullable android.graphics.Rect, @Nullable android.graphics.Rect, @Nullable android.graphics.Rect);
+    ctor public DisplayCutout(@NonNull android.graphics.Insets, @Nullable android.graphics.Rect, @Nullable android.graphics.Rect, @Nullable android.graphics.Rect, @Nullable android.graphics.Rect, @NonNull android.graphics.Insets);
     ctor @Deprecated public DisplayCutout(@Nullable android.graphics.Rect, @Nullable java.util.List<android.graphics.Rect>);
     method @NonNull public android.graphics.Rect getBoundingRectBottom();
     method @NonNull public android.graphics.Rect getBoundingRectLeft();
@@ -50519,6 +50568,7 @@ package android.view {
     method public int getSafeInsetLeft();
     method public int getSafeInsetRight();
     method public int getSafeInsetTop();
+    method @NonNull public android.graphics.Insets getWaterfallInsets();
   }
 
   public final class DragAndDropPermissions implements android.os.Parcelable {
