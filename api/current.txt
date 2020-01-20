@@ -52456,6 +52456,20 @@ package android.view {
     field @NonNull public static final android.os.Parcelable.Creator<android.view.SurfaceControl.Transaction> CREATOR;
   }
 
+  public class SurfaceControlViewHost {
+    ctor public SurfaceControlViewHost(@NonNull android.content.Context, @NonNull android.view.Display, @Nullable android.os.IBinder);
+    method public void addView(@NonNull android.view.View, int, int);
+    method @Nullable public android.view.SurfaceControlViewHost.SurfacePackage getSurfacePackage();
+    method public void relayout(int, int);
+    method public void release();
+  }
+
+  public static final class SurfaceControlViewHost.SurfacePackage implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.SurfaceControlViewHost.SurfacePackage> CREATOR;
+  }
+
   public interface SurfaceHolder {
     method public void addCallback(android.view.SurfaceHolder.Callback);
     method public android.view.Surface getSurface();
@@ -52500,7 +52514,9 @@ package android.view {
     ctor public SurfaceView(android.content.Context, android.util.AttributeSet, int, int);
     method public boolean gatherTransparentRegion(android.graphics.Region);
     method public android.view.SurfaceHolder getHolder();
+    method @Nullable public android.os.IBinder getHostToken();
     method public android.view.SurfaceControl getSurfaceControl();
+    method public void setChildSurfacePackage(@NonNull android.view.SurfaceControlViewHost.SurfacePackage);
     method public void setSecure(boolean);
     method public void setZOrderMediaOverlay(boolean);
     method public void setZOrderOnTop(boolean);
