@@ -26477,6 +26477,7 @@ package android.media {
 
   public final class MediaRoute2Info implements android.os.Parcelable {
     method public int describeContents();
+    method @Nullable public String getClientPackageName();
     method public int getConnectionState();
     method @Nullable public CharSequence getDescription();
     method public int getDeviceType();
@@ -26498,6 +26499,9 @@ package android.media {
     field public static final int DEVICE_TYPE_REMOTE_SPEAKER = 2; // 0x2
     field public static final int DEVICE_TYPE_REMOTE_TV = 1; // 0x1
     field public static final int DEVICE_TYPE_UNKNOWN = 0; // 0x0
+    field public static final String FEATURE_LIVE_AUDIO = "android.media.intent.category.LIVE_AUDIO";
+    field public static final String FEATURE_LIVE_VIDEO = "android.media.intent.category.LIVE_VIDEO";
+    field public static final String FEATURE_REMOTE_PLAYBACK = "android.media.intent.category.REMOTE_PLAYBACK";
     field public static final int PLAYBACK_VOLUME_FIXED = 0; // 0x0
     field public static final int PLAYBACK_VOLUME_VARIABLE = 1; // 0x1
   }
@@ -26522,9 +26526,23 @@ package android.media {
 
   public abstract class MediaRoute2ProviderService extends android.app.Service {
     ctor public MediaRoute2ProviderService();
+    method @NonNull public final java.util.List<android.media.RoutingSessionInfo> getAllSessionInfo();
+    method @Nullable public final android.media.RoutingSessionInfo getSessionInfo(@NonNull String);
     method public final void notifyRoutes(@NonNull java.util.Collection<android.media.MediaRoute2Info>);
-    method @NonNull public android.os.IBinder onBind(@NonNull android.content.Intent);
+    method public final void notifySessionCreated(@NonNull android.media.RoutingSessionInfo, long);
+    method public final void notifySessionCreationFailed(long);
+    method public final void notifySessionReleased(@NonNull String);
+    method public final void notifySessionUpdated(@NonNull android.media.RoutingSessionInfo);
+    method @CallSuper @Nullable public android.os.IBinder onBind(@NonNull android.content.Intent);
+    method public abstract void onCreateSession(@NonNull String, @NonNull String, long, @Nullable android.os.Bundle);
+    method public abstract void onDeselectRoute(@NonNull String, @NonNull String);
     method public void onDiscoveryPreferenceChanged(@NonNull android.media.RouteDiscoveryPreference);
+    method public abstract void onReleaseSession(@NonNull String);
+    method public abstract void onSelectRoute(@NonNull String, @NonNull String);
+    method public abstract void onSetVolume(@NonNull String, int);
+    method public abstract void onTransferToRoute(@NonNull String, @NonNull String);
+    method public abstract void onUpdateVolume(@NonNull String, int);
+    field public static final long REQUEST_ID_UNKNOWN = 0L; // 0x0L
     field public static final String SERVICE_INTERFACE = "android.media.MediaRoute2ProviderService";
   }
 
@@ -26652,10 +26670,20 @@ package android.media {
   }
 
   public class MediaRouter2 {
+    method @NonNull public java.util.List<android.media.MediaRouter2.RoutingController> getControllers();
     method @NonNull public static android.media.MediaRouter2 getInstance(@NonNull android.content.Context);
     method @NonNull public java.util.List<android.media.MediaRoute2Info> getRoutes();
+    method @NonNull public android.media.MediaRouter2.RoutingController getSystemController();
+    method public void registerControllerCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaRouter2.RoutingControllerCallback);
     method public void registerRouteCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaRouter2.RouteCallback, @NonNull android.media.RouteDiscoveryPreference);
+    method public void requestCreateController(@NonNull android.media.MediaRoute2Info);
+    method public void setOnGetControllerHintsListener(@Nullable android.media.MediaRouter2.OnGetControllerHintsListener);
+    method public void unregisterControllerCallback(@NonNull android.media.MediaRouter2.RoutingControllerCallback);
     method public void unregisterRouteCallback(@NonNull android.media.MediaRouter2.RouteCallback);
+  }
+
+  public static interface MediaRouter2.OnGetControllerHintsListener {
+    method @Nullable public android.os.Bundle onGetControllerHints(@NonNull android.media.MediaRoute2Info);
   }
 
   public static class MediaRouter2.RouteCallback {
@@ -26663,6 +26691,28 @@ package android.media {
     method public void onRoutesAdded(@NonNull java.util.List<android.media.MediaRoute2Info>);
     method public void onRoutesChanged(@NonNull java.util.List<android.media.MediaRoute2Info>);
     method public void onRoutesRemoved(@NonNull java.util.List<android.media.MediaRoute2Info>);
+  }
+
+  public class MediaRouter2.RoutingController {
+    method public void deselectRoute(@NonNull android.media.MediaRoute2Info);
+    method @Nullable public android.os.Bundle getControlHints();
+    method @NonNull public java.util.List<android.media.MediaRoute2Info> getDeselectableRoutes();
+    method @NonNull public String getId();
+    method @NonNull public java.util.List<android.media.MediaRoute2Info> getSelectableRoutes();
+    method @NonNull public java.util.List<android.media.MediaRoute2Info> getSelectedRoutes();
+    method @NonNull public java.util.List<android.media.MediaRoute2Info> getTransferrableRoutes();
+    method public boolean isReleased();
+    method public void release();
+    method public void selectRoute(@NonNull android.media.MediaRoute2Info);
+    method public void transferToRoute(@NonNull android.media.MediaRoute2Info);
+  }
+
+  public static class MediaRouter2.RoutingControllerCallback {
+    ctor public MediaRouter2.RoutingControllerCallback();
+    method public void onControllerCreated(@NonNull android.media.MediaRouter2.RoutingController);
+    method public void onControllerCreationFailed(@NonNull android.media.MediaRoute2Info);
+    method public void onControllerReleased(@NonNull android.media.MediaRouter2.RoutingController);
+    method public void onControllerUpdated(@NonNull android.media.MediaRouter2.RoutingController);
   }
 
   public class MediaScannerConnection implements android.content.ServiceConnection {
@@ -27037,6 +27087,38 @@ package android.media {
     method @NonNull public android.media.RouteDiscoveryPreference build();
     method @NonNull public android.media.RouteDiscoveryPreference.Builder setActiveScan(boolean);
     method @NonNull public android.media.RouteDiscoveryPreference.Builder setPreferredFeatures(@NonNull java.util.List<java.lang.String>);
+  }
+
+  public final class RoutingSessionInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public String getClientPackageName();
+    method @Nullable public android.os.Bundle getControlHints();
+    method @NonNull public java.util.List<java.lang.String> getDeselectableRoutes();
+    method @NonNull public String getId();
+    method @NonNull public java.util.List<java.lang.String> getSelectableRoutes();
+    method @NonNull public java.util.List<java.lang.String> getSelectedRoutes();
+    method @NonNull public java.util.List<java.lang.String> getTransferrableRoutes();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.media.RoutingSessionInfo> CREATOR;
+  }
+
+  public static final class RoutingSessionInfo.Builder {
+    ctor public RoutingSessionInfo.Builder(@NonNull String, @NonNull String);
+    ctor public RoutingSessionInfo.Builder(@NonNull android.media.RoutingSessionInfo);
+    method @NonNull public android.media.RoutingSessionInfo.Builder addDeselectableRoute(@NonNull String);
+    method @NonNull public android.media.RoutingSessionInfo.Builder addSelectableRoute(@NonNull String);
+    method @NonNull public android.media.RoutingSessionInfo.Builder addSelectedRoute(@NonNull String);
+    method @NonNull public android.media.RoutingSessionInfo.Builder addTransferrableRoute(@NonNull String);
+    method @NonNull public android.media.RoutingSessionInfo build();
+    method @NonNull public android.media.RoutingSessionInfo.Builder clearDeselectableRoutes();
+    method @NonNull public android.media.RoutingSessionInfo.Builder clearSelectableRoutes();
+    method @NonNull public android.media.RoutingSessionInfo.Builder clearSelectedRoutes();
+    method @NonNull public android.media.RoutingSessionInfo.Builder clearTransferrableRoutes();
+    method @NonNull public android.media.RoutingSessionInfo.Builder removeDeselectableRoute(@NonNull String);
+    method @NonNull public android.media.RoutingSessionInfo.Builder removeSelectableRoute(@NonNull String);
+    method @NonNull public android.media.RoutingSessionInfo.Builder removeSelectedRoute(@NonNull String);
+    method @NonNull public android.media.RoutingSessionInfo.Builder removeTransferrableRoute(@NonNull String);
+    method @NonNull public android.media.RoutingSessionInfo.Builder setControlHints(@Nullable android.os.Bundle);
   }
 
   public final class Session2Command implements android.os.Parcelable {
