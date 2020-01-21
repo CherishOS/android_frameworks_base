@@ -11700,11 +11700,8 @@ package android.content.pm {
     field public static final int STATUS_FAILURE_ABORTED = 3; // 0x3
     field public static final int STATUS_FAILURE_BLOCKED = 2; // 0x2
     field public static final int STATUS_FAILURE_CONFLICT = 5; // 0x5
-    field public static final int STATUS_FAILURE_ILLEGAL_STATE = 9; // 0x9
     field public static final int STATUS_FAILURE_INCOMPATIBLE = 7; // 0x7
     field public static final int STATUS_FAILURE_INVALID = 4; // 0x4
-    field public static final int STATUS_FAILURE_NAME_NOT_FOUND = 8; // 0x8
-    field public static final int STATUS_FAILURE_SECURITY = 10; // 0xa
     field public static final int STATUS_FAILURE_STORAGE = 6; // 0x6
     field public static final int STATUS_PENDING_USER_ACTION = -1; // 0xffffffff
     field public static final int STATUS_SUCCESS = 0; // 0x0
@@ -11726,7 +11723,6 @@ package android.content.pm {
     method public void removeChildSessionId(int);
     method public void removeSplit(@NonNull String) throws java.io.IOException;
     method public void setStagingProgress(float);
-    method public void transfer(@NonNull String, @NonNull android.content.IntentSender) throws android.content.pm.PackageManager.NameNotFoundException;
     method public void transfer(@NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
   }
 
@@ -18657,6 +18653,7 @@ package android.icu.lang {
     field public static final int CHEROKEE_SUPPLEMENT_ID = 255; // 0xff
     field public static final android.icu.lang.UCharacter.UnicodeBlock CHESS_SYMBOLS;
     field public static final int CHESS_SYMBOLS_ID = 281; // 0x119
+    field public static final android.icu.lang.UCharacter.UnicodeBlock CHORASMIAN;
     field public static final int CHORASMIAN_ID = 301; // 0x12d
     field public static final android.icu.lang.UCharacter.UnicodeBlock CJK_COMPATIBILITY;
     field public static final android.icu.lang.UCharacter.UnicodeBlock CJK_COMPATIBILITY_FORMS;
@@ -18685,6 +18682,7 @@ package android.icu.lang {
     field public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_E_ID = 256; // 0x100
     field public static final android.icu.lang.UCharacter.UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F;
     field public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F_ID = 274; // 0x112
+    field public static final android.icu.lang.UCharacter.UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_G;
     field public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_G_ID = 302; // 0x12e
     field public static final int CJK_UNIFIED_IDEOGRAPHS_ID = 71; // 0x47
     field public static final android.icu.lang.UCharacter.UnicodeBlock COMBINING_DIACRITICAL_MARKS;
@@ -18735,6 +18733,7 @@ package android.icu.lang {
     field public static final int DEVANAGARI_ID = 15; // 0xf
     field public static final android.icu.lang.UCharacter.UnicodeBlock DINGBATS;
     field public static final int DINGBATS_ID = 56; // 0x38
+    field public static final android.icu.lang.UCharacter.UnicodeBlock DIVES_AKURU;
     field public static final int DIVES_AKURU_ID = 303; // 0x12f
     field public static final android.icu.lang.UCharacter.UnicodeBlock DOGRA;
     field public static final int DOGRA_ID = 282; // 0x11a
@@ -22907,6 +22906,7 @@ package android.icu.util {
     field public static final android.icu.util.VersionInfo UNICODE_11_0;
     field public static final android.icu.util.VersionInfo UNICODE_12_0;
     field public static final android.icu.util.VersionInfo UNICODE_12_1;
+    field public static final android.icu.util.VersionInfo UNICODE_13_0;
     field public static final android.icu.util.VersionInfo UNICODE_1_0;
     field public static final android.icu.util.VersionInfo UNICODE_1_0_1;
     field public static final android.icu.util.VersionInfo UNICODE_1_1_0;
@@ -24793,11 +24793,13 @@ package android.media {
 
   public final class MediaCas implements java.lang.AutoCloseable {
     ctor public MediaCas(int) throws android.media.MediaCasException.UnsupportedCasException;
+    ctor public MediaCas(int, @Nullable String, int) throws android.media.MediaCasException.UnsupportedCasException;
     method public void close();
     method public static android.media.MediaCas.PluginDescriptor[] enumeratePlugins();
     method protected void finalize();
     method public static boolean isSystemIdSupported(int);
     method public android.media.MediaCas.Session openSession() throws android.media.MediaCasException;
+    method @Nullable public android.media.MediaCas.Session openSession(int, int) throws android.media.MediaCasException;
     method public void processEmm(@NonNull byte[], int, int) throws android.media.MediaCasException;
     method public void processEmm(@NonNull byte[]) throws android.media.MediaCasException;
     method public void provision(@NonNull String) throws android.media.MediaCasException;
@@ -24805,10 +24807,32 @@ package android.media {
     method public void sendEvent(int, int, @Nullable byte[]) throws android.media.MediaCasException;
     method public void setEventListener(@Nullable android.media.MediaCas.EventListener, @Nullable android.os.Handler);
     method public void setPrivateData(@NonNull byte[]) throws android.media.MediaCasException;
+    field public static final int PLUGIN_STATUS_PHYSICAL_MODULE_CHANGED = 0; // 0x0
+    field public static final int PLUGIN_STATUS_SESSION_NUMBER_CHANGED = 1; // 0x1
+    field public static final int SCRAMBLING_MODE_AES128 = 9; // 0x9
+    field public static final int SCRAMBLING_MODE_AES_ECB = 10; // 0xa
+    field public static final int SCRAMBLING_MODE_AES_SCTE52 = 11; // 0xb
+    field public static final int SCRAMBLING_MODE_DVB_CISSA_V1 = 6; // 0x6
+    field public static final int SCRAMBLING_MODE_DVB_CSA1 = 1; // 0x1
+    field public static final int SCRAMBLING_MODE_DVB_CSA2 = 2; // 0x2
+    field public static final int SCRAMBLING_MODE_DVB_CSA3_ENHANCE = 5; // 0x5
+    field public static final int SCRAMBLING_MODE_DVB_CSA3_MINIMAL = 4; // 0x4
+    field public static final int SCRAMBLING_MODE_DVB_CSA3_STANDARD = 3; // 0x3
+    field public static final int SCRAMBLING_MODE_DVB_IDSA = 7; // 0x7
+    field public static final int SCRAMBLING_MODE_MULTI2 = 8; // 0x8
+    field public static final int SCRAMBLING_MODE_RESERVED = 0; // 0x0
+    field public static final int SCRAMBLING_MODE_TDES_ECB = 12; // 0xc
+    field public static final int SCRAMBLING_MODE_TDES_SCTE52 = 13; // 0xd
+    field public static final int SESSION_USAGE_LIVE = 0; // 0x0
+    field public static final int SESSION_USAGE_PLAYBACK = 1; // 0x1
+    field public static final int SESSION_USAGE_RECORD = 2; // 0x2
+    field public static final int SESSION_USAGE_TIMESHIFT = 3; // 0x3
   }
 
   public static interface MediaCas.EventListener {
     method public void onEvent(@NonNull android.media.MediaCas, int, int, @Nullable byte[]);
+    method public default void onPluginStatusUpdate(@NonNull android.media.MediaCas, int, int);
+    method public default void onResourceLost(@NonNull android.media.MediaCas);
     method public default void onSessionEvent(@NonNull android.media.MediaCas, @NonNull android.media.MediaCas.Session, int, int, @Nullable byte[]);
   }
 
@@ -24819,6 +24843,7 @@ package android.media {
 
   public final class MediaCas.Session implements java.lang.AutoCloseable {
     method public void close();
+    method @NonNull public byte[] getSessionId();
     method public void processEcm(@NonNull byte[], int, int) throws android.media.MediaCasException;
     method public void processEcm(@NonNull byte[]) throws android.media.MediaCasException;
     method public void sendSessionEvent(int, int, @Nullable byte[]) throws android.media.MediaCasException;
@@ -24829,6 +24854,9 @@ package android.media {
   }
 
   public static final class MediaCasException.DeniedByServerException extends android.media.MediaCasException {
+  }
+
+  public static final class MediaCasException.InsufficientResourceException extends android.media.MediaCasException {
   }
 
   public static final class MediaCasException.NotProvisionedException extends android.media.MediaCasException {
@@ -28817,6 +28845,19 @@ package android.media.tv {
     field public static final int TIME_SHIFT_STATUS_UNSUPPORTED = 1; // 0x1
     field public static final int VIDEO_UNAVAILABLE_REASON_AUDIO_ONLY = 4; // 0x4
     field public static final int VIDEO_UNAVAILABLE_REASON_BUFFERING = 3; // 0x3
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_BLACKOUT = 16; // 0x10
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_CARD_INVALID = 15; // 0xf
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_CARD_MUTE = 14; // 0xe
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_INSUFFICIENT_OUTPUT_PROTECTION = 7; // 0x7
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_LICENSE_EXPIRED = 10; // 0xa
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_NEED_ACTIVATION = 11; // 0xb
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_NEED_PAIRING = 12; // 0xc
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_NO_CARD = 13; // 0xd
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_PVR_RECORDING_NOT_ALLOWED = 8; // 0x8
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_REBOOTING = 17; // 0x11
+    field public static final int VIDEO_UNAVAILABLE_REASON_CAS_UNKNOWN = 18; // 0x12
+    field public static final int VIDEO_UNAVAILABLE_REASON_INSUFFICIENT_RESOURCE = 6; // 0x6
+    field public static final int VIDEO_UNAVAILABLE_REASON_NOT_CONNECTED = 5; // 0x5
     field public static final int VIDEO_UNAVAILABLE_REASON_TUNING = 1; // 0x1
     field public static final int VIDEO_UNAVAILABLE_REASON_UNKNOWN = 0; // 0x0
     field public static final int VIDEO_UNAVAILABLE_REASON_WEAK_SIGNAL = 2; // 0x2
@@ -28838,6 +28879,11 @@ package android.media.tv {
     method @Nullable public android.media.tv.TvInputService.RecordingSession onCreateRecordingSession(@NonNull String, @NonNull String);
     method @Nullable public abstract android.media.tv.TvInputService.Session onCreateSession(String);
     method @Nullable public android.media.tv.TvInputService.Session onCreateSession(@NonNull String, @NonNull String);
+    field public static final int PRIORITY_HINT_USE_CASE_TYPE_BACKGROUND = 100; // 0x64
+    field public static final int PRIORITY_HINT_USE_CASE_TYPE_LIVE = 400; // 0x190
+    field public static final int PRIORITY_HINT_USE_CASE_TYPE_PLAYBACK = 300; // 0x12c
+    field public static final int PRIORITY_HINT_USE_CASE_TYPE_RECORD = 500; // 0x1f4
+    field public static final int PRIORITY_HINT_USE_CASE_TYPE_SCAN = 200; // 0xc8
     field public static final String SERVICE_INTERFACE = "android.media.tv.TvInputService";
     field public static final String SERVICE_META_DATA = "android.media.tv.input";
   }
@@ -30848,6 +30894,7 @@ package android.net.wifi {
     field public static final String SCAN_RESULTS_AVAILABLE_ACTION = "android.net.wifi.SCAN_RESULTS";
     field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_ADD_DUPLICATE = 3; // 0x3
     field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_ADD_EXCEEDS_MAX_PER_APP = 4; // 0x4
+    field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_ADD_NOT_ALLOWED = 6; // 0x6
     field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_APP_DISALLOWED = 2; // 0x2
     field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_INTERNAL = 1; // 0x1
     field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_REMOVE_INVALID = 5; // 0x5
@@ -30965,6 +31012,7 @@ package android.net.wifi {
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setPasspointConfig(@NonNull android.net.wifi.hotspot2.PasspointConfiguration);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setPriority(@IntRange(from=0) int);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setSsid(@NonNull String);
+    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setUntrusted(boolean);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setWapiEnterpriseConfig(@NonNull android.net.wifi.WifiEnterpriseConfig);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setWapiPassphrase(@NonNull String);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setWpa2EnterpriseConfig(@NonNull android.net.wifi.WifiEnterpriseConfig);
@@ -47101,6 +47149,37 @@ package android.telephony.gsm {
 
 package android.telephony.ims {
 
+  public final class ImsException extends java.lang.Exception {
+    method public int getCode();
+    field public static final int CODE_ERROR_SERVICE_UNAVAILABLE = 1; // 0x1
+    field public static final int CODE_ERROR_UNSPECIFIED = 0; // 0x0
+    field public static final int CODE_ERROR_UNSUPPORTED_OPERATION = 2; // 0x2
+  }
+
+  public class ImsMmTelManager implements android.telephony.ims.RegistrationManager {
+    method @NonNull @RequiresPermission(anyOf={"android.permission.READ_PRIVILEGED_PHONE_STATE", android.Manifest.permission.READ_PRECISE_PHONE_STATE}) public static android.telephony.ims.ImsMmTelManager createForSubscriptionId(int);
+    method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public void getRegistrationState(@NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<java.lang.Integer>);
+    method @RequiresPermission(anyOf={"android.permission.READ_PRIVILEGED_PHONE_STATE", android.Manifest.permission.READ_PRECISE_PHONE_STATE}) public void getRegistrationTransportType(@NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<java.lang.Integer>);
+    method @RequiresPermission(anyOf={"android.permission.READ_PRIVILEGED_PHONE_STATE", android.Manifest.permission.READ_PRECISE_PHONE_STATE}) public int getVoWiFiModeSetting();
+    method @RequiresPermission(anyOf={"android.permission.READ_PRIVILEGED_PHONE_STATE", android.Manifest.permission.READ_PRECISE_PHONE_STATE}) public boolean isAdvancedCallingSettingEnabled();
+    method @RequiresPermission(anyOf={"android.permission.READ_PRIVILEGED_PHONE_STATE", android.Manifest.permission.READ_PRECISE_PHONE_STATE}) public boolean isTtyOverVolteEnabled();
+    method @RequiresPermission(anyOf={"android.permission.READ_PRIVILEGED_PHONE_STATE", android.Manifest.permission.READ_PRECISE_PHONE_STATE}) public boolean isVoWiFiRoamingSettingEnabled();
+    method @RequiresPermission(anyOf={"android.permission.READ_PRIVILEGED_PHONE_STATE", android.Manifest.permission.READ_PRECISE_PHONE_STATE}) public boolean isVoWiFiSettingEnabled();
+    method @RequiresPermission(anyOf={"android.permission.READ_PRIVILEGED_PHONE_STATE", android.Manifest.permission.READ_PRECISE_PHONE_STATE}) public boolean isVtSettingEnabled();
+    method @RequiresPermission(anyOf={"android.permission.READ_PRIVILEGED_PHONE_STATE", android.Manifest.permission.READ_PRECISE_PHONE_STATE}) public void registerImsRegistrationCallback(@NonNull java.util.concurrent.Executor, @NonNull android.telephony.ims.RegistrationManager.RegistrationCallback) throws android.telephony.ims.ImsException;
+    method @RequiresPermission(anyOf={"android.permission.READ_PRIVILEGED_PHONE_STATE", android.Manifest.permission.READ_PRECISE_PHONE_STATE}) public void registerMmTelCapabilityCallback(@NonNull java.util.concurrent.Executor, @NonNull android.telephony.ims.ImsMmTelManager.CapabilityCallback) throws android.telephony.ims.ImsException;
+    method @RequiresPermission(anyOf={"android.permission.READ_PRIVILEGED_PHONE_STATE", android.Manifest.permission.READ_PRECISE_PHONE_STATE}) public void unregisterImsRegistrationCallback(@NonNull android.telephony.ims.RegistrationManager.RegistrationCallback);
+    method @RequiresPermission(anyOf={"android.permission.READ_PRIVILEGED_PHONE_STATE", android.Manifest.permission.READ_PRECISE_PHONE_STATE}) public void unregisterMmTelCapabilityCallback(@NonNull android.telephony.ims.ImsMmTelManager.CapabilityCallback);
+    field public static final int WIFI_MODE_CELLULAR_PREFERRED = 1; // 0x1
+    field public static final int WIFI_MODE_WIFI_ONLY = 0; // 0x0
+    field public static final int WIFI_MODE_WIFI_PREFERRED = 2; // 0x2
+  }
+
+  public static class ImsMmTelManager.CapabilityCallback {
+    ctor public ImsMmTelManager.CapabilityCallback();
+    method public void onCapabilitiesStatusChanged(@NonNull android.telephony.ims.feature.MmTelFeature.MmTelCapabilities);
+  }
+
   public final class ImsReasonInfo implements android.os.Parcelable {
     ctor public ImsReasonInfo(int, int, @Nullable String);
     method public int describeContents();
@@ -47282,6 +47361,38 @@ package android.telephony.ims {
     field public static final int EXTRA_CODE_CALL_RETRY_BY_SETTINGS = 3; // 0x3
     field public static final int EXTRA_CODE_CALL_RETRY_NORMAL = 1; // 0x1
     field public static final int EXTRA_CODE_CALL_RETRY_SILENT_REDIAL = 2; // 0x2
+  }
+
+  public interface RegistrationManager {
+    method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public void getRegistrationState(@NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<java.lang.Integer>);
+    method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public void getRegistrationTransportType(@NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<java.lang.Integer>);
+    method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public void registerImsRegistrationCallback(@NonNull java.util.concurrent.Executor, @NonNull android.telephony.ims.RegistrationManager.RegistrationCallback) throws android.telephony.ims.ImsException;
+    method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public void unregisterImsRegistrationCallback(@NonNull android.telephony.ims.RegistrationManager.RegistrationCallback);
+    field public static final int REGISTRATION_STATE_NOT_REGISTERED = 0; // 0x0
+    field public static final int REGISTRATION_STATE_REGISTERED = 2; // 0x2
+    field public static final int REGISTRATION_STATE_REGISTERING = 1; // 0x1
+  }
+
+  public static class RegistrationManager.RegistrationCallback {
+    ctor public RegistrationManager.RegistrationCallback();
+    method public void onRegistered(int);
+    method public void onRegistering(int);
+    method public void onTechnologyChangeFailed(int, @Nullable android.telephony.ims.ImsReasonInfo);
+    method public void onUnregistered(@Nullable android.telephony.ims.ImsReasonInfo);
+  }
+
+}
+
+package android.telephony.ims.feature {
+
+  public class MmTelFeature {
+  }
+
+  public static class MmTelFeature.MmTelCapabilities {
+    field public static final int CAPABILITY_TYPE_SMS = 8; // 0x8
+    field public static final int CAPABILITY_TYPE_UT = 4; // 0x4
+    field public static final int CAPABILITY_TYPE_VIDEO = 2; // 0x2
+    field public static final int CAPABILITY_TYPE_VOICE = 1; // 0x1
   }
 
 }
@@ -53869,6 +53980,7 @@ package android.view {
     field public static final int LAST_SUB_WINDOW = 1999; // 0x7cf
     field public static final int LAST_SYSTEM_WINDOW = 2999; // 0xbb7
     field public static final int LAYOUT_CHANGED = 1; // 0x1
+    field public static final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS = 3; // 0x3
     field public static final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT = 0; // 0x0
     field public static final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER = 2; // 0x2
     field public static final int LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES = 1; // 0x1
