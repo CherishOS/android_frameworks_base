@@ -43608,6 +43608,7 @@ package android.telecom {
     field public static final int PROPERTY_GENERIC_CONFERENCE = 2; // 0x2
     field public static final int PROPERTY_HAS_CDMA_VOICE_PRIVACY = 128; // 0x80
     field public static final int PROPERTY_HIGH_DEF_AUDIO = 16; // 0x10
+    field public static final int PROPERTY_IS_ADHOC_CONFERENCE = 8192; // 0x2000
     field public static final int PROPERTY_IS_EXTERNAL_CALL = 64; // 0x40
     field public static final int PROPERTY_NETWORK_IDENTIFIED_EMERGENCY_CALL = 2048; // 0x800
     field public static final int PROPERTY_RTT = 1024; // 0x400
@@ -43685,6 +43686,7 @@ package android.telecom {
   public abstract class Conference extends android.telecom.Conferenceable {
     ctor public Conference(android.telecom.PhoneAccountHandle);
     method public final boolean addConnection(android.telecom.Connection);
+    method @NonNull public static android.telecom.Conference createFailedConference(@NonNull android.telecom.DisconnectCause, @NonNull android.telecom.PhoneAccountHandle);
     method public final void destroy();
     method public final android.telecom.CallAudioState getCallAudioState();
     method public final java.util.List<android.telecom.Connection> getConferenceableConnections();
@@ -43699,6 +43701,8 @@ package android.telecom {
     method public final android.telecom.StatusHints getStatusHints();
     method public android.telecom.Connection.VideoProvider getVideoProvider();
     method public int getVideoState();
+    method public final boolean isRingbackRequested();
+    method public void onAnswer(int);
     method public void onCallAudioStateChanged(android.telecom.CallAudioState);
     method public void onConnectionAdded(android.telecom.Connection);
     method public void onDisconnect();
@@ -43707,6 +43711,7 @@ package android.telecom {
     method public void onMerge(android.telecom.Connection);
     method public void onMerge();
     method public void onPlayDtmfTone(char);
+    method public void onReject();
     method public void onSeparate(android.telecom.Connection);
     method public void onStopDtmfTone();
     method public void onSwap();
@@ -43726,6 +43731,8 @@ package android.telecom {
     method public final void setDisconnected(android.telecom.DisconnectCause);
     method public final void setExtras(@Nullable android.os.Bundle);
     method public final void setOnHold();
+    method public final void setRingbackRequested(boolean);
+    method public final void setRinging();
     method public final void setStatusHints(android.telecom.StatusHints);
     method public final void setVideoProvider(android.telecom.Connection, android.telecom.Connection.VideoProvider);
     method public final void setVideoState(android.telecom.Connection, int);
@@ -43883,6 +43890,7 @@ package android.telecom {
     field public static final int PROPERTY_ASSISTED_DIALING_USED = 512; // 0x200
     field public static final int PROPERTY_HAS_CDMA_VOICE_PRIVACY = 32; // 0x20
     field public static final int PROPERTY_HIGH_DEF_AUDIO = 4; // 0x4
+    field public static final int PROPERTY_IS_ADHOC_CONFERENCE = 4096; // 0x1000
     field public static final int PROPERTY_IS_EXTERNAL_CALL = 16; // 0x10
     field public static final int PROPERTY_IS_RTT = 256; // 0x100
     field public static final int PROPERTY_NETWORK_IDENTIFIED_EMERGENCY_CALL = 1024; // 0x400
@@ -43955,8 +43963,10 @@ package android.telecom {
     method public android.telecom.PhoneAccountHandle getAccountHandle();
     method public android.net.Uri getAddress();
     method public android.os.Bundle getExtras();
+    method @Nullable public java.util.List<android.net.Uri> getParticipants();
     method public android.telecom.Connection.RttTextStream getRttTextStream();
     method public int getVideoState();
+    method public boolean isAdhocConferenceCall();
     method public boolean isRequestingRtt();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.telecom.ConnectionRequest> CREATOR;
@@ -43976,9 +43986,13 @@ package android.telecom {
     method public void onConference(android.telecom.Connection, android.telecom.Connection);
     method public void onConnectionServiceFocusGained();
     method public void onConnectionServiceFocusLost();
+    method @Nullable public android.telecom.Conference onCreateIncomingConference(@Nullable android.telecom.PhoneAccountHandle, @Nullable android.telecom.ConnectionRequest);
+    method public void onCreateIncomingConferenceFailed(@Nullable android.telecom.PhoneAccountHandle, @Nullable android.telecom.ConnectionRequest);
     method public android.telecom.Connection onCreateIncomingConnection(android.telecom.PhoneAccountHandle, android.telecom.ConnectionRequest);
     method public void onCreateIncomingConnectionFailed(android.telecom.PhoneAccountHandle, android.telecom.ConnectionRequest);
     method public android.telecom.Connection onCreateIncomingHandoverConnection(android.telecom.PhoneAccountHandle, android.telecom.ConnectionRequest);
+    method @Nullable public android.telecom.Conference onCreateOutgoingConference(@Nullable android.telecom.PhoneAccountHandle, @Nullable android.telecom.ConnectionRequest);
+    method public void onCreateOutgoingConferenceFailed(@Nullable android.telecom.PhoneAccountHandle, @Nullable android.telecom.ConnectionRequest);
     method public android.telecom.Connection onCreateOutgoingConnection(android.telecom.PhoneAccountHandle, android.telecom.ConnectionRequest);
     method public void onCreateOutgoingConnectionFailed(android.telecom.PhoneAccountHandle, android.telecom.ConnectionRequest);
     method public android.telecom.Connection onCreateOutgoingHandoverConnection(android.telecom.PhoneAccountHandle, android.telecom.ConnectionRequest);
@@ -44093,6 +44107,7 @@ package android.telecom {
     method public boolean supportsUriScheme(String);
     method public android.telecom.PhoneAccount.Builder toBuilder();
     method public void writeToParcel(android.os.Parcel, int);
+    field public static final int CAPABILITY_ADHOC_CONFERENCE_CALLING = 16384; // 0x4000
     field public static final int CAPABILITY_CALL_PROVIDER = 2; // 0x2
     field public static final int CAPABILITY_CALL_SUBJECT = 64; // 0x40
     field public static final int CAPABILITY_CONNECTION_MANAGER = 1; // 0x1
@@ -44288,6 +44303,7 @@ package android.telecom {
     method @Deprecated @RequiresPermission(anyOf={android.Manifest.permission.ANSWER_PHONE_CALLS, android.Manifest.permission.MODIFY_PHONE_STATE}) public void acceptRingingCall();
     method @Deprecated @RequiresPermission(anyOf={android.Manifest.permission.ANSWER_PHONE_CALLS, android.Manifest.permission.MODIFY_PHONE_STATE}) public void acceptRingingCall(int);
     method public void addNewIncomingCall(android.telecom.PhoneAccountHandle, android.os.Bundle);
+    method public void addNewIncomingConference(@NonNull android.telecom.PhoneAccountHandle, @NonNull android.os.Bundle);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public void cancelMissedCallsNotification();
     method public android.content.Intent createManageBlockedNumbersIntent();
     method @Deprecated @RequiresPermission(android.Manifest.permission.ANSWER_PHONE_CALLS) public boolean endCall();
@@ -44315,6 +44331,7 @@ package android.telecom {
     method public void registerPhoneAccount(android.telecom.PhoneAccount);
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public void showInCallScreen(boolean);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public void silenceRinger();
+    method @RequiresPermission(android.Manifest.permission.CALL_PHONE) public void startConference(@NonNull java.util.List<android.net.Uri>, @NonNull android.os.Bundle);
     method public void unregisterPhoneAccount(android.telecom.PhoneAccountHandle);
     field public static final String ACTION_CHANGE_DEFAULT_DIALER = "android.telecom.action.CHANGE_DEFAULT_DIALER";
     field public static final String ACTION_CHANGE_PHONE_ACCOUNTS = "android.telecom.action.CHANGE_PHONE_ACCOUNTS";
@@ -44793,6 +44810,7 @@ package android.telephony {
     field public static final String KEY_SIM_NETWORK_UNLOCK_ALLOW_DISMISS_BOOL = "sim_network_unlock_allow_dismiss_bool";
     field public static final String KEY_SMS_REQUIRES_DESTINATION_NUMBER_CONVERSION_BOOL = "sms_requires_destination_number_conversion_bool";
     field public static final String KEY_SUPPORT_3GPP_CALL_FORWARDING_WHILE_ROAMING_BOOL = "support_3gpp_call_forwarding_while_roaming_bool";
+    field public static final String KEY_SUPPORT_ADHOC_CONFERENCE_CALLS_BOOL = "support_adhoc_conference_calls_bool";
     field public static final String KEY_SUPPORT_CLIR_NETWORK_DEFAULT_BOOL = "support_clir_network_default_bool";
     field public static final String KEY_SUPPORT_CONFERENCE_CALL_BOOL = "support_conference_call_bool";
     field public static final String KEY_SUPPORT_EMERGENCY_SMS_OVER_IMS_BOOL = "support_emergency_sms_over_ims_bool";
