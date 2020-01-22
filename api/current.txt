@@ -42611,6 +42611,7 @@ package android.service.autofill {
   public static final class FillResponse.Builder {
     ctor public FillResponse.Builder();
     method @NonNull public android.service.autofill.FillResponse.Builder addDataset(@Nullable android.service.autofill.Dataset);
+    method @NonNull public android.service.autofill.FillResponse.Builder addInlineAction(@NonNull android.service.autofill.InlinePresentation);
     method @NonNull public android.service.autofill.FillResponse build();
     method @NonNull public android.service.autofill.FillResponse.Builder disableAutofill(long);
     method @NonNull public android.service.autofill.FillResponse.Builder setAuthentication(@NonNull android.view.autofill.AutofillId[], @Nullable android.content.IntentSender, @Nullable android.widget.RemoteViews);
@@ -42640,10 +42641,11 @@ package android.service.autofill {
   }
 
   public final class InlinePresentation implements android.os.Parcelable {
-    ctor public InlinePresentation(@NonNull android.app.slice.Slice, @NonNull android.view.inline.InlinePresentationSpec);
+    ctor public InlinePresentation(@NonNull android.app.slice.Slice, @NonNull android.view.inline.InlinePresentationSpec, boolean);
     method public int describeContents();
     method @NonNull public android.view.inline.InlinePresentationSpec getInlinePresentationSpec();
     method @NonNull public android.app.slice.Slice getSlice();
+    method public boolean isPinned();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.service.autofill.InlinePresentation> CREATOR;
   }
@@ -55581,10 +55583,13 @@ package android.view.inputmethod {
     method @Nullable public String[] getAutofillHints();
     method @NonNull public android.view.inline.InlinePresentationSpec getPresentationSpec();
     method @NonNull public String getSource();
+    method @NonNull public String getType();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.view.inputmethod.InlineSuggestionInfo> CREATOR;
     field public static final String SOURCE_AUTOFILL = "android:autofill";
     field public static final String SOURCE_PLATFORM = "android:platform";
+    field public static final String TYPE_ACTION = "android:autofill:action";
+    field public static final String TYPE_SUGGESTION = "android:autofill:suggestion";
   }
 
   public final class InlineSuggestionsRequest implements android.os.Parcelable {
