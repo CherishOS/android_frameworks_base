@@ -39,6 +39,7 @@ package android {
     field public static final String BIND_NFC_SERVICE = "android.permission.BIND_NFC_SERVICE";
     field public static final String BIND_NOTIFICATION_LISTENER_SERVICE = "android.permission.BIND_NOTIFICATION_LISTENER_SERVICE";
     field public static final String BIND_PRINT_SERVICE = "android.permission.BIND_PRINT_SERVICE";
+    field public static final String BIND_QUICK_ACCESS_WALLET_SERVICE = "android.permission.BIND_QUICK_ACCESS_WALLET_SERVICE";
     field public static final String BIND_QUICK_SETTINGS_TILE = "android.permission.BIND_QUICK_SETTINGS_TILE";
     field public static final String BIND_REMOTEVIEWS = "android.permission.BIND_REMOTEVIEWS";
     field public static final String BIND_SCREENING_SERVICE = "android.permission.BIND_SCREENING_SERVICE";
@@ -40059,6 +40060,7 @@ package android.provider {
     field public static final String ACTION_PRINT_SETTINGS = "android.settings.ACTION_PRINT_SETTINGS";
     field public static final String ACTION_PRIVACY_SETTINGS = "android.settings.PRIVACY_SETTINGS";
     field public static final String ACTION_PROCESS_WIFI_EASY_CONNECT_URI = "android.settings.PROCESS_WIFI_EASY_CONNECT_URI";
+    field public static final String ACTION_QUICK_ACCESS_WALLET_SETTINGS = "android.settings.QUICK_ACCESS_WALLET_SETTINGS";
     field public static final String ACTION_QUICK_LAUNCH_SETTINGS = "android.settings.QUICK_LAUNCH_SETTINGS";
     field public static final String ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS = "android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS";
     field public static final String ACTION_REQUEST_SET_AUTOFILL_SERVICE = "android.settings.REQUEST_SET_AUTOFILL_SERVICE";
@@ -43230,6 +43232,94 @@ package android.service.notification {
     method @NonNull public android.service.notification.ZenPolicy.Builder showLights(boolean);
     method @NonNull public android.service.notification.ZenPolicy.Builder showPeeking(boolean);
     method @NonNull public android.service.notification.ZenPolicy.Builder showStatusBarIcons(boolean);
+  }
+
+}
+
+package android.service.quickaccesswallet {
+
+  public final class GetWalletCardsCallback {
+    method public void onFailure(@NonNull android.service.quickaccesswallet.GetWalletCardsError);
+    method public void onSuccess(@NonNull android.service.quickaccesswallet.GetWalletCardsResponse);
+  }
+
+  public final class GetWalletCardsError implements android.os.Parcelable {
+    ctor public GetWalletCardsError(@Nullable android.graphics.drawable.Icon, @Nullable CharSequence);
+    method public int describeContents();
+    method @Nullable public android.graphics.drawable.Icon getIcon();
+    method @Nullable public CharSequence getMessage();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.quickaccesswallet.GetWalletCardsError> CREATOR;
+  }
+
+  public final class GetWalletCardsRequest implements android.os.Parcelable {
+    ctor public GetWalletCardsRequest(int, int, int, int);
+    method public int describeContents();
+    method public int getCardHeightPx();
+    method public int getCardWidthPx();
+    method public int getIconSizePx();
+    method public int getMaxCards();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.quickaccesswallet.GetWalletCardsRequest> CREATOR;
+  }
+
+  public final class GetWalletCardsResponse implements android.os.Parcelable {
+    ctor public GetWalletCardsResponse(@NonNull java.util.List<android.service.quickaccesswallet.WalletCard>, int);
+    method public int describeContents();
+    method public int getSelectedIndex();
+    method @NonNull public java.util.List<android.service.quickaccesswallet.WalletCard> getWalletCards();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.quickaccesswallet.GetWalletCardsResponse> CREATOR;
+  }
+
+  public abstract class QuickAccessWalletService extends android.app.Service {
+    ctor public QuickAccessWalletService();
+    method @Nullable public android.os.IBinder onBind(@NonNull android.content.Intent);
+    method public abstract void onWalletCardSelected(@NonNull android.service.quickaccesswallet.SelectWalletCardRequest);
+    method public abstract void onWalletCardsRequested(@NonNull android.service.quickaccesswallet.GetWalletCardsRequest, @NonNull android.service.quickaccesswallet.GetWalletCardsCallback);
+    method public abstract void onWalletDismissed();
+    method public final void sendWalletServiceEvent(@NonNull android.service.quickaccesswallet.WalletServiceEvent);
+    field public static final String ACTION_DISMISS_WALLET = "android.service.quickaccesswallet.action.DISMISS_WALLET";
+    field public static final String ACTION_VIEW_WALLET = "android.service.quickaccesswallet.action.VIEW_WALLET";
+    field public static final String ACTION_VIEW_WALLET_SETTINGS = "android.service.quickaccesswallet.action.VIEW_WALLET_SETTINGS";
+    field public static final String SERVICE_INTERFACE = "android.service.quickaccesswallet.QuickAccessWalletService";
+    field public static final String SERVICE_META_DATA = "android.quickaccesswallet";
+  }
+
+  public final class SelectWalletCardRequest implements android.os.Parcelable {
+    ctor public SelectWalletCardRequest(@NonNull String);
+    method public int describeContents();
+    method @NonNull public String getCardId();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.quickaccesswallet.SelectWalletCardRequest> CREATOR;
+  }
+
+  public final class WalletCard implements android.os.Parcelable {
+    method public int describeContents();
+    method @Nullable public android.graphics.drawable.Icon getCardIcon();
+    method @NonNull public String getCardId();
+    method @NonNull public android.graphics.drawable.Icon getCardImage();
+    method @Nullable public CharSequence getCardLabel();
+    method @NonNull public CharSequence getContentDescription();
+    method @NonNull public android.app.PendingIntent getPendingIntent();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.quickaccesswallet.WalletCard> CREATOR;
+  }
+
+  public static final class WalletCard.Builder {
+    ctor public WalletCard.Builder(@NonNull String, @NonNull android.graphics.drawable.Icon, @NonNull CharSequence, @NonNull android.app.PendingIntent);
+    method @NonNull public android.service.quickaccesswallet.WalletCard build();
+    method @NonNull public android.service.quickaccesswallet.WalletCard.Builder setCardIcon(@Nullable android.graphics.drawable.Icon);
+    method @NonNull public android.service.quickaccesswallet.WalletCard.Builder setCardLabel(@Nullable CharSequence);
+  }
+
+  public final class WalletServiceEvent implements android.os.Parcelable {
+    ctor public WalletServiceEvent(int);
+    method public int describeContents();
+    method public int getEventType();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.quickaccesswallet.WalletServiceEvent> CREATOR;
+    field public static final int TYPE_NFC_PAYMENT_STARTED = 1; // 0x1
   }
 
 }
