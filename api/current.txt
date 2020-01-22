@@ -46412,8 +46412,32 @@ package android.telephony {
 
   public final class PhoneCapability implements android.os.Parcelable {
     method public int describeContents();
+    method @NonNull public java.util.List<java.lang.Integer> getBands(int);
+    method @NonNull public java.util.List<java.util.List<java.lang.Long>> getConcurrentFeaturesSupport();
+    method @NonNull public java.util.List<java.lang.String> getLogicalModemUuids();
+    method public int getMaxActiveDedicatedBearers();
+    method public int getMaxActiveInternetData();
+    method public int getMaxActivePsVoice();
+    method public long getPsDataConnectionLingerTimeMillis();
+    method @NonNull public java.util.List<android.telephony.SimSlotCapability> getSimSlotCapabilities();
+    method public long getSupportedRats();
+    method public int getUeCategory(boolean, int);
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.telephony.PhoneCapability> CREATOR;
+    field public static final long MODEM_FEATURE_3GPP2_REG = 1L; // 0x1L
+    field public static final long MODEM_FEATURE_3GPP_REG = 2L; // 0x2L
+    field public static final long MODEM_FEATURE_CDMA2000_EHRPD_REG = 4L; // 0x4L
+    field public static final long MODEM_FEATURE_CSIM = 8192L; // 0x2000L
+    field public static final long MODEM_FEATURE_CS_VOICE_SESSION = 512L; // 0x200L
+    field public static final long MODEM_FEATURE_DEDICATED_BEARER = 2048L; // 0x800L
+    field public static final long MODEM_FEATURE_EUTRAN_REG = 32L; // 0x20L
+    field public static final long MODEM_FEATURE_EUTRA_NR_DUAL_CONNECTIVITY_REG = 128L; // 0x80L
+    field public static final long MODEM_FEATURE_GERAN_REG = 8L; // 0x8L
+    field public static final long MODEM_FEATURE_INTERACTIVE_DATA_SESSION = 1024L; // 0x400L
+    field public static final long MODEM_FEATURE_NETWORK_SCAN = 4096L; // 0x1000L
+    field public static final long MODEM_FEATURE_NGRAN_REG = 64L; // 0x40L
+    field public static final long MODEM_FEATURE_PS_VOICE_REG = 256L; // 0x100L
+    field public static final long MODEM_FEATURE_UTRAN_REG = 16L; // 0x10L
   }
 
   public class PhoneNumberFormattingTextWatcher implements android.text.TextWatcher {
@@ -46598,6 +46622,18 @@ package android.telephony {
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.telephony.SignalStrength> CREATOR;
     field public static final int INVALID = 2147483647; // 0x7fffffff
+  }
+
+  public final class SimSlotCapability implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getPhysicalSlotIndex();
+    method public int getSlotType();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.telephony.SimSlotCapability> CREATOR;
+    field public static final int SLOT_TYPE_EUICC = 3; // 0x3
+    field public static final int SLOT_TYPE_IUICC = 2; // 0x2
+    field public static final int SLOT_TYPE_SOFT_SIM = 4; // 0x4
+    field public static final int SLOT_TYPE_UICC = 1; // 0x1
   }
 
   public final class SmsManager {
@@ -46954,6 +46990,7 @@ package android.telephony {
     method public String getNetworkOperatorName();
     method public String getNetworkSpecifier();
     method @Deprecated @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public int getNetworkType();
+    method @Nullable @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public android.telephony.PhoneCapability getPhoneCapability();
     method @Deprecated public int getPhoneCount();
     method public int getPhoneType();
     method @RequiresPermission(anyOf={"android.permission.READ_PRIVILEGED_PHONE_STATE", android.Manifest.permission.READ_PHONE_STATE}) public int getPreferredOpportunisticDataSubscription();
