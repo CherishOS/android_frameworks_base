@@ -10174,6 +10174,7 @@ package android.content {
     field public static final String USB_SERVICE = "usb";
     field public static final String USER_SERVICE = "user";
     field public static final String VIBRATOR_SERVICE = "vibrator";
+    field public static final String VPN_MANAGEMENT_SERVICE = "vpn_management";
     field public static final String WALLPAPER_SERVICE = "wallpaper";
     field public static final String WIFI_AWARE_SERVICE = "wifiaware";
     field public static final String WIFI_P2P_SERVICE = "wifip2p";
@@ -29770,6 +29771,35 @@ package android.net {
     field public final int code;
   }
 
+  public final class Ikev2VpnProfile extends android.net.PlatformVpnProfile {
+    method @NonNull public java.util.List<java.lang.String> getAllowedAlgorithms();
+    method public int getMaxMtu();
+    method @Nullable public String getPassword();
+    method @Nullable public byte[] getPresharedKey();
+    method @Nullable public android.net.ProxyInfo getProxyInfo();
+    method @Nullable public java.security.PrivateKey getRsaPrivateKey();
+    method @NonNull public String getServerAddr();
+    method @Nullable public java.security.cert.X509Certificate getServerRootCaCert();
+    method @Nullable public java.security.cert.X509Certificate getUserCert();
+    method @NonNull public String getUserIdentity();
+    method @Nullable public String getUsername();
+    method public boolean isBypassable();
+    method public boolean isMetered();
+  }
+
+  public static final class Ikev2VpnProfile.Builder {
+    ctor public Ikev2VpnProfile.Builder(@NonNull String, @NonNull String);
+    method @NonNull public android.net.Ikev2VpnProfile build();
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setAllowedAlgorithms(@NonNull java.util.List<java.lang.String>);
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setAuthDigitalSignature(@NonNull java.security.cert.X509Certificate, @NonNull java.security.PrivateKey, @Nullable java.security.cert.X509Certificate);
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setAuthPsk(@NonNull byte[]);
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setAuthUsernamePassword(@NonNull String, @NonNull String, @Nullable java.security.cert.X509Certificate);
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setBypassable(boolean);
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setMaxMtu(int);
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setMetered(boolean);
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setProxy(@Nullable android.net.ProxyInfo);
+  }
+
   public class InetAddresses {
     method public static boolean isNumericAddress(@NonNull String);
     method @NonNull public static java.net.InetAddress parseNumericAddress(@NonNull String);
@@ -30118,6 +30148,14 @@ package android.net {
     field public String response;
   }
 
+  public abstract class PlatformVpnProfile {
+    method public final int getType();
+    method @NonNull public final String getTypeString();
+    field public static final int TYPE_IKEV2_IPSEC_PSK = 7; // 0x7
+    field public static final int TYPE_IKEV2_IPSEC_RSA = 8; // 0x8
+    field public static final int TYPE_IKEV2_IPSEC_USER_PASS = 6; // 0x6
+  }
+
   public final class Proxy {
     ctor public Proxy();
     method @Deprecated public static String getDefaultHost();
@@ -30396,6 +30434,13 @@ package android.net {
 
   public static interface UrlQuerySanitizer.ValueSanitizer {
     method public String sanitize(String);
+  }
+
+  public class VpnManager {
+    method public void deleteProvisionedVpnProfile();
+    method @Nullable public android.content.Intent provisionVpnProfile(@NonNull android.net.PlatformVpnProfile);
+    method public void startProvisionedVpnProfile();
+    method public void stopProvisionedVpnProfile();
   }
 
   public class VpnService extends android.app.Service {
