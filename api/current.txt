@@ -3901,6 +3901,7 @@ package android.app {
     method public void setImmersive(boolean);
     method public void setInheritShowWhenLocked(boolean);
     method public void setIntent(android.content.Intent);
+    method public void setLocusContext(@Nullable android.content.LocusId, @Nullable android.os.Bundle);
     method public final void setMediaController(android.media.session.MediaController);
     method public void setPictureInPictureParams(@NonNull android.app.PictureInPictureParams);
     method @Deprecated public final void setProgress(int);
@@ -6831,6 +6832,7 @@ package android.app.admin {
     method public int getLockTaskFeatures(@NonNull android.content.ComponentName);
     method @NonNull public String[] getLockTaskPackages(@NonNull android.content.ComponentName);
     method @Nullable public CharSequence getLongSupportMessage(@NonNull android.content.ComponentName);
+    method public long getManagedProfileMaximumTimeOff(@NonNull android.content.ComponentName);
     method public int getMaximumFailedPasswordsForWipe(@Nullable android.content.ComponentName);
     method public long getMaximumTimeToLock(@Nullable android.content.ComponentName);
     method @NonNull public java.util.List<java.lang.String> getMeteredDataDisabledPackages(@NonNull android.content.ComponentName);
@@ -6917,6 +6919,7 @@ package android.app.admin {
     method public boolean removeOverrideApn(@NonNull android.content.ComponentName, int);
     method public boolean removeUser(@NonNull android.content.ComponentName, @NonNull android.os.UserHandle);
     method public boolean requestBugreport(@NonNull android.content.ComponentName);
+    method public void requestSetLocationProviderAllowed(@NonNull android.content.ComponentName, @NonNull String, boolean);
     method @Deprecated public boolean resetPassword(String, int);
     method public boolean resetPasswordWithToken(@NonNull android.content.ComponentName, String, byte[], int);
     method @Nullable public java.util.List<android.app.admin.NetworkEvent> retrieveNetworkLogs(@Nullable android.content.ComponentName, long);
@@ -6960,6 +6963,7 @@ package android.app.admin {
     method public void setLockdownAdminConfiguredNetworks(@NonNull android.content.ComponentName, boolean);
     method public void setLogoutEnabled(@NonNull android.content.ComponentName, boolean);
     method public void setLongSupportMessage(@NonNull android.content.ComponentName, @Nullable CharSequence);
+    method public void setManagedProfileMaximumTimeOff(@NonNull android.content.ComponentName, long);
     method public void setMasterVolumeMuted(@NonNull android.content.ComponentName, boolean);
     method public void setMaximumFailedPasswordsForWipe(@NonNull android.content.ComponentName, int);
     method public void setMaximumTimeToLock(@NonNull android.content.ComponentName, long);
@@ -7146,6 +7150,7 @@ package android.app.admin {
     field public static final int PERMISSION_POLICY_PROMPT = 0; // 0x0
     field public static final int PERSONAL_APPS_NOT_SUSPENDED = 0; // 0x0
     field public static final int PERSONAL_APPS_SUSPENDED_EXPLICITLY = 1; // 0x1
+    field public static final int PERSONAL_APPS_SUSPENDED_PROFILE_TIMEOUT = 2; // 0x2
     field public static final String POLICY_DISABLE_CAMERA = "policy_disable_camera";
     field public static final String POLICY_DISABLE_SCREEN_CAPTURE = "policy_disable_screen_capture";
     field public static final int PRIVATE_DNS_MODE_OFF = 1; // 0x1
@@ -10174,6 +10179,7 @@ package android.content {
     field public static final String USB_SERVICE = "usb";
     field public static final String USER_SERVICE = "user";
     field public static final String VIBRATOR_SERVICE = "vibrator";
+    field public static final String VPN_MANAGEMENT_SERVICE = "vpn_management";
     field public static final String WALLPAPER_SERVICE = "wallpaper";
     field public static final String WIFI_AWARE_SERVICE = "wifiaware";
     field public static final String WIFI_P2P_SERVICE = "wifip2p";
@@ -16733,6 +16739,7 @@ package android.hardware {
     field public static final String STRING_TYPE_GYROSCOPE_UNCALIBRATED = "android.sensor.gyroscope_uncalibrated";
     field public static final String STRING_TYPE_HEART_BEAT = "android.sensor.heart_beat";
     field public static final String STRING_TYPE_HEART_RATE = "android.sensor.heart_rate";
+    field public static final String STRING_TYPE_HINGE_ANGLE = "android.sensor.hinge_angle";
     field public static final String STRING_TYPE_LIGHT = "android.sensor.light";
     field public static final String STRING_TYPE_LINEAR_ACCELERATION = "android.sensor.linear_acceleration";
     field public static final String STRING_TYPE_LOW_LATENCY_OFFBODY_DETECT = "android.sensor.low_latency_offbody_detect";
@@ -16762,6 +16769,7 @@ package android.hardware {
     field public static final int TYPE_GYROSCOPE_UNCALIBRATED = 16; // 0x10
     field public static final int TYPE_HEART_BEAT = 31; // 0x1f
     field public static final int TYPE_HEART_RATE = 21; // 0x15
+    field public static final int TYPE_HINGE_ANGLE = 36; // 0x24
     field public static final int TYPE_LIGHT = 5; // 0x5
     field public static final int TYPE_LINEAR_ACCELERATION = 10; // 0xa
     field public static final int TYPE_LOW_LATENCY_OFFBODY_DETECT = 34; // 0x22
@@ -17158,6 +17166,7 @@ package android.hardware.camera2 {
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> REQUEST_PARTIAL_RESULT_COUNT;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Byte> REQUEST_PIPELINE_MAX_DEPTH;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Float> SCALER_AVAILABLE_MAX_DIGITAL_ZOOM;
+    field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> SCALER_AVAILABLE_ROTATE_AND_CROP_MODES;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> SCALER_CROPPING_TYPE;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<android.hardware.camera2.params.MandatoryStreamCombination[]> SCALER_MANDATORY_STREAM_COMBINATIONS;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<android.hardware.camera2.params.StreamConfigurationMap> SCALER_STREAM_CONFIGURATION_MAP;
@@ -17438,6 +17447,11 @@ package android.hardware.camera2 {
     field public static final int REQUEST_AVAILABLE_CAPABILITIES_YUV_REPROCESSING = 7; // 0x7
     field public static final int SCALER_CROPPING_TYPE_CENTER_ONLY = 0; // 0x0
     field public static final int SCALER_CROPPING_TYPE_FREEFORM = 1; // 0x1
+    field public static final int SCALER_ROTATE_AND_CROP_180 = 2; // 0x2
+    field public static final int SCALER_ROTATE_AND_CROP_270 = 3; // 0x3
+    field public static final int SCALER_ROTATE_AND_CROP_90 = 1; // 0x1
+    field public static final int SCALER_ROTATE_AND_CROP_AUTO = 4; // 0x4
+    field public static final int SCALER_ROTATE_AND_CROP_NONE = 0; // 0x0
     field public static final int SENSOR_INFO_COLOR_FILTER_ARRANGEMENT_BGGR = 3; // 0x3
     field public static final int SENSOR_INFO_COLOR_FILTER_ARRANGEMENT_GBRG = 2; // 0x2
     field public static final int SENSOR_INFO_COLOR_FILTER_ARRANGEMENT_GRBG = 1; // 0x1
@@ -17573,6 +17587,7 @@ package android.hardware.camera2 {
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> NOISE_REDUCTION_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Float> REPROCESS_EFFECTIVE_EXPOSURE_FACTOR;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<android.graphics.Rect> SCALER_CROP_REGION;
+    field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> SCALER_ROTATE_AND_CROP;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Long> SENSOR_EXPOSURE_TIME;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Long> SENSOR_FRAME_DURATION;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> SENSOR_SENSITIVITY;
@@ -17669,6 +17684,7 @@ package android.hardware.camera2 {
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Float> REPROCESS_EFFECTIVE_EXPOSURE_FACTOR;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Byte> REQUEST_PIPELINE_DEPTH;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<android.graphics.Rect> SCALER_CROP_REGION;
+    field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> SCALER_ROTATE_AND_CROP;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<float[]> SENSOR_DYNAMIC_BLACK_LEVEL;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> SENSOR_DYNAMIC_WHITE_LEVEL;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Long> SENSOR_EXPOSURE_TIME;
@@ -25974,6 +25990,7 @@ package android.media {
     field public static final String KEY_CAPTURE_RATE = "capture-rate";
     field public static final String KEY_CHANNEL_COUNT = "channel-count";
     field public static final String KEY_CHANNEL_MASK = "channel-mask";
+    field public static final String KEY_CODECS_STRING = "codecs-string";
     field public static final String KEY_COLOR_FORMAT = "color-format";
     field public static final String KEY_COLOR_RANGE = "color-range";
     field public static final String KEY_COLOR_STANDARD = "color-standard";
@@ -29607,6 +29624,18 @@ package android.net {
     method public long getReportTimestamp();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.ConnectivityDiagnosticsManager.ConnectivityReport> CREATOR;
+    field public static final String KEY_NETWORK_PROBES_ATTEMPTED_BITMASK = "networkProbesAttemped";
+    field public static final String KEY_NETWORK_PROBES_SUCCEEDED_BITMASK = "networkProbesSucceeded";
+    field public static final String KEY_NETWORK_VALIDATION_RESULT = "networkValidationResult";
+    field public static final int NETWORK_PROBE_DNS = 4; // 0x4
+    field public static final int NETWORK_PROBE_FALLBACK = 32; // 0x20
+    field public static final int NETWORK_PROBE_HTTP = 8; // 0x8
+    field public static final int NETWORK_PROBE_HTTPS = 16; // 0x10
+    field public static final int NETWORK_PROBE_PRIVATE_DNS = 64; // 0x40
+    field public static final int NETWORK_VALIDATION_RESULT_INVALID = 0; // 0x0
+    field public static final int NETWORK_VALIDATION_RESULT_PARTIALLY_VALID = 2; // 0x2
+    field public static final int NETWORK_VALIDATION_RESULT_SKIPPED = 3; // 0x3
+    field public static final int NETWORK_VALIDATION_RESULT_VALID = 1; // 0x1
   }
 
   public static final class ConnectivityDiagnosticsManager.DataStallReport implements android.os.Parcelable {
@@ -29620,6 +29649,9 @@ package android.net {
     field @NonNull public static final android.os.Parcelable.Creator<android.net.ConnectivityDiagnosticsManager.DataStallReport> CREATOR;
     field public static final int DETECTION_METHOD_DNS_EVENTS = 1; // 0x1
     field public static final int DETECTION_METHOD_TCP_METRICS = 2; // 0x2
+    field public static final String KEY_DNS_CONSECUTIVE_TIMEOUTS = "dnsConsecutiveTimeouts";
+    field public static final String KEY_TCP_METRICS_COLLECTION_PERIOD_MILLIS = "tcpMetricsCollectionPeriodMillis";
+    field public static final String KEY_TCP_PACKET_FAIL_RATE = "tcpPacketFailRate";
   }
 
   public class ConnectivityManager {
@@ -29760,6 +29792,35 @@ package android.net {
 
   public static class DnsResolver.DnsException extends java.lang.Exception {
     field public final int code;
+  }
+
+  public final class Ikev2VpnProfile extends android.net.PlatformVpnProfile {
+    method @NonNull public java.util.List<java.lang.String> getAllowedAlgorithms();
+    method public int getMaxMtu();
+    method @Nullable public String getPassword();
+    method @Nullable public byte[] getPresharedKey();
+    method @Nullable public android.net.ProxyInfo getProxyInfo();
+    method @Nullable public java.security.PrivateKey getRsaPrivateKey();
+    method @NonNull public String getServerAddr();
+    method @Nullable public java.security.cert.X509Certificate getServerRootCaCert();
+    method @Nullable public java.security.cert.X509Certificate getUserCert();
+    method @NonNull public String getUserIdentity();
+    method @Nullable public String getUsername();
+    method public boolean isBypassable();
+    method public boolean isMetered();
+  }
+
+  public static final class Ikev2VpnProfile.Builder {
+    ctor public Ikev2VpnProfile.Builder(@NonNull String, @NonNull String);
+    method @NonNull public android.net.Ikev2VpnProfile build();
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setAllowedAlgorithms(@NonNull java.util.List<java.lang.String>);
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setAuthDigitalSignature(@NonNull java.security.cert.X509Certificate, @NonNull java.security.PrivateKey, @Nullable java.security.cert.X509Certificate);
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setAuthPsk(@NonNull byte[]);
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setAuthUsernamePassword(@NonNull String, @NonNull String, @Nullable java.security.cert.X509Certificate);
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setBypassable(boolean);
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setMaxMtu(int);
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setMetered(boolean);
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setProxy(@Nullable android.net.ProxyInfo);
   }
 
   public class InetAddresses {
@@ -29990,6 +30051,7 @@ package android.net {
     method public int getLinkDownstreamBandwidthKbps();
     method public int getLinkUpstreamBandwidthKbps();
     method @Nullable public android.net.NetworkSpecifier getNetworkSpecifier();
+    method public int getOwnerUid();
     method public int getSignalStrength();
     method @Nullable public android.net.TransportInfo getTransportInfo();
     method public boolean hasCapability(int);
@@ -29999,6 +30061,7 @@ package android.net {
     method @NonNull public android.net.NetworkCapabilities setLinkDownstreamBandwidthKbps(int);
     method @NonNull public android.net.NetworkCapabilities setLinkUpstreamBandwidthKbps(int);
     method @NonNull public android.net.NetworkCapabilities setNetworkSpecifier(@NonNull android.net.NetworkSpecifier);
+    method public void setOwnerUid(int);
     method @NonNull public android.net.NetworkCapabilities setSignalStrength(int);
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.NetworkCapabilities> CREATOR;
@@ -30108,6 +30171,14 @@ package android.net {
 
   public class ParseException extends java.lang.RuntimeException {
     field public String response;
+  }
+
+  public abstract class PlatformVpnProfile {
+    method public final int getType();
+    method @NonNull public final String getTypeString();
+    field public static final int TYPE_IKEV2_IPSEC_PSK = 7; // 0x7
+    field public static final int TYPE_IKEV2_IPSEC_RSA = 8; // 0x8
+    field public static final int TYPE_IKEV2_IPSEC_USER_PASS = 6; // 0x6
   }
 
   public final class Proxy {
@@ -30388,6 +30459,13 @@ package android.net {
 
   public static interface UrlQuerySanitizer.ValueSanitizer {
     method public String sanitize(String);
+  }
+
+  public class VpnManager {
+    method public void deleteProvisionedVpnProfile();
+    method @Nullable public android.content.Intent provisionVpnProfile(@NonNull android.net.PlatformVpnProfile);
+    method public void startProvisionedVpnProfile();
+    method public void stopProvisionedVpnProfile();
   }
 
   public class VpnService extends android.app.Service {
@@ -42772,6 +42850,7 @@ package android.service.autofill {
   public static final class FillResponse.Builder {
     ctor public FillResponse.Builder();
     method @NonNull public android.service.autofill.FillResponse.Builder addDataset(@Nullable android.service.autofill.Dataset);
+    method @NonNull public android.service.autofill.FillResponse.Builder addInlineAction(@NonNull android.service.autofill.InlinePresentation);
     method @NonNull public android.service.autofill.FillResponse build();
     method @NonNull public android.service.autofill.FillResponse.Builder disableAutofill(long);
     method @NonNull public android.service.autofill.FillResponse.Builder setAuthentication(@NonNull android.view.autofill.AutofillId[], @Nullable android.content.IntentSender, @Nullable android.widget.RemoteViews);
@@ -42801,10 +42880,11 @@ package android.service.autofill {
   }
 
   public final class InlinePresentation implements android.os.Parcelable {
-    ctor public InlinePresentation(@NonNull android.app.slice.Slice, @NonNull android.view.inline.InlinePresentationSpec);
+    ctor public InlinePresentation(@NonNull android.app.slice.Slice, @NonNull android.view.inline.InlinePresentationSpec, boolean);
     method public int describeContents();
     method @NonNull public android.view.inline.InlinePresentationSpec getInlinePresentationSpec();
     method @NonNull public android.app.slice.Slice getSlice();
+    method public boolean isPinned();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.service.autofill.InlinePresentation> CREATOR;
   }
@@ -43048,6 +43128,307 @@ package android.service.chooser {
     field public static final String BIND_PERMISSION = "android.permission.BIND_CHOOSER_TARGET_SERVICE";
     field public static final String META_DATA_NAME = "android.service.chooser.chooser_target_service";
     field public static final String SERVICE_INTERFACE = "android.service.chooser.ChooserTargetService";
+  }
+
+}
+
+package android.service.controls {
+
+  public final class Control implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public android.app.PendingIntent getAppIntent();
+    method @NonNull public String getControlId();
+    method @NonNull public android.service.controls.templates.ControlTemplate getControlTemplate();
+    method @Nullable public android.content.res.ColorStateList getCustomColor();
+    method @Nullable public android.graphics.drawable.Icon getCustomIcon();
+    method public int getDeviceType();
+    method public int getStatus();
+    method @NonNull public CharSequence getStatusText();
+    method @Nullable public CharSequence getStructure();
+    method @NonNull public CharSequence getSubtitle();
+    method @NonNull public CharSequence getTitle();
+    method @Nullable public CharSequence getZone();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.controls.Control> CREATOR;
+    field public static final int STATUS_DISABLED = 4; // 0x4
+    field public static final int STATUS_ERROR = 3; // 0x3
+    field public static final int STATUS_NOT_FOUND = 2; // 0x2
+    field public static final int STATUS_OK = 1; // 0x1
+    field public static final int STATUS_UNKNOWN = 0; // 0x0
+  }
+
+  public static final class Control.StatefulBuilder {
+    ctor public Control.StatefulBuilder(@NonNull String, @NonNull android.app.PendingIntent);
+    ctor public Control.StatefulBuilder(@NonNull android.service.controls.Control);
+    method @NonNull public android.service.controls.Control build();
+    method @NonNull public android.service.controls.Control.StatefulBuilder setAppIntent(@NonNull android.app.PendingIntent);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setControlId(@NonNull String);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setControlTemplate(@NonNull android.service.controls.templates.ControlTemplate);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setCustomColor(@Nullable android.content.res.ColorStateList);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setCustomIcon(@Nullable android.graphics.drawable.Icon);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setDeviceType(int);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setStatus(int);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setStatusText(@NonNull CharSequence);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setStructure(@Nullable CharSequence);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setSubtitle(@NonNull CharSequence);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setTitle(@NonNull CharSequence);
+    method @NonNull public android.service.controls.Control.StatefulBuilder setZone(@Nullable CharSequence);
+  }
+
+  public static final class Control.StatelessBuilder {
+    ctor public Control.StatelessBuilder(@NonNull String, @NonNull android.app.PendingIntent);
+    ctor public Control.StatelessBuilder(@NonNull android.service.controls.Control);
+    method @NonNull public android.service.controls.Control build();
+    method @NonNull public android.service.controls.Control.StatelessBuilder setAppIntent(@NonNull android.app.PendingIntent);
+    method @NonNull public android.service.controls.Control.StatelessBuilder setControlId(@NonNull String);
+    method @NonNull public android.service.controls.Control.StatelessBuilder setCustomColor(@Nullable android.content.res.ColorStateList);
+    method @NonNull public android.service.controls.Control.StatelessBuilder setCustomIcon(@Nullable android.graphics.drawable.Icon);
+    method @NonNull public android.service.controls.Control.StatelessBuilder setDeviceType(int);
+    method @NonNull public android.service.controls.Control.StatelessBuilder setStructure(@Nullable CharSequence);
+    method @NonNull public android.service.controls.Control.StatelessBuilder setSubtitle(@NonNull CharSequence);
+    method @NonNull public android.service.controls.Control.StatelessBuilder setTitle(@NonNull CharSequence);
+    method @NonNull public android.service.controls.Control.StatelessBuilder setZone(@Nullable CharSequence);
+  }
+
+  public abstract class ControlsProviderService extends android.app.Service {
+    ctor public ControlsProviderService();
+    method public abstract void loadAvailableControls(@NonNull java.util.function.Consumer<java.util.List<android.service.controls.Control>>);
+    method @NonNull public final android.os.IBinder onBind(@NonNull android.content.Intent);
+    method public abstract void performControlAction(@NonNull String, @NonNull android.service.controls.actions.ControlAction, @NonNull java.util.function.Consumer<java.lang.Integer>);
+    method @NonNull public abstract java.util.concurrent.Flow.Publisher<android.service.controls.Control> publisherFor(@NonNull java.util.List<java.lang.String>);
+    field public static final String SERVICE_CONTROLS = "android.service.controls.ControlsProviderService";
+    field @NonNull public static final String TAG = "ControlsProviderService";
+  }
+
+  public class DeviceTypes {
+    method public static boolean validDeviceType(int);
+    field public static final int TYPE_AC_HEATER = 1; // 0x1
+    field public static final int TYPE_AC_UNIT = 2; // 0x2
+    field public static final int TYPE_AIR_FRESHENER = 3; // 0x3
+    field public static final int TYPE_AIR_PURIFIER = 4; // 0x4
+    field public static final int TYPE_AWNING = 33; // 0x21
+    field public static final int TYPE_BLINDS = 34; // 0x22
+    field public static final int TYPE_CAMERA = 50; // 0x32
+    field public static final int TYPE_CLOSET = 35; // 0x23
+    field public static final int TYPE_COFFEE_MAKER = 5; // 0x5
+    field public static final int TYPE_CURTAIN = 36; // 0x24
+    field public static final int TYPE_DEHUMIDIFIER = 6; // 0x6
+    field public static final int TYPE_DISHWASHER = 24; // 0x18
+    field public static final int TYPE_DISPLAY = 7; // 0x7
+    field public static final int TYPE_DOOR = 37; // 0x25
+    field public static final int TYPE_DOORBELL = 51; // 0x33
+    field public static final int TYPE_DRAWER = 38; // 0x26
+    field public static final int TYPE_DRYER = 25; // 0x19
+    field public static final int TYPE_FAN = 8; // 0x8
+    field public static final int TYPE_GARAGE = 39; // 0x27
+    field public static final int TYPE_GATE = 40; // 0x28
+    field public static final int TYPE_GENERIC_ARM_DISARM = -5; // 0xfffffffb
+    field public static final int TYPE_GENERIC_LOCK_UNLOCK = -4; // 0xfffffffc
+    field public static final int TYPE_GENERIC_ON_OFF = -1; // 0xffffffff
+    field public static final int TYPE_GENERIC_OPEN_CLOSE = -3; // 0xfffffffd
+    field public static final int TYPE_GENERIC_START_STOP = -2; // 0xfffffffe
+    field public static final int TYPE_GENERIC_TEMP_SETTING = -6; // 0xfffffffa
+    field public static final int TYPE_GENERIC_VIEWSTREAM = -7; // 0xfffffff9
+    field public static final int TYPE_HEATER = 47; // 0x2f
+    field public static final int TYPE_HOOD = 10; // 0xa
+    field public static final int TYPE_HUMIDIFIER = 11; // 0xb
+    field public static final int TYPE_KETTLE = 12; // 0xc
+    field public static final int TYPE_LIGHT = 13; // 0xd
+    field public static final int TYPE_LOCK = 45; // 0x2d
+    field public static final int TYPE_MICROWAVE = 14; // 0xe
+    field public static final int TYPE_MOP = 26; // 0x1a
+    field public static final int TYPE_MOWER = 27; // 0x1b
+    field public static final int TYPE_MULTICOOKER = 28; // 0x1c
+    field public static final int TYPE_OUTLET = 15; // 0xf
+    field public static final int TYPE_PERGOLA = 41; // 0x29
+    field public static final int TYPE_RADIATOR = 16; // 0x10
+    field public static final int TYPE_REFRIGERATOR = 48; // 0x30
+    field public static final int TYPE_REMOTE_CONTROL = 17; // 0x11
+    field public static final int TYPE_SECURITY_SYSTEM = 46; // 0x2e
+    field public static final int TYPE_SET_TOP = 18; // 0x12
+    field public static final int TYPE_SHOWER = 29; // 0x1d
+    field public static final int TYPE_SHUTTER = 42; // 0x2a
+    field public static final int TYPE_SPRINKLER = 30; // 0x1e
+    field public static final int TYPE_STANDMIXER = 19; // 0x13
+    field public static final int TYPE_STYLER = 20; // 0x14
+    field public static final int TYPE_SWITCH = 21; // 0x15
+    field public static final int TYPE_THERMOSTAT = 49; // 0x31
+    field public static final int TYPE_TV = 22; // 0x16
+    field public static final int TYPE_UNKNOWN = 0; // 0x0
+    field public static final int TYPE_VACUUM = 32; // 0x20
+    field public static final int TYPE_VALVE = 44; // 0x2c
+    field public static final int TYPE_WASHER = 31; // 0x1f
+    field public static final int TYPE_WATER_HEATER = 23; // 0x17
+    field public static final int TYPE_WINDOW = 43; // 0x2b
+  }
+
+}
+
+package android.service.controls.actions {
+
+  public final class BooleanAction extends android.service.controls.actions.ControlAction {
+    ctor public BooleanAction(@NonNull String, boolean);
+    ctor public BooleanAction(@NonNull String, boolean, @Nullable String);
+    method public int getActionType();
+    method public boolean getNewState();
+  }
+
+  public final class CommandAction extends android.service.controls.actions.ControlAction {
+    ctor public CommandAction(@NonNull String, @Nullable String);
+    ctor public CommandAction(@NonNull String);
+    method public int getActionType();
+  }
+
+  public abstract class ControlAction {
+    method public abstract int getActionType();
+    method @Nullable public String getChallengeValue();
+    method @NonNull public String getTemplateId();
+    method public static final boolean isValidResponse(int);
+    field @NonNull public static final android.service.controls.actions.ControlAction ERROR_ACTION;
+    field public static final int RESPONSE_CHALLENGE_ACK = 3; // 0x3
+    field public static final int RESPONSE_CHALLENGE_PASSPHRASE = 5; // 0x5
+    field public static final int RESPONSE_CHALLENGE_PIN = 4; // 0x4
+    field public static final int RESPONSE_FAIL = 2; // 0x2
+    field public static final int RESPONSE_OK = 1; // 0x1
+    field public static final int RESPONSE_UNKNOWN = 0; // 0x0
+    field public static final int TYPE_BOOLEAN = 1; // 0x1
+    field public static final int TYPE_COMMAND = 5; // 0x5
+    field public static final int TYPE_ERROR = -1; // 0xffffffff
+    field public static final int TYPE_FLOAT = 2; // 0x2
+    field public static final int TYPE_MODE = 4; // 0x4
+    field public static final int TYPE_MULTI_FLOAT = 3; // 0x3
+  }
+
+  public final class FloatAction extends android.service.controls.actions.ControlAction {
+    ctor public FloatAction(@NonNull String, float);
+    ctor public FloatAction(@NonNull String, float, @Nullable String);
+    method public int getActionType();
+    method public float getNewValue();
+  }
+
+  public final class ModeAction extends android.service.controls.actions.ControlAction {
+    ctor public ModeAction(@NonNull String, int, @Nullable String);
+    ctor public ModeAction(@NonNull String, int);
+    method public int getActionType();
+    method public int getNewMode();
+  }
+
+  public final class MultiFloatAction extends android.service.controls.actions.ControlAction {
+    ctor public MultiFloatAction(@NonNull String, @NonNull float[], @Nullable String);
+    ctor public MultiFloatAction(@NonNull String, @NonNull float[]);
+    method public int getActionType();
+    method @NonNull public float[] getNewValues();
+  }
+
+}
+
+package android.service.controls.templates {
+
+  public final class ControlButton implements android.os.Parcelable {
+    ctor public ControlButton(boolean, @NonNull CharSequence);
+    method public int describeContents();
+    method @NonNull public CharSequence getActionDescription();
+    method public boolean isChecked();
+    method @NonNull public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.controls.templates.ControlButton> CREATOR;
+  }
+
+  public abstract class ControlTemplate {
+    method @NonNull public String getTemplateId();
+    method public abstract int getTemplateType();
+    field @NonNull public static final android.service.controls.templates.ControlTemplate ERROR_TEMPLATE;
+    field @NonNull public static final android.service.controls.templates.ControlTemplate NO_TEMPLATE;
+    field public static final int TYPE_DISCRETE_TOGGLE = 4; // 0x4
+    field public static final int TYPE_ERROR = -1; // 0xffffffff
+    field public static final int TYPE_NONE = 0; // 0x0
+    field public static final int TYPE_RANGE = 2; // 0x2
+    field public static final int TYPE_STATELESS = 8; // 0x8
+    field public static final int TYPE_TEMPERATURE = 7; // 0x7
+    field public static final int TYPE_THUMBNAIL = 3; // 0x3
+    field public static final int TYPE_TOGGLE = 1; // 0x1
+    field public static final int TYPE_TOGGLE_RANGE = 6; // 0x6
+  }
+
+  public final class CoordinatedRangeTemplate extends android.service.controls.templates.ControlTemplate {
+    ctor public CoordinatedRangeTemplate(@NonNull String, float, @NonNull android.service.controls.templates.RangeTemplate, @NonNull android.service.controls.templates.RangeTemplate);
+    ctor public CoordinatedRangeTemplate(@NonNull String, float, float, float, float, float, float, float, float, @Nullable CharSequence);
+    method public float getCurrentValueHigh();
+    method public float getCurrentValueLow();
+    method @NonNull public CharSequence getFormatString();
+    method public float getMaxValueHigh();
+    method public float getMaxValueLow();
+    method public float getMinGap();
+    method public float getMinValueHigh();
+    method public float getMinValueLow();
+    method @NonNull public android.service.controls.templates.RangeTemplate getRangeHigh();
+    method @NonNull public android.service.controls.templates.RangeTemplate getRangeLow();
+    method public float getStepValue();
+    method public int getTemplateType();
+  }
+
+  public final class DiscreteToggleTemplate extends android.service.controls.templates.ControlTemplate {
+    ctor public DiscreteToggleTemplate(@NonNull String, @NonNull android.service.controls.templates.ControlButton, @NonNull android.service.controls.templates.ControlButton);
+    method @NonNull public android.service.controls.templates.ControlButton getNegativeButton();
+    method @NonNull public android.service.controls.templates.ControlButton getPositiveButton();
+    method public int getTemplateType();
+  }
+
+  public final class RangeTemplate extends android.service.controls.templates.ControlTemplate {
+    ctor public RangeTemplate(@NonNull String, float, float, float, float, @Nullable CharSequence);
+    method public float getCurrentValue();
+    method @NonNull public CharSequence getFormatString();
+    method public float getMaxValue();
+    method public float getMinValue();
+    method public float getStepValue();
+    method public int getTemplateType();
+  }
+
+  public final class StatelessTemplate extends android.service.controls.templates.ControlTemplate {
+    ctor public StatelessTemplate(@NonNull String);
+    method public int getTemplateType();
+  }
+
+  public final class TemperatureControlTemplate extends android.service.controls.templates.ControlTemplate {
+    ctor public TemperatureControlTemplate(@NonNull String, @NonNull android.service.controls.templates.ControlTemplate, int, int, int);
+    method public int getCurrentActiveMode();
+    method public int getCurrentMode();
+    method public int getModes();
+    method @NonNull public android.service.controls.templates.ControlTemplate getTemplate();
+    method public int getTemplateType();
+    field public static final int FLAG_MODE_COOL = 8; // 0x8
+    field public static final int FLAG_MODE_ECO = 32; // 0x20
+    field public static final int FLAG_MODE_HEAT = 4; // 0x4
+    field public static final int FLAG_MODE_HEAT_COOL = 16; // 0x10
+    field public static final int FLAG_MODE_OFF = 2; // 0x2
+    field public static final int MODE_COOL = 3; // 0x3
+    field public static final int MODE_ECO = 5; // 0x5
+    field public static final int MODE_HEAT = 2; // 0x2
+    field public static final int MODE_HEAT_COOL = 4; // 0x4
+    field public static final int MODE_OFF = 1; // 0x1
+    field public static final int MODE_UNKNOWN = 0; // 0x0
+  }
+
+  public final class ThumbnailTemplate extends android.service.controls.templates.ControlTemplate {
+    ctor public ThumbnailTemplate(@NonNull String, @NonNull android.graphics.drawable.Icon, @NonNull CharSequence);
+    method @NonNull public CharSequence getContentDescription();
+    method public int getTemplateType();
+    method @NonNull public android.graphics.drawable.Icon getThumbnail();
+  }
+
+  public final class ToggleRangeTemplate extends android.service.controls.templates.ControlTemplate {
+    ctor public ToggleRangeTemplate(@NonNull String, @NonNull android.service.controls.templates.ControlButton, @NonNull android.service.controls.templates.RangeTemplate);
+    ctor public ToggleRangeTemplate(@NonNull String, boolean, @NonNull CharSequence, @NonNull android.service.controls.templates.RangeTemplate);
+    method @NonNull public CharSequence getActionDescription();
+    method @NonNull public android.service.controls.templates.RangeTemplate getRange();
+    method public int getTemplateType();
+    method public boolean isChecked();
+  }
+
+  public final class ToggleTemplate extends android.service.controls.templates.ControlTemplate {
+    ctor public ToggleTemplate(@NonNull String, @NonNull android.service.controls.templates.ControlButton);
+    method @NonNull public CharSequence getContentDescription();
+    method public int getTemplateType();
+    method public boolean isChecked();
   }
 
 }
@@ -45351,6 +45732,9 @@ package android.telecom {
     field public static final int MISSED = 5; // 0x5
     field public static final int OTHER = 9; // 0x9
     field public static final String REASON_EMERGENCY_CALL_PLACED = "REASON_EMERGENCY_CALL_PLACED";
+    field public static final String REASON_EMULATING_SINGLE_CALL = "EMULATING_SINGLE_CALL";
+    field public static final String REASON_IMS_ACCESS_BLOCKED = "REASON_IMS_ACCESS_BLOCKED";
+    field public static final String REASON_WIFI_ON_BUT_WFC_OFF = "REASON_WIFI_ON_BUT_WFC_OFF";
     field public static final int REJECTED = 6; // 0x6
     field public static final int REMOTE = 3; // 0x3
     field public static final int RESTRICTED = 8; // 0x8
@@ -45679,6 +46063,7 @@ package android.telecom {
     field public static final int DURATION_SHORT = 1; // 0x1
     field public static final int DURATION_VERY_SHORT = 0; // 0x0
     field public static final String EXTRA_CALL_BACK_NUMBER = "android.telecom.extra.CALL_BACK_NUMBER";
+    field public static final String EXTRA_CALL_CREATED_TIME_MILLIS = "android.telecom.extra.CALL_CREATED_TIME_MILLIS";
     field public static final String EXTRA_CALL_DISCONNECT_CAUSE = "android.telecom.extra.CALL_DISCONNECT_CAUSE";
     field public static final String EXTRA_CALL_DISCONNECT_MESSAGE = "android.telecom.extra.CALL_DISCONNECT_MESSAGE";
     field public static final String EXTRA_CALL_DURATION = "android.telecom.extra.CALL_DURATION";
@@ -55767,6 +56152,7 @@ package android.view.contentcapture {
     method public boolean isContentCaptureEnabled();
     method public void removeData(@NonNull android.view.contentcapture.DataRemovalRequest);
     method public void setContentCaptureEnabled(boolean);
+    method public void shareData(@NonNull android.view.contentcapture.DataShareRequest, @NonNull java.util.concurrent.Executor, @NonNull android.view.contentcapture.DataShareWriteAdapter);
   }
 
   public abstract class ContentCaptureSession implements java.lang.AutoCloseable {
@@ -55813,6 +56199,24 @@ package android.view.contentcapture {
   public final class DataRemovalRequest.LocusIdRequest {
     method @NonNull public int getFlags();
     method @NonNull public android.content.LocusId getLocusId();
+  }
+
+  public final class DataShareRequest implements android.os.Parcelable {
+    ctor public DataShareRequest(@Nullable android.content.LocusId, @NonNull String);
+    method public int describeContents();
+    method @Nullable public android.content.LocusId getLocusId();
+    method @NonNull public String getMimeType();
+    method @NonNull public String getPackageName();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.contentcapture.DataShareRequest> CREATOR;
+  }
+
+  public interface DataShareWriteAdapter {
+    method public default void onError(int);
+    method public void onRejected();
+    method public void onWrite(@NonNull android.os.ParcelFileDescriptor, @NonNull android.os.CancellationSignal);
+    field public static final int ERROR_CONCURRENT_REQUEST = 1; // 0x1
+    field public static final int ERROR_UNKNOWN = 2; // 0x2
   }
 
 }
@@ -56016,10 +56420,13 @@ package android.view.inputmethod {
     method @Nullable public String[] getAutofillHints();
     method @NonNull public android.view.inline.InlinePresentationSpec getPresentationSpec();
     method @NonNull public String getSource();
+    method @NonNull public String getType();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.view.inputmethod.InlineSuggestionInfo> CREATOR;
     field public static final String SOURCE_AUTOFILL = "android:autofill";
     field public static final String SOURCE_PLATFORM = "android:platform";
+    field public static final String TYPE_ACTION = "android:autofill:action";
+    field public static final String TYPE_SUGGESTION = "android:autofill:suggestion";
   }
 
   public final class InlineSuggestionsRequest implements android.os.Parcelable {
