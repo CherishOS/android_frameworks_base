@@ -2873,6 +2873,8 @@ package android.accessibilityservice {
     method public final boolean performGlobalAction(int);
     method public final void setServiceInfo(android.accessibilityservice.AccessibilityServiceInfo);
     method public boolean takeScreenshot(int, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.graphics.Bitmap>);
+    field public static final int GESTURE_DOUBLE_TAP = 17; // 0x11
+    field public static final int GESTURE_DOUBLE_TAP_AND_HOLD = 18; // 0x12
     field public static final int GESTURE_SWIPE_DOWN = 2; // 0x2
     field public static final int GESTURE_SWIPE_DOWN_AND_LEFT = 15; // 0xf
     field public static final int GESTURE_SWIPE_DOWN_AND_RIGHT = 16; // 0x10
@@ -2986,9 +2988,11 @@ package android.accessibilityservice {
     field @Deprecated public static final int FLAG_REQUEST_ENHANCED_WEB_ACCESSIBILITY = 8; // 0x8
     field public static final int FLAG_REQUEST_FILTER_KEY_EVENTS = 32; // 0x20
     field public static final int FLAG_REQUEST_FINGERPRINT_GESTURES = 512; // 0x200
+    field public static final int FLAG_REQUEST_MULTI_FINGER_GESTURES = 4096; // 0x1000
     field public static final int FLAG_REQUEST_SHORTCUT_WARNING_DIALOG_SPOKEN_FEEDBACK = 1024; // 0x400
     field public static final int FLAG_REQUEST_TOUCH_EXPLORATION_MODE = 4; // 0x4
     field public static final int FLAG_RETRIEVE_INTERACTIVE_WINDOWS = 64; // 0x40
+    field public static final int FLAG_SERVICE_HANDLES_DOUBLE_TAP = 2048; // 0x800
     field public int eventTypes;
     field public int feedbackType;
     field public int flags;
@@ -10169,6 +10173,7 @@ package android.content {
     field public static final String STORAGE_STATS_SERVICE = "storagestats";
     field public static final String SYSTEM_HEALTH_SERVICE = "systemhealth";
     field public static final String TELECOM_SERVICE = "telecom";
+    field public static final String TELEPHONY_IMS_SERVICE = "telephony_ims";
     field public static final String TELEPHONY_SERVICE = "phone";
     field public static final String TELEPHONY_SUBSCRIPTION_SERVICE = "telephony_subscription_service";
     field public static final String TEXT_CLASSIFICATION_SERVICE = "textclassification";
@@ -12012,6 +12017,7 @@ package android.content.pm {
     field public static final String FEATURE_CAMERA_CAPABILITY_MANUAL_POST_PROCESSING = "android.hardware.camera.capability.manual_post_processing";
     field public static final String FEATURE_CAMERA_CAPABILITY_MANUAL_SENSOR = "android.hardware.camera.capability.manual_sensor";
     field public static final String FEATURE_CAMERA_CAPABILITY_RAW = "android.hardware.camera.capability.raw";
+    field public static final String FEATURE_CAMERA_CONCURRENT = "android.hardware.camera.concurrent";
     field public static final String FEATURE_CAMERA_EXTERNAL = "android.hardware.camera.external";
     field public static final String FEATURE_CAMERA_FLASH = "android.hardware.camera.flash";
     field public static final String FEATURE_CAMERA_FRONT = "android.hardware.camera.front";
@@ -12069,6 +12075,7 @@ package android.content.pm {
     field public static final String FEATURE_SENSOR_GYROSCOPE = "android.hardware.sensor.gyroscope";
     field public static final String FEATURE_SENSOR_HEART_RATE = "android.hardware.sensor.heartrate";
     field public static final String FEATURE_SENSOR_HEART_RATE_ECG = "android.hardware.sensor.heartrate.ecg";
+    field public static final String FEATURE_SENSOR_HINGE_ANGLE = "android.hardware.sensor.hinge_angle";
     field public static final String FEATURE_SENSOR_LIGHT = "android.hardware.sensor.light";
     field public static final String FEATURE_SENSOR_PROXIMITY = "android.hardware.sensor.proximity";
     field public static final String FEATURE_SENSOR_RELATIVE_HUMIDITY = "android.hardware.sensor.relative_humidity";
@@ -17168,6 +17175,7 @@ package android.hardware.camera2 {
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Float> SCALER_AVAILABLE_MAX_DIGITAL_ZOOM;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> SCALER_AVAILABLE_ROTATE_AND_CROP_MODES;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Integer> SCALER_CROPPING_TYPE;
+    field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<android.hardware.camera2.params.MandatoryStreamCombination[]> SCALER_MANDATORY_CONCURRENT_STREAM_COMBINATIONS;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<android.hardware.camera2.params.MandatoryStreamCombination[]> SCALER_MANDATORY_STREAM_COMBINATIONS;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<android.hardware.camera2.params.StreamConfigurationMap> SCALER_STREAM_CONFIGURATION_MAP;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> SENSOR_AVAILABLE_TEST_PATTERN_MODES;
@@ -17257,6 +17265,8 @@ package android.hardware.camera2 {
   public final class CameraManager {
     method @NonNull public android.hardware.camera2.CameraCharacteristics getCameraCharacteristics(@NonNull String) throws android.hardware.camera2.CameraAccessException;
     method @NonNull public String[] getCameraIdList() throws android.hardware.camera2.CameraAccessException;
+    method @NonNull public java.util.Set<java.util.Set<java.lang.String>> getConcurrentStreamingCameraIds() throws android.hardware.camera2.CameraAccessException;
+    method @RequiresPermission(android.Manifest.permission.CAMERA) public boolean isConcurrentSessionConfigurationSupported(@NonNull java.util.Map<java.lang.String,android.hardware.camera2.params.SessionConfiguration>) throws android.hardware.camera2.CameraAccessException;
     method @RequiresPermission(android.Manifest.permission.CAMERA) public void openCamera(@NonNull String, @NonNull android.hardware.camera2.CameraDevice.StateCallback, @Nullable android.os.Handler) throws android.hardware.camera2.CameraAccessException;
     method @RequiresPermission(android.Manifest.permission.CAMERA) public void openCamera(@NonNull String, @NonNull java.util.concurrent.Executor, @NonNull android.hardware.camera2.CameraDevice.StateCallback) throws android.hardware.camera2.CameraAccessException;
     method public void registerAvailabilityCallback(@NonNull android.hardware.camera2.CameraManager.AvailabilityCallback, @Nullable android.os.Handler);
@@ -45207,6 +45217,7 @@ package android.telecom {
     method public void registerCallback(android.telecom.Call.Callback);
     method public void registerCallback(android.telecom.Call.Callback, android.os.Handler);
     method public void reject(boolean, String);
+    method public void reject(int);
     method public void removeExtras(java.util.List<java.lang.String>);
     method public void removeExtras(java.lang.String...);
     method public void respondToRttRequest(int, boolean);
@@ -45222,6 +45233,8 @@ package android.telecom {
     field public static final String EXTRA_LAST_EMERGENCY_CALLBACK_TIME_MILLIS = "android.telecom.extra.LAST_EMERGENCY_CALLBACK_TIME_MILLIS";
     field public static final String EXTRA_SILENT_RINGING_REQUESTED = "android.telecom.extra.SILENT_RINGING_REQUESTED";
     field public static final String EXTRA_SUGGESTED_PHONE_ACCOUNTS = "android.telecom.extra.SUGGESTED_PHONE_ACCOUNTS";
+    field public static final int REJECT_REASON_DECLINED = 1; // 0x1
+    field public static final int REJECT_REASON_UNWANTED = 2; // 0x2
     field public static final int STATE_ACTIVE = 4; // 0x4
     field public static final int STATE_AUDIO_PROCESSING = 12; // 0xc
     field public static final int STATE_CONNECTING = 9; // 0x9
@@ -45489,6 +45502,7 @@ package android.telecom {
     method public void onPostDialContinue(boolean);
     method public void onPullExternalCall();
     method public void onReject();
+    method public void onReject(int);
     method public void onReject(String);
     method public void onSeparate();
     method public void onShowIncomingCallUi();
@@ -48248,13 +48262,20 @@ package android.telephony.ims {
 
   public final class ImsException extends java.lang.Exception {
     method public int getCode();
+    field public static final int CODE_ERROR_INVALID_SUBSCRIPTION = 3; // 0x3
     field public static final int CODE_ERROR_SERVICE_UNAVAILABLE = 1; // 0x1
     field public static final int CODE_ERROR_UNSPECIFIED = 0; // 0x0
     field public static final int CODE_ERROR_UNSUPPORTED_OPERATION = 2; // 0x2
   }
 
+  public class ImsManager {
+    method @NonNull public android.telephony.ims.ImsMmTelManager getImsMmTelManager(int);
+    field public static final String ACTION_WFC_IMS_REGISTRATION_ERROR = "android.telephony.ims.action.WFC_IMS_REGISTRATION_ERROR";
+    field public static final String EXTRA_WFC_REGISTRATION_FAILURE_MESSAGE = "android.telephony.ims.extra.WFC_REGISTRATION_FAILURE_MESSAGE";
+    field public static final String EXTRA_WFC_REGISTRATION_FAILURE_TITLE = "android.telephony.ims.extra.WFC_REGISTRATION_FAILURE_TITLE";
+  }
+
   public class ImsMmTelManager implements android.telephony.ims.RegistrationManager {
-    method @NonNull @RequiresPermission(anyOf={"android.permission.READ_PRIVILEGED_PHONE_STATE", android.Manifest.permission.READ_PRECISE_PHONE_STATE}) public static android.telephony.ims.ImsMmTelManager createForSubscriptionId(int);
     method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public void getRegistrationState(@NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<java.lang.Integer>);
     method @RequiresPermission(anyOf={"android.permission.READ_PRIVILEGED_PHONE_STATE", android.Manifest.permission.READ_PRECISE_PHONE_STATE}) public void getRegistrationTransportType(@NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<java.lang.Integer>);
     method @RequiresPermission(anyOf={"android.permission.READ_PRIVILEGED_PHONE_STATE", android.Manifest.permission.READ_PRECISE_PHONE_STATE}) public int getVoWiFiModeSetting();
