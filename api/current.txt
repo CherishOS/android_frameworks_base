@@ -36927,6 +36927,7 @@ package android.os {
     method public static android.os.VibrationEffect createWaveform(long[], int);
     method public static android.os.VibrationEffect createWaveform(long[], int[], int);
     method public int describeContents();
+    method @NonNull public static android.os.VibrationEffect.Composition startComposition();
     field @NonNull public static final android.os.Parcelable.Creator<android.os.VibrationEffect> CREATOR;
     field public static final int DEFAULT_AMPLITUDE = -1; // 0xffffffff
     field public static final int EFFECT_CLICK = 0; // 0x0
@@ -36935,7 +36936,26 @@ package android.os {
     field public static final int EFFECT_TICK = 2; // 0x2
   }
 
+  public static class VibrationEffect.Composition {
+    ctor public VibrationEffect.Composition();
+    method @Nullable public android.os.VibrationEffect.Composition addPrimitive(int);
+    method @Nullable public android.os.VibrationEffect.Composition addPrimitive(int, @FloatRange(from=0.0f, to=1.0f) float);
+    method @Nullable public android.os.VibrationEffect.Composition addPrimitive(int, @FloatRange(from=0.0f, to=1.0f) float, @IntRange(from=0) int);
+    method @NonNull public android.os.VibrationEffect compose();
+    field public static final int PRIMITIVE_CLICK = 1; // 0x1
+    field public static final int PRIMITIVE_LIGHT_TICK = 7; // 0x7
+    field public static final int PRIMITIVE_QUICK_FALL = 6; // 0x6
+    field public static final int PRIMITIVE_QUICK_RISE = 4; // 0x4
+    field public static final int PRIMITIVE_SLOW_RISE = 5; // 0x5
+    field public static final int PRIMITIVE_SPIN = 3; // 0x3
+    field public static final int PRIMITIVE_THUD = 2; // 0x2
+  }
+
   public abstract class Vibrator {
+    method @Nullable public Boolean areAllEffectsSupported(@NonNull int...);
+    method public boolean areAllPrimitivesSupported(@NonNull int...);
+    method @Nullable public boolean[] areEffectsSupported(@NonNull int...);
+    method @NonNull public boolean[] arePrimitivesSupported(@NonNull int...);
     method @RequiresPermission(android.Manifest.permission.VIBRATE) public abstract void cancel();
     method public abstract boolean hasAmplitudeControl();
     method public abstract boolean hasVibrator();
