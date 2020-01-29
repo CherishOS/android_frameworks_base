@@ -14249,9 +14249,12 @@ package android.graphics {
     method public int getWidth();
     method public boolean isHardwareAccelerated();
     method public boolean isOpaque();
-    method public boolean quickReject(@NonNull android.graphics.RectF, @NonNull android.graphics.Canvas.EdgeType);
-    method public boolean quickReject(@NonNull android.graphics.Path, @NonNull android.graphics.Canvas.EdgeType);
-    method public boolean quickReject(float, float, float, float, @NonNull android.graphics.Canvas.EdgeType);
+    method @Deprecated public boolean quickReject(@NonNull android.graphics.RectF, @NonNull android.graphics.Canvas.EdgeType);
+    method public boolean quickReject(@NonNull android.graphics.RectF);
+    method @Deprecated public boolean quickReject(@NonNull android.graphics.Path, @NonNull android.graphics.Canvas.EdgeType);
+    method public boolean quickReject(@NonNull android.graphics.Path);
+    method @Deprecated public boolean quickReject(float, float, float, float, @NonNull android.graphics.Canvas.EdgeType);
+    method public boolean quickReject(float, float, float, float);
     method public void restore();
     method public void restoreToCount(int);
     method public void rotate(float);
@@ -14276,9 +14279,9 @@ package android.graphics {
     field public static final int ALL_SAVE_FLAG = 31; // 0x1f
   }
 
-  public enum Canvas.EdgeType {
-    enum_constant public static final android.graphics.Canvas.EdgeType AA;
-    enum_constant public static final android.graphics.Canvas.EdgeType BW;
+  @Deprecated public enum Canvas.EdgeType {
+    enum_constant @Deprecated public static final android.graphics.Canvas.EdgeType AA;
+    enum_constant @Deprecated public static final android.graphics.Canvas.EdgeType BW;
   }
 
   public enum Canvas.VertexMode {
@@ -29200,6 +29203,7 @@ package android.media.tv {
     method public void onAppPrivateCommand(@NonNull String, android.os.Bundle);
     method public abstract void onRelease();
     method public abstract void onStartRecording(@Nullable android.net.Uri);
+    method public void onStartRecording(@Nullable android.net.Uri, @NonNull android.os.Bundle);
     method public abstract void onStopRecording();
     method public abstract void onTune(android.net.Uri);
     method public void onTune(android.net.Uri, android.os.Bundle);
@@ -29250,6 +29254,7 @@ package android.media.tv {
     method public void release();
     method public void sendAppPrivateCommand(@NonNull String, android.os.Bundle);
     method public void startRecording(@Nullable android.net.Uri);
+    method public void startRecording(@Nullable android.net.Uri, @NonNull android.os.Bundle);
     method public void stopRecording();
     method public void tune(String, android.net.Uri);
     method public void tune(String, android.net.Uri, android.os.Bundle);
@@ -36483,7 +36488,7 @@ package android.os {
     method public boolean isSustainedPerformanceModeSupported();
     method public boolean isWakeLockLevelSupported(int);
     method public android.os.PowerManager.WakeLock newWakeLock(int, String);
-    method public void reboot(@Nullable String);
+    method @RequiresPermission(android.Manifest.permission.REBOOT) public void reboot(@Nullable String);
     method public void removeThermalStatusListener(@NonNull android.os.PowerManager.OnThermalStatusChangedListener);
     field public static final int ACQUIRE_CAUSES_WAKEUP = 268435456; // 0x10000000
     field public static final String ACTION_DEVICE_IDLE_MODE_CHANGED = "android.os.action.DEVICE_IDLE_MODE_CHANGED";
@@ -36925,6 +36930,7 @@ package android.os {
     method public static android.os.VibrationEffect createWaveform(long[], int);
     method public static android.os.VibrationEffect createWaveform(long[], int[], int);
     method public int describeContents();
+    method @NonNull public static android.os.VibrationEffect.Composition startComposition();
     field @NonNull public static final android.os.Parcelable.Creator<android.os.VibrationEffect> CREATOR;
     field public static final int DEFAULT_AMPLITUDE = -1; // 0xffffffff
     field public static final int EFFECT_CLICK = 0; // 0x0
@@ -36933,7 +36939,26 @@ package android.os {
     field public static final int EFFECT_TICK = 2; // 0x2
   }
 
+  public static class VibrationEffect.Composition {
+    ctor public VibrationEffect.Composition();
+    method @Nullable public android.os.VibrationEffect.Composition addPrimitive(int);
+    method @Nullable public android.os.VibrationEffect.Composition addPrimitive(int, @FloatRange(from=0.0f, to=1.0f) float);
+    method @Nullable public android.os.VibrationEffect.Composition addPrimitive(int, @FloatRange(from=0.0f, to=1.0f) float, @IntRange(from=0) int);
+    method @NonNull public android.os.VibrationEffect compose();
+    field public static final int PRIMITIVE_CLICK = 1; // 0x1
+    field public static final int PRIMITIVE_LIGHT_TICK = 7; // 0x7
+    field public static final int PRIMITIVE_QUICK_FALL = 6; // 0x6
+    field public static final int PRIMITIVE_QUICK_RISE = 4; // 0x4
+    field public static final int PRIMITIVE_SLOW_RISE = 5; // 0x5
+    field public static final int PRIMITIVE_SPIN = 3; // 0x3
+    field public static final int PRIMITIVE_THUD = 2; // 0x2
+  }
+
   public abstract class Vibrator {
+    method @Nullable public Boolean areAllEffectsSupported(@NonNull int...);
+    method public boolean areAllPrimitivesSupported(@NonNull int...);
+    method @Nullable public boolean[] areEffectsSupported(@NonNull int...);
+    method @NonNull public boolean[] arePrimitivesSupported(@NonNull int...);
     method @RequiresPermission(android.Manifest.permission.VIBRATE) public abstract void cancel();
     method public abstract boolean hasAmplitudeControl();
     method public abstract boolean hasVibrator();
@@ -39874,6 +39899,7 @@ package android.provider {
     field public static final int MATCH_ONLY = 3; // 0x3
     field public static final String MEDIA_IGNORE_FILENAME = ".nomedia";
     field public static final String MEDIA_SCANNER_VOLUME = "volume";
+    field public static final String META_DATA_REVIEW_GALLERY_PREWARM_SERVICE = "android.media.review_gallery_prewarm_service";
     field public static final String META_DATA_STILL_IMAGE_CAMERA_PREWARM_SERVICE = "android.media.still_image_camera_preview_service";
     field public static final String QUERY_ARG_MATCH_FAVORITE = "android:query-arg-match-favorite";
     field public static final String QUERY_ARG_MATCH_PENDING = "android:query-arg-match-pending";
@@ -43867,11 +43893,13 @@ package android.service.quicksettings {
     method public android.graphics.drawable.Icon getIcon();
     method public CharSequence getLabel();
     method public int getState();
+    method @Nullable public CharSequence getStateDescription();
     method @Nullable public CharSequence getSubtitle();
     method public void setContentDescription(CharSequence);
     method public void setIcon(android.graphics.drawable.Icon);
     method public void setLabel(CharSequence);
     method public void setState(int);
+    method public void setStateDescription(@Nullable CharSequence);
     method public void setSubtitle(@Nullable CharSequence);
     method public void updateTile();
     method public void writeToParcel(android.os.Parcel, int);
