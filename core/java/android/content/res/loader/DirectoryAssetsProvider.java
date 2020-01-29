@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 The Android Open Source Project
+ * Copyright (C) 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,23 +26,27 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * A {@link ResourceLoader} that searches a directory for assets.
- *
- * Assumes that resource paths are resolvable child paths of the directory passed in.
+ * A {@link AssetsProvider} that searches a directory for assets.
+ * Assumes that resource paths are resolvable child paths of the root directory passed in.
  */
-public class DirectoryResourceLoader implements ResourceLoader {
+public class DirectoryAssetsProvider implements AssetsProvider {
 
     @NonNull
     private final File mDirectory;
 
-    public DirectoryResourceLoader(@NonNull File directory) {
+    /**
+     * Creates a DirectoryAssetsProvider with given root directory.
+     *
+     * @param directory the root directory to resolve files from
+     */
+    public DirectoryAssetsProvider(@NonNull File directory) {
         this.mDirectory = directory;
     }
 
     @Nullable
     @Override
     public InputStream loadAsset(@NonNull String path, int accessMode) throws IOException {
-        File file = findFile(path);
+        final File file = findFile(path);
         if (file == null || !file.exists()) {
             return null;
         }
@@ -51,8 +55,8 @@ public class DirectoryResourceLoader implements ResourceLoader {
 
     @Nullable
     @Override
-    public ParcelFileDescriptor loadAssetFd(@NonNull String path) throws IOException {
-        File file = findFile(path);
+    public ParcelFileDescriptor loadAssetParcelFd(@NonNull String path) throws IOException {
+        final File file = findFile(path);
         if (file == null || !file.exists()) {
             return null;
         }
@@ -60,7 +64,9 @@ public class DirectoryResourceLoader implements ResourceLoader {
     }
 
     /**
-     * Find the file for the given path encoded into the resource table.
+     * Finds the file relative to the root directory.
+     *
+     * @param path the relative path of the file
      */
     @Nullable
     public File findFile(@NonNull String path) {
