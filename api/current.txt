@@ -2873,6 +2873,12 @@ package android.accessibilityservice {
     method public final boolean performGlobalAction(int);
     method public final void setServiceInfo(android.accessibilityservice.AccessibilityServiceInfo);
     method public boolean takeScreenshot(int, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.graphics.Bitmap>);
+    field public static final int GESTURE_2_FINGER_DOUBLE_TAP = 20; // 0x14
+    field public static final int GESTURE_2_FINGER_SINGLE_TAP = 19; // 0x13
+    field public static final int GESTURE_2_FINGER_TRIPLE_TAP = 21; // 0x15
+    field public static final int GESTURE_3_FINGER_DOUBLE_TAP = 23; // 0x17
+    field public static final int GESTURE_3_FINGER_SINGLE_TAP = 22; // 0x16
+    field public static final int GESTURE_3_FINGER_TRIPLE_TAP = 24; // 0x18
     field public static final int GESTURE_DOUBLE_TAP = 17; // 0x11
     field public static final int GESTURE_DOUBLE_TAP_AND_HOLD = 18; // 0x12
     field public static final int GESTURE_SWIPE_DOWN = 2; // 0x2
@@ -10116,6 +10122,7 @@ package android.content {
     field public static final int BIND_NOT_PERCEPTIBLE = 256; // 0x100
     field public static final int BIND_WAIVE_PRIORITY = 32; // 0x20
     field public static final String BIOMETRIC_SERVICE = "biometric";
+    field public static final String BLOB_STORE_SERVICE = "blob_store";
     field public static final String BLUETOOTH_SERVICE = "bluetooth";
     field public static final String CAMERA_SERVICE = "camera";
     field public static final String CAPTIONING_SERVICE = "captioning";
@@ -11665,6 +11672,7 @@ package android.content.pm {
     method public android.content.pm.LauncherApps.ShortcutQuery setQueryFlags(int);
     method public android.content.pm.LauncherApps.ShortcutQuery setShortcutIds(@Nullable java.util.List<java.lang.String>);
     field public static final int FLAG_GET_KEY_FIELDS_ONLY = 4; // 0x4
+    field public static final int FLAG_MATCH_CACHED = 16; // 0x10
     field public static final int FLAG_MATCH_DYNAMIC = 1; // 0x1
     field public static final int FLAG_MATCH_MANIFEST = 8; // 0x8
     field public static final int FLAG_MATCH_PINNED = 2; // 0x2
@@ -12358,6 +12366,7 @@ package android.content.pm {
     method @Nullable public CharSequence getShortLabel();
     method public android.os.UserHandle getUserHandle();
     method public boolean hasKeyFieldsOnly();
+    method public boolean isCached();
     method public boolean isDeclaredInManifest();
     method public boolean isDynamic();
     method public boolean isEnabled();
@@ -12407,14 +12416,20 @@ package android.content.pm {
     method @NonNull public java.util.List<android.content.pm.ShortcutInfo> getManifestShortcuts();
     method public int getMaxShortcutCountPerActivity();
     method @NonNull public java.util.List<android.content.pm.ShortcutInfo> getPinnedShortcuts();
+    method @NonNull public java.util.List<android.content.pm.ShortcutInfo> getShortcuts(int);
     method public boolean isRateLimitingActive();
     method public boolean isRequestPinShortcutSupported();
     method public void removeAllDynamicShortcuts();
     method public void removeDynamicShortcuts(@NonNull java.util.List<java.lang.String>);
+    method public void removeLongLivedShortcuts(@NonNull java.util.List<java.lang.String>);
     method public void reportShortcutUsed(String);
     method public boolean requestPinShortcut(@NonNull android.content.pm.ShortcutInfo, @Nullable android.content.IntentSender);
     method public boolean setDynamicShortcuts(@NonNull java.util.List<android.content.pm.ShortcutInfo>);
     method public boolean updateShortcuts(@NonNull java.util.List<android.content.pm.ShortcutInfo>);
+    field public static final int FLAG_MATCH_CACHED = 8; // 0x8
+    field public static final int FLAG_MATCH_DYNAMIC = 2; // 0x2
+    field public static final int FLAG_MATCH_MANIFEST = 1; // 0x1
+    field public static final int FLAG_MATCH_PINNED = 4; // 0x4
   }
 
   public class Signature implements android.os.Parcelable {
@@ -12653,8 +12668,8 @@ package android.content.res {
 
   public class Resources {
     ctor @Deprecated public Resources(android.content.res.AssetManager, android.util.DisplayMetrics, android.content.res.Configuration);
-    method public void addLoader(@NonNull android.content.res.loader.ResourceLoader, @NonNull android.content.res.loader.ResourcesProvider, @IntRange(from=0) int);
-    method public int addLoader(@NonNull android.content.res.loader.ResourceLoader, @NonNull android.content.res.loader.ResourcesProvider);
+    method public void addLoader(@NonNull android.content.res.loader.ResourcesLoader);
+    method public void clearLoaders();
     method public final void finishPreloading();
     method public final void flushLayoutCache();
     method @NonNull public android.content.res.XmlResourceParser getAnimation(@AnimRes @AnimatorRes int) throws android.content.res.Resources.NotFoundException;
@@ -12681,7 +12696,7 @@ package android.content.res {
     method @NonNull public int[] getIntArray(@ArrayRes int) throws android.content.res.Resources.NotFoundException;
     method public int getInteger(@IntegerRes int) throws android.content.res.Resources.NotFoundException;
     method @NonNull public android.content.res.XmlResourceParser getLayout(@LayoutRes int) throws android.content.res.Resources.NotFoundException;
-    method @NonNull public java.util.List<android.util.Pair<android.content.res.loader.ResourceLoader,android.content.res.loader.ResourcesProvider>> getLoaders();
+    method @NonNull public java.util.List<android.content.res.loader.ResourcesLoader> getLoaders();
     method @Deprecated public android.graphics.Movie getMovie(@RawRes int) throws android.content.res.Resources.NotFoundException;
     method @NonNull public String getQuantityString(@PluralsRes int, int, java.lang.Object...) throws android.content.res.Resources.NotFoundException;
     method @NonNull public String getQuantityString(@PluralsRes int, int) throws android.content.res.Resources.NotFoundException;
@@ -12709,8 +12724,8 @@ package android.content.res {
     method public android.content.res.AssetFileDescriptor openRawResourceFd(@RawRes int) throws android.content.res.Resources.NotFoundException;
     method public void parseBundleExtra(String, android.util.AttributeSet, android.os.Bundle) throws org.xmlpull.v1.XmlPullParserException;
     method public void parseBundleExtras(android.content.res.XmlResourceParser, android.os.Bundle) throws java.io.IOException, org.xmlpull.v1.XmlPullParserException;
-    method public int removeLoader(@NonNull android.content.res.loader.ResourceLoader);
-    method public void setLoaders(@Nullable java.util.List<android.util.Pair<android.content.res.loader.ResourceLoader,android.content.res.loader.ResourcesProvider>>);
+    method public void removeLoader(@NonNull android.content.res.loader.ResourcesLoader);
+    method public void setLoaders(@NonNull java.util.List<android.content.res.loader.ResourcesLoader>);
     method @Deprecated public void updateConfiguration(android.content.res.Configuration, android.util.DisplayMetrics);
     field @AnyRes public static final int ID_NULL = 0; // 0x0
   }
@@ -12780,27 +12795,37 @@ package android.content.res {
 
 package android.content.res.loader {
 
-  public class DirectoryResourceLoader implements android.content.res.loader.ResourceLoader {
-    ctor public DirectoryResourceLoader(@NonNull java.io.File);
+  public interface AssetsProvider {
+    method @Nullable public default java.io.InputStream loadAsset(@NonNull String, int) throws java.io.IOException;
+    method @Nullable public default android.os.ParcelFileDescriptor loadAssetParcelFd(@NonNull String) throws java.io.IOException;
+  }
+
+  public class DirectoryAssetsProvider implements android.content.res.loader.AssetsProvider {
+    ctor public DirectoryAssetsProvider(@NonNull java.io.File);
     method @Nullable public java.io.File findFile(@NonNull String);
     method @NonNull public java.io.File getDirectory();
   }
 
-  public interface ResourceLoader {
-    method @Nullable public default java.io.InputStream loadAsset(@NonNull String, int) throws java.io.IOException;
-    method @Nullable public default android.os.ParcelFileDescriptor loadAssetFd(@NonNull String) throws java.io.IOException;
-    method @Nullable public default android.graphics.drawable.Drawable loadDrawable(@NonNull android.util.TypedValue, int, int, @Nullable android.content.res.Resources.Theme);
-    method @Nullable public default android.content.res.XmlResourceParser loadXmlResourceParser(@NonNull String, @AnyRes int);
+  public class ResourcesLoader {
+    ctor public ResourcesLoader();
+    method public void addProvider(@NonNull android.content.res.loader.ResourcesProvider);
+    method public void clearProviders();
+    method @NonNull public java.util.List<android.content.res.loader.ResourcesProvider> getProviders();
+    method public void removeProvider(@NonNull android.content.res.loader.ResourcesProvider);
+    method public void setProviders(@NonNull java.util.List<android.content.res.loader.ResourcesProvider>);
   }
 
-  public final class ResourcesProvider implements java.lang.AutoCloseable java.io.Closeable {
+  public class ResourcesProvider implements java.lang.AutoCloseable java.io.Closeable {
     method public void close();
-    method @NonNull public static android.content.res.loader.ResourcesProvider empty();
+    method @NonNull public static android.content.res.loader.ResourcesProvider empty(@NonNull android.content.res.loader.AssetsProvider);
+    method @Nullable public android.content.res.loader.AssetsProvider getAssetsProvider();
     method @NonNull public static android.content.res.loader.ResourcesProvider loadFromApk(@NonNull android.os.ParcelFileDescriptor) throws java.io.IOException;
+    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromApk(@NonNull android.os.ParcelFileDescriptor, @Nullable android.content.res.loader.AssetsProvider) throws java.io.IOException;
     method @NonNull public static android.content.res.loader.ResourcesProvider loadFromApk(@NonNull android.os.SharedMemory) throws java.io.IOException;
-    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromArsc(@NonNull android.os.ParcelFileDescriptor) throws java.io.IOException;
-    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromArsc(@NonNull android.os.SharedMemory) throws java.io.IOException;
+    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromApk(@NonNull android.os.SharedMemory, @Nullable android.content.res.loader.AssetsProvider) throws java.io.IOException;
     method @NonNull public static android.content.res.loader.ResourcesProvider loadFromSplit(@NonNull android.content.Context, @NonNull String) throws java.io.IOException;
+    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromTable(@NonNull android.os.ParcelFileDescriptor, @Nullable android.content.res.loader.AssetsProvider) throws java.io.IOException;
+    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromTable(@NonNull android.os.SharedMemory, @Nullable android.content.res.loader.AssetsProvider) throws java.io.IOException;
   }
 
 }
@@ -15066,7 +15091,7 @@ package android.graphics {
     method public void cubicTo(float, float, float, float, float, float);
     method @NonNull public android.graphics.Path.FillType getFillType();
     method public void incReserve(int);
-    method public boolean isConvex();
+    method @Deprecated public boolean isConvex();
     method public boolean isEmpty();
     method public boolean isInverseFillType();
     method public boolean isRect(@Nullable android.graphics.RectF);
@@ -26704,7 +26729,6 @@ package android.media {
     method public int getVolume();
     method public int getVolumeHandling();
     method public int getVolumeMax();
-    method public boolean hasAnyFeatures(@NonNull java.util.Collection<java.lang.String>);
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field public static final int CONNECTION_STATE_CONNECTED = 2; // 0x2
     field public static final int CONNECTION_STATE_CONNECTING = 1; // 0x1
@@ -47076,6 +47100,7 @@ package android.telephony {
     method @Nullable public android.telephony.CellIdentity getCellIdentity();
     method public int getDomain();
     method public int getNrState();
+    method @NonNull public String getRegisteredPlmn();
     method public int getTransportType();
     method public boolean isRegistered();
     method public boolean isRoaming();
@@ -54166,7 +54191,7 @@ package android.view {
   public class ViewConfiguration {
     ctor @Deprecated public ViewConfiguration();
     method public static android.view.ViewConfiguration get(android.content.Context);
-    method @FloatRange(from=1.0) public static float getAmbiguousGestureMultiplier();
+    method @Deprecated @FloatRange(from=1.0) public static float getAmbiguousGestureMultiplier();
     method public static long getDefaultActionModeHideDuration();
     method public static int getDoubleTapTimeout();
     method @Deprecated public static int getEdgeSlop();
@@ -54180,6 +54205,7 @@ package android.view {
     method @Deprecated public static int getMaximumFlingVelocity();
     method @Deprecated public static int getMinimumFlingVelocity();
     method public static int getPressedStateDuration();
+    method @FloatRange(from=1.0) public float getScaledAmbiguousGestureMultiplier();
     method public int getScaledDoubleTapSlop();
     method public int getScaledEdgeSlop();
     method public int getScaledFadingEdgeLength();
@@ -56202,6 +56228,9 @@ package android.view.contentcapture {
     method public void removeData(@NonNull android.view.contentcapture.DataRemovalRequest);
     method public void setContentCaptureEnabled(boolean);
     method public void shareData(@NonNull android.view.contentcapture.DataShareRequest, @NonNull java.util.concurrent.Executor, @NonNull android.view.contentcapture.DataShareWriteAdapter);
+    field public static final int DATA_SHARE_ERROR_CONCURRENT_REQUEST = 2; // 0x2
+    field public static final int DATA_SHARE_ERROR_TIMEOUT_INTERRUPTED = 3; // 0x3
+    field public static final int DATA_SHARE_ERROR_UNKNOWN = 1; // 0x1
   }
 
   public abstract class ContentCaptureSession implements java.lang.AutoCloseable {
@@ -56263,9 +56292,7 @@ package android.view.contentcapture {
   public interface DataShareWriteAdapter {
     method public default void onError(int);
     method public void onRejected();
-    method public void onWrite(@NonNull android.os.ParcelFileDescriptor, @NonNull android.os.CancellationSignal);
-    field public static final int ERROR_CONCURRENT_REQUEST = 1; // 0x1
-    field public static final int ERROR_UNKNOWN = 2; // 0x2
+    method public void onWrite(@NonNull android.os.ParcelFileDescriptor);
   }
 
 }
