@@ -9990,7 +9990,7 @@ package android.content {
     method public abstract android.content.Context createDisplayContext(@NonNull android.view.Display);
     method @NonNull public android.content.Context createFeatureContext(@Nullable String);
     method public abstract android.content.Context createPackageContext(String, int) throws android.content.pm.PackageManager.NameNotFoundException;
-    method @NonNull public android.content.Context createWindowContext(int);
+    method @NonNull public android.content.Context createWindowContext(int, @Nullable android.os.Bundle);
     method public abstract String[] databaseList();
     method public abstract boolean deleteDatabase(String);
     method public abstract boolean deleteFile(String);
@@ -31129,11 +31129,6 @@ package android.net.wifi {
     field @Deprecated public static final String[] strings;
   }
 
-  @Deprecated public static class WifiConfiguration.SuiteBCipher {
-    field @Deprecated public static final int ECDHE_ECDSA = 0; // 0x0
-    field @Deprecated public static final int ECDHE_RSA = 1; // 0x1
-  }
-
   public class WifiEnterpriseConfig implements android.os.Parcelable {
     ctor public WifiEnterpriseConfig();
     ctor public WifiEnterpriseConfig(android.net.wifi.WifiEnterpriseConfig);
@@ -31616,6 +31611,7 @@ package android.net.wifi.hotspot2 {
     method public android.net.wifi.hotspot2.pps.Credential getCredential();
     method public android.net.wifi.hotspot2.pps.HomeSp getHomeSp();
     method public long getSubscriptionExpirationTimeInMillis();
+    method @NonNull public String getUniqueId() throws java.lang.IllegalStateException;
     method public boolean isOsuProvisioned();
     method public void setCredential(android.net.wifi.hotspot2.pps.Credential);
     method public void setHomeSp(android.net.wifi.hotspot2.pps.HomeSp);
@@ -31796,8 +31792,8 @@ package android.net.wifi.p2p {
     method public boolean isGroupOwner();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.wifi.p2p.WifiP2pGroup> CREATOR;
-    field public static final int PERSISTENT_NET_ID = -2; // 0xfffffffe
-    field public static final int TEMPORARY_NET_ID = -1; // 0xffffffff
+    field public static final int NETWORK_ID_PERSISTENT = -2; // 0xfffffffe
+    field public static final int NETWORK_ID_TEMPORARY = -1; // 0xffffffff
   }
 
   public class WifiP2pInfo implements android.os.Parcelable {
@@ -36944,7 +36940,7 @@ package android.os {
     ctor public VibrationAttributes.Builder();
     ctor public VibrationAttributes.Builder(@Nullable android.os.VibrationAttributes);
     method @NonNull public android.os.VibrationAttributes build();
-    method @NonNull public android.os.VibrationAttributes.Builder replaceFlags(int);
+    method @NonNull public android.os.VibrationAttributes.Builder setFlags(int, int);
     method @NonNull public android.os.VibrationAttributes.Builder setUsage(int);
   }
 
@@ -46381,7 +46377,6 @@ package android.telephony {
   public final class BarringInfo implements android.os.Parcelable {
     method public int describeContents();
     method @NonNull public android.telephony.BarringInfo.BarringServiceInfo getBarringServiceInfo(int);
-    method public boolean isServiceBarred(int);
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field public static final int BARRING_SERVICE_TYPE_CS_FALLBACK = 5; // 0x5
     field public static final int BARRING_SERVICE_TYPE_CS_SERVICE = 0; // 0x0
