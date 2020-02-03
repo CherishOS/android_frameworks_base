@@ -98,5 +98,6 @@ public class SystemSettings {
         Settings.System.TORCH_POWER_BUTTON_GESTURE,
         Settings.System.ENABLE_RIPPLE_EFFECT,
         Settings.System.QS_PANEL_STYLE,
+        Settings.System.RINGTONE_VIBRATION_PATTERN,
     };
 }
