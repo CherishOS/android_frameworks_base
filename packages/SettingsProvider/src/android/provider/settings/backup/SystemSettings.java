@@ -93,5 +93,6 @@ public class SystemSettings {
         Settings.System.ENABLE_RIPPLE_EFFECT,
         Settings.System.USE_OLD_MOBILETYPE,
         Settings.System.LOCKSCREEN_BATTERY_INFO,
+        Settings.System.RINGTONE_VIBRATION_PATTERN,
     };
 }
