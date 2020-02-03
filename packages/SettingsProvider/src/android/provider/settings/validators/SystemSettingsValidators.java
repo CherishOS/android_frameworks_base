@@ -218,5 +218,6 @@ public class SystemSettingsValidators {
         VALIDATORS.put(System.LOCKSCREEN_MEDIA_ART, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.NOTIFICATION_HEADERS, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.LOCKSCREEN_MEDIA_ART, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.RINGTONE_VIBRATION_PATTERN, new InclusiveIntegerRangeValidator(0, 4));
     }
 }
