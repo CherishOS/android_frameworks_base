@@ -5986,6 +5986,11 @@ public final class Settings {
          */
         @Readable
         public static final String NOTIFICATION_HEADERS = "notification_headers";
+		
+		/**
+         * @hide
+         */
+        public static final String AMBIENT_LIGHT_PULSE_FOR_ALL = "ambient_light_pulse_for_all";
 
         /**
          * These are all public system settings
