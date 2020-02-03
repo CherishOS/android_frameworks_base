@@ -227,5 +227,6 @@ public class SystemSettingsValidators {
         VALIDATORS.put(System.SCREEN_OFF_ANIMATION, ANY_INTEGER_VALIDATOR);
         VALIDATORS.put(System.NAVIGATION_BAR_INVERSE, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.VOLUME_PANEL_ON_LEFT, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.RINGTONE_VIBRATION_PATTERN, new InclusiveIntegerRangeValidator(0, 4));
     }
 }

@@ -108,5 +108,6 @@ public class SystemSettings {
         Settings.System.SCREEN_OFF_ANIMATION,
         Settings.System.NAVIGATION_BAR_INVERSE,
         Settings.System.VOLUME_PANEL_ON_LEFT,
+        Settings.System.RINGTONE_VIBRATION_PATTERN,
     };
 }
