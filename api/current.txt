@@ -1876,6 +1876,7 @@ package android {
     ctor public R.id();
     field public static final int accessibilityActionContextClick = 16908348; // 0x102003c
     field public static final int accessibilityActionHideTooltip = 16908357; // 0x1020045
+    field public static final int accessibilityActionImeEnter = 16908372; // 0x1020054
     field public static final int accessibilityActionMoveWindow = 16908354; // 0x1020042
     field public static final int accessibilityActionPageDown = 16908359; // 0x1020047
     field public static final int accessibilityActionPageLeft = 16908360; // 0x1020048
@@ -5918,6 +5919,7 @@ package android.app {
     method public long[] getVibrationPattern();
     method public boolean hasUserSetImportance();
     method public boolean hasUserSetSound();
+    method public boolean isImportantConversation();
     method public void setAllowBubbles(boolean);
     method public void setBypassDnd(boolean);
     method public void setConversationId(@Nullable String, @Nullable String);
@@ -6030,14 +6032,19 @@ package android.app {
   public static class NotificationManager.Policy implements android.os.Parcelable {
     ctor public NotificationManager.Policy(int, int, int);
     ctor public NotificationManager.Policy(int, int, int, int);
+    ctor public NotificationManager.Policy(int, int, int, int, int);
     method public int describeContents();
     method public static String priorityCategoriesToString(int);
     method public static String prioritySendersToString(int);
     method public static String suppressedEffectsToString(int);
     method public void writeToParcel(android.os.Parcel, int);
+    field public static final int CONVERSATION_SENDERS_ANYONE = 1; // 0x1
+    field public static final int CONVERSATION_SENDERS_IMPORTANT = 2; // 0x2
+    field public static final int CONVERSATION_SENDERS_NONE = 3; // 0x3
     field @NonNull public static final android.os.Parcelable.Creator<android.app.NotificationManager.Policy> CREATOR;
     field public static final int PRIORITY_CATEGORY_ALARMS = 32; // 0x20
     field public static final int PRIORITY_CATEGORY_CALLS = 8; // 0x8
+    field public static final int PRIORITY_CATEGORY_CONVERSATIONS = 256; // 0x100
     field public static final int PRIORITY_CATEGORY_EVENTS = 2; // 0x2
     field public static final int PRIORITY_CATEGORY_MEDIA = 64; // 0x40
     field public static final int PRIORITY_CATEGORY_MESSAGES = 4; // 0x4
@@ -6058,6 +6065,7 @@ package android.app {
     field public static final int SUPPRESSED_EFFECT_STATUS_BAR = 32; // 0x20
     field public final int priorityCallSenders;
     field public final int priorityCategories;
+    field public final int priorityConversationSenders;
     field public final int priorityMessageSenders;
     field public final int suppressedVisualEffects;
   }
@@ -7139,6 +7147,7 @@ package android.app.admin {
     field public static final int KEYGUARD_DISABLE_UNREDACTED_NOTIFICATIONS = 8; // 0x8
     field public static final int KEYGUARD_DISABLE_WIDGETS_ALL = 1; // 0x1
     field public static final int LEAVE_ALL_SYSTEM_APPS_ENABLED = 16; // 0x10
+    field public static final int LOCK_TASK_FEATURE_BLOCK_ACTIVITY_START_IN_TASK = 64; // 0x40
     field public static final int LOCK_TASK_FEATURE_GLOBAL_ACTIONS = 16; // 0x10
     field public static final int LOCK_TASK_FEATURE_HOME = 4; // 0x4
     field public static final int LOCK_TASK_FEATURE_KEYGUARD = 32; // 0x20
@@ -28763,6 +28772,7 @@ package android.media.tv {
     field public static final String COLUMN_DESCRIPTION = "description";
     field public static final String COLUMN_DISPLAY_NAME = "display_name";
     field public static final String COLUMN_DISPLAY_NUMBER = "display_number";
+    field public static final String COLUMN_GLOBAL_CONTENT_ID = "global_content_id";
     field public static final String COLUMN_INPUT_ID = "input_id";
     field public static final String COLUMN_INTERNAL_PROVIDER_DATA = "internal_provider_data";
     field public static final String COLUMN_INTERNAL_PROVIDER_FLAG1 = "internal_provider_flag1";
@@ -28788,6 +28798,7 @@ package android.media.tv {
     field public static final String SERVICE_TYPE_AUDIO_VIDEO = "SERVICE_TYPE_AUDIO_VIDEO";
     field public static final String SERVICE_TYPE_OTHER = "SERVICE_TYPE_OTHER";
     field public static final String TYPE_1SEG = "TYPE_1SEG";
+    field public static final String TYPE_ATSC3_T = "TYPE_ATSC3_T";
     field public static final String TYPE_ATSC_C = "TYPE_ATSC_C";
     field public static final String TYPE_ATSC_M_H = "TYPE_ATSC_M_H";
     field public static final String TYPE_ATSC_T = "TYPE_ATSC_T";
@@ -28881,6 +28892,7 @@ package android.media.tv {
     field public static final String COLUMN_SEASON_TITLE = "season_title";
     field public static final String COLUMN_SERIES_ID = "series_id";
     field public static final String COLUMN_SHORT_DESCRIPTION = "short_description";
+    field public static final String COLUMN_SPLIT_ID = "split_id";
     field public static final String COLUMN_STARTING_PRICE = "starting_price";
     field public static final String COLUMN_THUMBNAIL_ASPECT_RATIO = "poster_thumbnail_aspect_ratio";
     field public static final String COLUMN_THUMBNAIL_URI = "thumbnail_uri";
@@ -28928,6 +28940,8 @@ package android.media.tv {
     field public static final String COLUMN_EPISODE_DISPLAY_NUMBER = "episode_display_number";
     field @Deprecated public static final String COLUMN_EPISODE_NUMBER = "episode_number";
     field public static final String COLUMN_EPISODE_TITLE = "episode_title";
+    field public static final String COLUMN_EVENT_ID = "event_id";
+    field public static final String COLUMN_GLOBAL_CONTENT_ID = "global_content_id";
     field public static final String COLUMN_INTERNAL_PROVIDER_DATA = "internal_provider_data";
     field public static final String COLUMN_INTERNAL_PROVIDER_FLAG1 = "internal_provider_flag1";
     field public static final String COLUMN_INTERNAL_PROVIDER_FLAG2 = "internal_provider_flag2";
@@ -28944,6 +28958,7 @@ package android.media.tv {
     field public static final String COLUMN_SEASON_TITLE = "season_title";
     field public static final String COLUMN_SERIES_ID = "series_id";
     field public static final String COLUMN_SHORT_DESCRIPTION = "short_description";
+    field public static final String COLUMN_SPLIT_ID = "split_id";
     field public static final String COLUMN_START_TIME_UTC_MILLIS = "start_time_utc_millis";
     field public static final String COLUMN_THUMBNAIL_URI = "thumbnail_uri";
     field public static final String COLUMN_TITLE = "title";
@@ -29009,6 +29024,7 @@ package android.media.tv {
     field public static final String COLUMN_SEASON_TITLE = "season_title";
     field public static final String COLUMN_SERIES_ID = "series_id";
     field public static final String COLUMN_SHORT_DESCRIPTION = "short_description";
+    field public static final String COLUMN_SPLIT_ID = "split_id";
     field public static final String COLUMN_START_TIME_UTC_MILLIS = "start_time_utc_millis";
     field public static final String COLUMN_THUMBNAIL_URI = "thumbnail_uri";
     field public static final String COLUMN_TITLE = "title";
@@ -29069,6 +29085,7 @@ package android.media.tv {
     field public static final String COLUMN_SEASON_TITLE = "season_title";
     field public static final String COLUMN_SERIES_ID = "series_id";
     field public static final String COLUMN_SHORT_DESCRIPTION = "short_description";
+    field public static final String COLUMN_SPLIT_ID = "split_id";
     field public static final String COLUMN_STARTING_PRICE = "starting_price";
     field public static final String COLUMN_THUMBNAIL_ASPECT_RATIO = "poster_thumbnail_aspect_ratio";
     field public static final String COLUMN_THUMBNAIL_URI = "thumbnail_uri";
@@ -31426,7 +31443,7 @@ package android.net.wifi {
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsAppInteractionRequired(boolean);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsEnhancedOpen(boolean);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsHiddenSsid(boolean);
-    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsInitialAutoJoinEnabled(boolean);
+    method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsInitialAutojoinEnabled(boolean);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsMetered(boolean);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setIsUserInteractionRequired(boolean);
     method @NonNull public android.net.wifi.WifiNetworkSuggestion.Builder setPasspointConfig(@NonNull android.net.wifi.hotspot2.PasspointConfiguration);
@@ -43775,12 +43792,14 @@ package android.service.notification {
     method public int getPriorityCallSenders();
     method public int getPriorityCategoryAlarms();
     method public int getPriorityCategoryCalls();
+    method public int getPriorityCategoryConversations();
     method public int getPriorityCategoryEvents();
     method public int getPriorityCategoryMedia();
     method public int getPriorityCategoryMessages();
     method public int getPriorityCategoryReminders();
     method public int getPriorityCategoryRepeatCallers();
     method public int getPriorityCategorySystem();
+    method public int getPriorityConversationSenders();
     method public int getPriorityMessageSenders();
     method public int getVisualEffectAmbient();
     method public int getVisualEffectBadge();
@@ -43790,6 +43809,10 @@ package android.service.notification {
     method public int getVisualEffectPeek();
     method public int getVisualEffectStatusBar();
     method public void writeToParcel(android.os.Parcel, int);
+    field public static final int CONVERSATION_SENDERS_ANYONE = 1; // 0x1
+    field public static final int CONVERSATION_SENDERS_IMPORTANT = 2; // 0x2
+    field public static final int CONVERSATION_SENDERS_NONE = 3; // 0x3
+    field public static final int CONVERSATION_SENDERS_UNSET = 0; // 0x0
     field @NonNull public static final android.os.Parcelable.Creator<android.service.notification.ZenPolicy> CREATOR;
     field public static final int PEOPLE_TYPE_ANYONE = 1; // 0x1
     field public static final int PEOPLE_TYPE_CONTACTS = 2; // 0x2
@@ -43806,6 +43829,7 @@ package android.service.notification {
     method @NonNull public android.service.notification.ZenPolicy.Builder allowAlarms(boolean);
     method @NonNull public android.service.notification.ZenPolicy.Builder allowAllSounds();
     method @NonNull public android.service.notification.ZenPolicy.Builder allowCalls(int);
+    method @NonNull public android.service.notification.ZenPolicy.Builder allowConversations(int);
     method @NonNull public android.service.notification.ZenPolicy.Builder allowEvents(boolean);
     method @NonNull public android.service.notification.ZenPolicy.Builder allowMedia(boolean);
     method @NonNull public android.service.notification.ZenPolicy.Builder allowMessages(int);
@@ -55620,6 +55644,7 @@ package android.view.accessibility {
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_EXPAND;
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_FOCUS;
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_HIDE_TOOLTIP;
+    field @NonNull public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_IME_ENTER;
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_LONG_CLICK;
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_MOVE_WINDOW;
     field public static final android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction ACTION_NEXT_AT_MOVEMENT_GRANULARITY;
@@ -60796,6 +60821,7 @@ package android.widget {
     method public void setTypeface(@Nullable android.graphics.Typeface, int);
     method public void setTypeface(@Nullable android.graphics.Typeface);
     method public void setWidth(int);
+    field public static final int ACCESSIBILITY_ACTION_IME_ENTER = 16908372; // 0x1020054
     field public static final int AUTO_SIZE_TEXT_TYPE_NONE = 0; // 0x0
     field public static final int AUTO_SIZE_TEXT_TYPE_UNIFORM = 1; // 0x1
   }
