@@ -6567,6 +6567,13 @@ public final class Settings {
         public static final String KEYGAURD_BATTERY_BAR_COLOR_CUSTOM = "keygaurd_battery_bar_color_custom";
 
         /**
+         * Battery info font
+         *
+         * @hide
+         */
+        public static final String LOCKSCREEN_BATTERY_INFO_FONT = "lockscreen_battery_info_font";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
