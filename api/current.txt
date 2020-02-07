@@ -2873,7 +2873,7 @@ package android.accessibilityservice {
     method public void onSystemActionsChanged();
     method public final boolean performGlobalAction(int);
     method public final void setServiceInfo(android.accessibilityservice.AccessibilityServiceInfo);
-    method public boolean takeScreenshot(int, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.graphics.Bitmap>);
+    method public boolean takeScreenshot(int, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.accessibilityservice.AccessibilityService.ScreenshotResult>);
     field public static final int GESTURE_2_FINGER_DOUBLE_TAP = 20; // 0x14
     field public static final int GESTURE_2_FINGER_SINGLE_TAP = 19; // 0x13
     field public static final int GESTURE_2_FINGER_SWIPE_DOWN = 26; // 0x1a
@@ -2888,6 +2888,13 @@ package android.accessibilityservice {
     field public static final int GESTURE_3_FINGER_SWIPE_RIGHT = 32; // 0x20
     field public static final int GESTURE_3_FINGER_SWIPE_UP = 29; // 0x1d
     field public static final int GESTURE_3_FINGER_TRIPLE_TAP = 24; // 0x18
+    field public static final int GESTURE_4_FINGER_DOUBLE_TAP = 38; // 0x26
+    field public static final int GESTURE_4_FINGER_SINGLE_TAP = 37; // 0x25
+    field public static final int GESTURE_4_FINGER_SWIPE_DOWN = 34; // 0x22
+    field public static final int GESTURE_4_FINGER_SWIPE_LEFT = 35; // 0x23
+    field public static final int GESTURE_4_FINGER_SWIPE_RIGHT = 36; // 0x24
+    field public static final int GESTURE_4_FINGER_SWIPE_UP = 33; // 0x21
+    field public static final int GESTURE_4_FINGER_TRIPLE_TAP = 39; // 0x27
     field public static final int GESTURE_DOUBLE_TAP = 17; // 0x11
     field public static final int GESTURE_DOUBLE_TAP_AND_HOLD = 18; // 0x12
     field public static final int GESTURE_SWIPE_DOWN = 2; // 0x2
@@ -2943,6 +2950,12 @@ package android.accessibilityservice {
 
   public static interface AccessibilityService.MagnificationController.OnMagnificationChangedListener {
     method public void onMagnificationChanged(@NonNull android.accessibilityservice.AccessibilityService.MagnificationController, @NonNull android.graphics.Region, float, float, float);
+  }
+
+  public static final class AccessibilityService.ScreenshotResult {
+    method @Nullable public android.graphics.ColorSpace getColorSpace();
+    method @NonNull public android.hardware.HardwareBuffer getHardwareBuffer();
+    method public long getTimestamp();
   }
 
   public static final class AccessibilityService.SoftKeyboardController {
@@ -3850,7 +3863,7 @@ package android.app {
     method public void onPerformDirectAction(@NonNull String, @NonNull android.os.Bundle, @NonNull android.os.CancellationSignal, @NonNull java.util.function.Consumer<android.os.Bundle>);
     method public void onPictureInPictureModeChanged(boolean, android.content.res.Configuration);
     method @Deprecated public void onPictureInPictureModeChanged(boolean);
-    method public void onPictureInPictureRequested();
+    method public boolean onPictureInPictureRequested();
     method @CallSuper protected void onPostCreate(@Nullable android.os.Bundle);
     method public void onPostCreate(@Nullable android.os.Bundle, @Nullable android.os.PersistableBundle);
     method @CallSuper protected void onPostResume();
@@ -6803,7 +6816,7 @@ package android.app.admin {
     ctor public DevicePolicyKeyguardService();
     method @Nullable public void dismiss();
     method @Nullable public final android.os.IBinder onBind(@Nullable android.content.Intent);
-    method @Nullable public android.view.SurfaceControl onSurfaceReady(@Nullable android.os.IBinder);
+    method @Nullable public android.view.SurfaceControlViewHost.SurfacePackage onSurfaceReady(@Nullable android.os.IBinder);
   }
 
   public class DevicePolicyManager {
@@ -26799,7 +26812,6 @@ package android.media {
     method public abstract void onSelectRoute(@NonNull String, @NonNull String);
     method public abstract void onSetVolume(@NonNull String, int);
     method public abstract void onTransferToRoute(@NonNull String, @NonNull String);
-    method public abstract void onUpdateVolume(@NonNull String, int);
     field public static final long REQUEST_ID_UNKNOWN = 0L; // 0x0L
     field public static final String SERVICE_INTERFACE = "android.media.MediaRoute2ProviderService";
   }
@@ -30127,7 +30139,7 @@ package android.net {
     method @NonNull public android.net.NetworkCapabilities setLinkDownstreamBandwidthKbps(int);
     method @NonNull public android.net.NetworkCapabilities setLinkUpstreamBandwidthKbps(int);
     method @NonNull public android.net.NetworkCapabilities setNetworkSpecifier(@NonNull android.net.NetworkSpecifier);
-    method public void setOwnerUid(int);
+    method @NonNull public android.net.NetworkCapabilities setOwnerUid(int);
     method @NonNull public android.net.NetworkCapabilities setSignalStrength(int);
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.NetworkCapabilities> CREATOR;
@@ -35688,6 +35700,7 @@ package android.os {
     field public static final String INCREMENTAL;
     field public static final int PREVIEW_SDK_INT;
     field public static final String RELEASE;
+    field @NonNull public static final String RELEASE_OR_CODENAME;
     field @Deprecated public static final String SDK;
     field public static final int SDK_INT;
     field public static final String SECURITY_PATCH;
@@ -44062,8 +44075,8 @@ package android.service.voice {
   }
 
   public static final class AlwaysOnHotwordDetector.ModelParamRange {
-    method public int end();
-    method public int start();
+    method public int getEnd();
+    method public int getStart();
   }
 
   public class VoiceInteractionService extends android.app.Service {
