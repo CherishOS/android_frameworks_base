@@ -5712,6 +5712,12 @@ public final class Settings {
          */
         public static final String FOD_RECOGNIZING_ANIMATION = "fod_recognizing_animation";
 
+         /**
+         * FOD recognizing animation picker
+         * @hide
+         */
+        public static final String FOD_ANIM = "fod_recognizing_animation_list";
+
         /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
