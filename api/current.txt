@@ -4015,7 +4015,7 @@ package android.app {
     method public android.util.Size getAppTaskThumbnailSize();
     method public java.util.List<android.app.ActivityManager.AppTask> getAppTasks();
     method public android.content.pm.ConfigurationInfo getDeviceConfigurationInfo();
-    method @Nullable public java.util.List<android.app.ApplicationExitInfo> getHistoricalProcessExitReasons(@Nullable String, @IntRange(from=0) int, @IntRange(from=0) int);
+    method @NonNull public java.util.List<android.app.ApplicationExitInfo> getHistoricalProcessExitReasons(@Nullable String, @IntRange(from=0) int, @IntRange(from=0) int);
     method public int getLargeMemoryClass();
     method public int getLauncherLargeIconDensity();
     method public int getLauncherLargeIconSize();
@@ -4555,12 +4555,13 @@ package android.app {
     method public int getPackageUid();
     method public int getPid();
     method @NonNull public String getProcessName();
-    method public int getPss();
+    method public long getPss();
     method public int getRealUid();
     method public int getReason();
-    method public int getRss();
+    method public long getRss();
     method public int getStatus();
     method public long getTimestamp();
+    method @NonNull public android.os.UserHandle getUserHandle();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.app.ApplicationExitInfo> CREATOR;
     field public static final int REASON_ANR = 6; // 0x6
@@ -29702,7 +29703,7 @@ package android.net {
     method public long getReportTimestamp();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.ConnectivityDiagnosticsManager.ConnectivityReport> CREATOR;
-    field public static final String KEY_NETWORK_PROBES_ATTEMPTED_BITMASK = "networkProbesAttemped";
+    field public static final String KEY_NETWORK_PROBES_ATTEMPTED_BITMASK = "networkProbesAttempted";
     field public static final String KEY_NETWORK_PROBES_SUCCEEDED_BITMASK = "networkProbesSucceeded";
     field public static final String KEY_NETWORK_VALIDATION_RESULT = "networkValidationResult";
     field public static final int NETWORK_PROBE_DNS = 4; // 0x4
@@ -31295,6 +31296,7 @@ package android.net.wifi {
     method public boolean isP2pSupported();
     method public boolean isPreferredNetworkOffloadSupported();
     method @Deprecated public boolean isScanAlwaysAvailable();
+    method @RequiresPermission(android.Manifest.permission.ACCESS_WIFI_STATE) public boolean isScanThrottleEnabled();
     method public boolean isStaApConcurrencySupported();
     method public boolean isTdlsSupported();
     method public boolean isWapiSupported();
@@ -31767,7 +31769,7 @@ package android.net.wifi.p2p {
     field public static final int GROUP_OWNER_INTENT_MAX = 15; // 0xf
     field public static final int GROUP_OWNER_INTENT_MIN = 0; // 0x0
     field public String deviceAddress;
-    field public int groupOwnerIntent;
+    field @IntRange(from=0, to=15) public int groupOwnerIntent;
     field public android.net.wifi.WpsInfo wps;
   }
 
@@ -31959,14 +31961,14 @@ package android.net.wifi.p2p {
     method public int getDeviceType();
     method public int getMaxThroughput();
     method public boolean isContentProtectionSupported();
+    method public boolean isEnabled();
     method public boolean isSessionAvailable();
-    method public boolean isWfdEnabled();
     method public void setContentProtectionSupported(boolean);
-    method public void setControlPort(int);
+    method public void setControlPort(@IntRange(from=0) int);
     method public boolean setDeviceType(int);
-    method public void setMaxThroughput(int);
+    method public void setEnabled(boolean);
+    method public void setMaxThroughput(@IntRange(from=0) int);
     method public void setSessionAvailable(boolean);
-    method public void setWfdEnabled(boolean);
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.wifi.p2p.WifiP2pWfdInfo> CREATOR;
     field public static final int DEVICE_TYPE_PRIMARY_SINK = 1; // 0x1
@@ -37041,6 +37043,15 @@ package android.os {
     method public void set(android.os.WorkSource);
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.os.WorkSource> CREATOR;
+  }
+
+}
+
+package android.os.ext.test {
+
+  @Deprecated public class Test {
+    ctor @Deprecated public Test();
+    method @Deprecated public void testE();
   }
 
 }
@@ -43994,7 +44005,7 @@ package android.service.quicksettings {
     field public static final String ACTION_QS_TILE = "android.service.quicksettings.action.QS_TILE";
     field public static final String ACTION_QS_TILE_PREFERENCES = "android.service.quicksettings.action.QS_TILE_PREFERENCES";
     field public static final String META_DATA_ACTIVE_TILE = "android.service.quicksettings.ACTIVE_TILE";
-    field public static final String META_DATA_BOOLEAN_TILE = "android.service.quicksettings.BOOLEAN_TILE";
+    field public static final String META_DATA_TOGGLEABLE_TILE = "android.service.quicksettings.TOGGLEABLE_TILE";
   }
 
 }
@@ -60834,7 +60845,6 @@ package android.widget {
     method public void setTypeface(@Nullable android.graphics.Typeface, int);
     method public void setTypeface(@Nullable android.graphics.Typeface);
     method public void setWidth(int);
-    field public static final int ACCESSIBILITY_ACTION_IME_ENTER = 16908372; // 0x1020054
     field public static final int AUTO_SIZE_TEXT_TYPE_NONE = 0; // 0x0
     field public static final int AUTO_SIZE_TEXT_TYPE_UNIFORM = 1; // 0x1
   }
