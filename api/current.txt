@@ -30780,7 +30780,6 @@ package android.net.sip {
     method public void close();
     method public void continueCall(int) throws android.net.sip.SipException;
     method public void endCall() throws android.net.sip.SipException;
-    method @Nullable public android.net.rtp.AudioGroup getAudioGroup();
     method public android.net.sip.SipProfile getLocalProfile();
     method public android.net.sip.SipProfile getPeerProfile();
     method public int getState();
@@ -30791,7 +30790,6 @@ package android.net.sip {
     method public void makeCall(android.net.sip.SipProfile, android.net.sip.SipSession, int) throws android.net.sip.SipException;
     method public void sendDtmf(int);
     method public void sendDtmf(int, android.os.Message);
-    method public void setAudioGroup(@NonNull android.net.rtp.AudioGroup);
     method public void setListener(android.net.sip.SipAudioCall.Listener);
     method public void setListener(android.net.sip.SipAudioCall.Listener, boolean);
     method public void setSpeakerMode(boolean);
@@ -30840,7 +30838,6 @@ package android.net.sip {
     method public void close(String) throws android.net.sip.SipException;
     method public android.net.sip.SipSession createSipSession(android.net.sip.SipProfile, android.net.sip.SipSession.Listener) throws android.net.sip.SipException;
     method public static String getCallId(android.content.Intent);
-    method @NonNull public java.util.List<android.net.sip.SipProfile> getListOfProfiles() throws android.net.sip.SipException;
     method public static String getOfferSessionDescription(android.content.Intent);
     method public android.net.sip.SipSession getSessionFor(android.content.Intent) throws android.net.sip.SipException;
     method public static boolean isApiSupported(android.content.Context);
@@ -30858,11 +30855,6 @@ package android.net.sip {
     method public void setRegistrationListener(String, android.net.sip.SipRegistrationListener) throws android.net.sip.SipException;
     method public android.net.sip.SipAudioCall takeAudioCall(android.content.Intent, android.net.sip.SipAudioCall.Listener) throws android.net.sip.SipException;
     method public void unregister(android.net.sip.SipProfile, android.net.sip.SipRegistrationListener) throws android.net.sip.SipException;
-    field public static final String ACTION_SIP_CALL_OPTION_CHANGED = "android.net.sip.action.SIP_CALL_OPTION_CHANGED";
-    field public static final String ACTION_SIP_INCOMING_CALL = "android.net.sip.action.SIP_INCOMING_CALL";
-    field public static final String ACTION_SIP_REMOVE_PROFILE = "android.net.sip.action.SIP_REMOVE_PROFILE";
-    field public static final String ACTION_SIP_SERVICE_UP = "android.net.sip.action.SIP_SERVICE_UP";
-    field public static final String ACTION_START_SIP = "android.net.sip.action.START_SIP";
     field public static final String EXTRA_CALL_ID = "android:sipCallID";
     field public static final String EXTRA_OFFER_SD = "android:sipOfferSD";
     field public static final int INCOMING_CALL_RESULT_CODE = 101; // 0x65
@@ -30872,7 +30864,6 @@ package android.net.sip {
     method public int describeContents();
     method public String getAuthUserName();
     method public boolean getAutoRegistration();
-    method public int getCallingUid();
     method public String getDisplayName();
     method public String getPassword();
     method public int getPort();
@@ -40426,6 +40417,7 @@ package android.provider {
     field public static final String EXTRA_BATTERY_SAVER_MODE_ENABLED = "android.settings.extra.battery_saver_mode_enabled";
     field public static final String EXTRA_BIOMETRIC_MINIMUM_STRENGTH_REQUIRED = "android.provider.extra.BIOMETRIC_MINIMUM_STRENGTH_REQUIRED";
     field public static final String EXTRA_CHANNEL_ID = "android.provider.extra.CHANNEL_ID";
+    field public static final String EXTRA_CONVERSATION_ID = "android.provider.extra.CONVERSATION_ID";
     field public static final String EXTRA_DO_NOT_DISTURB_MODE_ENABLED = "android.settings.extra.do_not_disturb_mode_enabled";
     field public static final String EXTRA_DO_NOT_DISTURB_MODE_MINUTES = "android.settings.extra.do_not_disturb_mode_minutes";
     field public static final String EXTRA_EASY_CONNECT_ATTEMPTED_SSID = "android.provider.extra.EASY_CONNECT_ATTEMPTED_SSID";
@@ -47322,7 +47314,7 @@ package android.telephony {
     method public void onSignalStrengthsChanged(android.telephony.SignalStrength);
     method public void onUserMobileDataStateChanged(boolean);
     field public static final int LISTEN_ACTIVE_DATA_SUBSCRIPTION_ID_CHANGE = 4194304; // 0x400000
-    field @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public static final int LISTEN_BARRING_INFO = -2147483648; // 0x80000000
+    field @RequiresPermission(android.Manifest.permission.READ_PRECISE_PHONE_STATE) public static final int LISTEN_BARRING_INFO = -2147483648; // 0x80000000
     field @RequiresPermission("android.permission.READ_PRECISE_PHONE_STATE") public static final int LISTEN_CALL_DISCONNECT_CAUSES = 33554432; // 0x2000000
     field public static final int LISTEN_CALL_FORWARDING_INDICATOR = 8; // 0x8
     field public static final int LISTEN_CALL_STATE = 32; // 0x20
@@ -47335,7 +47327,7 @@ package android.telephony {
     field public static final int LISTEN_MESSAGE_WAITING_INDICATOR = 4; // 0x4
     field public static final int LISTEN_NONE = 0; // 0x0
     field @RequiresPermission("android.permission.READ_PRECISE_PHONE_STATE") public static final int LISTEN_PRECISE_DATA_CONNECTION_STATE = 4096; // 0x1000
-    field @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public static final int LISTEN_REGISTRATION_FAILURE = 1073741824; // 0x40000000
+    field @RequiresPermission(android.Manifest.permission.READ_PRECISE_PHONE_STATE) public static final int LISTEN_REGISTRATION_FAILURE = 1073741824; // 0x40000000
     field public static final int LISTEN_SERVICE_STATE = 1; // 0x1
     field @Deprecated public static final int LISTEN_SIGNAL_STRENGTH = 2; // 0x2
     field public static final int LISTEN_SIGNAL_STRENGTHS = 256; // 0x100
@@ -60899,7 +60891,7 @@ package android.widget {
     method public int getGravity();
     method public float getHorizontalMargin();
     method public float getVerticalMargin();
-    method @Deprecated public android.view.View getView();
+    method @Deprecated @Nullable public android.view.View getView();
     method public int getXOffset();
     method public int getYOffset();
     method public static android.widget.Toast makeText(android.content.Context, CharSequence, int);
