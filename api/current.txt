@@ -42600,6 +42600,7 @@ package android.security.keystore {
     method @NonNull public String getKeystoreAlias();
     method public int getPurposes();
     method @NonNull public String[] getSignaturePaddings();
+    method public int getUserAuthenticationType();
     method public int getUserAuthenticationValidityDurationSeconds();
     method @NonNull public boolean isDigestsSpecified();
     method public boolean isInvalidatedByBiometricEnrollment();
@@ -42634,9 +42635,10 @@ package android.security.keystore {
     method @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setRandomizedEncryptionRequired(boolean);
     method @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setSignaturePaddings(java.lang.String...);
     method @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setUnlockedDeviceRequired(boolean);
+    method @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationParameters(@IntRange(from=0xffffffff) int, int);
     method @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationRequired(boolean);
     method @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationValidWhileOnBody(boolean);
-    method @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationValidityDurationSeconds(@IntRange(from=0xffffffff) int);
+    method @Deprecated @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationValidityDurationSeconds(@IntRange(from=0xffffffff) int);
     method @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setUserConfirmationRequired(boolean);
     method @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setUserPresenceRequired(boolean);
   }
@@ -42653,6 +42655,7 @@ package android.security.keystore {
     method public int getOrigin();
     method public int getPurposes();
     method @NonNull public String[] getSignaturePaddings();
+    method public int getUserAuthenticationType();
     method public int getUserAuthenticationValidityDurationSeconds();
     method public boolean isInsideSecureHardware();
     method public boolean isInvalidatedByBiometricEnrollment();
@@ -42676,6 +42679,8 @@ package android.security.keystore {
   }
 
   public abstract class KeyProperties {
+    field public static final int AUTH_BIOMETRIC_STRONG = 2; // 0x2
+    field public static final int AUTH_DEVICE_CREDENTIAL = 1; // 0x1
     field public static final String BLOCK_MODE_CBC = "CBC";
     field public static final String BLOCK_MODE_CTR = "CTR";
     field public static final String BLOCK_MODE_ECB = "ECB";
@@ -42722,6 +42727,7 @@ package android.security.keystore {
     method @Nullable public java.util.Date getKeyValidityStart();
     method public int getPurposes();
     method @NonNull public String[] getSignaturePaddings();
+    method public int getUserAuthenticationType();
     method public int getUserAuthenticationValidityDurationSeconds();
     method public boolean isDigestsSpecified();
     method public boolean isInvalidatedByBiometricEnrollment();
@@ -42747,9 +42753,10 @@ package android.security.keystore {
     method @NonNull public android.security.keystore.KeyProtection.Builder setRandomizedEncryptionRequired(boolean);
     method @NonNull public android.security.keystore.KeyProtection.Builder setSignaturePaddings(java.lang.String...);
     method @NonNull public android.security.keystore.KeyProtection.Builder setUnlockedDeviceRequired(boolean);
+    method @NonNull public android.security.keystore.KeyProtection.Builder setUserAuthenticationParameters(@IntRange(from=0xffffffff) int, int);
     method @NonNull public android.security.keystore.KeyProtection.Builder setUserAuthenticationRequired(boolean);
     method @NonNull public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidWhileOnBody(boolean);
-    method @NonNull public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidityDurationSeconds(@IntRange(from=0xffffffff) int);
+    method @Deprecated @NonNull public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidityDurationSeconds(@IntRange(from=0xffffffff) int);
     method @NonNull public android.security.keystore.KeyProtection.Builder setUserConfirmationRequired(boolean);
     method @NonNull public android.security.keystore.KeyProtection.Builder setUserPresenceRequired(boolean);
   }
