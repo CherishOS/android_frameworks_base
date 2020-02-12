@@ -7574,7 +7574,9 @@ package android.app.blob {
 
   public class BlobStoreManager {
     method public void acquireLease(@NonNull android.app.blob.BlobHandle, @IdRes int, long) throws java.io.IOException;
+    method public void acquireLease(@NonNull android.app.blob.BlobHandle, @NonNull CharSequence, long) throws java.io.IOException;
     method public void acquireLease(@NonNull android.app.blob.BlobHandle, @IdRes int) throws java.io.IOException;
+    method public void acquireLease(@NonNull android.app.blob.BlobHandle, @NonNull CharSequence) throws java.io.IOException;
     method @IntRange(from=1) public long createSession(@NonNull android.app.blob.BlobHandle) throws java.io.IOException;
     method public void deleteSession(@IntRange(from=1) long) throws java.io.IOException;
     method @NonNull public android.os.ParcelFileDescriptor openBlob(@NonNull android.app.blob.BlobHandle) throws java.io.IOException;
@@ -23475,6 +23477,69 @@ package android.location {
     method public static boolean isPresent();
   }
 
+  public final class GnssAntennaInfo implements android.os.Parcelable {
+    ctor public GnssAntennaInfo(double, @NonNull android.location.GnssAntennaInfo.PhaseCenterOffsetCoordinates, @Nullable android.location.GnssAntennaInfo.PhaseCenterVariationCorrections, @Nullable android.location.GnssAntennaInfo.SignalGainCorrections);
+    method public int describeContents();
+    method public double getCarrierFrequencyMHz();
+    method @NonNull public android.location.GnssAntennaInfo.PhaseCenterOffsetCoordinates getPhaseCenterOffsetCoordinates();
+    method @Nullable public android.location.GnssAntennaInfo.PhaseCenterVariationCorrections getPhaseCenterVariationCorrections();
+    method @Nullable public android.location.GnssAntennaInfo.SignalGainCorrections getSignalGainCorrections();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.location.GnssAntennaInfo> CREATOR;
+  }
+
+  public abstract static class GnssAntennaInfo.Callback {
+    ctor public GnssAntennaInfo.Callback();
+    method public void onGnssAntennaInfoReceived(@NonNull java.util.List<android.location.GnssAntennaInfo>);
+    method public void onStatusChanged(int);
+    field public static final int STATUS_LOCATION_DISABLED = 2; // 0x2
+    field public static final int STATUS_NOT_SUPPORTED = 0; // 0x0
+    field public static final int STATUS_READY = 1; // 0x1
+  }
+
+  public static final class GnssAntennaInfo.PhaseCenterOffsetCoordinates implements android.os.Parcelable {
+    ctor public GnssAntennaInfo.PhaseCenterOffsetCoordinates(double, double, double, double, double, double);
+    method public int describeContents();
+    method public double getXCoordMillimeters();
+    method public double getXCoordUncertaintyMillimeters();
+    method public double getYCoordMillimeters();
+    method public double getYCoordUncertaintyMillimeters();
+    method public double getZCoordMillimeters();
+    method public double getZCoordUncertaintyMillimeters();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.location.GnssAntennaInfo.PhaseCenterOffsetCoordinates> CREATOR;
+  }
+
+  public static final class GnssAntennaInfo.PhaseCenterVariationCorrections implements android.os.Parcelable {
+    ctor public GnssAntennaInfo.PhaseCenterVariationCorrections(@NonNull double[][], @NonNull double[][]);
+    method public int describeContents();
+    method public double getDeltaPhi();
+    method public double getDeltaTheta();
+    method public int getNumColumns();
+    method public int getNumRows();
+    method public double getPhaseCenterVariationCorrectionMillimetersAt(int, int);
+    method public double getPhaseCenterVariationCorrectionUncertaintyMillimetersAt(int, int);
+    method @NonNull public double[][] getRawCorrectionUncertaintiesArray();
+    method @NonNull public double[][] getRawCorrectionsArray();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.location.GnssAntennaInfo.PhaseCenterVariationCorrections> CREATOR;
+  }
+
+  public static final class GnssAntennaInfo.SignalGainCorrections implements android.os.Parcelable {
+    ctor public GnssAntennaInfo.SignalGainCorrections(@NonNull double[][], @NonNull double[][]);
+    method public int describeContents();
+    method public double getDeltaPhi();
+    method public double getDeltaTheta();
+    method public int getNumColumns();
+    method public int getNumRows();
+    method @NonNull public double[][] getRawCorrectionUncertaintiesArray();
+    method @NonNull public double[][] getRawCorrectionsArray();
+    method public double getSignalGainCorrectionDbiAt(int, int);
+    method public double getSignalGainCorrectionUncertaintyDbiAt(int, int);
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.location.GnssAntennaInfo.SignalGainCorrections> CREATOR;
+  }
+
   public final class GnssClock implements android.os.Parcelable {
     method public int describeContents();
     method public double getBiasNanos();
@@ -23792,6 +23857,7 @@ package android.location {
     method @NonNull public java.util.List<java.lang.String> getProviders(@NonNull android.location.Criteria, boolean);
     method public boolean isLocationEnabled();
     method public boolean isProviderEnabled(@NonNull String);
+    method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerAntennaInfoCallback(@NonNull java.util.concurrent.Executor, @NonNull android.location.GnssAntennaInfo.Callback);
     method @Deprecated @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssMeasurementsCallback(@NonNull android.location.GnssMeasurementsEvent.Callback);
     method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssMeasurementsCallback(@NonNull android.location.GnssMeasurementsEvent.Callback, @Nullable android.os.Handler);
     method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public boolean registerGnssMeasurementsCallback(@NonNull java.util.concurrent.Executor, @NonNull android.location.GnssMeasurementsEvent.Callback);
@@ -23823,6 +23889,7 @@ package android.location {
     method public void setTestProviderEnabled(@NonNull String, boolean);
     method public void setTestProviderLocation(@NonNull String, @NonNull android.location.Location);
     method @Deprecated public void setTestProviderStatus(@NonNull String, int, @Nullable android.os.Bundle, long);
+    method public void unregisterAntennaInfoCallback(@NonNull android.location.GnssAntennaInfo.Callback);
     method public void unregisterGnssMeasurementsCallback(@NonNull android.location.GnssMeasurementsEvent.Callback);
     method public void unregisterGnssNavigationMessageCallback(@NonNull android.location.GnssNavigationMessage.Callback);
     method public void unregisterGnssStatusCallback(@NonNull android.location.GnssStatus.Callback);
@@ -43303,6 +43370,7 @@ package android.service.controls {
   public abstract class ControlsProviderService extends android.app.Service {
     ctor public ControlsProviderService();
     method public abstract void loadAvailableControls(@NonNull java.util.function.Consumer<java.util.List<android.service.controls.Control>>);
+    method public void loadSuggestedControls(int, @NonNull java.util.function.Consumer<java.util.List<android.service.controls.Control>>);
     method @NonNull public final android.os.IBinder onBind(@NonNull android.content.Intent);
     method public abstract void performControlAction(@NonNull String, @NonNull android.service.controls.actions.ControlAction, @NonNull java.util.function.Consumer<java.lang.Integer>);
     method @NonNull public abstract java.util.concurrent.Flow.Publisher<android.service.controls.Control> publisherFor(@NonNull java.util.List<java.lang.String>);
@@ -45437,7 +45505,6 @@ package android.telecom {
     field public static final int PROPERTY_GENERIC_CONFERENCE = 2; // 0x2
     field public static final int PROPERTY_HAS_CDMA_VOICE_PRIVACY = 128; // 0x80
     field public static final int PROPERTY_HIGH_DEF_AUDIO = 16; // 0x10
-    field public static final int PROPERTY_IS_ADHOC_CONFERENCE = 8192; // 0x2000
     field public static final int PROPERTY_IS_EXTERNAL_CALL = 64; // 0x40
     field public static final int PROPERTY_NETWORK_IDENTIFIED_EMERGENCY_CALL = 2048; // 0x800
     field public static final int PROPERTY_RTT = 1024; // 0x400
@@ -45515,7 +45582,6 @@ package android.telecom {
   public abstract class Conference extends android.telecom.Conferenceable {
     ctor public Conference(android.telecom.PhoneAccountHandle);
     method public final boolean addConnection(android.telecom.Connection);
-    method @NonNull public static android.telecom.Conference createFailedConference(@NonNull android.telecom.DisconnectCause, @NonNull android.telecom.PhoneAccountHandle);
     method public final void destroy();
     method public final android.telecom.CallAudioState getCallAudioState();
     method public final java.util.List<android.telecom.Connection> getConferenceableConnections();
@@ -45530,8 +45596,6 @@ package android.telecom {
     method public final android.telecom.StatusHints getStatusHints();
     method public android.telecom.Connection.VideoProvider getVideoProvider();
     method public int getVideoState();
-    method public final boolean isRingbackRequested();
-    method public void onAnswer(int);
     method public void onCallAudioStateChanged(android.telecom.CallAudioState);
     method public void onConnectionAdded(android.telecom.Connection);
     method public void onDisconnect();
@@ -45540,7 +45604,6 @@ package android.telecom {
     method public void onMerge(android.telecom.Connection);
     method public void onMerge();
     method public void onPlayDtmfTone(char);
-    method public void onReject();
     method public void onSeparate(android.telecom.Connection);
     method public void onStopDtmfTone();
     method public void onSwap();
@@ -45560,8 +45623,6 @@ package android.telecom {
     method public final void setDisconnected(android.telecom.DisconnectCause);
     method public final void setExtras(@Nullable android.os.Bundle);
     method public final void setOnHold();
-    method public final void setRingbackRequested(boolean);
-    method public final void setRinging();
     method public final void setStatusHints(android.telecom.StatusHints);
     method public final void setVideoProvider(android.telecom.Connection, android.telecom.Connection.VideoProvider);
     method public final void setVideoState(android.telecom.Connection, int);
@@ -45720,7 +45781,6 @@ package android.telecom {
     field public static final int PROPERTY_ASSISTED_DIALING_USED = 512; // 0x200
     field public static final int PROPERTY_HAS_CDMA_VOICE_PRIVACY = 32; // 0x20
     field public static final int PROPERTY_HIGH_DEF_AUDIO = 4; // 0x4
-    field public static final int PROPERTY_IS_ADHOC_CONFERENCE = 4096; // 0x1000
     field public static final int PROPERTY_IS_EXTERNAL_CALL = 16; // 0x10
     field public static final int PROPERTY_IS_RTT = 256; // 0x100
     field public static final int PROPERTY_NETWORK_IDENTIFIED_EMERGENCY_CALL = 1024; // 0x400
@@ -46136,7 +46196,6 @@ package android.telecom {
     method @Deprecated @RequiresPermission(anyOf={android.Manifest.permission.ANSWER_PHONE_CALLS, android.Manifest.permission.MODIFY_PHONE_STATE}) public void acceptRingingCall();
     method @Deprecated @RequiresPermission(anyOf={android.Manifest.permission.ANSWER_PHONE_CALLS, android.Manifest.permission.MODIFY_PHONE_STATE}) public void acceptRingingCall(int);
     method public void addNewIncomingCall(android.telecom.PhoneAccountHandle, android.os.Bundle);
-    method public void addNewIncomingConference(@NonNull android.telecom.PhoneAccountHandle, @NonNull android.os.Bundle);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public void cancelMissedCallsNotification();
     method public android.content.Intent createManageBlockedNumbersIntent();
     method @Deprecated @RequiresPermission(android.Manifest.permission.ANSWER_PHONE_CALLS) public boolean endCall();
@@ -46164,7 +46223,6 @@ package android.telecom {
     method public void registerPhoneAccount(android.telecom.PhoneAccount);
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public void showInCallScreen(boolean);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public void silenceRinger();
-    method @RequiresPermission(android.Manifest.permission.CALL_PHONE) public void startConference(@NonNull java.util.List<android.net.Uri>, @NonNull android.os.Bundle);
     method public void unregisterPhoneAccount(android.telecom.PhoneAccountHandle);
     field public static final String ACTION_CHANGE_DEFAULT_DIALER = "android.telecom.action.CHANGE_DEFAULT_DIALER";
     field public static final String ACTION_CHANGE_PHONE_ACCOUNTS = "android.telecom.action.CHANGE_PHONE_ACCOUNTS";
@@ -46691,7 +46749,6 @@ package android.telephony {
     field public static final String KEY_SIM_NETWORK_UNLOCK_ALLOW_DISMISS_BOOL = "sim_network_unlock_allow_dismiss_bool";
     field public static final String KEY_SMS_REQUIRES_DESTINATION_NUMBER_CONVERSION_BOOL = "sms_requires_destination_number_conversion_bool";
     field public static final String KEY_SUPPORT_3GPP_CALL_FORWARDING_WHILE_ROAMING_BOOL = "support_3gpp_call_forwarding_while_roaming_bool";
-    field public static final String KEY_SUPPORT_ADHOC_CONFERENCE_CALLS_BOOL = "support_adhoc_conference_calls_bool";
     field public static final String KEY_SUPPORT_CLIR_NETWORK_DEFAULT_BOOL = "support_clir_network_default_bool";
     field public static final String KEY_SUPPORT_CONFERENCE_CALL_BOOL = "support_conference_call_bool";
     field public static final String KEY_SUPPORT_EMERGENCY_SMS_OVER_IMS_BOOL = "support_emergency_sms_over_ims_bool";
