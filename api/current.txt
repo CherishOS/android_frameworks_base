@@ -91,6 +91,7 @@ package android {
     field public static final String INTERACT_ACROSS_PROFILES = "android.permission.INTERACT_ACROSS_PROFILES";
     field public static final String INTERNET = "android.permission.INTERNET";
     field public static final String KILL_BACKGROUND_PROCESSES = "android.permission.KILL_BACKGROUND_PROCESSES";
+    field public static final String LOADER_USAGE_STATS = "android.permission.LOADER_USAGE_STATS";
     field public static final String LOCATION_HARDWARE = "android.permission.LOCATION_HARDWARE";
     field public static final String MANAGE_DOCUMENTS = "android.permission.MANAGE_DOCUMENTS";
     field public static final String MANAGE_EXTERNAL_STORAGE = "android.permission.MANAGE_EXTERNAL_STORAGE";
@@ -18114,6 +18115,7 @@ package android.hardware.input {
     method public int[] getInputDeviceIds();
     method public void registerInputDeviceListener(android.hardware.input.InputManager.InputDeviceListener, android.os.Handler);
     method public void unregisterInputDeviceListener(android.hardware.input.InputManager.InputDeviceListener);
+    method @Nullable public android.view.VerifiedInputEvent verifyInputEvent(@NonNull android.view.InputEvent);
     field public static final String ACTION_QUERY_KEYBOARD_LAYOUTS = "android.hardware.input.action.QUERY_KEYBOARD_LAYOUTS";
     field public static final String META_DATA_KEYBOARD_LAYOUTS = "android.hardware.input.metadata.KEYBOARD_LAYOUTS";
   }
@@ -26881,7 +26883,8 @@ package android.media {
     method public void onDiscoveryPreferenceChanged(@NonNull android.media.RouteDiscoveryPreference);
     method public abstract void onReleaseSession(@NonNull String);
     method public abstract void onSelectRoute(@NonNull String, @NonNull String);
-    method public abstract void onSetVolume(@NonNull String, int);
+    method public abstract void onSetRouteVolume(@NonNull String, int);
+    method public abstract void onSetSessionVolume(@NonNull String, int);
     method public abstract void onTransferToRoute(@NonNull String, @NonNull String);
     field public static final long REQUEST_ID_UNKNOWN = 0L; // 0x0L
     field public static final String SERVICE_INTERFACE = "android.media.MediaRoute2ProviderService";
@@ -27042,9 +27045,13 @@ package android.media {
     method @NonNull public java.util.List<android.media.MediaRoute2Info> getSelectableRoutes();
     method @NonNull public java.util.List<android.media.MediaRoute2Info> getSelectedRoutes();
     method @NonNull public java.util.List<android.media.MediaRoute2Info> getTransferrableRoutes();
+    method public int getVolume();
+    method public int getVolumeHandling();
+    method public int getVolumeMax();
     method public boolean isReleased();
     method public void release();
     method public void selectRoute(@NonNull android.media.MediaRoute2Info);
+    method public void setVolume(int);
     method public void transferToRoute(@NonNull android.media.MediaRoute2Info);
   }
 
@@ -27439,6 +27446,9 @@ package android.media {
     method @NonNull public java.util.List<java.lang.String> getSelectableRoutes();
     method @NonNull public java.util.List<java.lang.String> getSelectedRoutes();
     method @NonNull public java.util.List<java.lang.String> getTransferrableRoutes();
+    method public int getVolume();
+    method public int getVolumeHandling();
+    method public int getVolumeMax();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.media.RoutingSessionInfo> CREATOR;
   }
@@ -27460,6 +27470,9 @@ package android.media {
     method @NonNull public android.media.RoutingSessionInfo.Builder removeSelectedRoute(@NonNull String);
     method @NonNull public android.media.RoutingSessionInfo.Builder removeTransferrableRoute(@NonNull String);
     method @NonNull public android.media.RoutingSessionInfo.Builder setControlHints(@Nullable android.os.Bundle);
+    method @NonNull public android.media.RoutingSessionInfo.Builder setVolume(int);
+    method @NonNull public android.media.RoutingSessionInfo.Builder setVolumeHandling(int);
+    method @NonNull public android.media.RoutingSessionInfo.Builder setVolumeMax(int);
   }
 
   public final class Session2Command implements android.os.Parcelable {
@@ -29788,10 +29801,12 @@ package android.net {
   }
 
   public static final class ConnectivityDiagnosticsManager.DataStallReport implements android.os.Parcelable {
-    ctor public ConnectivityDiagnosticsManager.DataStallReport(@NonNull android.net.Network, long, int, @NonNull android.os.PersistableBundle);
+    ctor public ConnectivityDiagnosticsManager.DataStallReport(@NonNull android.net.Network, long, int, @NonNull android.net.LinkProperties, @NonNull android.net.NetworkCapabilities, @NonNull android.os.PersistableBundle);
     method public int describeContents();
     method public int getDetectionMethod();
+    method @NonNull public android.net.LinkProperties getLinkProperties();
     method @NonNull public android.net.Network getNetwork();
+    method @NonNull public android.net.NetworkCapabilities getNetworkCapabilities();
     method public long getReportTimestamp();
     method @NonNull public android.os.PersistableBundle getStallDetails();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
@@ -40320,6 +40335,7 @@ package android.provider {
     field public static final String VOLUME_NAME = "volume_name";
     field public static final String WIDTH = "width";
     field public static final String WRITER = "writer";
+    field public static final String XMP = "xmp";
     field public static final String YEAR = "year";
   }
 
@@ -53386,6 +53402,38 @@ package android.view {
     method public void recycle();
   }
 
+  public abstract class VerifiedInputEvent implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getDeviceId();
+    method public int getDisplayId();
+    method public long getEventTimeNanos();
+    method public int getSource();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.VerifiedInputEvent> CREATOR;
+  }
+
+  public final class VerifiedKeyEvent extends android.view.VerifiedInputEvent implements android.os.Parcelable {
+    method public int getAction();
+    method public long getDownTimeNanos();
+    method @Nullable public Boolean getFlag(int);
+    method public int getKeyCode();
+    method public int getMetaState();
+    method public int getRepeatCount();
+    method public int getScanCode();
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.VerifiedKeyEvent> CREATOR;
+  }
+
+  public final class VerifiedMotionEvent extends android.view.VerifiedInputEvent implements android.os.Parcelable {
+    method public int getActionMasked();
+    method public int getButtonState();
+    method public long getDownTimeNanos();
+    method @Nullable public Boolean getFlag(int);
+    method public int getMetaState();
+    method public float getRawX();
+    method public float getRawY();
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.VerifiedMotionEvent> CREATOR;
+  }
+
   @UiThread public class View implements android.view.accessibility.AccessibilityEventSource android.graphics.drawable.Drawable.Callback android.view.KeyEvent.Callback {
     ctor public View(android.content.Context);
     ctor public View(android.content.Context, @Nullable android.util.AttributeSet);
@@ -55208,7 +55256,7 @@ package android.view {
   }
 
   public interface WindowInsetsController {
-    method public void controlWindowInsetsAnimation(int, long, @Nullable android.view.animation.Interpolator, @NonNull android.view.WindowInsetsAnimationControlListener);
+    method @NonNull public android.os.CancellationSignal controlWindowInsetsAnimation(int, long, @Nullable android.view.animation.Interpolator, @NonNull android.view.WindowInsetsAnimationControlListener);
     method public int getSystemBarsAppearance();
     method public int getSystemBarsBehavior();
     method public void hide(int);
