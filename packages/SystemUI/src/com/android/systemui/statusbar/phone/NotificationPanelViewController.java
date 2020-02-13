@@ -3812,7 +3812,7 @@ public class NotificationPanelViewController extends PanelViewController {
     private class ConfigurationListener implements ConfigurationController.ConfigurationListener {
         @Override
         public void onDensityOrFontScaleChanged() {
-            updateShowEmptyShadeView();
+            reInflateViews();
         }
 
         @Override
