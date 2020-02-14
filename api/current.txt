@@ -26873,21 +26873,27 @@ package android.media {
     ctor public MediaRoute2ProviderService();
     method @NonNull public final java.util.List<android.media.RoutingSessionInfo> getAllSessionInfo();
     method @Nullable public final android.media.RoutingSessionInfo getSessionInfo(@NonNull String);
+    method public final void notifyRequestFailed(long, int);
     method public final void notifyRoutes(@NonNull java.util.Collection<android.media.MediaRoute2Info>);
     method public final void notifySessionCreated(@NonNull android.media.RoutingSessionInfo, long);
     method public final void notifySessionCreationFailed(long);
     method public final void notifySessionReleased(@NonNull String);
     method public final void notifySessionUpdated(@NonNull android.media.RoutingSessionInfo);
     method @CallSuper @Nullable public android.os.IBinder onBind(@NonNull android.content.Intent);
-    method public abstract void onCreateSession(@NonNull String, @NonNull String, long, @Nullable android.os.Bundle);
-    method public abstract void onDeselectRoute(@NonNull String, @NonNull String);
+    method public abstract void onCreateSession(long, @NonNull String, @NonNull String, @Nullable android.os.Bundle);
+    method public abstract void onDeselectRoute(long, @NonNull String, @NonNull String);
     method public void onDiscoveryPreferenceChanged(@NonNull android.media.RouteDiscoveryPreference);
-    method public abstract void onReleaseSession(@NonNull String);
-    method public abstract void onSelectRoute(@NonNull String, @NonNull String);
-    method public abstract void onSetRouteVolume(@NonNull String, int);
-    method public abstract void onSetSessionVolume(@NonNull String, int);
-    method public abstract void onTransferToRoute(@NonNull String, @NonNull String);
-    field public static final long REQUEST_ID_UNKNOWN = 0L; // 0x0L
+    method public abstract void onReleaseSession(long, @NonNull String);
+    method public abstract void onSelectRoute(long, @NonNull String, @NonNull String);
+    method public abstract void onSetRouteVolume(long, @NonNull String, int);
+    method public abstract void onSetSessionVolume(long, @NonNull String, int);
+    method public abstract void onTransferToRoute(long, @NonNull String, @NonNull String);
+    field public static final int REASON_INVALID_COMMAND = 4; // 0x4
+    field public static final int REASON_NETWORK_ERROR = 2; // 0x2
+    field public static final int REASON_REJECTED = 1; // 0x1
+    field public static final int REASON_ROUTE_NOT_AVAILABLE = 3; // 0x3
+    field public static final int REASON_UNKNOWN_ERROR = 0; // 0x0
+    field public static final long REQUEST_ID_NONE = 0L; // 0x0L
     field public static final String SERVICE_INTERFACE = "android.media.MediaRoute2ProviderService";
   }
 
