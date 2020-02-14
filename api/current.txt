@@ -6917,6 +6917,7 @@ package android.app.admin {
     method public boolean grantKeyPairToApp(@Nullable android.content.ComponentName, @NonNull String, @NonNull String);
     method public boolean hasCaCertInstalled(@Nullable android.content.ComponentName, byte[]);
     method public boolean hasGrantedPolicy(@NonNull android.content.ComponentName, int);
+    method public boolean hasLockdownAdminConfiguredNetworks(@NonNull android.content.ComponentName);
     method public boolean installCaCert(@Nullable android.content.ComponentName, byte[]);
     method public boolean installExistingPackage(@NonNull android.content.ComponentName, String);
     method public boolean installKeyPair(@Nullable android.content.ComponentName, @NonNull java.security.PrivateKey, @NonNull java.security.cert.Certificate, @NonNull String);
@@ -6935,7 +6936,6 @@ package android.app.admin {
     method public boolean isDeviceOwnerApp(String);
     method public boolean isEphemeralUser(@NonNull android.content.ComponentName);
     method public boolean isLockTaskPermitted(String);
-    method public boolean isLockdownAdminConfiguredNetworks(@NonNull android.content.ComponentName);
     method public boolean isLogoutEnabled();
     method public boolean isManagedProfile(@NonNull android.content.ComponentName);
     method public boolean isMasterVolumeMuted(@NonNull android.content.ComponentName);
@@ -6982,6 +6982,7 @@ package android.app.admin {
     method public void setCameraDisabled(@NonNull android.content.ComponentName, boolean);
     method @Deprecated public void setCertInstallerPackage(@NonNull android.content.ComponentName, @Nullable String) throws java.lang.SecurityException;
     method public void setCommonCriteriaModeEnabled(@NonNull android.content.ComponentName, boolean);
+    method public void setConfiguredNetworksLockdownState(@NonNull android.content.ComponentName, boolean);
     method public void setCrossProfileCalendarPackages(@NonNull android.content.ComponentName, @Nullable java.util.Set<java.lang.String>);
     method public void setCrossProfileCallerIdDisabled(@NonNull android.content.ComponentName, boolean);
     method public void setCrossProfileContactsSearchDisabled(@NonNull android.content.ComponentName, boolean);
@@ -7001,7 +7002,6 @@ package android.app.admin {
     method public void setLocationEnabled(@NonNull android.content.ComponentName, boolean);
     method public void setLockTaskFeatures(@NonNull android.content.ComponentName, int);
     method public void setLockTaskPackages(@NonNull android.content.ComponentName, @NonNull String[]) throws java.lang.SecurityException;
-    method public void setLockdownAdminConfiguredNetworks(@NonNull android.content.ComponentName, boolean);
     method public void setLogoutEnabled(@NonNull android.content.ComponentName, boolean);
     method public void setLongSupportMessage(@NonNull android.content.ComponentName, @Nullable CharSequence);
     method public void setManagedProfileMaximumTimeOff(@NonNull android.content.ComponentName, long);
@@ -12703,8 +12703,7 @@ package android.content.res {
 
   public class Resources {
     ctor @Deprecated public Resources(android.content.res.AssetManager, android.util.DisplayMetrics, android.content.res.Configuration);
-    method public void addLoader(@NonNull android.content.res.loader.ResourcesLoader);
-    method public void clearLoaders();
+    method public void addLoaders(@NonNull android.content.res.loader.ResourcesLoader...);
     method public final void finishPreloading();
     method public final void flushLayoutCache();
     method @NonNull public android.content.res.XmlResourceParser getAnimation(@AnimRes @AnimatorRes int) throws android.content.res.Resources.NotFoundException;
@@ -12731,7 +12730,6 @@ package android.content.res {
     method @NonNull public int[] getIntArray(@ArrayRes int) throws android.content.res.Resources.NotFoundException;
     method public int getInteger(@IntegerRes int) throws android.content.res.Resources.NotFoundException;
     method @NonNull public android.content.res.XmlResourceParser getLayout(@LayoutRes int) throws android.content.res.Resources.NotFoundException;
-    method @NonNull public java.util.List<android.content.res.loader.ResourcesLoader> getLoaders();
     method @Deprecated public android.graphics.Movie getMovie(@RawRes int) throws android.content.res.Resources.NotFoundException;
     method @NonNull public String getQuantityString(@PluralsRes int, int, java.lang.Object...) throws android.content.res.Resources.NotFoundException;
     method @NonNull public String getQuantityString(@PluralsRes int, int) throws android.content.res.Resources.NotFoundException;
@@ -12759,8 +12757,7 @@ package android.content.res {
     method public android.content.res.AssetFileDescriptor openRawResourceFd(@RawRes int) throws android.content.res.Resources.NotFoundException;
     method public void parseBundleExtra(String, android.util.AttributeSet, android.os.Bundle) throws org.xmlpull.v1.XmlPullParserException;
     method public void parseBundleExtras(android.content.res.XmlResourceParser, android.os.Bundle) throws java.io.IOException, org.xmlpull.v1.XmlPullParserException;
-    method public void removeLoader(@NonNull android.content.res.loader.ResourcesLoader);
-    method public void setLoaders(@NonNull java.util.List<android.content.res.loader.ResourcesLoader>);
+    method public void removeLoaders(@NonNull android.content.res.loader.ResourcesLoader...);
     method @Deprecated public void updateConfiguration(android.content.res.Configuration, android.util.DisplayMetrics);
     field @AnyRes public static final int ID_NULL = 0; // 0x0
   }
@@ -45514,7 +45511,7 @@ package android.telecom {
     field public static final int DIRECTION_INCOMING = 0; // 0x0
     field public static final int DIRECTION_OUTGOING = 1; // 0x1
     field public static final int DIRECTION_UNKNOWN = -1; // 0xffffffff
-    field public static final int PROPERTY_ASSISTED_DIALING_USED = 512; // 0x200
+    field public static final int PROPERTY_ASSISTED_DIALING = 512; // 0x200
     field public static final int PROPERTY_CONFERENCE = 1; // 0x1
     field public static final int PROPERTY_EMERGENCY_CALLBACK_MODE = 4; // 0x4
     field public static final int PROPERTY_ENTERPRISE_CALL = 32; // 0x20
@@ -45603,7 +45600,8 @@ package android.telecom {
     method public final java.util.List<android.telecom.Connection> getConferenceableConnections();
     method public final int getConnectionCapabilities();
     method public final int getConnectionProperties();
-    method public final long getConnectionTime();
+    method public final long getConnectionStartElapsedRealtimeMillis();
+    method @IntRange(from=0) public final long getConnectionTime();
     method public final java.util.List<android.telecom.Connection> getConnections();
     method public final android.telecom.DisconnectCause getDisconnectCause();
     method public final android.os.Bundle getExtras();
@@ -45633,8 +45631,9 @@ package android.telecom {
     method public final void setConferenceableConnections(java.util.List<android.telecom.Connection>);
     method public final void setConnectionCapabilities(int);
     method public final void setConnectionProperties(int);
-    method public final void setConnectionStartElapsedRealTime(long);
-    method public final void setConnectionTime(long);
+    method @Deprecated public final void setConnectionStartElapsedRealTime(long);
+    method public final void setConnectionStartElapsedRealtimeMillis(long);
+    method public final void setConnectionTime(@IntRange(from=0) long);
     method public final void setDialing();
     method public final void setDisconnected(android.telecom.DisconnectCause);
     method public final void setExtras(@Nullable android.os.Bundle);
@@ -45794,7 +45793,7 @@ package android.telecom {
     field public static final String EXTRA_IS_RTT_AUDIO_PRESENT = "android.telecom.extra.IS_RTT_AUDIO_PRESENT";
     field public static final String EXTRA_LAST_FORWARDED_NUMBER = "android.telecom.extra.LAST_FORWARDED_NUMBER";
     field public static final String EXTRA_SIP_INVITE = "android.telecom.extra.SIP_INVITE";
-    field public static final int PROPERTY_ASSISTED_DIALING_USED = 512; // 0x200
+    field public static final int PROPERTY_ASSISTED_DIALING = 512; // 0x200
     field public static final int PROPERTY_HAS_CDMA_VOICE_PRIVACY = 32; // 0x20
     field public static final int PROPERTY_HIGH_DEF_AUDIO = 4; // 0x4
     field public static final int PROPERTY_IS_EXTERNAL_CALL = 16; // 0x10
@@ -46973,7 +46972,7 @@ package android.telephony {
     method @NonNull public abstract android.telephony.CellIdentity getCellIdentity();
     method @NonNull public abstract android.telephony.CellSignalStrength getCellSignalStrength();
     method @Deprecated public long getTimeStamp();
-    method public long getTimestampNanos();
+    method public long getTimestampMillis();
     method public boolean isRegistered();
     field public static final int CONNECTION_NONE = 0; // 0x0
     field public static final int CONNECTION_PRIMARY_SERVING = 1; // 0x1
@@ -47131,6 +47130,19 @@ package android.telephony {
     method @NonNull public String getHomeNodebName();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.telephony.ClosedSubscriberGroupInfo> CREATOR;
+  }
+
+  public final class DisplayInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getNetworkType();
+    method public int getOverrideNetworkType();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.telephony.DisplayInfo> CREATOR;
+    field public static final int OVERRIDE_NETWORK_TYPE_LTE_ADVANCED_PRO = 2; // 0x2
+    field public static final int OVERRIDE_NETWORK_TYPE_LTE_CA = 1; // 0x1
+    field public static final int OVERRIDE_NETWORK_TYPE_NONE = 0; // 0x0
+    field public static final int OVERRIDE_NETWORK_TYPE_NR_NSA = 3; // 0x3
+    field public static final int OVERRIDE_NETWORK_TYPE_NR_NSA_MMWAVE = 4; // 0x4
   }
 
   public class IccOpenLogicalChannelResponse implements android.os.Parcelable {
@@ -47389,6 +47401,7 @@ package android.telephony {
     method public void onDataActivity(int);
     method public void onDataConnectionStateChanged(int);
     method public void onDataConnectionStateChanged(int, int);
+    method @RequiresPermission("android.permission.READ_PHONE_STATE") public void onDisplayInfoChanged(@NonNull android.telephony.DisplayInfo);
     method @RequiresPermission("android.permission.READ_PRECISE_PHONE_STATE") public void onImsCallDisconnectCauseChanged(@NonNull android.telephony.ims.ImsReasonInfo);
     method public void onMessageWaitingIndicatorChanged(boolean);
     method @RequiresPermission("android.permission.MODIFY_PHONE_STATE") public void onPreciseDataConnectionStateChanged(@NonNull android.telephony.PreciseDataConnectionState);
@@ -47406,6 +47419,7 @@ package android.telephony {
     field public static final int LISTEN_CELL_LOCATION = 16; // 0x10
     field public static final int LISTEN_DATA_ACTIVITY = 128; // 0x80
     field public static final int LISTEN_DATA_CONNECTION_STATE = 64; // 0x40
+    field public static final int LISTEN_DISPLAY_INFO_CHANGED = 1048576; // 0x100000
     field public static final int LISTEN_EMERGENCY_NUMBER_LIST = 16777216; // 0x1000000
     field @RequiresPermission("android.permission.READ_PRECISE_PHONE_STATE") public static final int LISTEN_IMS_CALL_DISCONNECT_CAUSES = 134217728; // 0x8000000
     field public static final int LISTEN_MESSAGE_WAITING_INDICATOR = 4; // 0x4
@@ -47488,7 +47502,7 @@ package android.telephony {
     method @Deprecated public int getGsmBitErrorRate();
     method @Deprecated public int getGsmSignalStrength();
     method public int getLevel();
-    method public long getTimestampNanos();
+    method public long getTimestampMillis();
     method @Deprecated public boolean isGsm();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.telephony.SignalStrength> CREATOR;
