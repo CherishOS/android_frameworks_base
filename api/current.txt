@@ -289,6 +289,7 @@ package android {
     field public static final int allowBackup = 16843392; // 0x1010280
     field public static final int allowClearUserData = 16842757; // 0x1010005
     field public static final int allowEmbedded = 16843765; // 0x10103f5
+    field public static final int allowNativeHeapPointerTagging = 16844311; // 0x1010617
     field public static final int allowParallelSyncs = 16843570; // 0x1010332
     field public static final int allowSingleTap = 16843353; // 0x1010259
     field public static final int allowTaskReparenting = 16843268; // 0x1010204
@@ -2876,6 +2877,7 @@ package android.accessibilityservice {
     method public final void setServiceInfo(android.accessibilityservice.AccessibilityServiceInfo);
     method public boolean takeScreenshot(int, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.accessibilityservice.AccessibilityService.ScreenshotResult>);
     field public static final int GESTURE_2_FINGER_DOUBLE_TAP = 20; // 0x14
+    field public static final int GESTURE_2_FINGER_DOUBLE_TAP_AND_HOLD = 40; // 0x28
     field public static final int GESTURE_2_FINGER_SINGLE_TAP = 19; // 0x13
     field public static final int GESTURE_2_FINGER_SWIPE_DOWN = 26; // 0x1a
     field public static final int GESTURE_2_FINGER_SWIPE_LEFT = 27; // 0x1b
@@ -2883,6 +2885,7 @@ package android.accessibilityservice {
     field public static final int GESTURE_2_FINGER_SWIPE_UP = 25; // 0x19
     field public static final int GESTURE_2_FINGER_TRIPLE_TAP = 21; // 0x15
     field public static final int GESTURE_3_FINGER_DOUBLE_TAP = 23; // 0x17
+    field public static final int GESTURE_3_FINGER_DOUBLE_TAP_AND_HOLD = 41; // 0x29
     field public static final int GESTURE_3_FINGER_SINGLE_TAP = 22; // 0x16
     field public static final int GESTURE_3_FINGER_SWIPE_DOWN = 30; // 0x1e
     field public static final int GESTURE_3_FINGER_SWIPE_LEFT = 31; // 0x1f
@@ -2890,6 +2893,7 @@ package android.accessibilityservice {
     field public static final int GESTURE_3_FINGER_SWIPE_UP = 29; // 0x1d
     field public static final int GESTURE_3_FINGER_TRIPLE_TAP = 24; // 0x18
     field public static final int GESTURE_4_FINGER_DOUBLE_TAP = 38; // 0x26
+    field public static final int GESTURE_4_FINGER_DOUBLE_TAP_AND_HOLD = 42; // 0x2a
     field public static final int GESTURE_4_FINGER_SINGLE_TAP = 37; // 0x25
     field public static final int GESTURE_4_FINGER_SWIPE_DOWN = 34; // 0x22
     field public static final int GESTURE_4_FINGER_SWIPE_LEFT = 35; // 0x23
@@ -2954,7 +2958,7 @@ package android.accessibilityservice {
   }
 
   public static final class AccessibilityService.ScreenshotResult {
-    method @Nullable public android.graphics.ColorSpace getColorSpace();
+    method @NonNull public android.graphics.ColorSpace getColorSpace();
     method @NonNull public android.hardware.HardwareBuffer getHardwareBuffer();
     method public long getTimestamp();
   }
@@ -7238,7 +7242,7 @@ package android.app.admin {
   public final class FactoryResetProtectionPolicy implements android.os.Parcelable {
     method public int describeContents();
     method @NonNull public java.util.List<java.lang.String> getFactoryResetProtectionAccounts();
-    method public boolean isFactoryResetProtectionDisabled();
+    method public boolean isFactoryResetProtectionEnabled();
     method public void writeToParcel(@NonNull android.os.Parcel, @Nullable int);
     field @NonNull public static final android.os.Parcelable.Creator<android.app.admin.FactoryResetProtectionPolicy> CREATOR;
   }
@@ -7247,7 +7251,7 @@ package android.app.admin {
     ctor public FactoryResetProtectionPolicy.Builder();
     method @NonNull public android.app.admin.FactoryResetProtectionPolicy build();
     method @NonNull public android.app.admin.FactoryResetProtectionPolicy.Builder setFactoryResetProtectionAccounts(@NonNull java.util.List<java.lang.String>);
-    method @NonNull public android.app.admin.FactoryResetProtectionPolicy.Builder setFactoryResetProtectionDisabled(boolean);
+    method @NonNull public android.app.admin.FactoryResetProtectionPolicy.Builder setFactoryResetProtectionEnabled(boolean);
   }
 
   public class FreezePeriod {
@@ -10141,7 +10145,6 @@ package android.content {
     field public static final String ALARM_SERVICE = "alarm";
     field public static final String APPWIDGET_SERVICE = "appwidget";
     field public static final String APP_OPS_SERVICE = "appops";
-    field public static final String APP_SEARCH_SERVICE = "app_search";
     field public static final String AUDIO_SERVICE = "audio";
     field public static final String BATTERY_SERVICE = "batterymanager";
     field public static final int BIND_ABOVE_CLIENT = 8; // 0x8
@@ -12068,7 +12071,7 @@ package android.content.pm {
     field public static final String FEATURE_COMPANION_DEVICE_SETUP = "android.software.companion_device_setup";
     field public static final String FEATURE_CONNECTION_SERVICE = "android.software.connectionservice";
     field public static final String FEATURE_CONSUMER_IR = "android.hardware.consumerir";
-    field public static final String FEATURE_CONTEXTHUB = "android.hardware.context_hub";
+    field public static final String FEATURE_CONTEXT_HUB = "android.hardware.context_hub";
     field public static final String FEATURE_DEVICE_ADMIN = "android.software.device_admin";
     field public static final String FEATURE_EMBEDDED = "android.hardware.type.embedded";
     field public static final String FEATURE_ETHERNET = "android.hardware.ethernet";
@@ -27041,7 +27044,7 @@ package android.media {
     method @NonNull public String getId();
     method @NonNull public java.util.List<android.media.MediaRoute2Info> getSelectableRoutes();
     method @NonNull public java.util.List<android.media.MediaRoute2Info> getSelectedRoutes();
-    method @NonNull public java.util.List<android.media.MediaRoute2Info> getTransferrableRoutes();
+    method @NonNull public java.util.List<android.media.MediaRoute2Info> getTransferableRoutes();
     method public int getVolume();
     method public int getVolumeHandling();
     method public int getVolumeMax();
@@ -27421,7 +27424,7 @@ package android.media {
   public final class RouteDiscoveryPreference implements android.os.Parcelable {
     method public int describeContents();
     method @NonNull public java.util.List<java.lang.String> getPreferredFeatures();
-    method public boolean isActiveScan();
+    method public boolean shouldPerformActiveScan();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.media.RouteDiscoveryPreference> CREATOR;
   }
@@ -27430,8 +27433,8 @@ package android.media {
     ctor public RouteDiscoveryPreference.Builder(@NonNull java.util.List<java.lang.String>, boolean);
     ctor public RouteDiscoveryPreference.Builder(@NonNull android.media.RouteDiscoveryPreference);
     method @NonNull public android.media.RouteDiscoveryPreference build();
-    method @NonNull public android.media.RouteDiscoveryPreference.Builder setActiveScan(boolean);
     method @NonNull public android.media.RouteDiscoveryPreference.Builder setPreferredFeatures(@NonNull java.util.List<java.lang.String>);
+    method @NonNull public android.media.RouteDiscoveryPreference.Builder setShouldPerformActiveScan(boolean);
   }
 
   public final class RoutingSessionInfo implements android.os.Parcelable {
@@ -27442,7 +27445,7 @@ package android.media {
     method @NonNull public String getId();
     method @NonNull public java.util.List<java.lang.String> getSelectableRoutes();
     method @NonNull public java.util.List<java.lang.String> getSelectedRoutes();
-    method @NonNull public java.util.List<java.lang.String> getTransferrableRoutes();
+    method @NonNull public java.util.List<java.lang.String> getTransferableRoutes();
     method public int getVolume();
     method public int getVolumeHandling();
     method public int getVolumeMax();
@@ -27456,16 +27459,16 @@ package android.media {
     method @NonNull public android.media.RoutingSessionInfo.Builder addDeselectableRoute(@NonNull String);
     method @NonNull public android.media.RoutingSessionInfo.Builder addSelectableRoute(@NonNull String);
     method @NonNull public android.media.RoutingSessionInfo.Builder addSelectedRoute(@NonNull String);
-    method @NonNull public android.media.RoutingSessionInfo.Builder addTransferrableRoute(@NonNull String);
+    method @NonNull public android.media.RoutingSessionInfo.Builder addTransferableRoute(@NonNull String);
     method @NonNull public android.media.RoutingSessionInfo build();
     method @NonNull public android.media.RoutingSessionInfo.Builder clearDeselectableRoutes();
     method @NonNull public android.media.RoutingSessionInfo.Builder clearSelectableRoutes();
     method @NonNull public android.media.RoutingSessionInfo.Builder clearSelectedRoutes();
-    method @NonNull public android.media.RoutingSessionInfo.Builder clearTransferrableRoutes();
+    method @NonNull public android.media.RoutingSessionInfo.Builder clearTransferableRoutes();
     method @NonNull public android.media.RoutingSessionInfo.Builder removeDeselectableRoute(@NonNull String);
     method @NonNull public android.media.RoutingSessionInfo.Builder removeSelectableRoute(@NonNull String);
     method @NonNull public android.media.RoutingSessionInfo.Builder removeSelectedRoute(@NonNull String);
-    method @NonNull public android.media.RoutingSessionInfo.Builder removeTransferrableRoute(@NonNull String);
+    method @NonNull public android.media.RoutingSessionInfo.Builder removeTransferableRoute(@NonNull String);
     method @NonNull public android.media.RoutingSessionInfo.Builder setControlHints(@Nullable android.os.Bundle);
     method @NonNull public android.media.RoutingSessionInfo.Builder setVolume(int);
     method @NonNull public android.media.RoutingSessionInfo.Builder setVolumeHandling(int);
@@ -30813,7 +30816,7 @@ package android.net.rtp {
 
   public class AudioGroup {
     ctor @Deprecated public AudioGroup();
-    ctor public AudioGroup(@Nullable android.content.Context);
+    ctor public AudioGroup(@NonNull android.content.Context);
     method public void clear();
     method public int getMode();
     method public android.net.rtp.AudioStream[] getStreams();
@@ -37311,6 +37314,7 @@ package android.os.storage {
     method public void setCacheBehaviorTombstone(java.io.File, boolean) throws java.io.IOException;
     method public boolean unmountObb(String, boolean, android.os.storage.OnObbStateChangeListener);
     method public void unregisterStorageVolumeCallback(@NonNull android.os.storage.StorageManager.StorageVolumeCallback);
+    field @RequiresPermission(android.Manifest.permission.MANAGE_EXTERNAL_STORAGE) public static final String ACTION_CLEAR_APP_CACHE = "android.os.storage.action.CLEAR_APP_CACHE";
     field public static final String ACTION_MANAGE_STORAGE = "android.os.storage.action.MANAGE_STORAGE";
     field public static final String EXTRA_REQUESTED_BYTES = "android.os.storage.extra.REQUESTED_BYTES";
     field public static final String EXTRA_UUID = "android.os.storage.extra.UUID";
@@ -46890,7 +46894,7 @@ package android.telephony {
   }
 
   public final class CellIdentityGsm extends android.telephony.CellIdentity {
-    method @NonNull public java.util.List<java.lang.String> getAdditionalPlmns();
+    method @NonNull public java.util.Set<java.lang.String> getAdditionalPlmns();
     method public int getArfcn();
     method public int getBsic();
     method public int getCid();
@@ -46906,7 +46910,7 @@ package android.telephony {
   }
 
   public final class CellIdentityLte extends android.telephony.CellIdentity {
-    method @NonNull public java.util.List<java.lang.String> getAdditionalPlmns();
+    method @NonNull public java.util.Set<java.lang.String> getAdditionalPlmns();
     method @NonNull public java.util.List<java.lang.Integer> getBands();
     method public int getBandwidth();
     method public int getCi();
@@ -46924,7 +46928,7 @@ package android.telephony {
   }
 
   public final class CellIdentityNr extends android.telephony.CellIdentity {
-    method @NonNull public java.util.List<java.lang.String> getAdditionalPlmns();
+    method @NonNull public java.util.Set<java.lang.String> getAdditionalPlmns();
     method @NonNull public java.util.List<java.lang.Integer> getBands();
     method @Nullable public String getMccString();
     method @Nullable public String getMncString();
@@ -46937,7 +46941,7 @@ package android.telephony {
   }
 
   public final class CellIdentityTdscdma extends android.telephony.CellIdentity {
-    method @NonNull public java.util.List<java.lang.String> getAdditionalPlmns();
+    method @NonNull public java.util.Set<java.lang.String> getAdditionalPlmns();
     method public int getCid();
     method @Nullable public android.telephony.ClosedSubscriberGroupInfo getClosedSubscriberGroupInfo();
     method public int getCpid();
@@ -46951,7 +46955,7 @@ package android.telephony {
   }
 
   public final class CellIdentityWcdma extends android.telephony.CellIdentity {
-    method @NonNull public java.util.List<java.lang.String> getAdditionalPlmns();
+    method @NonNull public java.util.Set<java.lang.String> getAdditionalPlmns();
     method public int getCid();
     method @Nullable public android.telephony.ClosedSubscriberGroupInfo getClosedSubscriberGroupInfo();
     method public int getLac();
@@ -47241,7 +47245,7 @@ package android.telephony {
     method @Nullable public android.telephony.CellIdentity getCellIdentity();
     method public int getDomain();
     method public int getNrState();
-    method @NonNull public String getRegisteredPlmn();
+    method @Nullable public String getRegisteredPlmn();
     method public int getTransportType();
     method public boolean isRegistered();
     method public boolean isRoaming();
@@ -52152,6 +52156,8 @@ package android.view {
     field public static final int CONTEXT_CLICK = 6; // 0x6
     field public static final int FLAG_IGNORE_GLOBAL_SETTING = 2; // 0x2
     field public static final int FLAG_IGNORE_VIEW_SETTING = 1; // 0x1
+    field public static final int GESTURE_END = 13; // 0xd
+    field public static final int GESTURE_START = 12; // 0xc
     field public static final int KEYBOARD_PRESS = 3; // 0x3
     field public static final int KEYBOARD_RELEASE = 7; // 0x7
     field public static final int KEYBOARD_TAP = 3; // 0x3
