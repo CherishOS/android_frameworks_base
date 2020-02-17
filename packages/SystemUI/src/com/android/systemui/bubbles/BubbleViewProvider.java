@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package com.android.systemui.controls.ui
+package com.android.systemui.bubbles;
 
-class UnknownBehavior : Behavior {
-    lateinit var cvh: ControlViewHolder
+import android.view.View;
 
-    override fun initialize(cvh: ControlViewHolder) {
-        this.cvh = cvh
-    }
-
-    override fun bind(cws: ControlWithState) {
-        cvh.status.setText(cvh.context.getString(com.android.internal.R.string.loading))
-        cvh.setEnabled(false)
-        cvh.applyRenderInfo(RenderInfo.lookup(cws.ci.deviceType, false))
-    }
+/**
+ * Interface to represent actual Bubbles and UI elements that act like bubbles, like BubbleOverflow.
+ */
+interface BubbleViewProvider {
+    BubbleExpandedView getExpandedView();
+    void setContentVisibility(boolean visible);
+    View getIconView();
+    void logUIEvent(int bubbleCount, int action, float normalX, float normalY, int index);
+    String getKey();
 }
