@@ -4351,7 +4351,7 @@ package android.app {
   public class AppOpsManager {
     method @Deprecated public int checkOp(@NonNull String, int, @NonNull String);
     method @Deprecated public int checkOpNoThrow(@NonNull String, int, @NonNull String);
-    method public void checkPackage(int, @NonNull String);
+    method @Deprecated public void checkPackage(int, @NonNull String);
     method @Deprecated public void finishOp(@NonNull String, int, @NonNull String);
     method public void finishOp(@NonNull String, int, @NonNull String, @Nullable String);
     method public boolean isOpActive(@NonNull String, int, @NonNull String);
@@ -4364,7 +4364,7 @@ package android.app {
     method @Deprecated public int noteProxyOpNoThrow(@NonNull String, @NonNull String);
     method @Deprecated public int noteProxyOpNoThrow(@NonNull String, @Nullable String, int);
     method public int noteProxyOpNoThrow(@NonNull String, @Nullable String, int, @Nullable String, @Nullable String);
-    method public static String permissionToOp(String);
+    method @Nullable public static String permissionToOp(@NonNull String);
     method public void setNotedAppOpsCollector(@Nullable android.app.AppOpsManager.AppOpsCollector);
     method @Deprecated public int startOp(@NonNull String, int, @NonNull String);
     method public int startOp(@NonNull String, int, @Nullable String, @Nullable String, @Nullable String);
@@ -11560,7 +11560,7 @@ package android.content.pm {
     method @NonNull public android.graphics.drawable.Drawable getProfileSwitchingIconDrawable(@NonNull android.os.UserHandle);
     method @NonNull public CharSequence getProfileSwitchingLabel(@NonNull android.os.UserHandle);
     method @NonNull public java.util.List<android.os.UserHandle> getTargetUserProfiles();
-    method @RequiresPermission(anyOf={android.Manifest.permission.INTERACT_ACROSS_PROFILES, "android.permission.INTERACT_ACROSS_USERS"}) public void startActivity(@NonNull android.content.Intent, @NonNull android.os.UserHandle);
+    method @RequiresPermission(anyOf={android.Manifest.permission.INTERACT_ACROSS_PROFILES, "android.permission.INTERACT_ACROSS_USERS"}) public void startActivity(@NonNull android.content.Intent, @NonNull android.os.UserHandle, @Nullable android.app.Activity);
     method public void startMainActivity(@NonNull android.content.ComponentName, @NonNull android.os.UserHandle);
     field public static final String ACTION_CAN_INTERACT_ACROSS_PROFILES_CHANGED = "android.content.pm.action.CAN_INTERACT_ACROSS_PROFILES_CHANGED";
   }
@@ -24377,10 +24377,8 @@ package android.media {
   public final class AudioPlaybackCaptureConfiguration {
     method @NonNull public int[] getExcludeUids();
     method @NonNull public int[] getExcludeUsages();
-    method @NonNull public int[] getExcludeUserIds();
     method @NonNull public int[] getMatchingUids();
     method @NonNull public int[] getMatchingUsages();
-    method @NonNull public int[] getMatchingUserIds();
     method @NonNull public android.media.projection.MediaProjection getMediaProjection();
   }
 
@@ -24388,11 +24386,9 @@ package android.media {
     ctor public AudioPlaybackCaptureConfiguration.Builder(@NonNull android.media.projection.MediaProjection);
     method @NonNull public android.media.AudioPlaybackCaptureConfiguration.Builder addMatchingUid(int);
     method @NonNull public android.media.AudioPlaybackCaptureConfiguration.Builder addMatchingUsage(int);
-    method @NonNull public android.media.AudioPlaybackCaptureConfiguration.Builder addMatchingUserId(int);
     method @NonNull public android.media.AudioPlaybackCaptureConfiguration build();
     method @NonNull public android.media.AudioPlaybackCaptureConfiguration.Builder excludeUid(int);
     method @NonNull public android.media.AudioPlaybackCaptureConfiguration.Builder excludeUsage(int);
-    method @NonNull public android.media.AudioPlaybackCaptureConfiguration.Builder excludeUserId(int);
   }
 
   public final class AudioPlaybackConfiguration implements android.os.Parcelable {
@@ -24793,11 +24789,15 @@ package android.media {
 
   public abstract class DrmInitData {
     method public abstract android.media.DrmInitData.SchemeInitData get(java.util.UUID);
+    method @NonNull public android.media.DrmInitData.SchemeInitData getSchemeInitDataAt(int);
+    method public int getSchemeInitDataCount();
   }
 
   public static final class DrmInitData.SchemeInitData {
+    field @NonNull public static final java.util.UUID UUID_NIL;
     field public final byte[] data;
     field public final String mimeType;
+    field @NonNull public final java.util.UUID uuid;
   }
 
   public class ExifInterface {
@@ -27020,12 +27020,19 @@ package android.media {
     method @NonNull public static android.media.MediaRouter2 getInstance(@NonNull android.content.Context);
     method @NonNull public java.util.List<android.media.MediaRoute2Info> getRoutes();
     method @NonNull public android.media.MediaRouter2.RoutingController getSystemController();
-    method public void registerControllerCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaRouter2.RoutingControllerCallback);
+    method public void registerControllerCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaRouter2.ControllerCallback);
     method public void registerRouteCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaRouter2.RouteCallback, @NonNull android.media.RouteDiscoveryPreference);
-    method public void requestCreateController(@NonNull android.media.MediaRoute2Info);
+    method public void registerTransferCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaRouter2.TransferCallback);
     method public void setOnGetControllerHintsListener(@Nullable android.media.MediaRouter2.OnGetControllerHintsListener);
-    method public void unregisterControllerCallback(@NonNull android.media.MediaRouter2.RoutingControllerCallback);
+    method public void transferTo(@Nullable android.media.MediaRoute2Info);
+    method public void unregisterControllerCallback(@NonNull android.media.MediaRouter2.ControllerCallback);
     method public void unregisterRouteCallback(@NonNull android.media.MediaRouter2.RouteCallback);
+    method public void unregisterTransferCallback(@NonNull android.media.MediaRouter2.TransferCallback);
+  }
+
+  public static class MediaRouter2.ControllerCallback {
+    ctor public MediaRouter2.ControllerCallback();
+    method public void onControllerUpdated(@NonNull android.media.MediaRouter2.RoutingController);
   }
 
   public static interface MediaRouter2.OnGetControllerHintsListener {
@@ -27046,7 +27053,6 @@ package android.media {
     method @NonNull public String getId();
     method @NonNull public java.util.List<android.media.MediaRoute2Info> getSelectableRoutes();
     method @NonNull public java.util.List<android.media.MediaRoute2Info> getSelectedRoutes();
-    method @NonNull public java.util.List<android.media.MediaRoute2Info> getTransferableRoutes();
     method public int getVolume();
     method public int getVolumeHandling();
     method public int getVolumeMax();
@@ -27054,15 +27060,12 @@ package android.media {
     method public void release();
     method public void selectRoute(@NonNull android.media.MediaRoute2Info);
     method public void setVolume(int);
-    method public void transferToRoute(@NonNull android.media.MediaRoute2Info);
   }
 
-  public static class MediaRouter2.RoutingControllerCallback {
-    ctor public MediaRouter2.RoutingControllerCallback();
-    method public void onControllerCreated(@NonNull android.media.MediaRouter2.RoutingController);
-    method public void onControllerCreationFailed(@NonNull android.media.MediaRoute2Info);
-    method public void onControllerReleased(@NonNull android.media.MediaRouter2.RoutingController);
-    method public void onControllerUpdated(@NonNull android.media.MediaRouter2.RoutingController);
+  public static class MediaRouter2.TransferCallback {
+    ctor public MediaRouter2.TransferCallback();
+    method public void onTransferFailed(@NonNull android.media.MediaRoute2Info);
+    method public void onTransferred(@NonNull android.media.MediaRouter2.RoutingController, @Nullable android.media.MediaRouter2.RoutingController);
   }
 
   public class MediaScannerConnection implements android.content.ServiceConnection {
@@ -43538,7 +43541,6 @@ package android.service.controls.templates {
     method public abstract int getTemplateType();
     field @NonNull public static final android.service.controls.templates.ControlTemplate ERROR_TEMPLATE;
     field @NonNull public static final android.service.controls.templates.ControlTemplate NO_TEMPLATE;
-    field public static final int TYPE_DISCRETE_TOGGLE = 4; // 0x4
     field public static final int TYPE_ERROR = -1; // 0xffffffff
     field public static final int TYPE_NONE = 0; // 0x0
     field public static final int TYPE_RANGE = 2; // 0x2
@@ -43547,30 +43549,6 @@ package android.service.controls.templates {
     field public static final int TYPE_THUMBNAIL = 3; // 0x3
     field public static final int TYPE_TOGGLE = 1; // 0x1
     field public static final int TYPE_TOGGLE_RANGE = 6; // 0x6
-  }
-
-  public final class CoordinatedRangeTemplate extends android.service.controls.templates.ControlTemplate {
-    ctor public CoordinatedRangeTemplate(@NonNull String, float, @NonNull android.service.controls.templates.RangeTemplate, @NonNull android.service.controls.templates.RangeTemplate);
-    ctor public CoordinatedRangeTemplate(@NonNull String, float, float, float, float, float, float, float, float, @Nullable CharSequence);
-    method public float getCurrentValueHigh();
-    method public float getCurrentValueLow();
-    method @NonNull public CharSequence getFormatString();
-    method public float getMaxValueHigh();
-    method public float getMaxValueLow();
-    method public float getMinGap();
-    method public float getMinValueHigh();
-    method public float getMinValueLow();
-    method @NonNull public android.service.controls.templates.RangeTemplate getRangeHigh();
-    method @NonNull public android.service.controls.templates.RangeTemplate getRangeLow();
-    method public float getStepValue();
-    method public int getTemplateType();
-  }
-
-  public final class DiscreteToggleTemplate extends android.service.controls.templates.ControlTemplate {
-    ctor public DiscreteToggleTemplate(@NonNull String, @NonNull android.service.controls.templates.ControlButton, @NonNull android.service.controls.templates.ControlButton);
-    method @NonNull public android.service.controls.templates.ControlButton getNegativeButton();
-    method @NonNull public android.service.controls.templates.ControlButton getPositiveButton();
-    method public int getTemplateType();
   }
 
   public final class RangeTemplate extends android.service.controls.templates.ControlTemplate {
@@ -56483,6 +56461,7 @@ package android.view.inline {
     method public int describeContents();
     method @NonNull public android.util.Size getMaxSize();
     method @NonNull public android.util.Size getMinSize();
+    method @Nullable public String getStyle();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.view.inline.InlinePresentationSpec> CREATOR;
   }
@@ -56687,9 +56666,11 @@ package android.view.inputmethod {
 
   public final class InlineSuggestionsRequest implements android.os.Parcelable {
     method public int describeContents();
+    method @Nullable public android.os.Bundle getExtras();
     method @NonNull public String getHostPackageName();
     method public int getMaxSuggestionCount();
     method @NonNull public java.util.List<android.view.inline.InlinePresentationSpec> getPresentationSpecs();
+    method @NonNull public android.os.LocaleList getSupportedLocales();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.view.inputmethod.InlineSuggestionsRequest> CREATOR;
     field public static final int SUGGESTION_COUNT_UNLIMITED = 2147483647; // 0x7fffffff
@@ -56699,7 +56680,9 @@ package android.view.inputmethod {
     ctor public InlineSuggestionsRequest.Builder(@NonNull java.util.List<android.view.inline.InlinePresentationSpec>);
     method @NonNull public android.view.inputmethod.InlineSuggestionsRequest.Builder addPresentationSpecs(@NonNull android.view.inline.InlinePresentationSpec);
     method @NonNull public android.view.inputmethod.InlineSuggestionsRequest build();
+    method @NonNull public android.view.inputmethod.InlineSuggestionsRequest.Builder setExtras(@Nullable android.os.Bundle);
     method @NonNull public android.view.inputmethod.InlineSuggestionsRequest.Builder setMaxSuggestionCount(int);
+    method @NonNull public android.view.inputmethod.InlineSuggestionsRequest.Builder setSupportedLocales(@NonNull android.os.LocaleList);
   }
 
   public final class InlineSuggestionsResponse implements android.os.Parcelable {
@@ -72110,6 +72093,7 @@ package java.time.chrono {
     method public static java.time.chrono.JapaneseEra[] values();
     field public static final java.time.chrono.JapaneseEra HEISEI;
     field public static final java.time.chrono.JapaneseEra MEIJI;
+    field public static final java.time.chrono.JapaneseEra REIWA;
     field public static final java.time.chrono.JapaneseEra SHOWA;
     field public static final java.time.chrono.JapaneseEra TAISHO;
   }
