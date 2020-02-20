@@ -5798,6 +5798,12 @@ public final class Settings {
          */
         public static final String ANIM_TILE_STYLE = "anim_tile_style";
 
+	/**
+         * Force show navigation bar setting.
+         * @hide
+         */
+        public static final String FORCE_SHOW_NAVBAR = "force_show_navbar";
+
         /**
          * Change quick settings tiles animation duration
          *
