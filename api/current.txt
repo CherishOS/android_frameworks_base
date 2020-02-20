@@ -9,6 +9,7 @@ package android {
     ctor public Manifest.permission();
     field public static final String ACCEPT_HANDOVER = "android.permission.ACCEPT_HANDOVER";
     field public static final String ACCESS_BACKGROUND_LOCATION = "android.permission.ACCESS_BACKGROUND_LOCATION";
+    field public static final String ACCESS_CALL_AUDIO = "android.permission.ACCESS_CALL_AUDIO";
     field public static final String ACCESS_CHECKIN_PROPERTIES = "android.permission.ACCESS_CHECKIN_PROPERTIES";
     field public static final String ACCESS_COARSE_LOCATION = "android.permission.ACCESS_COARSE_LOCATION";
     field public static final String ACCESS_FINE_LOCATION = "android.permission.ACCESS_FINE_LOCATION";
@@ -951,6 +952,7 @@ package android {
     field public static final int mediaRouteButtonStyle = 16843693; // 0x10103ad
     field public static final int mediaRouteTypes = 16843694; // 0x10103ae
     field public static final int menuCategory = 16843230; // 0x10101de
+    field public static final int mimeGroup = 16844309; // 0x1010615
     field public static final int mimeType = 16842790; // 0x1010026
     field public static final int min = 16844089; // 0x1010539
     field public static final int minAspectRatio = 16844187; // 0x101059b
@@ -2871,7 +2873,9 @@ package android.accessibilityservice {
     method protected void onServiceConnected();
     method public void onSystemActionsChanged();
     method public final boolean performGlobalAction(int);
+    method public void setGestureDetectionPassthroughRegion(int, @NonNull android.graphics.Region);
     method public final void setServiceInfo(android.accessibilityservice.AccessibilityServiceInfo);
+    method public void setTouchExplorationPassthroughRegion(int, @NonNull android.graphics.Region);
     method public boolean takeScreenshot(int, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.accessibilityservice.AccessibilityService.ScreenshotResult>);
     field public static final int GESTURE_2_FINGER_DOUBLE_TAP = 20; // 0x14
     field public static final int GESTURE_2_FINGER_DOUBLE_TAP_AND_HOLD = 40; // 0x28
@@ -10827,6 +10831,8 @@ package android.content {
     field public static final int FLAG_ACTIVITY_NO_USER_ACTION = 262144; // 0x40000
     field public static final int FLAG_ACTIVITY_PREVIOUS_IS_TOP = 16777216; // 0x1000000
     field public static final int FLAG_ACTIVITY_REORDER_TO_FRONT = 131072; // 0x20000
+    field public static final int FLAG_ACTIVITY_REQUIRE_DEFAULT = 512; // 0x200
+    field public static final int FLAG_ACTIVITY_REQUIRE_NON_BROWSER = 1024; // 0x400
     field public static final int FLAG_ACTIVITY_RESET_TASK_IF_NEEDED = 2097152; // 0x200000
     field public static final int FLAG_ACTIVITY_RETAIN_IN_RECENTS = 8192; // 0x2000
     field public static final int FLAG_ACTIVITY_SINGLE_TOP = 536870912; // 0x20000000
@@ -11937,6 +11943,7 @@ package android.content.pm {
     method @CheckResult public abstract int checkSignatures(@NonNull String, @NonNull String);
     method @CheckResult public abstract int checkSignatures(int, int);
     method public abstract void clearInstantAppCookie();
+    method public void clearMimeGroup(@NonNull String);
     method @Deprecated public abstract void clearPackagePreferredActivities(@NonNull String);
     method public abstract String[] currentToCanonicalPackageNames(@NonNull String[]);
     method public abstract void extendVerificationTimeout(int, int, long);
@@ -11972,6 +11979,7 @@ package android.content.pm {
     method @NonNull public abstract android.content.pm.InstrumentationInfo getInstrumentationInfo(@NonNull android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method @Nullable public abstract android.content.Intent getLaunchIntentForPackage(@NonNull String);
     method @Nullable public abstract android.content.Intent getLeanbackLaunchIntentForPackage(@NonNull String);
+    method @Nullable public java.util.Set<java.lang.String> getMimeGroup(@NonNull String);
     method @NonNull public android.content.pm.ModuleInfo getModuleInfo(@NonNull String, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method @Nullable public abstract String getNameForUid(int);
     method @Nullable public android.content.pm.PackageInfo getPackageArchiveInfo(@NonNull String, int);
@@ -12034,6 +12042,7 @@ package android.content.pm {
     method @RequiresPermission(value=android.Manifest.permission.CHANGE_COMPONENT_ENABLED_STATE, conditional=true) public abstract void setApplicationEnabledSetting(@NonNull String, int, int);
     method @RequiresPermission(value=android.Manifest.permission.CHANGE_COMPONENT_ENABLED_STATE, conditional=true) public abstract void setComponentEnabledSetting(@NonNull android.content.ComponentName, int, int);
     method public abstract void setInstallerPackageName(@NonNull String, @Nullable String);
+    method public void setMimeGroup(@NonNull String, @NonNull java.util.Set<java.lang.String>);
     method public abstract void updateInstantAppCookie(@Nullable byte[]);
     method public abstract void verifyPendingInstall(int, int);
     field public static final int CERT_INPUT_RAW_X509 = 0; // 0x0
@@ -25092,7 +25101,7 @@ package android.media {
 
   public final class MediaCas implements java.lang.AutoCloseable {
     ctor public MediaCas(int) throws android.media.MediaCasException.UnsupportedCasException;
-    ctor public MediaCas(int, @Nullable String, int) throws android.media.MediaCasException.UnsupportedCasException;
+    ctor public MediaCas(@NonNull android.content.Context, int, @Nullable String, int) throws android.media.MediaCasException.UnsupportedCasException;
     method public void close();
     method public static android.media.MediaCas.PluginDescriptor[] enumeratePlugins();
     method protected void finalize();
@@ -31736,7 +31745,7 @@ package android.net.wifi.hotspot2 {
     method public android.net.wifi.hotspot2.pps.Credential getCredential();
     method public android.net.wifi.hotspot2.pps.HomeSp getHomeSp();
     method public long getSubscriptionExpirationTimeMillis();
-    method @NonNull public String getUniqueId() throws java.lang.IllegalStateException;
+    method @NonNull public String getUniqueId();
     method public boolean isOsuProvisioned();
     method public void setCredential(android.net.wifi.hotspot2.pps.Credential);
     method public void setHomeSp(android.net.wifi.hotspot2.pps.HomeSp);
@@ -36625,6 +36634,7 @@ package android.os {
     method public void addThermalStatusListener(@NonNull java.util.concurrent.Executor, @NonNull android.os.PowerManager.OnThermalStatusChangedListener);
     method public int getCurrentThermalStatus();
     method public int getLocationPowerSaveMode();
+    method public float getThermalHeadroom(@IntRange(from=0, to=60) int);
     method public boolean isDeviceIdleMode();
     method public boolean isIgnoringBatteryOptimizations(String);
     method public boolean isInteractive();
@@ -40577,13 +40587,13 @@ package android.provider {
     field public static final String WIFI_MAX_DHCP_RETRY_COUNT = "wifi_max_dhcp_retry_count";
     field public static final String WIFI_MOBILE_DATA_TRANSITION_WAKELOCK_TIMEOUT_MS = "wifi_mobile_data_transition_wakelock_timeout_ms";
     field @Deprecated public static final String WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON = "wifi_networks_available_notification_on";
-    field public static final String WIFI_NETWORKS_AVAILABLE_REPEAT_DELAY = "wifi_networks_available_repeat_delay";
-    field public static final String WIFI_NUM_OPEN_NETWORKS_KEPT = "wifi_num_open_networks_kept";
+    field @Deprecated public static final String WIFI_NETWORKS_AVAILABLE_REPEAT_DELAY = "wifi_networks_available_repeat_delay";
+    field @Deprecated public static final String WIFI_NUM_OPEN_NETWORKS_KEPT = "wifi_num_open_networks_kept";
     field public static final String WIFI_ON = "wifi_on";
-    field public static final String WIFI_SLEEP_POLICY = "wifi_sleep_policy";
-    field public static final int WIFI_SLEEP_POLICY_DEFAULT = 0; // 0x0
-    field public static final int WIFI_SLEEP_POLICY_NEVER = 2; // 0x2
-    field public static final int WIFI_SLEEP_POLICY_NEVER_WHILE_PLUGGED = 1; // 0x1
+    field @Deprecated public static final String WIFI_SLEEP_POLICY = "wifi_sleep_policy";
+    field @Deprecated public static final int WIFI_SLEEP_POLICY_DEFAULT = 0; // 0x0
+    field @Deprecated public static final int WIFI_SLEEP_POLICY_NEVER = 2; // 0x2
+    field @Deprecated public static final int WIFI_SLEEP_POLICY_NEVER_WHILE_PLUGGED = 1; // 0x1
     field public static final String WIFI_WATCHDOG_ON = "wifi_watchdog_on";
     field public static final String WINDOW_ANIMATION_SCALE = "window_animation_scale";
   }
@@ -43394,11 +43404,12 @@ package android.service.controls {
 
   public abstract class ControlsProviderService extends android.app.Service {
     ctor public ControlsProviderService();
-    method public abstract void loadAvailableControls(@NonNull java.util.function.Consumer<java.util.List<android.service.controls.Control>>);
-    method public void loadSuggestedControls(int, @NonNull java.util.function.Consumer<java.util.List<android.service.controls.Control>>);
+    method @Deprecated public void loadAvailableControls(@NonNull java.util.function.Consumer<java.util.List<android.service.controls.Control>>);
     method @NonNull public final android.os.IBinder onBind(@NonNull android.content.Intent);
     method public abstract void performControlAction(@NonNull String, @NonNull android.service.controls.actions.ControlAction, @NonNull java.util.function.Consumer<java.lang.Integer>);
     method @NonNull public abstract java.util.concurrent.Flow.Publisher<android.service.controls.Control> publisherFor(@NonNull java.util.List<java.lang.String>);
+    method @Nullable public java.util.concurrent.Flow.Publisher<android.service.controls.Control> publisherForAllAvailable();
+    method @Nullable public java.util.concurrent.Flow.Publisher<android.service.controls.Control> publisherForSuggested();
     field public static final String SERVICE_CONTROLS = "android.service.controls.ControlsProviderService";
     field @NonNull public static final String TAG = "ControlsProviderService";
   }
@@ -46802,59 +46813,6 @@ package android.telephony {
   public static final class CarrierConfigManager.Ims {
     field public static final String KEY_PREFIX = "ims.";
     field public static final String KEY_WIFI_OFF_DEFERRING_TIME_INT = "ims.wifi_off_deferring_time_int";
-  }
-
-  public static final class CarrierConfigManager.Iwlan {
-    field public static final int AUTHENTICATION_METHOD_CERT = 1; // 0x1
-    field public static final int AUTHENTICATION_METHOD_EAP_ONLY = 0; // 0x0
-    field public static final int DH_GROUP_1024_BIT_MODP = 2; // 0x2
-    field public static final int DH_GROUP_2048_BIT_MODP = 14; // 0xe
-    field public static final int DH_GROUP_NONE = 0; // 0x0
-    field public static final int ENCRYPTION_ALGORITHM_3DES = 3; // 0x3
-    field public static final int ENCRYPTION_ALGORITHM_AES_CBC = 12; // 0xc
-    field public static final int ENCRYPTION_ALGORITHM_AES_GCM_12 = 19; // 0x13
-    field public static final int ENCRYPTION_ALGORITHM_AES_GCM_16 = 20; // 0x14
-    field public static final int ENCRYPTION_ALGORITHM_AES_GCM_8 = 18; // 0x12
-    field public static final int EPDG_ADDRESS_PCO = 2; // 0x2
-    field public static final int EPDG_ADDRESS_PLMN = 1; // 0x1
-    field public static final int EPDG_ADDRESS_STATIC = 0; // 0x0
-    field public static final int INTEGRITY_ALGORITHM_AES_XCBC_96 = 5; // 0x5
-    field public static final int INTEGRITY_ALGORITHM_HMAC_SHA1_96 = 2; // 0x2
-    field public static final int INTEGRITY_ALGORITHM_HMAC_SHA2_256_128 = 12; // 0xc
-    field public static final int INTEGRITY_ALGORITHM_HMAC_SHA2_384_192 = 13; // 0xd
-    field public static final int INTEGRITY_ALGORITHM_HMAC_SHA2_512_256 = 14; // 0xe
-    field public static final int INTEGRITY_ALGORITHM_NONE = 0; // 0x0
-    field public static final String KEY_CHILD_SA_REKEY_HARD_TIMER_SEC_INT = "iwlan.child_sa_rekey_hard_timer_sec_int";
-    field public static final String KEY_CHILD_SA_REKEY_SOFT_TIMER_SEC_INT = "iwlan.child_sa_rekey_soft_timer_sec_int";
-    field public static final String KEY_CHILD_SESSION_AES_CBC_KEY_SIZE_INT_ARRAY = "iwlan.child_session_aes_cbc_key_size_int_array";
-    field public static final String KEY_CHILD_SESSION_AES_CTR_KEY_SIZE_INT_ARRAY = "iwlan.child_encryption_aes_ctr_key_size_int_array";
-    field public static final String KEY_DIFFIE_HELLMAN_GROUPS_INT_ARRAY = "iwlan.diffie_hellman_groups_int_array";
-    field public static final String KEY_DPD_TIMER_SEC_INT = "iwlan.dpd_timer_sec_int";
-    field public static final String KEY_EPDG_ADDRESS_PRIORITY_INT_ARRAY = "iwlan.epdg_address_priority_int_array";
-    field public static final String KEY_EPDG_AUTHENTICATION_METHOD_INT = "iwlan.epdg_authentication_method_int";
-    field public static final String KEY_EPDG_STATIC_ADDRESS_ROAMING_STRING = "iwlan.epdg_static_address_roaming_string";
-    field public static final String KEY_EPDG_STATIC_ADDRESS_STRING = "iwlan.epdg_static_address_string";
-    field public static final String KEY_IKE_FRAGMENTATION_ENABLED_BOOL = "iwlan.ike_fragmentation_enabled_bool";
-    field public static final String KEY_IKE_REKEY_HARD_TIMER_SEC_INT = "iwlan.ike_rekey_hard_timer_in_sec";
-    field public static final String KEY_IKE_REKEY_SOFT_TIMER_SEC_INT = "iwlan.ike_rekey_soft_timer_sec_int";
-    field public static final String KEY_IKE_SESSION_AES_CBC_KEY_SIZE_INT_ARRAY = "iwlan.ike_session_encryption_aes_cbc_key_size_int_array";
-    field public static final String KEY_IKE_SESSION_AES_CTR_KEY_SIZE_INT_ARRAY = "iwlan.ike_session_aes_ctr_key_size_int_array";
-    field public static final int KEY_LEN_AES_128 = 128; // 0x80
-    field public static final int KEY_LEN_AES_192 = 192; // 0xc0
-    field public static final int KEY_LEN_AES_256 = 256; // 0x100
-    field public static final int KEY_LEN_UNUSED = 0; // 0x0
-    field public static final String KEY_MAX_RETRIES_INT = "iwlan.max_retries_int";
-    field public static final String KEY_MCC_MNCS_STRING_ARRAY = "iwlan.mcc_mncs_string_array";
-    field public static final String KEY_NATT_ENABLED_BOOL = "iwlan.natt_enabled_bool";
-    field public static final String KEY_NATT_KEEP_ALIVE_TIMER_SEC_INT = "iwlan.natt_keep_alive_timer_sec_int";
-    field public static final String KEY_PREFIX = "iwlan.";
-    field public static final String KEY_RETRANSMIT_TIMER_SEC_INT = "iwlan.retransmit_timer_sec_int";
-    field public static final String KEY_SUPPORTED_CHILD_SESSION_ENCRYPTION_ALGORITHMS_INT_ARRAY = "iwlan.supported_child_session_encryption_algorithms_int_array";
-    field public static final String KEY_SUPPORTED_IKE_SESSION_ENCRYPTION_ALGORITHMS_INT_ARRAY = "iwlan.supported_ike_session_encryption_algorithms_int_array";
-    field public static final String KEY_SUPPORTED_INTEGRITY_ALGORITHMS_INT_ARRAY = "iwlan.supported_integrity_algorithms_int_array";
-    field public static final String KEY_SUPPORTED_PRF_ALGORITHMS_INT_ARRAY = "iwlan.supported_prf_algorithms_int_array";
-    field public static final int PSEUDORANDOM_FUNCTION_AES128_XCBC = 4; // 0x4
-    field public static final int PSEUDORANDOM_FUNCTION_HMAC_SHA1 = 2; // 0x2
   }
 
   public abstract class CellIdentity implements android.os.Parcelable {
@@ -53231,11 +53189,13 @@ package android.view {
     method public android.graphics.Canvas lockHardwareCanvas();
     method public void readFromParcel(android.os.Parcel);
     method public void release();
-    method public void setFrameRate(@FloatRange(from=0.0) float);
+    method public void setFrameRate(@FloatRange(from=0.0) float, int);
     method @Deprecated public void unlockCanvas(android.graphics.Canvas);
     method public void unlockCanvasAndPost(android.graphics.Canvas);
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.view.Surface> CREATOR;
+    field public static final int FRAME_RATE_COMPATIBILITY_DEFAULT = 0; // 0x0
+    field public static final int FRAME_RATE_COMPATIBILITY_FIXED_SOURCE = 1; // 0x1
     field public static final int ROTATION_0 = 0; // 0x0
     field public static final int ROTATION_180 = 2; // 0x2
     field public static final int ROTATION_270 = 3; // 0x3
@@ -53275,7 +53235,7 @@ package android.view {
     method @NonNull public android.view.SurfaceControl.Transaction reparent(@NonNull android.view.SurfaceControl, @Nullable android.view.SurfaceControl);
     method @NonNull public android.view.SurfaceControl.Transaction setAlpha(@NonNull android.view.SurfaceControl, @FloatRange(from=0.0, to=1.0) float);
     method @NonNull public android.view.SurfaceControl.Transaction setBufferSize(@NonNull android.view.SurfaceControl, @IntRange(from=0) int, @IntRange(from=0) int);
-    method @NonNull public android.view.SurfaceControl.Transaction setFrameRate(@NonNull android.view.SurfaceControl, @FloatRange(from=0.0) float);
+    method @NonNull public android.view.SurfaceControl.Transaction setFrameRate(@NonNull android.view.SurfaceControl, @FloatRange(from=0.0) float, int);
     method @NonNull public android.view.SurfaceControl.Transaction setGeometry(@NonNull android.view.SurfaceControl, @Nullable android.graphics.Rect, @Nullable android.graphics.Rect, int);
     method @NonNull public android.view.SurfaceControl.Transaction setLayer(@NonNull android.view.SurfaceControl, @IntRange(from=java.lang.Integer.MIN_VALUE, to=java.lang.Integer.MAX_VALUE) int);
     method @NonNull public android.view.SurfaceControl.Transaction setVisibility(@NonNull android.view.SurfaceControl, boolean);
@@ -53883,6 +53843,7 @@ package android.view {
     method public boolean requestRectangleOnScreen(android.graphics.Rect);
     method public boolean requestRectangleOnScreen(android.graphics.Rect, boolean);
     method public final void requestUnbufferedDispatch(android.view.MotionEvent);
+    method public final void requestUnbufferedDispatch(int);
     method @NonNull public final <T extends android.view.View> T requireViewById(@IdRes int);
     method public void resetPivot();
     method public static int resolveSize(int, int);
@@ -55596,6 +55557,7 @@ package android.view.accessibility {
     method public CharSequence getContentDescription();
     method public int getDrawingOrder();
     method public CharSequence getError();
+    method @Nullable public android.view.accessibility.AccessibilityNodeInfo.ExtraRenderingInfo getExtraRenderingInfo();
     method public android.os.Bundle getExtras();
     method public CharSequence getHintText();
     method public int getInputType();
@@ -55748,6 +55710,7 @@ package android.view.accessibility {
     field public static final int ACTION_SET_SELECTION = 131072; // 0x20000
     field public static final int ACTION_SET_TEXT = 2097152; // 0x200000
     field @NonNull public static final android.os.Parcelable.Creator<android.view.accessibility.AccessibilityNodeInfo> CREATOR;
+    field public static final String EXTRA_DATA_RENDERING_INFO_KEY = "android.view.accessibility.extra.DATA_RENDERING_INFO_KEY";
     field public static final String EXTRA_DATA_TEXT_CHARACTER_LOCATION_ARG_LENGTH = "android.view.accessibility.extra.DATA_TEXT_CHARACTER_LOCATION_ARG_LENGTH";
     field public static final String EXTRA_DATA_TEXT_CHARACTER_LOCATION_ARG_START_INDEX = "android.view.accessibility.extra.DATA_TEXT_CHARACTER_LOCATION_ARG_START_INDEX";
     field public static final String EXTRA_DATA_TEXT_CHARACTER_LOCATION_KEY = "android.view.accessibility.extra.DATA_TEXT_CHARACTER_LOCATION_KEY";
@@ -55833,6 +55796,12 @@ package android.view.accessibility {
     method public boolean isSelected();
     method public static android.view.accessibility.AccessibilityNodeInfo.CollectionItemInfo obtain(int, int, int, int, boolean);
     method public static android.view.accessibility.AccessibilityNodeInfo.CollectionItemInfo obtain(int, int, int, int, boolean, boolean);
+  }
+
+  public static final class AccessibilityNodeInfo.ExtraRenderingInfo {
+    method @Nullable public android.util.Size getLayoutParams();
+    method public float getTextSizeInPx();
+    method public int getTextSizeUnit();
   }
 
   public static final class AccessibilityNodeInfo.RangeInfo {
@@ -60817,6 +60786,7 @@ package android.widget {
     method @Nullable public android.graphics.drawable.Drawable getTextSelectHandleLeft();
     method @Nullable public android.graphics.drawable.Drawable getTextSelectHandleRight();
     method @android.view.ViewDebug.ExportedProperty(category="text") public float getTextSize();
+    method public int getTextSizeUnit();
     method public int getTotalPaddingBottom();
     method public int getTotalPaddingEnd();
     method public int getTotalPaddingLeft();
