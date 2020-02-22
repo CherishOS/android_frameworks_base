@@ -255,7 +255,7 @@ public class CherishUtils {
         final KeyEvent evDown = new KeyEvent(when, when, KeyEvent.ACTION_DOWN, keycode, 0,
                 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
                 KeyEvent.FLAG_FROM_SYSTEM | KeyEvent.FLAG_VIRTUAL_HARD_KEY,
-                InputDevice.SOURCE_KEYBOARD);
+                InputDevice.SOURCE_NAVIGATION_BAR);
         final KeyEvent evUp = KeyEvent.changeAction(evDown, KeyEvent.ACTION_UP);
 
         final Handler handler = new Handler(Looper.getMainLooper());
