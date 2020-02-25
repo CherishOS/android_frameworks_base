@@ -16802,6 +16802,7 @@ package android.hardware {
     field public static final long USAGE_PROTECTED_CONTENT = 16384L; // 0x4000L
     field public static final long USAGE_SENSOR_DIRECT_DATA = 8388608L; // 0x800000L
     field public static final long USAGE_VIDEO_ENCODE = 65536L; // 0x10000L
+    field public static final int YCBCR_420_888 = 35; // 0x23
   }
 
   public final class Sensor {
@@ -25210,6 +25211,7 @@ package android.media {
     method @NonNull public android.media.MediaCodec.OutputFrame getOutputFrame(int);
     method @Nullable public android.media.Image getOutputImage(int);
     method @NonNull public android.media.MediaCodec.QueueRequest getQueueRequest(int);
+    method @Nullable public static android.media.Image mapHardwareBuffer(@NonNull android.hardware.HardwareBuffer);
     method public void queueInputBuffer(int, int, int, long, int) throws android.media.MediaCodec.CryptoException;
     method public void queueSecureInputBuffer(int, int, @NonNull android.media.MediaCodec.CryptoInfo, long, int) throws android.media.MediaCodec.CryptoException;
     method public void release();
@@ -25310,17 +25312,7 @@ package android.media {
     method public void set(int, int);
   }
 
-  public static final class MediaCodec.GraphicBlock {
-    method protected void finalize();
-    method public static boolean isCodecCopyFreeCompatible(@NonNull String[]);
-    method public boolean isMappable();
-    method @NonNull public android.media.Image map();
-    method @NonNull public static android.media.MediaCodec.GraphicBlock obtain(int, int, int, long, @NonNull String[]);
-    method public void recycle();
-  }
-
   public class MediaCodec.IncompatibleWithBlockModelException extends java.lang.RuntimeException {
-    ctor public MediaCodec.IncompatibleWithBlockModelException();
   }
 
   public static final class MediaCodec.LinearBlock {
@@ -25350,12 +25342,12 @@ package android.media {
   }
 
   public static final class MediaCodec.OutputFrame {
+    method @NonNull public java.util.Set<java.lang.String> getChangedKeys();
     method public int getFlags();
     method @NonNull public android.media.MediaFormat getFormat();
-    method @Nullable public android.media.MediaCodec.GraphicBlock getGraphicBlock();
+    method @Nullable public android.hardware.HardwareBuffer getHardwareBuffer();
     method @Nullable public android.media.MediaCodec.LinearBlock getLinearBlock();
     method public long getPresentationTimeUs();
-    method public void retrieveChangedKeys(@NonNull java.util.Set<java.lang.String>);
   }
 
   public final class MediaCodec.QueueRequest {
@@ -25363,7 +25355,7 @@ package android.media {
     method @NonNull public android.media.MediaCodec.QueueRequest setByteBufferParameter(@NonNull String, @NonNull java.nio.ByteBuffer);
     method @NonNull public android.media.MediaCodec.QueueRequest setFlags(int);
     method @NonNull public android.media.MediaCodec.QueueRequest setFloatParameter(@NonNull String, float);
-    method @NonNull public android.media.MediaCodec.QueueRequest setGraphicBlock(@NonNull android.media.MediaCodec.GraphicBlock);
+    method @NonNull public android.media.MediaCodec.QueueRequest setHardwareBuffer(@NonNull android.hardware.HardwareBuffer);
     method @NonNull public android.media.MediaCodec.QueueRequest setIntegerParameter(@NonNull String, int);
     method @NonNull public android.media.MediaCodec.QueueRequest setLinearBlock(@NonNull android.media.MediaCodec.LinearBlock, int, int, @Nullable android.media.MediaCodec.CryptoInfo);
     method @NonNull public android.media.MediaCodec.QueueRequest setLongParameter(@NonNull String, long);
