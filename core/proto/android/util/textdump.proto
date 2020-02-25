@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package android.service.autofill;
+syntax = "proto2";
+package android.util;
 
-import android.os.IBinder;
-import android.service.autofill.IInlineSuggestionUiCallback;
-import android.service.autofill.InlinePresentation;
+import "frameworks/base/core/proto/android/privacy.proto";
 
-/**
- * Interface from system to the inline suggestion render service.
- *
- * @hide
- */
-oneway interface IInlineSuggestionRenderService {
-    void renderSuggestion(in IInlineSuggestionUiCallback callback,
-                          in InlinePresentation presentation, int width, int height,
-                          in IBinder hostInputToken, int displayId);
+option java_multiple_files = true;
+
+message TextDumpProto {
+    option (android.msg_privacy).dest = DEST_EXPLICIT;
+
+    // The command that was executed
+    optional string command = 1;
+    // The content that was dumped
+    optional string content = 2;
+    // The duration of the dump process
+    optional int64 dump_duration_ns = 3;
 }
