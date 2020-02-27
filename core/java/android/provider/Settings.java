@@ -6248,6 +6248,12 @@ public final class Settings {
          * @hide
          */
         public static final String ALERT_SLIDER_ORDER = "alert_slider_order";
+		
+		/**
+         * Whether to show or hide alert slider notifications on supported devices
+         * @hide
+         */
+        public static final String ALERT_SLIDER_NOTIFICATIONS = "alert_slider_notifications";
 
         /** @hide */
         public static final String BACK_GESTURE_HAPTIC = "back_gesture_haptic";
