@@ -274,6 +274,20 @@ public class CherishUtils {
                 }
             }
         }
+		
+	public static void toggleNotifications() {
+        FireActions.toggleNotifications();
+    }
+	
+	// Toggle notifications panel
+        public static void toggleNotifications() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.togglePanel();
+                } catch (RemoteException e) {}
+            }
+        }
 
     public static void sendKeycode(int keycode) {
         long when = SystemClock.uptimeMillis();
