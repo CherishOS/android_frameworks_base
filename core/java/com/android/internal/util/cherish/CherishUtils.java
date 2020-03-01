@@ -259,6 +259,21 @@ public class CherishUtils {
         return !TextUtils.isEmpty(networkOperator) && Arrays.asList(mcc).contains(
                 networkOperator.substring(0, /*Filter only 3 digits*/ 3));
     }
+	
+	public static void killForegroundApp() {
+        FireActions.killForegroundApp();
+    }
+	
+	public static void killForegroundApp() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.killForegroundApp();
+                } catch (RemoteException e) {
+                    // do nothing.
+                }
+            }
+        }
 
     public static void sendKeycode(int keycode) {
         long when = SystemClock.uptimeMillis();
