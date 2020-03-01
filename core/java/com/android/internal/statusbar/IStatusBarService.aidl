@@ -237,6 +237,7 @@ interface IStatusBarService
     void toggleSplitScreen();
     void preloadRecentApps();
     void cancelPreloadRecentApps();
+    void killForegroundApp();
 
     /**
      * Used to block or unblock usage of gestural navigation
