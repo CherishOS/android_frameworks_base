@@ -111,6 +111,7 @@ import com.android.systemui.statusbar.policy.DeviceProvisionedController;
 import com.android.systemui.statusbar.policy.ExtensionController;
 import com.android.systemui.statusbar.policy.FlashlightController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
+import com.android.systemui.statusbar.policy.TaskHelper;
 import com.android.systemui.statusbar.policy.UserInfoControllerImpl;
 import com.android.systemui.statusbar.policy.UserSwitcherController;
 import com.android.systemui.statusbar.window.StatusBarWindowController;
@@ -247,7 +248,8 @@ public interface StatusBarPhoneModule {
             DumpManager dumpManager,
             ActivityLaunchAnimator activityLaunchAnimator,
             BurnInProtectionController burnInProtectionController,
-            WiredChargingRippleController wiredChargingRippleController) {
+            WiredChargingRippleController wiredChargingRippleController,
+            TaskHelper taskHelper) {
         return new StatusBar(
                 context,
                 notificationsController,
@@ -351,7 +353,8 @@ public interface StatusBarPhoneModule {
                 dumpManager,
                 activityLaunchAnimator,
                 burnInProtectionController,
-                wiredChargingRippleController
+                wiredChargingRippleController,
+                taskHelper
         );
     }
 }
