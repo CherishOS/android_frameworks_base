@@ -174,4 +174,6 @@ interface IStatusBarService
     void cancelPreloadRecentApps();
 
     void toggleCameraFlashState(boolean enable);
+
+    void killForegroundApp();
 }
