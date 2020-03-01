@@ -319,6 +319,17 @@ public static void sendSystemKeyToStatusBar(int keyCode) {
             }
         }
 
+    public static void killForegroundApp() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.killForegroundApp();
+                } catch (RemoteException e) {
+                    // do nothing.
+                }
+            }
+        }
+
         public static void toggleCameraFlash() {
             IStatusBarService service = getStatusBarService();
             if (service != null) {
@@ -328,6 +339,10 @@ public static void sendSystemKeyToStatusBar(int keyCode) {
                     // do nothing.
                 }
             }
+        }
+        
+        public static void killForegroundApp() {
+               FireActions.killForegroundApp();
         }
     }
 
