@@ -11373,6 +11373,7 @@ package android.content.pm {
     field public static final int FLAG_IMMERSIVE = 2048; // 0x800
     field public static final int FLAG_MULTIPROCESS = 1; // 0x1
     field public static final int FLAG_NO_HISTORY = 128; // 0x80
+    field public static final int FLAG_PREFER_MINIMAL_POST_PROCESSING = 33554432; // 0x2000000
     field public static final int FLAG_RELINQUISH_TASK_IDENTITY = 4096; // 0x1000
     field public static final int FLAG_RESUME_WHILE_PAUSING = 16384; // 0x4000
     field public static final int FLAG_SINGLE_USER = 1073741824; // 0x40000000
@@ -11410,7 +11411,6 @@ package android.content.pm {
     field public String parentActivityName;
     field public String permission;
     field public int persistableMode;
-    field public boolean preferMinimalPostProcessing;
     field public int screenOrientation;
     field public int softInputMode;
     field public String targetActivity;
@@ -26408,7 +26408,7 @@ package android.media {
   }
 
   public final class MediaParser {
-    method public boolean advance(@NonNull android.media.MediaParser.SeekableInputReader) throws java.io.IOException, java.lang.InterruptedException;
+    method public boolean advance(@NonNull android.media.MediaParser.SeekableInputReader) throws java.io.IOException;
     method @NonNull public static android.media.MediaParser create(@NonNull android.media.MediaParser.OutputConsumer, @NonNull java.lang.String...);
     method @NonNull public static android.media.MediaParser createByName(@NonNull String, @NonNull android.media.MediaParser.OutputConsumer);
     method @Nullable public String getParserName();
@@ -26440,12 +26440,12 @@ package android.media {
   public static interface MediaParser.InputReader {
     method public long getLength();
     method public long getPosition();
-    method public int read(@NonNull byte[], int, int) throws java.io.IOException, java.lang.InterruptedException;
+    method public int read(@NonNull byte[], int, int) throws java.io.IOException;
   }
 
   public static interface MediaParser.OutputConsumer {
     method public void onSampleCompleted(int, long, int, int, int, @Nullable android.media.MediaCodec.CryptoInfo);
-    method public void onSampleData(int, @NonNull android.media.MediaParser.InputReader) throws java.io.IOException, java.lang.InterruptedException;
+    method public void onSampleData(int, @NonNull android.media.MediaParser.InputReader) throws java.io.IOException;
     method public void onSeekMap(@NonNull android.media.MediaParser.SeekMap);
     method public void onTrackData(int, @NonNull android.media.MediaParser.TrackData);
     method public void onTracksFound(int);
@@ -42789,7 +42789,7 @@ package android.security.keystore {
     method @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setRandomizedEncryptionRequired(boolean);
     method @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setSignaturePaddings(java.lang.String...);
     method @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setUnlockedDeviceRequired(boolean);
-    method @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationParameters(@IntRange(from=0xffffffff) int, int);
+    method @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationParameters(@IntRange(from=0) int, int);
     method @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationRequired(boolean);
     method @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationValidWhileOnBody(boolean);
     method @Deprecated @NonNull public android.security.keystore.KeyGenParameterSpec.Builder setUserAuthenticationValidityDurationSeconds(@IntRange(from=0xffffffff) int);
@@ -42907,7 +42907,7 @@ package android.security.keystore {
     method @NonNull public android.security.keystore.KeyProtection.Builder setRandomizedEncryptionRequired(boolean);
     method @NonNull public android.security.keystore.KeyProtection.Builder setSignaturePaddings(java.lang.String...);
     method @NonNull public android.security.keystore.KeyProtection.Builder setUnlockedDeviceRequired(boolean);
-    method @NonNull public android.security.keystore.KeyProtection.Builder setUserAuthenticationParameters(@IntRange(from=0xffffffff) int, int);
+    method @NonNull public android.security.keystore.KeyProtection.Builder setUserAuthenticationParameters(@IntRange(from=0) int, int);
     method @NonNull public android.security.keystore.KeyProtection.Builder setUserAuthenticationRequired(boolean);
     method @NonNull public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidWhileOnBody(boolean);
     method @Deprecated @NonNull public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidityDurationSeconds(@IntRange(from=0xffffffff) int);
@@ -48051,7 +48051,7 @@ package android.telephony {
 
   public class SubscriptionManager {
     method public void addOnOpportunisticSubscriptionsChangedListener(@NonNull java.util.concurrent.Executor, @NonNull android.telephony.SubscriptionManager.OnOpportunisticSubscriptionsChangedListener);
-    method public void addOnSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnSubscriptionsChangedListener);
+    method @Deprecated public void addOnSubscriptionsChangedListener(android.telephony.SubscriptionManager.OnSubscriptionsChangedListener);
     method public void addOnSubscriptionsChangedListener(@NonNull java.util.concurrent.Executor, @NonNull android.telephony.SubscriptionManager.OnSubscriptionsChangedListener);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public void addSubscriptionsIntoGroup(@NonNull java.util.List<java.lang.Integer>, @NonNull android.os.ParcelUuid);
     method public boolean canManageSubscription(android.telephony.SubscriptionInfo);
