@@ -90,6 +90,13 @@ public static final String[] PANEL_BG_STYLE = {
         "com.jrinfected.panel.outline", // 3
 };
 
+public static final String[] NAVBAR_STYLES = {
+            "com.android.theme.navbar.asus",
+            "com.android.theme.navbar.oneplus",
+            "com.android.theme.navbar.oneui",
+            "com.android.theme.navbar.tecno",
+    };
+
 // QS Tile Styles
 public static final String[] QS_TILE_THEMES = {
     "com.android.systemui.qstile.default", // 0
