@@ -574,6 +574,7 @@ package android {
     field public static final int elevation = 16843840; // 0x1010440
     field public static final int ellipsize = 16842923; // 0x10100ab
     field public static final int ems = 16843096; // 0x1010158
+    field public static final int enableGwpAsan = 16844312; // 0x1010618
     field public static final int enableVrMode = 16844069; // 0x1010525
     field public static final int enabled = 16842766; // 0x101000e
     field public static final int end = 16843996; // 0x10104dc
@@ -9926,8 +9927,11 @@ package android.content {
     field public static final String EXTRA_REFRESH_SUPPORTED = "android.content.extra.REFRESH_SUPPORTED";
     field public static final String EXTRA_SIZE = "android.content.extra.SIZE";
     field public static final String EXTRA_TOTAL_COUNT = "android.content.extra.TOTAL_COUNT";
+    field public static final int NOTIFY_DELETE = 16; // 0x10
+    field public static final int NOTIFY_INSERT = 4; // 0x4
     field public static final int NOTIFY_SKIP_NOTIFY_FOR_DESCENDANTS = 2; // 0x2
     field public static final int NOTIFY_SYNC_TO_NETWORK = 1; // 0x1
+    field public static final int NOTIFY_UPDATE = 8; // 0x8
     field public static final String QUERY_ARG_GROUP_COLUMNS = "android:query-arg-group-columns";
     field public static final String QUERY_ARG_LIMIT = "android:query-arg-limit";
     field public static final String QUERY_ARG_OFFSET = "android:query-arg-offset";
@@ -11437,6 +11441,7 @@ package android.content.pm {
     method public int describeContents();
     method public void dump(android.util.Printer, String);
     method public static CharSequence getCategoryTitle(android.content.Context, int);
+    method @Nullable public Boolean isGwpAsanEnabled();
     method public boolean isProfileableByShell();
     method public boolean isResourceOverlay();
     method public boolean isVirtualPreload();
@@ -12969,9 +12974,13 @@ package android.database {
     ctor public ContentObserver(android.os.Handler);
     method public boolean deliverSelfNotifications();
     method @Deprecated public final void dispatchChange(boolean);
-    method public final void dispatchChange(boolean, android.net.Uri);
+    method public final void dispatchChange(boolean, @Nullable android.net.Uri);
+    method public final void dispatchChange(boolean, @Nullable android.net.Uri, int);
+    method public final void dispatchChange(boolean, @NonNull Iterable<android.net.Uri>, int);
     method public void onChange(boolean);
-    method public void onChange(boolean, android.net.Uri);
+    method public void onChange(boolean, @Nullable android.net.Uri);
+    method public void onChange(boolean, @Nullable android.net.Uri, int);
+    method public void onChange(boolean, @NonNull Iterable<android.net.Uri>, int);
   }
 
   public interface CrossProcessCursor extends android.database.Cursor {
@@ -14061,6 +14070,7 @@ package android.graphics {
     method public android.graphics.Bitmap.Config getConfig();
     method public int getDensity();
     method public int getGenerationId();
+    method @NonNull public android.hardware.HardwareBuffer getHardwareBuffer();
     method public int getHeight();
     method public byte[] getNinePatchChunk();
     method @ColorInt public int getPixel(int, int);
@@ -26904,7 +26914,6 @@ package android.media {
     method public final void notifyRequestFailed(long, int);
     method public final void notifyRoutes(@NonNull java.util.Collection<android.media.MediaRoute2Info>);
     method public final void notifySessionCreated(@NonNull android.media.RoutingSessionInfo, long);
-    method public final void notifySessionCreationFailed(long);
     method public final void notifySessionReleased(@NonNull String);
     method public final void notifySessionUpdated(@NonNull android.media.RoutingSessionInfo);
     method @CallSuper @Nullable public android.os.IBinder onBind(@NonNull android.content.Intent);
@@ -43509,6 +43518,7 @@ package android.service.controls {
     field public static final int TYPE_RADIATOR = 16; // 0x10
     field public static final int TYPE_REFRIGERATOR = 48; // 0x30
     field public static final int TYPE_REMOTE_CONTROL = 17; // 0x11
+    field public static final int TYPE_ROUTINE = 52; // 0x34
     field public static final int TYPE_SECURITY_SYSTEM = 46; // 0x2e
     field public static final int TYPE_SET_TOP = 18; // 0x12
     field public static final int TYPE_SHOWER = 29; // 0x1d
@@ -48312,10 +48322,6 @@ package android.telephony {
     field public static final String EXTRA_SUBSCRIPTION_ID = "android.telephony.extra.SUBSCRIPTION_ID";
     field public static final String EXTRA_VOICEMAIL_NUMBER = "android.telephony.extra.VOICEMAIL_NUMBER";
     field public static final String METADATA_HIDE_VOICEMAIL_SETTINGS_MENU = "android.telephony.HIDE_VOICEMAIL_SETTINGS_MENU";
-    field public static final int MODEM_COUNT_DUAL_MODEM = 2; // 0x2
-    field public static final int MODEM_COUNT_NO_MODEM = 0; // 0x0
-    field public static final int MODEM_COUNT_SINGLE_MODEM = 1; // 0x1
-    field public static final int MODEM_COUNT_TRI_MODEM = 3; // 0x3
     field public static final int MULTISIM_ALLOWED = 0; // 0x0
     field public static final int MULTISIM_NOT_SUPPORTED_BY_CARRIER = 2; // 0x2
     field public static final int MULTISIM_NOT_SUPPORTED_BY_HARDWARE = 1; // 0x1
@@ -55751,7 +55757,6 @@ package android.view {
     field public static final int TYPE_PRIVATE_PRESENTATION = 2030; // 0x7ee
     field public static final int TYPE_SEARCH_BAR = 2001; // 0x7d1
     field public static final int TYPE_STATUS_BAR = 2000; // 0x7d0
-    field @Deprecated public static final int TYPE_STATUS_BAR_PANEL = 2014; // 0x7de
     field @Deprecated public static final int TYPE_SYSTEM_ALERT = 2003; // 0x7d3
     field public static final int TYPE_SYSTEM_DIALOG = 2008; // 0x7d8
     field @Deprecated public static final int TYPE_SYSTEM_ERROR = 2010; // 0x7da
@@ -55778,7 +55783,7 @@ package android.view {
     field public int softInputMode;
     field @Deprecated public int systemUiVisibility;
     field public android.os.IBinder token;
-    field @android.view.ViewDebug.ExportedProperty(mapping={@android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_BASE_APPLICATION, to="BASE_APPLICATION"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION, to="APPLICATION"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_STARTING, to="APPLICATION_STARTING"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_DRAWN_APPLICATION, to="DRAWN_APPLICATION"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_PANEL, to="APPLICATION_PANEL"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_MEDIA, to="APPLICATION_MEDIA"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_SUB_PANEL, to="APPLICATION_SUB_PANEL"), @android.view.ViewDebug.IntToString(from=0x3ed, to="APPLICATION_ABOVE_SUB_PANEL"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG, to="APPLICATION_ATTACHED_DIALOG"), @android.view.ViewDebug.IntToString(from=0x3ec, to="APPLICATION_MEDIA_OVERLAY"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_STATUS_BAR, to="STATUS_BAR"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SEARCH_BAR, to="SEARCH_BAR"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_PHONE, to="PHONE"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT, to="SYSTEM_ALERT"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_TOAST, to="TOAST"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, to="SYSTEM_OVERLAY"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_PRIORITY_PHONE, to="PRIORITY_PHONE"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SYSTEM_DIALOG, to="SYSTEM_DIALOG"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG, to="KEYGUARD_DIALOG"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ERROR, to="SYSTEM_ERROR"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_INPUT_METHOD, to="INPUT_METHOD"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_INPUT_METHOD_DIALOG, to="INPUT_METHOD_DIALOG"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_WALLPAPER, to="WALLPAPER"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL, to="STATUS_BAR_PANEL"), @android.view.ViewDebug.IntToString(from=0x7df, to="SECURE_SYSTEM_OVERLAY"), @android.view.ViewDebug.IntToString(from=0x7e0, to="DRAG"), @android.view.ViewDebug.IntToString(from=0x7e1, to="STATUS_BAR_SUB_PANEL"), @android.view.ViewDebug.IntToString(from=0x7e2, to="POINTER"), @android.view.ViewDebug.IntToString(from=0x7e3, to="NAVIGATION_BAR"), @android.view.ViewDebug.IntToString(from=0x7e4, to="VOLUME_OVERLAY"), @android.view.ViewDebug.IntToString(from=0x7e5, to="BOOT_PROGRESS"), @android.view.ViewDebug.IntToString(from=0x7e6, to="INPUT_CONSUMER"), @android.view.ViewDebug.IntToString(from=0x7e7, to="DREAM"), @android.view.ViewDebug.IntToString(from=0x7e8, to="NAVIGATION_BAR_PANEL"), @android.view.ViewDebug.IntToString(from=0x7ea, to="DISPLAY_OVERLAY"), @android.view.ViewDebug.IntToString(from=0x7eb, to="MAGNIFICATION_OVERLAY"), @android.view.ViewDebug.IntToString(from=0x7f5, to="PRESENTATION"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_PRIVATE_PRESENTATION, to="PRIVATE_PRESENTATION"), @android.view.ViewDebug.IntToString(from=0x7ef, to="VOICE_INTERACTION"), @android.view.ViewDebug.IntToString(from=0x7f1, to="VOICE_INTERACTION_STARTING"), @android.view.ViewDebug.IntToString(from=0x7f2, to="DOCK_DIVIDER"), @android.view.ViewDebug.IntToString(from=0x7f3, to="QS_DIALOG"), @android.view.ViewDebug.IntToString(from=0x7f4, to="SCREENSHOT"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY, to="APPLICATION_OVERLAY")}) public int type;
+    field @android.view.ViewDebug.ExportedProperty(mapping={@android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_BASE_APPLICATION, to="BASE_APPLICATION"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION, to="APPLICATION"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_STARTING, to="APPLICATION_STARTING"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_DRAWN_APPLICATION, to="DRAWN_APPLICATION"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_PANEL, to="APPLICATION_PANEL"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_MEDIA, to="APPLICATION_MEDIA"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_SUB_PANEL, to="APPLICATION_SUB_PANEL"), @android.view.ViewDebug.IntToString(from=0x3ed, to="APPLICATION_ABOVE_SUB_PANEL"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG, to="APPLICATION_ATTACHED_DIALOG"), @android.view.ViewDebug.IntToString(from=0x3ec, to="APPLICATION_MEDIA_OVERLAY"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_STATUS_BAR, to="STATUS_BAR"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SEARCH_BAR, to="SEARCH_BAR"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_PHONE, to="PHONE"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT, to="SYSTEM_ALERT"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_TOAST, to="TOAST"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, to="SYSTEM_OVERLAY"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_PRIORITY_PHONE, to="PRIORITY_PHONE"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SYSTEM_DIALOG, to="SYSTEM_DIALOG"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG, to="KEYGUARD_DIALOG"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ERROR, to="SYSTEM_ERROR"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_INPUT_METHOD, to="INPUT_METHOD"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_INPUT_METHOD_DIALOG, to="INPUT_METHOD_DIALOG"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_WALLPAPER, to="WALLPAPER"), @android.view.ViewDebug.IntToString(from=0x7de, to="STATUS_BAR_PANEL"), @android.view.ViewDebug.IntToString(from=0x7df, to="SECURE_SYSTEM_OVERLAY"), @android.view.ViewDebug.IntToString(from=0x7e0, to="DRAG"), @android.view.ViewDebug.IntToString(from=0x7e1, to="STATUS_BAR_SUB_PANEL"), @android.view.ViewDebug.IntToString(from=0x7e2, to="POINTER"), @android.view.ViewDebug.IntToString(from=0x7e3, to="NAVIGATION_BAR"), @android.view.ViewDebug.IntToString(from=0x7e4, to="VOLUME_OVERLAY"), @android.view.ViewDebug.IntToString(from=0x7e5, to="BOOT_PROGRESS"), @android.view.ViewDebug.IntToString(from=0x7e6, to="INPUT_CONSUMER"), @android.view.ViewDebug.IntToString(from=0x7e7, to="DREAM"), @android.view.ViewDebug.IntToString(from=0x7e8, to="NAVIGATION_BAR_PANEL"), @android.view.ViewDebug.IntToString(from=0x7ea, to="DISPLAY_OVERLAY"), @android.view.ViewDebug.IntToString(from=0x7eb, to="MAGNIFICATION_OVERLAY"), @android.view.ViewDebug.IntToString(from=0x7f5, to="PRESENTATION"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_PRIVATE_PRESENTATION, to="PRIVATE_PRESENTATION"), @android.view.ViewDebug.IntToString(from=0x7ef, to="VOICE_INTERACTION"), @android.view.ViewDebug.IntToString(from=0x7f1, to="VOICE_INTERACTION_STARTING"), @android.view.ViewDebug.IntToString(from=0x7f2, to="DOCK_DIVIDER"), @android.view.ViewDebug.IntToString(from=0x7f3, to="QS_DIALOG"), @android.view.ViewDebug.IntToString(from=0x7f4, to="SCREENSHOT"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY, to="APPLICATION_OVERLAY")}) public int type;
     field public float verticalMargin;
     field @android.view.ViewDebug.ExportedProperty public float verticalWeight;
     field public int windowAnimations;
@@ -56179,7 +56184,7 @@ package android.view.accessibility {
   }
 
   public static final class AccessibilityNodeInfo.ExtraRenderingInfo {
-    method @Nullable public android.util.Size getLayoutParams();
+    method @Nullable public android.util.Size getLayoutSize();
     method public float getTextSizeInPx();
     method public int getTextSizeUnit();
   }
