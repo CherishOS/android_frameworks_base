@@ -43557,9 +43557,9 @@ package android.service.controls.actions {
   public abstract class ControlAction {
     method public abstract int getActionType();
     method @Nullable public String getChallengeValue();
+    method @NonNull public static android.service.controls.actions.ControlAction getErrorAction();
     method @NonNull public String getTemplateId();
     method public static final boolean isValidResponse(int);
-    field @NonNull public static final android.service.controls.actions.ControlAction ERROR_ACTION;
     field public static final int RESPONSE_CHALLENGE_ACK = 3; // 0x3
     field public static final int RESPONSE_CHALLENGE_PASSPHRASE = 5; // 0x5
     field public static final int RESPONSE_CHALLENGE_PIN = 4; // 0x4
@@ -43571,7 +43571,6 @@ package android.service.controls.actions {
     field public static final int TYPE_ERROR = -1; // 0xffffffff
     field public static final int TYPE_FLOAT = 2; // 0x2
     field public static final int TYPE_MODE = 4; // 0x4
-    field public static final int TYPE_MULTI_FLOAT = 3; // 0x3
   }
 
   public final class FloatAction extends android.service.controls.actions.ControlAction {
@@ -43588,13 +43587,6 @@ package android.service.controls.actions {
     method public int getNewMode();
   }
 
-  public final class MultiFloatAction extends android.service.controls.actions.ControlAction {
-    ctor public MultiFloatAction(@NonNull String, @NonNull float[], @Nullable String);
-    ctor public MultiFloatAction(@NonNull String, @NonNull float[]);
-    method public int getActionType();
-    method @NonNull public float[] getNewValues();
-  }
-
 }
 
 package android.service.controls.templates {
@@ -43609,16 +43601,15 @@ package android.service.controls.templates {
   }
 
   public abstract class ControlTemplate {
+    method @NonNull public static android.service.controls.templates.ControlTemplate getErrorTemplate();
+    method @NonNull public static android.service.controls.templates.ControlTemplate getNoTemplateObject();
     method @NonNull public String getTemplateId();
     method public abstract int getTemplateType();
-    field @NonNull public static final android.service.controls.templates.ControlTemplate ERROR_TEMPLATE;
-    field @NonNull public static final android.service.controls.templates.ControlTemplate NO_TEMPLATE;
     field public static final int TYPE_ERROR = -1; // 0xffffffff
-    field public static final int TYPE_NONE = 0; // 0x0
+    field public static final int TYPE_NO_TEMPLATE = 0; // 0x0
     field public static final int TYPE_RANGE = 2; // 0x2
     field public static final int TYPE_STATELESS = 8; // 0x8
     field public static final int TYPE_TEMPERATURE = 7; // 0x7
-    field public static final int TYPE_THUMBNAIL = 3; // 0x3
     field public static final int TYPE_TOGGLE = 1; // 0x1
     field public static final int TYPE_TOGGLE_RANGE = 6; // 0x6
   }
@@ -43656,13 +43647,6 @@ package android.service.controls.templates {
     field public static final int MODE_HEAT_COOL = 4; // 0x4
     field public static final int MODE_OFF = 1; // 0x1
     field public static final int MODE_UNKNOWN = 0; // 0x0
-  }
-
-  public final class ThumbnailTemplate extends android.service.controls.templates.ControlTemplate {
-    ctor public ThumbnailTemplate(@NonNull String, @NonNull android.graphics.drawable.Icon, @NonNull CharSequence);
-    method @NonNull public CharSequence getContentDescription();
-    method public int getTemplateType();
-    method @NonNull public android.graphics.drawable.Icon getThumbnail();
   }
 
   public final class ToggleRangeTemplate extends android.service.controls.templates.ControlTemplate {
