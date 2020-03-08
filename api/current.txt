@@ -316,7 +316,7 @@ package android {
     field public static final int animationOrder = 16843214; // 0x10101ce
     field @Deprecated public static final int animationResolution = 16843546; // 0x101031a
     field public static final int antialias = 16843034; // 0x101011a
-    field public static final int anyDensity = 16843372; // 0x101026c
+    field @Deprecated public static final int anyDensity = 16843372; // 0x101026c
     field public static final int apduServiceBanner = 16843757; // 0x10103ed
     field public static final int apiKey = 16843281; // 0x1010211
     field public static final int appCategory = 16844101; // 0x1010545
@@ -11479,7 +11479,7 @@ package android.content.pm {
     field public static final int FLAG_SUPPORTS_LARGE_SCREENS = 2048; // 0x800
     field public static final int FLAG_SUPPORTS_NORMAL_SCREENS = 1024; // 0x400
     field public static final int FLAG_SUPPORTS_RTL = 4194304; // 0x400000
-    field public static final int FLAG_SUPPORTS_SCREEN_DENSITIES = 8192; // 0x2000
+    field @Deprecated public static final int FLAG_SUPPORTS_SCREEN_DENSITIES = 8192; // 0x2000
     field public static final int FLAG_SUPPORTS_SMALL_SCREENS = 512; // 0x200
     field public static final int FLAG_SUPPORTS_XLARGE_SCREENS = 524288; // 0x80000
     field public static final int FLAG_SUSPENDED = 1073741824; // 0x40000000
@@ -18123,9 +18123,7 @@ package android.hardware.fingerprint {
     ctor @Deprecated public FingerprintManager.CryptoObject(@NonNull java.security.Signature);
     ctor @Deprecated public FingerprintManager.CryptoObject(@NonNull javax.crypto.Cipher);
     ctor @Deprecated public FingerprintManager.CryptoObject(@NonNull javax.crypto.Mac);
-    ctor @Deprecated public FingerprintManager.CryptoObject(@NonNull android.security.identity.IdentityCredential);
     method @Deprecated public javax.crypto.Cipher getCipher();
-    method @Deprecated @Nullable public android.security.identity.IdentityCredential getIdentityCredential();
     method @Deprecated public javax.crypto.Mac getMac();
     method @Deprecated public java.security.Signature getSignature();
   }
@@ -40579,7 +40577,7 @@ package android.provider {
     field public static final String EXTRA_APP_PACKAGE = "android.provider.extra.APP_PACKAGE";
     field public static final String EXTRA_AUTHORITIES = "authorities";
     field public static final String EXTRA_BATTERY_SAVER_MODE_ENABLED = "android.settings.extra.battery_saver_mode_enabled";
-    field public static final String EXTRA_BIOMETRIC_MINIMUM_STRENGTH_REQUIRED = "android.provider.extra.BIOMETRIC_MINIMUM_STRENGTH_REQUIRED";
+    field public static final String EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED = "android.provider.extra.BIOMETRIC_AUTHENTICATORS_ALLOWED";
     field public static final String EXTRA_CHANNEL_ID = "android.provider.extra.CHANNEL_ID";
     field public static final String EXTRA_CONVERSATION_ID = "android.provider.extra.CONVERSATION_ID";
     field public static final String EXTRA_DO_NOT_DISTURB_MODE_ENABLED = "android.settings.extra.do_not_disturb_mode_enabled";
@@ -42700,7 +42698,7 @@ package android.security.identity {
     ctor public PersonalizationData.Builder();
     method @NonNull public android.security.identity.PersonalizationData.Builder addAccessControlProfile(@NonNull android.security.identity.AccessControlProfile);
     method @NonNull public android.security.identity.PersonalizationData build();
-    method @NonNull public android.security.identity.PersonalizationData.Builder setEntry(@NonNull String, @NonNull String, @NonNull java.util.Collection<android.security.identity.AccessControlProfileId>, @NonNull byte[]);
+    method @NonNull public android.security.identity.PersonalizationData.Builder putEntry(@NonNull String, @NonNull String, @NonNull java.util.Collection<android.security.identity.AccessControlProfileId>, @NonNull byte[]);
   }
 
   public abstract class ResultData {
@@ -42708,7 +42706,7 @@ package android.security.identity {
     method @Nullable public abstract byte[] getEntry(@NonNull String, @NonNull String);
     method @Nullable public abstract java.util.Collection<java.lang.String> getEntryNames(@NonNull String);
     method @Nullable public abstract byte[] getMessageAuthenticationCode();
-    method @NonNull public abstract java.util.Collection<java.lang.String> getNamespaceNames();
+    method @NonNull public abstract java.util.Collection<java.lang.String> getNamespaces();
     method @Nullable public abstract java.util.Collection<java.lang.String> getRetrievedEntryNames(@NonNull String);
     method @NonNull public abstract byte[] getStaticAuthenticationData();
     method public abstract int getStatus(@NonNull String, @NonNull String);
@@ -43557,9 +43555,9 @@ package android.service.controls.actions {
   public abstract class ControlAction {
     method public abstract int getActionType();
     method @Nullable public String getChallengeValue();
+    method @NonNull public static android.service.controls.actions.ControlAction getErrorAction();
     method @NonNull public String getTemplateId();
     method public static final boolean isValidResponse(int);
-    field @NonNull public static final android.service.controls.actions.ControlAction ERROR_ACTION;
     field public static final int RESPONSE_CHALLENGE_ACK = 3; // 0x3
     field public static final int RESPONSE_CHALLENGE_PASSPHRASE = 5; // 0x5
     field public static final int RESPONSE_CHALLENGE_PIN = 4; // 0x4
@@ -43571,7 +43569,6 @@ package android.service.controls.actions {
     field public static final int TYPE_ERROR = -1; // 0xffffffff
     field public static final int TYPE_FLOAT = 2; // 0x2
     field public static final int TYPE_MODE = 4; // 0x4
-    field public static final int TYPE_MULTI_FLOAT = 3; // 0x3
   }
 
   public final class FloatAction extends android.service.controls.actions.ControlAction {
@@ -43588,13 +43585,6 @@ package android.service.controls.actions {
     method public int getNewMode();
   }
 
-  public final class MultiFloatAction extends android.service.controls.actions.ControlAction {
-    ctor public MultiFloatAction(@NonNull String, @NonNull float[], @Nullable String);
-    ctor public MultiFloatAction(@NonNull String, @NonNull float[]);
-    method public int getActionType();
-    method @NonNull public float[] getNewValues();
-  }
-
 }
 
 package android.service.controls.templates {
@@ -43609,16 +43599,15 @@ package android.service.controls.templates {
   }
 
   public abstract class ControlTemplate {
+    method @NonNull public static android.service.controls.templates.ControlTemplate getErrorTemplate();
+    method @NonNull public static android.service.controls.templates.ControlTemplate getNoTemplateObject();
     method @NonNull public String getTemplateId();
     method public abstract int getTemplateType();
-    field @NonNull public static final android.service.controls.templates.ControlTemplate ERROR_TEMPLATE;
-    field @NonNull public static final android.service.controls.templates.ControlTemplate NO_TEMPLATE;
     field public static final int TYPE_ERROR = -1; // 0xffffffff
-    field public static final int TYPE_NONE = 0; // 0x0
+    field public static final int TYPE_NO_TEMPLATE = 0; // 0x0
     field public static final int TYPE_RANGE = 2; // 0x2
     field public static final int TYPE_STATELESS = 8; // 0x8
     field public static final int TYPE_TEMPERATURE = 7; // 0x7
-    field public static final int TYPE_THUMBNAIL = 3; // 0x3
     field public static final int TYPE_TOGGLE = 1; // 0x1
     field public static final int TYPE_TOGGLE_RANGE = 6; // 0x6
   }
@@ -43656,13 +43645,6 @@ package android.service.controls.templates {
     field public static final int MODE_HEAT_COOL = 4; // 0x4
     field public static final int MODE_OFF = 1; // 0x1
     field public static final int MODE_UNKNOWN = 0; // 0x0
-  }
-
-  public final class ThumbnailTemplate extends android.service.controls.templates.ControlTemplate {
-    ctor public ThumbnailTemplate(@NonNull String, @NonNull android.graphics.drawable.Icon, @NonNull CharSequence);
-    method @NonNull public CharSequence getContentDescription();
-    method public int getTemplateType();
-    method @NonNull public android.graphics.drawable.Icon getThumbnail();
   }
 
   public final class ToggleRangeTemplate extends android.service.controls.templates.ControlTemplate {
