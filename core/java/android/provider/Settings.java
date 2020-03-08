@@ -5529,7 +5529,7 @@ public final class Settings {
          * Whether to show charging animation on lock screen
          * @hide
          */
-        public static final String LOCKSCREEN_CHARGING_ANIMATION = "lockscreen_charging_animation";
+        public static final String LOCKSCREEN_CHARGING_ANIMATION_STYLE = "lockscreen_charging_animation_style";
 
         /**
          * Whether to take partial screenshot with volume down + power click.
