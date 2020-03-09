@@ -5784,6 +5784,12 @@ public final class Settings {
          * @hide
          */
 	public static final String DISABLE_USERCARD = "disable_usercard";
+		
+		/**
+         * boolean value. toggles compact layout in navigation bar
+         * @hide
+         */
+        public static final String NAV_BAR_COMPACT_LAYOUT = "navigation_bar_compact_layout";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
@@ -5923,6 +5929,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(INCREASING_RING);
             PRIVATE_SETTINGS.add(INCREASING_RING_START_VOLUME);
             PRIVATE_SETTINGS.add(INCREASING_RING_RAMP_UP_TIME);
+            PRIVATE_SETTINGS.add(NAV_BAR_COMPACT_LAYOUT);
         }
 
         /**
