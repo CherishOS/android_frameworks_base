@@ -6510,8 +6510,14 @@ public final class Settings {
          * Whether to enable taskbar.
          */
         public static final String ENABLE_TASKBAR = "enable_taskbar";
-		
-		/**
+
+        /**
+         * boolean value. toggles compact layout in navigation bar
+         * @hide
+         */
+        public static final String NAV_BAR_COMPACT_LAYOUT = "navigation_bar_compact_layout";
+
+        /**
          * These are all public system settings
          *
          * @hide
@@ -6652,6 +6658,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(LIVE_DISPLAY_HINTED);
 			PRIVATE_SETTINGS.add(FORCE_FULLSCREEN_CUTOUT_APPS);
             PRIVATE_SETTINGS.add(POCKET_JUDGE);
+            PRIVATE_SETTINGS.add(NAV_BAR_COMPACT_LAYOUT);
         }
 
         /**
