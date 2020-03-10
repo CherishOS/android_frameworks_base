@@ -419,6 +419,9 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
         mIsExtendedSwipe = mGestureNavigationSettingsObserver.getIsExtendedSwipe();
         mLeftVerticalSwipeAction = mGestureNavigationSettingsObserver.getLeftLSwipeAction();
         mRightVerticalSwipeAction = mGestureNavigationSettingsObserver.getRightLSwipeAction();
+        if (mEdgeBackPlugin != null) {
+            mEdgeBackPlugin.setLongSwipeEnabled(mIsExtendedSwipe);
+        }
 
         final DisplayMetrics dm = res.getDisplayMetrics();
         final float defaultGestureHeight = res.getDimension(
@@ -597,6 +600,7 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
         mEdgeBackPlugin = edgeBackPlugin;
         mEdgeBackPlugin.setBackCallback(mBackCallback);
         mEdgeBackPlugin.setLayoutParams(createLayoutParams());
+        mEdgeBackPlugin.setLongSwipeEnabled(mIsExtendedSwipe);
         updateDisplaySize();
     }
 
