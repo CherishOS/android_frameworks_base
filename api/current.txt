@@ -4368,7 +4368,7 @@ package android.app {
     method @Deprecated public int noteProxyOpNoThrow(@NonNull String, @Nullable String, int);
     method public int noteProxyOpNoThrow(@NonNull String, @Nullable String, int, @Nullable String, @Nullable String);
     method @Nullable public static String permissionToOp(@NonNull String);
-    method public void setNotedAppOpsCollector(@Nullable android.app.AppOpsManager.AppOpsCollector);
+    method public void setOnOpNotedCallback(@Nullable java.util.concurrent.Executor, @Nullable android.app.AppOpsManager.OnOpNotedCallback);
     method @Deprecated public int startOp(@NonNull String, int, @NonNull String);
     method public int startOp(@NonNull String, int, @Nullable String, @Nullable String, @Nullable String);
     method @Deprecated public int startOpNoThrow(@NonNull String, int, @NonNull String);
@@ -4424,20 +4424,19 @@ package android.app {
     field public static final int WATCH_FOREGROUND_CHANGES = 1; // 0x1
   }
 
-  public abstract static class AppOpsManager.AppOpsCollector {
-    ctor public AppOpsManager.AppOpsCollector();
-    method @NonNull public java.util.concurrent.Executor getAsyncNotedExecutor();
-    method public abstract void onAsyncNoted(@NonNull android.app.AsyncNotedAppOp);
-    method public abstract void onNoted(@NonNull android.app.SyncNotedAppOp);
-    method public abstract void onSelfNoted(@NonNull android.app.SyncNotedAppOp);
-  }
-
   public static interface AppOpsManager.OnOpActiveChangedListener {
     method public void onOpActiveChanged(@NonNull String, int, @NonNull String, boolean);
   }
 
   public static interface AppOpsManager.OnOpChangedListener {
     method public void onOpChanged(String, String);
+  }
+
+  public abstract static class AppOpsManager.OnOpNotedCallback {
+    ctor public AppOpsManager.OnOpNotedCallback();
+    method public abstract void onAsyncNoted(@NonNull android.app.AsyncNotedAppOp);
+    method public abstract void onNoted(@NonNull android.app.SyncNotedAppOp);
+    method public abstract void onSelfNoted(@NonNull android.app.SyncNotedAppOp);
   }
 
   public class Application extends android.content.ContextWrapper implements android.content.ComponentCallbacks2 {
@@ -4591,7 +4590,7 @@ package android.app {
     method @NonNull public String getMessage();
     method @IntRange(from=0) public int getNotingUid();
     method @NonNull public String getOp();
-    method @IntRange(from=0) public long getTime();
+    method public long getTime();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.app.AsyncNotedAppOp> CREATOR;
   }
