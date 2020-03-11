@@ -26440,14 +26440,14 @@ package android.media {
 
   public static interface MediaParser.OutputConsumer {
     method public void onSampleCompleted(int, long, int, int, int, @Nullable android.media.MediaCodec.CryptoInfo);
-    method public void onSampleData(int, @NonNull android.media.MediaParser.InputReader) throws java.io.IOException;
-    method public void onSeekMap(@NonNull android.media.MediaParser.SeekMap);
-    method public void onTrackData(int, @NonNull android.media.MediaParser.TrackData);
-    method public void onTracksFound(int);
+    method public void onSampleDataFound(int, @NonNull android.media.MediaParser.InputReader) throws java.io.IOException;
+    method public void onSeekMapFound(@NonNull android.media.MediaParser.SeekMap);
+    method public void onTrackCountFound(int);
+    method public void onTrackDataFound(int, @NonNull android.media.MediaParser.TrackData);
   }
 
   public static final class MediaParser.SeekMap {
-    method public long getDurationUs();
+    method public long getDurationMicros();
     method @NonNull public android.util.Pair<android.media.MediaParser.SeekPoint,android.media.MediaParser.SeekPoint> getSeekPoints(long);
     method public boolean isSeekable();
     field public static final int UNKNOWN_DURATION = -2147483648; // 0x80000000
@@ -26456,7 +26456,7 @@ package android.media {
   public static final class MediaParser.SeekPoint {
     field @NonNull public static final android.media.MediaParser.SeekPoint START;
     field public final long position;
-    field public final long timeUs;
+    field public final long timeMicros;
   }
 
   public static interface MediaParser.SeekableInputReader extends android.media.MediaParser.InputReader {
