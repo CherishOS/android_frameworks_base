@@ -10806,6 +10806,7 @@ package android.content {
     field public static final String EXTRA_TEMPLATE = "android.intent.extra.TEMPLATE";
     field public static final String EXTRA_TEXT = "android.intent.extra.TEXT";
     field public static final String EXTRA_TIME = "android.intent.extra.TIME";
+    field public static final String EXTRA_TIMEZONE = "time-zone";
     field public static final String EXTRA_TITLE = "android.intent.extra.TITLE";
     field public static final String EXTRA_UID = "android.intent.extra.UID";
     field public static final String EXTRA_USER = "android.intent.extra.USER";
@@ -45973,9 +45974,6 @@ package android.telecom {
     field public static final int MISSED = 5; // 0x5
     field public static final int OTHER = 9; // 0x9
     field public static final String REASON_EMERGENCY_CALL_PLACED = "REASON_EMERGENCY_CALL_PLACED";
-    field public static final String REASON_EMULATING_SINGLE_CALL = "EMULATING_SINGLE_CALL";
-    field public static final String REASON_IMS_ACCESS_BLOCKED = "REASON_IMS_ACCESS_BLOCKED";
-    field public static final String REASON_WIFI_ON_BUT_WFC_OFF = "REASON_WIFI_ON_BUT_WFC_OFF";
     field public static final int REJECTED = 6; // 0x6
     field public static final int REMOTE = 3; // 0x3
     field public static final int RESTRICTED = 8; // 0x8
@@ -46302,7 +46300,6 @@ package android.telecom {
     field public static final int DURATION_SHORT = 1; // 0x1
     field public static final int DURATION_VERY_SHORT = 0; // 0x0
     field public static final String EXTRA_CALL_BACK_NUMBER = "android.telecom.extra.CALL_BACK_NUMBER";
-    field public static final String EXTRA_CALL_CREATED_TIME_MILLIS = "android.telecom.extra.CALL_CREATED_TIME_MILLIS";
     field public static final String EXTRA_CALL_DISCONNECT_CAUSE = "android.telecom.extra.CALL_DISCONNECT_CAUSE";
     field public static final String EXTRA_CALL_DISCONNECT_MESSAGE = "android.telecom.extra.CALL_DISCONNECT_MESSAGE";
     field public static final String EXTRA_CALL_DURATION = "android.telecom.extra.CALL_DURATION";
@@ -48044,13 +48041,13 @@ package android.telephony {
     method @NonNull @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public android.os.ParcelUuid createSubscriptionGroup(@NonNull java.util.List<java.lang.Integer>);
     method @Deprecated public static android.telephony.SubscriptionManager from(android.content.Context);
     method public java.util.List<android.telephony.SubscriptionInfo> getAccessibleSubscriptionInfoList();
-    method @Nullable public java.util.List<android.telephony.SubscriptionInfo> getActiveAndHiddenSubscriptionInfoList();
     method public static int getActiveDataSubscriptionId();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public android.telephony.SubscriptionInfo getActiveSubscriptionInfo(int);
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public int getActiveSubscriptionInfoCount();
     method public int getActiveSubscriptionInfoCountMax();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public android.telephony.SubscriptionInfo getActiveSubscriptionInfoForSimSlotIndex(int);
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public java.util.List<android.telephony.SubscriptionInfo> getActiveSubscriptionInfoList();
+    method @NonNull public java.util.List<android.telephony.SubscriptionInfo> getCompleteActiveSubscriptionInfoList();
     method public static int getDefaultDataSubscriptionId();
     method public static int getDefaultSmsSubscriptionId();
     method public static int getDefaultSubscriptionId();
@@ -48213,6 +48210,7 @@ package android.telephony {
     method public boolean isEmergencyNumber(@NonNull String);
     method public boolean isHearingAidCompatibilitySupported();
     method @RequiresPermission(anyOf={android.Manifest.permission.READ_PRECISE_PHONE_STATE, "android.permission.READ_PRIVILEGED_PHONE_STATE"}) public boolean isManualNetworkSelectionAllowed();
+    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public boolean isModemEnabledForSlot(int);
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public int isMultiSimSupported();
     method public boolean isNetworkRoaming();
     method public boolean isRttSupported();
@@ -48326,7 +48324,6 @@ package android.telephony {
     field public static final int NETWORK_TYPE_UNKNOWN = 0; // 0x0
     field public static final int PHONE_TYPE_CDMA = 2; // 0x2
     field public static final int PHONE_TYPE_GSM = 1; // 0x1
-    field public static final int PHONE_TYPE_IMS = 5; // 0x5
     field public static final int PHONE_TYPE_NONE = 0; // 0x0
     field public static final int PHONE_TYPE_SIP = 3; // 0x3
     field public static final int SET_OPPORTUNISTIC_SUB_INACTIVE_SUBSCRIPTION = 2; // 0x2
@@ -55582,10 +55579,12 @@ package android.view {
   }
 
   public interface WindowInsetsController {
+    method public void addOnControllableInsetsChangedListener(@NonNull android.view.WindowInsetsController.OnControllableInsetsChangedListener);
     method @NonNull public android.os.CancellationSignal controlWindowInsetsAnimation(int, long, @Nullable android.view.animation.Interpolator, @NonNull android.view.WindowInsetsAnimationControlListener);
     method public int getSystemBarsAppearance();
     method public int getSystemBarsBehavior();
     method public void hide(int);
+    method public void removeOnControllableInsetsChangedListener(@NonNull android.view.WindowInsetsController.OnControllableInsetsChangedListener);
     method public void setSystemBarsAppearance(int, int);
     method public void setSystemBarsBehavior(int);
     method public void show(int);
@@ -55594,6 +55593,10 @@ package android.view {
     field public static final int BEHAVIOR_SHOW_BARS_BY_SWIPE = 1; // 0x1
     field public static final int BEHAVIOR_SHOW_BARS_BY_TOUCH = 0; // 0x0
     field public static final int BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE = 2; // 0x2
+  }
+
+  public static interface WindowInsetsController.OnControllableInsetsChangedListener {
+    method public void onControllableInsetsChanged(@NonNull android.view.WindowInsetsController, int);
   }
 
   public interface WindowManager extends android.view.ViewManager {
@@ -82227,3 +82230,4 @@ package org.xmlpull.v1.sax2 {
   }
 
 }
+
