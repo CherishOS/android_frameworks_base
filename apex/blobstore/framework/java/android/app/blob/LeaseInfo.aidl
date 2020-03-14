@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The Android Open Source Project
+ * Copyright 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package android.os.incremental;
+package android.app.blob;
 
 /** {@hide} */
-parcelable IncrementalSignature {
-    /*
-     * Stable AIDL doesn't support constants, but here's the possible values
-     *   const int HASH_ALGO_NONE = 0;
-     *   const int HASH_ALGO_SHA256 = 1;
-    */
-
-    int hashAlgorithm = 0;
-    byte[] rootHash;
-    byte[] additionalData;
-    byte[] signature;
-}
+parcelable LeaseInfo;
