@@ -290,7 +290,6 @@ package android {
     field public static final int allowAudioPlaybackCapture = 16844289; // 0x1010601
     field public static final int allowBackup = 16843392; // 0x1010280
     field public static final int allowClearUserData = 16842757; // 0x1010005
-    field public static final int allowDontAutoRevokeWhenUnused = 16844310; // 0x1010616
     field public static final int allowEmbedded = 16843765; // 0x10103f5
     field public static final int allowNativeHeapPointerTagging = 16844307; // 0x1010613
     field public static final int allowParallelSyncs = 16843570; // 0x1010332
@@ -539,7 +538,6 @@ package android {
     field public static final int dividerPadding = 16843562; // 0x101032a
     field public static final int dividerVertical = 16843530; // 0x101030a
     field public static final int documentLaunchMode = 16843845; // 0x1010445
-    field public static final int dontAutoRevokeWhenUnused = 16844311; // 0x1010617
     field public static final int drawSelectorOnTop = 16843004; // 0x10100fc
     field public static final int drawable = 16843161; // 0x1010199
     field public static final int drawableBottom = 16843118; // 0x101016e
@@ -574,7 +572,7 @@ package android {
     field public static final int elevation = 16843840; // 0x1010440
     field public static final int ellipsize = 16842923; // 0x10100ab
     field public static final int ems = 16843096; // 0x1010158
-    field public static final int enableGwpAsan = 16844312; // 0x1010618
+    field public static final int enableGwpAsan = 16844310; // 0x1010616
     field public static final int enableVrMode = 16844069; // 0x1010525
     field public static final int enabled = 16842766; // 0x101000e
     field public static final int end = 16843996; // 0x10104dc
@@ -6858,9 +6856,9 @@ package android.app.admin {
     method @Nullable public String getAlwaysOnVpnPackage(@NonNull android.content.ComponentName);
     method @NonNull @WorkerThread public android.os.Bundle getApplicationRestrictions(@Nullable android.content.ComponentName, String);
     method @Deprecated @Nullable public String getApplicationRestrictionsManagingPackage(@NonNull android.content.ComponentName);
-    method public boolean getAutoTime(@NonNull android.content.ComponentName);
+    method public boolean getAutoTimeEnabled(@NonNull android.content.ComponentName);
     method @Deprecated public boolean getAutoTimeRequired();
-    method public boolean getAutoTimeZone(@NonNull android.content.ComponentName);
+    method public boolean getAutoTimeZoneEnabled(@NonNull android.content.ComponentName);
     method @NonNull public java.util.List<android.os.UserHandle> getBindDeviceAdminTargetUsers(@NonNull android.content.ComponentName);
     method public boolean getBluetoothContactSharingDisabled(@NonNull android.content.ComponentName);
     method public boolean getCameraDisabled(@Nullable android.content.ComponentName);
@@ -6984,9 +6982,9 @@ package android.app.admin {
     method public boolean setApplicationHidden(@NonNull android.content.ComponentName, String, boolean);
     method @WorkerThread public void setApplicationRestrictions(@Nullable android.content.ComponentName, String, android.os.Bundle);
     method @Deprecated public void setApplicationRestrictionsManagingPackage(@NonNull android.content.ComponentName, @Nullable String) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public void setAutoTime(@NonNull android.content.ComponentName, boolean);
+    method public void setAutoTimeEnabled(@NonNull android.content.ComponentName, boolean);
     method @Deprecated public void setAutoTimeRequired(@NonNull android.content.ComponentName, boolean);
-    method public void setAutoTimeZone(@NonNull android.content.ComponentName, boolean);
+    method public void setAutoTimeZoneEnabled(@NonNull android.content.ComponentName, boolean);
     method public void setBackupServiceEnabled(@NonNull android.content.ComponentName, boolean);
     method public void setBluetoothContactSharingDisabled(@NonNull android.content.ComponentName, boolean);
     method public void setCameraDisabled(@NonNull android.content.ComponentName, boolean);
@@ -11575,6 +11573,7 @@ package android.content.pm {
     method @NonNull public CharSequence getProfileSwitchingLabel(@NonNull android.os.UserHandle);
     method @NonNull public java.util.List<android.os.UserHandle> getTargetUserProfiles();
     method @RequiresPermission(anyOf={android.Manifest.permission.INTERACT_ACROSS_PROFILES, "android.permission.INTERACT_ACROSS_USERS"}) public void startActivity(@NonNull android.content.Intent, @NonNull android.os.UserHandle, @Nullable android.app.Activity);
+    method @RequiresPermission(anyOf={android.Manifest.permission.INTERACT_ACROSS_PROFILES, "android.permission.INTERACT_ACROSS_USERS"}) public void startActivity(@NonNull android.content.Intent, @NonNull android.os.UserHandle, @Nullable android.app.Activity, @Nullable android.os.Bundle);
     method public void startMainActivity(@NonNull android.content.ComponentName, @NonNull android.os.UserHandle);
     field public static final String ACTION_CAN_INTERACT_ACROSS_PROFILES_CHANGED = "android.content.pm.action.CAN_INTERACT_ACROSS_PROFILES_CHANGED";
   }
@@ -20101,8 +20100,7 @@ package android.icu.number {
     method public T numberFormatterSecond(android.icu.number.UnlocalizedNumberFormatter);
   }
 
-  public abstract class Precision implements java.lang.Cloneable {
-    method public Object clone();
+  public abstract class Precision {
     method public static android.icu.number.CurrencyPrecision currency(android.icu.util.Currency.CurrencyUsage);
     method public static android.icu.number.FractionPrecision fixedFraction(int);
     method public static android.icu.number.Precision fixedSignificantDigits(int);
@@ -20125,8 +20123,7 @@ package android.icu.number {
     method public static android.icu.number.Scale powerOfTen(int);
   }
 
-  public class ScientificNotation extends android.icu.number.Notation implements java.lang.Cloneable {
-    method public Object clone();
+  public class ScientificNotation extends android.icu.number.Notation {
     method public android.icu.number.ScientificNotation withExponentSignDisplay(android.icu.number.NumberFormatter.SignDisplay);
     method public android.icu.number.ScientificNotation withMinExponentDigits(int);
   }
@@ -26457,14 +26454,14 @@ package android.media {
 
   public static interface MediaParser.OutputConsumer {
     method public void onSampleCompleted(int, long, int, int, int, @Nullable android.media.MediaCodec.CryptoInfo);
-    method public void onSampleData(int, @NonNull android.media.MediaParser.InputReader) throws java.io.IOException;
-    method public void onSeekMap(@NonNull android.media.MediaParser.SeekMap);
-    method public void onTrackData(int, @NonNull android.media.MediaParser.TrackData);
-    method public void onTracksFound(int);
+    method public void onSampleDataFound(int, @NonNull android.media.MediaParser.InputReader) throws java.io.IOException;
+    method public void onSeekMapFound(@NonNull android.media.MediaParser.SeekMap);
+    method public void onTrackCountFound(int);
+    method public void onTrackDataFound(int, @NonNull android.media.MediaParser.TrackData);
   }
 
   public static final class MediaParser.SeekMap {
-    method public long getDurationUs();
+    method public long getDurationMicros();
     method @NonNull public android.util.Pair<android.media.MediaParser.SeekPoint,android.media.MediaParser.SeekPoint> getSeekPoints(long);
     method public boolean isSeekable();
     field public static final int UNKNOWN_DURATION = -2147483648; // 0x80000000
@@ -26473,7 +26470,7 @@ package android.media {
   public static final class MediaParser.SeekPoint {
     field @NonNull public static final android.media.MediaParser.SeekPoint START;
     field public final long position;
-    field public final long timeUs;
+    field public final long timeMicros;
   }
 
   public static interface MediaParser.SeekableInputReader extends android.media.MediaParser.InputReader {
@@ -40723,6 +40720,7 @@ package android.provider {
     field public static final String PARENTAL_CONTROL_LAST_UPDATE = "parental_control_last_update";
     field public static final String PARENTAL_CONTROL_REDIRECT_URL = "parental_control_redirect_url";
     field public static final String RTT_CALLING_MODE = "rtt_calling_mode";
+    field public static final String SECURE_FRP_MODE = "secure_frp_mode";
     field public static final String SELECTED_INPUT_METHOD_SUBTYPE = "selected_input_method_subtype";
     field public static final String SETTINGS_CLASSNAME = "settings_classname";
     field public static final String SKIP_FIRST_USE_HINTS = "skip_first_use_hints";
@@ -43021,12 +43019,12 @@ package android.service.autofill {
   }
 
   public static final class Dataset.Builder {
-    ctor public Dataset.Builder(@NonNull android.widget.RemoteViews, @NonNull android.service.autofill.InlinePresentation);
     ctor public Dataset.Builder(@NonNull android.widget.RemoteViews);
     ctor public Dataset.Builder();
     method @NonNull public android.service.autofill.Dataset build();
     method @NonNull public android.service.autofill.Dataset.Builder setAuthentication(@Nullable android.content.IntentSender);
     method @NonNull public android.service.autofill.Dataset.Builder setId(@Nullable String);
+    method @NonNull public android.service.autofill.Dataset.Builder setInlinePresentation(@NonNull android.service.autofill.InlinePresentation);
     method @NonNull public android.service.autofill.Dataset.Builder setValue(@NonNull android.view.autofill.AutofillId, @Nullable android.view.autofill.AutofillValue);
     method @NonNull public android.service.autofill.Dataset.Builder setValue(@NonNull android.view.autofill.AutofillId, @Nullable android.view.autofill.AutofillValue, @NonNull android.widget.RemoteViews);
     method @NonNull public android.service.autofill.Dataset.Builder setValue(@NonNull android.view.autofill.AutofillId, @Nullable android.view.autofill.AutofillValue, @Nullable java.util.regex.Pattern);
@@ -56747,6 +56745,7 @@ package android.view.contentcapture {
     method public final void notifySessionResumed();
     method public final void notifyViewAppeared(@NonNull android.view.ViewStructure);
     method public final void notifyViewDisappeared(@NonNull android.view.autofill.AutofillId);
+    method public final void notifyViewInsetsChanged(@NonNull android.graphics.Insets);
     method public final void notifyViewTextChanged(@NonNull android.view.autofill.AutofillId, @Nullable CharSequence);
     method public final void notifyViewsDisappeared(@NonNull android.view.autofill.AutofillId, @NonNull long[]);
     method public final void setContentCaptureContext(@Nullable android.view.contentcapture.ContentCaptureContext);
