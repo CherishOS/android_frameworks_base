@@ -290,6 +290,7 @@ package android {
     field public static final int allowAudioPlaybackCapture = 16844289; // 0x1010601
     field public static final int allowBackup = 16843392; // 0x1010280
     field public static final int allowClearUserData = 16842757; // 0x1010005
+    field public static final int allowDontAutoRevokePermissions = 16844309; // 0x1010615
     field public static final int allowEmbedded = 16843765; // 0x10103f5
     field public static final int allowNativeHeapPointerTagging = 16844307; // 0x1010613
     field public static final int allowParallelSyncs = 16843570; // 0x1010332
@@ -572,6 +573,7 @@ package android {
     field public static final int elevation = 16843840; // 0x1010440
     field public static final int ellipsize = 16842923; // 0x10100ab
     field public static final int ems = 16843096; // 0x1010158
+    field public static final int enableGwpAsan = 16844312; // 0x1010618
     field public static final int enableVrMode = 16844069; // 0x1010525
     field public static final int enabled = 16842766; // 0x101000e
     field public static final int end = 16843996; // 0x10104dc
@@ -620,7 +622,6 @@ package android {
     field public static final int fastScrollTextColor = 16843609; // 0x1010359
     field public static final int fastScrollThumbDrawable = 16843574; // 0x1010336
     field public static final int fastScrollTrackDrawable = 16843577; // 0x1010339
-    field public static final int featureId = 16844301; // 0x101060d
     field public static final int fillAfter = 16843197; // 0x10101bd
     field public static final int fillAlpha = 16843980; // 0x10104cc
     field public static final int fillBefore = 16843196; // 0x10101bc
@@ -953,7 +954,7 @@ package android {
     field public static final int mediaRouteButtonStyle = 16843693; // 0x10103ad
     field public static final int mediaRouteTypes = 16843694; // 0x10103ae
     field public static final int menuCategory = 16843230; // 0x10101de
-    field public static final int mimeGroup = 16844309; // 0x1010615
+    field public static final int mimeGroup = 16844311; // 0x1010617
     field public static final int mimeType = 16842790; // 0x1010026
     field public static final int min = 16844089; // 0x1010539
     field public static final int minAspectRatio = 16844187; // 0x101059b
@@ -1082,7 +1083,7 @@ package android {
     field public static final int preferenceScreenStyle = 16842891; // 0x101008b
     field public static final int preferenceStyle = 16842894; // 0x101008e
     field public static final int presentationTheme = 16843712; // 0x10103c0
-    field public static final int preserveLegacyExternalStorage = 16844308; // 0x1010614
+    field public static final int preserveLegacyExternalStorage = 16844310; // 0x1010616
     field public static final int previewImage = 16843482; // 0x10102da
     field public static final int primaryContentAlpha = 16844114; // 0x1010552
     field public static final int priority = 16842780; // 0x101001c
@@ -1139,6 +1140,7 @@ package android {
     field public static final int reqKeyboardType = 16843304; // 0x1010228
     field public static final int reqNavigation = 16843306; // 0x101022a
     field public static final int reqTouchScreen = 16843303; // 0x1010227
+    field public static final int requestDontAutoRevokePermissions = 16844308; // 0x1010614
     field public static final int requestLegacyExternalStorage = 16844291; // 0x1010603
     field public static final int requireDeviceUnlock = 16843756; // 0x10103ec
     field public static final int required = 16843406; // 0x101028e
@@ -4586,7 +4588,7 @@ package android.app {
 
   public final class AsyncNotedAppOp implements android.os.Parcelable {
     method public int describeContents();
-    method @Nullable public String getFeatureId();
+    method @Nullable public String getAttributionTag();
     method @NonNull public String getMessage();
     method @IntRange(from=0) public int getNotingUid();
     method @NonNull public String getOp();
@@ -6430,7 +6432,7 @@ package android.app {
   public final class SyncNotedAppOp implements android.os.Parcelable {
     ctor public SyncNotedAppOp(@IntRange(from=0L) int, @Nullable String);
     method public int describeContents();
-    method @Nullable public String getFeatureId();
+    method @Nullable public String getAttributionTag();
     method @NonNull public String getOp();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.app.SyncNotedAppOp> CREATOR;
@@ -6856,9 +6858,9 @@ package android.app.admin {
     method @Nullable public String getAlwaysOnVpnPackage(@NonNull android.content.ComponentName);
     method @NonNull @WorkerThread public android.os.Bundle getApplicationRestrictions(@Nullable android.content.ComponentName, String);
     method @Deprecated @Nullable public String getApplicationRestrictionsManagingPackage(@NonNull android.content.ComponentName);
-    method public boolean getAutoTime(@NonNull android.content.ComponentName);
+    method public boolean getAutoTimeEnabled(@NonNull android.content.ComponentName);
     method @Deprecated public boolean getAutoTimeRequired();
-    method public boolean getAutoTimeZone(@NonNull android.content.ComponentName);
+    method public boolean getAutoTimeZoneEnabled(@NonNull android.content.ComponentName);
     method @NonNull public java.util.List<android.os.UserHandle> getBindDeviceAdminTargetUsers(@NonNull android.content.ComponentName);
     method public boolean getBluetoothContactSharingDisabled(@NonNull android.content.ComponentName);
     method public boolean getCameraDisabled(@Nullable android.content.ComponentName);
@@ -6982,9 +6984,9 @@ package android.app.admin {
     method public boolean setApplicationHidden(@NonNull android.content.ComponentName, String, boolean);
     method @WorkerThread public void setApplicationRestrictions(@Nullable android.content.ComponentName, String, android.os.Bundle);
     method @Deprecated public void setApplicationRestrictionsManagingPackage(@NonNull android.content.ComponentName, @Nullable String) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public void setAutoTime(@NonNull android.content.ComponentName, boolean);
+    method public void setAutoTimeEnabled(@NonNull android.content.ComponentName, boolean);
     method @Deprecated public void setAutoTimeRequired(@NonNull android.content.ComponentName, boolean);
-    method public void setAutoTimeZone(@NonNull android.content.ComponentName, boolean);
+    method public void setAutoTimeZoneEnabled(@NonNull android.content.ComponentName, boolean);
     method public void setBackupServiceEnabled(@NonNull android.content.ComponentName, boolean);
     method public void setBluetoothContactSharingDisabled(@NonNull android.content.ComponentName, boolean);
     method public void setCameraDisabled(@NonNull android.content.ComponentName, boolean);
@@ -9696,7 +9698,7 @@ package android.content {
     method public abstract int delete(@NonNull android.net.Uri, @Nullable String, @Nullable String[]);
     method public int delete(@NonNull android.net.Uri, @Nullable android.os.Bundle);
     method public void dump(java.io.FileDescriptor, java.io.PrintWriter, String[]);
-    method @Nullable public final String getCallingFeatureId();
+    method @Nullable public final String getCallingAttributionTag();
     method @Nullable public final String getCallingPackage();
     method @Nullable public final String getCallingPackageUnchecked();
     method @Nullable public final android.content.Context getContext();
@@ -10030,11 +10032,11 @@ package android.content {
     method @CheckResult(suggest="#enforceUriPermission(Uri,int,int,String)") public abstract int checkUriPermission(android.net.Uri, int, int, int);
     method @CheckResult(suggest="#enforceUriPermission(Uri,String,String,int,int,int,String)") public abstract int checkUriPermission(@Nullable android.net.Uri, @Nullable String, @Nullable String, int, int, int);
     method @Deprecated public abstract void clearWallpaper() throws java.io.IOException;
+    method @NonNull public android.content.Context createAttributionContext(@Nullable String);
     method public abstract android.content.Context createConfigurationContext(@NonNull android.content.res.Configuration);
     method public abstract android.content.Context createContextForSplit(String) throws android.content.pm.PackageManager.NameNotFoundException;
     method public abstract android.content.Context createDeviceProtectedStorageContext();
     method public abstract android.content.Context createDisplayContext(@NonNull android.view.Display);
-    method @NonNull public android.content.Context createFeatureContext(@Nullable String);
     method public abstract android.content.Context createPackageContext(String, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method @NonNull public android.content.Context createWindowContext(int, @Nullable android.os.Bundle);
     method public abstract String[] databaseList();
@@ -10052,6 +10054,7 @@ package android.content {
     method public abstract android.content.Context getApplicationContext();
     method public abstract android.content.pm.ApplicationInfo getApplicationInfo();
     method public abstract android.content.res.AssetManager getAssets();
+    method @Nullable public String getAttributionTag();
     method public abstract java.io.File getCacheDir();
     method public abstract ClassLoader getClassLoader();
     method public abstract java.io.File getCodeCacheDir();
@@ -10068,7 +10071,6 @@ package android.content {
     method @Nullable public abstract java.io.File getExternalFilesDir(@Nullable String);
     method public abstract java.io.File[] getExternalFilesDirs(String);
     method @Deprecated public abstract java.io.File[] getExternalMediaDirs();
-    method @Nullable public String getFeatureId();
     method public abstract java.io.File getFileStreamPath(String);
     method public abstract java.io.File getFilesDir();
     method public java.util.concurrent.Executor getMainExecutor();
@@ -11439,6 +11441,7 @@ package android.content.pm {
     method public int describeContents();
     method public void dump(android.util.Printer, String);
     method public static CharSequence getCategoryTitle(android.content.Context, int);
+    method @Nullable public Boolean isGwpAsanEnabled();
     method public boolean isProfileableByShell();
     method public boolean isResourceOverlay();
     method public boolean isVirtualPreload();
@@ -11572,6 +11575,7 @@ package android.content.pm {
     method @NonNull public CharSequence getProfileSwitchingLabel(@NonNull android.os.UserHandle);
     method @NonNull public java.util.List<android.os.UserHandle> getTargetUserProfiles();
     method @RequiresPermission(anyOf={android.Manifest.permission.INTERACT_ACROSS_PROFILES, "android.permission.INTERACT_ACROSS_USERS"}) public void startActivity(@NonNull android.content.Intent, @NonNull android.os.UserHandle, @Nullable android.app.Activity);
+    method @RequiresPermission(anyOf={android.Manifest.permission.INTERACT_ACROSS_PROFILES, "android.permission.INTERACT_ACROSS_USERS"}) public void startActivity(@NonNull android.content.Intent, @NonNull android.os.UserHandle, @Nullable android.app.Activity, @Nullable android.os.Bundle);
     method public void startMainActivity(@NonNull android.content.ComponentName, @NonNull android.os.UserHandle);
     field public static final String ACTION_CAN_INTERACT_ACROSS_PROFILES_CHANGED = "android.content.pm.action.CAN_INTERACT_ACROSS_PROFILES_CHANGED";
   }
@@ -11892,6 +11896,7 @@ package android.content.pm {
     method public void setAppIcon(@Nullable android.graphics.Bitmap);
     method public void setAppLabel(@Nullable CharSequence);
     method public void setAppPackageName(@Nullable String);
+    method public void setAutoRevokePermissionsMode(boolean);
     method public void setInstallLocation(int);
     method public void setInstallReason(int);
     method public void setMultiPackage();
@@ -12021,6 +12026,8 @@ package android.content.pm {
     method public boolean hasSigningCertificate(int, @NonNull byte[], int);
     method public abstract boolean hasSystemFeature(@NonNull String);
     method public abstract boolean hasSystemFeature(@NonNull String, int);
+    method @RequiresPermission(value="android.permission.WHITELIST_AUTO_REVOKE_PERMISSIONS", conditional=true) public boolean isAutoRevokeWhitelisted(@NonNull String);
+    method public boolean isAutoRevokeWhitelisted();
     method public boolean isDefaultApplicationIcon(@NonNull android.graphics.drawable.Drawable);
     method public boolean isDeviceUpgrading();
     method public abstract boolean isInstantApp();
@@ -12045,6 +12052,7 @@ package android.content.pm {
     method @Nullable public abstract android.content.pm.ResolveInfo resolveService(@NonNull android.content.Intent, int);
     method public abstract void setApplicationCategoryHint(@NonNull String, int);
     method @RequiresPermission(value=android.Manifest.permission.CHANGE_COMPONENT_ENABLED_STATE, conditional=true) public abstract void setApplicationEnabledSetting(@NonNull String, int, int);
+    method @RequiresPermission(value="android.permission.WHITELIST_AUTO_REVOKE_PERMISSIONS", conditional=true) public boolean setAutoRevokeWhitelisted(@NonNull String, boolean);
     method @RequiresPermission(value=android.Manifest.permission.CHANGE_COMPONENT_ENABLED_STATE, conditional=true) public abstract void setComponentEnabledSetting(@NonNull android.content.ComponentName, int, int);
     method public abstract void setInstallerPackageName(@NonNull String, @Nullable String);
     method public void setMimeGroup(@NonNull String, @NonNull java.util.Set<java.lang.String>);
@@ -17351,7 +17359,7 @@ package android.hardware.camera2 {
   public final class CameraManager {
     method @NonNull public android.hardware.camera2.CameraCharacteristics getCameraCharacteristics(@NonNull String) throws android.hardware.camera2.CameraAccessException;
     method @NonNull public String[] getCameraIdList() throws android.hardware.camera2.CameraAccessException;
-    method @NonNull public java.util.Set<java.util.Set<java.lang.String>> getConcurrentStreamingCameraIds() throws android.hardware.camera2.CameraAccessException;
+    method @NonNull public java.util.Set<java.util.Set<java.lang.String>> getConcurrentCameraIds() throws android.hardware.camera2.CameraAccessException;
     method @RequiresPermission(android.Manifest.permission.CAMERA) public boolean isConcurrentSessionConfigurationSupported(@NonNull java.util.Map<java.lang.String,android.hardware.camera2.params.SessionConfiguration>) throws android.hardware.camera2.CameraAccessException;
     method @RequiresPermission(android.Manifest.permission.CAMERA) public void openCamera(@NonNull String, @NonNull android.hardware.camera2.CameraDevice.StateCallback, @Nullable android.os.Handler) throws android.hardware.camera2.CameraAccessException;
     method @RequiresPermission(android.Manifest.permission.CAMERA) public void openCamera(@NonNull String, @NonNull java.util.concurrent.Executor, @NonNull android.hardware.camera2.CameraDevice.StateCallback) throws android.hardware.camera2.CameraAccessException;
@@ -20093,8 +20101,7 @@ package android.icu.number {
     method public T numberFormatterSecond(android.icu.number.UnlocalizedNumberFormatter);
   }
 
-  public abstract class Precision implements java.lang.Cloneable {
-    method public Object clone();
+  public abstract class Precision {
     method public static android.icu.number.CurrencyPrecision currency(android.icu.util.Currency.CurrencyUsage);
     method public static android.icu.number.FractionPrecision fixedFraction(int);
     method public static android.icu.number.Precision fixedSignificantDigits(int);
@@ -20117,8 +20124,7 @@ package android.icu.number {
     method public static android.icu.number.Scale powerOfTen(int);
   }
 
-  public class ScientificNotation extends android.icu.number.Notation implements java.lang.Cloneable {
-    method public Object clone();
+  public class ScientificNotation extends android.icu.number.Notation {
     method public android.icu.number.ScientificNotation withExponentSignDisplay(android.icu.number.NumberFormatter.SignDisplay);
     method public android.icu.number.ScientificNotation withMinExponentDigits(int);
   }
@@ -26449,14 +26455,14 @@ package android.media {
 
   public static interface MediaParser.OutputConsumer {
     method public void onSampleCompleted(int, long, int, int, int, @Nullable android.media.MediaCodec.CryptoInfo);
-    method public void onSampleData(int, @NonNull android.media.MediaParser.InputReader) throws java.io.IOException;
-    method public void onSeekMap(@NonNull android.media.MediaParser.SeekMap);
-    method public void onTrackData(int, @NonNull android.media.MediaParser.TrackData);
-    method public void onTracksFound(int);
+    method public void onSampleDataFound(int, @NonNull android.media.MediaParser.InputReader) throws java.io.IOException;
+    method public void onSeekMapFound(@NonNull android.media.MediaParser.SeekMap);
+    method public void onTrackCountFound(int);
+    method public void onTrackDataFound(int, @NonNull android.media.MediaParser.TrackData);
   }
 
   public static final class MediaParser.SeekMap {
-    method public long getDurationUs();
+    method public long getDurationMicros();
     method @NonNull public android.util.Pair<android.media.MediaParser.SeekPoint,android.media.MediaParser.SeekPoint> getSeekPoints(long);
     method public boolean isSeekable();
     field public static final int UNKNOWN_DURATION = -2147483648; // 0x80000000
@@ -26465,7 +26471,7 @@ package android.media {
   public static final class MediaParser.SeekPoint {
     field @NonNull public static final android.media.MediaParser.SeekPoint START;
     field public final long position;
-    field public final long timeUs;
+    field public final long timeMicros;
   }
 
   public static interface MediaParser.SeekableInputReader extends android.media.MediaParser.InputReader {
@@ -40715,6 +40721,7 @@ package android.provider {
     field public static final String PARENTAL_CONTROL_LAST_UPDATE = "parental_control_last_update";
     field public static final String PARENTAL_CONTROL_REDIRECT_URL = "parental_control_redirect_url";
     field public static final String RTT_CALLING_MODE = "rtt_calling_mode";
+    field public static final String SECURE_FRP_MODE = "secure_frp_mode";
     field public static final String SELECTED_INPUT_METHOD_SUBTYPE = "selected_input_method_subtype";
     field public static final String SETTINGS_CLASSNAME = "settings_classname";
     field public static final String SKIP_FIRST_USE_HINTS = "skip_first_use_hints";
@@ -43013,12 +43020,12 @@ package android.service.autofill {
   }
 
   public static final class Dataset.Builder {
-    ctor public Dataset.Builder(@NonNull android.widget.RemoteViews, @NonNull android.service.autofill.InlinePresentation);
     ctor public Dataset.Builder(@NonNull android.widget.RemoteViews);
     ctor public Dataset.Builder();
     method @NonNull public android.service.autofill.Dataset build();
     method @NonNull public android.service.autofill.Dataset.Builder setAuthentication(@Nullable android.content.IntentSender);
     method @NonNull public android.service.autofill.Dataset.Builder setId(@Nullable String);
+    method @NonNull public android.service.autofill.Dataset.Builder setInlinePresentation(@NonNull android.service.autofill.InlinePresentation);
     method @NonNull public android.service.autofill.Dataset.Builder setValue(@NonNull android.view.autofill.AutofillId, @Nullable android.view.autofill.AutofillValue);
     method @NonNull public android.service.autofill.Dataset.Builder setValue(@NonNull android.view.autofill.AutofillId, @Nullable android.view.autofill.AutofillValue, @NonNull android.widget.RemoteViews);
     method @NonNull public android.service.autofill.Dataset.Builder setValue(@NonNull android.view.autofill.AutofillId, @Nullable android.view.autofill.AutofillValue, @Nullable java.util.regex.Pattern);
@@ -56738,6 +56745,7 @@ package android.view.contentcapture {
     method public final void notifySessionResumed();
     method public final void notifyViewAppeared(@NonNull android.view.ViewStructure);
     method public final void notifyViewDisappeared(@NonNull android.view.autofill.AutofillId);
+    method public final void notifyViewInsetsChanged(@NonNull android.graphics.Insets);
     method public final void notifyViewTextChanged(@NonNull android.view.autofill.AutofillId, @Nullable CharSequence);
     method public final void notifyViewsDisappeared(@NonNull android.view.autofill.AutofillId, @NonNull long[]);
     method public final void setContentCaptureContext(@Nullable android.view.contentcapture.ContentCaptureContext);
