@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-package android.os.incremental;
+package com.android.effectstest;
 
-/** {@hide} */
-parcelable IncrementalSignature {
-    /*
-     * Stable AIDL doesn't support constants, but here's the possible values
-     *   const int HASH_ALGO_NONE = 0;
-     *   const int HASH_ALGO_SHA256 = 1;
-    */
-
-    int hashAlgorithm = 0;
-    byte[] rootHash;
-    byte[] additionalData;
-    byte[] signature;
+interface VisualizerInstance {
+    void enableDataCaptureListener(boolean enable);
+    boolean getEnabled();
+    void release();
+    void setEnabled(boolean enabled);
+    void startStopCapture(boolean start);
 }
