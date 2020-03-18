@@ -44680,6 +44680,38 @@ package android.telephony {
     field public static final int PRIORITY_MED = 2; // 0x2
   }
 
+  public final class BarringInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public android.telephony.BarringInfo.BarringServiceInfo getBarringServiceInfo(int);
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field public static final int BARRING_SERVICE_TYPE_CS_FALLBACK = 5; // 0x5
+    field public static final int BARRING_SERVICE_TYPE_CS_SERVICE = 0; // 0x0
+    field public static final int BARRING_SERVICE_TYPE_CS_VOICE = 2; // 0x2
+    field public static final int BARRING_SERVICE_TYPE_EMERGENCY = 8; // 0x8
+    field public static final int BARRING_SERVICE_TYPE_MMTEL_VIDEO = 7; // 0x7
+    field public static final int BARRING_SERVICE_TYPE_MMTEL_VOICE = 6; // 0x6
+    field public static final int BARRING_SERVICE_TYPE_MO_DATA = 4; // 0x4
+    field public static final int BARRING_SERVICE_TYPE_MO_SIGNALLING = 3; // 0x3
+    field public static final int BARRING_SERVICE_TYPE_PS_SERVICE = 1; // 0x1
+    field public static final int BARRING_SERVICE_TYPE_SMS = 9; // 0x9
+    field @NonNull public static final android.os.Parcelable.Creator<android.telephony.BarringInfo> CREATOR;
+  }
+
+  public static final class BarringInfo.BarringServiceInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getBarringType();
+    method public int getConditionalBarringFactor();
+    method public int getConditionalBarringTimeSeconds();
+    method public boolean isBarred();
+    method public boolean isConditionallyBarred();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field public static final int BARRING_TYPE_CONDITIONAL = 1; // 0x1
+    field public static final int BARRING_TYPE_NONE = 0; // 0x0
+    field public static final int BARRING_TYPE_UNCONDITIONAL = 2; // 0x2
+    field public static final int BARRING_TYPE_UNKNOWN = -1; // 0xffffffff
+    field @NonNull public static final android.os.Parcelable.Creator<android.telephony.BarringInfo.BarringServiceInfo> CREATOR;
+  }
+
   public class CarrierConfigManager {
     method @Nullable public android.os.PersistableBundle getConfig();
     method @Nullable public android.os.PersistableBundle getConfigByComponentForSubId(@NonNull String, int);
@@ -45316,6 +45348,7 @@ package android.telephony {
     method @Nullable public android.telephony.CellIdentity getCellIdentity();
     method public int getDomain();
     method public int getNrState();
+    method @Nullable public String getRegisteredPlmn();
     method public int getTransportType();
     method public boolean isRegistered();
     method public boolean isRoaming();
@@ -45442,6 +45475,7 @@ package android.telephony {
     ctor public PhoneStateListener();
     ctor public PhoneStateListener(@NonNull java.util.concurrent.Executor);
     method public void onActiveDataSubscriptionIdChanged(int);
+    method public void onBarringInfoChanged(@NonNull android.telephony.BarringInfo);
     method @RequiresPermission("android.permission.READ_PRECISE_PHONE_STATE") public void onCallDisconnectCauseChanged(int, int);
     method public void onCallForwardingIndicatorChanged(boolean);
     method public void onCallStateChanged(int, String);
@@ -45460,6 +45494,7 @@ package android.telephony {
     method public void onSignalStrengthsChanged(android.telephony.SignalStrength);
     method public void onUserMobileDataStateChanged(boolean);
     field public static final int LISTEN_ACTIVE_DATA_SUBSCRIPTION_ID_CHANGE = 4194304; // 0x400000
+    field @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public static final int LISTEN_BARRING_INFO = -2147483648; // 0x80000000
     field @RequiresPermission("android.permission.READ_PRECISE_PHONE_STATE") public static final int LISTEN_CALL_DISCONNECT_CAUSES = 33554432; // 0x2000000
     field public static final int LISTEN_CALL_FORWARDING_INDICATOR = 8; // 0x8
     field public static final int LISTEN_CALL_STATE = 32; // 0x20
@@ -45482,6 +45517,7 @@ package android.telephony {
 
   public final class PreciseDataConnectionState implements android.os.Parcelable {
     method public int describeContents();
+    method @Nullable public android.telephony.data.ApnSetting getApnSetting();
     method public int getLastCauseCode();
     method @Nullable public android.net.LinkProperties getLinkProperties();
     method public int getNetworkType();
