@@ -288,9 +288,9 @@ package android {
     field public static final int alignmentMode = 16843642; // 0x101037a
     field public static final int allContactsName = 16843468; // 0x10102cc
     field public static final int allowAudioPlaybackCapture = 16844289; // 0x1010601
+    field public static final int allowAutoRevokePermissionsExemption = 16844309; // 0x1010615
     field public static final int allowBackup = 16843392; // 0x1010280
     field public static final int allowClearUserData = 16842757; // 0x1010005
-    field public static final int allowDontAutoRevokePermissions = 16844309; // 0x1010615
     field public static final int allowEmbedded = 16843765; // 0x10103f5
     field public static final int allowNativeHeapPointerTagging = 16844307; // 0x1010613
     field public static final int allowParallelSyncs = 16843570; // 0x1010332
@@ -1140,7 +1140,7 @@ package android {
     field public static final int reqKeyboardType = 16843304; // 0x1010228
     field public static final int reqNavigation = 16843306; // 0x101022a
     field public static final int reqTouchScreen = 16843303; // 0x1010227
-    field public static final int requestDontAutoRevokePermissions = 16844308; // 0x1010614
+    field public static final int requestAutoRevokePermissionsExemption = 16844308; // 0x1010614
     field public static final int requestLegacyExternalStorage = 16844291; // 0x1010603
     field public static final int requireDeviceUnlock = 16843756; // 0x10103ec
     field public static final int required = 16843406; // 0x101028e
@@ -4049,6 +4049,7 @@ package android.app {
     method @RequiresPermission(android.Manifest.permission.REORDER_TASKS) public void moveTaskToFront(int, int);
     method @RequiresPermission(android.Manifest.permission.REORDER_TASKS) public void moveTaskToFront(int, int, android.os.Bundle);
     method @Deprecated public void restartPackage(String);
+    method public void setProcessStateSummary(@Nullable byte[]);
     method public static void setVrThread(int);
     method public void setWatchHeapLimit(long);
     field public static final String ACTION_REPORT_HEAP_LIMIT = "android.app.action.REPORT_HEAP_LIMIT";
@@ -4561,12 +4562,14 @@ package android.app {
     method public int getPackageUid();
     method public int getPid();
     method @NonNull public String getProcessName();
+    method @Nullable public byte[] getProcessStateSummary();
     method public long getPss();
     method public int getRealUid();
     method public int getReason();
     method public long getRss();
     method public int getStatus();
     method public long getTimestamp();
+    method @Nullable public java.io.InputStream getTraceInputStream() throws java.io.IOException;
     method @NonNull public android.os.UserHandle getUserHandle();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.app.ApplicationExitInfo> CREATOR;
@@ -6942,7 +6945,7 @@ package android.app.admin {
     method public boolean isApplicationHidden(@NonNull android.content.ComponentName, String);
     method public boolean isBackupServiceEnabled(@NonNull android.content.ComponentName);
     method @Deprecated public boolean isCallerApplicationRestrictionsManagingPackage();
-    method public boolean isCommonCriteriaModeEnabled(@NonNull android.content.ComponentName);
+    method public boolean isCommonCriteriaModeEnabled(@Nullable android.content.ComponentName);
     method public boolean isDeviceIdAttestationSupported();
     method public boolean isDeviceOwnerApp(String);
     method public boolean isEphemeralUser(@NonNull android.content.ComponentName);
@@ -10202,7 +10205,6 @@ package android.content {
     field public static final String MEDIA_ROUTER_SERVICE = "media_router";
     field public static final String MEDIA_SESSION_SERVICE = "media_session";
     field public static final String MIDI_SERVICE = "midi";
-    field public static final String MMS_SERVICE = "mms";
     field public static final int MODE_APPEND = 32768; // 0x8000
     field public static final int MODE_ENABLE_WRITE_AHEAD_LOGGING = 8; // 0x8
     field @Deprecated public static final int MODE_MULTI_PROCESS = 4; // 0x4
@@ -23601,13 +23603,13 @@ package android.location {
     method @FloatRange(from=0, to=63) public double getCn0DbHz();
     method @NonNull public String getCodeType();
     method public int getConstellationType();
+    method public double getFullInterSignalBiasNanos();
+    method @FloatRange(from=0.0) public double getFullInterSignalBiasUncertaintyNanos();
     method public int getMultipathIndicator();
     method public double getPseudorangeRateMetersPerSecond();
     method public double getPseudorangeRateUncertaintyMetersPerSecond();
     method public long getReceivedSvTimeNanos();
     method public long getReceivedSvTimeUncertaintyNanos();
-    method public double getReceiverInterSignalBiasNanos();
-    method @FloatRange(from=0.0) public double getReceiverInterSignalBiasUncertaintyNanos();
     method public double getSatelliteInterSignalBiasNanos();
     method @FloatRange(from=0.0) public double getSatelliteInterSignalBiasUncertaintyNanos();
     method public double getSnrInDb();
@@ -23621,8 +23623,8 @@ package android.location {
     method @Deprecated public boolean hasCarrierPhase();
     method @Deprecated public boolean hasCarrierPhaseUncertainty();
     method public boolean hasCodeType();
-    method public boolean hasReceiverInterSignalBiasNanos();
-    method public boolean hasReceiverInterSignalBiasUncertaintyNanos();
+    method public boolean hasFullInterSignalBiasNanos();
+    method public boolean hasFullInterSignalBiasUncertaintyNanos();
     method public boolean hasSatelliteInterSignalBiasNanos();
     method public boolean hasSatelliteInterSignalBiasUncertaintyNanos();
     method public boolean hasSnrInDb();
@@ -26428,24 +26430,23 @@ package android.media {
     method public void seek(@NonNull android.media.MediaParser.SeekPoint);
     method @NonNull public android.media.MediaParser setParameter(@NonNull String, @NonNull Object);
     method public boolean supportsParameter(@NonNull String);
-    field public static final String PARAMETER_ADTS_ENABLE_CBR_SEEKING = "exo.AdtsParser.enableCbrSeeking";
-    field public static final String PARAMETER_AMR_ENABLE_CBR_SEEKING = "exo.AmrParser.enableCbrSeeking";
-    field public static final String PARAMETER_FLAC_DISABLE_ID3 = "exo.FlacParser.disableId3";
-    field public static final String PARAMETER_FMP4_IGNORE_EDIT_LISTS = "exo.FragmentedMp4Parser.ignoreEditLists";
-    field public static final String PARAMETER_FMP4_IGNORE_TFDT_BOX = "exo.FragmentedMp4Parser.ignoreTfdtBox";
-    field public static final String PARAMETER_FMP4_TREAT_VIDEO_FRAMES_AS_KEYFRAMES = "exo.FragmentedMp4Parser.treatVideoFramesAsKeyframes";
-    field public static final String PARAMETER_MATROSKA_DISABLE_CUES_SEEKING = "exo.MatroskaParser.disableCuesSeeking";
-    field public static final String PARAMETER_MP3_DISABLE_ID3 = "exo.Mp3Parser.disableId3";
-    field public static final String PARAMETER_MP3_ENABLE_CBR_SEEKING = "exo.Mp3Parser.enableCbrSeeking";
-    field public static final String PARAMETER_MP3_ENABLE_INDEX_SEEKING = "exo.Mp3Parser.enableIndexSeeking";
-    field public static final String PARAMETER_MP4_IGNORE_EDIT_LISTS = "exo.Mp4Parser.ignoreEditLists";
-    field public static final String PARAMETER_TS_ALLOW_NON_IDR_AVC_KEYFRAMES = "exo.TsParser.allowNonIdrAvcKeyframes";
-    field public static final String PARAMETER_TS_DETECT_ACCESS_UNITS = "exo.TsParser.ignoreDetectAccessUnits";
-    field public static final String PARAMETER_TS_ENABLE_HDMV_DTS_AUDIO_STREAMS = "exo.TsParser.enableHdmvDtsAudioStreams";
-    field public static final String PARAMETER_TS_IGNORE_AAC_STREAM = "exo.TsParser.ignoreAacStream";
-    field public static final String PARAMETER_TS_IGNORE_AVC_STREAM = "exo.TsParser.ignoreAvcStream";
-    field public static final String PARAMETER_TS_IGNORE_SPLICE_INFO_STREAM = "exo.TsParser.ignoreSpliceInfoStream";
-    field public static final String PARAMETER_TS_MODE = "exo.TsParser.mode";
+    field public static final String PARAMETER_ADTS_ENABLE_CBR_SEEKING = "android.media.mediaparser.adts.enableCbrSeeking";
+    field public static final String PARAMETER_AMR_ENABLE_CBR_SEEKING = "android.media.mediaparser.amr.enableCbrSeeking";
+    field public static final String PARAMETER_FLAC_DISABLE_ID3 = "android.media.mediaparser.flac.disableId3";
+    field public static final String PARAMETER_MATROSKA_DISABLE_CUES_SEEKING = "android.media.mediaparser.matroska.disableCuesSeeking";
+    field public static final String PARAMETER_MP3_DISABLE_ID3 = "android.media.mediaparser.mp3.disableId3";
+    field public static final String PARAMETER_MP3_ENABLE_CBR_SEEKING = "android.media.mediaparser.mp3.enableCbrSeeking";
+    field public static final String PARAMETER_MP3_ENABLE_INDEX_SEEKING = "android.media.mediaparser.mp3.enableIndexSeeking";
+    field public static final String PARAMETER_MP4_IGNORE_EDIT_LISTS = "android.media.mediaparser.mp4.ignoreEditLists";
+    field public static final String PARAMETER_MP4_IGNORE_TFDT_BOX = "android.media.mediaparser.mp4.ignoreTfdtBox";
+    field public static final String PARAMETER_MP4_TREAT_VIDEO_FRAMES_AS_KEYFRAMES = "android.media.mediaparser.mp4.treatVideoFramesAsKeyframes";
+    field public static final String PARAMETER_TS_ALLOW_NON_IDR_AVC_KEYFRAMES = "android.media.mediaparser.ts.allowNonIdrAvcKeyframes";
+    field public static final String PARAMETER_TS_DETECT_ACCESS_UNITS = "android.media.mediaparser.ts.ignoreDetectAccessUnits";
+    field public static final String PARAMETER_TS_ENABLE_HDMV_DTS_AUDIO_STREAMS = "android.media.mediaparser.ts.enableHdmvDtsAudioStreams";
+    field public static final String PARAMETER_TS_IGNORE_AAC_STREAM = "android.media.mediaparser.ts.ignoreAacStream";
+    field public static final String PARAMETER_TS_IGNORE_AVC_STREAM = "android.media.mediaparser.ts.ignoreAvcStream";
+    field public static final String PARAMETER_TS_IGNORE_SPLICE_INFO_STREAM = "android.media.mediaparser.ts.ignoreSpliceInfoStream";
+    field public static final String PARAMETER_TS_MODE = "android.media.mediaparser.ts.mode";
   }
 
   public static interface MediaParser.InputReader {
@@ -32454,7 +32455,7 @@ package android.nfc.cardemulation {
     method public boolean categoryAllowsForegroundPreference(String);
     method @Nullable @RequiresPermission(android.Manifest.permission.NFC_PREFERRED_PAYMENT_INFO) public java.util.List<java.lang.String> getAidsForPreferredPaymentService();
     method public java.util.List<java.lang.String> getAidsForService(android.content.ComponentName, String);
-    method @Nullable @RequiresPermission(android.Manifest.permission.NFC_PREFERRED_PAYMENT_INFO) public String getDescriptionForPreferredPaymentService();
+    method @Nullable @RequiresPermission(android.Manifest.permission.NFC_PREFERRED_PAYMENT_INFO) public CharSequence getDescriptionForPreferredPaymentService();
     method public static android.nfc.cardemulation.CardEmulation getInstance(android.nfc.NfcAdapter);
     method @Nullable @RequiresPermission(android.Manifest.permission.NFC_PREFERRED_PAYMENT_INFO) public String getRouteDestinationForPreferredPaymentService();
     method public int getSelectionModeForCategory(String);
@@ -47546,11 +47547,6 @@ package android.telephony {
     method @Nullable public android.telephony.mbms.StreamingService startStreaming(android.telephony.mbms.StreamingServiceInfo, @NonNull java.util.concurrent.Executor, android.telephony.mbms.StreamingServiceCallback);
   }
 
-  public class MmsManager {
-    method public void downloadMultimediaMessage(int, @NonNull String, @NonNull android.net.Uri, @Nullable android.os.Bundle, @Nullable android.app.PendingIntent, long);
-    method public void sendMultimediaMessage(int, @NonNull android.net.Uri, @Nullable String, @Nullable android.os.Bundle, @Nullable android.app.PendingIntent, long);
-  }
-
   @Deprecated public class NeighboringCellInfo implements android.os.Parcelable {
     ctor @Deprecated public NeighboringCellInfo();
     ctor @Deprecated public NeighboringCellInfo(int, int);
@@ -48111,7 +48107,7 @@ package android.telephony {
     method public long getDataLimitBytes();
     method public long getDataUsageBytes();
     method public long getDataUsageTime();
-    method @Nullable public int[] getNetworkTypes();
+    method @NonNull public int[] getNetworkTypes();
     method @Nullable public CharSequence getSummary();
     method @Nullable public CharSequence getTitle();
     method public void writeToParcel(android.os.Parcel, int);
@@ -48131,7 +48127,7 @@ package android.telephony {
     method public static android.telephony.SubscriptionPlan.Builder createRecurring(java.time.ZonedDateTime, java.time.Period);
     method public android.telephony.SubscriptionPlan.Builder setDataLimit(long, int);
     method public android.telephony.SubscriptionPlan.Builder setDataUsage(long, long);
-    method @NonNull public android.telephony.SubscriptionPlan.Builder setNetworkTypes(@Nullable int[]);
+    method @NonNull public android.telephony.SubscriptionPlan.Builder setNetworkTypes(@NonNull int[]);
     method public android.telephony.SubscriptionPlan.Builder setSummary(@Nullable CharSequence);
     method public android.telephony.SubscriptionPlan.Builder setTitle(@Nullable CharSequence);
   }
@@ -53620,6 +53616,7 @@ package android.view {
 
   public static final class SurfaceControlViewHost.SurfacePackage implements android.os.Parcelable {
     method public int describeContents();
+    method public void release();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.view.SurfaceControlViewHost.SurfacePackage> CREATOR;
   }
@@ -55573,7 +55570,8 @@ package android.view {
   }
 
   public interface WindowInsetsAnimationControlListener {
-    method public void onCancelled();
+    method public void onCancelled(@Nullable android.view.WindowInsetsAnimationController);
+    method public void onFinished(@NonNull android.view.WindowInsetsAnimationController);
     method public void onReady(@NonNull android.view.WindowInsetsAnimationController, int);
   }
 
@@ -55585,6 +55583,9 @@ package android.view {
     method @NonNull public android.graphics.Insets getHiddenStateInsets();
     method @NonNull public android.graphics.Insets getShownStateInsets();
     method public int getTypes();
+    method public boolean isCancelled();
+    method public boolean isFinished();
+    method public default boolean isReady();
     method public void setInsetsAndAlpha(@Nullable android.graphics.Insets, @FloatRange(from=0.0f, to=1.0f) float, @FloatRange(from=0.0f, to=1.0f) float);
   }
 
