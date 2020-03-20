@@ -12872,14 +12872,7 @@ package android.content.res {
 package android.content.res.loader {
 
   public interface AssetsProvider {
-    method @Nullable public default java.io.InputStream loadAsset(@NonNull String, int) throws java.io.IOException;
-    method @Nullable public default android.os.ParcelFileDescriptor loadAssetParcelFd(@NonNull String) throws java.io.IOException;
-  }
-
-  public class DirectoryAssetsProvider implements android.content.res.loader.AssetsProvider {
-    ctor public DirectoryAssetsProvider(@NonNull java.io.File);
-    method @Nullable public java.io.File findFile(@NonNull String);
-    method @NonNull public java.io.File getDirectory();
+    method @Nullable public default android.content.res.AssetFileDescriptor loadAssetFd(@NonNull String, int);
   }
 
   public class ResourcesLoader {
@@ -12894,14 +12887,11 @@ package android.content.res.loader {
   public class ResourcesProvider implements java.lang.AutoCloseable java.io.Closeable {
     method public void close();
     method @NonNull public static android.content.res.loader.ResourcesProvider empty(@NonNull android.content.res.loader.AssetsProvider);
-    method @Nullable public android.content.res.loader.AssetsProvider getAssetsProvider();
     method @NonNull public static android.content.res.loader.ResourcesProvider loadFromApk(@NonNull android.os.ParcelFileDescriptor) throws java.io.IOException;
     method @NonNull public static android.content.res.loader.ResourcesProvider loadFromApk(@NonNull android.os.ParcelFileDescriptor, @Nullable android.content.res.loader.AssetsProvider) throws java.io.IOException;
-    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromApk(@NonNull android.os.SharedMemory) throws java.io.IOException;
-    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromApk(@NonNull android.os.SharedMemory, @Nullable android.content.res.loader.AssetsProvider) throws java.io.IOException;
+    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromDirectory(@NonNull String, @Nullable android.content.res.loader.AssetsProvider) throws java.io.IOException;
     method @NonNull public static android.content.res.loader.ResourcesProvider loadFromSplit(@NonNull android.content.Context, @NonNull String) throws java.io.IOException;
     method @NonNull public static android.content.res.loader.ResourcesProvider loadFromTable(@NonNull android.os.ParcelFileDescriptor, @Nullable android.content.res.loader.AssetsProvider) throws java.io.IOException;
-    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromTable(@NonNull android.os.SharedMemory, @Nullable android.content.res.loader.AssetsProvider) throws java.io.IOException;
   }
 
 }
