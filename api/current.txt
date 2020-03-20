@@ -2879,7 +2879,11 @@ package android.accessibilityservice {
     method public void setGestureDetectionPassthroughRegion(int, @NonNull android.graphics.Region);
     method public final void setServiceInfo(android.accessibilityservice.AccessibilityServiceInfo);
     method public void setTouchExplorationPassthroughRegion(int, @NonNull android.graphics.Region);
-    method public boolean takeScreenshot(int, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.accessibilityservice.AccessibilityService.ScreenshotResult>);
+    method public void takeScreenshot(int, @NonNull java.util.concurrent.Executor, @NonNull android.accessibilityservice.AccessibilityService.TakeScreenshotCallback);
+    field public static final int ERROR_TAKE_SCREENSHOT_INTERNAL_ERROR = 1; // 0x1
+    field public static final int ERROR_TAKE_SCREENSHOT_INTERVAL_TIME_SHORT = 3; // 0x3
+    field public static final int ERROR_TAKE_SCREENSHOT_INVALID_DISPLAY = 4; // 0x4
+    field public static final int ERROR_TAKE_SCREENSHOT_NO_ACCESSIBILITY_ACCESS = 2; // 0x2
     field public static final int GESTURE_2_FINGER_DOUBLE_TAP = 20; // 0x14
     field public static final int GESTURE_2_FINGER_DOUBLE_TAP_AND_HOLD = 40; // 0x28
     field public static final int GESTURE_2_FINGER_SINGLE_TAP = 19; // 0x13
@@ -2978,6 +2982,11 @@ package android.accessibilityservice {
 
   public static interface AccessibilityService.SoftKeyboardController.OnShowModeChangedListener {
     method public void onShowModeChanged(@NonNull android.accessibilityservice.AccessibilityService.SoftKeyboardController, int);
+  }
+
+  public static interface AccessibilityService.TakeScreenshotCallback {
+    method public void onFailure(int);
+    method public void onSuccess(@NonNull android.accessibilityservice.AccessibilityService.ScreenshotResult);
   }
 
   public class AccessibilityServiceInfo implements android.os.Parcelable {
