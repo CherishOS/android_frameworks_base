@@ -278,6 +278,7 @@ package android {
     field public static final int activityCloseExitAnimation = 16842939; // 0x10100bb
     field public static final int activityOpenEnterAnimation = 16842936; // 0x10100b8
     field public static final int activityOpenExitAnimation = 16842937; // 0x10100b9
+    field public static final int actor = 16844313; // 0x1010619
     field public static final int addPrintersActivity = 16843750; // 0x10103e6
     field public static final int addStatesFromChildren = 16842992; // 0x10100f0
     field public static final int adjustViewBounds = 16843038; // 0x101011e
@@ -2879,7 +2880,11 @@ package android.accessibilityservice {
     method public void setGestureDetectionPassthroughRegion(int, @NonNull android.graphics.Region);
     method public final void setServiceInfo(android.accessibilityservice.AccessibilityServiceInfo);
     method public void setTouchExplorationPassthroughRegion(int, @NonNull android.graphics.Region);
-    method public boolean takeScreenshot(int, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.accessibilityservice.AccessibilityService.ScreenshotResult>);
+    method public void takeScreenshot(int, @NonNull java.util.concurrent.Executor, @NonNull android.accessibilityservice.AccessibilityService.TakeScreenshotCallback);
+    field public static final int ERROR_TAKE_SCREENSHOT_INTERNAL_ERROR = 1; // 0x1
+    field public static final int ERROR_TAKE_SCREENSHOT_INTERVAL_TIME_SHORT = 3; // 0x3
+    field public static final int ERROR_TAKE_SCREENSHOT_INVALID_DISPLAY = 4; // 0x4
+    field public static final int ERROR_TAKE_SCREENSHOT_NO_ACCESSIBILITY_ACCESS = 2; // 0x2
     field public static final int GESTURE_2_FINGER_DOUBLE_TAP = 20; // 0x14
     field public static final int GESTURE_2_FINGER_DOUBLE_TAP_AND_HOLD = 40; // 0x28
     field public static final int GESTURE_2_FINGER_SINGLE_TAP = 19; // 0x13
@@ -2978,6 +2983,11 @@ package android.accessibilityservice {
 
   public static interface AccessibilityService.SoftKeyboardController.OnShowModeChangedListener {
     method public void onShowModeChanged(@NonNull android.accessibilityservice.AccessibilityService.SoftKeyboardController, int);
+  }
+
+  public static interface AccessibilityService.TakeScreenshotCallback {
+    method public void onFailure(int);
+    method public void onSuccess(@NonNull android.accessibilityservice.AccessibilityService.ScreenshotResult);
   }
 
   public class AccessibilityServiceInfo implements android.os.Parcelable {
@@ -5659,13 +5669,13 @@ package android.app {
   public static final class Notification.BubbleMetadata implements android.os.Parcelable {
     method public int describeContents();
     method public boolean getAutoExpandBubble();
-    method @Nullable public android.graphics.drawable.Icon getBubbleIcon();
-    method @Nullable public android.app.PendingIntent getBubbleIntent();
+    method @Deprecated @Nullable public android.graphics.drawable.Icon getBubbleIcon();
+    method @Deprecated @Nullable public android.app.PendingIntent getBubbleIntent();
     method @Nullable public android.app.PendingIntent getDeleteIntent();
     method @Dimension(unit=android.annotation.Dimension.DP) public int getDesiredHeight();
     method @DimenRes public int getDesiredHeightResId();
-    method @Deprecated @NonNull public android.graphics.drawable.Icon getIcon();
-    method @Deprecated @NonNull public android.app.PendingIntent getIntent();
+    method @Nullable public android.graphics.drawable.Icon getIcon();
+    method @Nullable public android.app.PendingIntent getIntent();
     method @Nullable public String getShortcutId();
     method public boolean isNotificationSuppressed();
     method public void writeToParcel(android.os.Parcel, int);
@@ -5673,16 +5683,18 @@ package android.app {
   }
 
   public static final class Notification.BubbleMetadata.Builder {
-    ctor public Notification.BubbleMetadata.Builder();
+    ctor @Deprecated public Notification.BubbleMetadata.Builder();
+    ctor public Notification.BubbleMetadata.Builder(@NonNull String);
+    ctor public Notification.BubbleMetadata.Builder(@NonNull android.app.PendingIntent, @NonNull android.graphics.drawable.Icon);
     method @NonNull public android.app.Notification.BubbleMetadata build();
-    method @NonNull public android.app.Notification.BubbleMetadata.Builder createIntentBubble(@NonNull android.app.PendingIntent, @NonNull android.graphics.drawable.Icon);
-    method @NonNull public android.app.Notification.BubbleMetadata.Builder createShortcutBubble(@NonNull String);
+    method @Deprecated @NonNull public android.app.Notification.BubbleMetadata.Builder createIntentBubble(@NonNull android.app.PendingIntent, @NonNull android.graphics.drawable.Icon);
+    method @Deprecated @NonNull public android.app.Notification.BubbleMetadata.Builder createShortcutBubble(@NonNull String);
     method @NonNull public android.app.Notification.BubbleMetadata.Builder setAutoExpandBubble(boolean);
     method @NonNull public android.app.Notification.BubbleMetadata.Builder setDeleteIntent(@Nullable android.app.PendingIntent);
     method @NonNull public android.app.Notification.BubbleMetadata.Builder setDesiredHeight(@Dimension(unit=android.annotation.Dimension.DP) int);
     method @NonNull public android.app.Notification.BubbleMetadata.Builder setDesiredHeightResId(@DimenRes int);
-    method @Deprecated @NonNull public android.app.Notification.BubbleMetadata.Builder setIcon(@NonNull android.graphics.drawable.Icon);
-    method @Deprecated @NonNull public android.app.Notification.BubbleMetadata.Builder setIntent(@NonNull android.app.PendingIntent);
+    method @NonNull public android.app.Notification.BubbleMetadata.Builder setIcon(@NonNull android.graphics.drawable.Icon);
+    method @NonNull public android.app.Notification.BubbleMetadata.Builder setIntent(@NonNull android.app.PendingIntent);
     method @NonNull public android.app.Notification.BubbleMetadata.Builder setSuppressNotification(boolean);
   }
 
@@ -6832,7 +6844,7 @@ package android.app.admin {
     ctor public DevicePolicyKeyguardService();
     method @Nullable public void dismiss();
     method @Nullable public final android.os.IBinder onBind(@Nullable android.content.Intent);
-    method @Nullable public android.view.SurfaceControlViewHost.SurfacePackage onSurfaceReady(@Nullable android.os.IBinder);
+    method @Nullable public android.view.SurfaceControlViewHost.SurfacePackage onCreateKeyguardSurface(@NonNull android.os.IBinder);
   }
 
   public class DevicePolicyManager {
@@ -11959,7 +11971,6 @@ package android.content.pm {
     method @CheckResult public abstract int checkSignatures(@NonNull String, @NonNull String);
     method @CheckResult public abstract int checkSignatures(int, int);
     method public abstract void clearInstantAppCookie();
-    method public void clearMimeGroup(@NonNull String);
     method @Deprecated public abstract void clearPackagePreferredActivities(@NonNull String);
     method public abstract String[] currentToCanonicalPackageNames(@NonNull String[]);
     method public abstract void extendVerificationTimeout(int, int, long);
@@ -11995,7 +12006,7 @@ package android.content.pm {
     method @NonNull public abstract android.content.pm.InstrumentationInfo getInstrumentationInfo(@NonNull android.content.ComponentName, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method @Nullable public abstract android.content.Intent getLaunchIntentForPackage(@NonNull String);
     method @Nullable public abstract android.content.Intent getLeanbackLaunchIntentForPackage(@NonNull String);
-    method @Nullable public java.util.Set<java.lang.String> getMimeGroup(@NonNull String);
+    method @NonNull public java.util.Set<java.lang.String> getMimeGroup(@NonNull String);
     method @NonNull public android.content.pm.ModuleInfo getModuleInfo(@NonNull String, int) throws android.content.pm.PackageManager.NameNotFoundException;
     method @Nullable public abstract String getNameForUid(int);
     method @Nullable public android.content.pm.PackageInfo getPackageArchiveInfo(@NonNull String, int);
@@ -12861,14 +12872,7 @@ package android.content.res {
 package android.content.res.loader {
 
   public interface AssetsProvider {
-    method @Nullable public default java.io.InputStream loadAsset(@NonNull String, int) throws java.io.IOException;
-    method @Nullable public default android.os.ParcelFileDescriptor loadAssetParcelFd(@NonNull String) throws java.io.IOException;
-  }
-
-  public class DirectoryAssetsProvider implements android.content.res.loader.AssetsProvider {
-    ctor public DirectoryAssetsProvider(@NonNull java.io.File);
-    method @Nullable public java.io.File findFile(@NonNull String);
-    method @NonNull public java.io.File getDirectory();
+    method @Nullable public default android.content.res.AssetFileDescriptor loadAssetFd(@NonNull String, int);
   }
 
   public class ResourcesLoader {
@@ -12883,14 +12887,11 @@ package android.content.res.loader {
   public class ResourcesProvider implements java.lang.AutoCloseable java.io.Closeable {
     method public void close();
     method @NonNull public static android.content.res.loader.ResourcesProvider empty(@NonNull android.content.res.loader.AssetsProvider);
-    method @Nullable public android.content.res.loader.AssetsProvider getAssetsProvider();
     method @NonNull public static android.content.res.loader.ResourcesProvider loadFromApk(@NonNull android.os.ParcelFileDescriptor) throws java.io.IOException;
     method @NonNull public static android.content.res.loader.ResourcesProvider loadFromApk(@NonNull android.os.ParcelFileDescriptor, @Nullable android.content.res.loader.AssetsProvider) throws java.io.IOException;
-    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromApk(@NonNull android.os.SharedMemory) throws java.io.IOException;
-    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromApk(@NonNull android.os.SharedMemory, @Nullable android.content.res.loader.AssetsProvider) throws java.io.IOException;
+    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromDirectory(@NonNull String, @Nullable android.content.res.loader.AssetsProvider) throws java.io.IOException;
     method @NonNull public static android.content.res.loader.ResourcesProvider loadFromSplit(@NonNull android.content.Context, @NonNull String) throws java.io.IOException;
     method @NonNull public static android.content.res.loader.ResourcesProvider loadFromTable(@NonNull android.os.ParcelFileDescriptor, @Nullable android.content.res.loader.AssetsProvider) throws java.io.IOException;
-    method @NonNull public static android.content.res.loader.ResourcesProvider loadFromTable(@NonNull android.os.SharedMemory, @Nullable android.content.res.loader.AssetsProvider) throws java.io.IOException;
   }
 
 }
@@ -17229,8 +17230,8 @@ package android.hardware.camera2 {
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<android.util.Rational> CONTROL_AE_COMPENSATION_STEP;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<java.lang.Boolean> CONTROL_AE_LOCK_AVAILABLE;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AF_AVAILABLE_MODES;
-    field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<android.hardware.camera2.params.Capability[]> CONTROL_AVAILABLE_BOKEH_CAPABILITIES;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AVAILABLE_EFFECTS;
+    field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<android.hardware.camera2.params.Capability[]> CONTROL_AVAILABLE_EXTENDED_SCENE_MODE_CAPABILITIES;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AVAILABLE_MODES;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AVAILABLE_SCENE_MODES;
     field @NonNull public static final android.hardware.camera2.CameraCharacteristics.Key<int[]> CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES;
@@ -17451,9 +17452,6 @@ package android.hardware.camera2 {
     field public static final int CONTROL_AWB_STATE_INACTIVE = 0; // 0x0
     field public static final int CONTROL_AWB_STATE_LOCKED = 3; // 0x3
     field public static final int CONTROL_AWB_STATE_SEARCHING = 1; // 0x1
-    field public static final int CONTROL_BOKEH_MODE_CONTINUOUS = 2; // 0x2
-    field public static final int CONTROL_BOKEH_MODE_OFF = 0; // 0x0
-    field public static final int CONTROL_BOKEH_MODE_STILL_CAPTURE = 1; // 0x1
     field public static final int CONTROL_CAPTURE_INTENT_CUSTOM = 0; // 0x0
     field public static final int CONTROL_CAPTURE_INTENT_MANUAL = 6; // 0x6
     field public static final int CONTROL_CAPTURE_INTENT_MOTION_TRACKING = 7; // 0x7
@@ -17471,9 +17469,13 @@ package android.hardware.camera2 {
     field public static final int CONTROL_EFFECT_MODE_SEPIA = 4; // 0x4
     field public static final int CONTROL_EFFECT_MODE_SOLARIZE = 3; // 0x3
     field public static final int CONTROL_EFFECT_MODE_WHITEBOARD = 6; // 0x6
+    field public static final int CONTROL_EXTENDED_SCENE_MODE_BOKEH_CONTINUOUS = 2; // 0x2
+    field public static final int CONTROL_EXTENDED_SCENE_MODE_BOKEH_STILL_CAPTURE = 1; // 0x1
+    field public static final int CONTROL_EXTENDED_SCENE_MODE_DISABLED = 0; // 0x0
     field public static final int CONTROL_MODE_AUTO = 1; // 0x1
     field public static final int CONTROL_MODE_OFF = 0; // 0x0
     field public static final int CONTROL_MODE_OFF_KEEP_STATE = 3; // 0x3
+    field public static final int CONTROL_MODE_USE_EXTENDED_SCENE_MODE = 4; // 0x4
     field public static final int CONTROL_MODE_USE_SCENE_MODE = 2; // 0x2
     field public static final int CONTROL_SCENE_MODE_ACTION = 2; // 0x2
     field public static final int CONTROL_SCENE_MODE_BARCODE = 16; // 0x10
@@ -17665,10 +17667,10 @@ package android.hardware.camera2 {
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Boolean> CONTROL_AWB_LOCK;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> CONTROL_AWB_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<android.hardware.camera2.params.MeteringRectangle[]> CONTROL_AWB_REGIONS;
-    field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> CONTROL_BOKEH_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> CONTROL_CAPTURE_INTENT;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> CONTROL_EFFECT_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Boolean> CONTROL_ENABLE_ZSL;
+    field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> CONTROL_EXTENDED_SCENE_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> CONTROL_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> CONTROL_POST_RAW_SENSITIVITY_BOOST;
     field @NonNull public static final android.hardware.camera2.CaptureRequest.Key<java.lang.Integer> CONTROL_SCENE_MODE;
@@ -17752,10 +17754,10 @@ package android.hardware.camera2 {
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_AWB_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<android.hardware.camera2.params.MeteringRectangle[]> CONTROL_AWB_REGIONS;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_AWB_STATE;
-    field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_BOKEH_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_CAPTURE_INTENT;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_EFFECT_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Boolean> CONTROL_ENABLE_ZSL;
+    field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_EXTENDED_SCENE_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_MODE;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_POST_RAW_SENSITIVITY_BOOST;
     field @NonNull public static final android.hardware.camera2.CaptureResult.Key<java.lang.Integer> CONTROL_SCENE_MODE;
@@ -24654,7 +24656,6 @@ package android.media {
     field public static final int ENCAPSULATION_METADATA_TYPE_DVB_AD_DESCRIPTOR = 2; // 0x2
     field public static final int ENCAPSULATION_METADATA_TYPE_FRAMEWORK_TUNER = 1; // 0x1
     field public static final int ENCAPSULATION_MODE_ELEMENTARY_STREAM = 1; // 0x1
-    field public static final int ENCAPSULATION_MODE_HANDLE = 2; // 0x2
     field public static final int ENCAPSULATION_MODE_NONE = 0; // 0x0
     field public static final int ERROR = -1; // 0xffffffff
     field public static final int ERROR_BAD_VALUE = -2; // 0xfffffffe
@@ -24687,7 +24688,6 @@ package android.media {
     method @NonNull public android.media.AudioTrack.Builder setPerformanceMode(int);
     method @NonNull public android.media.AudioTrack.Builder setSessionId(@IntRange(from=1) int) throws java.lang.IllegalArgumentException;
     method @NonNull public android.media.AudioTrack.Builder setTransferMode(int) throws java.lang.IllegalArgumentException;
-    method @NonNull public android.media.AudioTrack.Builder setTunerConfiguration(@NonNull android.media.AudioTrack.TunerConfiguration);
   }
 
   public static final class AudioTrack.MetricsConstants {
@@ -24717,18 +24717,6 @@ package android.media {
     method public void onDataRequest(@NonNull android.media.AudioTrack, @IntRange(from=0) int);
     method public void onPresentationEnded(@NonNull android.media.AudioTrack);
     method public void onTearDown(@NonNull android.media.AudioTrack);
-  }
-
-  public static class AudioTrack.TunerConfiguration {
-    method public int getContentId();
-    method public int getSyncId();
-  }
-
-  public static class AudioTrack.TunerConfiguration.Builder {
-    ctor public AudioTrack.TunerConfiguration.Builder();
-    method @NonNull public android.media.AudioTrack.TunerConfiguration build();
-    method @NonNull public android.media.AudioTrack.TunerConfiguration.Builder setContentId(@IntRange(from=1) int);
-    method @NonNull public android.media.AudioTrack.TunerConfiguration.Builder setSyncId(@IntRange(from=1) int);
   }
 
   public class CamcorderProfile {
@@ -26434,6 +26422,20 @@ package android.media {
     field public static final String PARAMETER_TS_IGNORE_AVC_STREAM = "android.media.mediaparser.ts.ignoreAvcStream";
     field public static final String PARAMETER_TS_IGNORE_SPLICE_INFO_STREAM = "android.media.mediaparser.ts.ignoreSpliceInfoStream";
     field public static final String PARAMETER_TS_MODE = "android.media.mediaparser.ts.mode";
+    field public static final String PARSER_NAME_AC3 = "android.media.mediaparser.Ac3Parser";
+    field public static final String PARSER_NAME_AC4 = "android.media.mediaparser.Ac4Parser";
+    field public static final String PARSER_NAME_ADTS = "android.media.mediaparser.AdtsParser";
+    field public static final String PARSER_NAME_AMR = "android.media.mediaparser.AmrParser";
+    field public static final String PARSER_NAME_FLAC = "android.media.mediaparser.FlacParser";
+    field public static final String PARSER_NAME_FLV = "android.media.mediaparser.FlvParser";
+    field public static final String PARSER_NAME_FMP4 = "android.media.mediaparser.FragmentedMp4Parser";
+    field public static final String PARSER_NAME_MATROSKA = "android.media.mediaparser.MatroskaParser";
+    field public static final String PARSER_NAME_MP3 = "android.media.mediaparser.Mp3Parser";
+    field public static final String PARSER_NAME_MP4 = "android.media.mediaparser.Mp4Parser";
+    field public static final String PARSER_NAME_OGG = "android.media.mediaparser.OggParser";
+    field public static final String PARSER_NAME_PS = "android.media.mediaparser.PsParser";
+    field public static final String PARSER_NAME_TS = "android.media.mediaparser.TsParser";
+    field public static final String PARSER_NAME_WAV = "android.media.mediaparser.WavParser";
   }
 
   public static interface MediaParser.InputReader {
@@ -26869,9 +26871,11 @@ package android.media {
     field public static final int CONNECTION_STATE_CONNECTING = 1; // 0x1
     field public static final int CONNECTION_STATE_DISCONNECTED = 0; // 0x0
     field @NonNull public static final android.os.Parcelable.Creator<android.media.MediaRoute2Info> CREATOR;
-    field public static final String FEATURE_LIVE_AUDIO = "android.media.intent.category.LIVE_AUDIO";
-    field public static final String FEATURE_LIVE_VIDEO = "android.media.intent.category.LIVE_VIDEO";
-    field public static final String FEATURE_REMOTE_PLAYBACK = "android.media.intent.category.REMOTE_PLAYBACK";
+    field public static final String FEATURE_LIVE_AUDIO = "android.media.route.feature.LIVE_AUDIO";
+    field public static final String FEATURE_LIVE_VIDEO = "android.media.route.feature.LIVE_VIDEO";
+    field public static final String FEATURE_REMOTE_AUDIO_PLAYBACK = "android.media.route.feature.REMOTE_AUDIO_PLAYBACK";
+    field public static final String FEATURE_REMOTE_PLAYBACK = "android.media.route.feature.REMOTE_PLAYBACK";
+    field public static final String FEATURE_REMOTE_VIDEO_PLAYBACK = "android.media.route.feature.REMOTE_VIDEO_PLAYBACK";
     field public static final int PLAYBACK_VOLUME_FIXED = 0; // 0x0
     field public static final int PLAYBACK_VOLUME_VARIABLE = 1; // 0x1
   }
@@ -27093,9 +27097,9 @@ package android.media {
 
   public abstract static class MediaRouter2.TransferCallback {
     ctor public MediaRouter2.TransferCallback();
-    method public void onStopped(@NonNull android.media.MediaRouter2.RoutingController);
-    method public void onTransferFailed(@NonNull android.media.MediaRoute2Info);
-    method public void onTransferred(@NonNull android.media.MediaRouter2.RoutingController, @NonNull android.media.MediaRouter2.RoutingController);
+    method public void onStop(@NonNull android.media.MediaRouter2.RoutingController);
+    method public void onTransfer(@NonNull android.media.MediaRouter2.RoutingController, @NonNull android.media.MediaRouter2.RoutingController);
+    method public void onTransferFailure(@NonNull android.media.MediaRoute2Info);
   }
 
   public class MediaScannerConnection implements android.content.ServiceConnection {
@@ -30247,9 +30251,6 @@ package android.net {
   public final class NetworkCapabilities implements android.os.Parcelable {
     ctor public NetworkCapabilities();
     ctor public NetworkCapabilities(android.net.NetworkCapabilities);
-    method @NonNull public android.net.NetworkCapabilities addCapability(int);
-    method @NonNull public android.net.NetworkCapabilities addTransportType(int);
-    method public void clearAll();
     method public int describeContents();
     method public int getLinkDownstreamBandwidthKbps();
     method public int getLinkUpstreamBandwidthKbps();
@@ -30259,13 +30260,6 @@ package android.net {
     method @Nullable public android.net.TransportInfo getTransportInfo();
     method public boolean hasCapability(int);
     method public boolean hasTransport(int);
-    method @NonNull public android.net.NetworkCapabilities removeCapability(int);
-    method @NonNull public android.net.NetworkCapabilities setCapability(int, boolean);
-    method @NonNull public android.net.NetworkCapabilities setLinkDownstreamBandwidthKbps(int);
-    method @NonNull public android.net.NetworkCapabilities setLinkUpstreamBandwidthKbps(int);
-    method @NonNull public android.net.NetworkCapabilities setNetworkSpecifier(@NonNull android.net.NetworkSpecifier);
-    method @NonNull public android.net.NetworkCapabilities setOwnerUid(int);
-    method @NonNull public android.net.NetworkCapabilities setSignalStrength(int);
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.NetworkCapabilities> CREATOR;
     field public static final int NET_CAPABILITY_CAPTIVE_PORTAL = 17; // 0x11
@@ -31105,7 +31099,7 @@ package android.net.wifi {
     field public static final int EASY_CONNECT_EVENT_FAILURE_TIMEOUT = -6; // 0xfffffffa
   }
 
-  public class ScanResult implements android.os.Parcelable {
+  public final class ScanResult implements android.os.Parcelable {
     ctor public ScanResult(@NonNull android.net.wifi.ScanResult);
     ctor public ScanResult();
     method public int describeContents();
@@ -47006,7 +47000,6 @@ package android.telephony {
     method public abstract int getAsuLevel();
     method public abstract int getDbm();
     method @IntRange(from=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_NONE_OR_UNKNOWN, to=android.telephony.CellSignalStrength.SIGNAL_STRENGTH_GREAT) public abstract int getLevel();
-    method public static final int getNumSignalStrengthLevels();
     method public abstract int hashCode();
     field public static final int SIGNAL_STRENGTH_GOOD = 3; // 0x3
     field public static final int SIGNAL_STRENGTH_GREAT = 4; // 0x4
@@ -47587,12 +47580,6 @@ package android.telephony {
     field public static final int SCAN_TYPE_PERIODIC = 1; // 0x1
   }
 
-  public final class PhoneCapability implements android.os.Parcelable {
-    method public int describeContents();
-    method public void writeToParcel(@NonNull android.os.Parcel, int);
-    field @NonNull public static final android.os.Parcelable.Creator<android.telephony.PhoneCapability> CREATOR;
-  }
-
   public class PhoneNumberFormattingTextWatcher implements android.text.TextWatcher {
     ctor public PhoneNumberFormattingTextWatcher();
     ctor public PhoneNumberFormattingTextWatcher(String);
@@ -47797,7 +47784,7 @@ package android.telephony {
     method @Deprecated public void sendMultimediaMessage(android.content.Context, android.net.Uri, String, android.os.Bundle, android.app.PendingIntent);
     method public void sendMultipartTextMessage(String, String, java.util.ArrayList<java.lang.String>, java.util.ArrayList<android.app.PendingIntent>, java.util.ArrayList<android.app.PendingIntent>);
     method public void sendMultipartTextMessage(@NonNull String, @Nullable String, @NonNull java.util.List<java.lang.String>, @Nullable java.util.List<android.app.PendingIntent>, @Nullable java.util.List<android.app.PendingIntent>, long);
-    method public void sendMultipartTextMessage(@NonNull String, @Nullable String, @NonNull java.util.List<java.lang.String>, @Nullable java.util.List<android.app.PendingIntent>, @Nullable java.util.List<android.app.PendingIntent>, @NonNull String);
+    method public void sendMultipartTextMessage(@NonNull String, @Nullable String, @NonNull java.util.List<java.lang.String>, @Nullable java.util.List<android.app.PendingIntent>, @Nullable java.util.List<android.app.PendingIntent>, @NonNull String, @Nullable String);
     method public void sendTextMessage(String, String, String, android.app.PendingIntent, android.app.PendingIntent);
     method public void sendTextMessage(@NonNull String, @Nullable String, @NonNull String, @Nullable android.app.PendingIntent, @Nullable android.app.PendingIntent, long);
     method @RequiresPermission(allOf={android.Manifest.permission.MODIFY_PHONE_STATE, android.Manifest.permission.SEND_SMS}) public void sendTextMessageWithoutPersisting(String, String, String, android.app.PendingIntent, android.app.PendingIntent);
@@ -47933,7 +47920,6 @@ package android.telephony {
     method public byte[] getPdu();
     method public int getProtocolIdentifier();
     method public String getPseudoSubject();
-    method @Nullable public String getRecipientAddress();
     method public String getServiceCenterAddress();
     method public int getStatus();
     method public int getStatusOnIcc();
@@ -48089,6 +48075,7 @@ package android.telephony {
     method public android.telephony.SubscriptionPlan build();
     method public static android.telephony.SubscriptionPlan.Builder createNonrecurring(java.time.ZonedDateTime, java.time.ZonedDateTime);
     method public static android.telephony.SubscriptionPlan.Builder createRecurring(java.time.ZonedDateTime, java.time.Period);
+    method @NonNull public android.telephony.SubscriptionPlan.Builder resetNetworkTypes();
     method public android.telephony.SubscriptionPlan.Builder setDataLimit(long, int);
     method public android.telephony.SubscriptionPlan.Builder setDataUsage(long, long);
     method @NonNull public android.telephony.SubscriptionPlan.Builder setNetworkTypes(@NonNull int[]);
@@ -48116,7 +48103,6 @@ package android.telephony {
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public boolean doesSwitchMultiSimConfigTriggerReboot();
     method public int getActiveModemCount();
     method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public java.util.List<android.telephony.CellInfo> getAllCellInfo();
-    method @NonNull public static int[] getAllNetworkTypes();
     method public int getCallState();
     method public int getCardIdForDefaultEuicc();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) @WorkerThread public android.os.PersistableBundle getCarrierConfig();
