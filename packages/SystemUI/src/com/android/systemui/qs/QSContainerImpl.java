@@ -20,6 +20,8 @@ import static android.app.StatusBarManager.DISABLE2_QUICK_SETTINGS;
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
 import android.content.Context;
+import android.content.ContentResolver;
+import android.content.res.ColorUtils;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
