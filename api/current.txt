@@ -277,7 +277,6 @@ package android {
     field public static final int activityCloseExitAnimation = 16842939; // 0x10100bb
     field public static final int activityOpenEnterAnimation = 16842936; // 0x10100b8
     field public static final int activityOpenExitAnimation = 16842937; // 0x10100b9
-    field public static final int actor = 16844312; // 0x1010618
     field public static final int addPrintersActivity = 16843750; // 0x10103e6
     field public static final int addStatesFromChildren = 16842992; // 0x10100f0
     field public static final int adjustViewBounds = 16843038; // 0x101011e
@@ -327,7 +326,7 @@ package android {
     field public static final int autoLink = 16842928; // 0x10100b0
     field public static final int autoMirrored = 16843754; // 0x10103ea
     field public static final int autoRemoveFromRecents = 16843847; // 0x1010447
-    field public static final int autoRevokePermissions = 16844308; // 0x1010614
+    field public static final int autoRevokePermissions = 16844309; // 0x1010615
     field public static final int autoSizeMaxTextSize = 16844102; // 0x1010546
     field public static final int autoSizeMinTextSize = 16844088; // 0x1010538
     field public static final int autoSizePresetSizes = 16844087; // 0x1010537
@@ -709,7 +708,7 @@ package android {
     field public static final int gravity = 16842927; // 0x10100af
     field public static final int gridViewStyle = 16842865; // 0x1010071
     field public static final int groupIndicator = 16843019; // 0x101010b
-    field public static final int gwpAsanMode = 16844311; // 0x1010617
+    field public static final int gwpAsanMode = 16844312; // 0x1010618
     field public static final int hand_hour = 16843011; // 0x1010103
     field public static final int hand_minute = 16843012; // 0x1010104
     field public static final int handle = 16843354; // 0x101025a
@@ -954,7 +953,7 @@ package android {
     field public static final int mediaRouteButtonStyle = 16843693; // 0x10103ad
     field public static final int mediaRouteTypes = 16843694; // 0x10103ae
     field public static final int menuCategory = 16843230; // 0x10101de
-    field public static final int mimeGroup = 16844310; // 0x1010616
+    field public static final int mimeGroup = 16844311; // 0x1010617
     field public static final int mimeType = 16842790; // 0x1010026
     field public static final int min = 16844089; // 0x1010539
     field public static final int minAspectRatio = 16844187; // 0x101059b
@@ -1083,7 +1082,7 @@ package android {
     field public static final int preferenceScreenStyle = 16842891; // 0x101008b
     field public static final int preferenceStyle = 16842894; // 0x101008e
     field public static final int presentationTheme = 16843712; // 0x10103c0
-    field public static final int preserveLegacyExternalStorage = 16844309; // 0x1010615
+    field public static final int preserveLegacyExternalStorage = 16844310; // 0x1010616
     field public static final int previewImage = 16843482; // 0x10102da
     field public static final int primaryContentAlpha = 16844114; // 0x1010552
     field public static final int priority = 16842780; // 0x101001c
@@ -24357,7 +24356,7 @@ package android.media {
   }
 
   public final class AudioMetadata {
-    method @NonNull public static android.media.AudioMetadata.Map createMap();
+    method @NonNull public static android.media.AudioMetadataMap createMap();
   }
 
   public static class AudioMetadata.Format {
@@ -24375,16 +24374,16 @@ package android.media {
     method @NonNull public Class<T> getValueClass();
   }
 
-  public static interface AudioMetadata.Map extends android.media.AudioMetadata.ReadMap {
+  public interface AudioMetadataMap extends android.media.AudioMetadataReadMap {
     method @Nullable public <T> T remove(@NonNull android.media.AudioMetadata.Key<T>);
     method @Nullable public <T> T set(@NonNull android.media.AudioMetadata.Key<T>, @NonNull T);
   }
 
-  public static interface AudioMetadata.ReadMap {
+  public interface AudioMetadataReadMap {
     method public <T> boolean containsKey(@NonNull android.media.AudioMetadata.Key<T>);
-    method @NonNull public android.media.AudioMetadata.Map dup();
+    method @NonNull public android.media.AudioMetadataMap dup();
     method @Nullable public <T> T get(@NonNull android.media.AudioMetadata.Key<T>);
-    method public int size();
+    method @IntRange(from=0) public int size();
   }
 
   public final class AudioPlaybackCaptureConfiguration {
@@ -24699,7 +24698,7 @@ package android.media {
   }
 
   public static interface AudioTrack.OnCodecFormatChangedListener {
-    method public void onCodecFormatChanged(@NonNull android.media.AudioTrack, @Nullable android.media.AudioMetadata.ReadMap);
+    method public void onCodecFormatChanged(@NonNull android.media.AudioTrack, @Nullable android.media.AudioMetadataReadMap);
   }
 
   public static interface AudioTrack.OnPlaybackPositionUpdateListener {
@@ -26400,7 +26399,7 @@ package android.media {
     method public boolean advance(@NonNull android.media.MediaParser.SeekableInputReader) throws java.io.IOException;
     method @NonNull public static android.media.MediaParser create(@NonNull android.media.MediaParser.OutputConsumer, @NonNull java.lang.String...);
     method @NonNull public static android.media.MediaParser createByName(@NonNull String, @NonNull android.media.MediaParser.OutputConsumer);
-    method @Nullable public String getParserName();
+    method @NonNull public String getParserName();
     method @NonNull public static java.util.List<java.lang.String> getParserNames(@NonNull android.media.MediaFormat);
     method public void release();
     method public void seek(@NonNull android.media.MediaParser.SeekPoint);
@@ -26436,6 +26435,7 @@ package android.media {
     field public static final String PARSER_NAME_OGG = "android.media.mediaparser.OggParser";
     field public static final String PARSER_NAME_PS = "android.media.mediaparser.PsParser";
     field public static final String PARSER_NAME_TS = "android.media.mediaparser.TsParser";
+    field public static final String PARSER_NAME_UNKNOWN = "android.media.mediaparser.UNKNOWN";
     field public static final String PARSER_NAME_WAV = "android.media.mediaparser.WavParser";
   }
 
@@ -30343,6 +30343,7 @@ package android.net {
   }
 
   public class NetworkRequest implements android.os.Parcelable {
+    method public boolean canBeSatisfiedBy(@Nullable android.net.NetworkCapabilities);
     method public int describeContents();
     method @Nullable public android.net.NetworkSpecifier getNetworkSpecifier();
     method public boolean hasCapability(int);
@@ -37145,11 +37146,10 @@ package android.os {
     field public static final int EFFECT_TICK = 2; // 0x2
   }
 
-  public static class VibrationEffect.Composition {
-    ctor public VibrationEffect.Composition();
-    method @Nullable public android.os.VibrationEffect.Composition addPrimitive(int);
-    method @Nullable public android.os.VibrationEffect.Composition addPrimitive(int, @FloatRange(from=0.0f, to=1.0f) float);
-    method @Nullable public android.os.VibrationEffect.Composition addPrimitive(int, @FloatRange(from=0.0f, to=1.0f) float, @IntRange(from=0) int);
+  public static final class VibrationEffect.Composition {
+    method @NonNull public android.os.VibrationEffect.Composition addPrimitive(int);
+    method @NonNull public android.os.VibrationEffect.Composition addPrimitive(int, @FloatRange(from=0.0f, to=1.0f) float);
+    method @NonNull public android.os.VibrationEffect.Composition addPrimitive(int, @FloatRange(from=0.0f, to=1.0f) float, @IntRange(from=0) int);
     method @NonNull public android.os.VibrationEffect compose();
     field public static final int PRIMITIVE_CLICK = 1; // 0x1
     field public static final int PRIMITIVE_QUICK_FALL = 6; // 0x6
@@ -37159,9 +37159,9 @@ package android.os {
   }
 
   public abstract class Vibrator {
-    method @Nullable public Boolean areAllEffectsSupported(@NonNull int...);
-    method public boolean areAllPrimitivesSupported(@NonNull int...);
-    method @Nullable public boolean[] areEffectsSupported(@NonNull int...);
+    method public final int areAllEffectsSupported(@NonNull int...);
+    method public final boolean areAllPrimitivesSupported(@NonNull int...);
+    method @NonNull public int[] areEffectsSupported(@NonNull int...);
     method @NonNull public boolean[] arePrimitivesSupported(@NonNull int...);
     method @RequiresPermission(android.Manifest.permission.VIBRATE) public abstract void cancel();
     method public abstract boolean hasAmplitudeControl();
@@ -37172,6 +37172,9 @@ package android.os {
     method @Deprecated @RequiresPermission(android.Manifest.permission.VIBRATE) public void vibrate(long[], int, android.media.AudioAttributes);
     method @RequiresPermission(android.Manifest.permission.VIBRATE) public void vibrate(android.os.VibrationEffect);
     method @RequiresPermission(android.Manifest.permission.VIBRATE) public void vibrate(android.os.VibrationEffect, android.media.AudioAttributes);
+    field public static final int VIBRATION_EFFECT_SUPPORT_NO = 2; // 0x2
+    field public static final int VIBRATION_EFFECT_SUPPORT_UNKNOWN = 0; // 0x0
+    field public static final int VIBRATION_EFFECT_SUPPORT_YES = 1; // 0x1
   }
 
   public class WorkSource implements android.os.Parcelable {
@@ -46414,14 +46417,26 @@ package android.telephony {
     field public static final int BAND_46 = 46; // 0x2e
     field public static final int BAND_47 = 47; // 0x2f
     field public static final int BAND_48 = 48; // 0x30
+    field public static final int BAND_49 = 49; // 0x31
     field public static final int BAND_5 = 5; // 0x5
+    field public static final int BAND_50 = 50; // 0x32
+    field public static final int BAND_51 = 51; // 0x33
+    field public static final int BAND_52 = 52; // 0x34
+    field public static final int BAND_53 = 53; // 0x35
     field public static final int BAND_6 = 6; // 0x6
     field public static final int BAND_65 = 65; // 0x41
     field public static final int BAND_66 = 66; // 0x42
     field public static final int BAND_68 = 68; // 0x44
     field public static final int BAND_7 = 7; // 0x7
     field public static final int BAND_70 = 70; // 0x46
+    field public static final int BAND_71 = 71; // 0x47
+    field public static final int BAND_72 = 72; // 0x48
+    field public static final int BAND_73 = 73; // 0x49
+    field public static final int BAND_74 = 74; // 0x4a
     field public static final int BAND_8 = 8; // 0x8
+    field public static final int BAND_85 = 85; // 0x55
+    field public static final int BAND_87 = 87; // 0x57
+    field public static final int BAND_88 = 88; // 0x58
     field public static final int BAND_9 = 9; // 0x9
   }
 
@@ -46485,7 +46500,13 @@ package android.telephony {
     field public static final int BAND_83 = 83; // 0x53
     field public static final int BAND_84 = 84; // 0x54
     field public static final int BAND_86 = 86; // 0x56
+    field public static final int BAND_89 = 89; // 0x59
     field public static final int BAND_90 = 90; // 0x5a
+    field public static final int BAND_91 = 91; // 0x5b
+    field public static final int BAND_92 = 92; // 0x5c
+    field public static final int BAND_93 = 93; // 0x5d
+    field public static final int BAND_94 = 94; // 0x5e
+    field public static final int BAND_95 = 95; // 0x5f
   }
 
   public static final class AccessNetworkConstants.UtranBand {
@@ -55739,7 +55760,7 @@ package android.view {
     field public int softInputMode;
     field @Deprecated public int systemUiVisibility;
     field public android.os.IBinder token;
-    field @android.view.ViewDebug.ExportedProperty(mapping={@android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_BASE_APPLICATION, to="BASE_APPLICATION"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION, to="APPLICATION"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_STARTING, to="APPLICATION_STARTING"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_DRAWN_APPLICATION, to="DRAWN_APPLICATION"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_PANEL, to="APPLICATION_PANEL"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_MEDIA, to="APPLICATION_MEDIA"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_SUB_PANEL, to="APPLICATION_SUB_PANEL"), @android.view.ViewDebug.IntToString(from=0x3ed, to="APPLICATION_ABOVE_SUB_PANEL"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG, to="APPLICATION_ATTACHED_DIALOG"), @android.view.ViewDebug.IntToString(from=0x3ec, to="APPLICATION_MEDIA_OVERLAY"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_STATUS_BAR, to="STATUS_BAR"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SEARCH_BAR, to="SEARCH_BAR"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_PHONE, to="PHONE"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT, to="SYSTEM_ALERT"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_TOAST, to="TOAST"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, to="SYSTEM_OVERLAY"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_PRIORITY_PHONE, to="PRIORITY_PHONE"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SYSTEM_DIALOG, to="SYSTEM_DIALOG"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG, to="KEYGUARD_DIALOG"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ERROR, to="SYSTEM_ERROR"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_INPUT_METHOD, to="INPUT_METHOD"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_INPUT_METHOD_DIALOG, to="INPUT_METHOD_DIALOG"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_WALLPAPER, to="WALLPAPER"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL, to="STATUS_BAR_PANEL"), @android.view.ViewDebug.IntToString(from=0x7df, to="SECURE_SYSTEM_OVERLAY"), @android.view.ViewDebug.IntToString(from=0x7e0, to="DRAG"), @android.view.ViewDebug.IntToString(from=0x7e1, to="STATUS_BAR_SUB_PANEL"), @android.view.ViewDebug.IntToString(from=0x7e2, to="POINTER"), @android.view.ViewDebug.IntToString(from=0x7e3, to="NAVIGATION_BAR"), @android.view.ViewDebug.IntToString(from=0x7e4, to="VOLUME_OVERLAY"), @android.view.ViewDebug.IntToString(from=0x7e5, to="BOOT_PROGRESS"), @android.view.ViewDebug.IntToString(from=0x7e6, to="INPUT_CONSUMER"), @android.view.ViewDebug.IntToString(from=0x7e7, to="DREAM"), @android.view.ViewDebug.IntToString(from=0x7e8, to="NAVIGATION_BAR_PANEL"), @android.view.ViewDebug.IntToString(from=0x7ea, to="DISPLAY_OVERLAY"), @android.view.ViewDebug.IntToString(from=0x7eb, to="MAGNIFICATION_OVERLAY"), @android.view.ViewDebug.IntToString(from=0x7f5, to="PRESENTATION"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_PRIVATE_PRESENTATION, to="PRIVATE_PRESENTATION"), @android.view.ViewDebug.IntToString(from=0x7ef, to="VOICE_INTERACTION"), @android.view.ViewDebug.IntToString(from=0x7f1, to="VOICE_INTERACTION_STARTING"), @android.view.ViewDebug.IntToString(from=0x7f2, to="DOCK_DIVIDER"), @android.view.ViewDebug.IntToString(from=0x7f3, to="QS_DIALOG"), @android.view.ViewDebug.IntToString(from=0x7f4, to="SCREENSHOT"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY, to="APPLICATION_OVERLAY")}) public int type;
+    field @android.view.ViewDebug.ExportedProperty(mapping={@android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_BASE_APPLICATION, to="BASE_APPLICATION"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION, to="APPLICATION"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_STARTING, to="APPLICATION_STARTING"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_DRAWN_APPLICATION, to="DRAWN_APPLICATION"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_PANEL, to="APPLICATION_PANEL"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_MEDIA, to="APPLICATION_MEDIA"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_SUB_PANEL, to="APPLICATION_SUB_PANEL"), @android.view.ViewDebug.IntToString(from=0x3ed, to="APPLICATION_ABOVE_SUB_PANEL"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG, to="APPLICATION_ATTACHED_DIALOG"), @android.view.ViewDebug.IntToString(from=0x3ec, to="APPLICATION_MEDIA_OVERLAY"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_STATUS_BAR, to="STATUS_BAR"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SEARCH_BAR, to="SEARCH_BAR"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_PHONE, to="PHONE"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT, to="SYSTEM_ALERT"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_TOAST, to="TOAST"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, to="SYSTEM_OVERLAY"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_PRIORITY_PHONE, to="PRIORITY_PHONE"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SYSTEM_DIALOG, to="SYSTEM_DIALOG"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG, to="KEYGUARD_DIALOG"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ERROR, to="SYSTEM_ERROR"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_INPUT_METHOD, to="INPUT_METHOD"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_INPUT_METHOD_DIALOG, to="INPUT_METHOD_DIALOG"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_WALLPAPER, to="WALLPAPER"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL, to="STATUS_BAR_PANEL"), @android.view.ViewDebug.IntToString(from=0x7df, to="SECURE_SYSTEM_OVERLAY"), @android.view.ViewDebug.IntToString(from=0x7e0, to="DRAG"), @android.view.ViewDebug.IntToString(from=0x7e1, to="STATUS_BAR_SUB_PANEL"), @android.view.ViewDebug.IntToString(from=0x7e2, to="POINTER"), @android.view.ViewDebug.IntToString(from=0x7e3, to="NAVIGATION_BAR"), @android.view.ViewDebug.IntToString(from=0x7e4, to="VOLUME_OVERLAY"), @android.view.ViewDebug.IntToString(from=0x7e5, to="BOOT_PROGRESS"), @android.view.ViewDebug.IntToString(from=0x7e6, to="INPUT_CONSUMER"), @android.view.ViewDebug.IntToString(from=0x7e8, to="NAVIGATION_BAR_PANEL"), @android.view.ViewDebug.IntToString(from=0x7ea, to="DISPLAY_OVERLAY"), @android.view.ViewDebug.IntToString(from=0x7eb, to="MAGNIFICATION_OVERLAY"), @android.view.ViewDebug.IntToString(from=0x7f5, to="PRESENTATION"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_PRIVATE_PRESENTATION, to="PRIVATE_PRESENTATION"), @android.view.ViewDebug.IntToString(from=0x7ef, to="VOICE_INTERACTION"), @android.view.ViewDebug.IntToString(from=0x7f1, to="VOICE_INTERACTION_STARTING"), @android.view.ViewDebug.IntToString(from=0x7f2, to="DOCK_DIVIDER"), @android.view.ViewDebug.IntToString(from=0x7f3, to="QS_DIALOG"), @android.view.ViewDebug.IntToString(from=0x7f4, to="SCREENSHOT"), @android.view.ViewDebug.IntToString(from=android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY, to="APPLICATION_OVERLAY")}) public int type;
     field public float verticalMargin;
     field @android.view.ViewDebug.ExportedProperty public float verticalWeight;
     field public int windowAnimations;
@@ -55748,8 +55769,8 @@ package android.view {
   }
 
   public final class WindowMetrics {
-    ctor public WindowMetrics(@NonNull android.util.Size, @NonNull android.view.WindowInsets);
-    method @NonNull public android.util.Size getSize();
+    ctor public WindowMetrics(@NonNull android.graphics.Rect, @NonNull android.view.WindowInsets);
+    method @NonNull public android.graphics.Rect getBounds();
     method @NonNull public android.view.WindowInsets getWindowInsets();
   }
 
