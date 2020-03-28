@@ -13,41 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#pragma once
 
-package android.os.ext.test;
+#include <utils/RefBase.h>
 
-import android.annotation.SystemApi;
+#include "StatsPuller.h"
+#include "logd/LogEvent.h"
 
-/**
- * This class exists temporarily to verify SDK updates are working properly.
- * @deprecated Do not use.
- */
-@Deprecated
-public class Test {
+namespace android {
+namespace os {
+namespace statsd {
 
-    public Test() { }
+class PullUidProvider : virtual public RefBase {
+public:
+    virtual ~PullUidProvider() {}
 
-    /** @hide */
-    public void testA() {}
+    /**
+     * @param atomId The atom for which to get the uids.
+     */
+    virtual vector<int32_t> getPullAtomUids(int32_t atomId) = 0;
+};
 
-    /** @hide */
-    public void testB() {}
-
-    /** @hide */
-    public void testC() {}
-
-    /** @hide */
-    @SystemApi(client = SystemApi.Client.MODULE_LIBRARIES)
-    public void testD() {}
-
-    public void testE() {}
-
-    /** @hide */
-    @SystemApi
-    public void testF() {}
-
-    /** @hide */
-    @SystemApi
-    public void testG() {}
-
-}
+}  // namespace statsd
+}  // namespace os
+}  // namespace android
