@@ -23727,7 +23727,8 @@ package android.location {
     field public static final int STATUS_READY = 1; // 0x1
   }
 
-  public final class GnssStatus {
+  public final class GnssStatus implements android.os.Parcelable {
+    method public int describeContents();
     method @FloatRange(from=0, to=360) public float getAzimuthDegrees(@IntRange(from=0) int);
     method @FloatRange(from=0, to=63) public float getBasebandCn0DbHz(@IntRange(from=0) int);
     method @FloatRange(from=0) public float getCarrierFrequencyHz(@IntRange(from=0) int);
@@ -23741,6 +23742,7 @@ package android.location {
     method public boolean hasCarrierFrequencyHz(@IntRange(from=0) int);
     method public boolean hasEphemerisData(@IntRange(from=0) int);
     method public boolean usedInFix(@IntRange(from=0) int);
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
     field public static final int CONSTELLATION_BEIDOU = 5; // 0x5
     field public static final int CONSTELLATION_GALILEO = 6; // 0x6
     field public static final int CONSTELLATION_GLONASS = 3; // 0x3
@@ -23749,6 +23751,7 @@ package android.location {
     field public static final int CONSTELLATION_QZSS = 4; // 0x4
     field public static final int CONSTELLATION_SBAS = 2; // 0x2
     field public static final int CONSTELLATION_UNKNOWN = 0; // 0x0
+    field @NonNull public static final android.os.Parcelable.Creator<android.location.GnssStatus> CREATOR;
   }
 
   public static final class GnssStatus.Builder {
@@ -37206,15 +37209,6 @@ package android.os {
 
 }
 
-package android.os.ext.test {
-
-  @Deprecated public class Test {
-    ctor @Deprecated public Test();
-    method @Deprecated public void testE();
-  }
-
-}
-
 package android.os.health {
 
   public class HealthStats {
@@ -43158,9 +43152,9 @@ package android.service.autofill {
   }
 
   public final class InlinePresentation implements android.os.Parcelable {
-    ctor public InlinePresentation(@NonNull android.app.slice.Slice, @NonNull android.view.inline.InlinePresentationSpec, boolean);
+    ctor public InlinePresentation(@NonNull android.app.slice.Slice, @NonNull android.widget.inline.InlinePresentationSpec, boolean);
     method public int describeContents();
-    method @NonNull public android.view.inline.InlinePresentationSpec getInlinePresentationSpec();
+    method @NonNull public android.widget.inline.InlinePresentationSpec getInlinePresentationSpec();
     method @NonNull public android.app.slice.Slice getSlice();
     method public boolean isPinned();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
@@ -56804,38 +56798,6 @@ package android.view.contentcapture {
 
 }
 
-package android.view.inline {
-
-  public class InlineContentView extends android.view.ViewGroup {
-    method @Nullable public android.view.SurfaceControl getSurfaceControl();
-    method public boolean isZOrderedOnTop();
-    method public void onLayout(boolean, int, int, int, int);
-    method public void setSurfaceControlCallback(@Nullable android.view.inline.InlineContentView.SurfaceControlCallback);
-    method public boolean setZOrderedOnTop(boolean);
-  }
-
-  public static interface InlineContentView.SurfaceControlCallback {
-    method public void onCreated(@NonNull android.view.SurfaceControl);
-    method public void onDestroyed(@NonNull android.view.SurfaceControl);
-  }
-
-  public final class InlinePresentationSpec implements android.os.Parcelable {
-    method public int describeContents();
-    method @NonNull public android.util.Size getMaxSize();
-    method @NonNull public android.util.Size getMinSize();
-    method @Nullable public android.os.Bundle getStyle();
-    method public void writeToParcel(@NonNull android.os.Parcel, int);
-    field @NonNull public static final android.os.Parcelable.Creator<android.view.inline.InlinePresentationSpec> CREATOR;
-  }
-
-  public static final class InlinePresentationSpec.Builder {
-    ctor public InlinePresentationSpec.Builder(@NonNull android.util.Size, @NonNull android.util.Size);
-    method @NonNull public android.view.inline.InlinePresentationSpec build();
-    method @NonNull public android.view.inline.InlinePresentationSpec.Builder setStyle(@NonNull android.os.Bundle);
-  }
-
-}
-
 package android.view.inputmethod {
 
   public class BaseInputConnection implements android.view.inputmethod.InputConnection {
@@ -57007,7 +56969,7 @@ package android.view.inputmethod {
   public final class InlineSuggestion implements android.os.Parcelable {
     method public int describeContents();
     method @NonNull public android.view.inputmethod.InlineSuggestionInfo getInfo();
-    method public void inflate(@NonNull android.content.Context, @NonNull android.util.Size, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.view.inline.InlineContentView>);
+    method public void inflate(@NonNull android.content.Context, @NonNull android.util.Size, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.widget.inline.InlineContentView>);
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.view.inputmethod.InlineSuggestion> CREATOR;
   }
@@ -57015,7 +56977,7 @@ package android.view.inputmethod {
   public final class InlineSuggestionInfo implements android.os.Parcelable {
     method public int describeContents();
     method @Nullable public String[] getAutofillHints();
-    method @NonNull public android.view.inline.InlinePresentationSpec getPresentationSpec();
+    method @NonNull public android.widget.inline.InlinePresentationSpec getInlinePresentationSpec();
     method @NonNull public String getSource();
     method @NonNull public String getType();
     method public boolean isPinned();
@@ -57031,8 +56993,8 @@ package android.view.inputmethod {
     method public int describeContents();
     method @Nullable public android.os.Bundle getExtras();
     method @NonNull public String getHostPackageName();
+    method @NonNull public java.util.List<android.widget.inline.InlinePresentationSpec> getInlinePresentationSpecs();
     method public int getMaxSuggestionCount();
-    method @NonNull public java.util.List<android.view.inline.InlinePresentationSpec> getPresentationSpecs();
     method @NonNull public android.os.LocaleList getSupportedLocales();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.view.inputmethod.InlineSuggestionsRequest> CREATOR;
@@ -57040,10 +57002,11 @@ package android.view.inputmethod {
   }
 
   public static final class InlineSuggestionsRequest.Builder {
-    ctor public InlineSuggestionsRequest.Builder(@NonNull java.util.List<android.view.inline.InlinePresentationSpec>);
-    method @NonNull public android.view.inputmethod.InlineSuggestionsRequest.Builder addPresentationSpecs(@NonNull android.view.inline.InlinePresentationSpec);
+    ctor public InlineSuggestionsRequest.Builder(@NonNull java.util.List<android.widget.inline.InlinePresentationSpec>);
+    method @NonNull public android.view.inputmethod.InlineSuggestionsRequest.Builder addInlinePresentationSpecs(@NonNull android.widget.inline.InlinePresentationSpec);
     method @NonNull public android.view.inputmethod.InlineSuggestionsRequest build();
     method @NonNull public android.view.inputmethod.InlineSuggestionsRequest.Builder setExtras(@NonNull android.os.Bundle);
+    method @NonNull public android.view.inputmethod.InlineSuggestionsRequest.Builder setInlinePresentationSpecs(@NonNull java.util.List<android.widget.inline.InlinePresentationSpec>);
     method @NonNull public android.view.inputmethod.InlineSuggestionsRequest.Builder setMaxSuggestionCount(int);
     method @NonNull public android.view.inputmethod.InlineSuggestionsRequest.Builder setSupportedLocales(@NonNull android.os.LocaleList);
   }
@@ -61633,6 +61596,38 @@ package android.widget {
     method @Deprecated public void setOnZoomOutClickListener(android.view.View.OnClickListener);
     method @Deprecated public void setZoomSpeed(long);
     method @Deprecated public void show();
+  }
+
+}
+
+package android.widget.inline {
+
+  public class InlineContentView extends android.view.ViewGroup {
+    method @Nullable public android.view.SurfaceControl getSurfaceControl();
+    method public boolean isZOrderedOnTop();
+    method public void onLayout(boolean, int, int, int, int);
+    method public void setSurfaceControlCallback(@Nullable android.widget.inline.InlineContentView.SurfaceControlCallback);
+    method public boolean setZOrderedOnTop(boolean);
+  }
+
+  public static interface InlineContentView.SurfaceControlCallback {
+    method public void onCreated(@NonNull android.view.SurfaceControl);
+    method public void onDestroyed(@NonNull android.view.SurfaceControl);
+  }
+
+  public final class InlinePresentationSpec implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public android.util.Size getMaxSize();
+    method @NonNull public android.util.Size getMinSize();
+    method @Nullable public android.os.Bundle getStyle();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.widget.inline.InlinePresentationSpec> CREATOR;
+  }
+
+  public static final class InlinePresentationSpec.Builder {
+    ctor public InlinePresentationSpec.Builder(@NonNull android.util.Size, @NonNull android.util.Size);
+    method @NonNull public android.widget.inline.InlinePresentationSpec build();
+    method @NonNull public android.widget.inline.InlinePresentationSpec.Builder setStyle(@NonNull android.os.Bundle);
   }
 
 }
