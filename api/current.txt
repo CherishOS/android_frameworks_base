@@ -54414,6 +54414,7 @@ package android.view {
     field public static final int AUTOFILL_TYPE_DATE = 4; // 0x4
     field public static final int AUTOFILL_TYPE_LIST = 3; // 0x3
     field public static final int AUTOFILL_TYPE_NONE = 0; // 0x0
+    field public static final int AUTOFILL_TYPE_RICH_CONTENT = 5; // 0x5
     field public static final int AUTOFILL_TYPE_TEXT = 1; // 0x1
     field public static final int AUTOFILL_TYPE_TOGGLE = 2; // 0x2
     field public static final int DRAG_FLAG_GLOBAL = 256; // 0x100
@@ -56682,14 +56683,17 @@ package android.view.autofill {
     method public int describeContents();
     method public static android.view.autofill.AutofillValue forDate(long);
     method public static android.view.autofill.AutofillValue forList(int);
+    method @NonNull public static android.view.autofill.AutofillValue forRichContent(@NonNull android.content.ClipData);
     method public static android.view.autofill.AutofillValue forText(@Nullable CharSequence);
     method public static android.view.autofill.AutofillValue forToggle(boolean);
     method public long getDateValue();
     method public int getListValue();
+    method @NonNull public android.content.ClipData getRichContentValue();
     method @NonNull public CharSequence getTextValue();
     method public boolean getToggleValue();
     method public boolean isDate();
     method public boolean isList();
+    method public boolean isRichContent();
     method public boolean isText();
     method public boolean isToggle();
     method public void writeToParcel(android.os.Parcel, int);
@@ -60570,6 +60574,16 @@ package android.widget {
     method public android.view.View newGroupView(android.content.Context, android.database.Cursor, boolean, android.view.ViewGroup);
   }
 
+  public interface RichContentReceiver<T extends android.view.View> {
+    method @NonNull public java.util.Set<java.lang.String> getSupportedMimeTypes();
+    method public boolean onReceive(@NonNull T, @NonNull android.content.ClipData, int, int);
+    field public static final int FLAG_CONVERT_TO_PLAIN_TEXT = 1; // 0x1
+    field public static final int SOURCE_AUTOFILL = 3; // 0x3
+    field public static final int SOURCE_DRAG_AND_DROP = 2; // 0x2
+    field public static final int SOURCE_INPUT_METHOD = 1; // 0x1
+    field public static final int SOURCE_MENU = 0; // 0x0
+  }
+
   public class ScrollView extends android.widget.FrameLayout {
     ctor public ScrollView(android.content.Context);
     ctor public ScrollView(android.content.Context, android.util.AttributeSet);
@@ -61127,6 +61141,7 @@ package android.widget {
     method public android.text.TextPaint getPaint();
     method public int getPaintFlags();
     method public String getPrivateImeOptions();
+    method @NonNull public android.widget.RichContentReceiver<android.widget.TextView> getRichContentReceiver();
     method @android.view.ViewDebug.ExportedProperty(category="text") public int getSelectionEnd();
     method @android.view.ViewDebug.ExportedProperty(category="text") public int getSelectionStart();
     method @ColorInt public int getShadowColor();
@@ -61254,6 +61269,7 @@ package android.widget {
     method public void setPaintFlags(int);
     method public void setPrivateImeOptions(String);
     method public void setRawInputType(int);
+    method public void setRichContentReceiver(@NonNull android.widget.RichContentReceiver<android.widget.TextView>);
     method public void setScroller(android.widget.Scroller);
     method public void setSelectAllOnFocus(boolean);
     method public void setShadowLayer(float, float, float, int);
@@ -61294,6 +61310,7 @@ package android.widget {
     method public void setWidth(int);
     field public static final int AUTO_SIZE_TEXT_TYPE_NONE = 0; // 0x0
     field public static final int AUTO_SIZE_TEXT_TYPE_UNIFORM = 1; // 0x1
+    field @NonNull public static final android.widget.RichContentReceiver<android.widget.TextView> DEFAULT_RICH_CONTENT_RECEIVER;
   }
 
   public enum TextView.BufferType {
