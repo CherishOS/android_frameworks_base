@@ -289,6 +289,7 @@ package android {
     field public static final int allowAudioPlaybackCapture = 16844289; // 0x1010601
     field public static final int allowBackup = 16843392; // 0x1010280
     field public static final int allowClearUserData = 16842757; // 0x1010005
+    field public static final int allowClickWhenDisabled = 16844325; // 0x1010625
     field public static final int allowEmbedded = 16843765; // 0x10103f5
     field public static final int allowNativeHeapPointerTagging = 16844307; // 0x1010613
     field public static final int allowParallelSyncs = 16843570; // 0x1010332
@@ -14185,8 +14186,8 @@ package android.graphics {
     method @NonNull public static android.graphics.BitmapRegionDecoder newInstance(@NonNull byte[], int, int) throws java.io.IOException;
     method @Deprecated @NonNull public static android.graphics.BitmapRegionDecoder newInstance(@NonNull java.io.FileDescriptor, boolean) throws java.io.IOException;
     method @NonNull public static android.graphics.BitmapRegionDecoder newInstance(@NonNull android.os.ParcelFileDescriptor) throws java.io.IOException;
-    method @Deprecated @NonNull public static android.graphics.BitmapRegionDecoder newInstance(@NonNull java.io.InputStream, boolean) throws java.io.IOException;
-    method @NonNull public static android.graphics.BitmapRegionDecoder newInstance(@NonNull java.io.InputStream) throws java.io.IOException;
+    method @Deprecated @Nullable public static android.graphics.BitmapRegionDecoder newInstance(@NonNull java.io.InputStream, boolean) throws java.io.IOException;
+    method @Nullable public static android.graphics.BitmapRegionDecoder newInstance(@NonNull java.io.InputStream) throws java.io.IOException;
     method @Deprecated @NonNull public static android.graphics.BitmapRegionDecoder newInstance(@NonNull String, boolean) throws java.io.IOException;
     method @NonNull public static android.graphics.BitmapRegionDecoder newInstance(@NonNull String) throws java.io.IOException;
     method public void recycle();
@@ -14673,6 +14674,8 @@ package android.graphics {
     method @AnyThread @NonNull public static android.graphics.ImageDecoder.Source createSource(@NonNull android.content.res.Resources, int);
     method @AnyThread @NonNull public static android.graphics.ImageDecoder.Source createSource(@NonNull android.content.ContentResolver, @NonNull android.net.Uri);
     method @AnyThread @NonNull public static android.graphics.ImageDecoder.Source createSource(@NonNull android.content.res.AssetManager, @NonNull String);
+    method @AnyThread @NonNull public static android.graphics.ImageDecoder.Source createSource(@NonNull byte[], int, int) throws java.lang.ArrayIndexOutOfBoundsException;
+    method @AnyThread @NonNull public static android.graphics.ImageDecoder.Source createSource(@NonNull byte[]);
     method @AnyThread @NonNull public static android.graphics.ImageDecoder.Source createSource(@NonNull java.nio.ByteBuffer);
     method @AnyThread @NonNull public static android.graphics.ImageDecoder.Source createSource(@NonNull java.io.File);
     method @AnyThread @NonNull public static android.graphics.ImageDecoder.Source createSource(@NonNull java.util.concurrent.Callable<android.content.res.AssetFileDescriptor>);
@@ -26451,6 +26454,11 @@ package android.media {
     field public static final String PARSER_NAME_TS = "android.media.mediaparser.TsParser";
     field public static final String PARSER_NAME_UNKNOWN = "android.media.mediaparser.UNKNOWN";
     field public static final String PARSER_NAME_WAV = "android.media.mediaparser.WavParser";
+    field public static final int SAMPLE_FLAG_DECODE_ONLY = -2147483648; // 0x80000000
+    field public static final int SAMPLE_FLAG_ENCRYPTED = 1073741824; // 0x40000000
+    field public static final int SAMPLE_FLAG_HAS_SUPPLEMENTAL_DATA = 268435456; // 0x10000000
+    field public static final int SAMPLE_FLAG_KEY_FRAME = 1; // 0x1
+    field public static final int SAMPLE_FLAG_LAST_SAMPLE = 536870912; // 0x20000000
   }
 
   public static interface MediaParser.InputReader {
@@ -54407,6 +54415,7 @@ package android.view {
     field public static final int AUTOFILL_TYPE_DATE = 4; // 0x4
     field public static final int AUTOFILL_TYPE_LIST = 3; // 0x3
     field public static final int AUTOFILL_TYPE_NONE = 0; // 0x0
+    field public static final int AUTOFILL_TYPE_RICH_CONTENT = 5; // 0x5
     field public static final int AUTOFILL_TYPE_TEXT = 1; // 0x1
     field public static final int AUTOFILL_TYPE_TOGGLE = 2; // 0x2
     field public static final int DRAG_FLAG_GLOBAL = 256; // 0x100
@@ -56675,14 +56684,17 @@ package android.view.autofill {
     method public int describeContents();
     method public static android.view.autofill.AutofillValue forDate(long);
     method public static android.view.autofill.AutofillValue forList(int);
+    method @NonNull public static android.view.autofill.AutofillValue forRichContent(@NonNull android.content.ClipData);
     method public static android.view.autofill.AutofillValue forText(@Nullable CharSequence);
     method public static android.view.autofill.AutofillValue forToggle(boolean);
     method public long getDateValue();
     method public int getListValue();
+    method @NonNull public android.content.ClipData getRichContentValue();
     method @NonNull public CharSequence getTextValue();
     method public boolean getToggleValue();
     method public boolean isDate();
     method public boolean isList();
+    method public boolean isRichContent();
     method public boolean isText();
     method public boolean isToggle();
     method public void writeToParcel(android.os.Parcel, int);
@@ -56988,7 +57000,7 @@ package android.view.inputmethod {
 
   public final class InlineSuggestionsRequest implements android.os.Parcelable {
     method public int describeContents();
-    method @Nullable public android.os.Bundle getExtras();
+    method @NonNull public android.os.Bundle getExtras();
     method @NonNull public String getHostPackageName();
     method @NonNull public java.util.List<android.widget.inline.InlinePresentationSpec> getInlinePresentationSpecs();
     method public int getMaxSuggestionCount();
@@ -60563,6 +60575,16 @@ package android.widget {
     method public android.view.View newGroupView(android.content.Context, android.database.Cursor, boolean, android.view.ViewGroup);
   }
 
+  public interface RichContentReceiver<T extends android.view.View> {
+    method @NonNull public java.util.Set<java.lang.String> getSupportedMimeTypes();
+    method public boolean onReceive(@NonNull T, @NonNull android.content.ClipData, int, int);
+    field public static final int FLAG_CONVERT_TO_PLAIN_TEXT = 1; // 0x1
+    field public static final int SOURCE_AUTOFILL = 3; // 0x3
+    field public static final int SOURCE_DRAG_AND_DROP = 2; // 0x2
+    field public static final int SOURCE_INPUT_METHOD = 1; // 0x1
+    field public static final int SOURCE_MENU = 0; // 0x0
+  }
+
   public class ScrollView extends android.widget.FrameLayout {
     ctor public ScrollView(android.content.Context);
     ctor public ScrollView(android.content.Context, android.util.AttributeSet);
@@ -61120,6 +61142,7 @@ package android.widget {
     method public android.text.TextPaint getPaint();
     method public int getPaintFlags();
     method public String getPrivateImeOptions();
+    method @NonNull public android.widget.RichContentReceiver<android.widget.TextView> getRichContentReceiver();
     method @android.view.ViewDebug.ExportedProperty(category="text") public int getSelectionEnd();
     method @android.view.ViewDebug.ExportedProperty(category="text") public int getSelectionStart();
     method @ColorInt public int getShadowColor();
@@ -61247,6 +61270,7 @@ package android.widget {
     method public void setPaintFlags(int);
     method public void setPrivateImeOptions(String);
     method public void setRawInputType(int);
+    method public void setRichContentReceiver(@NonNull android.widget.RichContentReceiver<android.widget.TextView>);
     method public void setScroller(android.widget.Scroller);
     method public void setSelectAllOnFocus(boolean);
     method public void setShadowLayer(float, float, float, int);
@@ -61287,6 +61311,7 @@ package android.widget {
     method public void setWidth(int);
     field public static final int AUTO_SIZE_TEXT_TYPE_NONE = 0; // 0x0
     field public static final int AUTO_SIZE_TEXT_TYPE_UNIFORM = 1; // 0x1
+    field @NonNull public static final android.widget.RichContentReceiver<android.widget.TextView> DEFAULT_RICH_CONTENT_RECEIVER;
   }
 
   public enum TextView.BufferType {
@@ -61616,7 +61641,7 @@ package android.widget.inline {
     method public int describeContents();
     method @NonNull public android.util.Size getMaxSize();
     method @NonNull public android.util.Size getMinSize();
-    method @Nullable public android.os.Bundle getStyle();
+    method @NonNull public android.os.Bundle getStyle();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.widget.inline.InlinePresentationSpec> CREATOR;
   }
