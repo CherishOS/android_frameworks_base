@@ -47,9 +47,9 @@ LOCAL_REQUIRED_MODULES := \
 	FontComicSansSourceOverlay \
 	FontGoogleSansSourceOverlay \
 	FontNotoSerifSourceOverlay \
+	FontReemKufiSourceOverlay \
 	FontRubikRubikOverlay \
 	FontOdudaSourceOverlay \
-	FontReemKufiSourceOverlay \
 	FontSimpleDaySourceOverlay \
         FontLinotte \
 	FontOneplusSlateSource \
