@@ -51,6 +51,7 @@ import com.android.systemui.qs.tiles.MonoToggleTile;
 import com.android.systemui.qs.tiles.MusicTile;
 import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.NightDisplayTile;
+import com.android.systemui.qs.tiles.PowerShareTile;
 import com.android.systemui.qs.tiles.QuickAccessWalletTile;
 import com.android.systemui.qs.tiles.RebootTile;
 import com.android.systemui.qs.tiles.ReduceBrightColorsTile;
@@ -128,6 +129,8 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<ReadingModeTile> mReadingModeTileProvider;
     private final Provider<AntiFlickerTile> mAntiFlickerTileProvider;
     private final Provider<GamingModeTile> mGamingModeTileProvider;
+    private final Provider<PowerShareTile> mPowerShareTileProvider;
+
     private final Lazy<QSHost> mQsHostLazy;
     private final Provider<CustomTile.Builder> mCustomTileBuilderProvider;
 
@@ -180,7 +183,8 @@ public class QSFactoryImpl implements QSFactory {
             Provider<LiveDisplayTile> liveDisplayTileProvider,
             Provider<ReadingModeTile> readingModeTileProvider,
             Provider<AntiFlickerTile> antiFlickerTileProvider,
-            Provider<GamingModeTile> gamingModeTileProvider) {
+            Provider<GamingModeTile> gamingModeTileProvider,
+            Provider<PowerShareTile> powerShareTileProvider) {
         mQsHostLazy = qsHostLazy;
         mCustomTileBuilderProvider = customTileBuilderProvider;
 
@@ -230,6 +234,7 @@ public class QSFactoryImpl implements QSFactory {
         mReadingModeTileProvider = readingModeTileProvider;
         mAntiFlickerTileProvider = antiFlickerTileProvider;
         mGamingModeTileProvider = gamingModeTileProvider;
+        mPowerShareTileProvider = powerShareTileProvider;
     }
 
     public QSTile createTile(String tileSpec) {
@@ -334,6 +339,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mAntiFlickerTileProvider.get();
             case "gamingmode":
                 return mGamingModeTileProvider.get();
+            case "powershare":
+                return mPowerShareTileProvider.get();
         }
 
         // Custom tiles
