@@ -49,6 +49,7 @@ import com.android.systemui.qs.tiles.MonoToggleTile;
 import com.android.systemui.qs.tiles.MusicTile;
 import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.NightDisplayTile;
+import com.android.systemui.qs.tiles.PowerShareTile;
 import com.android.systemui.qs.tiles.QuickAccessWalletTile;
 import com.android.systemui.qs.tiles.RebootTile;
 import com.android.systemui.qs.tiles.ReduceBrightColorsTile;
@@ -122,6 +123,8 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<MusicTile> mMusicTileProvider;
     private final Provider<SoundSearchTile> mSoundSearchTileProvider;
     private final Provider<GamingModeTile> mGamingModeTileProvider;
+    private final Provider<PowerShareTile> mPowerShareTileProvider;
+
     private final Lazy<QSHost> mQsHostLazy;
     private final Provider<CustomTile.Builder> mCustomTileBuilderProvider;
 
@@ -171,7 +174,8 @@ public class QSFactoryImpl implements QSFactory {
             Provider<MonoToggleTile> monoToggleTileProvider,
             Provider<SoundSearchTile> soundSearchTileProvider,
             Provider<MusicTile> musicTileProvider,
-            Provider<GamingModeTile> gamingModeTileProvider) {
+            Provider<GamingModeTile> gamingModeTileProvider,
+            Provider<PowerShareTile> powerShareTileProvider) {
         mQsHostLazy = qsHostLazy;
         mCustomTileBuilderProvider = customTileBuilderProvider;
 
@@ -218,6 +222,7 @@ public class QSFactoryImpl implements QSFactory {
         mMusicTileProvider = musicTileProvider;
         mSoundSearchTileProvider = soundSearchTileProvider;
         mGamingModeTileProvider = gamingModeTileProvider;
+        mPowerShareTileProvider = powerShareTileProvider;
     }
 
     public QSTile createTile(String tileSpec) {
@@ -316,8 +321,10 @@ public class QSFactoryImpl implements QSFactory {
                 return mMusicTileProvider.get();
             case "gamingmode":
                 return mGamingModeTileProvider.get();
+            // Additional tiles.
+            case "powershare":
+                return mPowerShareTileProvider.get();
         }
-
         // Custom tiles
         if (tileSpec.startsWith(CustomTile.PREFIX)) {
             return CustomTile.create(
