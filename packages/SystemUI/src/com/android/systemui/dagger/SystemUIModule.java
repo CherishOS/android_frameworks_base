@@ -44,6 +44,7 @@ import com.android.systemui.demomode.dagger.DemoModeModule;
 import com.android.systemui.doze.dagger.DozeComponent;
 import com.android.systemui.dreams.dagger.DreamModule;
 import com.android.systemui.dump.DumpManager;
+import com.android.systemui.cherish.CherishModule;
 import com.android.systemui.flags.FeatureFlags;
 import com.android.systemui.flags.FlagsModule;
 import com.android.systemui.fragments.FragmentService;
@@ -149,6 +150,7 @@ import dagger.Provides;
             DreamModule.class,
             ControlsModule.class,
             DemoModeModule.class,
+            CherishModule.class,
             FalsingModule.class,
             FlagsModule.class,
             SystemPropertiesFlagsModule.class,
