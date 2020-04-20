@@ -84,7 +84,6 @@ public class QSFactoryImpl implements QSFactory {
                 && (!tileSpec.equals(GarbageMonitor.MemoryTile.TILE_SPEC) || Build.IS_DEBUGGABLE)) {
             return mTileMap.get(tileSpec).get();
         }
-
         // Custom tiles
         if (tileSpec.startsWith(CustomTile.PREFIX)) {
             return CustomTile.create(
