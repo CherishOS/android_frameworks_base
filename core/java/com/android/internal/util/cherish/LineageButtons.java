@@ -33,6 +33,8 @@ import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.ViewConfiguration;
 
+import com.android.internal.util.hwkeys.ActionUtils;
+
 import java.util.List;
 
 public final class LineageButtons {
@@ -266,6 +268,9 @@ public final class LineageButtons {
                 break;
             case 18: // Hush mute
                 CherishUtils.triggerHushMute(context);
+                break;
+            case 19: // Switch recent app
+                ActionUtils.switchToLastApp(mContext);
                 break;
         }
     }
