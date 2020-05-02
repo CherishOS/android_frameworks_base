@@ -5773,6 +5773,12 @@ public final class Settings {
          */
          public static final String NETWORK_TRAFFIC_VIEW_LOCATION = "network_traffic_view_location";
 
+	/**
+         * Network traffic font style
+         * @hide
+         */
+        public static final String NETWORK_TRAFFIC_FONT_STYLE = "network_traffic_font_style";
+
         /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
