@@ -6428,6 +6428,12 @@ public final class Settings {
         public static final String NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD = "network_traffic_autohide_threshold";
 		
 		/**
+         * Where to show network traffic indicator
+         * @hide
+         */
+        public static final String NETWORK_TRAFFIC_LOCATION = "network_traffic_location";
+		
+		/**
          * These are all public system settings
          *
          * @hide
