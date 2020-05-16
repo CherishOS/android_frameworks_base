@@ -6478,6 +6478,14 @@ public final class Settings {
         public static final String DISPLAY_CUTOUT_HIDDEN = "display_cutout_hidden";
 
         /**
+         * Direction of repeat animations of Ambient edge light
+         * 0 is restart
+         * 1 is reverse
+         * @hide
+         */
+        public static final String AMBIENT_LIGHT_REPEAT_DIRECTION = "ambient_light_repeat_direction";
+
+        /**
          * Battery style
          * @hide
          */
