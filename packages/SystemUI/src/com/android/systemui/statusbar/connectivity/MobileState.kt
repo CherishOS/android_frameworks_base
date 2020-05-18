@@ -140,6 +140,10 @@ internal class MobileState(
         return serviceState != null && serviceState!!.roaming
     }
 
+    fun getDataNetworkType(): Int {
+        return serviceState?.getDataNetworkType() ?: 0
+    }
+
     /**
      *
      * Load the (potentially customized) icon resource id for the current network type. Note that

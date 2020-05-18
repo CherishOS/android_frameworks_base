@@ -245,8 +245,11 @@ public class StatusBarMobileView extends BaseStatusBarFrameLayout implements Dar
             mMobileGroup.setVisibility(newVisibility);
             needsLayout = true;
         }
-        if (mState.strengthId != state.strengthId) {
+        if (state.strengthId > 0) {
             mMobileDrawable.setLevel(state.strengthId);
+            mMobile.setVisibility(View.VISIBLE);
+        } else {
+            mMobile.setVisibility(View.GONE);
         }
         boolean showRoamingSpace = mOldStyleType ? true : false;
         if (mState.typeId != state.typeId) {
