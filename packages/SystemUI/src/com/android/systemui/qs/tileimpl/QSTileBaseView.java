@@ -21,7 +21,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.ColorUtils;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -81,6 +83,7 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
     private final int mColorDisabled;
     private int mColorActive;
     private int mColorActiveAlpha;
+    private int setQsUseNewTint;
     private final int mColorInactive;
     private int mCircleColor;
     private int mState;
@@ -95,13 +98,10 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
     public QSTileBaseView(Context context, QSIconView icon, boolean collapsedView) {
         super(context);
 
-        mColorActive = Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
-        mColorActiveAlpha = adjustAlpha(mColorActive, 0.2f);
-        boolean setQsUseNewTint = Settings.System.getIntForUser(context.getContentResolver(),
-                    Settings.System.QS_PANEL_BG_USE_NEW_TINT, 1, UserHandle.USER_CURRENT) == 1;
-        if (setQsUseNewTint) {
-            mColorActive = mColorActiveAlpha;
-        }
+        mIcon = icon;
+        setQsUseNewTint = Settings.System.getIntForUser(context.getContentResolver(),
+                    Settings.System.QS_PANEL_BG_USE_NEW_TINT, 1, UserHandle.USER_CURRENT);
+        setActiveColor(context);
         mColorInactive = Utils.getColorAttrDefaultColor(context, android.R.attr.textColorSecondary);
         mColorDisabled = Utils.getDisabled(context,
                 Utils.getColorAttrDefaultColor(context, android.R.attr.textColorTertiary));
@@ -126,7 +126,7 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
         // The drawable shown when the tile is active
         foregroundDrawable = new ShapeDrawable(p);
         if (context.getResources().getBoolean(R.bool.config_useMaskForQs)) {
-            if (!setQsUseNewTint) {
+            if (setQsUseNewTint == 0) {
                 backgroundDrawable.setTintList(ColorStateList.valueOf(mColorDisabled));
                 backgroundDrawable.setIntrinsicHeight(bgSize);
                 backgroundDrawable.setIntrinsicWidth(bgSize);
@@ -167,7 +167,6 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
             backgroundView.setImageResource(R.drawable.ic_qs_circle);
             mIconFrame.addView(backgroundView);
         }
-        mIcon = icon;
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
                 Gravity.CENTER);
@@ -187,6 +186,31 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
         setClipToPadding(false);
         mCollapsedView = collapsedView;
         setFocusable(true);
+    }
+
+    private void setActiveColor(Context context) {
+        if (setQsUseNewTint == 1) {
+            mColorActive = ColorUtils.genRandomAccentColor(isThemeDark(context));
+            mColorActiveAlpha = adjustAlpha(mColorActive, 0.3f);
+            mColorActive = mColorActiveAlpha;
+        } else if (setQsUseNewTint == 2) {
+            mColorActive = Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
+            mColorActiveAlpha = adjustAlpha(mColorActive, 0.3f);
+            mColorActive = mColorActiveAlpha;
+        } else {
+            mColorActive = Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
+        }
+    }
+
+    private static Boolean isThemeDark(Context context) {
+        switch (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+            case Configuration.UI_MODE_NIGHT_YES:
+              return true;
+            case Configuration.UI_MODE_NIGHT_NO:
+              return false;
+            default:
+              return false;
+        }
     }
 
     public View getBgCircle() {
@@ -256,6 +280,7 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
     }
 
     public void onStateChanged(QSTile.State state) {
+        setActiveColor(mContext);
         mHandler.obtainMessage(H.STATE_CHANGED, state).sendToTarget();
     }
 
@@ -293,10 +318,10 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
 
     protected void handleStateChanged(QSTile.State state) {
         updateStrokeShapeWidth(state);
-        boolean setQsUseNewTint = Settings.System.getIntForUser(getContext().getContentResolver(),
-                    Settings.System.QS_PANEL_BG_USE_NEW_TINT, 1, UserHandle.USER_CURRENT) == 1;
+        setQsUseNewTint = Settings.System.getIntForUser(getContext().getContentResolver(),
+                    Settings.System.QS_PANEL_BG_USE_NEW_TINT, 1, UserHandle.USER_CURRENT);
         boolean allowAnimations = animationsEnabled();
-        if (getResources().getBoolean(R.bool.config_useMaskForQs) && !setQsUseNewTint) {
+        if (getResources().getBoolean(R.bool.config_useMaskForQs) && setQsUseNewTint == 0) {
             int newTileState = state.state;
             if (newTileState != mState) {
                 if (allowAnimations) {
