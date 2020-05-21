@@ -30,6 +30,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
     private static final float ICON_ALPHA_WHEN_LIGHTS_OUT_NON_BATTERY_CLOCK = 0;
 
     private final float mIconAlphaWhenOpaque;
+    private View mWeatherTextView, mWeatherImageView;
 
     private View mLeftSide, mStatusIcons, mBattery, mClock, mCenterClock, mRightClock;
     private View mCherishLogo, mCherishLogoRight;
@@ -54,6 +55,8 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
         mRightClock = statusBarView.findViewById(R.id.right_clock);
         mCherishLogo = statusBarView.findViewById(R.id.cherish_logo);
         mCherishLogoRight = statusBarView.findViewById(R.id.cherish_logo_right);
+		mWeatherTextView = statusBarView.findViewById(R.id.weather_temp);
+        mWeatherImageView = statusBarView.findViewById(R.id.weather_image);
         applyModeBackground(-1, getMode(), false /*animate*/);
         applyMode(getMode(), false /*animate*/);
     }
@@ -97,6 +100,8 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
                     animateTransitionTo(mLeftSide, newAlpha),
                     animateTransitionTo(mStatusIcons, newAlpha),
 		    animateTransitionTo(mBattery, newAlphaBC),
+                    animateTransitionTo(mWeatherTextView, newAlphaBC),
+                    animateTransitionTo(mWeatherImageView, newAlphaBC),
                     animateTransitionTo(mBatteryBars[0], newAlphaBC),
                     animateTransitionTo(mBatteryBars[1], newAlphaBC),
                     animateTransitionTo(mClock, newAlphaBC),
@@ -112,6 +117,8 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
         } else {
             mLeftSide.setAlpha(newAlpha);
             mStatusIcons.setAlpha(newAlpha);
+            mWeatherTextView.setAlpha(newAlphaBC);
+            mWeatherImageView.setAlpha(newAlphaBC);
             mBattery.setAlpha(newAlphaBC);
             mBatteryBars[0].setAlpha(newAlphaBC);
             mBatteryBars[1].setAlpha(newAlphaBC);
