@@ -179,21 +179,11 @@ public class DividedLinesClockController implements ClockPlugin {
         mClock.setTextColor(color);
     }
 
-    public void setTypeface(Typeface tf) {
-        mClock.setTypeface(tf);
-    }
-
-    public void setDateTypeface(Typeface tf) {
-        mDate.setTypeface(tf);
-    }
-
     @Override
     public void setColorPalette(boolean supportsDarkText, int[] colorPalette) {}
 
     @Override
     public void onTimeTick() {
-		mView.onTimeChanged();
-        mClock.refreshTime();
     }
 
     @Override
