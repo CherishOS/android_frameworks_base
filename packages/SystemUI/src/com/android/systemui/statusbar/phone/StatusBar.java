@@ -467,6 +467,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 	
 	 private ImageButton mDismissAllButton;
     private boolean mClearableNotifications = true;
+	private boolean mShowDismissButton;
 
     private final int[] mAbsPos = new int[2];
 
@@ -2551,7 +2552,8 @@ public class StatusBar extends SystemUI implements DemoMode,
     }
 
     public void updateDismissAllVisibility(boolean visible) {
-        if (mClearableNotifications && mState != StatusBarState.KEYGUARD && visible) {
+        if (mDismissAllButton == null) return;
+        if (mClearableNotifications && mState != StatusBarState.KEYGUARD && visible && mShowDismissButton) {
             mDismissAllButton.setVisibility(View.VISIBLE);
             int DismissAllAlpha = Math.round(255.0f * mNotificationPanelViewController.getExpandedFraction());
             mDismissAllButton.setAlpha(DismissAllAlpha);
@@ -2559,7 +2561,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         } else {
             mDismissAllButton.setAlpha(0);
             mDismissAllButton.getBackground().setAlpha(0);
-            mDismissAllButton.setVisibility(View.INVISIBLE);
+            mDismissAllButton.setVisibility(View.GONE);
         }
     }
 
@@ -4431,6 +4433,9 @@ public class StatusBar extends SystemUI implements DemoMode,
 			resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_SHOW_BATTERY_ESTIMATE),
                     false, this, UserHandle.USER_ALL);
+			resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_MATERIAL_DISMISS),
+                    false, this, UserHandle.USER_ALL);
         }
          @Override
         public void onChange(boolean selfChange, Uri uri) {
@@ -4481,6 +4486,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             update();
         }
          public void update() {
+			 mShowDismissButton = Settings.System.getIntForUser(
+                mContext.getContentResolver(), Settings.System.NOTIFICATION_MATERIAL_DISMISS, 0,
+                UserHandle.USER_CURRENT) == 1;
 			updateKeyguardStatusSettings();
 			setLockScreenMediaBlurLevel();
 			updateChargingAnimation();
@@ -4499,6 +4507,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 			updateQsPanelResources();
 			setQsBatteryPercentMode();
 			setQsBatteryEstimate();
+			updateDismissAllVisibility(true);
         }
     }
 
