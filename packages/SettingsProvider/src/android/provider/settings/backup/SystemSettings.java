@@ -85,5 +85,7 @@ public class SystemSettings {
         Settings.System.ALARM_ALERT,
         Settings.System.NOTIFICATION_LIGHT_PULSE,
         Settings.System.FLASHLIGHT_ON_CALL,
+        Settings.System.FLASHLIGHT_ON_CALL_IGNORE_DND,
+        Settings.System.FLASHLIGHT_ON_CALL_RATE,
     };
 }
