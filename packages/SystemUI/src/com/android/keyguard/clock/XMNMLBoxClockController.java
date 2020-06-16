@@ -44,7 +44,7 @@ import java.util.TimeZone;
 /**
  * Plugin for the default clock face used only to provide a preview.
  */
-public class MNMLBoxClockController implements ClockPlugin {
+public class XMNMLBoxClockController implements ClockPlugin {
 
     /**
      * Resources used to get title and thumbnail.
@@ -92,7 +92,7 @@ public class MNMLBoxClockController implements ClockPlugin {
      * @param inflater Inflater used to inflate custom clock views.
      * @param colorExtractor Extracts accent color from wallpaper.
      */
-    public MNMLBoxClockController(Resources res, LayoutInflater inflater,
+    public XMNMLBoxClockController(Resources res, LayoutInflater inflater,
             SysuiColorExtractor colorExtractor) {
         mResources = res;
         mLayoutInflater = inflater;
@@ -101,7 +101,7 @@ public class MNMLBoxClockController implements ClockPlugin {
 
     private void createViews() {
         mBigClockView = (ClockLayout) mLayoutInflater
-                .inflate(R.layout.digital_mnml_box, null);
+                .inflate(R.layout.x_digital_mnml_box, null);
         mClock = mBigClockView.findViewById(R.id.clock);
         mDate = mBigClockView.findViewById(R.id.bigDate);
         mDateDay = mBigClockView.findViewById(R.id.bigDateDay);
@@ -122,7 +122,7 @@ public class MNMLBoxClockController implements ClockPlugin {
 
     @Override
     public String getTitle() {
-        return mResources.getString(R.string.clock_title_mnml_box);
+        return mResources.getString(R.string.clock_title_x_mnml_box);
     }
 
     @Override
@@ -133,7 +133,7 @@ public class MNMLBoxClockController implements ClockPlugin {
     @Override
     public Bitmap getPreview(int width, int height) {
 
-        View previewView = mLayoutInflater.inflate(R.layout.digital_mnml_box, null);
+        View previewView = mLayoutInflater.inflate(R.layout.x_digital_mnml_box, null);
         TextView previewTime = previewView.findViewById(R.id.clock);
         TextView previewDate = previewView.findViewById(R.id.bigDate);
 
@@ -147,7 +147,7 @@ public class MNMLBoxClockController implements ClockPlugin {
         typeHeader = typeHeader.replaceAll("\\n", "") + " ";
         SimpleDateFormat timeformat = new SimpleDateFormat("HH:mm");
         previewTime.setText(typeHeader.substring(0, typeHeader.indexOf("^")) + " " + timeformat.format(mTime.getInstance().getTimeInMillis()));
-        DateFormat dateFormat = DateFormat.getInstanceForSkeleton("EEEEMMMMd", Locale.getDefault());
+        DateFormat dateFormat = DateFormat.getInstanceForSkeleton("EEEEMMMMdyyyy", Locale.getDefault());
         dateFormat.setContext(DisplayContext.CAPITALIZATION_FOR_STANDALONE);
         previewDate.setText(dateFormat.format(mTime.getInstance().getTimeInMillis()));
 
