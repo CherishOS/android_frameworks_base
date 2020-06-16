@@ -1912,6 +1912,22 @@ public class WallpaperManagerService extends IWallpaperManager.Stub
         }
     }
 
+    /** Called by WallpaperUpdateReceiver */
+    public void requestUpdateImageWallpaper() {
+        synchronized (mLock) {
+            WallpaperData wallpaper = getWallpaperSafeLocked(mCurrentUserId, FLAG_SYSTEM);
+            if (wallpaper != null && wallpaper.wallpaperComponent.equals(mImageWallpaper)) {
+                // Reload wallpaper bitmap
+                if (DEBUG) {
+                    Slog.i(TAG, "requestUpdateImageWallpaper : wallpaer=" + wallpaper
+                            + " mImageWallpaper=" + mImageWallpaper);
+                }
+                clearWallpaperComponentLocked(wallpaper);
+                bindWallpaperComponentLocked(mImageWallpaper, true, false, wallpaper, null);
+            }
+        }
+    }
+
     /** Called by SystemBackupAgent */
     public String getName() {
         // Verify caller is the system
