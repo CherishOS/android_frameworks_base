@@ -5223,6 +5223,12 @@ public final class Settings {
          */
         @Readable
         public static final String MULTI_AUDIO_FOCUS_ENABLED = "multi_audio_focus_enabled";
+		
+		/**
+         * Whether to show VoWiFi icon or not
+         * @hide
+         */
+        public static final String VOWIFI_ICON = "vowifi_icon";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
