@@ -142,9 +142,14 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
             "system:" + Settings.System.SHOW_VOLTE_ICON;
 	private static final String VOLTE_ICON_STYLE =
             "system:" + Settings.System.VOLTE_ICON_STYLE;
+	private static final String VOWIFI_ICON =
+            "system:" + Settings.System.VOWIFI_ICON;
 
     // Volte Icon Style
     private int mVoLTEstyle = 0;
+
+    // VoWiFi Icon
+    private int mVoWiFiIcon;
 
     private final MobileStatusTracker.Callback mMobileCallback =
             new MobileStatusTracker.Callback() {
@@ -314,6 +319,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
         Dependency.get(TunerService.class).addTunable(this, DATA_DISABLED_ICON);
 		Dependency.get(TunerService.class).addTunable(this, SHOW_VOLTE_ICON);
 		 Dependency.get(TunerService.class).addTunable(this, VOLTE_ICON_STYLE);
+		Dependency.get(TunerService.class).addTunable(this, VOWIFI_ICON);
     }
 
     @Override
@@ -341,6 +347,11 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
                 break;
 			case VOLTE_ICON_STYLE:
                 mVoLTEstyle =
+                    TunerService.parseInteger(newValue, 0);
+                notifyListeners();
+                break;
+			case VOWIFI_ICON:
+                mVoWiFiIcon =
                     TunerService.parseInteger(newValue, 0);
                 notifyListeners();
                 break;
@@ -480,6 +491,10 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
 
     private int getVolteResId() {
         int resId = 0;
+
+        if (mVoWiFiIcon == 2 && isVowifiAvailable()) {
+            return resId;
+        }
 
         if (mCurrentState.imsRegistered && mVolteIcon) {
             switch(mVoLTEstyle) {
@@ -715,7 +730,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
                     showDataIconStatusBar && !mCurrentState.airplaneMode,
                     getCurrentIconId(), contentDescription);
             MobileIconGroup vowifiIconGroup = getVowifiIconGroup();
-            if (vowifiIconGroup != null ) {
+            if (vowifiIconGroup != null && (mVoWiFiIcon >= 1)) {
                 typeIcon = vowifiIconGroup.dataType;
                 statusIcon = new IconState(true,
                         mCurrentState.enabled && !mCurrentState.airplaneMode? statusIcon.icon : -1,
