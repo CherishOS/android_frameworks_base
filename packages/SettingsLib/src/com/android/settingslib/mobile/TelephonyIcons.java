@@ -196,6 +196,90 @@ public class TelephonyIcons {
             0,
             TelephonyIcons.ICON_VOWIFI_CALLING);
 
+            public static final MobileIconGroup VOWIFI_MOTO = new MobileIconGroup(
+            "VoWIFI_Moto",
+            null,
+            null,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
+            0, 0,
+            0,
+            0,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
+            0,
+            TelephonyIcons.ICON_VOWIFI_MOTO);
+
+    public static final MobileIconGroup VOWIFI_ASUS = new MobileIconGroup(
+            "VoWIFI_ASUS",
+            null,
+            null,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
+            0, 0,
+            0,
+            0,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
+            0,
+            TelephonyIcons.ICON_VOWIFI_ASUS);
+
+    public static final MobileIconGroup VOWIFI_ONEPLUS = new MobileIconGroup(
+            "VoWIFI_OnePlus",
+            null,
+            null,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
+            0, 0,
+            0,
+            0,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
+            0,
+            TelephonyIcons.ICON_VOWIFI_ONEPLUS);
+
+    public static final MobileIconGroup VOWIFI_EMUI = new MobileIconGroup(
+            "VoWIFI_Emui",
+            null,
+            null,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
+            0, 0,
+            0,
+            0,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
+            0,
+            TelephonyIcons.ICON_VOWIFI_EMUI);
+
+    public static final MobileIconGroup VOWIFI_ONEPLUS_COMPACT = new MobileIconGroup(
+            "VoWIFI_Oneplus_Compact",
+            null,
+            null,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
+            0, 0,
+            0,
+            0,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
+            0,
+            TelephonyIcons.ICON_VOWIFI_ONEPLUS_COMPACT);
+
+    public static final MobileIconGroup VOWIFI_VIVO = new MobileIconGroup(
+            "VoWIFI_VIVO",
+            null,
+            null,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
+            0, 0,
+            0,
+            0,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
+            0,
+            TelephonyIcons.ICON_VOWIFI_VIVO);
+
+    public static final MobileIconGroup VOWIFI_Margaritov = new MobileIconGroup(
+            "VoWIFI_Margaritov",
+            null,
+            null,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
+            0, 0,
+            0,
+            0,
+            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
+            0,
+            TelephonyIcons.ICON_VOWIFI_Margaritov);
+
     // When adding a new MobileIconGroup, check if the dataContentDescription has to be filtered
     // in QSCarrier#hasValidTypeContentDescription
 
