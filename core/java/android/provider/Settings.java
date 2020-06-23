@@ -5229,6 +5229,12 @@ public final class Settings {
          * @hide
          */
         public static final String VOWIFI_ICON = "vowifi_icon";
+		
+		/**
+         * VoWiFi icon style
+         * @hide
+         */
+        public static final String VOWIFI_ICON_STYLE = "vowifi_icon_style";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
