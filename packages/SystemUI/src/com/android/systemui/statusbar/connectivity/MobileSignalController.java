@@ -144,12 +144,16 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
             "system:" + Settings.System.VOLTE_ICON_STYLE;
 	private static final String VOWIFI_ICON =
             "system:" + Settings.System.VOWIFI_ICON;
+	private static final String VOWIFI_ICON_STYLE =
+            "system:" + Settings.System.VOWIFI_ICON_STYLE;
 
     // Volte Icon Style
     private int mVoLTEstyle = 0;
 
     // VoWiFi Icon
     private int mVoWiFiIcon;
+    // VoWiFi Icon Style
+    private int mVoWiFistyle;
 
     private final MobileStatusTracker.Callback mMobileCallback =
             new MobileStatusTracker.Callback() {
@@ -320,6 +324,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
 		Dependency.get(TunerService.class).addTunable(this, SHOW_VOLTE_ICON);
 		 Dependency.get(TunerService.class).addTunable(this, VOLTE_ICON_STYLE);
 		Dependency.get(TunerService.class).addTunable(this, VOWIFI_ICON);
+		Dependency.get(TunerService.class).addTunable(this, VOWIFI_ICON_STYLE);
     }
 
     @Override
@@ -352,6 +357,11 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
                 break;
 			case VOWIFI_ICON:
                 mVoWiFiIcon =
+                    TunerService.parseInteger(newValue, 0);
+                notifyListeners();
+                break;
+			case VOWIFI_ICON_STYLE:
+                mVoWiFistyle =
                     TunerService.parseInteger(newValue, 0);
                 notifyListeners();
                 break;
@@ -1130,7 +1140,31 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
         if ( isVowifiAvailable() && !isCallIdle() ) {
             return TelephonyIcons.VOWIFI_CALLING;
         }else if (isVowifiAvailable()) {
-            return TelephonyIcons.VOWIFI;
+            switch(mVoWiFistyle) {
+                // OOS
+                case 1:
+                    return TelephonyIcons.VOWIFI_ONEPLUS;
+                // Motorola
+                case 2:
+                    return TelephonyIcons.VOWIFI_MOTO;
+                // ASUS
+                case 3:
+                    return TelephonyIcons.VOWIFI_ASUS;
+                // EMUI (Huawei P10)
+                case 4:
+                    return TelephonyIcons.VOWIFI_EMUI;
+                // Simple1
+                case 5:
+                    return TelephonyIcons.VOWIFI_Simple1;
+                // Simple2
+                case 6:
+                    return TelephonyIcons.VOWIFI_Simple2;
+                // Simple3
+                case 7:
+                    return TelephonyIcons.VOWIFI_Simple3;
+                default:
+                    return TelephonyIcons.VOWIFI;
+            }
         }else {
             return null;
         }
