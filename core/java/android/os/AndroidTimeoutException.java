@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The Android Open Source Project
+ * Copyright (C) 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package android.os.strictmode;
 
-public final class LeakedClosableViolation extends Violation {
-    /** @hide */
-    public LeakedClosableViolation(String message, Throwable allocationSite) {
-        super(message);
-        initCause(allocationSite);
-    }
+package android.os;
 
-    /** @hide */
-    public LeakedClosableViolation(String message) {
+import android.annotation.NonNull;
+import android.util.AndroidRuntimeException;
+
+/**
+ * An exception that indicates that the request timed out, for example because
+ * the requested content provider took too long to initialize.
+ *
+ * @hide
+ */
+public final class AndroidTimeoutException extends AndroidRuntimeException {
+
+    public AndroidTimeoutException(@NonNull String message) {
         super(message);
     }
 }
