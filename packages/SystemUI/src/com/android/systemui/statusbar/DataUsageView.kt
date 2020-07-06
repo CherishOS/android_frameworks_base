@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkTemplate
 import android.net.wifi.WifiManager
+import android.provider.Settings
 import android.telephony.SubscriptionManager
 import android.text.BidiFormatter
 import android.text.format.Formatter
@@ -51,6 +52,10 @@ class DataUsageView(context: Context, attrs: AttributeSet?) :
         val info: DataUsageController.DataUsageInfo
         val prefix: String
         val suffix: String
+        val showDailyDataUsage = Settings.System.getInt(
+            context.contentResolver,
+            Settings.System.DATA_USAGE_PERIOD, 1
+        ) == 0
         if (isWifiConnected) {
             val template: NetworkTemplate
             val wifiInfo = wifiManager.connectionInfo
@@ -64,9 +69,19 @@ class DataUsageView(context: Context, attrs: AttributeSet?) :
             suffix = context.resources.getString(R.string.usage_data)
         } else {
             dataController.setSubscriptionId(SubscriptionManager.getDefaultDataSubscriptionId())
-            info = dataController.getDailyDataUsageInfo()
+            info = if (showDailyDataUsage) {
+                dataController.getDailyDataUsageInfo()
+            } else {
+                dataController.getDataUsageInfo()
+            }
             prefix = context.resources.getString(R.string.usage_data_prefix)
-            suffix = context.resources.getString(R.string.usage_data_today)
+            suffix = context.resources.getString(
+                if (showDailyDataUsage) {
+                    R.string.usage_data_today
+                } else {
+                    R.string.usage_data
+                }
+            )
         }
         formattedInfo = prefix + ": " + formatDataUsage(info.usageLevel) + " " + suffix
         shouldUpdateDataTextView = true
