@@ -172,6 +172,7 @@ public final class ClockManager {
         addBuiltinClock(() -> new ClockertinoClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new GradientFireClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new TypeAltClockController(res, layoutInflater, colorExtractor));
+        addBuiltinClock(() -> new SammyClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new StickerTagClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new OctaviDigitalClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new SquaryClockController(res, layoutInflater, colorExtractor));
