@@ -5162,6 +5162,15 @@ public abstract class Context {
      */
     @TestApi
     public static final String DREAM_SERVICE = "dream";
+	
+	/**
+     * {@link android.hardware.display.DcDimManager} for accessing and setting locked apps state.
+     *
+     * @see #getSystemService
+     * @see android.hardware.display.DcDimmingManager
+     * @hide
+     */
+    public static final String DC_DIM_SERVICE = "dc_dim_service";
 
     /**
      * Use with {@link #getSystemService} to retrieve a
