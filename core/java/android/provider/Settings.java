@@ -5754,6 +5754,12 @@ public final class Settings {
          * @hide
          */
         public static final String QS_HEADER_CLOCK_SIZE = "qs_header_clock_size";
+		
+		/**
+         * Qs Header Clock font color
+         * @hide
+         */
+        public static final String QS_HEADER_CLOCK_COLOR = "qs_header_clock_color";
 
        /**
          * Position of date
