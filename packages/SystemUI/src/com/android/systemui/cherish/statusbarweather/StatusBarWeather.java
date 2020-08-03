@@ -54,7 +54,7 @@ public class StatusBarWeather extends TextView implements
     private OmniJawsClient mWeatherClient;
     private OmniJawsClient.WeatherInfo mWeatherData;
     private boolean mEnabled;
-    private int mTintColor;
+    private int mTintColor = 0xffffffff;
     private boolean mWeatherInHeaderView;
     private int mColor;
     private int mSize;
@@ -105,7 +105,6 @@ public class StatusBarWeather extends TextView implements
         mHandler = new Handler();
         mWeatherClient = new OmniJawsClient(mContext);
         mEnabled = mWeatherClient.isOmniJawsEnabled();
-        mTintColor = resources.getColor(android.R.color.white);
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
         settingsObserver.observe();
     }
@@ -163,9 +162,7 @@ public class StatusBarWeather extends TextView implements
         } else {
             setVisibility(View.GONE);
         }
-        if (mColor != 0xFFFFFFFF) {
-            updateFontColor();
-        }
+        updateFontColor();
         updateFontSize();
         if (onChange && mStatusBarWeatherEnabled == 0) {
             // Disable OmniJaws if tile isn't used either
@@ -198,7 +195,7 @@ public class StatusBarWeather extends TextView implements
                         }
                     } else {
                         setVisibility(View.GONE);
-		    }
+		            }
                 } else {
                     setVisibility(View.GONE);
                 }
@@ -213,7 +210,11 @@ public class StatusBarWeather extends TextView implements
 
     public void updateFontColor() {
        try {
-           setTextColor(mColor);
+            if (mColor == 0xFFFFFFFF) {
+                setTextColor(mTintColor);
+            } else {
+                setTextColor(mColor);
+            }
        } catch (Exception e) {}
     }
 
@@ -225,11 +226,7 @@ public class StatusBarWeather extends TextView implements
 
     public void onDarkChanged(Rect area, float darkIntensity, int tint) {
         mTintColor = DarkIconDispatcher.getTint(area, this, tint);
-        if (mColor == 0xFFFFFFFF) {
-            setTextColor(mTintColor);
-        } else {
-            updateFontColor();
-        }
+        updateFontColor();
         queryAndUpdateWeather();
     }
 }

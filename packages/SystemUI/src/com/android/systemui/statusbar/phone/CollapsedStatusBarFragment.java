@@ -551,7 +551,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         }
         updateClockStyle(animate);
         setCarrierLabel(animate);
-        updateSBWeather(animate);
     }
 
     private void updateClockStyle(boolean animate) {
