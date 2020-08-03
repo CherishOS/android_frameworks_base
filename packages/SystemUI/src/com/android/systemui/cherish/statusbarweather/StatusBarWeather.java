@@ -152,6 +152,10 @@ public class StatusBarWeather extends TextView implements
         mSize = Settings.System.getIntForUser(resolver,
                 Settings.System.STATUS_BAR_WEATHER_FONT_SIZE, 14,
                 UserHandle.USER_CURRENT);
+        if (mStatusBarWeatherEnabled == 5) {
+            setVisibility(View.GONE); 
+            return;
+        }
         if ((mStatusBarWeatherEnabled != 0 && mStatusBarWeatherEnabled != 5)
                                            && !mWeatherInHeaderView) {
             mWeatherClient.setOmniJawsEnabled(true);
