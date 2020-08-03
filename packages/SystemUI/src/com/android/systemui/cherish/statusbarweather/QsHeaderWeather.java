@@ -53,6 +53,8 @@ public class QsHeaderWeather extends TextView implements
     private OmniJawsClient.WeatherInfo mWeatherData;
     private boolean mEnabled;
     private boolean mWeatherInHeaderView;
+    private int mColor;
+    private int mSize;
 
     Handler mHandler;
 
@@ -69,6 +71,12 @@ public class QsHeaderWeather extends TextView implements
             resolver.registerContentObserver(Settings.System.getUriFor(
 	            Settings.System.STATUS_BAR_SHOW_WEATHER_LOCATION), false, this,
 		    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+		    Settings.System.STATUS_BAR_WEATHER_COLOR), false, this,
+   	            UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+		    Settings.System.STATUS_BAR_WEATHER_FONT_SIZE), false, this,
+   	            UserHandle.USER_ALL);
             updateSettings(false);
         }
 
@@ -132,6 +140,14 @@ public class QsHeaderWeather extends TextView implements
         mWeatherInHeaderView = Settings.System.getIntForUser(resolver,
                 Settings.System.STATUS_BAR_SHOW_WEATHER_LOCATION, 0,
                 UserHandle.USER_CURRENT) == 1;
+        mColor = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUS_BAR_WEATHER_COLOR, 0xffffffff,
+                UserHandle.USER_CURRENT);
+        mSize = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUS_BAR_WEATHER_FONT_SIZE, 14,
+                UserHandle.USER_CURRENT);
+        setTextSize(mSize);
+        setTextColor(mColor);
         if ((mStatusBarWeatherEnabled != 0 && mStatusBarWeatherEnabled != 5)
                                            && mWeatherInHeaderView) {
             mWeatherClient.setOmniJawsEnabled(true);
