@@ -6121,6 +6121,11 @@ public final class Settings {
          * @hide
          */
         public static final String BRIGHTNESS_SLIDER_STYLE = "brightness_slider_style";
+		
+		/**
+         * @hide
+         */
+        public static final String UI_STYLE = "ui_style";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
@@ -6335,6 +6340,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(HEADS_UP_BLACKLIST_VALUES);
             PRIVATE_SETTINGS.add(LOCKSCREEN_PIN_SCRAMBLE_LAYOUT);
 			 PRIVATE_SETTINGS.add(BRIGHTNESS_SLIDER_STYLE);
+			 PRIVATE_SETTINGS.add(UI_STYLE);
         }
 
         /**
