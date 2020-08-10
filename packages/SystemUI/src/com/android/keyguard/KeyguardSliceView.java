@@ -46,6 +46,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.LinearLayout;
@@ -224,6 +225,10 @@ public class KeyguardSliceView extends LinearLayout implements View.OnClickListe
         }
         mClickActions.clear();
 
+        final ContentResolver resolver = mContext.getContentResolver();
+        int mLockDateAlignment = Settings.Secure.getIntForUser(resolver,
+                Settings.Secure.LOCK_DATE_ALIGNMENT, 1, UserHandle.USER_CURRENT);
+
         ListContent lc = new ListContent(getContext(), mSlice);
         SliceContent headerContent = lc.getHeader();
         mHasHeader = headerContent != null && !headerContent.getSliceItem().hasHint(HINT_LIST_ITEM);
@@ -254,6 +259,18 @@ public class KeyguardSliceView extends LinearLayout implements View.OnClickListe
         final int subItemsCount = subItems.size();
         final int blendedColor = getTextColor();
         final int startIndex = mHasHeader ? 1 : 0; // First item is header; skip it
+        switch (mLockDateAlignment) {
+            case 0:
+                mRowContainer.setGravity(Gravity.START);
+                break;
+            case 1:
+            default:
+                mRowContainer.setGravity(Gravity.CENTER);
+                break;
+            case 2:
+                mRowContainer.setGravity(Gravity.END);
+                break;
+        }
         mRow.setVisibility(subItemsCount > 0 ? VISIBLE : GONE);
 
         for (int i = startIndex; i < subItemsCount; i++) {

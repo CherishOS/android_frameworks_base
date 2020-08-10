@@ -9311,10 +9311,28 @@ public final class Settings {
         public static final String LOCKSCREEN_DATE_SELECTION = "lockscreen_date_selection";
 
         /**
-         * Center the lockscreen text clock
+         * Lockscreen Text Clock Alignment
          * @hide
          */
         public static final String CENTER_TEXT_CLOCK = "center_text_clock";
+
+        /**
+         * Lockscreen Date Alignment
+         * @hide
+         */
+        public static final String LOCK_DATE_ALIGNMENT = "lock_date_alignment";
+
+        /**
+         * Lockscreen OwnerInfo Alignment
+         * @hide
+         */
+        public static final String LOCK_OWNERINFO_ALIGNMENT = "lock_ownerinfo_alignment";
+
+        /**
+         * Lockscreen Items padding
+         * @hide
+         */
+        public static final String LOCKSCREEN_ITEM_PADDING = "lockscreen_item_padding";
 
         /**
          * Whether the Lockdown button should be shown in the power menu.

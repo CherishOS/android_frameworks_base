@@ -93,7 +93,10 @@ public class KeyguardStatusView extends GridLayout implements
 
     private int mClockSelection;
     private int mDateSelection;
-    private boolean mIsCenterAligned;
+    private int mTextClockPadding;
+    private int mTextClockAlignment;
+    private int mLockDateAlignment;
+    private int mOwnerInfoAlignment;
 
     // Date styles paddings
     private int mDateVerPadding;
@@ -127,6 +130,8 @@ public class KeyguardStatusView extends GridLayout implements
                 updateOwnerInfoColor();
                 refreshOwnerInfoSize();
                 refreshOwnerInfoFont();
+                updateClockAlignment();
+                updateTextClockPadding();
 	    }
         }
 
@@ -147,7 +152,6 @@ public class KeyguardStatusView extends GridLayout implements
             updateLogoutView();
             mClockView.refreshLockFont();
             refreshLockDateFont();
-	    refreshLockDateFont();
 	    mClockView.refreshclocksize();
 	    mKeyguardSlice.refreshdatesize();
             mClockView.updateClockColor();
@@ -156,6 +160,8 @@ public class KeyguardStatusView extends GridLayout implements
             refreshOwnerInfoSize();
             refreshOwnerInfoFont();
             updateDateStyles();
+            updateClockAlignment();
+            updateTextClockPadding();
 	}
 
         @Override
@@ -251,6 +257,8 @@ public class KeyguardStatusView extends GridLayout implements
 	refreshOwnerInfoFont();
         updateLsClockSettings();
         updateDateStyles();
+        updateClockAlignment();
+        updateTextClockPadding();
 
         mTextColor = mClockView.getCurrentTextColor();
 
@@ -284,6 +292,8 @@ public class KeyguardStatusView extends GridLayout implements
                     params.bottomMargin);
             mNotificationIcons.setLayoutParams(params);
         }
+        refreshLockDateFont();
+        mKeyguardSlice.refreshdatesize();
     }
 
     @Override
@@ -337,6 +347,8 @@ public class KeyguardStatusView extends GridLayout implements
             mClockView.setFormat12Hour(Html.fromHtml("<strong>hh</strong><br>mm"));
             mClockView.setFormat24Hour(Html.fromHtml("<strong>kk</strong><br>mm"));
         }
+        refreshLockDateFont();
+        mKeyguardSlice.refreshdatesize();
     }
 
     private void updateTimeZone(TimeZone timeZone) {
@@ -538,6 +550,26 @@ public class KeyguardStatusView extends GridLayout implements
                     KeyguardUpdateMonitor.getCurrentUser());
             if (ownerInfoEnabled) {
                 info = mLockPatternUtils.getOwnerInfo(KeyguardUpdateMonitor.getCurrentUser());
+            }
+        }
+        final ContentResolver resolver = mContext.getContentResolver();
+        mOwnerInfoAlignment = Settings.Secure.getIntForUser(resolver,
+                Settings.Secure.LOCK_OWNERINFO_ALIGNMENT, 1, UserHandle.USER_CURRENT);
+        if (info != null) {
+            switch (mOwnerInfoAlignment) {
+                case 0:
+                    mOwnerInfo.setPaddingRelative(updateTextClockPadding() + 8, 0, 0, 0);
+                    mOwnerInfo.setGravity(Gravity.START);
+                    break;
+                case 1:
+                default:
+                    mOwnerInfo.setPaddingRelative(0, 0, 0, 0);
+                    mOwnerInfo.setGravity(Gravity.CENTER);
+                    break;
+                case 2:
+                    mOwnerInfo.setPaddingRelative(0, 0, updateTextClockPadding() + 8, 0);
+                    mOwnerInfo.setGravity(Gravity.END);
+                    break;
             }
         }
         mOwnerInfo.setText(info);
@@ -845,17 +877,8 @@ public class KeyguardStatusView extends GridLayout implements
         mClockSelection = Settings.Secure.getIntForUser(resolver,
                 Settings.Secure.LOCKSCREEN_CLOCK_SELECTION, 2, UserHandle.USER_CURRENT);
 
-        mIsCenterAligned = Settings.Secure.getIntForUser(resolver,
-                Settings.Secure.CENTER_TEXT_CLOCK, 0, UserHandle.USER_CURRENT) == 1;
-
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)
                 mKeyguardSlice.getLayoutParams();
-
-        RelativeLayout.LayoutParams textClockParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        int leftPadding = (int) getResources().getDimension(R.dimen.custom_clock_left_padding);
 
         mSmallClockView = findViewById(R.id.clock_view);
         mDefaultClockView = findViewById(R.id.default_clock_view);
@@ -938,24 +961,290 @@ public class KeyguardStatusView extends GridLayout implements
                 params.addRule(RelativeLayout.BELOW, R.id.custom_num_clock_view);
                 break;
         }
-        if (mTextClock != null && mIsCenterAligned) {
-            mTextClock.setGravity(Gravity.CENTER);
-            textClockParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-            textClockParams.removeRule(RelativeLayout.ALIGN_PARENT_START);
-            mTextClock.setLayoutParams(textClockParams);
-            mTextClock.setPaddingRelative(0, 0, 0, 0);
-        } else {
-            mTextClock.setGravity(Gravity.LEFT);
-            textClockParams.removeRule(RelativeLayout.CENTER_HORIZONTAL);
-            textClockParams.addRule(RelativeLayout.ALIGN_PARENT_START);
-            mTextClock.setLayoutParams(textClockParams);
-            mTextClock.setPaddingRelative(leftPadding, 0, 0, 0);
+    }
+
+    private void updateClockAlignment() {
+        final ContentResolver resolver = getContext().getContentResolver();
+
+        mTextClock = findViewById(R.id.custom_text_clock_view);
+        mKeyguardSlice = findViewById(R.id.keyguard_status_area);
+
+        mTextClockAlignment = Settings.Secure.getIntForUser(resolver,
+                Settings.Secure.CENTER_TEXT_CLOCK, 1, UserHandle.USER_CURRENT);
+
+        mLockDateAlignment = Settings.Secure.getIntForUser(resolver,
+                Settings.Secure.LOCK_DATE_ALIGNMENT, 1, UserHandle.USER_CURRENT);
+
+        RelativeLayout.LayoutParams textClockParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+        if (mTextClock != null) {
+            switch (mTextClockAlignment) {
+                case 0:
+                    mTextClock.setGravity(Gravity.START);
+                    textClockParams.addRule(RelativeLayout.ALIGN_PARENT_START);
+                    textClockParams.removeRule(RelativeLayout.CENTER_HORIZONTAL);
+                    textClockParams.removeRule(RelativeLayout.ALIGN_PARENT_END);
+                    mTextClock.setPaddingRelative(updateTextClockPadding() + 8, 0, 0, 0);
+                    mTextClock.setLayoutParams(textClockParams);
+                    break;
+                case 1:
+                default:
+                    mTextClock.setGravity(Gravity.CENTER);
+                    textClockParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                    textClockParams.removeRule(RelativeLayout.ALIGN_PARENT_START);
+                    textClockParams.removeRule(RelativeLayout.ALIGN_PARENT_END);
+                    mTextClock.setPaddingRelative(0, 0, 0, 0);
+                    mTextClock.setLayoutParams(textClockParams);
+                    break;
+                case 2:
+                    mTextClock.setGravity(Gravity.END);
+                    textClockParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+                    textClockParams.removeRule(RelativeLayout.CENTER_HORIZONTAL);
+                    textClockParams.removeRule(RelativeLayout.ALIGN_PARENT_START);
+                    mTextClock.setPaddingRelative(0, 0, updateTextClockPadding() + 8, 0);
+                    mTextClock.setLayoutParams(textClockParams);
+                    break;
+            }
+	}
+        if (mKeyguardSlice != null) {
+            switch (mLockDateAlignment) {
+                case 0:
+                    mKeyguardSlice.setGravity(Gravity.START);
+                    mKeyguardSlice.setPaddingRelative(updateTextClockPadding() + 8, 0, 0, 0);
+                    break;
+                case 1:
+                default:
+                    mKeyguardSlice.setGravity(Gravity.CENTER);
+                    mKeyguardSlice.setPaddingRelative(0, 0, 0, 0);
+                    break;
+                case 2:
+                    mKeyguardSlice.setGravity(Gravity.END);
+                    mKeyguardSlice.setPaddingRelative(0, 0, updateTextClockPadding() + 8, 0);
+                    break;
+		}
+	}
+        updateTextClockPadding();
+    }
+
+    private int updateTextClockPadding() {
+        final ContentResolver resolver = getContext().getContentResolver();
+        mTextClockPadding = Settings.Secure.getIntForUser(resolver,
+                Settings.Secure.LOCKSCREEN_ITEM_PADDING, 35, UserHandle.USER_CURRENT);
+
+        switch (mTextClockPadding) {
+            case 0:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_0);
+            case 1:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_1);
+            case 2:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_2);
+            case 3:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_3);
+            case 4:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_4);
+            case 5:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_5);
+            case 6:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_6);
+            case 7:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_7);
+            case 8:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_8);
+            case 9:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_9);
+            case 10:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_10);
+            case 11:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_11);
+            case 12:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_12);
+            case 13:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_13);
+            case 14:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_14);
+            case 15:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_15);
+            case 16:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_16);
+            case 17:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_17);
+            case 18:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_18);
+            case 19:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_19);
+            case 20:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_20);
+            case 21:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_21);
+            case 22:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_22);
+            case 23:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_23);
+            case 24:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_24);
+            case 25:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_25);
+            case 26:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_26);
+            case 27:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_27);
+            case 28:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_28);
+            case 29:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_29);
+            case 30:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_30);
+            case 31:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_31);
+            case 32:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_32);
+            case 33:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_33);
+            case 34:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_34);
+            case 35:
+            default:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_35);
+            case 36:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_36);
+            case 37:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_37);
+            case 38:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_38);
+            case 39:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_39);
+            case 40:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_40);
+            case 41:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_41);
+            case 42:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_42);
+            case 43:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_43);
+            case 44:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_44);
+            case 45:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_45);
+            case 46:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_46);
+            case 47:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_47);
+            case 48:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_48);
+            case 49:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_49);
+            case 50:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_date_font_size_50);
+            case 51:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_51);
+            case 52:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_52);
+            case 53:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_53);
+            case 54:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_54);
+            case 55:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_55);
+            case 56:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_56);
+            case 57:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_57);
+            case 58:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_58);
+            case 59:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_59);
+            case 60:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_60);
+            case 61:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_61);
+            case 62:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_62);
+            case 63:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_63);
+            case 64:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_64);
+            case 65:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_65);
+            case 66:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_66);
+            case 67:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_67);
+            case 68:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_68);
+            case 69:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_69);
+            case 70:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_70);
+            case 71:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_71);
+            case 72:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_72);
+            case 73:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_73);
+            case 74:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_74);
+            case 75:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_75);
+            case 76:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_76);
+            case 77:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_77);
+            case 78:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_78);
+            case 79:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_79);
+            case 80:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_80);
+            case 81:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_81);
+            case 82:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_82);
+            case 83:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_83);
+            case 84:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_84);
+            case 85:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_85);
+            case 86:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_86);
+            case 87:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_87);
+            case 88:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_88);
+            case 89:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_89);
+            case 90:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_90);
+            case 91:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_91);
+            case 92:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_92);
+            case 93:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_93);
+            case 94:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_94);
+            case 95:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_95);
+            case 96:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_96);
+            case 97:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_97);
+            case 98:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_98);
+            case 99:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_99);
+            case 100:
+                return (int) mContext.getResources().getDimension(R.dimen.lock_clock_font_size_100);
         }
     }
 
     public void updateAll() {
         updateLsClockSettings();
         updateDateStyles();
+        updateClockAlignment();
+        updateTextClockPadding();
     }
 
     // DateFormat.getBestDateTimePattern is extremely expensive, and refresh is called often.
