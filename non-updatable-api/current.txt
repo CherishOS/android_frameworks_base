@@ -44126,7 +44126,9 @@ package android.telecom {
     method public final void addExistingConnection(android.telecom.PhoneAccountHandle, android.telecom.Connection);
     method public final void conferenceRemoteConnections(android.telecom.RemoteConnection, android.telecom.RemoteConnection);
     method public final void connectionServiceFocusReleased();
+    method @Nullable public final android.telecom.RemoteConference createRemoteIncomingConference(@Nullable android.telecom.PhoneAccountHandle, @Nullable android.telecom.ConnectionRequest);
     method public final android.telecom.RemoteConnection createRemoteIncomingConnection(android.telecom.PhoneAccountHandle, android.telecom.ConnectionRequest);
+    method @Nullable public final android.telecom.RemoteConference createRemoteOutgoingConference(@Nullable android.telecom.PhoneAccountHandle, @Nullable android.telecom.ConnectionRequest);
     method public final android.telecom.RemoteConnection createRemoteOutgoingConnection(android.telecom.PhoneAccountHandle, android.telecom.ConnectionRequest);
     method public final java.util.Collection<android.telecom.Conference> getAllConferences();
     method public final java.util.Collection<android.telecom.Connection> getAllConnections();
@@ -44357,6 +44359,7 @@ package android.telecom {
 
   public final class RemoteConnection {
     method public void abort();
+    method public void addConferenceParticipants(@NonNull java.util.List<android.net.Uri>);
     method public void answer();
     method public void disconnect();
     method public android.net.Uri getAddress();
@@ -63867,7 +63870,7 @@ package java.lang.reflect {
 
 package java.math {
 
-  public class BigDecimal extends java.lang.Number implements java.lang.Comparable<java.math.BigDecimal> java.io.Serializable {
+  public class BigDecimal extends java.lang.Number implements java.lang.Comparable<java.math.BigDecimal> {
     ctor public BigDecimal(char[], int, int);
     ctor public BigDecimal(char[], int, int, java.math.MathContext);
     ctor public BigDecimal(char[]);
@@ -63954,19 +63957,20 @@ package java.math {
     field public static final java.math.BigDecimal ZERO;
   }
 
-  public class BigInteger extends java.lang.Number implements java.lang.Comparable<java.math.BigInteger> java.io.Serializable {
+  public class BigInteger extends java.lang.Number implements java.lang.Comparable<java.math.BigInteger> {
+    ctor public BigInteger(byte[]);
+    ctor public BigInteger(int, byte[]);
+    ctor public BigInteger(@NonNull String, int);
+    ctor public BigInteger(@NonNull String);
     ctor public BigInteger(int, @NonNull java.util.Random);
     ctor public BigInteger(int, int, @NonNull java.util.Random);
-    ctor public BigInteger(@NonNull String);
-    ctor public BigInteger(@NonNull String, int);
-    ctor public BigInteger(int, byte[]);
-    ctor public BigInteger(byte[]);
     method @NonNull public java.math.BigInteger abs();
     method @NonNull public java.math.BigInteger add(@NonNull java.math.BigInteger);
     method @NonNull public java.math.BigInteger and(@NonNull java.math.BigInteger);
     method @NonNull public java.math.BigInteger andNot(@NonNull java.math.BigInteger);
     method public int bitCount();
     method public int bitLength();
+    method public byte byteValueExact();
     method @NonNull public java.math.BigInteger clearBit(int);
     method public int compareTo(@NonNull java.math.BigInteger);
     method @NonNull public java.math.BigInteger divide(@NonNull java.math.BigInteger);
@@ -63977,8 +63981,10 @@ package java.math {
     method @NonNull public java.math.BigInteger gcd(@NonNull java.math.BigInteger);
     method public int getLowestSetBit();
     method public int intValue();
+    method public int intValueExact();
     method public boolean isProbablePrime(int);
     method public long longValue();
+    method public long longValueExact();
     method @NonNull public java.math.BigInteger max(@NonNull java.math.BigInteger);
     method @NonNull public java.math.BigInteger min(@NonNull java.math.BigInteger);
     method @NonNull public java.math.BigInteger mod(@NonNull java.math.BigInteger);
@@ -63995,6 +64001,7 @@ package java.math {
     method @NonNull public java.math.BigInteger setBit(int);
     method @NonNull public java.math.BigInteger shiftLeft(int);
     method @NonNull public java.math.BigInteger shiftRight(int);
+    method public short shortValueExact();
     method public int signum();
     method @NonNull public java.math.BigInteger subtract(@NonNull java.math.BigInteger);
     method public boolean testBit(int);
