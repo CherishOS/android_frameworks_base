@@ -6407,10 +6407,10 @@ public final class Settings {
         public static final String AMBIENT_MUSIC_TICKER = "ambient_music_ticker";
 		
 		/**
-         * Toggle for clipboard access toast.
+         * Clipboard access info
          * @hide
          */
-        public static final String SHOW_CLIPBOARD_TOAST = "show_clipboard_toast";
+        public static final String CLIPBOARD_TOAST_INFO = "clipboard_toast_info";
 
         /** @hide */
         public static final String BACK_GESTURE_HEIGHT = "back_gesture_height";
