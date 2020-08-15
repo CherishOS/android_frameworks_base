@@ -102,6 +102,7 @@ public class KeyguardStatusView extends GridLayout implements
     private int mTextClockAlignment;
     private int mLockDateAlignment;
     private int mOwnerInfoAlignment;
+    private int mWeatherViewAlignment;
 
     // Date styles paddings
     private int mDateVerPadding;
@@ -1387,6 +1388,12 @@ public class KeyguardStatusView extends GridLayout implements
                 Settings.System.AICP_LOCKSCREEN_WEATHER_STYLE, 0,
                 UserHandle.USER_CURRENT) == 0;
 
+        mWeatherViewAlignment = Settings.Secure.getIntForUser(resolver,
+                Settings.Secure.LOCKSCREEN_WEATHER_ALIGNMENT, 1, UserHandle.USER_CURRENT);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                          LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+
         if (mWeatherView != null) {
             if (showWeather &&  mOmniStyle) {
                 mWeatherView.setVisibility(View.VISIBLE);
@@ -1395,6 +1402,26 @@ public class KeyguardStatusView extends GridLayout implements
             if (!showWeather ||  !mOmniStyle) {
                 mWeatherView.setVisibility(View.GONE);
                 mWeatherView.disableUpdates();
+            }
+        }
+        if (mWeatherView != null && mOmniStyle) {
+            switch (mWeatherViewAlignment) {
+                case 0:
+                    params.gravity = Gravity.LEFT;
+                    mWeatherView.setPaddingRelative(updateTextClockPadding() + 8, 0, 0, 0);
+                    mWeatherView.setLayoutParams(params);
+                    break;
+                case 1:
+                default:
+                    params.gravity = Gravity.CENTER;
+                    mWeatherView.setPaddingRelative(0, 0, 0, 0);
+                    mWeatherView.setLayoutParams(params);
+                    break;
+                case 2:
+                    params.gravity = Gravity.RIGHT;
+                    mWeatherView.setPaddingRelative(0, 0, updateTextClockPadding() + 8, 0);
+                    mWeatherView.setLayoutParams(params);
+                    break;
             }
         }
     }
