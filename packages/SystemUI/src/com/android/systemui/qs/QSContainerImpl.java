@@ -440,7 +440,7 @@ public class QSContainerImpl extends FrameLayout implements
         boolean hideStatusbar = mLandscape && !mHeaderImageEnabled;
 
         mBackgroundGradient.setVisibility(hideGradient ? View.INVISIBLE : View.VISIBLE);
-        mStatusBarBackground.setBackgroundColor(hideGradient ? Color.TRANSPARENT : Color.BLACK);
+        mStatusBarBackground.setBackgroundColor(hideGradient ? Color.TRANSPARENT : getResources().getColor(R.color.quick_settings_status_bar_background_color));
         mStatusBarBackground.setVisibility(hideStatusbar ? View.INVISIBLE : View.VISIBLE);
 
         applyHeaderBackgroundShadow();
