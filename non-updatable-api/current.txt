@@ -11901,8 +11901,8 @@ package android.content.pm {
     field public static final android.os.Parcelable.Creator<android.content.pm.PackageInstaller.SessionInfo> CREATOR;
     field public static final int INVALID_ID = -1; // 0xffffffff
     field public static final int STAGED_SESSION_ACTIVATION_FAILED = 2; // 0x2
+    field public static final int STAGED_SESSION_CONFLICT = 4; // 0x4
     field public static final int STAGED_SESSION_NO_ERROR = 0; // 0x0
-    field public static final int STAGED_SESSION_OTHER_ERROR = 4; // 0x4
     field public static final int STAGED_SESSION_UNKNOWN = 3; // 0x3
     field public static final int STAGED_SESSION_VERIFICATION_FAILED = 1; // 0x1
   }
@@ -14248,6 +14248,10 @@ package android.graphics {
     enum_constant public static final android.graphics.BlurMaskFilter.Blur NORMAL;
     enum_constant public static final android.graphics.BlurMaskFilter.Blur OUTER;
     enum_constant public static final android.graphics.BlurMaskFilter.Blur SOLID;
+  }
+
+  public final class BlurShader extends android.graphics.Shader {
+    ctor public BlurShader(float, float, @Nullable android.graphics.Shader);
   }
 
   public class Camera {
@@ -45988,6 +45992,7 @@ package android.telephony {
     method public void onDataConnectionStateChanged(int);
     method public void onDataConnectionStateChanged(int, int);
     method @RequiresPermission("android.permission.READ_PHONE_STATE") public void onDisplayInfoChanged(@NonNull android.telephony.TelephonyDisplayInfo);
+    method public void onEmergencyNumberListChanged(@NonNull java.util.Map<java.lang.Integer,java.util.List<android.telephony.emergency.EmergencyNumber>>);
     method @RequiresPermission("android.permission.READ_PRECISE_PHONE_STATE") public void onImsCallDisconnectCauseChanged(@NonNull android.telephony.ims.ImsReasonInfo);
     method public void onMessageWaitingIndicatorChanged(boolean);
     method @RequiresPermission("android.permission.MODIFY_PHONE_STATE") public void onPreciseDataConnectionStateChanged(@NonNull android.telephony.PreciseDataConnectionState);
@@ -46504,7 +46509,9 @@ package android.telephony {
     method @Deprecated public String iccTransmitApduBasicChannel(int, int, int, int, int, String);
     method @Deprecated public String iccTransmitApduLogicalChannel(int, int, int, int, int, int, String);
     method public boolean isConcurrentVoiceAndDataSupported();
+    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.READ_PHONE_STATE, "android.permission.READ_PRIVILEGED_PHONE_STATE"}) public boolean isDataConnectionAllowed();
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.MODIFY_PHONE_STATE}) public boolean isDataEnabled();
+    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.READ_PHONE_STATE}) public boolean isDataEnabledForReason(int);
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.READ_PHONE_STATE}) public boolean isDataRoamingEnabled();
     method public boolean isEmergencyNumber(@NonNull String);
     method public boolean isHearingAidCompatibilitySupported();
@@ -46526,6 +46533,7 @@ package android.telephony {
     method @RequiresPermission(android.Manifest.permission.CALL_PHONE) public void sendUssdRequest(String, android.telephony.TelephonyManager.UssdResponseCallback, android.os.Handler);
     method public void sendVisualVoicemailSms(String, int, String, android.app.PendingIntent);
     method @Deprecated @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public void setDataEnabled(boolean);
+    method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public void setDataEnabledForReason(int, boolean);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public int setForbiddenPlmns(@NonNull java.util.List<java.lang.String>);
     method public boolean setLine1NumberForDisplay(String, String);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public void setNetworkSelectionModeAutomatic();
@@ -46573,6 +46581,10 @@ package android.telephony {
     field public static final int DATA_CONNECTING = 1; // 0x1
     field public static final int DATA_DISCONNECTED = 0; // 0x0
     field public static final int DATA_DISCONNECTING = 4; // 0x4
+    field public static final int DATA_ENABLED_REASON_CARRIER = 2; // 0x2
+    field public static final int DATA_ENABLED_REASON_POLICY = 1; // 0x1
+    field public static final int DATA_ENABLED_REASON_THERMAL = 3; // 0x3
+    field public static final int DATA_ENABLED_REASON_USER = 0; // 0x0
     field public static final int DATA_SUSPENDED = 3; // 0x3
     field public static final int DATA_UNKNOWN = -1; // 0xffffffff
     field public static final String EXTRA_ACTIVE_SIM_SUPPORTED_COUNT = "android.telephony.extra.ACTIVE_SIM_SUPPORTED_COUNT";
