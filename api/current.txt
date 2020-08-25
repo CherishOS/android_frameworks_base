@@ -11617,6 +11617,16 @@ package android.content.pm {
     field public int version;
   }
 
+  public final class FileChecksum implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getKind();
+    method @Nullable public java.security.cert.Certificate getSourceCertificate() throws java.security.cert.CertificateException;
+    method @Nullable public String getSplitName();
+    method @NonNull public byte[] getValue();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.content.pm.FileChecksum> CREATOR;
+  }
+
   public final class InstallSourceInfo implements android.os.Parcelable {
     method public int describeContents();
     method @Nullable public String getInitiatingPackageName();
@@ -11992,6 +12002,7 @@ package android.content.pm {
     method @Nullable public abstract android.graphics.drawable.Drawable getApplicationLogo(@NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
     method @NonNull public CharSequence getBackgroundPermissionOptionLabel();
     method @Nullable public abstract android.content.pm.ChangedPackages getChangedPackages(@IntRange(from=0) int);
+    method public void getChecksums(@NonNull String, boolean, int, @Nullable java.util.List<java.security.cert.Certificate>, @NonNull android.content.IntentSender) throws java.security.cert.CertificateEncodingException, java.io.IOException, android.content.pm.PackageManager.NameNotFoundException;
     method public abstract int getComponentEnabledSetting(@NonNull android.content.ComponentName);
     method @NonNull public abstract android.graphics.drawable.Drawable getDefaultActivityIcon();
     method @Nullable public abstract android.graphics.drawable.Drawable getDrawable(@NonNull String, @DrawableRes int, @Nullable android.content.pm.ApplicationInfo);
@@ -12082,6 +12093,7 @@ package android.content.pm {
     field public static final int COMPONENT_ENABLED_STATE_DISABLED_USER = 3; // 0x3
     field public static final int COMPONENT_ENABLED_STATE_ENABLED = 1; // 0x1
     field public static final int DONT_KILL_APP = 1; // 0x1
+    field public static final String EXTRA_CHECKSUMS = "android.content.pm.extra.CHECKSUMS";
     field public static final String EXTRA_VERIFICATION_ID = "android.content.pm.extra.VERIFICATION_ID";
     field public static final String EXTRA_VERIFICATION_RESULT = "android.content.pm.extra.VERIFICATION_RESULT";
     field public static final String FEATURE_ACTIVITIES_ON_SECONDARY_DISPLAYS = "android.software.activities_on_secondary_displays";
@@ -12236,6 +12248,8 @@ package android.content.pm {
     field public static final int MATCH_SYSTEM_ONLY = 1048576; // 0x100000
     field public static final int MATCH_UNINSTALLED_PACKAGES = 8192; // 0x2000
     field public static final long MAXIMUM_VERIFICATION_TIMEOUT = 3600000L; // 0x36ee80L
+    field public static final int PARTIAL_MERKLE_ROOT_1M_SHA256 = 32; // 0x20
+    field public static final int PARTIAL_MERKLE_ROOT_1M_SHA512 = 64; // 0x40
     field public static final int PERMISSION_DENIED = -1; // 0xffffffff
     field public static final int PERMISSION_GRANTED = 0; // 0x0
     field public static final int SIGNATURE_FIRST_NOT_SIGNED = -1; // 0xffffffff
@@ -12245,9 +12259,16 @@ package android.content.pm {
     field public static final int SIGNATURE_SECOND_NOT_SIGNED = -2; // 0xfffffffe
     field public static final int SIGNATURE_UNKNOWN_PACKAGE = -4; // 0xfffffffc
     field public static final int SYNCHRONOUS = 2; // 0x2
+    field @Nullable public static final java.util.List<java.security.cert.Certificate> TRUST_ALL;
+    field @NonNull public static final java.util.List<java.security.cert.Certificate> TRUST_NONE;
     field public static final int VERIFICATION_ALLOW = 1; // 0x1
     field public static final int VERIFICATION_REJECT = -1; // 0xffffffff
     field public static final int VERSION_CODE_HIGHEST = -1; // 0xffffffff
+    field public static final int WHOLE_MD5 = 2; // 0x2
+    field public static final int WHOLE_MERKLE_ROOT_4K_SHA256 = 1; // 0x1
+    field public static final int WHOLE_SHA1 = 4; // 0x4
+    field public static final int WHOLE_SHA256 = 8; // 0x8
+    field public static final int WHOLE_SHA512 = 16; // 0x10
   }
 
   public static class PackageManager.NameNotFoundException extends android.util.AndroidException {
