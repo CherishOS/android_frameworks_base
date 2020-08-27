@@ -6116,6 +6116,11 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_CARRIER_FONT_STYLE = "status_bar_carrier_font_style";
+		
+		/**
+         * @hide
+         */
+        public static final String BRIGHTNESS_SLIDER_STYLE = "brightness_slider_style";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
@@ -6329,6 +6334,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(HEADS_UP_STOPLIST_VALUES);
             PRIVATE_SETTINGS.add(HEADS_UP_BLACKLIST_VALUES);
             PRIVATE_SETTINGS.add(LOCKSCREEN_PIN_SCRAMBLE_LAYOUT);
+			 PRIVATE_SETTINGS.add(BRIGHTNESS_SLIDER_STYLE);
         }
 
         /**
