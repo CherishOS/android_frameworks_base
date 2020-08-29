@@ -253,6 +253,10 @@ public class AmbientDisplayConfiguration {
         return Settings.Secure.getIntForUser(mContext.getContentResolver(),
             Settings.Secure.DOZE_ON_CHARGE, 0, user) == 1;
     }
+	
+	private boolean boolSettingSystem(String name, int user, int def) {
+        return Settings.System.getIntForUser(mContext.getContentResolver(), name, def, user) != 0;
+    }
 
     private boolean alwaysOnChargingEnabled(int user) {
         if (alwaysOnChargingEnabledSetting(user)) {

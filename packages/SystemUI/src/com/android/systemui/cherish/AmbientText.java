@@ -50,6 +50,8 @@ import androidx.palette.graphics.Palette;
 import com.android.settingslib.Utils;
 import com.android.systemui.R;
 
+import java.util.Random;
+
 public class AmbientText extends FrameLayout {
    private static final boolean DEBUG = false;
    private static final String TAG = "AmbientText";
@@ -502,6 +504,9 @@ public class AmbientText extends FrameLayout {
                        Settings.System.AMBIENT_TEXT_COLOR, 0xFF3980FF,
                        UserHandle.USER_CURRENT);
                break;
+           case 3:
+               color = getRandomColor();
+               break;
        }
 
        if (mEnable) {
@@ -544,4 +549,8 @@ public class AmbientText extends FrameLayout {
        mTextAnimator.reverse();
    }
 
+    public int getRandomColor(){
+    Random rnd = new Random();
+       return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+    }
 }
