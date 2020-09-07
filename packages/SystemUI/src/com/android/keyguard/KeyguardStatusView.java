@@ -48,6 +48,7 @@ import com.android.keyguard.clock.CustomAnalogClock;
 import com.android.keyguard.clock.CustomTextClock;
 import com.android.systemui.Dependency;
 import com.android.systemui.R;
+import com.android.keyguard.clock.SmallClockPosition;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 
 import java.io.FileDescriptor;
@@ -101,6 +102,7 @@ public class KeyguardStatusView extends GridLayout implements
     // Date styles paddings
     private int mDateVerPadding;
     private int mDateHorPadding;
+    private final SmallClockPosition mClockPosition;
 
     private KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
@@ -187,6 +189,7 @@ public class KeyguardStatusView extends GridLayout implements
         mIActivityManager = ActivityManager.getService();
         mLockPatternUtils = new LockPatternUtils(getContext());
         mHandler = new Handler();
+        mClockPosition = new SmallClockPosition(getResources());
         onDensityOrFontScaleChanged();
     }
 
@@ -538,7 +541,9 @@ public class KeyguardStatusView extends GridLayout implements
      * @return Y position of clock.
      */
     public int getClockPreferredY(int totalHeight) {
-        return mClockView.getPreferredY(totalHeight);
+        /* If using the bigger Sammy Clock, take into account lock icon and statusbar height and padding */
+        return (mClockSelection == 4/*Sammy Clock*/) ? mClockPosition.getPreferredY()
+                : mClockView.getPreferredY(totalHeight) /*totalHeight/2*/;
     }
 
     private void updateLogoutView() {
