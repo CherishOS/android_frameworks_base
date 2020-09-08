@@ -26,6 +26,7 @@ import com.android.systemui.qs.tiles.AODTile;
 import com.android.systemui.qs.tiles.AirplaneModeTile;
 import com.android.systemui.qs.tiles.AlarmTile;
 import com.android.systemui.qs.tiles.AmbientDisplayTile;
+import com.android.systemui.qs.tiles.AntiFlickerTile;
 import com.android.systemui.qs.tiles.BluetoothTile;
 import com.android.systemui.qs.tiles.CaffeineTile;
 import com.android.systemui.qs.tiles.CameraToggleTile;
@@ -71,6 +72,7 @@ import com.android.systemui.util.leak.GarbageMonitor;
 
 import org.pixelexperience.systemui.qs.tiles.BatterySaverTileGoogle;
 import org.pixelexperience.systemui.qs.tiles.ReverseChargingTile;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 
@@ -132,7 +134,8 @@ public class QSFactoryImplGoogle extends QSFactoryImpl {
             Provider<PowerShareTile> powerShareTileProvider,
             Provider<CompassTile> compassTileProvider,
             Provider<LiveDisplayTile> liveDisplayTileProvider,
-            Provider<ReadingModeTile> readingModeTileProvider) {
+            Provider<ReadingModeTile> readingModeTileProvider,
+            Provider<AntiFlickerTile> antiFlickerTileProvider) {
         super(qsHostLazy,
                 customTileBuilderProvider,
                 wifiTileProvider,
@@ -181,7 +184,8 @@ public class QSFactoryImplGoogle extends QSFactoryImpl {
                 powerShareTileProvider,
                 compassTileProvider,
                 liveDisplayTileProvider,
-                readingModeTileProvider);
+                readingModeTileProvider,
+                antiFlickerTileProvider);
         mReverseChargingTileProvider = reverseChargingTileProvider;
         mBatterySaverTileGoogleProvider = batterySaverTileGoogleProvider;
     }
