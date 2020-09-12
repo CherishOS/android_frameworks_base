@@ -38,6 +38,8 @@ import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.pocket.IPocketCallback;
+import android.pocket.PocketManager;
 import android.provider.Settings;
 import android.net.Uri;
 import android.view.Display;
@@ -199,6 +201,7 @@ public class FODCircleView extends ImageView{
             if (mFODIcon != null) {
                 mFODIcon.setIsKeyguard(mIsKeyguard);
             }
+            handlePocketManagerCallback(showing);
         }
 
         @Override
@@ -251,6 +254,37 @@ public class FODCircleView extends ImageView{
     };
 
     private FodGestureSettingsObserver mFodGestureSettingsObserver;
+	
+	private void handlePocketManagerCallback(boolean keyguardShowing){
+        if (!keyguardShowing){
+            if (mPocketCallbackAdded){
+                mPocketCallbackAdded = false;
+                mPocketManager.removeCallback(mPocketCallback);
+            }
+        }else{
+            if (!mPocketCallbackAdded){
+                mPocketCallbackAdded = true;
+                mPocketManager.addCallback(mPocketCallback);
+            }
+        }
+    }
+	
+	private PocketManager mPocketManager;
+    private boolean mIsDeviceInPocket;
+    private boolean mPocketCallbackAdded = false;
+    private final IPocketCallback mPocketCallback = new IPocketCallback.Stub() {
+
+        @Override
+        public void onStateChanged(boolean isDeviceInPocket, int reason) {
+            boolean wasDeviceInPocket = mIsDeviceInPocket;
+            if (reason == PocketManager.REASON_SENSOR) {
+                mIsDeviceInPocket = isDeviceInPocket;
+            } else {
+                mIsDeviceInPocket = false;
+            }
+        }
+
+    };
 	
     public FODCircleView(Context context) {
         super(context);
@@ -336,6 +370,9 @@ public class FODCircleView extends ImageView{
 
         mUpdateMonitor = Dependency.get(KeyguardUpdateMonitor.class);
         mUpdateMonitor.registerCallback(mMonitorCallback);
+		
+		// Pocket
+        mPocketManager = (PocketManager) context.getSystemService(Context.POCKET_SERVICE);
 		
 		if (context.getResources().getBoolean(
             com.android.internal.R.bool.config_supportsScreenOffInDisplayFingerprint)){
@@ -506,7 +543,7 @@ public class FODCircleView extends ImageView{
     }
 
     public void showCircle() {
-        if (mTouchedOutside) return;
+        if (mTouchedOutside || (mIsKeyguard && mIsDeviceInPocket)) return;
         mIsCircleShowing = true;
 
         setKeepScreenOn(true);

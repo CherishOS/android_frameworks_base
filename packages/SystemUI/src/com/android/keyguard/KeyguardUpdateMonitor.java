@@ -129,6 +129,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.android.internal.util.custom.faceunlock.FaceUnlockUtils;
+import com.android.internal.util.cherish.FodUtils;
 
 /**
  * Watches for updates that may be interesting to the keyguard, and provides
@@ -333,6 +334,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
             mHandler.obtainMessage(MSG_RINGER_MODE_CHANGED, ringer, 0).sendToTarget();
         }
     };
+
+    private boolean mHasFod;
 
     private PocketManager mPocketManager;
     private boolean mIsDeviceInPocket;
@@ -713,6 +716,9 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
 
     private void handleFingerprintHelp(int msgId, String helpString) {
         Assert.isMainThread();
+        if (mIsDeviceInPocket && mHasFod){
+            return;
+        }
         for (int i = 0; i < mCallbacks.size(); i++) {
             KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
             if (cb != null) {
@@ -1879,6 +1885,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
         }
 		mSettingsObserver = new SettingsObserver(mHandler);
         mSettingsObserver.observe();
+        mHasFod = FodUtils.hasFodSupport(mContext);
     }
 
     private final UserSwitchObserver mUserSwitchObserver = new UserSwitchObserver() {
@@ -2009,7 +2016,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
                 shouldListenForFingerprintAssistant() || (mKeyguardOccluded && mIsDreaming))
                 && !mSwitchingUser && !isFingerprintDisabled(getCurrentUser())
                 && (!mKeyguardGoingAway || !mDeviceInteractive) && mIsPrimaryUser
-                && allowedOnBouncer && !mIsDeviceInPocket;
+                && allowedOnBouncer && (mHasFod || !mIsDeviceInPocket);
         return shouldListen;
     }
 
