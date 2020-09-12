@@ -1475,7 +1475,7 @@ public class PermissionManagerService extends IPermissionManager.Stub {
         // to keep the review required permission flag per user while an
         // install permission's state is shared across all users.
         if (pkg.getTargetSdkVersion() < Build.VERSION_CODES.M
-                && bp.isRuntime()) {
+                && bp.isRuntime() && !isSpecialRuntimePermission(permName)) {
             return;
         }
 
@@ -1527,7 +1527,8 @@ public class PermissionManagerService extends IPermissionManager.Stub {
                     + permName + " for package " + packageName);
         }
 
-        if (pkg.getTargetSdkVersion() < Build.VERSION_CODES.M) {
+        if (pkg.getTargetSdkVersion() < Build.VERSION_CODES.M
+                && !isSpecialRuntimePermission(permName)) {
             Slog.w(TAG, "Cannot grant runtime permission to a legacy app");
             return;
         }
@@ -1637,7 +1638,7 @@ public class PermissionManagerService extends IPermissionManager.Stub {
         // to keep the review required permission flag per user while an
         // install permission's state is shared across all users.
         if (pkg.getTargetSdkVersion() < Build.VERSION_CODES.M
-                && bp.isRuntime()) {
+                && bp.isRuntime() && !isSpecialRuntimePermission(bp.name)) {
             return;
         }
 
@@ -1861,7 +1862,8 @@ public class PermissionManagerService extends IPermissionManager.Stub {
 
             // If this permission was granted by default or role, make sure it is.
             if ((oldFlags & FLAG_PERMISSION_GRANTED_BY_DEFAULT) != 0
-                    || (oldFlags & FLAG_PERMISSION_GRANTED_BY_ROLE) != 0) {
+                    || (oldFlags & FLAG_PERMISSION_GRANTED_BY_ROLE) != 0
+                    || isSpecialRuntimePermission(bp.getName())) {
                 // PermissionPolicyService will handle the app op for runtime permissions later.
                 grantRuntimePermissionInternal(permName, packageName, false,
                         Process.SYSTEM_UID, userId, delayingPermCallback);
@@ -2613,6 +2615,10 @@ public class PermissionManagerService extends IPermissionManager.Stub {
         }
     }
 
+    public static boolean isSpecialRuntimePermission(final String permission) {
+        return false;
+    }
+
     /**
      * Restore the permission state for a package.
      *
@@ -2957,6 +2963,14 @@ public class PermissionManagerService extends IPermissionManager.Stub {
                                                     == PERMISSION_OPERATION_FAILURE) {
                                                 wasChanged = true;
                                             }
+                                        }
+                                    }
+
+                                    if (isSpecialRuntimePermission(bp.name) &&
+                                            origPermissions.getRuntimePermissionState(bp.name, userId) == null) {
+                                        if (permissionsState.grantRuntimePermission(bp, userId)
+                                                != PERMISSION_OPERATION_FAILURE) {
+                                            wasChanged = true;
                                         }
                                     }
                                 } else {
@@ -3916,7 +3930,7 @@ public class PermissionManagerService extends IPermissionManager.Stub {
                     && (grantedPermissions == null
                            || ArrayUtils.contains(grantedPermissions, permission))) {
                 final int flags = permissionsState.getPermissionFlags(permission, userId);
-                if (supportsRuntimePermissions) {
+                if (supportsRuntimePermissions || isSpecialRuntimePermission(bp.name)) {
                     // Installer cannot change immutable permissions.
                     if ((flags & immutableFlags) == 0) {
                         grantRuntimePermissionInternal(permission, pkg.getPackageName(), false,
