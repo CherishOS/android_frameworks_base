@@ -23907,6 +23907,7 @@ package android.location {
     method @NonNull public java.util.List<java.lang.String> getAllProviders();
     method @Nullable public String getBestProvider(@NonNull android.location.Criteria, boolean);
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void getCurrentLocation(@NonNull String, @Nullable android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.location.Location>);
+    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void getCurrentLocation(@NonNull String, @NonNull android.location.LocationRequest, @Nullable android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.location.Location>);
     method @NonNull public android.location.GnssCapabilities getGnssCapabilities();
     method @Nullable public String getGnssHardwareModelName();
     method public int getGnssYearOfHardware();
@@ -23941,6 +23942,8 @@ package android.location {
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestLocationUpdates(long, float, @NonNull android.location.Criteria, @NonNull java.util.concurrent.Executor, @NonNull android.location.LocationListener);
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestLocationUpdates(@NonNull String, long, float, @NonNull android.app.PendingIntent);
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestLocationUpdates(long, float, @NonNull android.location.Criteria, @NonNull android.app.PendingIntent);
+    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestLocationUpdates(@NonNull String, @NonNull android.location.LocationRequest, @NonNull java.util.concurrent.Executor, @NonNull android.location.LocationListener);
+    method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestLocationUpdates(@NonNull String, @NonNull android.location.LocationRequest, @NonNull android.app.PendingIntent);
     method @Deprecated @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestSingleUpdate(@NonNull String, @NonNull android.location.LocationListener, @Nullable android.os.Looper);
     method @Deprecated @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestSingleUpdate(@NonNull android.location.Criteria, @NonNull android.location.LocationListener, @Nullable android.os.Looper);
     method @Deprecated @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}) public void requestSingleUpdate(@NonNull String, @NonNull android.app.PendingIntent);
@@ -23982,6 +23985,30 @@ package android.location {
     field @Deprecated public static final int AVAILABLE = 2; // 0x2
     field @Deprecated public static final int OUT_OF_SERVICE = 0; // 0x0
     field @Deprecated public static final int TEMPORARILY_UNAVAILABLE = 1; // 0x1
+  }
+
+  public final class LocationRequest implements android.os.Parcelable {
+    method public int describeContents();
+    method public long getDurationMillis();
+    method public long getIntervalMillis();
+    method public int getMaxUpdates();
+    method public float getMinUpdateDistanceMeters();
+    method public long getMinUpdateIntervalMillis();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.location.LocationRequest> CREATOR;
+    field public static final long PASSIVE_INTERVAL = 9223372036854775807L; // 0x7fffffffffffffffL
+  }
+
+  public static final class LocationRequest.Builder {
+    ctor public LocationRequest.Builder(long);
+    ctor public LocationRequest.Builder(@NonNull android.location.LocationRequest);
+    method @NonNull public android.location.LocationRequest build();
+    method @NonNull public android.location.LocationRequest.Builder clearMinUpdateIntervalMillis();
+    method @NonNull public android.location.LocationRequest.Builder setDurationMillis(@IntRange(from=1) long);
+    method @NonNull public android.location.LocationRequest.Builder setIntervalMillis(@IntRange(from=0) long);
+    method @NonNull public android.location.LocationRequest.Builder setMaxUpdates(@IntRange(from=1, to=java.lang.Integer.MAX_VALUE) int);
+    method @NonNull public android.location.LocationRequest.Builder setMinUpdateDistanceMeters(@FloatRange(from=0, to=java.lang.Float.MAX_VALUE) float);
+    method @NonNull public android.location.LocationRequest.Builder setMinUpdateIntervalMillis(@IntRange(from=0) long);
   }
 
   public interface OnNmeaMessageListener {
