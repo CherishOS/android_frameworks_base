@@ -227,4 +227,5 @@ oneway interface IStatusBar
      * display.
      */
     void suppressAmbientDisplay(boolean suppress);
+    void toggleCameraFlash();
 }
