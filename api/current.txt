@@ -11359,6 +11359,7 @@ package android.content.pm {
     field public static final int CONFIG_COLOR_MODE = 16384; // 0x4000
     field public static final int CONFIG_DENSITY = 4096; // 0x1000
     field public static final int CONFIG_FONT_SCALE = 1073741824; // 0x40000000
+    field public static final int CONFIG_FORCE_BOLD_TEXT = 268435456; // 0x10000000
     field public static final int CONFIG_KEYBOARD = 16; // 0x10
     field public static final int CONFIG_KEYBOARD_HIDDEN = 32; // 0x20
     field public static final int CONFIG_LAYOUT_DIRECTION = 8192; // 0x2000
@@ -11451,6 +11452,7 @@ package android.content.pm {
     method public int describeContents();
     method public int getKind();
     method @Nullable public java.security.cert.Certificate getSourceCertificate() throws java.security.cert.CertificateException;
+    method @Nullable public String getSourcePackageName();
     method @Nullable public String getSplitName();
     method @NonNull public byte[] getValue();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
@@ -11559,6 +11561,7 @@ package android.content.pm {
   }
 
   public final class Checksum implements android.os.Parcelable {
+    ctor public Checksum(int, @NonNull byte[]);
     method public int describeContents();
     method public int getKind();
     method @NonNull public byte[] getValue();
@@ -11566,9 +11569,9 @@ package android.content.pm {
     field @NonNull public static final android.os.Parcelable.Creator<android.content.pm.Checksum> CREATOR;
     field public static final int PARTIAL_MERKLE_ROOT_1M_SHA256 = 32; // 0x20
     field public static final int PARTIAL_MERKLE_ROOT_1M_SHA512 = 64; // 0x40
-    field public static final int WHOLE_MD5 = 2; // 0x2
+    field @Deprecated public static final int WHOLE_MD5 = 2; // 0x2
     field public static final int WHOLE_MERKLE_ROOT_4K_SHA256 = 1; // 0x1
-    field public static final int WHOLE_SHA1 = 4; // 0x4
+    field @Deprecated public static final int WHOLE_SHA1 = 4; // 0x4
     field public static final int WHOLE_SHA256 = 8; // 0x8
     field public static final int WHOLE_SHA512 = 16; // 0x10
   }
@@ -11864,7 +11867,7 @@ package android.content.pm {
 
   public static class PackageInstaller.Session implements java.io.Closeable {
     method public void abandon();
-    method public void addChecksums(@NonNull String, @NonNull java.util.List<android.content.pm.Checksum>) throws java.io.IOException;
+    method @Deprecated public void addChecksums(@NonNull String, @NonNull java.util.List<android.content.pm.Checksum>) throws java.io.IOException;
     method public void addChildSessionId(int);
     method public void close();
     method public void commit(@NonNull android.content.IntentSender);
@@ -12680,6 +12683,9 @@ package android.content.res {
     field public static final int COLOR_MODE_WIDE_COLOR_GAMUT_YES = 2; // 0x2
     field @NonNull public static final android.os.Parcelable.Creator<android.content.res.Configuration> CREATOR;
     field public static final int DENSITY_DPI_UNDEFINED = 0; // 0x0
+    field public static final int FORCE_BOLD_TEXT_NO = 1; // 0x1
+    field public static final int FORCE_BOLD_TEXT_UNDEFINED = 0; // 0x0
+    field public static final int FORCE_BOLD_TEXT_YES = 2; // 0x2
     field public static final int HARDKEYBOARDHIDDEN_NO = 1; // 0x1
     field public static final int HARDKEYBOARDHIDDEN_UNDEFINED = 0; // 0x0
     field public static final int HARDKEYBOARDHIDDEN_YES = 2; // 0x2
@@ -12746,6 +12752,7 @@ package android.content.res {
     field public int colorMode;
     field public int densityDpi;
     field public float fontScale;
+    field public int forceBoldText;
     field public int hardKeyboardHidden;
     field public int keyboard;
     field public int keyboardHidden;
@@ -15186,6 +15193,20 @@ package android.graphics {
 
   public class PaintFlagsDrawFilter extends android.graphics.DrawFilter {
     ctor public PaintFlagsDrawFilter(int, int);
+  }
+
+  public final class ParcelableColorSpace extends android.graphics.ColorSpace implements android.os.Parcelable {
+    ctor public ParcelableColorSpace(@NonNull android.graphics.ColorSpace);
+    method public int describeContents();
+    method @NonNull public float[] fromXyz(@NonNull float[]);
+    method @NonNull public android.graphics.ColorSpace getColorSpace();
+    method public float getMaxValue(int);
+    method public float getMinValue(int);
+    method public static boolean isParcelable(@NonNull android.graphics.ColorSpace);
+    method public boolean isWideGamut();
+    method @NonNull public float[] toXyz(@NonNull float[]);
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.graphics.ParcelableColorSpace> CREATOR;
   }
 
   public class Path {
@@ -44287,54 +44308,8 @@ package android.service.textservice {
 
 package android.service.voice {
 
-  public class AlwaysOnHotwordDetector {
-    method public android.content.Intent createEnrollIntent();
-    method public android.content.Intent createReEnrollIntent();
-    method public android.content.Intent createUnEnrollIntent();
-    method public int getParameter(int);
-    method public int getSupportedAudioCapabilities();
-    method public int getSupportedRecognitionModes();
-    method @Nullable public android.service.voice.AlwaysOnHotwordDetector.ModelParamRange queryParameter(int);
-    method public int setParameter(int, int);
-    method public boolean startRecognition(int);
-    method public boolean stopRecognition();
-    field public static final int AUDIO_CAPABILITY_ECHO_CANCELLATION = 1; // 0x1
-    field public static final int AUDIO_CAPABILITY_NOISE_SUPPRESSION = 2; // 0x2
-    field public static final int MODEL_PARAM_THRESHOLD_FACTOR = 0; // 0x0
-    field public static final int RECOGNITION_FLAG_ALLOW_MULTIPLE_TRIGGERS = 2; // 0x2
-    field public static final int RECOGNITION_FLAG_CAPTURE_TRIGGER_AUDIO = 1; // 0x1
-    field public static final int RECOGNITION_FLAG_ENABLE_AUDIO_ECHO_CANCELLATION = 4; // 0x4
-    field public static final int RECOGNITION_FLAG_ENABLE_AUDIO_NOISE_SUPPRESSION = 8; // 0x8
-    field public static final int RECOGNITION_MODE_USER_IDENTIFICATION = 2; // 0x2
-    field public static final int RECOGNITION_MODE_VOICE_TRIGGER = 1; // 0x1
-    field public static final int STATE_HARDWARE_UNAVAILABLE = -2; // 0xfffffffe
-    field public static final int STATE_KEYPHRASE_ENROLLED = 2; // 0x2
-    field public static final int STATE_KEYPHRASE_UNENROLLED = 1; // 0x1
-    field @Deprecated public static final int STATE_KEYPHRASE_UNSUPPORTED = -1; // 0xffffffff
-  }
-
-  public abstract static class AlwaysOnHotwordDetector.Callback {
-    ctor public AlwaysOnHotwordDetector.Callback();
-    method public abstract void onAvailabilityChanged(int);
-    method public abstract void onDetected(@NonNull android.service.voice.AlwaysOnHotwordDetector.EventPayload);
-    method public abstract void onError();
-    method public abstract void onRecognitionPaused();
-    method public abstract void onRecognitionResumed();
-  }
-
-  public static class AlwaysOnHotwordDetector.EventPayload {
-    method @Nullable public android.media.AudioFormat getCaptureAudioFormat();
-    method @Nullable public byte[] getTriggerAudio();
-  }
-
-  public static final class AlwaysOnHotwordDetector.ModelParamRange {
-    method public int getEnd();
-    method public int getStart();
-  }
-
   public class VoiceInteractionService extends android.app.Service {
     ctor public VoiceInteractionService();
-    method public final android.service.voice.AlwaysOnHotwordDetector createAlwaysOnHotwordDetector(String, java.util.Locale, android.service.voice.AlwaysOnHotwordDetector.Callback);
     method public int getDisabledShowContext();
     method public static boolean isActiveService(android.content.Context, android.content.ComponentName);
     method public android.os.IBinder onBind(android.content.Intent);
