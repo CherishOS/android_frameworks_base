@@ -95,5 +95,6 @@ public class SystemSettings {
         Settings.System.ENABLE_CONDITIONS,
         Settings.System.ENABLE_SUGGESTIONS,
         Settings.System.NOTIFICATION_HEADERS,
+        Settings.System.LOCKSCREEN_MEDIA_ART,
     };
 }

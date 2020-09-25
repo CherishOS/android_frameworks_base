@@ -4955,6 +4955,11 @@ public final class Settings {
         public static final String DOUBLE_TAP_SLEEP_LOCKSCREEN = "double_tap_sleep_lockscreen";
 
         /**
+         * @hide
+         */
+        public static final String LOCKSCREEN_MEDIA_ART = "lockscreen_media_art";
+
+        /**
          * Three Finger Gesture from Oppo
          * @hide
          */
@@ -5653,6 +5658,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(ENABLE_CONDITIONS);
             PRIVATE_SETTINGS.add(ENABLE_SUGGESTIONS);
             PRIVATE_SETTINGS.add(FORCE_FULLSCREEN_CUTOUT_APPS);
+            PRIVATE_SETTINGS.add(LOCKSCREEN_MEDIA_ART);
         }
 
         /**

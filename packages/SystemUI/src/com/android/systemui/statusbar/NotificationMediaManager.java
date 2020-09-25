@@ -43,6 +43,10 @@ import android.util.ArraySet;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.database.ContentObserver;
+import android.content.ContentResolver;
+import android.os.Handler;
+import android.provider.Settings;
 
 import com.android.internal.config.sysui.SystemUiDeviceConfigFlags;
 import com.android.internal.statusbar.NotificationVisibility;
@@ -133,6 +137,36 @@ public class NotificationMediaManager implements Dumpable {
     private BackDropView mBackdrop;
     private ImageView mBackdropFront;
     private ImageView mBackdropBack;
+
+    private boolean mLockscreenArt;
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            // Observe all users' changes
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_MEDIA_ART), false, this,
+                    UserHandle.USER_ALL);
+            updateSettings();
+        }
+
+        @Override 
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
+    }
+
+    public void updateSettings() {
+        ContentResolver resolver = mContext.getContentResolver();
+        mLockscreenArt =  Settings.System.getIntForUser(resolver,
+                Settings.System.LOCKSCREEN_MEDIA_ART, 1,
+                UserHandle.USER_CURRENT) == 1;
+        
+    }
 
     private boolean mShowCompactMediaSeekbar;
     private final DeviceConfig.OnPropertiesChangedListener mPropertiesChangedListener =
@@ -246,6 +280,9 @@ public class NotificationMediaManager implements Dumpable {
         deviceConfig.addOnPropertiesChangedListener(DeviceConfig.NAMESPACE_SYSTEMUI,
                 mContext.getMainExecutor(),
                 mPropertiesChangedListener);
+        Handler mHandler = new Handler();
+        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
+        settingsObserver.observe();
     }
 
     /**
@@ -519,7 +556,7 @@ public class NotificationMediaManager implements Dumpable {
             }
             mProcessArtworkTasks.clear();
         }
-        if (artworkBitmap != null && !Utils.useQsMediaPlayer(mContext)) {
+        if (artworkBitmap != null && mLockscreenArt) {
             mProcessArtworkTasks.add(new ProcessArtworkTask(this, metaDataChanged,
                     allowEnterAnimation).execute(artworkBitmap));
         } else {
