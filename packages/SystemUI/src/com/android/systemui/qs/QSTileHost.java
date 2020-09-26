@@ -54,7 +54,6 @@ import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.statusbar.phone.StatusBarIconController;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.tuner.TunerService.Tunable;
-import com.android.systemui.util.leak.GarbageMonitor;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -476,10 +475,6 @@ public class QSTileHost implements QSHost, Tunable, PluginListener<QSFactory>, D
         final String defaultTileList = res.getString(R.string.quick_settings_tiles_default);
 
         tiles.addAll(Arrays.asList(defaultTileList.split(",")));
-        if (Build.IS_DEBUGGABLE
-                && GarbageMonitor.ADD_MEMORY_TILE_TO_DEFAULT_ON_DEBUGGABLE_BUILDS) {
-            tiles.add(GarbageMonitor.MemoryTile.TILE_SPEC);
-        }
         return tiles;
     }
 
