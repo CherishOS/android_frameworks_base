@@ -16,7 +16,12 @@
 
 package android.widget;
 
+import static android.view.OnReceiveContentCallback.Payload.FLAG_CONVERT_TO_PLAIN_TEXT;
+import static android.view.OnReceiveContentCallback.Payload.SOURCE_AUTOFILL;
+import static android.view.OnReceiveContentCallback.Payload.SOURCE_DRAG_AND_DROP;
+
 import android.annotation.NonNull;
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Context;
 import android.text.Editable;
@@ -24,54 +29,45 @@ import android.text.Selection;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.OnReceiveContentCallback;
+import android.view.OnReceiveContentCallback.Payload.Flags;
+import android.view.OnReceiveContentCallback.Payload.Source;
 
 import java.util.Collections;
 import java.util.Set;
 
 /**
- * Default implementation of {@link RichContentReceiver} for editable {@link TextView} components.
- * This class handles insertion of text (plain text, styled text, HTML, etc) but not images or other
- * rich content. Typically this class will be used as a delegate by custom implementations of
- * {@link RichContentReceiver}, to provide consistent behavior for insertion of text while
- * implementing custom behavior for insertion of other content (images, etc). See
- * {@link TextView#DEFAULT_RICH_CONTENT_RECEIVER}.
- *
- * @hide
+ * Default implementation of {@link android.view.OnReceiveContentCallback} for editable
+ * {@link TextView} components. This class handles insertion of text (plain text, styled text, HTML,
+ * etc) but not images or other content. This class can be used as a base class for an
+ * implementation of {@link android.view.OnReceiveContentCallback} for a {@link TextView}, to
+ * provide consistent behavior for insertion of text.
  */
-final class TextViewRichContentReceiver implements RichContentReceiver<TextView> {
-    static final TextViewRichContentReceiver INSTANCE = new TextViewRichContentReceiver();
-
-    private static final String LOG_TAG = "RichContentReceiver";
+public class TextViewOnReceiveContentCallback implements OnReceiveContentCallback<TextView> {
+    private static final String LOG_TAG = "OnReceiveContentCallback";
 
     private static final Set<String> MIME_TYPES_ALL_TEXT = Collections.singleton("text/*");
 
+    @SuppressLint("CallbackMethodName")
+    @NonNull
     @Override
-    public Set<String> getSupportedMimeTypes() {
+    public Set<String> getSupportedMimeTypes(@NonNull TextView view) {
         return MIME_TYPES_ALL_TEXT;
     }
 
     @Override
-    public boolean onReceive(@NonNull TextView textView, @NonNull ClipData clip,
-            @Source int source, @Flags int flags) {
+    public boolean onReceiveContent(@NonNull TextView view, @NonNull Payload payload) {
         if (Log.isLoggable(LOG_TAG, Log.DEBUG)) {
-            StringBuilder sb = new StringBuilder("onReceive: clip=");
-            if (clip.getDescription() == null) {
-                sb.append("null");
-            } else {
-                clip.getDescription().toShortStringTypesOnly(sb);
-            }
-            sb.append(", source=").append(RichContentReceiver.sourceToString(source));
-            sb.append(", flags=").append(RichContentReceiver.flagsToString(flags));
-            Log.d(LOG_TAG, sb.toString());
+            Log.d(LOG_TAG, "onReceive:" + payload);
         }
+        ClipData clip = payload.getClip();
+        @Source int source = payload.getSource();
+        @Flags int flags = payload.getFlags();
         if (source == SOURCE_AUTOFILL) {
-            return onReceiveForAutofill(textView, clip, flags);
+            return onReceiveForAutofill(view, clip, flags);
         }
         if (source == SOURCE_DRAG_AND_DROP) {
-            return onReceiveForDragAndDrop(textView, clip, flags);
-        }
-        if (source == SOURCE_INPUT_METHOD && !supports(clip.getDescription())) {
-            return false;
+            return onReceiveForDragAndDrop(view, clip, flags);
         }
 
         // The code here follows the original paste logic from TextView:
@@ -79,8 +75,8 @@ final class TextViewRichContentReceiver implements RichContentReceiver<TextView>
         // In particular, multiple items within the given ClipData will trigger separate calls to
         // replace/insert. This is to preserve the original behavior with respect to TextWatcher
         // notifications fired from SpannableStringBuilder when replace/insert is called.
-        final Editable editable = (Editable) textView.getText();
-        final Context context = textView.getContext();
+        final Editable editable = (Editable) view.getText();
+        final Context context = view.getContext();
         boolean didFirst = false;
         for (int i = 0; i < clip.getItemCount(); i++) {
             CharSequence itemText;
@@ -100,7 +96,7 @@ final class TextViewRichContentReceiver implements RichContentReceiver<TextView>
                 }
             }
         }
-        return didFirst;
+        return true;
     }
 
     private static void replaceSelection(@NonNull Editable editable,
@@ -128,7 +124,7 @@ final class TextViewRichContentReceiver implements RichContentReceiver<TextView>
             @NonNull ClipData clip, @Flags int flags) {
         final CharSequence text = coerceToText(clip, textView.getContext(), flags);
         if (text.length() == 0) {
-            return false;
+            return true;
         }
         replaceSelection((Editable) textView.getText(), text);
         return true;
