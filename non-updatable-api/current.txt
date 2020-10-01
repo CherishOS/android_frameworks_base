@@ -646,10 +646,10 @@ package android {
     field public static final int font = 16844082; // 0x1010532
     field public static final int fontFamily = 16843692; // 0x10103ac
     field public static final int fontFeatureSettings = 16843959; // 0x10104b7
-    field public static final int fontProviderAuthority = 16844112; // 0x1010550
-    field public static final int fontProviderCerts = 16844125; // 0x101055d
-    field public static final int fontProviderPackage = 16844119; // 0x1010557
-    field public static final int fontProviderQuery = 16844113; // 0x1010551
+    field @Deprecated public static final int fontProviderAuthority = 16844112; // 0x1010550
+    field @Deprecated public static final int fontProviderCerts = 16844125; // 0x101055d
+    field @Deprecated public static final int fontProviderPackage = 16844119; // 0x1010557
+    field @Deprecated public static final int fontProviderQuery = 16844113; // 0x1010551
     field public static final int fontStyle = 16844095; // 0x101053f
     field public static final int fontVariationSettings = 16844144; // 0x1010570
     field public static final int fontWeight = 16844083; // 0x1010533
@@ -38725,62 +38725,62 @@ package android.provider {
     method public final int update(android.net.Uri, android.content.ContentValues, String, String[]);
   }
 
-  public final class FontRequest {
-    ctor public FontRequest(@NonNull String, @NonNull String, @NonNull String);
-    ctor public FontRequest(@NonNull String, @NonNull String, @NonNull String, @NonNull java.util.List<java.util.List<byte[]>>);
-    method public java.util.List<java.util.List<byte[]>> getCertificates();
-    method public String getProviderAuthority();
-    method public String getProviderPackage();
-    method public String getQuery();
+  @Deprecated public final class FontRequest {
+    ctor @Deprecated public FontRequest(@NonNull String, @NonNull String, @NonNull String);
+    ctor @Deprecated public FontRequest(@NonNull String, @NonNull String, @NonNull String, @NonNull java.util.List<java.util.List<byte[]>>);
+    method @Deprecated public java.util.List<java.util.List<byte[]>> getCertificates();
+    method @Deprecated public String getProviderAuthority();
+    method @Deprecated public String getProviderPackage();
+    method @Deprecated public String getQuery();
   }
 
-  public class FontsContract {
-    method public static android.graphics.Typeface buildTypeface(@NonNull android.content.Context, @Nullable android.os.CancellationSignal, @NonNull android.provider.FontsContract.FontInfo[]);
-    method @NonNull public static android.provider.FontsContract.FontFamilyResult fetchFonts(@NonNull android.content.Context, @Nullable android.os.CancellationSignal, @NonNull android.provider.FontRequest) throws android.content.pm.PackageManager.NameNotFoundException;
-    method public static void requestFonts(@NonNull android.content.Context, @NonNull android.provider.FontRequest, @NonNull android.os.Handler, @Nullable android.os.CancellationSignal, @NonNull android.provider.FontsContract.FontRequestCallback);
+  @Deprecated public class FontsContract {
+    method @Deprecated public static android.graphics.Typeface buildTypeface(@NonNull android.content.Context, @Nullable android.os.CancellationSignal, @NonNull android.provider.FontsContract.FontInfo[]);
+    method @Deprecated @NonNull public static android.provider.FontsContract.FontFamilyResult fetchFonts(@NonNull android.content.Context, @Nullable android.os.CancellationSignal, @NonNull android.provider.FontRequest) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @Deprecated public static void requestFonts(@NonNull android.content.Context, @NonNull android.provider.FontRequest, @NonNull android.os.Handler, @Nullable android.os.CancellationSignal, @NonNull android.provider.FontsContract.FontRequestCallback);
   }
 
-  public static final class FontsContract.Columns implements android.provider.BaseColumns {
-    field public static final String FILE_ID = "file_id";
-    field public static final String ITALIC = "font_italic";
-    field public static final String RESULT_CODE = "result_code";
-    field public static final int RESULT_CODE_FONT_NOT_FOUND = 1; // 0x1
-    field public static final int RESULT_CODE_FONT_UNAVAILABLE = 2; // 0x2
-    field public static final int RESULT_CODE_MALFORMED_QUERY = 3; // 0x3
-    field public static final int RESULT_CODE_OK = 0; // 0x0
-    field public static final String TTC_INDEX = "font_ttc_index";
-    field public static final String VARIATION_SETTINGS = "font_variation_settings";
-    field public static final String WEIGHT = "font_weight";
+  @Deprecated public static final class FontsContract.Columns implements android.provider.BaseColumns {
+    field @Deprecated public static final String FILE_ID = "file_id";
+    field @Deprecated public static final String ITALIC = "font_italic";
+    field @Deprecated public static final String RESULT_CODE = "result_code";
+    field @Deprecated public static final int RESULT_CODE_FONT_NOT_FOUND = 1; // 0x1
+    field @Deprecated public static final int RESULT_CODE_FONT_UNAVAILABLE = 2; // 0x2
+    field @Deprecated public static final int RESULT_CODE_MALFORMED_QUERY = 3; // 0x3
+    field @Deprecated public static final int RESULT_CODE_OK = 0; // 0x0
+    field @Deprecated public static final String TTC_INDEX = "font_ttc_index";
+    field @Deprecated public static final String VARIATION_SETTINGS = "font_variation_settings";
+    field @Deprecated public static final String WEIGHT = "font_weight";
   }
 
-  public static class FontsContract.FontFamilyResult {
-    method @NonNull public android.provider.FontsContract.FontInfo[] getFonts();
-    method public int getStatusCode();
-    field public static final int STATUS_OK = 0; // 0x0
-    field public static final int STATUS_REJECTED = 3; // 0x3
-    field public static final int STATUS_UNEXPECTED_DATA_PROVIDED = 2; // 0x2
-    field public static final int STATUS_WRONG_CERTIFICATES = 1; // 0x1
+  @Deprecated public static class FontsContract.FontFamilyResult {
+    method @Deprecated @NonNull public android.provider.FontsContract.FontInfo[] getFonts();
+    method @Deprecated public int getStatusCode();
+    field @Deprecated public static final int STATUS_OK = 0; // 0x0
+    field @Deprecated public static final int STATUS_REJECTED = 3; // 0x3
+    field @Deprecated public static final int STATUS_UNEXPECTED_DATA_PROVIDED = 2; // 0x2
+    field @Deprecated public static final int STATUS_WRONG_CERTIFICATES = 1; // 0x1
   }
 
-  public static class FontsContract.FontInfo {
-    method @Nullable public android.graphics.fonts.FontVariationAxis[] getAxes();
-    method public int getResultCode();
-    method @IntRange(from=0) public int getTtcIndex();
-    method @NonNull public android.net.Uri getUri();
-    method @IntRange(from=1, to=1000) public int getWeight();
-    method public boolean isItalic();
+  @Deprecated public static class FontsContract.FontInfo {
+    method @Deprecated @Nullable public android.graphics.fonts.FontVariationAxis[] getAxes();
+    method @Deprecated public int getResultCode();
+    method @Deprecated @IntRange(from=0) public int getTtcIndex();
+    method @Deprecated @NonNull public android.net.Uri getUri();
+    method @Deprecated @IntRange(from=1, to=1000) public int getWeight();
+    method @Deprecated public boolean isItalic();
   }
 
-  public static class FontsContract.FontRequestCallback {
-    ctor public FontsContract.FontRequestCallback();
-    method public void onTypefaceRequestFailed(int);
-    method public void onTypefaceRetrieved(android.graphics.Typeface);
-    field public static final int FAIL_REASON_FONT_LOAD_ERROR = -3; // 0xfffffffd
-    field public static final int FAIL_REASON_FONT_NOT_FOUND = 1; // 0x1
-    field public static final int FAIL_REASON_FONT_UNAVAILABLE = 2; // 0x2
-    field public static final int FAIL_REASON_MALFORMED_QUERY = 3; // 0x3
-    field public static final int FAIL_REASON_PROVIDER_NOT_FOUND = -1; // 0xffffffff
-    field public static final int FAIL_REASON_WRONG_CERTIFICATES = -2; // 0xfffffffe
+  @Deprecated public static class FontsContract.FontRequestCallback {
+    ctor @Deprecated public FontsContract.FontRequestCallback();
+    method @Deprecated public void onTypefaceRequestFailed(int);
+    method @Deprecated public void onTypefaceRetrieved(android.graphics.Typeface);
+    field @Deprecated public static final int FAIL_REASON_FONT_LOAD_ERROR = -3; // 0xfffffffd
+    field @Deprecated public static final int FAIL_REASON_FONT_NOT_FOUND = 1; // 0x1
+    field @Deprecated public static final int FAIL_REASON_FONT_UNAVAILABLE = 2; // 0x2
+    field @Deprecated public static final int FAIL_REASON_MALFORMED_QUERY = 3; // 0x3
+    field @Deprecated public static final int FAIL_REASON_PROVIDER_NOT_FOUND = -1; // 0xffffffff
+    field @Deprecated public static final int FAIL_REASON_WRONG_CERTIFICATES = -2; // 0xfffffffe
   }
 
   @Deprecated public final class LiveFolders implements android.provider.BaseColumns {
