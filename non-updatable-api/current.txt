@@ -21,6 +21,7 @@ package android {
     field public static final String ACTIVITY_RECOGNITION = "android.permission.ACTIVITY_RECOGNITION";
     field public static final String ADD_VOICEMAIL = "com.android.voicemail.permission.ADD_VOICEMAIL";
     field public static final String ANSWER_PHONE_CALLS = "android.permission.ANSWER_PHONE_CALLS";
+    field public static final String BACKGROUND_CAMERA = "android.permission.BACKGROUND_CAMERA";
     field public static final String BATTERY_STATS = "android.permission.BATTERY_STATS";
     field public static final String BIND_ACCESSIBILITY_SERVICE = "android.permission.BIND_ACCESSIBILITY_SERVICE";
     field public static final String BIND_APPWIDGET = "android.permission.BIND_APPWIDGET";
@@ -129,6 +130,7 @@ package android {
     field public static final String RECEIVE_SMS = "android.permission.RECEIVE_SMS";
     field public static final String RECEIVE_WAP_PUSH = "android.permission.RECEIVE_WAP_PUSH";
     field public static final String RECORD_AUDIO = "android.permission.RECORD_AUDIO";
+    field public static final String RECORD_BACKGROUND_AUDIO = "android.permission.RECORD_BACKGROUND_AUDIO";
     field public static final String REORDER_TASKS = "android.permission.REORDER_TASKS";
     field public static final String REQUEST_COMPANION_RUN_IN_BACKGROUND = "android.permission.REQUEST_COMPANION_RUN_IN_BACKGROUND";
     field public static final String REQUEST_COMPANION_USE_DATA_IN_BACKGROUND = "android.permission.REQUEST_COMPANION_USE_DATA_IN_BACKGROUND";
@@ -12235,6 +12237,7 @@ package android.content.pm {
     field public static final String FEATURE_WIFI_DIRECT = "android.hardware.wifi.direct";
     field public static final String FEATURE_WIFI_PASSPOINT = "android.hardware.wifi.passpoint";
     field public static final String FEATURE_WIFI_RTT = "android.hardware.wifi.rtt";
+    field public static final int FLAG_PERMISSION_ALLOWLIST_ROLE = 8; // 0x8
     field public static final int FLAG_PERMISSION_WHITELIST_INSTALLER = 2; // 0x2
     field public static final int FLAG_PERMISSION_WHITELIST_SYSTEM = 1; // 0x1
     field public static final int FLAG_PERMISSION_WHITELIST_UPGRADE = 4; // 0x4
@@ -12344,6 +12347,7 @@ package android.content.pm {
     field public static final int FLAG_HARD_RESTRICTED = 4; // 0x4
     field public static final int FLAG_IMMUTABLY_RESTRICTED = 16; // 0x10
     field public static final int FLAG_INSTALLED = 1073741824; // 0x40000000
+    field public static final int FLAG_INSTALLER_EXEMPT_IGNORED = 32; // 0x20
     field public static final int FLAG_SOFT_RESTRICTED = 8; // 0x8
     field public static final int PROTECTION_DANGEROUS = 1; // 0x1
     field public static final int PROTECTION_FLAG_APPOP = 64; // 0x40
@@ -16492,6 +16496,23 @@ package android.graphics.pdf {
 
 package android.graphics.text {
 
+  public class GlyphStyle {
+    ctor public GlyphStyle(@ColorInt int, @FloatRange(from=0) float, @FloatRange(from=0) float, @FloatRange(from=0) float, int);
+    ctor public GlyphStyle(@NonNull android.graphics.Paint);
+    method public void applyToPaint(@NonNull android.graphics.Paint);
+    method @ColorInt public int getColor();
+    method public int getFlags();
+    method @FloatRange(from=0) public float getFontSize();
+    method @FloatRange(from=0) public float getScaleX();
+    method @FloatRange(from=0) public float getSkewX();
+    method public void setColor(@ColorInt int);
+    method public void setFlags(int);
+    method public void setFontSize(@FloatRange(from=0) float);
+    method public void setFromPaint(@NonNull android.graphics.Paint);
+    method public void setScaleX(@FloatRange(from=0) float);
+    method public void setSkewX(@FloatRange(from=0) float);
+  }
+
   public class LineBreaker {
     method @NonNull public android.graphics.text.LineBreaker.Result computeLineBreaks(@NonNull android.graphics.text.MeasuredText, @NonNull android.graphics.text.LineBreaker.ParagraphConstraints, @IntRange(from=0) int);
     field public static final int BREAK_STRATEGY_BALANCED = 2; // 0x2
@@ -16550,6 +16571,25 @@ package android.graphics.text {
     method @NonNull public android.graphics.text.MeasuredText build();
     method @NonNull public android.graphics.text.MeasuredText.Builder setComputeHyphenation(boolean);
     method @NonNull public android.graphics.text.MeasuredText.Builder setComputeLayout(boolean);
+  }
+
+  public final class PositionedGlyphs {
+    method public float getAscent();
+    method public float getDescent();
+    method @NonNull public android.graphics.fonts.Font getFont(@IntRange(from=0) int);
+    method @IntRange(from=0) public int getGlyphId(@IntRange(from=0) int);
+    method public float getOriginX();
+    method public float getOriginY();
+    method public float getPositionX(@IntRange(from=0) int);
+    method public float getPositionY(@IntRange(from=0) int);
+    method @NonNull public android.graphics.text.GlyphStyle getStyle();
+    method public float getTotalAdvance();
+    method @IntRange(from=0) public int glyphCount();
+  }
+
+  public class TextShaper {
+    method @NonNull public static android.graphics.text.PositionedGlyphs shapeTextRun(@NonNull char[], int, int, int, int, float, float, boolean, @NonNull android.graphics.Paint);
+    method @NonNull public static android.graphics.text.PositionedGlyphs shapeTextRun(@NonNull CharSequence, int, int, int, int, float, float, boolean, @NonNull android.graphics.Paint);
   }
 
 }
@@ -45310,9 +45350,9 @@ package android.telephony {
     field @NonNull public static final android.os.Parcelable.Creator<android.telephony.CellInfoWcdma> CREATOR;
   }
 
-  public abstract class CellLocation {
-    ctor public CellLocation();
-    method public static android.telephony.CellLocation getEmpty();
+  @Deprecated public abstract class CellLocation {
+    ctor @Deprecated public CellLocation();
+    method @Deprecated public static android.telephony.CellLocation getEmpty();
     method @Deprecated public static void requestLocationUpdate();
   }
 
@@ -46830,19 +46870,19 @@ package android.telephony {
 
 package android.telephony.cdma {
 
-  public class CdmaCellLocation extends android.telephony.CellLocation {
-    ctor public CdmaCellLocation();
-    ctor public CdmaCellLocation(android.os.Bundle);
-    method public static double convertQuartSecToDecDegrees(int);
-    method public void fillInNotifierBundle(android.os.Bundle);
-    method public int getBaseStationId();
-    method public int getBaseStationLatitude();
-    method public int getBaseStationLongitude();
-    method public int getNetworkId();
-    method public int getSystemId();
-    method public void setCellLocationData(int, int, int);
-    method public void setCellLocationData(int, int, int, int, int);
-    method public void setStateInvalid();
+  @Deprecated public class CdmaCellLocation extends android.telephony.CellLocation {
+    ctor @Deprecated public CdmaCellLocation();
+    ctor @Deprecated public CdmaCellLocation(android.os.Bundle);
+    method @Deprecated public static double convertQuartSecToDecDegrees(int);
+    method @Deprecated public void fillInNotifierBundle(android.os.Bundle);
+    method @Deprecated public int getBaseStationId();
+    method @Deprecated public int getBaseStationLatitude();
+    method @Deprecated public int getBaseStationLongitude();
+    method @Deprecated public int getNetworkId();
+    method @Deprecated public int getSystemId();
+    method @Deprecated public void setCellLocationData(int, int, int);
+    method @Deprecated public void setCellLocationData(int, int, int, int, int);
+    method @Deprecated public void setStateInvalid();
   }
 
 }
@@ -47042,15 +47082,15 @@ package android.telephony.euicc {
 
 package android.telephony.gsm {
 
-  public class GsmCellLocation extends android.telephony.CellLocation {
-    ctor public GsmCellLocation();
-    ctor public GsmCellLocation(android.os.Bundle);
-    method public void fillInNotifierBundle(android.os.Bundle);
-    method public int getCid();
-    method public int getLac();
-    method public int getPsc();
-    method public void setLacAndCid(int, int);
-    method public void setStateInvalid();
+  @Deprecated public class GsmCellLocation extends android.telephony.CellLocation {
+    ctor @Deprecated public GsmCellLocation();
+    ctor @Deprecated public GsmCellLocation(android.os.Bundle);
+    method @Deprecated public void fillInNotifierBundle(android.os.Bundle);
+    method @Deprecated public int getCid();
+    method @Deprecated public int getLac();
+    method @Deprecated public int getPsc();
+    method @Deprecated public void setLacAndCid(int, int);
+    method @Deprecated public void setStateInvalid();
   }
 
   @Deprecated public final class SmsManager {
@@ -48135,6 +48175,10 @@ package android.text {
     method public android.text.StaticLayout.Builder setText(CharSequence);
     method @NonNull public android.text.StaticLayout.Builder setTextDirection(@NonNull android.text.TextDirectionHeuristic);
     method @NonNull public android.text.StaticLayout.Builder setUseLineSpacingFromFallbacks(boolean);
+  }
+
+  public class StyledTextShaper {
+    method @NonNull public static java.util.List<android.graphics.text.PositionedGlyphs> shapeText(@NonNull CharSequence, int, int, @NonNull android.text.TextDirectionHeuristic, @NonNull android.text.TextPaint);
   }
 
   public interface TextDirectionHeuristic {
