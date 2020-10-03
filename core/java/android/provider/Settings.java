@@ -6466,6 +6466,12 @@ public final class Settings {
         public static final String USE_PHOTOS_SPOOF = "use_photos_spoof";
 		
 		/**
+         * Force full screen for devices with cutout
+         * @hide
+         */
+        public static final String FORCE_FULLSCREEN_CUTOUT_APPS = "force_full_screen_cutout_apps";
+		
+		/**
          * These are all public system settings
          *
          * @hide
