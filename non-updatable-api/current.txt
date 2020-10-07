@@ -11454,10 +11454,10 @@ package android.content.pm {
 
   public final class ApkChecksum implements android.os.Parcelable {
     method public int describeContents();
-    method public int getKind();
-    method @Nullable public java.security.cert.Certificate getSourceCertificate() throws java.security.cert.CertificateException;
-    method @Nullable public String getSourcePackageName();
+    method @Nullable public java.security.cert.Certificate getInstallerCertificate() throws java.security.cert.CertificateException;
+    method @Nullable public String getInstallerPackageName();
     method @Nullable public String getSplitName();
+    method public int getType();
     method @NonNull public byte[] getValue();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.content.pm.ApkChecksum> CREATOR;
@@ -11567,17 +11567,17 @@ package android.content.pm {
   public final class Checksum implements android.os.Parcelable {
     ctor public Checksum(int, @NonNull byte[]);
     method public int describeContents();
-    method public int getKind();
+    method public int getType();
     method @NonNull public byte[] getValue();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.content.pm.Checksum> CREATOR;
-    field public static final int PARTIAL_MERKLE_ROOT_1M_SHA256 = 32; // 0x20
-    field public static final int PARTIAL_MERKLE_ROOT_1M_SHA512 = 64; // 0x40
-    field @Deprecated public static final int WHOLE_MD5 = 2; // 0x2
-    field public static final int WHOLE_MERKLE_ROOT_4K_SHA256 = 1; // 0x1
-    field @Deprecated public static final int WHOLE_SHA1 = 4; // 0x4
-    field public static final int WHOLE_SHA256 = 8; // 0x8
-    field public static final int WHOLE_SHA512 = 16; // 0x10
+    field public static final int TYPE_PARTIAL_MERKLE_ROOT_1M_SHA256 = 32; // 0x20
+    field public static final int TYPE_PARTIAL_MERKLE_ROOT_1M_SHA512 = 64; // 0x40
+    field @Deprecated public static final int TYPE_WHOLE_MD5 = 2; // 0x2
+    field public static final int TYPE_WHOLE_MERKLE_ROOT_4K_SHA256 = 1; // 0x1
+    field @Deprecated public static final int TYPE_WHOLE_SHA1 = 4; // 0x4
+    field @Deprecated public static final int TYPE_WHOLE_SHA256 = 8; // 0x8
+    field @Deprecated public static final int TYPE_WHOLE_SHA512 = 16; // 0x10
   }
 
   public class ComponentInfo extends android.content.pm.PackageItemInfo {
@@ -12027,7 +12027,6 @@ package android.content.pm {
     method @Nullable public abstract android.graphics.drawable.Drawable getApplicationLogo(@NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
     method @NonNull public CharSequence getBackgroundPermissionOptionLabel();
     method @Nullable public abstract android.content.pm.ChangedPackages getChangedPackages(@IntRange(from=0) int);
-    method public void getChecksums(@NonNull String, boolean, int, @Nullable java.util.List<java.security.cert.Certificate>, @NonNull android.content.IntentSender) throws java.security.cert.CertificateEncodingException, java.io.IOException, android.content.pm.PackageManager.NameNotFoundException;
     method public abstract int getComponentEnabledSetting(@NonNull android.content.ComponentName);
     method @NonNull public abstract android.graphics.drawable.Drawable getDefaultActivityIcon();
     method @Nullable public abstract android.graphics.drawable.Drawable getDrawable(@NonNull String, @DrawableRes int, @Nullable android.content.pm.ApplicationInfo);
@@ -12100,6 +12099,7 @@ package android.content.pm {
     method @Deprecated public abstract void removePackageFromPreferred(@NonNull String);
     method public abstract void removePermission(@NonNull String);
     method @RequiresPermission(value="android.permission.WHITELIST_RESTRICTED_PERMISSIONS", conditional=true) public boolean removeWhitelistedRestrictedPermission(@NonNull String, @NonNull String, int);
+    method public void requestChecksums(@NonNull String, boolean, int, @NonNull java.util.List<java.security.cert.Certificate>, @NonNull android.content.IntentSender) throws java.security.cert.CertificateEncodingException, android.content.pm.PackageManager.NameNotFoundException;
     method @Nullable public abstract android.content.pm.ResolveInfo resolveActivity(@NonNull android.content.Intent, int);
     method @Nullable public abstract android.content.pm.ProviderInfo resolveContentProvider(@NonNull String, int);
     method @Nullable public abstract android.content.pm.ResolveInfo resolveService(@NonNull android.content.Intent, int);
@@ -14356,6 +14356,7 @@ package android.graphics {
     method public void drawColor(@ColorLong long, @NonNull android.graphics.BlendMode);
     method public void drawDoubleRoundRect(@NonNull android.graphics.RectF, float, float, @NonNull android.graphics.RectF, float, float, @NonNull android.graphics.Paint);
     method public void drawDoubleRoundRect(@NonNull android.graphics.RectF, @NonNull float[], @NonNull android.graphics.RectF, @NonNull float[], @NonNull android.graphics.Paint);
+    method public void drawGlyphs(@NonNull int[], @IntRange(from=0) int, @NonNull float[], @IntRange(from=0) int, @IntRange(from=0) int, @NonNull android.graphics.fonts.Font, @NonNull android.graphics.Paint);
     method public void drawLine(float, float, float, float, @NonNull android.graphics.Paint);
     method public void drawLines(@NonNull @Size(multiple=4) float[], int, int, @NonNull android.graphics.Paint);
     method public void drawLines(@NonNull @Size(multiple=4) float[], @NonNull android.graphics.Paint);
@@ -46223,6 +46224,7 @@ package android.telephony {
     method @NonNull public android.os.Bundle getCarrierConfigValues();
     method @Deprecated public static android.telephony.SmsManager getDefault();
     method public static int getDefaultSmsSubscriptionId();
+    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public int getSmsCapacityOnIcc();
     method @Deprecated public static android.telephony.SmsManager getSmsManagerForSubscriptionId(int);
     method @RequiresPermission(android.Manifest.permission.SMS_FINANCIAL_TRANSACTIONS) public void getSmsMessagesForFinancialApp(android.os.Bundle, @NonNull java.util.concurrent.Executor, @NonNull android.telephony.SmsManager.FinancialSmsCallback);
     method @Nullable @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public String getSmscAddress();
