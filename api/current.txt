@@ -16525,23 +16525,6 @@ package android.graphics.pdf {
 
 package android.graphics.text {
 
-  public class GlyphStyle {
-    ctor public GlyphStyle(@ColorInt int, @FloatRange(from=0) float, @FloatRange(from=0) float, @FloatRange(from=0) float, int);
-    ctor public GlyphStyle(@NonNull android.graphics.Paint);
-    method public void applyToPaint(@NonNull android.graphics.Paint);
-    method @ColorInt public int getColor();
-    method public int getFlags();
-    method @FloatRange(from=0) public float getFontSize();
-    method @FloatRange(from=0) public float getScaleX();
-    method @FloatRange(from=0) public float getSkewX();
-    method public void setColor(@ColorInt int);
-    method public void setFlags(int);
-    method public void setFontSize(@FloatRange(from=0) float);
-    method public void setFromPaint(@NonNull android.graphics.Paint);
-    method public void setScaleX(@FloatRange(from=0) float);
-    method public void setSkewX(@FloatRange(from=0) float);
-  }
-
   public class LineBreaker {
     method @NonNull public android.graphics.text.LineBreaker.Result computeLineBreaks(@NonNull android.graphics.text.MeasuredText, @NonNull android.graphics.text.LineBreaker.ParagraphConstraints, @IntRange(from=0) int);
     field public static final int BREAK_STRATEGY_BALANCED = 2; // 0x2
@@ -16603,20 +16586,19 @@ package android.graphics.text {
   }
 
   public final class PositionedGlyphs {
+    method public float getAdvance();
     method public float getAscent();
     method public float getDescent();
     method @NonNull public android.graphics.fonts.Font getFont(@IntRange(from=0) int);
     method @IntRange(from=0) public int getGlyphId(@IntRange(from=0) int);
-    method public float getOriginX();
-    method public float getOriginY();
-    method public float getPositionX(@IntRange(from=0) int);
-    method public float getPositionY(@IntRange(from=0) int);
-    method @NonNull public android.graphics.text.GlyphStyle getStyle();
-    method public float getTotalAdvance();
+    method public float getGlyphX(@IntRange(from=0) int);
+    method public float getGlyphY(@IntRange(from=0) int);
+    method public float getOffsetX();
+    method public float getOffsetY();
     method @IntRange(from=0) public int glyphCount();
   }
 
-  public class TextShaper {
+  public class TextRunShaper {
     method @NonNull public static android.graphics.text.PositionedGlyphs shapeTextRun(@NonNull char[], int, int, int, int, float, float, boolean, @NonNull android.graphics.Paint);
     method @NonNull public static android.graphics.text.PositionedGlyphs shapeTextRun(@NonNull CharSequence, int, int, int, int, float, float, boolean, @NonNull android.graphics.Paint);
   }
@@ -50059,10 +50041,6 @@ package android.text {
     method @NonNull public android.text.StaticLayout.Builder setUseLineSpacingFromFallbacks(boolean);
   }
 
-  public class StyledTextShaper {
-    method @NonNull public static java.util.List<android.graphics.text.PositionedGlyphs> shapeText(@NonNull CharSequence, int, int, @NonNull android.text.TextDirectionHeuristic, @NonNull android.text.TextPaint);
-  }
-
   public interface TextDirectionHeuristic {
     method public boolean isRtl(char[], int, int);
     method public boolean isRtl(CharSequence, int, int);
@@ -50090,6 +50068,14 @@ package android.text {
     field @ColorInt public int linkColor;
     field @ColorInt public int underlineColor;
     field @Px public float underlineThickness;
+  }
+
+  public class TextShaper {
+    method public static void shapeText(@NonNull CharSequence, @IntRange(from=0) int, @IntRange(from=0) int, @NonNull android.text.TextDirectionHeuristic, @NonNull android.text.TextPaint, @NonNull android.text.TextShaper.GlyphsConsumer);
+  }
+
+  public static interface TextShaper.GlyphsConsumer {
+    method public void accept(@IntRange(from=0) int, @IntRange(from=0) int, @NonNull android.graphics.text.PositionedGlyphs, @NonNull android.text.TextPaint);
   }
 
   public class TextUtils {
