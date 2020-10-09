@@ -6576,12 +6576,6 @@ public final class Settings {
         public static final String QS_FOOTER_DATA_USAGE = "qs_footer_data_usage";
 
         /**
-         * Whether to show material Dismiss All Button for notifications
-         * @hide
-         */
-        public static final String NOTIFICATION_MATERIAL_DISMISS = "notification_material_dismiss";
-
-        /**
          * Whether to enable Smart Pixels
          * @hide
          */
@@ -6604,6 +6598,22 @@ public final class Settings {
          * @hide
          */
         public static final String SMART_PIXELS_ON_POWER_SAVE = "smart_pixels_on_power_save";
+
+        /**
+         * Whether to show material Dismiss All Button for notifications
+         * @hide
+         */
+        public static final String NOTIFICATION_MATERIAL_DISMISS = "notification_material_dismiss";
+
+        /**
+         * @hide
+         */
+        public static final String NOTIFICATION_MATERIAL_DISMISS_STYLE = "notification_material_dismiss_style";
+
+        /**
+         * @hide
+         */
+        public static final String NOTIFICATION_MATERIAL_DISMISS_BGSTYLE = "notification_material_dismiss_bgstyle";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
