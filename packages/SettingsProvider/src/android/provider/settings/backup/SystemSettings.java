@@ -94,5 +94,6 @@ public class SystemSettings {
         Settings.System.THEMING_SETTINGS_DASHBOARD_ICONS,
         Settings.System.ENABLE_CONDITIONS,
         Settings.System.ENABLE_SUGGESTIONS,
+        Settings.System.NOTIFICATION_HEADERS,
     };
 }
