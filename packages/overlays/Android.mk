@@ -45,6 +45,7 @@ LOCAL_REQUIRED_MODULES := \
 	IconPackVictorPixelThemePickerOverlay \
 	IconPackVictorSystemUIOverlay \
 	IconShapeHeartOverlay \
+	IconShapeLeafOverlay \
 	IconShapeMallowOverlay \
 	IconShapePebbleOverlay \
 	IconShapeRoundedRectOverlay \
