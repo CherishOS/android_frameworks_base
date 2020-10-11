@@ -171,6 +171,7 @@ public class QSPanel extends LinearLayout implements Callback, BrightnessMirrorL
     private int mMediaTotalBottomMargin;
     private int mFooterMarginStartHorizontal;
     private Consumer<Boolean> mMediaVisibilityChangedListener;
+    private boolean mMediaVisible;
 
 
     @Inject
@@ -257,6 +258,9 @@ public class QSPanel extends LinearLayout implements Callback, BrightnessMirrorL
 			resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_SHOW_BRIGHTNESS_ABOVE_FOOTER),
                     false, this, UserHandle.USER_ALL);
+			resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_LAYOUT_ROWS),
+                    false, this, UserHandle.USER_ALL);
         }
 
         void unobserve() {
@@ -279,6 +283,9 @@ public class QSPanel extends LinearLayout implements Callback, BrightnessMirrorL
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.QS_SHOW_AUTO_BRIGHTNESS))) {
                 updateBrightnessButtonsVisibility();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.QS_LAYOUT_ROWS))) {
+                updateMinRows();
             }
         }
 
@@ -289,6 +296,7 @@ public class QSPanel extends LinearLayout implements Callback, BrightnessMirrorL
                     UserHandle.USER_CURRENT) == 1);
             updateBrightnessSliderPosition();
             updateBrightnessButtonsVisibility();
+            updateMinRows();
         }
     }
 
@@ -296,9 +304,8 @@ public class QSPanel extends LinearLayout implements Callback, BrightnessMirrorL
 
     protected void onMediaVisibilityChanged(Boolean visible) {
         switchTileLayout();
-        if (getTileLayout() != null) {
-            getTileLayout().setMinRows(visible ? 2 : 3);
-        }
+        mMediaVisible = visible;
+        updateMinRows();
         if (mMediaVisibilityChangedListener != null) {
             mMediaVisibilityChangedListener.accept(visible);
         }
@@ -527,6 +534,22 @@ public class QSPanel extends LinearLayout implements Callback, BrightnessMirrorL
         mBrightnessIcon.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
+    private void updateMinRows() {
+        if (getTileLayout() == null) {
+            return;
+        }
+        if (!mMediaVisible) {
+            int rows = Settings.System.getIntForUser(
+                    mContext.getContentResolver(), Settings.System.QS_LAYOUT_ROWS, 3,
+                    UserHandle.USER_CURRENT);
+            boolean isPortrait = mContext.getResources().getConfiguration().orientation
+                    == Configuration.ORIENTATION_PORTRAIT;
+            getTileLayout().setMinRows(isPortrait ? rows : 1);
+        } else {
+            getTileLayout().setMinRows(2);
+        }
+    }
+
     public void openDetails(String subPanel) {
         QSTile tile = getTile(subPanel);
         // If there's no tile with that name (as defined in QSFactoryImpl or other QSFactory),
@@ -655,6 +678,7 @@ public class QSPanel extends LinearLayout implements Callback, BrightnessMirrorL
         if (newConfig.orientation != mLastOrientation) {
             mLastOrientation = newConfig.orientation;
             switchTileLayout();
+            updateMinRows();
         }
     }
 
@@ -1435,6 +1459,7 @@ public class QSPanel extends LinearLayout implements Callback, BrightnessMirrorL
                 configureTile(r.tile, r.tileView);
             }
         }
+        updateMinRows();
     }
 
     public int getNumColumns() {
