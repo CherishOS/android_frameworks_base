@@ -5350,6 +5350,13 @@ public final class Settings {
         public static final String QS_QUICKBAR_COLUMNS = "qs_quickbar_columns";
 		
 		/**
+         * Whether to show QS brightness slider above qs footer
+         * Only applies when {@link QS_BRIGHTNESS_POSITION_BOTTOM} is enabled
+         * @hide
+         */
+        public static final String QS_SHOW_BRIGHTNESS_ABOVE_FOOTER = "qs_show_brightness_above_footer";
+		
+		/**
          * Whether to show the brighness slider auto brightness toggle
          * @hide
          */
