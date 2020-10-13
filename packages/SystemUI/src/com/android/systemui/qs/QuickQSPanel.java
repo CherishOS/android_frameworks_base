@@ -277,6 +277,11 @@ public class QuickQSPanel extends QSPanel {
         } else {
             setMaxTiles(Math.max(NUM_QUICK_TILES_DEFAULT, qsColumns));
         }
+        if (mFullPanel != null && mFullPanel.getMediaVisible()) {
+            // if the user changed quick columns while media is playing
+            // making sure we redistribute the tiles properly
+            mFullPanel.switchTileLayout(true);
+        }
     }
 
     public void updateResources() {
