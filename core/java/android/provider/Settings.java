@@ -5331,6 +5331,12 @@ public final class Settings {
          */
         public static final String CUSTOM_TEXT_CLOCK_FONT_SIZE = "custom_text_clock_font_size";
 
+	/**
+         * Network traffic font style
+         * @hide
+         */
+        public static final String NETWORK_TRAFFIC_FONT_STYLE = "network_traffic_font_style";
+
         /**
          * Whether to display cross sign for a data disabled connection
          * @hide
