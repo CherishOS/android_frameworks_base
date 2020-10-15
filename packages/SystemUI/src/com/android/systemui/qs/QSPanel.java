@@ -1297,6 +1297,7 @@ public class QSPanel extends LinearLayout implements Callback, BrightnessMirrorL
         int getOffsetTop(TileRecord tile);
 
         boolean updateResources();
+        int getNumColumns();
         void updateSettings();
 
         void setListening(boolean listening);
@@ -1390,5 +1391,9 @@ public class QSPanel extends LinearLayout implements Callback, BrightnessMirrorL
         if (mTileLayout != null) {
             mTileLayout.updateSettings();
         }
+    }
+
+    public int getNumColumns() {
+        return mTileLayout.getNumColumns();
     }
 }
