@@ -144,6 +144,11 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
      * @param arg additional arguments needed to populate {@code state}
      */
     abstract protected void handleUpdateState(TState state, Object arg);
+	
+	@Override
+    public boolean isDualTarget() {
+        return false;
+    }
 
     protected Vibrator mVibrator;
 
@@ -377,8 +382,10 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
      * {@link QSTileImpl#getLongClickIntent}
      */
     protected void handleLongClick() {
-        Dependency.get(ActivityStarter.class).postStartActivityDismissingKeyguard(
-                getLongClickIntent(), 0);
+        if (getLongClickIntent() != null) {
+            Dependency.get(ActivityStarter.class).postStartActivityDismissingKeyguard(
+                    getLongClickIntent(), 0);
+        }
     }
 
     /**
