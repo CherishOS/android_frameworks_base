@@ -5342,6 +5342,12 @@ public final class Settings {
          * @hide
          */
         public static final String QS_QUICKBAR_COLUMNS = "qs_quickbar_columns";
+		
+		/**
+	    ** What to show in network traffic indicator in statusbar
+	    ** @hide
+	    **/
+        public static final String NETWORK_TRAFFIC_TYPE = "network_traffic_type";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
@@ -5516,6 +5522,9 @@ public final class Settings {
             PRIVATE_SETTINGS.add(LOCK_SCREEN_WEATHER_ICON_COLOR);
             PRIVATE_SETTINGS.add(LOCK_OWNERINFO_FONTS);
             PRIVATE_SETTINGS.add(LOCKOWNER_FONT_SIZE);
+            PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_STATE);
+            PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_TYPE);
+            PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD);
         }
 
         /**
