@@ -2889,6 +2889,7 @@ package android.accessibilityservice {
     field public static final int GESTURE_2_FINGER_DOUBLE_TAP = 20; // 0x14
     field public static final int GESTURE_2_FINGER_DOUBLE_TAP_AND_HOLD = 40; // 0x28
     field public static final int GESTURE_2_FINGER_SINGLE_TAP = 19; // 0x13
+    field public static final int GESTURE_2_FINGER_SINGLE_TAP_AND_HOLD = 43; // 0x2b
     field public static final int GESTURE_2_FINGER_SWIPE_DOWN = 26; // 0x1a
     field public static final int GESTURE_2_FINGER_SWIPE_LEFT = 27; // 0x1b
     field public static final int GESTURE_2_FINGER_SWIPE_RIGHT = 28; // 0x1c
@@ -2897,11 +2898,13 @@ package android.accessibilityservice {
     field public static final int GESTURE_3_FINGER_DOUBLE_TAP = 23; // 0x17
     field public static final int GESTURE_3_FINGER_DOUBLE_TAP_AND_HOLD = 41; // 0x29
     field public static final int GESTURE_3_FINGER_SINGLE_TAP = 22; // 0x16
+    field public static final int GESTURE_3_FINGER_SINGLE_TAP_AND_HOLD = 44; // 0x2c
     field public static final int GESTURE_3_FINGER_SWIPE_DOWN = 30; // 0x1e
     field public static final int GESTURE_3_FINGER_SWIPE_LEFT = 31; // 0x1f
     field public static final int GESTURE_3_FINGER_SWIPE_RIGHT = 32; // 0x20
     field public static final int GESTURE_3_FINGER_SWIPE_UP = 29; // 0x1d
     field public static final int GESTURE_3_FINGER_TRIPLE_TAP = 24; // 0x18
+    field public static final int GESTURE_3_FINGER_TRIPLE_TAP_AND_HOLD = 45; // 0x2d
     field public static final int GESTURE_4_FINGER_DOUBLE_TAP = 38; // 0x26
     field public static final int GESTURE_4_FINGER_DOUBLE_TAP_AND_HOLD = 42; // 0x2a
     field public static final int GESTURE_4_FINGER_SINGLE_TAP = 37; // 0x25
@@ -10664,12 +10667,15 @@ package android.content {
     field public static final String ACTION_PACKAGE_CHANGED = "android.intent.action.PACKAGE_CHANGED";
     field public static final String ACTION_PACKAGE_DATA_CLEARED = "android.intent.action.PACKAGE_DATA_CLEARED";
     field public static final String ACTION_PACKAGE_FIRST_LAUNCH = "android.intent.action.PACKAGE_FIRST_LAUNCH";
+    field public static final String ACTION_PACKAGE_FULLY_LOADED = "android.intent.action.PACKAGE_FULLY_LOADED";
     field public static final String ACTION_PACKAGE_FULLY_REMOVED = "android.intent.action.PACKAGE_FULLY_REMOVED";
     field @Deprecated public static final String ACTION_PACKAGE_INSTALL = "android.intent.action.PACKAGE_INSTALL";
     field public static final String ACTION_PACKAGE_NEEDS_VERIFICATION = "android.intent.action.PACKAGE_NEEDS_VERIFICATION";
     field public static final String ACTION_PACKAGE_REMOVED = "android.intent.action.PACKAGE_REMOVED";
     field public static final String ACTION_PACKAGE_REPLACED = "android.intent.action.PACKAGE_REPLACED";
     field public static final String ACTION_PACKAGE_RESTARTED = "android.intent.action.PACKAGE_RESTARTED";
+    field public static final String ACTION_PACKAGE_STARTABLE = "android.intent.action.PACKAGE_STARTABLE";
+    field public static final String ACTION_PACKAGE_UNSTARTABLE = "android.intent.action.PACKAGE_UNSTARTABLE";
     field public static final String ACTION_PACKAGE_VERIFIED = "android.intent.action.PACKAGE_VERIFIED";
     field public static final String ACTION_PASTE = "android.intent.action.PASTE";
     field public static final String ACTION_PICK = "android.intent.action.PICK";
@@ -10834,6 +10840,7 @@ package android.content {
     field public static final String EXTRA_TIMEZONE = "time-zone";
     field public static final String EXTRA_TITLE = "android.intent.extra.TITLE";
     field public static final String EXTRA_UID = "android.intent.extra.UID";
+    field public static final String EXTRA_UNSTARTABLE_REASON = "android.intent.extra.UNSTARTABLE_REASON";
     field public static final String EXTRA_USER = "android.intent.extra.USER";
     field public static final int FILL_IN_ACTION = 1; // 0x1
     field public static final int FILL_IN_CATEGORIES = 4; // 0x4
@@ -12293,6 +12300,9 @@ package android.content.pm {
     field public static final int SYNCHRONOUS = 2; // 0x2
     field @Nullable public static final java.util.List<java.security.cert.Certificate> TRUST_ALL;
     field @NonNull public static final java.util.List<java.security.cert.Certificate> TRUST_NONE;
+    field public static final int UNSTARTABLE_REASON_CONNECTION_ERROR = 1; // 0x1
+    field public static final int UNSTARTABLE_REASON_INSUFFICIENT_STORAGE = 2; // 0x2
+    field public static final int UNSTARTABLE_REASON_UNKNOWN = 0; // 0x0
     field public static final int VERIFICATION_ALLOW = 1; // 0x1
     field public static final int VERIFICATION_REJECT = -1; // 0xffffffff
     field public static final int VERSION_CODE_HIGHEST = -1; // 0xffffffff
@@ -46577,6 +46587,7 @@ package android.telephony {
     method @Nullable @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getDeviceSoftwareVersion();
     method @NonNull @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public java.util.Map<java.lang.Integer,java.util.List<android.telephony.emergency.EmergencyNumber>> getEmergencyNumberList();
     method @NonNull @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public java.util.Map<java.lang.Integer,java.util.List<android.telephony.emergency.EmergencyNumber>> getEmergencyNumberList(int);
+    method @NonNull @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public java.util.List<java.lang.String> getEquivalentHomePlmns();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String[] getForbiddenPlmns();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getGroupIdLevel1();
     method public String getIccAuthentication(int, int, String);
