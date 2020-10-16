@@ -11714,7 +11714,10 @@ package android.content.pm {
     method public android.graphics.drawable.Drawable getIcon(int);
     method public CharSequence getLabel();
     method public String getName();
+    method public float getProgress();
     method public android.os.UserHandle getUser();
+    method public boolean isLoading();
+    method public boolean isStartable();
   }
 
   public class LauncherApps {
@@ -11754,6 +11757,7 @@ package android.content.pm {
     ctor public LauncherApps.Callback();
     method public abstract void onPackageAdded(String, android.os.UserHandle);
     method public abstract void onPackageChanged(String, android.os.UserHandle);
+    method public void onPackageProgressChanged(@NonNull String, @NonNull android.os.UserHandle, float);
     method public abstract void onPackageRemoved(String, android.os.UserHandle);
     method public abstract void onPackagesAvailable(String[], android.os.UserHandle, boolean);
     method public void onPackagesSuspended(String[], android.os.UserHandle);
@@ -13073,38 +13077,38 @@ package android.database {
 
   public interface Cursor extends java.io.Closeable {
     method public void close();
-    method public void copyStringToBuffer(int, android.database.CharArrayBuffer);
+    method public void copyStringToBuffer(@IntRange(from=0) int, android.database.CharArrayBuffer);
     method @Deprecated public void deactivate();
-    method public byte[] getBlob(int);
-    method public int getColumnCount();
-    method public int getColumnIndex(String);
-    method public int getColumnIndexOrThrow(String) throws java.lang.IllegalArgumentException;
-    method public String getColumnName(int);
+    method public byte[] getBlob(@IntRange(from=0) int);
+    method @IntRange(from=0) public int getColumnCount();
+    method @IntRange(from=0xffffffff) public int getColumnIndex(String);
+    method @IntRange(from=0) public int getColumnIndexOrThrow(String) throws java.lang.IllegalArgumentException;
+    method public String getColumnName(@IntRange(from=0) int);
     method public String[] getColumnNames();
-    method public int getCount();
-    method public double getDouble(int);
+    method @IntRange(from=0) public int getCount();
+    method public double getDouble(@IntRange(from=0) int);
     method public android.os.Bundle getExtras();
-    method public float getFloat(int);
-    method public int getInt(int);
-    method public long getLong(int);
+    method public float getFloat(@IntRange(from=0) int);
+    method public int getInt(@IntRange(from=0) int);
+    method public long getLong(@IntRange(from=0) int);
     method public android.net.Uri getNotificationUri();
     method @Nullable public default java.util.List<android.net.Uri> getNotificationUris();
-    method public int getPosition();
-    method public short getShort(int);
-    method public String getString(int);
-    method public int getType(int);
+    method @IntRange(from=0xffffffff) public int getPosition();
+    method public short getShort(@IntRange(from=0) int);
+    method public String getString(@IntRange(from=0) int);
+    method public int getType(@IntRange(from=0) int);
     method public boolean getWantsAllOnMoveCalls();
     method public boolean isAfterLast();
     method public boolean isBeforeFirst();
     method public boolean isClosed();
     method public boolean isFirst();
     method public boolean isLast();
-    method public boolean isNull(int);
+    method public boolean isNull(@IntRange(from=0) int);
     method public boolean move(int);
     method public boolean moveToFirst();
     method public boolean moveToLast();
     method public boolean moveToNext();
-    method public boolean moveToPosition(int);
+    method public boolean moveToPosition(@IntRange(from=0xffffffff) int);
     method public boolean moveToPrevious();
     method public void registerContentObserver(android.database.ContentObserver);
     method public void registerDataSetObserver(android.database.DataSetObserver);
@@ -13146,33 +13150,33 @@ package android.database {
     ctor @Deprecated public CursorWindow(boolean);
     method public boolean allocRow();
     method public void clear();
-    method public void copyStringToBuffer(int, int, android.database.CharArrayBuffer);
+    method public void copyStringToBuffer(@IntRange(from=0) int, @IntRange(from=0) int, android.database.CharArrayBuffer);
     method public int describeContents();
     method public void freeLastRow();
-    method public byte[] getBlob(int, int);
-    method public double getDouble(int, int);
-    method public float getFloat(int, int);
-    method public int getInt(int, int);
-    method public long getLong(int, int);
-    method public int getNumRows();
-    method public short getShort(int, int);
-    method public int getStartPosition();
-    method public String getString(int, int);
-    method public int getType(int, int);
-    method @Deprecated public boolean isBlob(int, int);
-    method @Deprecated public boolean isFloat(int, int);
-    method @Deprecated public boolean isLong(int, int);
-    method @Deprecated public boolean isNull(int, int);
-    method @Deprecated public boolean isString(int, int);
+    method public byte[] getBlob(@IntRange(from=0) int, @IntRange(from=0) int);
+    method public double getDouble(@IntRange(from=0) int, @IntRange(from=0) int);
+    method public float getFloat(@IntRange(from=0) int, @IntRange(from=0) int);
+    method public int getInt(@IntRange(from=0) int, @IntRange(from=0) int);
+    method public long getLong(@IntRange(from=0) int, @IntRange(from=0) int);
+    method @IntRange(from=0) public int getNumRows();
+    method public short getShort(@IntRange(from=0) int, @IntRange(from=0) int);
+    method @IntRange(from=0) public int getStartPosition();
+    method public String getString(@IntRange(from=0) int, @IntRange(from=0) int);
+    method public int getType(@IntRange(from=0) int, @IntRange(from=0) int);
+    method @Deprecated public boolean isBlob(@IntRange(from=0) int, @IntRange(from=0) int);
+    method @Deprecated public boolean isFloat(@IntRange(from=0) int, @IntRange(from=0) int);
+    method @Deprecated public boolean isLong(@IntRange(from=0) int, @IntRange(from=0) int);
+    method @Deprecated public boolean isNull(@IntRange(from=0) int, @IntRange(from=0) int);
+    method @Deprecated public boolean isString(@IntRange(from=0) int, @IntRange(from=0) int);
     method public static android.database.CursorWindow newFromParcel(android.os.Parcel);
     method protected void onAllReferencesReleased();
-    method public boolean putBlob(byte[], int, int);
-    method public boolean putDouble(double, int, int);
-    method public boolean putLong(long, int, int);
-    method public boolean putNull(int, int);
-    method public boolean putString(String, int, int);
-    method public boolean setNumColumns(int);
-    method public void setStartPosition(int);
+    method public boolean putBlob(byte[], @IntRange(from=0) int, @IntRange(from=0) int);
+    method public boolean putDouble(double, @IntRange(from=0) int, @IntRange(from=0) int);
+    method public boolean putLong(long, @IntRange(from=0) int, @IntRange(from=0) int);
+    method public boolean putNull(@IntRange(from=0) int, @IntRange(from=0) int);
+    method public boolean putString(String, @IntRange(from=0) int, @IntRange(from=0) int);
+    method public boolean setNumColumns(@IntRange(from=0) int);
+    method public void setStartPosition(@IntRange(from=0) int);
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.database.CursorWindow> CREATOR;
   }
@@ -24099,9 +24103,13 @@ package android.location {
     method @IntRange(from=1, to=java.lang.Integer.MAX_VALUE) public int getMaxUpdates();
     method @FloatRange(from=0, to=java.lang.Float.MAX_VALUE) public float getMinUpdateDistanceMeters();
     method @IntRange(from=0) public long getMinUpdateIntervalMillis();
+    method public int getQuality();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.location.LocationRequest> CREATOR;
     field public static final long PASSIVE_INTERVAL = 9223372036854775807L; // 0x7fffffffffffffffL
+    field public static final int QUALITY_BALANCED_POWER_ACCURACY = 102; // 0x66
+    field public static final int QUALITY_HIGH_ACCURACY = 100; // 0x64
+    field public static final int QUALITY_LOW_POWER = 104; // 0x68
   }
 
   public static final class LocationRequest.Builder {
@@ -24114,6 +24122,7 @@ package android.location {
     method @NonNull public android.location.LocationRequest.Builder setMaxUpdates(@IntRange(from=1, to=java.lang.Integer.MAX_VALUE) int);
     method @NonNull public android.location.LocationRequest.Builder setMinUpdateDistanceMeters(@FloatRange(from=0, to=java.lang.Float.MAX_VALUE) float);
     method @NonNull public android.location.LocationRequest.Builder setMinUpdateIntervalMillis(@IntRange(from=0) long);
+    method @NonNull public android.location.LocationRequest.Builder setQuality(int);
   }
 
   public interface OnNmeaMessageListener {
@@ -32101,13 +32110,13 @@ package android.net.wifi.hotspot2.pps {
     method public String getFriendlyName();
     method @Nullable public long[] getMatchAllOis();
     method @Nullable public long[] getMatchAnyOis();
-    method @Nullable public String[] getOtherHomePartners();
+    method @NonNull public java.util.Collection<java.lang.String> getOtherHomePartnersList();
     method public long[] getRoamingConsortiumOis();
     method public void setFqdn(String);
     method public void setFriendlyName(String);
     method public void setMatchAllOis(@Nullable long[]);
     method public void setMatchAnyOis(@Nullable long[]);
-    method public void setOtherHomePartners(@Nullable String[]);
+    method public void setOtherHomePartnersList(@NonNull java.util.Collection<java.lang.String>);
     method public void setRoamingConsortiumOis(long[]);
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.wifi.hotspot2.pps.HomeSp> CREATOR;
@@ -53735,11 +53744,12 @@ package android.view {
     method @Nullable public android.net.Uri getLinkUri();
     method public int getSource();
     field public static final int FLAG_CONVERT_TO_PLAIN_TEXT = 1; // 0x1
-    field public static final int SOURCE_AUTOFILL = 3; // 0x3
-    field public static final int SOURCE_CLIPBOARD = 0; // 0x0
-    field public static final int SOURCE_DRAG_AND_DROP = 2; // 0x2
-    field public static final int SOURCE_INPUT_METHOD = 1; // 0x1
-    field public static final int SOURCE_PROCESS_TEXT = 4; // 0x4
+    field public static final int SOURCE_APP = 0; // 0x0
+    field public static final int SOURCE_AUTOFILL = 4; // 0x4
+    field public static final int SOURCE_CLIPBOARD = 1; // 0x1
+    field public static final int SOURCE_DRAG_AND_DROP = 3; // 0x3
+    field public static final int SOURCE_INPUT_METHOD = 2; // 0x2
+    field public static final int SOURCE_PROCESS_TEXT = 5; // 0x5
   }
 
   public static final class OnReceiveContentCallback.Payload.Builder {
