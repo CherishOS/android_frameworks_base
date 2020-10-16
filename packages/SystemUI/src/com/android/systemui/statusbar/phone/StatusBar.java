@@ -188,6 +188,7 @@ import com.android.systemui.plugins.statusbar.StatusBarStateController;
 import com.android.systemui.qs.QSFragment;
 import com.android.systemui.qs.QSPanel;
 import com.android.systemui.qs.QuickQSPanel;
+import com.android.systemui.statusbar.info.DataUsageView;
 import com.android.systemui.recents.Recents;
 import com.android.systemui.recents.ScreenPinningRequest;
 import com.android.systemui.shared.plugins.PluginManager;
@@ -4136,7 +4137,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             getNavigationBarView().setBlockedGesturalNavigation(blocked);
         }
     }
-
+	
     private CherishSettingsObserver mCherishSettingsObserver = new CherishSettingsObserver(mHandler);
     private class CherishSettingsObserver extends ContentObserver {
         CherishSettingsObserver(Handler handler) {
@@ -4219,6 +4220,10 @@ public class StatusBar extends SystemUI implements DemoMode,
         if (mKeyguardIndicationController != null) {
             mKeyguardIndicationController.updateChargingIndication(mChargingAnimation);
         }
+    }
+	
+	public void updateQSDataUsageInfo() {
+        DataUsageView.updateUsage();
     }
 
     public int getWakefulnessState() {
