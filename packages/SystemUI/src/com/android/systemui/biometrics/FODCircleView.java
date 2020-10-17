@@ -48,7 +48,7 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
 
-import com.android.internal.util.bliss.BlissUtils;
+import com.android.internal.util.cherish.CherishUtils;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardSecurityModel.SecurityMode;
 import com.android.keyguard.KeyguardUpdateMonitor;
@@ -328,7 +328,7 @@ public class FODCircleView extends ImageView implements TunerService.Tunable {
                 com.android.internal.R.bool.config_hideFodCircleGoingToSleep);
 
         mWindowManager = mContext.getSystemService(WindowManager.class);
-        mIsFodAnimationAvailable = BlissUtils.isPackageInstalled(context,
+        mIsFodAnimationAvailable = CherishUtils.isPackageInstalled(context,
                                     context.getResources().getString(
                                     com.android.internal.R.string.config_fodAnimationPackage));
         if (mIsFodAnimationAvailable) {
