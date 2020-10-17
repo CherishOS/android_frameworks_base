@@ -1568,6 +1568,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_SCREEN_CAMERA_GESTURE);
+        filter.addAction(NotificationPanelViewController.CANCEL_NOTIFICATION_PULSE_ACTION);
         mBroadcastDispatcher.registerReceiver(mBroadcastReceiver, filter, null, UserHandle.ALL);
         mGameSpaceManager.observe();
     }
@@ -2692,6 +2693,9 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
                 // state is correct.
                 mMainExecutor.execute(() -> mCommandQueueCallbacks.onCameraLaunchGestureDetected(
                         StatusBarManager.CAMERA_LAUNCH_SOURCE_SCREEN_GESTURE));
+            }
+            else if (NotificationPanelViewController.CANCEL_NOTIFICATION_PULSE_ACTION.equals(action)) {
+                mNotificationPanelViewController.stopNotificationPulse();
             }
             Trace.endSection();
         }
