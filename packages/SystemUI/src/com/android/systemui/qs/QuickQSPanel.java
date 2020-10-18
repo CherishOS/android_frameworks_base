@@ -140,6 +140,22 @@ public class QuickQSPanel extends QSPanel {
     }
 
     @Override
+    public void setContentMargins(int startMargin, int endMargin) {
+        super.setContentMargins(startMargin, endMargin);
+        View tilesView = (View) mTileLayout;
+        tilesView.setPaddingRelative(startMargin - getVisualTilePadding(),
+                tilesView.getPaddingTop(),
+                endMargin - getVisualTilePadding(),
+                tilesView.getPaddingBottom());
+    }
+
+    @Override
+    public void setListening(boolean listening) {
+        super.setListening(listening);
+        setBrightnessListening(listening);
+    }
+
+    @Override
     protected String getDumpableTag() {
         return TAG;
     }
