@@ -10668,12 +10668,15 @@ package android.content {
     field public static final String ACTION_PACKAGE_CHANGED = "android.intent.action.PACKAGE_CHANGED";
     field public static final String ACTION_PACKAGE_DATA_CLEARED = "android.intent.action.PACKAGE_DATA_CLEARED";
     field public static final String ACTION_PACKAGE_FIRST_LAUNCH = "android.intent.action.PACKAGE_FIRST_LAUNCH";
+    field public static final String ACTION_PACKAGE_FULLY_LOADED = "android.intent.action.PACKAGE_FULLY_LOADED";
     field public static final String ACTION_PACKAGE_FULLY_REMOVED = "android.intent.action.PACKAGE_FULLY_REMOVED";
     field @Deprecated public static final String ACTION_PACKAGE_INSTALL = "android.intent.action.PACKAGE_INSTALL";
     field public static final String ACTION_PACKAGE_NEEDS_VERIFICATION = "android.intent.action.PACKAGE_NEEDS_VERIFICATION";
     field public static final String ACTION_PACKAGE_REMOVED = "android.intent.action.PACKAGE_REMOVED";
     field public static final String ACTION_PACKAGE_REPLACED = "android.intent.action.PACKAGE_REPLACED";
     field public static final String ACTION_PACKAGE_RESTARTED = "android.intent.action.PACKAGE_RESTARTED";
+    field public static final String ACTION_PACKAGE_STARTABLE = "android.intent.action.PACKAGE_STARTABLE";
+    field public static final String ACTION_PACKAGE_UNSTARTABLE = "android.intent.action.PACKAGE_UNSTARTABLE";
     field public static final String ACTION_PACKAGE_VERIFIED = "android.intent.action.PACKAGE_VERIFIED";
     field public static final String ACTION_PASTE = "android.intent.action.PASTE";
     field public static final String ACTION_PICK = "android.intent.action.PICK";
@@ -10838,6 +10841,7 @@ package android.content {
     field public static final String EXTRA_TIMEZONE = "time-zone";
     field public static final String EXTRA_TITLE = "android.intent.extra.TITLE";
     field public static final String EXTRA_UID = "android.intent.extra.UID";
+    field public static final String EXTRA_UNSTARTABLE_REASON = "android.intent.extra.UNSTARTABLE_REASON";
     field public static final String EXTRA_USER = "android.intent.extra.USER";
     field public static final int FILL_IN_ACTION = 1; // 0x1
     field public static final int FILL_IN_CATEGORIES = 4; // 0x4
@@ -12297,6 +12301,9 @@ package android.content.pm {
     field public static final int SYNCHRONOUS = 2; // 0x2
     field @Nullable public static final java.util.List<java.security.cert.Certificate> TRUST_ALL;
     field @NonNull public static final java.util.List<java.security.cert.Certificate> TRUST_NONE;
+    field public static final int UNSTARTABLE_REASON_CONNECTION_ERROR = 1; // 0x1
+    field public static final int UNSTARTABLE_REASON_INSUFFICIENT_STORAGE = 2; // 0x2
+    field public static final int UNSTARTABLE_REASON_UNKNOWN = 0; // 0x0
     field public static final int VERIFICATION_ALLOW = 1; // 0x1
     field public static final int VERIFICATION_REJECT = -1; // 0xffffffff
     field public static final int VERSION_CODE_HIGHEST = -1; // 0xffffffff
@@ -31846,6 +31853,7 @@ package android.net.wifi.aware {
     method public int getMaxServiceNameLength();
     method public int getMaxServiceSpecificInfoLength();
     method public int getSupportedCipherSuites();
+    method public boolean isInstantCommunicationModeSupported();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.net.wifi.aware.Characteristics> CREATOR;
     field public static final int WIFI_AWARE_CIPHER_SUITE_NCS_SK_128 = 1; // 0x1
@@ -31944,6 +31952,7 @@ package android.net.wifi.aware {
     method public android.net.wifi.aware.Characteristics getCharacteristics();
     method public boolean isAvailable();
     method public boolean isDeviceAttached();
+    method public boolean isInstantCommunicationModeEnabled();
     field public static final String ACTION_WIFI_AWARE_STATE_CHANGED = "android.net.wifi.aware.action.WIFI_AWARE_STATE_CHANGED";
     field public static final int WIFI_AWARE_DATA_PATH_ROLE_INITIATOR = 0; // 0x0
     field public static final int WIFI_AWARE_DATA_PATH_ROLE_RESPONDER = 1; // 0x1
