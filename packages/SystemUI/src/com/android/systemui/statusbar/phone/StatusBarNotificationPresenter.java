@@ -341,7 +341,7 @@ public class StatusBarNotificationPresenter implements NotificationPresenter,
     }
 
     public boolean hasActiveNotifications() {
-        return mEntryManager.hasActiveNotifications();
+        return mEntryManager.hasVisibleNotifications();
     }
 
     @Override

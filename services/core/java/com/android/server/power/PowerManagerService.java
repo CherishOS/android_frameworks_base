@@ -85,6 +85,7 @@ import android.util.SparseArray;
 import android.util.TimeUtils;
 import android.util.proto.ProtoOutputStream;
 import android.view.Display;
+import android.view.KeyEvent;
 
 import com.android.internal.BrightnessSynchronizer;
 import com.android.internal.annotations.VisibleForTesting;
@@ -5586,6 +5587,29 @@ public final class PowerManagerService extends SystemService
         }
     }
 
+    /**
+     * If the user presses power while the proximity sensor is enabled and keeping
+     * the screen off, then turn the screen back on by telling display manager to
+     * ignore the proximity sensor.  We don't turn off the proximity sensor because
+     * we still want it to be reenabled if it's state changes.
+     *
+     * @return True if the proximity sensor was successfully ignored and we should
+     * consume the key event.
+     */
+    private boolean interceptPowerKeyDownInternal(KeyEvent event) {
+        synchronized (mLock) {
+            // DisplayPowerController only reports proximity positive (near) if it's
+            // positive and the proximity wasn't already being ignored. So it reliably
+            // also tells us that we're not already ignoring the proximity sensor.
+            if (mDisplayPowerRequest.useProximitySensor && mProximityPositive) {
+                mDisplayManagerInternal.ignoreProximitySensorUntilChanged();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @VisibleForTesting
     final class LocalService extends PowerManagerInternal {
         @Override
@@ -5748,6 +5772,11 @@ public final class PowerManagerService extends SystemService
         @Override
         public void setFeature(int featureId, int data) {
             nativeSetFeature(featureId, data);
+        }
+		
+		@Override
+        public boolean interceptPowerKeyDown(KeyEvent event) {
+            return interceptPowerKeyDownInternal(event);
         }
     }
 }
