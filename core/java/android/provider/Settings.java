@@ -5464,6 +5464,12 @@ public final class Settings {
          * @hide
          */
         public static final String NOTIFICATION_HEADERS = "notification_headers";
+		
+		/**
+         * whether to show center notification headers
+         * @hide
+         */
+        public static final String CENTER_NOTIFICATION_HEADERS = "center_notification_headers";
 
         /**
          * Force full screen for devices with cutout
@@ -5724,6 +5730,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(ENABLE_SUGGESTIONS);
             PRIVATE_SETTINGS.add(FORCE_FULLSCREEN_CUTOUT_APPS);
             PRIVATE_SETTINGS.add(LOCKSCREEN_MEDIA_ART);
+            PRIVATE_SETTINGS.add(CENTER_NOTIFICATION_HEADERS);
         }
 
         /**
