@@ -11718,7 +11718,10 @@ package android.content.pm {
     method public android.graphics.drawable.Drawable getIcon(int);
     method public CharSequence getLabel();
     method public String getName();
+    method public float getProgress();
     method public android.os.UserHandle getUser();
+    method public boolean isLoading();
+    method public boolean isStartable();
   }
 
   public class LauncherApps {
@@ -11758,6 +11761,7 @@ package android.content.pm {
     ctor public LauncherApps.Callback();
     method public abstract void onPackageAdded(String, android.os.UserHandle);
     method public abstract void onPackageChanged(String, android.os.UserHandle);
+    method public void onPackageProgressChanged(@NonNull String, @NonNull android.os.UserHandle, float);
     method public abstract void onPackageRemoved(String, android.os.UserHandle);
     method public abstract void onPackagesAvailable(String[], android.os.UserHandle, boolean);
     method public void onPackagesSuspended(String[], android.os.UserHandle);
@@ -15435,6 +15439,7 @@ package android.graphics {
   public class RadialGradient extends android.graphics.Shader {
     ctor public RadialGradient(float, float, float, @ColorInt @NonNull int[], @Nullable float[], @NonNull android.graphics.Shader.TileMode);
     ctor public RadialGradient(float, float, float, @ColorLong @NonNull long[], @Nullable float[], @NonNull android.graphics.Shader.TileMode);
+    ctor public RadialGradient(float, float, @FloatRange(from=0.0f) float, float, float, @FloatRange(from=0.0f, fromInclusive=false) float, @ColorLong @NonNull long[], @Nullable float[], @NonNull android.graphics.Shader.TileMode);
     ctor public RadialGradient(float, float, float, @ColorInt int, @ColorInt int, @NonNull android.graphics.Shader.TileMode);
     ctor public RadialGradient(float, float, float, @ColorLong long, @ColorLong long, @NonNull android.graphics.Shader.TileMode);
   }
@@ -55536,6 +55541,7 @@ package android.view.inputmethod {
     method public android.view.inputmethod.ExtractedText getExtractedText(android.view.inputmethod.ExtractedTextRequest, int);
     method public android.os.Handler getHandler();
     method public CharSequence getSelectedText(int);
+    method @Nullable public default android.view.inputmethod.SurroundingText getSurroundingText(@IntRange(from=0) int, @IntRange(from=0) int, int);
     method public CharSequence getTextAfterCursor(int, int);
     method public CharSequence getTextBeforeCursor(int, int);
     method public boolean performContextMenuAction(int);
@@ -55742,6 +55748,17 @@ package android.view.inputmethod {
     method public android.view.inputmethod.InputMethodSubtype.InputMethodSubtypeBuilder setSubtypeLocale(String);
     method public android.view.inputmethod.InputMethodSubtype.InputMethodSubtypeBuilder setSubtypeMode(String);
     method public android.view.inputmethod.InputMethodSubtype.InputMethodSubtypeBuilder setSubtypeNameResId(int);
+  }
+
+  public final class SurroundingText implements android.os.Parcelable {
+    ctor public SurroundingText(@NonNull CharSequence, @IntRange(from=0) int, @IntRange(from=0) int, @IntRange(from=0xffffffff) int);
+    method public int describeContents();
+    method @IntRange(from=0xffffffff) public int getOffset();
+    method @IntRange(from=0) public int getSelectionEnd();
+    method @IntRange(from=0) public int getSelectionStart();
+    method @NonNull public CharSequence getText();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.view.inputmethod.SurroundingText> CREATOR;
   }
 
 }
