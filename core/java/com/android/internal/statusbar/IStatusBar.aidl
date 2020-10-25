@@ -340,4 +340,6 @@ oneway interface IStatusBar
     void enterStageSplitFromRunningApp(boolean leftOrTop);
 
     void toggleCameraFlash();
+    void screenPinningStateChanged(boolean enabled);
+    void leftInLandscapeChanged(boolean isLeft);
 }
