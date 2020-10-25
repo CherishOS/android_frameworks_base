@@ -232,4 +232,6 @@ interface IStatusBarService
     void showRearDisplayDialog(int currentBaseState);
 
     void toggleCameraFlash();
+
+    void screenPinningStateChanged(boolean enabled);
 }
