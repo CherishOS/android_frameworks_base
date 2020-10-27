@@ -97,6 +97,7 @@ package android {
     field public static final String LOCATION_HARDWARE = "android.permission.LOCATION_HARDWARE";
     field public static final String MANAGE_DOCUMENTS = "android.permission.MANAGE_DOCUMENTS";
     field public static final String MANAGE_EXTERNAL_STORAGE = "android.permission.MANAGE_EXTERNAL_STORAGE";
+    field public static final String MANAGE_ONGOING_CALLS = "android.permission.MANAGE_ONGOING_CALLS";
     field public static final String MANAGE_OWN_CALLS = "android.permission.MANAGE_OWN_CALLS";
     field public static final String MASTER_CLEAR = "android.permission.MASTER_CLEAR";
     field public static final String MEDIA_CONTENT_CONTROL = "android.permission.MEDIA_CONTENT_CONTROL";
@@ -38882,6 +38883,9 @@ package android.provider {
     ctor public CallLog.Calls();
     method public static String getLastOutgoingCall(android.content.Context);
     field public static final int ANSWERED_EXTERNALLY_TYPE = 7; // 0x7
+    field public static final long AUTO_MISSED_EMERGENCY_CALL = 1L; // 0x1L
+    field public static final long AUTO_MISSED_MAXIMUM_DIALING = 4L; // 0x4L
+    field public static final long AUTO_MISSED_MAXIMUM_RINGING = 2L; // 0x2L
     field public static final int BLOCKED_TYPE = 6; // 0x6
     field public static final String BLOCK_REASON = "block_reason";
     field public static final int BLOCK_REASON_BLOCKED_NUMBER = 3; // 0x3
@@ -38927,6 +38931,8 @@ package android.provider {
     field public static final String IS_READ = "is_read";
     field public static final String LAST_MODIFIED = "last_modified";
     field public static final String LIMIT_PARAM_KEY = "limit";
+    field public static final String MISSED_REASON = "missed_reason";
+    field public static final long MISSED_REASON_NOT_MISSED = 0L; // 0x0L
     field public static final int MISSED_TYPE = 3; // 0x3
     field public static final String NEW = "new";
     field public static final String NUMBER = "number";
@@ -38943,6 +38949,13 @@ package android.provider {
     field public static final int REJECTED_TYPE = 5; // 0x5
     field public static final String TRANSCRIPTION = "transcription";
     field public static final String TYPE = "type";
+    field public static final long USER_MISSED_CALL_FILTERS_TIMEOUT = 4194304L; // 0x400000L
+    field public static final long USER_MISSED_CALL_SCREENING_SERVICE_SILENCED = 2097152L; // 0x200000L
+    field public static final long USER_MISSED_DND_MODE = 262144L; // 0x40000L
+    field public static final long USER_MISSED_LOW_RING_VOLUME = 524288L; // 0x80000L
+    field public static final long USER_MISSED_NO_ANSWER = 65536L; // 0x10000L
+    field public static final long USER_MISSED_NO_VIBRATE = 1048576L; // 0x100000L
+    field public static final long USER_MISSED_SHORT_RING = 131072L; // 0x20000L
     field public static final String VIA_NUMBER = "via_number";
     field public static final int VOICEMAIL_TYPE = 4; // 0x4
     field public static final String VOICEMAIL_URI = "voicemail_uri";
@@ -43850,6 +43863,7 @@ package android.service.controls.templates {
     field public static final int TYPE_RANGE = 2; // 0x2
     field public static final int TYPE_STATELESS = 8; // 0x8
     field public static final int TYPE_TEMPERATURE = 7; // 0x7
+    field public static final int TYPE_THUMBNAIL = 3; // 0x3
     field public static final int TYPE_TOGGLE = 1; // 0x1
     field public static final int TYPE_TOGGLE_RANGE = 6; // 0x6
   }
@@ -43887,6 +43901,14 @@ package android.service.controls.templates {
     field public static final int MODE_HEAT_COOL = 4; // 0x4
     field public static final int MODE_OFF = 1; // 0x1
     field public static final int MODE_UNKNOWN = 0; // 0x0
+  }
+
+  public final class ThumbnailTemplate extends android.service.controls.templates.ControlTemplate {
+    ctor public ThumbnailTemplate(@NonNull String, boolean, @NonNull android.graphics.drawable.Icon, @NonNull CharSequence);
+    method @NonNull public CharSequence getContentDescription();
+    method public int getTemplateType();
+    method @NonNull public android.graphics.drawable.Icon getThumbnail();
+    method public boolean isActive();
   }
 
   public final class ToggleRangeTemplate extends android.service.controls.templates.ControlTemplate {
