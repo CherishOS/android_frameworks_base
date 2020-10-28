@@ -17847,6 +17847,7 @@ package android.hardware.camera2 {
 
   public class CaptureResult extends android.hardware.camera2.CameraMetadata<android.hardware.camera2.CaptureResult.Key<?>> {
     method @Nullable public <T> T get(android.hardware.camera2.CaptureResult.Key<T>);
+    method @NonNull public String getCameraId();
     method public long getFrameNumber();
     method @NonNull public java.util.List<android.hardware.camera2.CaptureResult.Key<?>> getKeys();
     method @NonNull public android.hardware.camera2.CaptureRequest getRequest();
@@ -44634,6 +44635,7 @@ package android.telecom {
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public String getVoiceMailNumber(android.telecom.PhoneAccountHandle);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public boolean handleMmi(String);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public boolean handleMmi(String, android.telecom.PhoneAccountHandle);
+    method public boolean hasCompanionInCallServiceAccess();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public boolean isInCall();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public boolean isInManagedCall();
     method public boolean isIncomingCallPermitted(android.telecom.PhoneAccountHandle);
@@ -46031,6 +46033,7 @@ package android.telephony {
     method @NonNull public java.util.List<java.lang.Integer> getAvailableServices();
     method @Nullable public android.telephony.CellIdentity getCellIdentity();
     method public int getDomain();
+    method public int getNrState();
     method @Nullable public String getRegisteredPlmn();
     method public int getTransportType();
     method public boolean isRegistered();
@@ -51895,7 +51898,6 @@ package android.view {
   }
 
   public interface OnReceiveContentCallback<T extends android.view.View> {
-    method @NonNull public java.util.Set<java.lang.String> getSupportedMimeTypes(@NonNull T);
     method public boolean onReceiveContent(@NonNull T, @NonNull android.view.OnReceiveContentCallback.Payload);
   }
 
@@ -52473,7 +52475,7 @@ package android.view {
     method @IdRes public int getNextFocusRightId();
     method @IdRes public int getNextFocusUpId();
     method public android.view.View.OnFocusChangeListener getOnFocusChangeListener();
-    method @Nullable public android.view.OnReceiveContentCallback<? extends android.view.View> getOnReceiveContentCallback();
+    method @Nullable public String[] getOnReceiveContentMimeTypes();
     method @ColorInt public int getOutlineAmbientShadowColor();
     method public android.view.ViewOutlineProvider getOutlineProvider();
     method @ColorInt public int getOutlineSpotShadowColor();
@@ -52668,6 +52670,7 @@ package android.view {
     method public void onProvideContentCaptureStructure(@NonNull android.view.ViewStructure, int);
     method public void onProvideStructure(android.view.ViewStructure);
     method public void onProvideVirtualStructure(android.view.ViewStructure);
+    method public boolean onReceiveContent(@NonNull android.view.OnReceiveContentCallback.Payload);
     method public android.view.PointerIcon onResolvePointerIcon(android.view.MotionEvent, int);
     method @CallSuper protected void onRestoreInstanceState(android.os.Parcelable);
     method public void onRtlPropertiesChanged(int);
@@ -52825,7 +52828,7 @@ package android.view {
     method public void setOnHoverListener(android.view.View.OnHoverListener);
     method public void setOnKeyListener(android.view.View.OnKeyListener);
     method public void setOnLongClickListener(@Nullable android.view.View.OnLongClickListener);
-    method public void setOnReceiveContentCallback(@Nullable android.view.OnReceiveContentCallback<? extends android.view.View>);
+    method public void setOnReceiveContentCallback(@Nullable String[], @Nullable android.view.OnReceiveContentCallback);
     method public void setOnScrollChangeListener(android.view.View.OnScrollChangeListener);
     method @Deprecated public void setOnSystemUiVisibilityChangeListener(android.view.View.OnSystemUiVisibilityChangeListener);
     method public void setOnTouchListener(android.view.View.OnTouchListener);
@@ -59655,7 +59658,6 @@ package android.widget {
     method public int getMinWidth();
     method public final android.text.method.MovementMethod getMovementMethod();
     method public int getOffsetForPosition(float, float);
-    method @Nullable public android.view.OnReceiveContentCallback<android.widget.TextView> getOnReceiveContentCallback();
     method public android.text.TextPaint getPaint();
     method public int getPaintFlags();
     method public String getPrivateImeOptions();
@@ -59844,7 +59846,6 @@ package android.widget {
 
   public class TextViewOnReceiveContentCallback implements android.view.OnReceiveContentCallback<android.widget.TextView> {
     ctor public TextViewOnReceiveContentCallback();
-    method @NonNull public java.util.Set<java.lang.String> getSupportedMimeTypes(@NonNull android.widget.TextView);
     method public boolean onReceiveContent(@NonNull android.widget.TextView, @NonNull android.view.OnReceiveContentCallback.Payload);
   }
 
