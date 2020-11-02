@@ -1034,16 +1034,6 @@ public class Build {
     public static final String FINGERPRINT = deriveFingerprint();
 
     /**
-     * CherishOS fingerprint
-     * @hide
-     */
-    public static final String PROP_CHERISH_FINGERPRINT = "com.cherish.fingerprint";
-
-    /** @hide */
-    public static final String CHERISH_FINGERPRINT = SystemProperties.get(PROP_CHERISH_FINGERPRINT,
-            deriveFingerprint());
-
-    /**
      * Some devices split the fingerprint components between multiple
      * partitions, so we might derive the fingerprint at runtime.
      */
