@@ -31,6 +31,7 @@ package android {
     field @Deprecated public static final String BIND_CARRIER_MESSAGING_SERVICE = "android.permission.BIND_CARRIER_MESSAGING_SERVICE";
     field public static final String BIND_CARRIER_SERVICES = "android.permission.BIND_CARRIER_SERVICES";
     field @Deprecated public static final String BIND_CHOOSER_TARGET_SERVICE = "android.permission.BIND_CHOOSER_TARGET_SERVICE";
+    field public static final String BIND_COMPANION_DEVICE_SERVICE = "android.permission.BIND_COMPANION_DEVICE_SERVICE";
     field public static final String BIND_CONDITION_PROVIDER_SERVICE = "android.permission.BIND_CONDITION_PROVIDER_SERVICE";
     field public static final String BIND_CONTROLS = "android.permission.BIND_CONTROLS";
     field public static final String BIND_DEVICE_ADMIN = "android.permission.BIND_DEVICE_ADMIN";
@@ -9489,6 +9490,14 @@ package android.companion {
     ctor public CompanionDeviceManager.Callback();
     method public abstract void onDeviceFound(android.content.IntentSender);
     method public abstract void onFailure(CharSequence);
+  }
+
+  public abstract class CompanionDeviceService extends android.app.Service {
+    ctor public CompanionDeviceService();
+    method @Nullable public final android.os.IBinder onBind(@NonNull android.content.Intent);
+    method @MainThread public abstract void onDeviceAppeared(@NonNull String);
+    method @MainThread public abstract void onDeviceDisappeared(@NonNull String);
+    field public static final String SERVICE_INTERFACE = "android.companion.CompanionDeviceService";
   }
 
   public interface DeviceFilter<D extends android.os.Parcelable> extends android.os.Parcelable {
