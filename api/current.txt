@@ -31,6 +31,7 @@ package android {
     field @Deprecated public static final String BIND_CARRIER_MESSAGING_SERVICE = "android.permission.BIND_CARRIER_MESSAGING_SERVICE";
     field public static final String BIND_CARRIER_SERVICES = "android.permission.BIND_CARRIER_SERVICES";
     field @Deprecated public static final String BIND_CHOOSER_TARGET_SERVICE = "android.permission.BIND_CHOOSER_TARGET_SERVICE";
+    field public static final String BIND_COMPANION_DEVICE_SERVICE = "android.permission.BIND_COMPANION_DEVICE_SERVICE";
     field public static final String BIND_CONDITION_PROVIDER_SERVICE = "android.permission.BIND_CONDITION_PROVIDER_SERVICE";
     field public static final String BIND_CONTROLS = "android.permission.BIND_CONTROLS";
     field public static final String BIND_DEVICE_ADMIN = "android.permission.BIND_DEVICE_ADMIN";
@@ -133,6 +134,7 @@ package android {
     field public static final String RECORD_AUDIO = "android.permission.RECORD_AUDIO";
     field public static final String RECORD_BACKGROUND_AUDIO = "android.permission.RECORD_BACKGROUND_AUDIO";
     field public static final String REORDER_TASKS = "android.permission.REORDER_TASKS";
+    field public static final String REQUEST_COMPANION_PROFILE_WATCH = "android.permission.REQUEST_COMPANION_PROFILE_WATCH";
     field public static final String REQUEST_COMPANION_RUN_IN_BACKGROUND = "android.permission.REQUEST_COMPANION_RUN_IN_BACKGROUND";
     field public static final String REQUEST_COMPANION_USE_DATA_IN_BACKGROUND = "android.permission.REQUEST_COMPANION_USE_DATA_IN_BACKGROUND";
     field public static final String REQUEST_DELETE_PACKAGES = "android.permission.REQUEST_DELETE_PACKAGES";
@@ -9434,14 +9436,16 @@ package android.companion {
 
   public final class AssociationRequest implements android.os.Parcelable {
     method public int describeContents();
-    method public void writeToParcel(android.os.Parcel, int);
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.companion.AssociationRequest> CREATOR;
+    field public static final String DEVICE_PROFILE_WATCH = "android.app.role.COMPANION_DEVICE_WATCH";
   }
 
   public static final class AssociationRequest.Builder {
     ctor public AssociationRequest.Builder();
     method @NonNull public android.companion.AssociationRequest.Builder addDeviceFilter(@Nullable android.companion.DeviceFilter<?>);
     method @NonNull public android.companion.AssociationRequest build();
+    method @NonNull public android.companion.AssociationRequest.Builder setDeviceProfile(@NonNull String);
     method @NonNull public android.companion.AssociationRequest.Builder setSingleDevice(boolean);
   }
 
@@ -9489,6 +9493,14 @@ package android.companion {
     ctor public CompanionDeviceManager.Callback();
     method public abstract void onDeviceFound(android.content.IntentSender);
     method public abstract void onFailure(CharSequence);
+  }
+
+  public abstract class CompanionDeviceService extends android.app.Service {
+    ctor public CompanionDeviceService();
+    method @Nullable public final android.os.IBinder onBind(@NonNull android.content.Intent);
+    method @MainThread public abstract void onDeviceAppeared(@NonNull String);
+    method @MainThread public abstract void onDeviceDisappeared(@NonNull String);
+    field public static final String SERVICE_INTERFACE = "android.companion.CompanionDeviceService";
   }
 
   public interface DeviceFilter<D extends android.os.Parcelable> extends android.os.Parcelable {
@@ -15598,6 +15610,19 @@ package android.graphics {
     method public final boolean next(android.graphics.Rect);
   }
 
+  public final class RenderEffect {
+    method @NonNull public static android.graphics.RenderEffect createBitmapEffect(@NonNull android.graphics.Bitmap);
+    method @NonNull public static android.graphics.RenderEffect createBitmapEffect(@NonNull android.graphics.Bitmap, @Nullable android.graphics.Rect, @NonNull android.graphics.Rect);
+    method @NonNull public static android.graphics.RenderEffect createBlendModeEffect(@NonNull android.graphics.RenderEffect, @NonNull android.graphics.RenderEffect, @NonNull android.graphics.BlendMode);
+    method @NonNull public static android.graphics.RenderEffect createBlurEffect(float, float, @NonNull android.graphics.RenderEffect, @NonNull android.graphics.Shader.TileMode);
+    method @NonNull public static android.graphics.RenderEffect createBlurEffect(float, float, @NonNull android.graphics.Shader.TileMode);
+    method @NonNull public static android.graphics.RenderEffect createChainEffect(@NonNull android.graphics.RenderEffect, @NonNull android.graphics.RenderEffect);
+    method @NonNull public static android.graphics.RenderEffect createColorFilterEffect(@NonNull android.graphics.ColorFilter, @NonNull android.graphics.RenderEffect);
+    method @NonNull public static android.graphics.RenderEffect createColorFilterEffect(@NonNull android.graphics.ColorFilter);
+    method @NonNull public static android.graphics.RenderEffect createOffsetEffect(float, float);
+    method @NonNull public static android.graphics.RenderEffect createOffsetEffect(float, float, @NonNull android.graphics.RenderEffect);
+  }
+
   public final class RenderNode {
     ctor public RenderNode(@Nullable String);
     method @NonNull public android.graphics.RecordingCanvas beginRecording(int, int);
@@ -15657,6 +15682,7 @@ package android.graphics {
     method public boolean setPosition(@NonNull android.graphics.Rect);
     method public boolean setProjectBackwards(boolean);
     method public boolean setProjectionReceiver(boolean);
+    method public void setRenderEffect(@Nullable android.graphics.RenderEffect);
     method public boolean setRotationX(float);
     method public boolean setRotationY(float);
     method public boolean setRotationZ(float);
@@ -31407,6 +31433,7 @@ package android.net.wifi {
     field @Deprecated public static final int SECURITY_TYPE_EAP = 3; // 0x3
     field @Deprecated public static final int SECURITY_TYPE_EAP_SUITE_B = 5; // 0x5
     field @Deprecated public static final int SECURITY_TYPE_EAP_WPA3_ENTERPRISE = 9; // 0x9
+    field @Deprecated public static final int SECURITY_TYPE_EAP_WPA3_ENTERPRISE_192_BIT = 5; // 0x5
     field @Deprecated public static final int SECURITY_TYPE_OPEN = 0; // 0x0
     field @Deprecated public static final int SECURITY_TYPE_OWE = 6; // 0x6
     field @Deprecated public static final int SECURITY_TYPE_PSK = 2; // 0x2
@@ -31644,6 +31671,7 @@ package android.net.wifi {
     method public boolean isWapiSupported();
     method public boolean isWifiEnabled();
     method public boolean isWifiStandardSupported(int);
+    method public boolean isWpa3ApValidationSupported();
     method public boolean isWpa3SaeSupported();
     method public boolean isWpa3SuiteBSupported();
     method @Deprecated public boolean pingSupplicant();
@@ -43136,6 +43164,11 @@ package android.security.keystore {
     field public static final int PURPOSE_SIGN = 4; // 0x4
     field public static final int PURPOSE_VERIFY = 8; // 0x8
     field public static final int PURPOSE_WRAP_KEY = 32; // 0x20
+    field public static final int SECURITY_LEVEL_SOFTWARE = 0; // 0x0
+    field public static final int SECURITY_LEVEL_STRONGBOX = 2; // 0x2
+    field public static final int SECURITY_LEVEL_TRUSTED_ENVIRONMENT = 1; // 0x1
+    field public static final int SECURITY_LEVEL_UNKNOWN = -2; // 0xfffffffe
+    field public static final int SECURITY_LEVEL_UNKNOWN_SECURE = -1; // 0xffffffff
     field public static final String SIGNATURE_PADDING_RSA_PKCS1 = "PKCS1";
     field public static final String SIGNATURE_PADDING_RSA_PSS = "PSS";
   }
