@@ -229,6 +229,9 @@ interface IStatusBarService
     /** Unregisters a nearby media devices provider. */
     void unregisterNearbyMediaDevicesProvider(in INearbyMediaDevicesProvider provider);
 
+    /** Starts the default assistant app. */
+    void startAssist(in Bundle args);
+
     void toggleCameraFlash();
     void toggleRecentApps();
     void toggleSplitScreen();
