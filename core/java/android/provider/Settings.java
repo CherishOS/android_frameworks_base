@@ -5784,6 +5784,14 @@ public final class Settings {
         @Readable
         public static final String TORCH_POWER_BUTTON_GESTURE = "torch_power_button_gesture";
 
+        /** Whether to show ambient or lockscreen if AoD is disabled
+         * and we do a wake gesture like lift to wake or double tap
+         *
+         * @hide
+         */
+        @Readable
+        public static final String AMBIENT_WAKE_GESTURES = "ambient_wake_gestures";
+
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
          * PUBLIC_SETTINGS below. If the new setting is hidden you have to add
@@ -5922,6 +5930,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(CAMERA_FLASH_NOTIFICATION);
             PRIVATE_SETTINGS.add(SCREEN_FLASH_NOTIFICATION);
             PRIVATE_SETTINGS.add(SCREEN_FLASH_NOTIFICATION_COLOR);
+            PRIVATE_SETTINGS.add(AMBIENT_WAKE_GESTURES);
         }
 
         /**
