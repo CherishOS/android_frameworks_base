@@ -717,6 +717,10 @@ public class NotificationPanelViewController extends PanelViewController {
         return mKeyguardStatusView.hasCustomClockInBigContainer();
     }
 
+    public KeyguardStatusView getKeyguardStatusView() {
+        return mKeyguardStatusView;
+    }
+
     private void setStatusBar(StatusBar bar) {
         // TODO: this can be injected.
         mStatusBar = bar;
