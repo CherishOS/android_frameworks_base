@@ -17,9 +17,14 @@
 */
 package com.android.systemui.omni;
 
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -39,6 +44,7 @@ import com.android.systemui.R;
 public class NotificationLightsView extends RelativeLayout {
     private static final boolean DEBUG = false;
     private static final String TAG = "NotificationLightsView";
+    private static final String CANCEL_NOTIFICATION_PULSE_ACTION = "cancel_notification_pulse";
     private ValueAnimator mLightAnimator;
 
     public NotificationLightsView(Context context) {
@@ -55,7 +61,6 @@ public class NotificationLightsView extends RelativeLayout {
 
     public NotificationLightsView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        if (DEBUG) Log.d(TAG, "new");
     }
 
     public void stopAnimateNotification() {
@@ -89,53 +94,54 @@ public class NotificationLightsView extends RelativeLayout {
     }
 
     public void animateNotificationWithColor(int color) {
-        int duration = Settings.System.getIntForUser(mContext.getContentResolver(),
+        ContentResolver resolver = mContext.getContentResolver();
+        int duration = Settings.System.getIntForUser(resolver,
                 Settings.System.AMBIENT_LIGHT_DURATION, 2,
                 UserHandle.USER_CURRENT) * 1000;
-        int repeat = Settings.System.getIntForUser(mContext.getContentResolver(),
+        int repeats = Settings.System.getIntForUser(resolver,
                 Settings.System.AMBIENT_LIGHT_REPEAT_COUNT, 0,
                 UserHandle.USER_CURRENT);
-        boolean directionIsRestart = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.AMBIENT_LIGHT_REPEAT_DIRECTION, 0,
-                UserHandle.USER_CURRENT) != 1;
-        int style = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.AMBIENT_LIGHT_LAYOUT, 0,
-                UserHandle.USER_CURRENT);
-
-        ImageView leftViewFaded = (ImageView) findViewById(R.id.notification_animation_left_faded);
-        ImageView rightViewFaded = (ImageView) findViewById(R.id.notification_animation_right_faded);
-        ImageView leftViewSolid = (ImageView) findViewById(R.id.notification_animation_left_solid);
-        ImageView rightViewSolid = (ImageView) findViewById(R.id.notification_animation_right_solid);
-        leftViewFaded.setColorFilter(color);
-        rightViewFaded.setColorFilter(color);
-        leftViewFaded.setVisibility(style == 0 ? View.VISIBLE : View.GONE);
-        rightViewFaded.setVisibility(style == 0 ? View.VISIBLE : View.GONE);
-        leftViewSolid.setColorFilter(color);
-        rightViewSolid.setColorFilter(color);
-        leftViewSolid.setVisibility(style == 1 ? View.VISIBLE : View.GONE);
-        rightViewSolid.setVisibility(style == 1 ? View.VISIBLE : View.GONE);
+        ImageView leftView = (ImageView) findViewById(R.id.notification_animation_left);
+        ImageView rightView = (ImageView) findViewById(R.id.notification_animation_right);
+        leftView.setColorFilter(color);
+        rightView.setColorFilter(color);
         mLightAnimator = ValueAnimator.ofFloat(new float[]{0.0f, 2.0f});
         mLightAnimator.setDuration(duration);
-        mLightAnimator.setRepeatCount(repeat == 0 ? ValueAnimator.INFINITE : repeat);
-        mLightAnimator.setRepeatMode(directionIsRestart ? ValueAnimator.RESTART : ValueAnimator.REVERSE);
+        mLightAnimator.setRepeatCount(repeats == 0 ? ValueAnimator.INFINITE : repeats);
+        mLightAnimator.setRepeatMode(ValueAnimator.RESTART);
+        if (repeats != 0) {
+            mLightAnimator.addListener(new AnimatorListener() {
+                @Override
+                public void onAnimationCancel(Animator animation) { /* do nothing */ }
+                @Override
+                public void onAnimationRepeat(Animator animation) { /* do nothing */ }
+                @Override
+                public void onAnimationStart(Animator animation) { /* do nothing */ }
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    Settings.System.putIntForUser(resolver,
+                            Settings.System.AOD_NOTIFICATION_PULSE_ACTIVATED, 0,
+                            UserHandle.USER_CURRENT);
+                    Settings.System.putIntForUser(resolver,
+                            Settings.System.AOD_NOTIFICATION_PULSE_TRIGGER, 0,
+                            UserHandle.USER_CURRENT);
+                }
+            });
+        }
         mLightAnimator.addUpdateListener(new AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
                 if (DEBUG) Log.d(TAG, "onAnimationUpdate");
                 float progress = ((Float) animation.getAnimatedValue()).floatValue();
-                leftViewFaded.setScaleY(progress);
-                rightViewFaded.setScaleY(progress);
-                leftViewSolid.setScaleY(progress);
-                rightViewSolid.setScaleY(progress);
+                leftView.setScaleY(progress);
+                rightView.setScaleY(progress);
                 float alpha = 1.0f;
                 if (progress <= 0.3f) {
                     alpha = progress / 0.3f;
                 } else if (progress >= 1.0f) {
                     alpha = 2.0f - progress;
                 }
-                leftViewFaded.setAlpha(alpha);
-                rightViewFaded.setAlpha(alpha);
-                leftViewSolid.setAlpha(alpha);
-                rightViewSolid.setAlpha(alpha);
+                leftView.setAlpha(alpha);
+                rightView.setAlpha(alpha);
             }
         });
         if (DEBUG) Log.d(TAG, "start");
