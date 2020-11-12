@@ -45,6 +45,9 @@ import android.text.format.Time;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.BatteryManager;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.UserHandle;
 import android.text.format.Time;
 import android.content.res.Resources;
 import android.view.IWindowManager;
@@ -56,8 +59,6 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.view.KeyEvent;
 import android.util.DisplayMetrics;
-import android.os.Handler;
-import android.os.UserHandle;
 import android.content.om.IOverlayManager;
 import android.content.om.OverlayInfo;
 
@@ -310,54 +311,6 @@ public class CherishUtils {
         audioMan.setRingerModeInternal(ringerMode);
         Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
     }
-
-	
-	public static void killForegroundApp() {
-        FireActions.killForegroundApp();
-    }
-	
-	public static void killForegroundApp() {
-            IStatusBarService service = getStatusBarService();
-            if (service != null) {
-                try {
-                    service.killForegroundApp();
-                } catch (RemoteException e) {
-                    // do nothing.
-                }
-            }
-        }
-		
-	public static void toggleNotifications() {
-        FireActions.toggleNotifications();
-    }
-	
-	public static void toggleQsPanel() {
-        FireActions.toggleQsPanel();
-	}
-	
-	// Toggle notifications panel
-        public static void toggleNotifications() {
-            IStatusBarService service = getStatusBarService();
-            if (service != null) {
-                try {
-                    service.togglePanel();
-                } catch (RemoteException e) {}
-            }
-        }
-		
-	// Toggle qs panel
-        public static void toggleQsPanel() {
-            IStatusBarService service = getStatusBarService();
-            if (service != null) {
-                try {
-                    service.toggleSettingsPanel();
-                } catch (RemoteException e) {}
-            }
-        }
-		
-		public static void clearAllNotifications() {
-			FireActions.clearAllNotifications();
-		}
 	
 
     public static void sendKeycode(int keycode) {
@@ -385,7 +338,119 @@ public class CherishUtils {
         }, 20);
     }
 	
-	// Cycle ringer modes
+	// Check if device has a notch
+    public static boolean hasNotch(Context context) {
+        String displayCutout = context.getResources().getString(R.string.config_mainBuiltInDisplayCutout);
+        boolean maskDisplayCutout = context.getResources().getBoolean(R.bool.config_maskMainBuiltInDisplayCutout);
+        boolean displayCutoutExists = (!TextUtils.isEmpty(displayCutout) && !maskDisplayCutout);
+        return displayCutoutExists;
+    }
+	
+	public static void takeScreenshot(boolean full) {
+        IWindowManager wm = WindowManagerGlobal.getWindowManagerService();
+        try {
+            wm.sendCustomAction(new Intent(full? INTENT_SCREENSHOT : INTENT_REGION_SCREENSHOT));
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+	
+	public static void killForegroundApp() {
+        FireActions.killForegroundApp();
+    }
+		
+	public static void toggleNotifications() {
+        FireActions.toggleNotifications();
+    }
+	
+	public static void toggleQsPanel() {
+        FireActions.toggleQsPanel();
+	}
+		
+	public static void clearAllNotifications() {
+		FireActions.clearAllNotifications();
+	}
+	
+	public static void startAssist() {
+        FireActions.startAssist();
+    }
+
+    private static final class FireActions {
+        private static IStatusBarService mStatusBarService = null;
+        private static IStatusBarService getStatusBarService() {
+            synchronized (FireActions.class) {
+                if (mStatusBarService == null) {
+                    mStatusBarService = IStatusBarService.Stub.asInterface(
+                            ServiceManager.getService("statusbar"));
+                }
+                return mStatusBarService;
+            }
+        }
+		
+		
+        public static void toggleCameraFlash() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.toggleCameraFlash();
+                } catch (RemoteException e) {
+                    // do nothing.
+                }
+            }
+        }
+		
+		public static void startAssist() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.startAssist(new Bundle());
+                } catch (RemoteException e) {}
+            }
+        }
+
+     public static void killForegroundApp() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.killForegroundApp();
+                } catch (RemoteException e) {
+                    // do nothing.
+                }
+            }
+        }
+
+    // Toggle notifications panel
+        public static void toggleNotifications() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.togglePanel();
+                } catch (RemoteException e) {}
+            }
+        }
+		
+	// Toggle qs panel
+        public static void toggleQsPanel() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.toggleSettingsPanel();
+                } catch (RemoteException e) {}
+            }
+        }
+		
+	// Clear notifications
+        public static void clearAllNotifications() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.onClearAllNotifications(ActivityManager.getCurrentUser());
+                } catch (RemoteException e) {}
+            }
+        }
+    }
+
+    // Cycle ringer modes
     public static void toggleRingerModes (Context context) {
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         Vibrator mVibrator = (Vibrator) context.getSystemService(VIBRATOR_SERVICE);
@@ -413,56 +478,6 @@ public class CherishUtils {
     public static void toggleVolumePanel(Context context) {
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         am.adjustVolume(AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
-    }
-	
-	// Clear notifications
-        public static void clearAllNotifications() {
-            IStatusBarService service = getStatusBarService();
-            if (service != null) {
-                try {
-                    service.onClearAllNotifications(ActivityManager.getCurrentUser());
-                } catch (RemoteException e) {}
-            }
-        }
-	
-	// Check if device has a notch
-    public static boolean hasNotch(Context context) {
-        String displayCutout = context.getResources().getString(R.string.config_mainBuiltInDisplayCutout);
-        boolean maskDisplayCutout = context.getResources().getBoolean(R.bool.config_maskMainBuiltInDisplayCutout);
-        boolean displayCutoutExists = (!TextUtils.isEmpty(displayCutout) && !maskDisplayCutout);
-        return displayCutoutExists;
-    }
-	
-	public static void takeScreenshot(boolean full) {
-        IWindowManager wm = WindowManagerGlobal.getWindowManagerService();
-        try {
-            wm.sendCustomAction(new Intent(full? INTENT_SCREENSHOT : INTENT_REGION_SCREENSHOT));
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static final class FireActions {
-        private static IStatusBarService mStatusBarService = null;
-        private static IStatusBarService getStatusBarService() {
-            synchronized (FireActions.class) {
-                if (mStatusBarService == null) {
-                    mStatusBarService = IStatusBarService.Stub.asInterface(
-                            ServiceManager.getService("statusbar"));
-                }
-                return mStatusBarService;
-            }
-        }
-        public static void toggleCameraFlash() {
-            IStatusBarService service = getStatusBarService();
-            if (service != null) {
-                try {
-                    service.toggleCameraFlash();
-                } catch (RemoteException e) {
-                    // do nothing.
-                }
-            }
-        }
     }
 	
 	public static boolean deviceSupportNavigationBar(Context context) {
