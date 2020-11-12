@@ -25,6 +25,7 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.IActivityManager;
 import android.hardware.input.InputManager;
+import android.media.AudioManager;
 import android.os.Looper;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -50,6 +51,7 @@ import android.view.IWindowManager;
 import android.view.WindowManagerGlobal;
 import android.view.InputDevice;
 import android.view.KeyCharacterMap;
+import android.widget.Toast;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.view.KeyEvent;
@@ -277,6 +279,29 @@ public class CherishUtils {
         return !TextUtils.isEmpty(networkOperator) && Arrays.asList(mcc).contains(
                 networkOperator.substring(0, /*Filter only 3 digits*/ 3));
     }
+	
+	public static void triggerHushMute(Context context) {
+        // We can't call AudioService#silenceRingerModeInternal from here, so this is a partial copy of it
+        int silenceRingerSetting = Settings.Secure.getIntForUser(context.getContentResolver(),
+                Settings.Secure.VOLUME_HUSH_GESTURE, Settings.Secure.VOLUME_HUSH_OFF,
+                UserHandle.USER_CURRENT);
+
+        int ringerMode;
+        int toastText;
+        if (silenceRingerSetting == Settings.Secure.VOLUME_HUSH_VIBRATE) {
+            ringerMode = AudioManager.RINGER_MODE_VIBRATE;
+            toastText = com.android.internal.R.string.volume_dialog_ringer_guidance_vibrate;
+        } else {
+            // VOLUME_HUSH_MUTE and VOLUME_HUSH_OFF
+            ringerMode = AudioManager.RINGER_MODE_SILENT;
+            toastText = com.android.internal.R.string.volume_dialog_ringer_guidance_silent;
+        }
+        AudioManager audioMan = (AudioManager)
+                context.getSystemService(Context.AUDIO_SERVICE);
+        audioMan.setRingerModeInternal(ringerMode);
+        Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
+    }
+
 	
 	public static void killForegroundApp() {
         FireActions.killForegroundApp();
