@@ -246,6 +246,15 @@ public class CherishUtils {
            return false;
        }
     }
+	
+	public static void showPowerMenu() {
+        final IWindowManager wm = WindowManagerGlobal.getWindowManagerService();
+        try {
+            wm.showGlobalActions();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void toggleCameraFlash() {
         FireActions.toggleCameraFlash();
