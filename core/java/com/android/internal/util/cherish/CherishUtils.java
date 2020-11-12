@@ -45,6 +45,9 @@ import android.text.format.Time;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.BatteryManager;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.UserHandle;
 import android.text.format.Time;
 import android.content.res.Resources;
 import android.view.IWindowManager;
@@ -56,8 +59,6 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.view.KeyEvent;
 import android.util.DisplayMetrics;
-import android.os.Handler;
-import android.os.UserHandle;
 import android.content.om.IOverlayManager;
 import android.content.om.OverlayInfo;
 
@@ -191,6 +192,19 @@ public class CherishUtils {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
+	
+	public static void startAssist() {
+        FireActions.startAssist();
+    }
+	
+	public static void startAssist() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.startAssist(new Bundle());
+                } catch (RemoteException e) {}
+            }
+        }
 
     // Check to see if device has a camera
     public static boolean hasCamera(Context context) {
