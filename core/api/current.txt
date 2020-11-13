@@ -6950,6 +6950,7 @@ package android.app.admin {
     method @Nullable public java.util.List<java.lang.String> getPermittedCrossProfileNotificationListeners(@NonNull android.content.ComponentName);
     method @Nullable public java.util.List<java.lang.String> getPermittedInputMethods(@NonNull android.content.ComponentName);
     method public int getPersonalAppsSuspendedReasons(@NonNull android.content.ComponentName);
+    method public int getRequiredPasswordComplexity();
     method public long getRequiredStrongAuthTimeout(@Nullable android.content.ComponentName);
     method public boolean getScreenCaptureDisabled(@Nullable android.content.ComponentName);
     method public java.util.List<android.os.UserHandle> getSecondaryUsers(@NonNull android.content.ComponentName);
@@ -7081,6 +7082,7 @@ package android.app.admin {
     method public void setProfileEnabled(@NonNull android.content.ComponentName);
     method public void setProfileName(@NonNull android.content.ComponentName, String);
     method public void setRecommendedGlobalProxy(@NonNull android.content.ComponentName, @Nullable android.net.ProxyInfo);
+    method public void setRequiredPasswordComplexity(int);
     method public void setRequiredStrongAuthTimeout(@NonNull android.content.ComponentName, long);
     method public boolean setResetPasswordToken(android.content.ComponentName, byte[]);
     method public void setRestrictionsProvider(@NonNull android.content.ComponentName, @Nullable android.content.ComponentName);
@@ -7401,6 +7403,12 @@ package android.app.admin {
     field public static final int ERROR_NEW_FREEZE_PERIOD_TOO_CLOSE = 4; // 0x4
     field public static final int ERROR_NEW_FREEZE_PERIOD_TOO_LONG = 3; // 0x3
     field public static final int ERROR_UNKNOWN = 1; // 0x1
+  }
+
+  public final class UnsafeStateException extends java.lang.IllegalStateException implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.app.admin.UnsafeStateException> CREATOR;
   }
 
 }
@@ -24364,6 +24372,8 @@ package android.media {
     field public static final int ENCODING_MP3 = 9; // 0x9
     field public static final int ENCODING_OPUS = 20; // 0x14
     field public static final int ENCODING_PCM_16BIT = 2; // 0x2
+    field public static final int ENCODING_PCM_24BIT_PACKED = 21; // 0x15
+    field public static final int ENCODING_PCM_32BIT = 22; // 0x16
     field public static final int ENCODING_PCM_8BIT = 3; // 0x3
     field public static final int ENCODING_PCM_FLOAT = 4; // 0x4
     field public static final int SAMPLE_RATE_UNSPECIFIED = 0; // 0x0
@@ -41238,10 +41248,11 @@ package android.security.keystore {
     method public String getKeystoreAlias();
     method public int getOrigin();
     method public int getPurposes();
+    method public int getSecurityLevel();
     method @NonNull public String[] getSignaturePaddings();
     method public int getUserAuthenticationType();
     method public int getUserAuthenticationValidityDurationSeconds();
-    method public boolean isInsideSecureHardware();
+    method @Deprecated public boolean isInsideSecureHardware();
     method public boolean isInvalidatedByBiometricEnrollment();
     method public boolean isTrustedUserPresenceRequired();
     method public boolean isUserAuthenticationRequired();
@@ -44243,6 +44254,8 @@ package android.telecom {
     field public static final String EXTRA_ANSWERING_DROPS_FG_CALL = "android.telecom.extra.ANSWERING_DROPS_FG_CALL";
     field public static final String EXTRA_ANSWERING_DROPS_FG_CALL_APP_NAME = "android.telecom.extra.ANSWERING_DROPS_FG_CALL_APP_NAME";
     field public static final String EXTRA_AUDIO_CODEC = "android.telecom.extra.AUDIO_CODEC";
+    field public static final String EXTRA_AUDIO_CODEC_BANDWIDTH_KHZ = "android.telecom.extra.AUDIO_CODEC_BANDWIDTH_KHZ";
+    field public static final String EXTRA_AUDIO_CODEC_BITRATE_KBPS = "android.telecom.extra.AUDIO_CODEC_BITRATE_KBPS";
     field public static final String EXTRA_CALL_SUBJECT = "android.telecom.extra.CALL_SUBJECT";
     field public static final String EXTRA_CHILD_ADDRESS = "android.telecom.extra.CHILD_ADDRESS";
     field public static final String EXTRA_IS_RTT_AUDIO_PRESENT = "android.telecom.extra.IS_RTT_AUDIO_PRESENT";
