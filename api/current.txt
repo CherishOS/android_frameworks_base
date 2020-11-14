@@ -11744,7 +11744,7 @@ package android.content.pm {
     method public long getFirstInstallTime();
     method public android.graphics.drawable.Drawable getIcon(int);
     method public CharSequence getLabel();
-    method public float getLoadingProgress();
+    method @FloatRange(from=0.0, to=1.0) public float getLoadingProgress();
     method public String getName();
     method public android.os.UserHandle getUser();
   }
@@ -31682,6 +31682,7 @@ package android.net.wifi {
     method public android.net.DhcpInfo getDhcpInfo();
     method public int getMaxNumberOfNetworkSuggestionsPerApp();
     method @IntRange(from=0) public int getMaxSignalLevel();
+    method @RequiresPermission(android.Manifest.permission.ACCESS_WIFI_STATE) public int getNetworkSuggestionUserApprovalStatus();
     method @NonNull @RequiresPermission(android.Manifest.permission.ACCESS_WIFI_STATE) public java.util.List<android.net.wifi.WifiNetworkSuggestion> getNetworkSuggestions();
     method @Deprecated @RequiresPermission(anyOf={"android.permission.NETWORK_SETTINGS", "android.permission.NETWORK_SETUP_WIZARD"}) public java.util.List<android.net.wifi.hotspot2.PasspointConfiguration> getPasspointConfigurations();
     method public java.util.List<android.net.wifi.ScanResult> getScanResults();
@@ -31752,6 +31753,11 @@ package android.net.wifi {
     field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_INTERNAL = 1; // 0x1
     field public static final int STATUS_NETWORK_SUGGESTIONS_ERROR_REMOVE_INVALID = 5; // 0x5
     field public static final int STATUS_NETWORK_SUGGESTIONS_SUCCESS = 0; // 0x0
+    field public static final int STATUS_SUGGESTION_APPROVAL_APPROVED_BY_CARRIER_PRIVILEGE = 4; // 0x4
+    field public static final int STATUS_SUGGESTION_APPROVAL_APPROVED_BY_USER = 2; // 0x2
+    field public static final int STATUS_SUGGESTION_APPROVAL_PENDING = 1; // 0x1
+    field public static final int STATUS_SUGGESTION_APPROVAL_REJECTED_BY_USER = 3; // 0x3
+    field public static final int STATUS_SUGGESTION_APPROVAL_UNKNOWN = 0; // 0x0
     field public static final int STATUS_SUGGESTION_CONNECTION_FAILURE_ASSOCIATION = 1; // 0x1
     field public static final int STATUS_SUGGESTION_CONNECTION_FAILURE_AUTHENTICATION = 2; // 0x2
     field public static final int STATUS_SUGGESTION_CONNECTION_FAILURE_IP_PROVISIONING = 3; // 0x3
@@ -53860,16 +53866,17 @@ package android.view {
     field public int toolType;
   }
 
-  public interface OnReceiveContentCallback<T extends android.view.View> {
-    method public boolean onReceiveContent(@NonNull T, @NonNull android.view.OnReceiveContentCallback.Payload);
+  public interface OnReceiveContentListener {
+    method @Nullable public android.view.OnReceiveContentListener.Payload onReceiveContent(@NonNull android.view.View, @NonNull android.view.OnReceiveContentListener.Payload);
   }
 
-  public static final class OnReceiveContentCallback.Payload {
+  public static final class OnReceiveContentListener.Payload {
     method @NonNull public android.content.ClipData getClip();
     method @Nullable public android.os.Bundle getExtras();
     method public int getFlags();
     method @Nullable public android.net.Uri getLinkUri();
     method public int getSource();
+    method @NonNull public java.util.Map<java.lang.Boolean,android.view.OnReceiveContentListener.Payload> partition(@NonNull java.util.function.Predicate<android.content.ClipData.Item>);
     field public static final int FLAG_CONVERT_TO_PLAIN_TEXT = 1; // 0x1
     field public static final int SOURCE_APP = 0; // 0x0
     field public static final int SOURCE_AUTOFILL = 4; // 0x4
@@ -53879,12 +53886,15 @@ package android.view {
     field public static final int SOURCE_PROCESS_TEXT = 5; // 0x5
   }
 
-  public static final class OnReceiveContentCallback.Payload.Builder {
-    ctor public OnReceiveContentCallback.Payload.Builder(@NonNull android.content.ClipData, int);
-    method @NonNull public android.view.OnReceiveContentCallback.Payload build();
-    method @NonNull public android.view.OnReceiveContentCallback.Payload.Builder setExtras(@Nullable android.os.Bundle);
-    method @NonNull public android.view.OnReceiveContentCallback.Payload.Builder setFlags(int);
-    method @NonNull public android.view.OnReceiveContentCallback.Payload.Builder setLinkUri(@Nullable android.net.Uri);
+  public static final class OnReceiveContentListener.Payload.Builder {
+    ctor public OnReceiveContentListener.Payload.Builder(@NonNull android.view.OnReceiveContentListener.Payload);
+    ctor public OnReceiveContentListener.Payload.Builder(@NonNull android.content.ClipData, int);
+    method @NonNull public android.view.OnReceiveContentListener.Payload build();
+    method @NonNull public android.view.OnReceiveContentListener.Payload.Builder setClip(@NonNull android.content.ClipData);
+    method @NonNull public android.view.OnReceiveContentListener.Payload.Builder setExtras(@Nullable android.os.Bundle);
+    method @NonNull public android.view.OnReceiveContentListener.Payload.Builder setFlags(int);
+    method @NonNull public android.view.OnReceiveContentListener.Payload.Builder setLinkUri(@Nullable android.net.Uri);
+    method @NonNull public android.view.OnReceiveContentListener.Payload.Builder setSource(int);
   }
 
   public abstract class OrientationEventListener {
@@ -54633,7 +54643,7 @@ package android.view {
     method public void onProvideContentCaptureStructure(@NonNull android.view.ViewStructure, int);
     method public void onProvideStructure(android.view.ViewStructure);
     method public void onProvideVirtualStructure(android.view.ViewStructure);
-    method public boolean onReceiveContent(@NonNull android.view.OnReceiveContentCallback.Payload);
+    method @Nullable public android.view.OnReceiveContentListener.Payload onReceiveContent(@NonNull android.view.OnReceiveContentListener.Payload);
     method public android.view.PointerIcon onResolvePointerIcon(android.view.MotionEvent, int);
     method @CallSuper protected void onRestoreInstanceState(android.os.Parcelable);
     method public void onRtlPropertiesChanged(int);
@@ -54791,7 +54801,7 @@ package android.view {
     method public void setOnHoverListener(android.view.View.OnHoverListener);
     method public void setOnKeyListener(android.view.View.OnKeyListener);
     method public void setOnLongClickListener(@Nullable android.view.View.OnLongClickListener);
-    method public void setOnReceiveContentCallback(@Nullable String[], @Nullable android.view.OnReceiveContentCallback);
+    method public void setOnReceiveContentListener(@Nullable String[], @Nullable android.view.OnReceiveContentListener);
     method public void setOnScrollChangeListener(android.view.View.OnScrollChangeListener);
     method @Deprecated public void setOnSystemUiVisibilityChangeListener(android.view.View.OnSystemUiVisibilityChangeListener);
     method public void setOnTouchListener(android.view.View.OnTouchListener);
@@ -61806,11 +61816,6 @@ package android.widget {
 
   public static class TextView.SavedState extends android.view.View.BaseSavedState {
     field @NonNull public static final android.os.Parcelable.Creator<android.widget.TextView.SavedState> CREATOR;
-  }
-
-  public class TextViewOnReceiveContentCallback implements android.view.OnReceiveContentCallback<android.widget.TextView> {
-    ctor public TextViewOnReceiveContentCallback();
-    method public boolean onReceiveContent(@NonNull android.widget.TextView, @NonNull android.view.OnReceiveContentCallback.Payload);
   }
 
   public interface ThemedSpinnerAdapter extends android.widget.SpinnerAdapter {
