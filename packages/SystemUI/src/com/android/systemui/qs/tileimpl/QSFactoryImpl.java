@@ -46,6 +46,7 @@ import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.HeadsUpTile;
 import com.android.systemui.qs.tiles.HWKeysTile;
 import com.android.systemui.qs.tiles.LiveDisplayTile;
+import com.android.systemui.qs.tiles.KillappTile;
 import com.android.systemui.qs.tiles.LocationTile;
 import com.android.systemui.qs.tiles.LteTile;
 import com.android.systemui.qs.tiles.MonoToggleTile;
@@ -118,6 +119,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<SmartPixelsTile> mSmartPixelsTileProvider;
     private final Provider<SoundSearchTile> mSoundSearchTileProvider;
     private final Provider<MonoToggleTile> mMonoToggleTileProvider;
+    private final Provider<KillappTile> mKillappTileProvider;
 
     private final Lazy<QSHost> mQsHostLazy;
 
@@ -162,7 +164,8 @@ public class QSFactoryImpl implements QSFactory {
             Provider<GamingModeTile> gamingModeTileProvider,
             Provider<SmartPixelsTile> smartPixelsTileProvider,
             Provider<SoundSearchTile> soundSearchTileProvider,
-            Provider<MonoToggleTile> monoToggleTileProvider) {
+            Provider<MonoToggleTile> monoToggleTileProvider,
+            Provider<KillappTile> killappTileProvider) {
         mQsHostLazy = qsHostLazy;
         mWifiTileProvider = wifiTileProvider;
         mBluetoothTileProvider = bluetoothTileProvider;
@@ -204,6 +207,7 @@ public class QSFactoryImpl implements QSFactory {
         mSmartPixelsTileProvider = smartPixelsTileProvider;
         mSoundSearchTileProvider = soundSearchTileProvider;
         mMonoToggleTileProvider = monoToggleTileProvider;
+        mKillappTileProvider = killappTileProvider;
     }
 
     public QSTile createTile(String tileSpec) {
@@ -295,6 +299,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mSoundSearchTileProvider.get();
             case "mono":
                 return mMonoToggleTileProvider.get();
+            case "killapp":
+                return mKillappTileProvider.get();
         }
 
         // Custom tiles
