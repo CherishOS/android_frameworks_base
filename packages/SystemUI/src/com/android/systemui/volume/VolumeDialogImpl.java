@@ -187,6 +187,8 @@ public class VolumeDialogImpl implements VolumeDialog,
     private boolean mediaRingCase;
     private boolean mShowing;
     private boolean mShowA11yStream;
+    private boolean wasMusicActive;
+    private Handler musicStateHandler;
 
     private ColorStateList mIconNTint;
 
@@ -1537,6 +1539,8 @@ public class VolumeDialogImpl implements VolumeDialog,
             final int userLevel = getImpliedLevel(seekBar, progress);
             int pauseAudioStreamStatus = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.PAUSE_AUDIO_STREAM, 0, UserHandle.USER_CURRENT);
+            int resumeAudioStreamStatus = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.RESUME_AUDIO_STREAM, 0, UserHandle.USER_CURRENT);
             if (mRow.ss.level != userLevel || mRow.ss.muted && userLevel > 0) {
                 mRow.userAttempt = SystemClock.uptimeMillis();
                 if (mRow.requestedLevel != userLevel) {
@@ -1545,6 +1549,19 @@ public class VolumeDialogImpl implements VolumeDialog,
                     if (mRow.requestedLevel == 0 && mRow == findRow(STREAM_MUSIC) && mAudioManager.isMusicActive() && pauseAudioStreamStatus == 1) {
                         mAudioManager.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, 127));
                         mAudioManager.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, 127));
+                        if (resumeAudioStreamStatus == 1) {
+                            wasMusicActive = true;
+                            musicStateHandler = new Handler();
+                                musicStateHandler.postDelayed(() -> {
+                                    wasMusicActive = false;
+                                }, 180000);
+                        }
+                    }
+                    if (mRow == findRow(STREAM_MUSIC)  && mRow.requestedLevel > 0 && wasMusicActive && resumeAudioStreamStatus == 1) {
+                        musicStateHandler.removeCallbacksAndMessages(null);
+                        wasMusicActive = false;
+                        mAudioManager.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, 126));
+                        mAudioManager.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, 126));
                     }
                     Events.writeEvent(Events.EVENT_TOUCH_LEVEL_CHANGED, mRow.stream,
                             userLevel);
