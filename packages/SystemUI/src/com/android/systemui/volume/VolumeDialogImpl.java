@@ -782,6 +782,7 @@ public class VolumeDialogImpl implements VolumeDialog,
         mController.notifyVisible(true);
         mController.getCaptionsComponentState(false);
         checkODICaptionsTooltip(false);
+        if (countVisibleRows() > 1) getActiveRow().icon.setVisibility(View.VISIBLE);
         isEpilepticUser = false;
     }
 
@@ -1679,10 +1680,10 @@ public class VolumeDialogImpl implements VolumeDialog,
         mRingerIcon.setClickable(true);
         mExtendOutputs.setClickable(true);
         //dynamically set width
-        setDialogWidth(true, mRowWidth * countVisibleRows()/*4*/);
+        setDialogWidth(true, mRowWidth * countVisibleRows()/*4*/);//cazzo
         //define animators
-        ObjectAnimator animationODI = ObjectAnimator.ofFloat(mODICaptionsView, "translationX", translationCalc(-225));
-        ObjectAnimator animationRinger = ObjectAnimator.ofFloat(mRinger, "translationX", translationCalc(-265));
+        ObjectAnimator animationODI = ObjectAnimator.ofFloat(mODICaptionsView, "translationX", translationCalc(calcTrans(countVisibleRows(), "odi")));
+        ObjectAnimator animationRinger = ObjectAnimator.ofFloat(mRinger, "translationX", translationCalc(calcTrans(countVisibleRows(), "ringer")));
         ObjectAnimator rotationRinger = ObjectAnimator.ofFloat(mRinger, View.ROTATION, 0f, 90f).setDuration(DIALOG_HIDE_ANIMATION_DURATION);
         ObjectAnimator rotationRingerIcon = ObjectAnimator.ofFloat(mRingerIcon, View.ROTATION, 0f, -90f).setDuration(DIALOG_HIDE_ANIMATION_DURATION);
         ObjectAnimator rotationRingerDismiss = ObjectAnimator.ofFloat(mExtendOutputs, View.ROTATION, 0f, -90f).setDuration(DIALOG_HIDE_ANIMATION_DURATION);
@@ -1813,7 +1814,7 @@ public class VolumeDialogImpl implements VolumeDialog,
     private float translationCalc(float translationX) {
         float translationXleft = 0;
         if (isVolumeRockerLeft()) {
-            if (translationX != -225) {
+            if (translationX != calcTrans(countVisibleRows(), "ringer") || translationX != calcTrans(countVisibleRows(), "odi")) {
                 translationXleft = translationX * -1;
             } else {
                 translationXleft = translationX;
@@ -1929,5 +1930,11 @@ public class VolumeDialogImpl implements VolumeDialog,
 
     private boolean isVolumeRockerLeft() {
         return mIsRockerOnLeft;
+    }
+
+    private float calcTrans(int nrRow, String component) {
+        float factor = component == "ringer" ? (float) 66.25 : (float) 56.25;
+        float nrRowf = (float) nrRow;
+        return (float) factor * nrRowf * -1;
     }
 }
