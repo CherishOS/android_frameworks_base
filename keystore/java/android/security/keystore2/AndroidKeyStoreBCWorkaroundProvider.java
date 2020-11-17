@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.security.keystore;
+package android.security.keystore2;
 
 import java.security.Provider;
 
@@ -34,13 +34,13 @@ import java.security.Provider;
  *
  * @hide
  */
-public class AndroidKeyStoreBCWorkaroundProvider extends Provider {
+class AndroidKeyStoreBCWorkaroundProvider extends Provider {
 
     // IMPLEMENTATION NOTE: Class names are hard-coded in this provider to avoid loading these
     // classes when this provider is instantiated and installed early on during each app's
     // initialization process.
 
-    private static final String PACKAGE_NAME = "android.security.keystore";
+    private static final String PACKAGE_NAME = "android.security.keystore2";
     private static final String KEYSTORE_SECRET_KEY_CLASS_NAME =
             PACKAGE_NAME + ".AndroidKeyStoreSecretKey";
     private static final String KEYSTORE_PRIVATE_KEY_CLASS_NAME =
@@ -50,14 +50,8 @@ public class AndroidKeyStoreBCWorkaroundProvider extends Provider {
 
     private static final String DESEDE_SYSTEM_PROPERTY = "ro.hardware.keystore_desede";
 
-    /** @hide */
-    public AndroidKeyStoreBCWorkaroundProvider() {
-        this("AndroidKeyStoreBCWorkaround");
-    }
-
-    /** @hide **/
-    public AndroidKeyStoreBCWorkaroundProvider(String providerName) {
-        super(providerName,
+    AndroidKeyStoreBCWorkaroundProvider() {
+        super("AndroidKeyStoreBCWorkaround",
                 1.0,
                 "Android KeyStore security provider to work around Bouncy Castle");
 
