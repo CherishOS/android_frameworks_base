@@ -208,8 +208,8 @@ public class VolumeDialogImpl implements VolumeDialog,
     private boolean mIsRockerOnLeft;
     private ViewStub mODICaptionsTooltipViewStub;
     private View mODICaptionsTooltipView = null;
-    private ViewStub mBluetoothTooltipViewStub;
-    private View mBluetoothTooltipView = null;
+    //private ViewStub mBluetoothTooltipViewStub;
+    //private View mBluetoothTooltipView = null;
 
     public VolumeDialogImpl(Context context) {
         mContext =
@@ -285,10 +285,10 @@ public class VolumeDialogImpl implements VolumeDialog,
         mDialog.setContentView(R.layout.volume_dialog);
         mDialogView = mDialog.findViewById(R.id.volume_dialog);
         mMain = mDialogView.findViewById(R.id.main);
-        mBluetoothTooltipViewStub = mDialog.findViewById(R.id.bt_battery_tooltip_stub);
-        mBluetoothTooltipView = mBluetoothTooltipViewStub.inflate();
-        mBluetoothTooltipView.setVisibility(View.GONE);
-        mBluetoothBatteryReceiver = new BluetoothBatteryReceiver(mContext);
+        //mBluetoothTooltipViewStub = mDialog.findViewById(R.id.bt_battery_tooltip_stub);
+        //mBluetoothTooltipView = mBluetoothTooltipViewStub.inflate();
+        //mBluetoothTooltipView.setVisibility(View.GONE);
+        //mBluetoothBatteryReceiver = new BluetoothBatteryReceiver(mContext);
 
         isExpandedImmediatelyOn = com.android.systemui.DescendantSystemUIUtils.settingStatusBoolean("expand_immediately", mContext);
         mDialogView.setAlpha(0);
@@ -310,7 +310,7 @@ public class VolumeDialogImpl implements VolumeDialog,
         });
         expandImmediatelyAnim(true);
         }
-        showBluetoothBatteryTooltip();
+        //showBluetoothBatteryTooltip();
         mDialog.setOnShowListener(dialog -> {
             mDialogView.setTranslationX(translationCalc(200)/*200 180*/);
             mDialogView.setAlpha(0);
@@ -583,7 +583,7 @@ public class VolumeDialogImpl implements VolumeDialog,
         }
     }
 
-    protected void showBluetoothBatteryTooltip() {
+    /*protected void showBluetoothBatteryTooltip() {
         if (mState == null) return;
         setBtTooltipParams();
         final StreamState ss_music = mState.states.get(AudioManager.STREAM_MUSIC);
@@ -613,7 +613,7 @@ public class VolumeDialogImpl implements VolumeDialog,
     protected void hideBluetoothBatteryTooltip() {
         mBluetoothTooltipView.animate().alpha(0).setDuration(DIALOG_SHOW_ANIMATION_DURATION).start();
         expandImmediatelyAnim(false);
-    }
+    }*/
 
     protected void showCaptionsTooltip() {
         if (!mHasSeenODICaptionsTooltip && mODICaptionsTooltipViewStub != null) {
@@ -818,7 +818,7 @@ public class VolumeDialogImpl implements VolumeDialog,
     protected void dismissH(int reason) {
         Events.writeEvent(Events.EVENT_DISMISS_DIALOG, reason);
         mediaRingCase = false;
-        hideBluetoothBatteryTooltip();
+        //hideBluetoothBatteryTooltip();
         expandImmediatelyAnim(false);
         // Avoid multiple animation calls on touch spams.
         if (!mShowing) {
@@ -1639,7 +1639,7 @@ public class VolumeDialogImpl implements VolumeDialog,
 
     private void enlargedPanel() {
         if (isPanelEnlarged || isPanelExpanded) return;
-        hideBluetoothBatteryTooltip();
+        //hideBluetoothBatteryTooltip();
         getActiveRow().icon.setVisibility(VISIBLE);
         findRow(STREAM_RING).icon.setVisibility(VISIBLE);
         isAnimationInProgress = true;
@@ -1663,7 +1663,7 @@ public class VolumeDialogImpl implements VolumeDialog,
 
     private void expandedPanel() {
         if (directlyCalled) {
-            hideBluetoothBatteryTooltip();
+            //hideBluetoothBatteryTooltip();
             mODICaptionsView.animate().alpha(0).setDuration(DIALOG_HIDE_ANIMATION_DURATION).start();
             mODICaptionsView.animate().alpha(1.0f).setInterpolator(new SystemUIInterpolators.LogDecelerateInterpolator(800f, 2.1f, 0)).setDuration(DIALOG_HIDE_ANIMATION_DURATION).start();
             ObjectAnimator animation = ObjectAnimator.ofFloat(mDialogView, "translationX", translationCalc(150), 0f);
@@ -1888,7 +1888,7 @@ public class VolumeDialogImpl implements VolumeDialog,
         mDialog.getWindow().setAttributes(attributes);
     }
 
-    public void setBtTooltipParams() {
+    /*public void setBtTooltipParams() {
         if (mBluetoothTooltipViewStub == null) return;
         if (isVolumeRockerLeft()) {
             RelativeLayout rl = mDialog.findViewById(R.id.volume_bt_rl);
@@ -1903,7 +1903,7 @@ public class VolumeDialogImpl implements VolumeDialog,
             rl.requestLayout();
             rl.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
         }
-    }
+    }*/
 
     private int countVisibleRows() {
         int count = 0;
