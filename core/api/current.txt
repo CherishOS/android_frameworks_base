@@ -5778,6 +5778,7 @@ package android.app {
     method @NonNull public android.app.Notification.Builder setRemoteInputHistory(CharSequence[]);
     method @NonNull public android.app.Notification.Builder setSettingsText(CharSequence);
     method @NonNull public android.app.Notification.Builder setShortcutId(String);
+    method @NonNull public android.app.Notification.Builder setShowForegroundImmediately(boolean);
     method @NonNull public android.app.Notification.Builder setShowWhen(boolean);
     method @NonNull public android.app.Notification.Builder setSmallIcon(@DrawableRes int);
     method @NonNull public android.app.Notification.Builder setSmallIcon(@DrawableRes int, int);
@@ -37999,16 +38000,16 @@ package android.provider {
     field public static final String EXTRA_ADDRESS_BOOK_INDEX_COUNTS = "android.provider.extra.ADDRESS_BOOK_INDEX_COUNTS";
     field public static final String EXTRA_ADDRESS_BOOK_INDEX_TITLES = "android.provider.extra.ADDRESS_BOOK_INDEX_TITLES";
     field public static final String PROTOCOL = "data5";
-    field public static final int PROTOCOL_AIM = 0; // 0x0
+    field @Deprecated public static final int PROTOCOL_AIM = 0; // 0x0
     field public static final int PROTOCOL_CUSTOM = -1; // 0xffffffff
-    field public static final int PROTOCOL_GOOGLE_TALK = 5; // 0x5
-    field public static final int PROTOCOL_ICQ = 6; // 0x6
-    field public static final int PROTOCOL_JABBER = 7; // 0x7
-    field public static final int PROTOCOL_MSN = 1; // 0x1
-    field public static final int PROTOCOL_NETMEETING = 8; // 0x8
-    field public static final int PROTOCOL_QQ = 4; // 0x4
-    field public static final int PROTOCOL_SKYPE = 3; // 0x3
-    field public static final int PROTOCOL_YAHOO = 2; // 0x2
+    field @Deprecated public static final int PROTOCOL_GOOGLE_TALK = 5; // 0x5
+    field @Deprecated public static final int PROTOCOL_ICQ = 6; // 0x6
+    field @Deprecated public static final int PROTOCOL_JABBER = 7; // 0x7
+    field @Deprecated public static final int PROTOCOL_MSN = 1; // 0x1
+    field @Deprecated public static final int PROTOCOL_NETMEETING = 8; // 0x8
+    field @Deprecated public static final int PROTOCOL_QQ = 4; // 0x4
+    field @Deprecated public static final int PROTOCOL_SKYPE = 3; // 0x3
+    field @Deprecated public static final int PROTOCOL_YAHOO = 2; // 0x2
     field public static final int TYPE_HOME = 1; // 0x1
     field public static final int TYPE_OTHER = 3; // 0x3
     field public static final int TYPE_WORK = 2; // 0x2
@@ -41196,6 +41197,12 @@ package android.security.identity {
 }
 
 package android.security.keystore {
+
+  public class BackendBusyException extends java.security.ProviderException {
+    ctor public BackendBusyException();
+    ctor public BackendBusyException(@NonNull String);
+    ctor public BackendBusyException(@NonNull String, @NonNull Throwable);
+  }
 
   public class KeyExpiredException extends java.security.InvalidKeyException {
     ctor public KeyExpiredException();
@@ -52166,6 +52173,7 @@ package android.view {
     method public android.graphics.Canvas lockHardwareCanvas();
     method public void readFromParcel(android.os.Parcel);
     method public void release();
+    method public void setFrameRate(@FloatRange(from=0.0) float, int, boolean);
     method public void setFrameRate(@FloatRange(from=0.0) float, int);
     method @Deprecated public void unlockCanvas(android.graphics.Canvas);
     method public void unlockCanvasAndPost(android.graphics.Canvas);
@@ -52213,6 +52221,7 @@ package android.view {
     method @NonNull public android.view.SurfaceControl.Transaction setAlpha(@NonNull android.view.SurfaceControl, @FloatRange(from=0.0, to=1.0) float);
     method @NonNull public android.view.SurfaceControl.Transaction setBufferSize(@NonNull android.view.SurfaceControl, @IntRange(from=0) int, @IntRange(from=0) int);
     method @NonNull public android.view.SurfaceControl.Transaction setFrameRate(@NonNull android.view.SurfaceControl, @FloatRange(from=0.0) float, int);
+    method @NonNull public android.view.SurfaceControl.Transaction setFrameRate(@NonNull android.view.SurfaceControl, @FloatRange(from=0.0) float, int, boolean);
     method @NonNull public android.view.SurfaceControl.Transaction setGeometry(@NonNull android.view.SurfaceControl, @Nullable android.graphics.Rect, @Nullable android.graphics.Rect, int);
     method @NonNull public android.view.SurfaceControl.Transaction setLayer(@NonNull android.view.SurfaceControl, @IntRange(from=java.lang.Integer.MIN_VALUE, to=java.lang.Integer.MAX_VALUE) int);
     method @NonNull public android.view.SurfaceControl.Transaction setVisibility(@NonNull android.view.SurfaceControl, boolean);
