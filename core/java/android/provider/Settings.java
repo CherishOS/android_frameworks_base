@@ -5422,6 +5422,12 @@ public final class Settings {
         * @hide
         */
         public static final String AICP_LOCKSCREEN_WEATHER_STYLE = "lockscreen_weather_style";
+		
+		/**
+         * Settings dashboard icon style
+         * @hide
+         */
+        public static final String THEMING_SETTINGS_DASHBOARD_ICONS = "theming_settings_dashboard_icons";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
@@ -5606,6 +5612,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(OMNIJAWS_WEATHER_ICON_PACK);
             PRIVATE_SETTINGS.add(OMNI_LOCKSCREEN_WEATHER_ENABLED);
             PRIVATE_SETTINGS.add(AICP_LOCKSCREEN_WEATHER_STYLE);
+            PRIVATE_SETTINGS.add(THEMING_SETTINGS_DASHBOARD_ICONS);
         }
 
         /**
