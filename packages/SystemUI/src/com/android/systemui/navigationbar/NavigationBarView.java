@@ -610,6 +610,7 @@ public class NavigationBarView extends FrameLayout implements
             mTransitionListener.onBackAltCleared();
         }
         mImeVisible = visible;
+        mEdgeBackGestureHandler.setImeVisible(visible);
     }
 
     void setDisabledFlags(int disabledFlags, SysUiState sysUiState) {
