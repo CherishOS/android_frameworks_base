@@ -751,6 +751,7 @@ public class NavigationBarView extends FrameLayout implements
         mImeVisible = visible;
         mRotationButtonController.getRotationButton().setCanShowRotationButton(
                 !mImeVisible && mIsUserEnabled);
+        mEdgeBackGestureHandler.setImeVisible(mImeVisible);
         if (mNavBarOverlayController.isNavigationBarOverlayEnabled()) {
             mNavBarOverlayController.setCanShow(!mImeVisible);
         }
