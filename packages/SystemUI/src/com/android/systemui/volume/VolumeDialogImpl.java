@@ -1708,7 +1708,6 @@ public class VolumeDialogImpl implements VolumeDialog,
             h.postDelayed(() -> {
                 isAnimationInProgress = false;
             }, DIALOG_HIDE_ANIMATION_DURATION);
-        mBlurUtils.applyBlur(mWindow.getDecorView().getViewRootImpl(),mBlurUtils.blurRadiusOfRatio(1));
         mMain.setBackgroundResource(R.drawable.rounded_bg_full_transparent);
         mMain.setPadding(16, 16, 16, 16);
         mRinger.setBackgroundResource(R.drawable.rounded_bg_full_transparent);
