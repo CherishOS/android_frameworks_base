@@ -201,4 +201,65 @@ public final class LineageButtons {
                     UserHandle.USER_CURRENT) == 1;
         }
     }
+	 public void triggerAction(int action, boolean leftEdge, boolean isVerticalSwipe, Context context) {
+        switch (action) {
+            case 0: // No action
+            default:
+                break;
+            case 1: // Assistant
+                CherishUtils.startAssist();
+                break;
+            case 2: // Voice search
+                CherishUtils.launchVoiceSearch(context);
+                break;
+            case 3: // Camera
+                CherishUtils.launchCamera(context);
+                break;
+            case 4: // Flashlight
+                CherishUtils.toggleCameraFlash(false/*no proximity check*/);
+                break;
+            case 5: // Application
+                CherishUtils.launchApp(context, leftEdge, isVerticalSwipe);
+                break;
+            case 6: // Volume panel
+                CherishUtils.toggleVolumePanel(context);
+                break;
+            case 7: // Screen off
+                CherishUtils.switchScreenOff(context);
+                break;
+            case 8: // Screenshot
+                CherishUtils.takeScreenshot(true);
+                break;
+            case 9: // Notification panel
+                CherishUtils.toggleNotifications();
+                break;
+            case 10: // QS panel
+                CherishUtils.toggleQsPanel();
+                break;
+            case 11: // Clear notifications
+                CherishUtils.clearAllNotifications();
+                break;
+            case 12: // Ringer modes
+                CherishUtils.toggleRingerModes(context);
+                break;
+            case 13: // Kill app
+                CherishUtils.killForegroundApp();
+                break;
+            case 14: // Skip song
+                skipTrack();
+                break;
+            case 15: // Previous song
+                previousTrack();
+                break;
+            case 16: // Power menu
+                CherishUtils.showPowerMenu();
+                break;
+            case 17: // Partial screenshot
+                CherishUtils.takeScreenshot(false);
+                break;
+            case 18: // Hush mute
+                CherishUtils.triggerHushMute(context);
+                break;
+        }
+    }
 }
