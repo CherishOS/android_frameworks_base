@@ -27,7 +27,6 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.ArrayMap;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 
 import androidx.annotation.VisibleForTesting;
@@ -154,17 +153,9 @@ public final class ClockManager {
         addBuiltinClock(() -> new DefaultBoldClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new SamsungClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new SamsungBoldClockController(res, layoutInflater, colorExtractor));
-        //addBuiltinClock(() -> new BubbleClockController(res, layoutInflater, colorExtractor));
+        addBuiltinClock(() -> new BubbleClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new AnalogClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new SpideyClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new SpectrumClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new DotClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new SneekyClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new TypeClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new TypeClockAltController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new DividedLinesClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new OneLineDigitalClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new TwoLineDigitalClockController(res, layoutInflater, colorExtractor));
 
         // Store the size of the display for generation of clock preview.
         DisplayMetrics dm = res.getDisplayMetrics();
@@ -342,8 +333,7 @@ public final class ClockManager {
                     .setTitle(plugin::getTitle)
                     .setId(id)
                     .setThumbnail(plugin::getThumbnail)
-                     // to make the preview bigger in ThemePicker
-                    .setPreview(() -> plugin.getPreview(mWidth / 2, mHeight / 2))
+                    .setPreview(() -> plugin.getPreview(mWidth, mHeight))
                     .build());
         }
 
