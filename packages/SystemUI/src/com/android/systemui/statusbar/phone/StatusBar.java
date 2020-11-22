@@ -909,6 +909,8 @@ public class StatusBar extends SystemUI implements DemoMode,
         DateTimeView.setReceiverHandler(timeTickHandler);
     }
 
+    private boolean mShowNavBar;
+
     @Override
     public void start() {
         mScreenLifecycle.addObserver(mScreenObserver);
@@ -1211,7 +1213,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mNotificationPanelViewController.setHeadsUpManager(mHeadsUpManager);
         mNotificationLogger.setHeadsUpManager(mHeadsUpManager);
 
-        createNavigationBar(result);
+        updateNavigationBar(true);
 
         if (ENABLE_LOCKSCREEN_WALLPAPER && mWallpaperSupported) {
             mLockscreenWallpaper = mLockscreenWallpaperLazy.get();
@@ -4167,6 +4169,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_CHARGING_ANIMATION_STYLE),
                     false, this, UserHandle.USER_ALL);
+			resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.FORCE_SHOW_NAVBAR),
+                    false, this, UserHandle.USER_ALL);
         }
          @Override
         public void onChange(boolean selfChange, Uri uri) {
@@ -4191,6 +4196,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 			updateKeyguardStatusSettings();
 			setLockScreenMediaBlurLevel();
 			updateChargingAnimation();
+			updateNavigationBar(false);
         }
     }
 
@@ -4224,6 +4230,24 @@ public class StatusBar extends SystemUI implements DemoMode,
 	
 	public void updateQSDataUsageInfo() {
         DataUsageView.updateUsage();
+    }
+
+    private void updateNavigationBar(boolean init) {
+        boolean showNavBar = CherishUtils.deviceSupportNavigationBar(mContext);
+        if (init) {
+            if (showNavBar) {
+                mNavigationBarController.createNavigationBars(true, null);
+            }
+        } else {
+            if (showNavBar != mShowNavBar) {
+                if (showNavBar) {
+                    mNavigationBarController.createNavigationBars(true, null);
+                } else {
+                    mNavigationBarController.removeNavigationBar(mDisplayId);
+                }
+            }
+        }
+        mShowNavBar = showNavBar;
     }
 
     public int getWakefulnessState() {
