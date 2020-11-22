@@ -46,5 +46,10 @@ public class ThemesUtils {
             "com.android.theme.materialocean.system",
             "com.android.theme.materialocean.systemui",
     };
+
+    public static final String[] CLEAR_SPRING = {
+            "com.android.theme.clearspring.system",
+            "com.android.theme.clearspring.systemui",
+    };
 }
 
