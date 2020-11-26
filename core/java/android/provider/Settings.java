@@ -5391,13 +5391,6 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_LOCK_ICON = "lockscreen_lock_icon";
-
-        /**
-         * Whether to control brightness from status bar
-         *
-         * @hide
-         */
-        public static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
 		
 		/**
          * Disable dashboard conditions in settings
