@@ -5875,6 +5875,12 @@ public final class Settings {
          * @hide
          */
         public static final String LIVE_DISPLAY_HINTED = "live_display_hinted";
+		
+		/**
+         * FOD icon picker
+         * @hide
+         */
+        public static final String FOD_ICON = "fod_icon";
 
 
         /**
