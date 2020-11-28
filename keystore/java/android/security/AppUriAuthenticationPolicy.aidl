@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 
-package com.android.wm.shell.flicker.pip
+package android.security;
 
-import com.android.wm.shell.flicker.helpers.PipAppHelper
-
-abstract class PipTestBase(
-    rotationName: String,
-    rotation: Int
-) : AppTestBase(rotationName, rotation) {
-    protected val testApp = PipAppHelper(instrumentation)
-}
+parcelable AppUriAuthenticationPolicy;
