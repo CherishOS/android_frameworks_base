@@ -5881,7 +5881,12 @@ public final class Settings {
          * @hide
          */
         public static final String FOD_ICON = "fod_icon";
-
+		
+		/**
+         * FOD pressed color
+         * @hide
+         */
+        public static final String FOD_COLOR = "fod_color";
 
         /**
          * Whether to use the custom status bar header or not
