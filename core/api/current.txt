@@ -50849,6 +50849,33 @@ package android.view {
     method public void onActionViewExpanded();
   }
 
+  public final class ContentInfo {
+    method @NonNull public android.content.ClipData getClip();
+    method @Nullable public android.os.Bundle getExtras();
+    method public int getFlags();
+    method @Nullable public android.net.Uri getLinkUri();
+    method public int getSource();
+    method @NonNull public java.util.Map<java.lang.Boolean,android.view.ContentInfo> partition(@NonNull java.util.function.Predicate<android.content.ClipData.Item>);
+    field public static final int FLAG_CONVERT_TO_PLAIN_TEXT = 1; // 0x1
+    field public static final int SOURCE_APP = 0; // 0x0
+    field public static final int SOURCE_AUTOFILL = 4; // 0x4
+    field public static final int SOURCE_CLIPBOARD = 1; // 0x1
+    field public static final int SOURCE_DRAG_AND_DROP = 3; // 0x3
+    field public static final int SOURCE_INPUT_METHOD = 2; // 0x2
+    field public static final int SOURCE_PROCESS_TEXT = 5; // 0x5
+  }
+
+  public static final class ContentInfo.Builder {
+    ctor public ContentInfo.Builder(@NonNull android.view.ContentInfo);
+    ctor public ContentInfo.Builder(@NonNull android.content.ClipData, int);
+    method @NonNull public android.view.ContentInfo build();
+    method @NonNull public android.view.ContentInfo.Builder setClip(@NonNull android.content.ClipData);
+    method @NonNull public android.view.ContentInfo.Builder setExtras(@Nullable android.os.Bundle);
+    method @NonNull public android.view.ContentInfo.Builder setFlags(int);
+    method @NonNull public android.view.ContentInfo.Builder setLinkUri(@Nullable android.net.Uri);
+    method @NonNull public android.view.ContentInfo.Builder setSource(int);
+  }
+
   public interface ContextMenu extends android.view.Menu {
     method public void clearHeader();
     method public android.view.ContextMenu setHeaderIcon(@DrawableRes int);
@@ -52064,34 +52091,7 @@ package android.view {
   }
 
   public interface OnReceiveContentListener {
-    method @Nullable public android.view.OnReceiveContentListener.Payload onReceiveContent(@NonNull android.view.View, @NonNull android.view.OnReceiveContentListener.Payload);
-  }
-
-  public static final class OnReceiveContentListener.Payload {
-    method @NonNull public android.content.ClipData getClip();
-    method @Nullable public android.os.Bundle getExtras();
-    method public int getFlags();
-    method @Nullable public android.net.Uri getLinkUri();
-    method public int getSource();
-    method @NonNull public java.util.Map<java.lang.Boolean,android.view.OnReceiveContentListener.Payload> partition(@NonNull java.util.function.Predicate<android.content.ClipData.Item>);
-    field public static final int FLAG_CONVERT_TO_PLAIN_TEXT = 1; // 0x1
-    field public static final int SOURCE_APP = 0; // 0x0
-    field public static final int SOURCE_AUTOFILL = 4; // 0x4
-    field public static final int SOURCE_CLIPBOARD = 1; // 0x1
-    field public static final int SOURCE_DRAG_AND_DROP = 3; // 0x3
-    field public static final int SOURCE_INPUT_METHOD = 2; // 0x2
-    field public static final int SOURCE_PROCESS_TEXT = 5; // 0x5
-  }
-
-  public static final class OnReceiveContentListener.Payload.Builder {
-    ctor public OnReceiveContentListener.Payload.Builder(@NonNull android.view.OnReceiveContentListener.Payload);
-    ctor public OnReceiveContentListener.Payload.Builder(@NonNull android.content.ClipData, int);
-    method @NonNull public android.view.OnReceiveContentListener.Payload build();
-    method @NonNull public android.view.OnReceiveContentListener.Payload.Builder setClip(@NonNull android.content.ClipData);
-    method @NonNull public android.view.OnReceiveContentListener.Payload.Builder setExtras(@Nullable android.os.Bundle);
-    method @NonNull public android.view.OnReceiveContentListener.Payload.Builder setFlags(int);
-    method @NonNull public android.view.OnReceiveContentListener.Payload.Builder setLinkUri(@Nullable android.net.Uri);
-    method @NonNull public android.view.OnReceiveContentListener.Payload.Builder setSource(int);
+    method @Nullable public android.view.ContentInfo onReceiveContent(@NonNull android.view.View, @NonNull android.view.ContentInfo);
   }
 
   public abstract class OrientationEventListener {
@@ -52842,7 +52842,7 @@ package android.view {
     method public void onProvideContentCaptureStructure(@NonNull android.view.ViewStructure, int);
     method public void onProvideStructure(android.view.ViewStructure);
     method public void onProvideVirtualStructure(android.view.ViewStructure);
-    method @Nullable public android.view.OnReceiveContentListener.Payload onReceiveContent(@NonNull android.view.OnReceiveContentListener.Payload);
+    method @Nullable public android.view.ContentInfo onReceiveContent(@NonNull android.view.ContentInfo);
     method public android.view.PointerIcon onResolvePointerIcon(android.view.MotionEvent, int);
     method @CallSuper protected void onRestoreInstanceState(android.os.Parcelable);
     method public void onRtlPropertiesChanged(int);
@@ -52868,7 +52868,7 @@ package android.view {
     method public boolean performHapticFeedback(int, int);
     method public boolean performLongClick();
     method public boolean performLongClick(float, float);
-    method @Nullable public android.view.OnReceiveContentListener.Payload performReceiveContent(@NonNull android.view.OnReceiveContentListener.Payload);
+    method @Nullable public android.view.ContentInfo performReceiveContent(@NonNull android.view.ContentInfo);
     method public void playSoundEffect(int);
     method public boolean post(Runnable);
     method public boolean postDelayed(Runnable, long);
