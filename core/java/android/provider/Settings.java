@@ -5839,6 +5839,12 @@ public final class Settings {
         public static final String UDFPS_ICON = "udfps_icon";
 		
 		/**
+         * FOD pressed color
+         * @hide
+         */
+        public static final String UDFPS_COLOR = "udfps_color";
+		
+		/**
          * @hide
          */
         public static final String OMNI_CUSTOM_FP_ICON_ENABLED = "custom_fp_icon_enabled";
