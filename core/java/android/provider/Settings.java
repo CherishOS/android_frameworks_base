@@ -6228,6 +6228,12 @@ public final class Settings {
          * @hide
          */
         public static final String UDFPS_HAPTIC_FEEDBACK = "udfps_haptic_feedback";
+		
+		/**
+         * FOD pressed color
+         * @hide
+         */
+        public static final String FOD_COLOR = "fod_color";
 
         /**
          * These are all public system settings
