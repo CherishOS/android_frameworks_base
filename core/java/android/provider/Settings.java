@@ -5870,6 +5870,12 @@ public final class Settings {
          * @hide
          */
         public static final String OMNI_CUSTOM_FP_ICON = "custom_fingerprint_icon";
+		
+			/**
+         * FOD pressed color
+         * @hide
+         */
+        public static final String UDFPS_COLOR = "udfps_color";
 
         /**
          * @hide
