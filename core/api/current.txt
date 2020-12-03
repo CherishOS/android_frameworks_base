@@ -9098,6 +9098,15 @@ package android.bluetooth {
     field @NonNull public static final android.os.Parcelable.Creator<android.bluetooth.BluetoothHidDeviceAppSdpSettings> CREATOR;
   }
 
+  public final class BluetoothLeAudio implements java.lang.AutoCloseable android.bluetooth.BluetoothProfile {
+    method @RequiresPermission(android.Manifest.permission.BLUETOOTH_PRIVILEGED) public void close();
+    method @RequiresPermission(android.Manifest.permission.BLUETOOTH_PRIVILEGED) protected void finalize();
+    method @NonNull public java.util.List<android.bluetooth.BluetoothDevice> getConnectedDevices();
+    method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public int getConnectionState(@NonNull android.bluetooth.BluetoothDevice);
+    method @NonNull public java.util.List<android.bluetooth.BluetoothDevice> getDevicesMatchingConnectionStates(@NonNull int[]);
+    field public static final String ACTION_LE_AUDIO_CONNECTION_STATE_CHANGED = "android.bluetooth.action.LE_AUDIO_CONNECTION_STATE_CHANGED";
+  }
+
   public final class BluetoothManager {
     method public android.bluetooth.BluetoothAdapter getAdapter();
     method @RequiresPermission(android.Manifest.permission.BLUETOOTH) public java.util.List<android.bluetooth.BluetoothDevice> getConnectedDevices(int);
@@ -10319,7 +10328,7 @@ package android.content {
     method public int checkPermission(String, int, int);
     method public int checkSelfPermission(String);
     method public int checkUriPermission(android.net.Uri, int, int, int);
-    method public int checkUriPermission(android.net.Uri, String, String, int, int, int);
+    method public int checkUriPermission(@Nullable android.net.Uri, @Nullable String, @Nullable String, int, int, int);
     method @Deprecated public void clearWallpaper() throws java.io.IOException;
     method public android.content.Context createConfigurationContext(android.content.res.Configuration);
     method public android.content.Context createContextForSplit(String) throws android.content.pm.PackageManager.NameNotFoundException;
@@ -10330,13 +10339,13 @@ package android.content {
     method public boolean deleteDatabase(String);
     method public boolean deleteFile(String);
     method public boolean deleteSharedPreferences(String);
-    method public void enforceCallingOrSelfPermission(String, String);
+    method public void enforceCallingOrSelfPermission(String, @Nullable String);
     method public void enforceCallingOrSelfUriPermission(android.net.Uri, int, String);
-    method public void enforceCallingPermission(String, String);
+    method public void enforceCallingPermission(String, @Nullable String);
     method public void enforceCallingUriPermission(android.net.Uri, int, String);
-    method public void enforcePermission(String, int, int, String);
+    method public void enforcePermission(String, int, int, @Nullable String);
     method public void enforceUriPermission(android.net.Uri, int, int, int, String);
-    method public void enforceUriPermission(android.net.Uri, String, String, int, int, int, String);
+    method public void enforceUriPermission(@Nullable android.net.Uri, @Nullable String, @Nullable String, int, int, int, @Nullable String);
     method public String[] fileList();
     method public android.content.Context getApplicationContext();
     method public android.content.pm.ApplicationInfo getApplicationInfo();
@@ -10349,9 +10358,9 @@ package android.content {
     method public java.io.File getDataDir();
     method public java.io.File getDatabasePath(String);
     method public java.io.File getDir(String, int);
-    method public java.io.File getExternalCacheDir();
+    method @Nullable public java.io.File getExternalCacheDir();
     method public java.io.File[] getExternalCacheDirs();
-    method public java.io.File getExternalFilesDir(String);
+    method @Nullable public java.io.File getExternalFilesDir(@Nullable String);
     method public java.io.File[] getExternalFilesDirs(String);
     method public java.io.File[] getExternalMediaDirs();
     method public java.io.File getFileStreamPath(String);
@@ -10379,40 +10388,40 @@ package android.content {
     method public java.io.FileInputStream openFileInput(String) throws java.io.FileNotFoundException;
     method public java.io.FileOutputStream openFileOutput(String, int) throws java.io.FileNotFoundException;
     method public android.database.sqlite.SQLiteDatabase openOrCreateDatabase(String, int, android.database.sqlite.SQLiteDatabase.CursorFactory);
-    method public android.database.sqlite.SQLiteDatabase openOrCreateDatabase(String, int, android.database.sqlite.SQLiteDatabase.CursorFactory, android.database.DatabaseErrorHandler);
+    method public android.database.sqlite.SQLiteDatabase openOrCreateDatabase(String, int, android.database.sqlite.SQLiteDatabase.CursorFactory, @Nullable android.database.DatabaseErrorHandler);
     method @Deprecated public android.graphics.drawable.Drawable peekWallpaper();
-    method public android.content.Intent registerReceiver(android.content.BroadcastReceiver, android.content.IntentFilter);
-    method public android.content.Intent registerReceiver(android.content.BroadcastReceiver, android.content.IntentFilter, int);
-    method public android.content.Intent registerReceiver(android.content.BroadcastReceiver, android.content.IntentFilter, String, android.os.Handler);
-    method public android.content.Intent registerReceiver(android.content.BroadcastReceiver, android.content.IntentFilter, String, android.os.Handler, int);
+    method public android.content.Intent registerReceiver(@Nullable android.content.BroadcastReceiver, android.content.IntentFilter);
+    method public android.content.Intent registerReceiver(@Nullable android.content.BroadcastReceiver, android.content.IntentFilter, int);
+    method public android.content.Intent registerReceiver(@Nullable android.content.BroadcastReceiver, android.content.IntentFilter, @Nullable String, @Nullable android.os.Handler);
+    method public android.content.Intent registerReceiver(@Nullable android.content.BroadcastReceiver, android.content.IntentFilter, @Nullable String, @Nullable android.os.Handler, int);
     method @Deprecated public void removeStickyBroadcast(android.content.Intent);
     method @Deprecated public void removeStickyBroadcastAsUser(android.content.Intent, android.os.UserHandle);
     method public void revokeUriPermission(android.net.Uri, int);
     method public void revokeUriPermission(String, android.net.Uri, int);
     method public void sendBroadcast(android.content.Intent);
-    method public void sendBroadcast(android.content.Intent, String);
+    method public void sendBroadcast(android.content.Intent, @Nullable String);
     method public void sendBroadcastAsUser(android.content.Intent, android.os.UserHandle);
     method public void sendBroadcastAsUser(android.content.Intent, android.os.UserHandle, String);
-    method public void sendOrderedBroadcast(android.content.Intent, String);
-    method public void sendOrderedBroadcast(android.content.Intent, String, android.content.BroadcastReceiver, android.os.Handler, int, String, android.os.Bundle);
+    method public void sendOrderedBroadcast(android.content.Intent, @Nullable String);
+    method public void sendOrderedBroadcast(android.content.Intent, @Nullable String, @Nullable android.content.BroadcastReceiver, @Nullable android.os.Handler, int, @Nullable String, @Nullable android.os.Bundle);
     method public void sendOrderedBroadcast(@NonNull @RequiresPermission android.content.Intent, int, @Nullable String, @Nullable String, @Nullable android.content.BroadcastReceiver, @Nullable android.os.Handler, @Nullable String, @Nullable android.os.Bundle, @Nullable android.os.Bundle);
-    method public void sendOrderedBroadcastAsUser(android.content.Intent, android.os.UserHandle, String, android.content.BroadcastReceiver, android.os.Handler, int, String, android.os.Bundle);
+    method public void sendOrderedBroadcastAsUser(android.content.Intent, android.os.UserHandle, @Nullable String, @Nullable android.content.BroadcastReceiver, @Nullable android.os.Handler, int, @Nullable String, @Nullable android.os.Bundle);
     method @Deprecated public void sendStickyBroadcast(android.content.Intent);
     method @Deprecated public void sendStickyBroadcastAsUser(android.content.Intent, android.os.UserHandle);
-    method @Deprecated public void sendStickyOrderedBroadcast(android.content.Intent, android.content.BroadcastReceiver, android.os.Handler, int, String, android.os.Bundle);
-    method @Deprecated public void sendStickyOrderedBroadcastAsUser(android.content.Intent, android.os.UserHandle, android.content.BroadcastReceiver, android.os.Handler, int, String, android.os.Bundle);
+    method @Deprecated public void sendStickyOrderedBroadcast(android.content.Intent, @Nullable android.content.BroadcastReceiver, @Nullable android.os.Handler, int, @Nullable String, @Nullable android.os.Bundle);
+    method @Deprecated public void sendStickyOrderedBroadcastAsUser(android.content.Intent, android.os.UserHandle, @Nullable android.content.BroadcastReceiver, @Nullable android.os.Handler, int, @Nullable String, @Nullable android.os.Bundle);
     method public void setTheme(int);
     method @Deprecated public void setWallpaper(android.graphics.Bitmap) throws java.io.IOException;
     method @Deprecated public void setWallpaper(java.io.InputStream) throws java.io.IOException;
     method public void startActivities(android.content.Intent[]);
-    method public void startActivities(android.content.Intent[], android.os.Bundle);
+    method public void startActivities(android.content.Intent[], @Nullable android.os.Bundle);
     method public void startActivity(android.content.Intent);
-    method public void startActivity(android.content.Intent, android.os.Bundle);
-    method public android.content.ComponentName startForegroundService(android.content.Intent);
-    method public boolean startInstrumentation(android.content.ComponentName, String, android.os.Bundle);
+    method public void startActivity(android.content.Intent, @Nullable android.os.Bundle);
+    method @Nullable public android.content.ComponentName startForegroundService(android.content.Intent);
+    method public boolean startInstrumentation(android.content.ComponentName, @Nullable String, @Nullable android.os.Bundle);
     method public void startIntentSender(android.content.IntentSender, @Nullable android.content.Intent, int, int, int) throws android.content.IntentSender.SendIntentException;
     method public void startIntentSender(android.content.IntentSender, @Nullable android.content.Intent, int, int, int, @Nullable android.os.Bundle) throws android.content.IntentSender.SendIntentException;
-    method public android.content.ComponentName startService(android.content.Intent);
+    method @Nullable public android.content.ComponentName startService(android.content.Intent);
     method public boolean stopService(android.content.Intent);
     method public void unbindService(android.content.ServiceConnection);
     method public void unregisterReceiver(android.content.BroadcastReceiver);
@@ -45156,6 +45165,7 @@ package android.telephony {
     field public static final String KEY_CALL_BARRING_SUPPORTS_DEACTIVATE_ALL_BOOL = "call_barring_supports_deactivate_all_bool";
     field public static final String KEY_CALL_BARRING_SUPPORTS_PASSWORD_CHANGE_BOOL = "call_barring_supports_password_change_bool";
     field public static final String KEY_CALL_BARRING_VISIBILITY_BOOL = "call_barring_visibility_bool";
+    field public static final String KEY_CALL_COMPOSER_PICTURE_SERVER_URL_STRING = "call_composer_picture_server_url_string";
     field public static final String KEY_CALL_FORWARDING_BLOCKS_WHILE_ROAMING_STRING_ARRAY = "call_forwarding_blocks_while_roaming_string_array";
     field public static final String KEY_CALL_REDIRECTION_SERVICE_COMPONENT_NAME_STRING = "call_redirection_service_component_name_string";
     field public static final String KEY_CARRIER_ALLOW_DEFLECT_IMS_CALL_BOOL = "carrier_allow_deflect_ims_call_bool";
@@ -45345,6 +45355,7 @@ package android.telephony {
     field public static final String KEY_SIMPLIFIED_NETWORK_SETTINGS_BOOL = "simplified_network_settings_bool";
     field public static final String KEY_SIM_NETWORK_UNLOCK_ALLOW_DISMISS_BOOL = "sim_network_unlock_allow_dismiss_bool";
     field public static final String KEY_SMS_REQUIRES_DESTINATION_NUMBER_CONVERSION_BOOL = "sms_requires_destination_number_conversion_bool";
+    field public static final String KEY_SUPPORTS_CALL_COMPOSER_BOOL = "supports_call_composer_bool";
     field public static final String KEY_SUPPORT_3GPP_CALL_FORWARDING_WHILE_ROAMING_BOOL = "support_3gpp_call_forwarding_while_roaming_bool";
     field public static final String KEY_SUPPORT_ADD_CONFERENCE_PARTICIPANTS_BOOL = "support_add_conference_participants_bool";
     field public static final String KEY_SUPPORT_ADHOC_CONFERENCE_CALLS_BOOL = "support_adhoc_conference_calls_bool";
@@ -47662,6 +47673,7 @@ package android.telephony.ims.feature {
 
   public static class MmTelFeature.MmTelCapabilities {
     method public final boolean isCapable(int);
+    field public static final int CAPABILITY_TYPE_CALL_COMPOSER = 16; // 0x10
     field public static final int CAPABILITY_TYPE_SMS = 8; // 0x8
     field public static final int CAPABILITY_TYPE_UT = 4; // 0x4
     field public static final int CAPABILITY_TYPE_VIDEO = 2; // 0x2
