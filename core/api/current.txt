@@ -7686,6 +7686,7 @@ package android.app.job {
     method public long getTriggerContentMaxDelay();
     method public long getTriggerContentUpdateDelay();
     method @Nullable public android.app.job.JobInfo.TriggerContentUri[] getTriggerContentUris();
+    method public boolean isForegroundJob();
     method public boolean isImportantWhileForeground();
     method public boolean isPeriodic();
     method public boolean isPersisted();
@@ -7717,7 +7718,8 @@ package android.app.job {
     method public android.app.job.JobInfo.Builder setClipData(@Nullable android.content.ClipData, int);
     method public android.app.job.JobInfo.Builder setEstimatedNetworkBytes(long, long);
     method public android.app.job.JobInfo.Builder setExtras(@NonNull android.os.PersistableBundle);
-    method public android.app.job.JobInfo.Builder setImportantWhileForeground(boolean);
+    method @NonNull public android.app.job.JobInfo.Builder setForeground(boolean);
+    method @Deprecated public android.app.job.JobInfo.Builder setImportantWhileForeground(boolean);
     method public android.app.job.JobInfo.Builder setMinimumLatency(long);
     method public android.app.job.JobInfo.Builder setOverrideDeadline(long);
     method public android.app.job.JobInfo.Builder setPeriodic(long);
@@ -7757,6 +7759,7 @@ package android.app.job {
     method @NonNull public android.os.Bundle getTransientExtras();
     method @Nullable public String[] getTriggeredContentAuthorities();
     method @Nullable public android.net.Uri[] getTriggeredContentUris();
+    method public boolean isForegroundJob();
     method public boolean isOverrideDeadlineExpired();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.app.job.JobParameters> CREATOR;
@@ -38699,6 +38702,25 @@ package android.provider {
     field public static final String UNGROUPED_WITH_PHONES = "summ_phones";
   }
 
+  public static final class ContactsContract.SimAccount implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public String getAccountName();
+    method @NonNull public String getAccountType();
+    method public int getEfType();
+    method public int getSimSlotIndex();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field public static final int ADN_EF_TYPE = 1; // 0x1
+    field @NonNull public static final android.os.Parcelable.Creator<android.provider.ContactsContract.SimAccount> CREATOR;
+    field public static final int FDN_EF_TYPE = 3; // 0x3
+    field public static final int SDN_EF_TYPE = 2; // 0x2
+    field public static final int UNKNOWN_EF_TYPE = 0; // 0x0
+  }
+
+  public static final class ContactsContract.SimContacts {
+    method @NonNull public static java.util.List<android.provider.ContactsContract.SimAccount> getSimAccounts(@NonNull android.content.ContentResolver);
+    field public static final String ACTION_SIM_ACCOUNTS_CHANGED = "android.provider.action.SIM_ACCOUNTS_CHANGED";
+  }
+
   protected static interface ContactsContract.StatusColumns {
     field public static final int AVAILABLE = 5; // 0x5
     field public static final int AWAY = 2; // 0x2
@@ -50871,7 +50893,7 @@ package android.view {
     method public int getFlags();
     method @Nullable public android.net.Uri getLinkUri();
     method public int getSource();
-    method @NonNull public java.util.Map<java.lang.Boolean,android.view.ContentInfo> partition(@NonNull java.util.function.Predicate<android.content.ClipData.Item>);
+    method @NonNull public android.util.Pair<android.view.ContentInfo,android.view.ContentInfo> partition(@NonNull java.util.function.Predicate<android.content.ClipData.Item>);
     field public static final int FLAG_CONVERT_TO_PLAIN_TEXT = 1; // 0x1
     field public static final int SOURCE_APP = 0; // 0x0
     field public static final int SOURCE_AUTOFILL = 4; // 0x4
@@ -56542,6 +56564,7 @@ package android.view.textclassifier {
     method @Nullable public String getId();
     method public int getSelectionEndIndex();
     method public int getSelectionStartIndex();
+    method @Nullable public android.view.textclassifier.TextClassification getTextClassification();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.view.textclassifier.TextSelection> CREATOR;
   }
@@ -56552,6 +56575,7 @@ package android.view.textclassifier {
     method @NonNull public android.view.textclassifier.TextSelection.Builder setEntityType(@NonNull String, @FloatRange(from=0.0, to=1.0) float);
     method @NonNull public android.view.textclassifier.TextSelection.Builder setExtras(@Nullable android.os.Bundle);
     method @NonNull public android.view.textclassifier.TextSelection.Builder setId(@Nullable String);
+    method @NonNull public android.view.textclassifier.TextSelection.Builder setTextClassification(@Nullable android.view.textclassifier.TextClassification);
   }
 
   public static final class TextSelection.Request implements android.os.Parcelable {
@@ -56562,6 +56586,7 @@ package android.view.textclassifier {
     method @NonNull public android.os.Bundle getExtras();
     method @IntRange(from=0) public int getStartIndex();
     method @NonNull public CharSequence getText();
+    method public boolean shouldIncludeTextClassification();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.view.textclassifier.TextSelection.Request> CREATOR;
   }
@@ -56571,6 +56596,7 @@ package android.view.textclassifier {
     method @NonNull public android.view.textclassifier.TextSelection.Request build();
     method @NonNull public android.view.textclassifier.TextSelection.Request.Builder setDefaultLocales(@Nullable android.os.LocaleList);
     method @NonNull public android.view.textclassifier.TextSelection.Request.Builder setExtras(@Nullable android.os.Bundle);
+    method @NonNull public android.view.textclassifier.TextSelection.Request.Builder setIncludeTextClassification(boolean);
   }
 
 }
