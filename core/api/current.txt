@@ -2883,6 +2883,7 @@ package android.accessibilityservice {
     method protected void onServiceConnected();
     method public void onSystemActionsChanged();
     method public final boolean performGlobalAction(int);
+    method public void setAccessibilityFocusAppearance(int, @ColorInt int);
     method public void setGestureDetectionPassthroughRegion(int, @NonNull android.graphics.Region);
     method public final void setServiceInfo(android.accessibilityservice.AccessibilityServiceInfo);
     method public void setTouchExplorationPassthroughRegion(int, @NonNull android.graphics.Region);
@@ -7150,6 +7151,7 @@ package android.app.admin {
     field @RequiresPermission(android.Manifest.permission.REQUEST_PASSWORD_COMPLEXITY) public static final String EXTRA_PASSWORD_COMPLEXITY = "android.app.extra.PASSWORD_COMPLEXITY";
     field public static final String EXTRA_PROVISIONING_ACCOUNT_TO_MIGRATE = "android.app.extra.PROVISIONING_ACCOUNT_TO_MIGRATE";
     field public static final String EXTRA_PROVISIONING_ADMIN_EXTRAS_BUNDLE = "android.app.extra.PROVISIONING_ADMIN_EXTRAS_BUNDLE";
+    field public static final String EXTRA_PROVISIONING_ALLOWED_PROVISIONING_MODES = "android.app.extra.PROVISIONING_ALLOWED_PROVISIONING_MODES";
     field public static final String EXTRA_PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME = "android.app.extra.PROVISIONING_DEVICE_ADMIN_COMPONENT_NAME";
     field public static final String EXTRA_PROVISIONING_DEVICE_ADMIN_MINIMUM_VERSION_CODE = "android.app.extra.PROVISIONING_DEVICE_ADMIN_MINIMUM_VERSION_CODE";
     field public static final String EXTRA_PROVISIONING_DEVICE_ADMIN_PACKAGE_CHECKSUM = "android.app.extra.PROVISIONING_DEVICE_ADMIN_PACKAGE_CHECKSUM";
@@ -7254,6 +7256,7 @@ package android.app.admin {
     field public static final int PRIVATE_DNS_SET_NO_ERROR = 0; // 0x0
     field public static final int PROVISIONING_MODE_FULLY_MANAGED_DEVICE = 1; // 0x1
     field public static final int PROVISIONING_MODE_MANAGED_PROFILE = 2; // 0x2
+    field public static final int PROVISIONING_MODE_MANAGED_PROFILE_ON_PERSONAL_DEVICE = 3; // 0x3
     field public static final int RESET_PASSWORD_DO_NOT_ASK_CREDENTIALS_ON_BOOT = 2; // 0x2
     field public static final int RESET_PASSWORD_REQUIRE_ENTRY = 1; // 0x1
     field public static final int SKIP_SETUP_WIZARD = 1; // 0x1
@@ -42460,6 +42463,7 @@ package android.service.notification {
     method public CharSequence getImportanceExplanation();
     method public String getKey();
     method public long getLastAudiblyAlertedMillis();
+    method public int getLockscreenVisibilityOverride();
     method public String getOverrideGroupKey();
     method public int getRank();
     method @NonNull public java.util.List<android.app.Notification.Action> getSmartActions();
@@ -42473,6 +42477,7 @@ package android.service.notification {
     field public static final int USER_SENTIMENT_NEGATIVE = -1; // 0xffffffff
     field public static final int USER_SENTIMENT_NEUTRAL = 0; // 0x0
     field public static final int USER_SENTIMENT_POSITIVE = 1; // 0x1
+    field public static final int VISIBILITY_NO_OVERRIDE = -1000; // 0xfffffc18
   }
 
   public static class NotificationListenerService.RankingMap implements android.os.Parcelable {
@@ -44860,14 +44865,19 @@ package android.telecom {
     field public static final String EXTRA_DEFAULT_CALL_SCREENING_APP_COMPONENT_NAME = "android.telecom.extra.DEFAULT_CALL_SCREENING_APP_COMPONENT_NAME";
     field public static final String EXTRA_DISCONNECT_CAUSE = "android.telecom.extra.DISCONNECT_CAUSE";
     field public static final String EXTRA_HANDLE = "android.telecom.extra.HANDLE";
+    field public static final String EXTRA_HAS_PICTURE = "android.telecom.extra.HAS_PICTURE";
     field public static final String EXTRA_INCOMING_CALL_ADDRESS = "android.telecom.extra.INCOMING_CALL_ADDRESS";
     field public static final String EXTRA_INCOMING_CALL_EXTRAS = "android.telecom.extra.INCOMING_CALL_EXTRAS";
+    field public static final String EXTRA_INCOMING_PICTURE = "android.telecom.extra.INCOMING_PICTURE";
     field public static final String EXTRA_INCOMING_VIDEO_STATE = "android.telecom.extra.INCOMING_VIDEO_STATE";
     field public static final String EXTRA_IS_DEFAULT_CALL_SCREENING_APP = "android.telecom.extra.IS_DEFAULT_CALL_SCREENING_APP";
+    field public static final String EXTRA_LOCATION = "android.telecom.extra.LOCATION";
     field public static final String EXTRA_NOTIFICATION_COUNT = "android.telecom.extra.NOTIFICATION_COUNT";
     field public static final String EXTRA_NOTIFICATION_PHONE_NUMBER = "android.telecom.extra.NOTIFICATION_PHONE_NUMBER";
     field public static final String EXTRA_OUTGOING_CALL_EXTRAS = "android.telecom.extra.OUTGOING_CALL_EXTRAS";
+    field public static final String EXTRA_OUTGOING_PICTURE = "android.telecom.extra.OUTGOING_PICTURE";
     field public static final String EXTRA_PHONE_ACCOUNT_HANDLE = "android.telecom.extra.PHONE_ACCOUNT_HANDLE";
+    field public static final String EXTRA_PRIORITY = "android.telecom.extra.PRIORITY";
     field public static final String EXTRA_START_CALL_WITH_RTT = "android.telecom.extra.START_CALL_WITH_RTT";
     field public static final String EXTRA_START_CALL_WITH_SPEAKERPHONE = "android.telecom.extra.START_CALL_WITH_SPEAKERPHONE";
     field public static final String EXTRA_START_CALL_WITH_VIDEO_STATE = "android.telecom.extra.START_CALL_WITH_VIDEO_STATE";
@@ -44883,6 +44893,8 @@ package android.telecom {
     field public static final int PRESENTATION_PAYPHONE = 4; // 0x4
     field public static final int PRESENTATION_RESTRICTED = 2; // 0x2
     field public static final int PRESENTATION_UNKNOWN = 3; // 0x3
+    field public static final int PRIORITY_NORMAL = 0; // 0x0
+    field public static final int PRIORITY_URGENT = 1; // 0x1
   }
 
   public class VideoProfile implements android.os.Parcelable {
@@ -54611,6 +54623,8 @@ package android.view.accessibility {
     method public void addAccessibilityStateChangeListener(@NonNull android.view.accessibility.AccessibilityManager.AccessibilityStateChangeListener, @Nullable android.os.Handler);
     method public boolean addTouchExplorationStateChangeListener(@NonNull android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener);
     method public void addTouchExplorationStateChangeListener(@NonNull android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener, @Nullable android.os.Handler);
+    method @ColorInt public int getAccessibilityFocusColor();
+    method public int getAccessibilityFocusStrokeWidth();
     method @Deprecated public java.util.List<android.content.pm.ServiceInfo> getAccessibilityServiceList();
     method public java.util.List<android.accessibilityservice.AccessibilityServiceInfo> getEnabledAccessibilityServiceList(int);
     method public java.util.List<android.accessibilityservice.AccessibilityServiceInfo> getInstalledAccessibilityServiceList();
