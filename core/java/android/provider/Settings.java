@@ -5200,20 +5200,6 @@ public final class Settings {
         public static final String ANIM_TILE_INTERPOLATOR = "anim_tile_interpolator";
 
         /**
-         * Applications list where heasdup should't show
-         *
-         * @hide
-         */
-        public static final String HEADS_UP_STOPLIST_VALUES = "heads_up_stoplist_values";
-
-         /**
-         * Which applications to disable heads up notifications for
-         *
-         * @hide
-         */
-        public static final String HEADS_UP_BLACKLIST_VALUES = "heads_up_blacklist_values";
-
-        /**
          * Defines the screen-off animation to display
          * @hide
          */
@@ -5999,8 +5985,6 @@ public final class Settings {
             PUBLIC_SETTINGS.add(HAPTIC_FEEDBACK_ENABLED);
             PUBLIC_SETTINGS.add(SHOW_WEB_SUGGESTIONS);
             PUBLIC_SETTINGS.add(VIBRATE_WHEN_RINGING);
-            PUBLIC_SETTINGS.add(HEADS_UP_STOPLIST_VALUES);
-            PUBLIC_SETTINGS.add(HEADS_UP_BLACKLIST_VALUES);
             PUBLIC_SETTINGS.add(SCREEN_OFF_ANIMATION);
         }
 
@@ -6085,8 +6069,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(ANIM_TILE_STYLE);
             PRIVATE_SETTINGS.add(ANIM_TILE_DURATION);
             PRIVATE_SETTINGS.add(ANIM_TILE_INTERPOLATOR);
-            PRIVATE_SETTINGS.add(HEADS_UP_STOPLIST_VALUES);
-            PRIVATE_SETTINGS.add(HEADS_UP_BLACKLIST_VALUES);
             PRIVATE_SETTINGS.add(SCREEN_OFF_ANIMATION);
             PRIVATE_SETTINGS.add(LOCK_CLOCK_FONTS);
             PRIVATE_SETTINGS.add(LOCK_DATE_FONTS);
