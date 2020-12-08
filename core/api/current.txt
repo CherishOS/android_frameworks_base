@@ -140,6 +140,7 @@ package android {
     field public static final String REQUEST_DELETE_PACKAGES = "android.permission.REQUEST_DELETE_PACKAGES";
     field public static final String REQUEST_IGNORE_BATTERY_OPTIMIZATIONS = "android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS";
     field public static final String REQUEST_INSTALL_PACKAGES = "android.permission.REQUEST_INSTALL_PACKAGES";
+    field public static final String REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE = "android.permission.REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE";
     field public static final String REQUEST_PASSWORD_COMPLEXITY = "android.permission.REQUEST_PASSWORD_COMPLEXITY";
     field @Deprecated public static final String RESTART_PACKAGES = "android.permission.RESTART_PACKAGES";
     field public static final String SEND_RESPOND_VIA_MESSAGE = "android.permission.SEND_RESPOND_VIA_MESSAGE";
@@ -9519,6 +9520,8 @@ package android.companion {
     method @NonNull public java.util.List<java.lang.String> getAssociations();
     method public boolean hasNotificationAccess(android.content.ComponentName);
     method public void requestNotificationAccess(android.content.ComponentName);
+    method @RequiresPermission(android.Manifest.permission.REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE) public void startObservingDevicePresence(@NonNull String) throws android.companion.DeviceNotAssociatedException;
+    method @RequiresPermission(android.Manifest.permission.REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE) public void stopObservingDevicePresence(@NonNull String) throws android.companion.DeviceNotAssociatedException;
     field public static final String EXTRA_DEVICE = "android.companion.extra.DEVICE";
   }
 
@@ -9537,6 +9540,9 @@ package android.companion {
   }
 
   public interface DeviceFilter<D extends android.os.Parcelable> extends android.os.Parcelable {
+  }
+
+  public class DeviceNotAssociatedException extends java.lang.Exception {
   }
 
   public final class WifiDeviceFilter implements android.companion.DeviceFilter<android.net.wifi.ScanResult> {
