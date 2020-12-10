@@ -5237,6 +5237,11 @@ public final class Settings {
          * @hide
          */
         public static final String SMART_CUTOFF_RESUME_TEMPERATURE = "smart_cutoff_resume_temperature";
+		
+		/**
+         * @hide
+         */
+        public static final String ADVANCED_REBOOT = "advanced_reboot";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
