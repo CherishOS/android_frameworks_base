@@ -6920,6 +6920,7 @@ package android.app.admin {
     method public int getGlobalPrivateDnsMode(@NonNull android.content.ComponentName);
     method @NonNull public java.util.List<byte[]> getInstalledCaCerts(@Nullable android.content.ComponentName);
     method @Nullable public java.util.List<java.lang.String> getKeepUninstalledPackages(@Nullable android.content.ComponentName);
+    method @NonNull public java.util.Set<java.util.Set<java.lang.String>> getKeyPairGrants(@NonNull String);
     method public int getKeyguardDisabledFeatures(@Nullable android.content.ComponentName);
     method public int getLockTaskFeatures(@NonNull android.content.ComponentName);
     method @NonNull public String[] getLockTaskPackages(@NonNull android.content.ComponentName);
@@ -34862,6 +34863,27 @@ package android.os {
     method public void onCancel();
   }
 
+  public abstract class CombinedVibrationEffect implements android.os.Parcelable {
+    method @NonNull public static android.os.CombinedVibrationEffect createSynced(@NonNull android.os.VibrationEffect);
+    method public int describeContents();
+    method @NonNull public static android.os.CombinedVibrationEffect.SequentialCombination startSequential();
+    method @NonNull public static android.os.CombinedVibrationEffect.SyncedCombination startSynced();
+    field @NonNull public static final android.os.Parcelable.Creator<android.os.CombinedVibrationEffect> CREATOR;
+  }
+
+  public static final class CombinedVibrationEffect.SequentialCombination {
+    method @NonNull public android.os.CombinedVibrationEffect.SequentialCombination addNext(int, @NonNull android.os.VibrationEffect);
+    method @NonNull public android.os.CombinedVibrationEffect.SequentialCombination addNext(int, @NonNull android.os.VibrationEffect, int);
+    method @NonNull public android.os.CombinedVibrationEffect.SequentialCombination addNext(@NonNull android.os.CombinedVibrationEffect);
+    method @NonNull public android.os.CombinedVibrationEffect.SequentialCombination addNext(@NonNull android.os.CombinedVibrationEffect, int);
+    method @NonNull public android.os.CombinedVibrationEffect combine();
+  }
+
+  public static final class CombinedVibrationEffect.SyncedCombination {
+    method @NonNull public android.os.CombinedVibrationEffect.SyncedCombination addVibrator(int, @NonNull android.os.VibrationEffect);
+    method @NonNull public android.os.CombinedVibrationEffect combine();
+  }
+
   public class ConditionVariable {
     ctor public ConditionVariable();
     ctor public ConditionVariable(boolean);
@@ -36086,6 +36108,13 @@ package android.os {
     field public static final int VIBRATION_EFFECT_SUPPORT_NO = 2; // 0x2
     field public static final int VIBRATION_EFFECT_SUPPORT_UNKNOWN = 0; // 0x0
     field public static final int VIBRATION_EFFECT_SUPPORT_YES = 1; // 0x1
+  }
+
+  public abstract class VibratorManager {
+    method @NonNull public abstract android.os.Vibrator getDefaultVibrator();
+    method @NonNull public abstract android.os.Vibrator getVibrator(int);
+    method @NonNull public abstract int[] getVibratorIds();
+    method public abstract void vibrate(@NonNull android.os.CombinedVibrationEffect);
   }
 
   public class WorkSource implements android.os.Parcelable {
@@ -47014,7 +47043,6 @@ package android.telephony {
     method public boolean isVoicemailVibrationEnabled(android.telecom.PhoneAccountHandle);
     method public boolean isWorldPhone();
     method @Deprecated public void listen(android.telephony.PhoneStateListener, int);
-    method @Deprecated public void listen(long, @NonNull android.telephony.PhoneStateListener);
     method public void registerPhoneStateListener(@NonNull java.util.concurrent.Executor, @NonNull android.telephony.PhoneStateListener);
     method @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) public void requestCellInfoUpdate(@NonNull java.util.concurrent.Executor, @NonNull android.telephony.TelephonyManager.CellInfoCallback);
     method @RequiresPermission(allOf={android.Manifest.permission.MODIFY_PHONE_STATE, android.Manifest.permission.ACCESS_FINE_LOCATION}) public android.telephony.NetworkScan requestNetworkScan(android.telephony.NetworkScanRequest, java.util.concurrent.Executor, android.telephony.TelephonyScanManager.NetworkScanCallback);
@@ -51337,6 +51365,7 @@ package android.view {
     method public int getSources();
     method public int getVendorId();
     method public android.os.Vibrator getVibrator();
+    method @NonNull public android.os.VibratorManager getVibratorManager();
     method public boolean[] hasKeys(int...);
     method public boolean hasMicrophone();
     method public boolean isEnabled();
