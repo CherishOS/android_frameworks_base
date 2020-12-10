@@ -527,9 +527,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private DeviceKeyHandler mDeviceKeyHandler;
 
-    // Click volume down + power for partial screenshot
-    boolean mClickPartialScreenshot;
-
     private boolean mPendingKeyguardOccluded;
     private boolean mKeyguardOccludedChanged;
 
@@ -887,9 +884,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.THREE_FINGER_GESTURE), false, this,
-                    UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.CLICK_PARTIAL_SCREENSHOT), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.System.FORCE_SHOW_NAVBAR), false, this,
@@ -2312,11 +2306,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             boolean threeFingerGesture = Settings.System.getIntForUser(resolver,
                     Settings.System.THREE_FINGER_GESTURE, 0, UserHandle.USER_CURRENT) == 1;
             enableSwipeThreeFingerGesture(threeFingerGesture);
-
-            //Partial Screenshot
-            mClickPartialScreenshot = Settings.System.getIntForUser(resolver,
-                    Settings.System.CLICK_PARTIAL_SCREENSHOT, 0,
-                    UserHandle.USER_CURRENT) == 1;
 
             // Configure wake gesture.
             boolean wakeGestureEnabledSetting = Settings.Secure.getIntForUser(resolver,
@@ -4163,11 +4152,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         mScreenshotChordVolumeDownKeyTriggered = false;
                         cancelPendingScreenshotChordAction();
                         cancelPendingAccessibilityShortcutAction();
-
-                        if (mClickPartialScreenshot && mScreenshotChordVolumeDownKeyConsumed) {
-                            mScreenshotRunnable.setScreenshotType(TAKE_SCREENSHOT_SELECTED_REGION);
-                            mHandler.post(mScreenshotRunnable);
-                        }
                     }
                 } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
                     if (down) {
