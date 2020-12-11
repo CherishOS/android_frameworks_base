@@ -165,6 +165,7 @@ package android {
     field public static final String USE_BIOMETRIC = "android.permission.USE_BIOMETRIC";
     field @Deprecated public static final String USE_FINGERPRINT = "android.permission.USE_FINGERPRINT";
     field public static final String USE_FULL_SCREEN_INTENT = "android.permission.USE_FULL_SCREEN_INTENT";
+    field public static final String USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER = "android.permission.USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER";
     field public static final String USE_SIP = "android.permission.USE_SIP";
     field public static final String VIBRATE = "android.permission.VIBRATE";
     field public static final String WAKE_LOCK = "android.permission.WAKE_LOCK";
@@ -6215,6 +6216,7 @@ package android.app {
     method public android.app.PictureInPictureParams.Builder setActions(java.util.List<android.app.RemoteAction>);
     method public android.app.PictureInPictureParams.Builder setAspectRatio(android.util.Rational);
     method @NonNull public android.app.PictureInPictureParams.Builder setAutoEnterEnabled(boolean);
+    method @NonNull public android.app.PictureInPictureParams.Builder setSeamlessResizeEnabled(boolean);
     method public android.app.PictureInPictureParams.Builder setSourceRectHint(android.graphics.Rect);
   }
 
@@ -12454,6 +12456,7 @@ package android.content.pm {
     field public static final int PROTECTION_FLAG_SETUP = 2048; // 0x800
     field @Deprecated public static final int PROTECTION_FLAG_SYSTEM = 16; // 0x10
     field public static final int PROTECTION_FLAG_VERIFIER = 512; // 0x200
+    field public static final int PROTECTION_INTERNAL = 4; // 0x4
     field @Deprecated public static final int PROTECTION_MASK_BASE = 15; // 0xf
     field @Deprecated public static final int PROTECTION_MASK_FLAGS = 65520; // 0xfff0
     field public static final int PROTECTION_NORMAL = 0; // 0x0
@@ -15276,16 +15279,11 @@ package android.graphics {
     ctor public PaintFlagsDrawFilter(int, int);
   }
 
-  public final class ParcelableColorSpace extends android.graphics.ColorSpace implements android.os.Parcelable {
+  public final class ParcelableColorSpace implements android.os.Parcelable {
     ctor public ParcelableColorSpace(@NonNull android.graphics.ColorSpace);
     method public int describeContents();
-    method @NonNull public float[] fromXyz(@NonNull float[]);
     method @NonNull public android.graphics.ColorSpace getColorSpace();
-    method public float getMaxValue(int);
-    method public float getMinValue(int);
     method public static boolean isParcelable(@NonNull android.graphics.ColorSpace);
-    method public boolean isWideGamut();
-    method @NonNull public float[] toXyz(@NonNull float[]);
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.graphics.ParcelableColorSpace> CREATOR;
   }
@@ -24033,7 +24031,7 @@ package android.location {
     method public void setBearingAccuracyDegrees(float);
     method public void setElapsedRealtimeNanos(long);
     method public void setElapsedRealtimeUncertaintyNanos(double);
-    method @Deprecated public void setExtras(android.os.Bundle);
+    method @Deprecated public void setExtras(@Nullable android.os.Bundle);
     method public void setLatitude(double);
     method public void setLongitude(double);
     method public void setProvider(String);
@@ -24306,6 +24304,7 @@ package android.media {
 
   public final class AudioDeviceInfo {
     method @NonNull public String getAddress();
+    method @NonNull public java.util.List<android.media.AudioProfile> getAudioProfiles();
     method @NonNull public int[] getChannelCounts();
     method @NonNull public int[] getChannelIndexMasks();
     method @NonNull public int[] getChannelMasks();
@@ -24721,6 +24720,13 @@ package android.media {
     method @NonNull public android.media.AudioPresentation.Builder setLocale(@NonNull android.icu.util.ULocale);
     method @NonNull public android.media.AudioPresentation.Builder setMasteringIndication(int);
     method @NonNull public android.media.AudioPresentation.Builder setProgramId(int);
+  }
+
+  public class AudioProfile {
+    method @NonNull public int[] getChannelIndexMasks();
+    method @NonNull public int[] getChannelMasks();
+    method public int getFormat();
+    method @NonNull public int[] getSampleRates();
   }
 
   public class AudioRecord implements android.media.AudioRecordingMonitor android.media.AudioRouting android.media.MicrophoneDirection {
@@ -28900,6 +28906,7 @@ package android.media.session {
     field public static final long ACTION_PREPARE_FROM_URI = 131072L; // 0x20000L
     field public static final long ACTION_REWIND = 8L; // 0x8L
     field public static final long ACTION_SEEK_TO = 256L; // 0x100L
+    field public static final long ACTION_SET_PLAYBACK_SPEED = 4194304L; // 0x400000L
     field public static final long ACTION_SET_RATING = 128L; // 0x80L
     field public static final long ACTION_SKIP_TO_NEXT = 32L; // 0x20L
     field public static final long ACTION_SKIP_TO_PREVIOUS = 16L; // 0x10L
@@ -46978,6 +46985,7 @@ package android.telephony {
     method @NonNull @RequiresPermission(android.Manifest.permission.READ_PRECISE_PHONE_STATE) public String getManualNetworkSelectionPlmn();
     method @Nullable public String getManufacturerCode();
     method @Nullable public String getManufacturerCode(int);
+    method public static long getMaximumCallComposerPictureSize();
     method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public String getMeid();
     method @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE") public String getMeid(int);
     method public String getMmsUAProfUrl();
@@ -47086,6 +47094,7 @@ package android.telephony {
     field public static final int APPTYPE_ISIM = 5; // 0x5
     field public static final int APPTYPE_RUIM = 3; // 0x3
     field public static final int APPTYPE_SIM = 1; // 0x1
+    field public static final int APPTYPE_UNKNOWN = 0; // 0x0
     field public static final int APPTYPE_USIM = 2; // 0x2
     field public static final int AUTHTYPE_EAP_AKA = 129; // 0x81
     field public static final int AUTHTYPE_EAP_SIM = 128; // 0x80
