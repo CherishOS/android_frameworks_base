@@ -305,7 +305,6 @@ public class QSPanel extends LinearLayout implements Callback, BrightnessMirrorL
     protected void onMediaVisibilityChanged(Boolean visible) {
         mMediaVisible = visible;
         switchTileLayout();
-        updateBrightnessSliderPosition();
         if (mMediaVisibilityChangedListener != null) {
             mMediaVisibilityChangedListener.accept(visible);
         }
@@ -478,7 +477,7 @@ public class QSPanel extends LinearLayout implements Callback, BrightnessMirrorL
         boolean above = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.QS_SHOW_BRIGHTNESS_ABOVE_FOOTER, 0,
                 UserHandle.USER_CURRENT) == 1;
-        View seekView = above && !mMediaVisible ? mFooter : mDivider;
+        View seekView = above ? mFooter : mDivider;
         for (int i = 0; i < getChildCount(); i++) {
             View v = getChildAt(i);
             if (v == seekView) {
