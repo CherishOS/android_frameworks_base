@@ -6629,6 +6629,25 @@ public final class Settings {
          * @hide
          */
         public static final String FOD_ICON_ANIM_TYPE = "fod_icon_anim_type";
+		
+		/**
+         * User definable value of pulse notification screen brightness
+         *
+         * @hide
+         */
+        public static final String PULSE_BRIGHTNESS = "pulse_brightness";
+
+        /**
+         * User definable value of aod screen brightness
+         *
+         * @hide
+         */
+        public static final String DOZE_BRIGHTNESS = "doze_brightness";
+
+        /**
+         * @hide
+         */
+        public static final String DOZE_BRIGHTNESS_FORCE = "doze_brightness_force";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
@@ -6865,6 +6884,9 @@ public final class Settings {
             PRIVATE_SETTINGS.add(COLOR_BUCKET_OVERLAY);
             PRIVATE_SETTINGS.add(DISPLAY_CUTOUT_MODE);
             PRIVATE_SETTINGS.add(STOCK_STATUSBAR_IN_HIDE);
+            PRIVATE_SETTINGS.add(PULSE_BRIGHTNESS);
+            PRIVATE_SETTINGS.add(DOZE_BRIGHTNESS);
+            PRIVATE_SETTINGS.add(DOZE_BRIGHTNESS_FORCE);
         }
 
         /**
