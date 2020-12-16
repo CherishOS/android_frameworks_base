@@ -6023,7 +6023,7 @@ package android.app {
 
   public class NotificationManager {
     method public String addAutomaticZenRule(android.app.AutomaticZenRule);
-    method public boolean areBubblesAllowed();
+    method @Deprecated public boolean areBubblesAllowed();
     method public boolean areNotificationsEnabled();
     method public boolean areNotificationsPaused();
     method public boolean canNotifyAsPackage(@NonNull String);
@@ -6040,6 +6040,7 @@ package android.app {
     method public android.service.notification.StatusBarNotification[] getActiveNotifications();
     method public android.app.AutomaticZenRule getAutomaticZenRule(String);
     method public java.util.Map<java.lang.String,android.app.AutomaticZenRule> getAutomaticZenRules();
+    method public int getBubblePreference();
     method @NonNull public android.app.NotificationManager.Policy getConsolidatedNotificationPolicy();
     method public final int getCurrentInterruptionFilter();
     method public int getImportance();
@@ -6074,6 +6075,9 @@ package android.app {
     field public static final int AUTOMATIC_RULE_STATUS_ENABLED = 1; // 0x1
     field public static final int AUTOMATIC_RULE_STATUS_REMOVED = 3; // 0x3
     field public static final int AUTOMATIC_RULE_STATUS_UNKNOWN = -1; // 0xffffffff
+    field public static final int BUBBLE_PREFERENCE_ALL = 1; // 0x1
+    field public static final int BUBBLE_PREFERENCE_NONE = 0; // 0x0
+    field public static final int BUBBLE_PREFERENCE_SELECTED = 2; // 0x2
     field public static final String EXTRA_AUTOMATIC_RULE_ID = "android.app.extra.AUTOMATIC_RULE_ID";
     field public static final String EXTRA_AUTOMATIC_ZEN_RULE_ID = "android.app.extra.AUTOMATIC_ZEN_RULE_ID";
     field public static final String EXTRA_AUTOMATIC_ZEN_RULE_STATUS = "android.app.extra.AUTOMATIC_ZEN_RULE_STATUS";
@@ -7694,7 +7698,8 @@ package android.app.job {
     method public long getTriggerContentMaxDelay();
     method public long getTriggerContentUpdateDelay();
     method @Nullable public android.app.job.JobInfo.TriggerContentUri[] getTriggerContentUris();
-    method public boolean isForegroundJob();
+    method public boolean isExpedited();
+    method @Deprecated public boolean isForegroundJob();
     method public boolean isImportantWhileForeground();
     method public boolean isPeriodic();
     method public boolean isPersisted();
@@ -7725,8 +7730,9 @@ package android.app.job {
     method public android.app.job.JobInfo.Builder setBackoffCriteria(long, int);
     method public android.app.job.JobInfo.Builder setClipData(@Nullable android.content.ClipData, int);
     method public android.app.job.JobInfo.Builder setEstimatedNetworkBytes(long, long);
+    method @NonNull public android.app.job.JobInfo.Builder setExpedited(boolean);
     method public android.app.job.JobInfo.Builder setExtras(@NonNull android.os.PersistableBundle);
-    method @NonNull public android.app.job.JobInfo.Builder setForeground(boolean);
+    method @Deprecated @NonNull public android.app.job.JobInfo.Builder setForeground(boolean);
     method @Deprecated public android.app.job.JobInfo.Builder setImportantWhileForeground(boolean);
     method public android.app.job.JobInfo.Builder setMinimumLatency(long);
     method public android.app.job.JobInfo.Builder setOverrideDeadline(long);
@@ -7767,7 +7773,8 @@ package android.app.job {
     method @NonNull public android.os.Bundle getTransientExtras();
     method @Nullable public String[] getTriggeredContentAuthorities();
     method @Nullable public android.net.Uri[] getTriggeredContentUris();
-    method public boolean isForegroundJob();
+    method public boolean isExpeditedJob();
+    method @Deprecated public boolean isForegroundJob();
     method public boolean isOverrideDeadlineExpired();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.app.job.JobParameters> CREATOR;
@@ -10242,6 +10249,7 @@ package android.content {
     field public static final String ALARM_SERVICE = "alarm";
     field public static final String APPWIDGET_SERVICE = "appwidget";
     field public static final String APP_OPS_SERVICE = "appops";
+    field public static final String APP_SEARCH_SERVICE = "app_search";
     field public static final String AUDIO_SERVICE = "audio";
     field public static final String BATTERY_SERVICE = "batterymanager";
     field public static final int BIND_ABOVE_CLIENT = 8; // 0x8
@@ -15727,7 +15735,7 @@ package android.graphics {
     method public boolean setPosition(@NonNull android.graphics.Rect);
     method public boolean setProjectBackwards(boolean);
     method public boolean setProjectionReceiver(boolean);
-    method public void setRenderEffect(@Nullable android.graphics.RenderEffect);
+    method public boolean setRenderEffect(@Nullable android.graphics.RenderEffect);
     method public boolean setRotationX(float);
     method public boolean setRotationY(float);
     method public boolean setRotationZ(float);
@@ -31548,6 +31556,7 @@ package android.os.storage {
     method @Nullable public java.io.File getDirectory();
     method @Nullable public String getMediaStoreVolumeName();
     method public String getState();
+    method @Nullable public java.util.UUID getStorageUuid();
     method @Nullable public String getUuid();
     method public boolean isEmulated();
     method public boolean isPrimary();
@@ -48446,6 +48455,7 @@ package android.view {
     method public void setPivotY(float);
     method public void setPointerIcon(android.view.PointerIcon);
     method public void setPressed(boolean);
+    method public void setRenderEffect(@Nullable android.graphics.RenderEffect);
     method public final void setRevealOnFocusHint(boolean);
     method public final void setRight(int);
     method public void setRotation(float);
@@ -57915,6 +57925,7 @@ package java.lang {
     method public int getModifiers();
     method @NonNull public String getName();
     method @Nullable public Package getPackage();
+    method @NonNull public String getPackageName();
     method @Nullable public java.security.ProtectionDomain getProtectionDomain();
     method @Nullable public java.net.URL getResource(@NonNull String);
     method @Nullable public java.io.InputStream getResourceAsStream(@NonNull String);
