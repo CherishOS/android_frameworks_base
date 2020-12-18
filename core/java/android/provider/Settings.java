@@ -6082,24 +6082,17 @@ public final class Settings {
          * @hide
          */
         public static final String SETTINGS_SPACER = "settings_spacer";
-
-        /**
-<<<<<<< HEAD
-         * Disable power menu on secure lock screens
-         *
-         * @hide
-=======
+		
+		/**
          * Whether to take partial screenshot with volume down + power click.
          * @hide
          */
         public static final String CLICK_PARTIAL_SCREENSHOT = "click_partial_screenshot";
 
         /**
-         * IMPORTANT: If you add a new public settings you also have to add it to
-         * PUBLIC_SETTINGS below. If the new setting is hidden you have to add
-         * it to PRIVATE_SETTINGS below. Also add a validator that can validate
-         * the setting value. See an example above.
->>>>>>> 4227e90a2ff0 (Implement click to take partial screenshot [1/2])
+         * Disable power menu on secure lock screens
+         *
+         * @hide
          */
         public static final String LOCK_POWER_MENU_DISABLED = "lockscreen_power_menu_disabled";
 
