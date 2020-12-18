@@ -17,22 +17,19 @@
 package android.location;
 
 import android.annotation.NonNull;
-import android.annotation.SystemApi;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * This class contains extra parameters to pass to a GNSS provider implementation.
- * @hide
+ * This class contains extra parameters to pass in a GNSS measurement request.
  */
-@SystemApi
-public final class GnssRequest implements Parcelable {
+public final class GnssMeasurementRequest implements Parcelable {
     private final boolean mFullTracking;
 
     /**
-     * Creates a {@link GnssRequest} with a full list of parameters.
+     * Creates a {@link GnssMeasurementRequest} with a full list of parameters.
      */
-    private GnssRequest(boolean fullTracking) {
+    private GnssMeasurementRequest(boolean fullTracking) {
         mFullTracking = fullTracking;
     }
 
@@ -41,10 +38,10 @@ public final class GnssRequest implements Parcelable {
      *
      * <p>If true, GNSS chipset switches off duty cycling. In such a mode, no clock
      * discontinuities are expected, and when supported, carrier phase should be continuous in
-     * good signal conditions. All non-blacklisted, healthy constellations, satellites and
+     * good signal conditions. All non-blocklisted, healthy constellations, satellites and
      * frequency bands that the chipset supports must be reported in this mode. The GNSS chipset
-     * is allowed to consume more power in this mode. If false, GNSS chipset optimizes power via
-     * duty cycling, constellations and frequency limits, etc.
+     * will consume more power in full tracking mode than in duty cycling mode. If false, GNSS
+     * chipset optimizes power via duty cycling, constellations and frequency limits, etc.
      *
      * <p>Full GNSS tracking mode affects GnssMeasurement and other GNSS functionalities
      * including GNSS location.
@@ -53,35 +50,31 @@ public final class GnssRequest implements Parcelable {
         return mFullTracking;
     }
 
-    /**
-     * Converts the {@link GnssRequest} into a {@link GnssMeasurementRequest}.
-     * @hide
-     */
     @NonNull
-    public GnssMeasurementRequest toGnssMeasurementRequest() {
-        return new GnssMeasurementRequest.Builder().setFullTracking(isFullTracking()).build();
-    }
-
-    @NonNull
-    public static final Creator<GnssRequest> CREATOR =
-            new Creator<GnssRequest>() {
+    public static final Creator<GnssMeasurementRequest> CREATOR =
+            new Creator<GnssMeasurementRequest>() {
                 @Override
                 @NonNull
-                public GnssRequest createFromParcel(@NonNull Parcel parcel) {
-                    return new GnssRequest(parcel.readBoolean());
+                public GnssMeasurementRequest createFromParcel(@NonNull Parcel parcel) {
+                    return new GnssMeasurementRequest(parcel.readBoolean());
                 }
 
                 @Override
-                public GnssRequest[] newArray(int i) {
-                    return new GnssRequest[i];
+                public GnssMeasurementRequest[] newArray(int i) {
+                    return new GnssMeasurementRequest[i];
                 }
             };
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int flags) {
+        parcel.writeBoolean(mFullTracking);
+    }
 
     @NonNull
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append("GnssRequest[");
+        s.append("GnssMeasurementRequest[");
         if (mFullTracking) {
             s.append("FullTracking");
         }
@@ -93,9 +86,9 @@ public final class GnssRequest implements Parcelable {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
-        if (!(obj instanceof GnssRequest)) return false;
+        if (!(obj instanceof GnssMeasurementRequest)) return false;
 
-        GnssRequest other = (GnssRequest) obj;
+        GnssMeasurementRequest other = (GnssMeasurementRequest) obj;
         if (mFullTracking != other.mFullTracking) return false;
 
         return true;
@@ -111,12 +104,7 @@ public final class GnssRequest implements Parcelable {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(@NonNull Parcel parcel, int flags) {
-        parcel.writeBoolean(mFullTracking);
-    }
-
-    /** Builder for {@link GnssRequest} */
+    /** Builder for {@link GnssMeasurementRequest} */
     public static final class Builder {
         private boolean mFullTracking;
 
@@ -127,9 +115,9 @@ public final class GnssRequest implements Parcelable {
         }
 
         /**
-         * Constructs a {@link Builder} instance by copying a {@link GnssRequest}.
+         * Constructs a {@link Builder} instance by copying a {@link GnssMeasurementRequest}.
          */
-        public Builder(@NonNull GnssRequest request) {
+        public Builder(@NonNull GnssMeasurementRequest request) {
             mFullTracking = request.isFullTracking();
         }
 
@@ -138,10 +126,10 @@ public final class GnssRequest implements Parcelable {
          *
          * <p>If true, GNSS chipset switches off duty cycling. In such a mode, no clock
          * discontinuities are expected, and when supported, carrier phase should be continuous in
-         * good signal conditions. All non-blacklisted, healthy constellations, satellites and
+         * good signal conditions. All non-blocklisted, healthy constellations, satellites and
          * frequency bands that the chipset supports must be reported in this mode. The GNSS chipset
-         * is allowed to consume more power in this mode. If false, GNSS chipset optimizes power via
-         * duty cycling, constellations and frequency limits, etc.
+         * will consume more power in full tracking mode than in duty cycling mode. If false,
+         * GNSS chipset optimizes power via duty cycling, constellations and frequency limits, etc.
          *
          * <p>Full GNSS tracking mode affects GnssMeasurement and other GNSS functionalities
          * including GNSS location.
@@ -155,10 +143,10 @@ public final class GnssRequest implements Parcelable {
             return this;
         }
 
-        /** Builds a {@link GnssRequest} instance as specified by this builder. */
+        /** Builds a {@link GnssMeasurementRequest} instance as specified by this builder. */
         @NonNull
-        public GnssRequest build() {
-            return new GnssRequest(mFullTracking);
+        public GnssMeasurementRequest build() {
+            return new GnssMeasurementRequest(mFullTracking);
         }
     }
 }
