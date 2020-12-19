@@ -4922,20 +4922,6 @@ public final class Settings {
          */
         public static final String ANBI_ENABLED_OPTION = "anbi_enabled_option";
 
-        /** some devices have a extra hw button e.g. n3 on the back on the
-         * fingerprint sensor. allow mapping button to key
-         *
-         * @hide
-         */
-        public static final String BUTTON_EXTRA_KEY_MAPPING = "button_extra_mapping";
-
-        /**
-         * Enable proxi check for wake keys - must be implemented in a device
-         * KeyHandler
-         * @hide
-         */
-        public static final String DEVICE_PROXI_CHECK_ENABLED = "device_proxi_check_enabled";
-
         /**
          * Whether the Home button works during call
          * @hide
@@ -6232,8 +6218,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(BUTTON_BRIGHTNESS);
             PRIVATE_SETTINGS.add(BUTTON_BACKLIGHT_ONLY_WHEN_PRESSED);
             PRIVATE_SETTINGS.add(ANBI_ENABLED_OPTION);
-            PRIVATE_SETTINGS.add(BUTTON_EXTRA_KEY_MAPPING);
-            PRIVATE_SETTINGS.add(DEVICE_PROXI_CHECK_ENABLED);
             PRIVATE_SETTINGS.add(ALLOW_INCALL_HOME);
             PRIVATE_SETTINGS.add(LOCKSCREEN_BATTERY_INFO);
             PRIVATE_SETTINGS.add(DOUBLE_TAP_SLEEP_GESTURE);
