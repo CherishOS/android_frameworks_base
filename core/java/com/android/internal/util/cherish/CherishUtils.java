@@ -17,6 +17,9 @@
 package com.android.internal.util.cherish;
 
 import android.content.Intent;
+import android.app.ActivityManager;
+import android.app.AlertDialog;
+import android.app.IActivityManager;
 import android.hardware.input.InputManager;
 import android.os.Looper;
 import android.content.Context;
