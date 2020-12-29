@@ -41,6 +41,7 @@ import com.android.systemui.qs.tiles.DataSwitchTile;
 import com.android.systemui.qs.tiles.DndTile;
 import com.android.systemui.qs.tiles.FlashlightTile;
 import com.android.systemui.qs.tiles.GamingModeTile;
+import com.android.systemui.qs.tiles.HeadphonesBuddyTile;
 import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.HeadsUpTile;
 import com.android.systemui.qs.tiles.HWKeysTile;
@@ -107,6 +108,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<CompassTile> mCompassTileProvider;
     private final Provider<CPUInfoTile> mCPUInfoTileProvider;
     private final Provider<WeatherTile> mWeatherTileProvider;
+    private final Provider<HeadphonesBuddyTile> mHeadphonesBuddyTile;
     private final Provider<LiveDisplayTile> mLiveDisplayTileProvider;
     private final Provider<ReadingModeTile> mReadingModeTileProvider;
     private final Provider<GamingModeTile> mGamingModeTileProvider;
@@ -148,6 +150,7 @@ public class QSFactoryImpl implements QSFactory {
             Provider<CompassTile> compassTileProvider,
             Provider<CPUInfoTile> cpuInfoTileProvider,
             Provider<WeatherTile> weatherTileProvider,
+            Provider<HeadphonesBuddyTile> headphonesBuddyTile,
             Provider<LiveDisplayTile> liveDisplayTileProvider,
             Provider<ReadingModeTile> readingModeTileProvider,
             Provider<GamingModeTile> gamingModeTileProvider) {
@@ -185,6 +188,7 @@ public class QSFactoryImpl implements QSFactory {
         mCompassTileProvider = compassTileProvider;
         mCPUInfoTileProvider = cpuInfoTileProvider;
         mWeatherTileProvider = weatherTileProvider;
+        mHeadphonesBuddyTile = headphonesBuddyTile;
         mLiveDisplayTileProvider = liveDisplayTileProvider;
         mReadingModeTileProvider = readingModeTileProvider;
         mGamingModeTileProvider = gamingModeTileProvider;
@@ -247,6 +251,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mAmbientDisplayTileProvider.get();
             case "caffeine":
                 return mCaffeineTileProvider.get();
+            case "headphonesbuddy":
+                return mHeadphonesBuddyTile.get();
             case "heads_up":
                 return mHeadsUpTileProvider.get();
             case "usb_tether":
