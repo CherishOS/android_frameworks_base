@@ -74,13 +74,6 @@ public class ThemesUtils {
             "com.android.theme.clearspring.systemui",
     };
 
-    public static final String[] BRIGHTNESS_SLIDER_THEMES = {
-        "com.jrinfected.brightness.a",
-        "com.jrinfected.brightness.b",
-        "com.jrinfected.brightness.c",
-        "com.jrinfected.brightness.d",
-};
-
     public static final String[] UI_THEMES = {
             "com.android.systemui.ui.default",
             "com.android.systemui.ui.nocornerradius",
