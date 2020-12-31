@@ -136,7 +136,15 @@ public class QSTileView extends QSTileBaseView {
         int setQsUseNewTint = Settings.System.getIntForUser(getContext().getContentResolver(),
                 Settings.System.QS_PANEL_BG_USE_NEW_TINT, 2, UserHandle.USER_CURRENT);
 
-        if (setQsUseNewTint == 1) {
+        boolean shouldDisco = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.QS_TILES_BG_DISCO, 0, UserHandle.USER_CURRENT) == 1;
+        if (setQsUseNewTint ==1 && shouldDisco) {
+            if (state.state == Tile.STATE_ACTIVE) {
+                mLabel.setTextColor(mColorLabelDefault);
+            } else if (state.state == Tile.STATE_INACTIVE) {
+                mLabel.setTextColor(mColorLabelDefault);
+            }
+        } else if (setQsUseNewTint == 1 && !shouldDisco) {
             if (state.state == Tile.STATE_ACTIVE) {
                 mLabel.setTextColor(mColorLabelActive);
             } else if (state.state == Tile.STATE_INACTIVE) {
