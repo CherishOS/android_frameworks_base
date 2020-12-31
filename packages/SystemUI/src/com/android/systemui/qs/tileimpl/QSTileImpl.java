@@ -537,6 +537,8 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
 		int defaultColor = ColorUtils.genRandomQsColor();
         int qsTileStyle = Settings.System.getIntForUser(context.getContentResolver(),
                 System.QS_TILE_STYLE, 0, UserHandle.USER_CURRENT);
+		boolean shouldDisco = Settings.System.getIntForUser(context.getContentResolver(),
+                System.QS_TILES_BG_DISCO, 0, UserHandle.USER_CURRENT) == 1;
         int setQsUseNewTint = Settings.System.getIntForUser(context.getContentResolver(),
                 System.QS_PANEL_BG_USE_NEW_TINT, 2, UserHandle.USER_CURRENT);
 		boolean setQsFromWall = System.getIntForUser(context.getContentResolver(),
@@ -551,7 +553,9 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
                 return Utils.getDisabled(context,
                         Utils.getColorAttrDefaultColor(context, android.R.attr.textColorSecondary));
             case Tile.STATE_INACTIVE:
-                if (setQsUseNewTint == 1) {
+                if (setQsUseNewTint == 1 && shouldDisco) {
+                        return Utils.getColorAttrDefaultColor(context, android.R.attr.colorPrimary);
+                    } else if (setQsUseNewTint == 1 && !shouldDisco) {
                     return Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary);
                 } else if (setQsUseNewTint == 2) {
                     return context.getResources().getColor(R.color.qs_tile_oos_background);

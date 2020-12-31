@@ -5316,6 +5316,12 @@ public final class Settings {
          * @hide
          */
         public static final String QS_PANEL_BG_USE_FW = "qs_panel_bg_use_fw";
+		
+		/**
+         * Whether to disco the QS tiles or not
+         * @hide
+         */
+        public static final String QS_TILES_BG_DISCO = "qs_tiles_bg_disco";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
@@ -6778,6 +6784,7 @@ public final class Settings {
 			PRIVATE_SETTINGS.add(QS_PANEL_BG_ALPHA);
 			PRIVATE_SETTINGS.add(QS_PANEL_BG_COLOR);
             PRIVATE_SETTINGS.add(QS_PANEL_BG_USE_FW);
+			 PRIVATE_SETTINGS.add(QS_TILES_BG_DISCO);
         }
 
         /**
