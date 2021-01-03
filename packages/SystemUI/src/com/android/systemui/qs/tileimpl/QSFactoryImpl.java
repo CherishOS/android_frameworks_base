@@ -53,6 +53,7 @@ import com.android.systemui.qs.tiles.LteTile;
 import com.android.systemui.qs.tiles.MonoToggleTile;
 import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.NightDisplayTile;
+import com.android.systemui.qs.tiles.PowerMenuTile;
 import com.android.systemui.qs.tiles.ReadingModeTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.ScreenRecordTile;
@@ -105,6 +106,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<AmbientDisplayTile> mAmbientDisplayTileProvider;
     private final Provider<CaffeineTile> mCaffeineTileProvider;
     private final Provider<HeadsUpTile> mHeadsUpTileProvider;
+    private final Provider<PowerMenuTile> mPowerMenuTileProvider;
     private final Provider<UsbTetherTile> mUsbTetherTileProvider;
     private final Provider<SleepScreenTile> mSleepScreenTileProvider;
     private final Provider<DataSwitchTile> mDataSwitchTileProvider;
@@ -163,6 +165,7 @@ public class QSFactoryImpl implements QSFactory {
             Provider<WeatherTile> weatherTileProvider,
             Provider<HeadphonesBuddyTile> headphonesBuddyTile,
             Provider<LiveDisplayTile> liveDisplayTileProvider,
+            Provider<PowerMenuTile> powerMenuTileProvider,
             Provider<ReadingModeTile> readingModeTileProvider,
             Provider<GamingModeTile> gamingModeTileProvider,
             Provider<SmartPixelsTile> smartPixelsTileProvider,
@@ -205,6 +208,7 @@ public class QSFactoryImpl implements QSFactory {
         mWeatherTileProvider = weatherTileProvider;
         mHeadphonesBuddyTile = headphonesBuddyTile;
         mLiveDisplayTileProvider = liveDisplayTileProvider;
+        mPowerMenuTileProvider = powerMenuTileProvider;
         mReadingModeTileProvider = readingModeTileProvider;
         mGamingModeTileProvider = gamingModeTileProvider;
         mSmartPixelsTileProvider = smartPixelsTileProvider;
@@ -275,6 +279,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mHeadphonesBuddyTile.get();
             case "heads_up":
                 return mHeadsUpTileProvider.get();
+            case "powermenu":
+                return mPowerMenuTileProvider.get();
             case "usb_tether":
                 return mUsbTetherTileProvider.get();
             case "sleepscreen":
