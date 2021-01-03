@@ -100,6 +100,15 @@ public static final String[] PANEL_BG_STYLE = {
         "com.jrinfected.panel.outline", // 3
 };
 
+// Switch themes
+    private static final String[] SWITCH_THEMES = {
+        "com.android.system.switch.aosp", // 0
+        "com.android.system.switch.contained", // 1
+        "com.android.system.switch.telegram", // 2
+        "com.android.system.switch.md2", // 3
+        "com.android.system.switch.retro", // 4
+    };
+
 // QS Tile Styles
 public static final String[] QS_TILE_THEMES = {
     "com.android.systemui.qstile.default", // 0
@@ -121,6 +130,31 @@ public static final String[] QS_TILE_THEMES = {
     "com.bootleggers.qstile.oos", // 16
     "com.bootleggers.qstile.triangles", // 17
 };
+
+public static void updateSwitchStyle(IOverlayManager om, int userId, int switchStyle) {
+        if (switchStyle == 0) {
+            stockSwitchStyle(om, userId);
+        } else {
+            try {
+                om.setEnabled(SWITCH_THEMES[switchStyle],
+                        true, userId);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Can't change switch theme", e);
+            }
+        }
+    }
+
+    public static void stockSwitchStyle(IOverlayManager om, int userId) {
+        for (int i = 1; i < SWITCH_THEMES.length; i++) {
+            String switchtheme = SWITCH_THEMES[i];
+            try {
+                om.setEnabled(switchtheme,
+                        false /*disable*/, userId);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 // Switches qs tile style to user selected.
 public static void updateNewTileStyle(IOverlayManager om, int userId, int qsTileStyle) {
