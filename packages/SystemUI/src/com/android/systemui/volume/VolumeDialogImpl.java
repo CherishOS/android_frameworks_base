@@ -1656,6 +1656,7 @@ public class VolumeDialogImpl implements VolumeDialog,
         animation.start();
         mRinger.setRotation(0);
         mRingerIcon.setRotation(0);
+        expandImmediatelyAnim(false);
         mRinger.animate().alpha(1.0f).setInterpolator(new SystemUIInterpolators.LogDecelerateInterpolator(800f, 2.1f, 0)).setDuration(DIALOG_HIDE_ANIMATION_DURATION).start();
         mODICaptionsView.animate().alpha(1.0f).setInterpolator(new SystemUIInterpolators.LogDecelerateInterpolator(800f, 2.1f, 0)).setDuration(DIALOG_HIDE_ANIMATION_DURATION).start();
         Handler h = new Handler();
