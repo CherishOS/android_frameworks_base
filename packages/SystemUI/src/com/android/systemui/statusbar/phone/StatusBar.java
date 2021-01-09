@@ -81,6 +81,7 @@ import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.Point;
 import android.graphics.PointF;
@@ -444,6 +445,8 @@ public class StatusBar extends SystemUI implements DemoMode,
     private View mReportRejectedTouch;
 
     private boolean mExpandedVisible;
+
+    private boolean mSysuiRoundedFwvals;
 
     private final int[] mAbsPos = new int[2];
 
@@ -3738,6 +3741,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             mContext.setTheme(themeResId);
             mConfigurationController.notifyThemeChanged();
         }
+        updateCorners();
     }
 
     private void updateDozingState() {
@@ -4228,6 +4232,9 @@ public class StatusBar extends SystemUI implements DemoMode,
 			resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_TILE_STYLE),
                     false, this, UserHandle.USER_ALL);
+			resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.SYSUI_ROUNDED_FWVALS),
+                    false, this, UserHandle.USER_ALL);
         }
          @Override
         public void onChange(boolean selfChange, Uri uri) {
@@ -4250,6 +4257,8 @@ public class StatusBar extends SystemUI implements DemoMode,
 			} else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_CHARGING_ANIMATION_STYLE))) {
                 updateChargingAnimation();
+			} else if (uri.equals(Settings.Secure.getUriFor(Settings.Secure.SYSUI_ROUNDED_FWVALS))) {
+                updateCorners();
             }
             update();
         }
@@ -4267,7 +4276,42 @@ public class StatusBar extends SystemUI implements DemoMode,
 			updateGModStyle();
 			stockQSHeaderStyle();
             updateQSHeaderStyle();
+			updateCorners();
         }
+    }
+	
+	private void updateCorners() {
+        mSysuiRoundedFwvals = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.SYSUI_ROUNDED_FWVALS, 1,
+                UserHandle.USER_CURRENT) == 1;
+        if (mSysuiRoundedFwvals && !isCurrentRoundedSameAsFw()) {
+            float density = Resources.getSystem().getDisplayMetrics().density;
+            int resourceIdRadius = (int) mContext.getResources().getDimension(com.android.internal.R.dimen.rounded_corner_radius);
+            Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                Settings.Secure.SYSUI_ROUNDED_SIZE, (int) (resourceIdRadius / density), UserHandle.USER_CURRENT);
+            int resourceIdPadding = (int) mContext.getResources().getDimension(R.dimen.rounded_corner_content_padding);
+            Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                Settings.Secure.SYSUI_ROUNDED_CONTENT_PADDING, (int) (resourceIdPadding / density), UserHandle.USER_CURRENT);
+        }
+    }
+
+    private boolean isCurrentRoundedSameAsFw() {
+        float density = Resources.getSystem().getDisplayMetrics().density;
+        // Resource IDs for framework properties
+        int resourceIdRadius = (int) mContext.getResources().getDimension(com.android.internal.R.dimen.rounded_corner_radius);
+        int resourceIdPadding = (int) mContext.getResources().getDimension(R.dimen.rounded_corner_content_padding);
+
+        // Values on framework resources
+        int cornerRadiusRes = (int) (resourceIdRadius / density);
+        int contentPaddingRes = (int) (resourceIdPadding / density);
+
+        // Values in Settings DBs
+        int cornerRadius = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.SYSUI_ROUNDED_SIZE, cornerRadiusRes, UserHandle.USER_CURRENT);
+        int contentPadding = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.SYSUI_ROUNDED_CONTENT_PADDING, contentPaddingRes, UserHandle.USER_CURRENT);
+
+        return (cornerRadiusRes == cornerRadius) && (contentPaddingRes == contentPadding);
     }
 	
 	// Switches qs header style from stock to custom
