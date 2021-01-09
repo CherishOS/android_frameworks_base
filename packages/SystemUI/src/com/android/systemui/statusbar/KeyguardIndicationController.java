@@ -59,6 +59,7 @@ import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
 import com.android.settingslib.Utils;
 import com.android.settingslib.fuelgauge.BatteryStatus;
+import com.android.systemui.Dependency;
 import com.android.systemui.Interpolators;
 import com.android.systemui.R;
 import com.android.systemui.broadcast.BroadcastDispatcher;
@@ -70,6 +71,7 @@ import com.android.systemui.statusbar.phone.KeyguardIndicationTextView;
 import com.android.systemui.statusbar.phone.LockscreenLockIconController;
 import com.android.systemui.statusbar.phone.StatusBarKeyguardViewManager;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.wakelock.SettableWakeLock;
 import com.android.systemui.util.wakelock.WakeLock;
 
@@ -91,7 +93,7 @@ import vendor.lineage.biometrics.fingerprint.inscreen.V1_0.IFingerprintInscreen;
  */
 @Singleton
 public class KeyguardIndicationController implements StateListener,
-        KeyguardStateController.Callback {
+        KeyguardStateController.Callback, TunerService.Tunable {
 
     private static final String TAG = "KeyguardIndication";
     private static final boolean DEBUG_CHARGING_SPEED = false;
@@ -103,6 +105,9 @@ public class KeyguardIndicationController implements StateListener,
     private static final float BOUNCE_ANIMATION_FINAL_Y = 0f;
 
     private static final String BATTERY_TEMP_PATH = "sys/class/power_supply/battery/temp";
+
+    private static final String LOCKSCREEN_CHARGING_ANIMATION_STYLE =
+            "system:" + Settings.System.LOCKSCREEN_CHARGING_ANIMATION_STYLE;
 
     private final Context mContext;
     private final BroadcastDispatcher mBroadcastDispatcher;
@@ -195,6 +200,22 @@ public class KeyguardIndicationController implements StateListener,
         mKeyguardUpdateMonitor.registerCallback(mTickReceiver);
         mStatusBarStateController.addCallback(this);
         mKeyguardStateController.addCallback(this);
+
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, LOCKSCREEN_CHARGING_ANIMATION_STYLE);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case LOCKSCREEN_CHARGING_ANIMATION_STYLE:
+                mChargingIndication =
+                        TunerService.parseInteger(newValue, 1);
+                if (mChargingIndicationView != null) updateChargingIndication();
+                break;
+            default:
+                break;
+        }
     }
 
     public void setIndicationArea(ViewGroup indicationArea) {
@@ -202,8 +223,8 @@ public class KeyguardIndicationController implements StateListener,
         mTextView = indicationArea.findViewById(R.id.keyguard_indication_text);
         mInitialTextColorState = mTextView != null ?
                 mTextView.getTextColors() : ColorStateList.valueOf(Color.WHITE);
-        mDisclosure = indicationArea.findViewById(R.id.keyguard_indication_enterprise_disclosure);
         mBatteryBar = indicationArea.findViewById(R.id.battery_bar_view);
+		mDisclosure = indicationArea.findViewById(R.id.keyguard_indication_enterprise_disclosure);
         mDisclosureMaxAlpha = mDisclosure.getAlpha();
         mChargingIndicationView = (LottieAnimationView) indicationArea.findViewById(
                 R.id.charging_indication);
@@ -664,6 +685,7 @@ public class KeyguardIndicationController implements StateListener,
     private void updateChargingIndication() {
         if (mChargingIndicationView == null) return;
         if (mChargingIndication > 0 && mPowerPluggedIn) {
+            mChargingIndicationView.setVisibility(View.VISIBLE);
             if (hasActiveInDisplayFp()) {
                 if (mFODPositionY != 0) {
                     // Get screen height
@@ -695,7 +717,6 @@ public class KeyguardIndicationController implements StateListener,
                     mChargingIndicationView.setLayoutParams(params);
                 }
             }
-            mChargingIndicationView.setVisibility(View.VISIBLE);
             mChargingIndicationView.playAnimation();
         } else {
             mChargingIndicationView.setVisibility(View.GONE);
