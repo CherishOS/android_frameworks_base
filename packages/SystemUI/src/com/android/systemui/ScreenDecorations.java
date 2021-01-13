@@ -774,6 +774,10 @@ public class ScreenDecorations extends SystemUI implements Tunable {
                         size = new Point(s, s);
                     } catch (Exception e) {
                     }
+                } else {
+                    int s = (int) (Secure.getIntForUser(mContext.getContentResolver(), SIZE,
+                            -1, UserHandle.USER_CURRENT) * mDensity);
+                    size = new Point(s, s);
                 }
                 updateRoundedCornerSize(size, sizeTop, sizeBottom);
             }
