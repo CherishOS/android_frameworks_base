@@ -10517,6 +10517,12 @@ public final class Settings {
          */
         public static final String QS_SHOW_BRIGHTNESS_SLIDER =
                 "qs_show_brightness_slider";
+				
+		/**
+         * Whether to show QS brightness slider on bottom
+         * @hide
+         */
+        public static final String QS_BRIGHTNESS_POSITION_BOTTOM = "qs_brightness_position_bottom";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
