@@ -55,6 +55,10 @@ public class QSContainerImpl extends FrameLayout implements
 
     private static final String QS_PANEL_BG_ALPHA =
             "system:" + Settings.System.QS_PANEL_BG_ALPHA;
+    private static final String QS_SB_BG_GRADIENT =
+            "system:" + Settings.System.QS_SB_BG_GRADIENT;
+    private static final String QS_SB_BG_ALPHA =
+            "system:" + Settings.System.QS_SB_BG_ALPHA;
 
     private final Point mSizePoint = new Point();
     private static final FloatPropertyCompat<QSContainerImpl> BACKGROUND_BOTTOM =
@@ -100,6 +104,8 @@ public class QSContainerImpl extends FrameLayout implements
     private int mHeaderShadow = 0;
 
     private int mQsBackgroundAlpha = 255;
+    private boolean mQsSBBackgroundGradient = true;
+    private int mQsSBBackgroundAlpha = 255;
 
     public QSContainerImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -156,6 +162,8 @@ public class QSContainerImpl extends FrameLayout implements
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, STATUS_BAR_CUSTOM_HEADER_SHADOW);
         tunerService.addTunable(this, QS_PANEL_BG_ALPHA);
+        tunerService.addTunable(this, QS_SB_BG_GRADIENT);
+        tunerService.addTunable(this, QS_SB_BG_ALPHA);
 
         mStatusBarHeaderMachine.addObserver(this);
         mStatusBarHeaderMachine.updateEnablement();
@@ -190,14 +198,24 @@ public class QSContainerImpl extends FrameLayout implements
                         TunerService.parseInteger(newValue, 255);
                 updateAlpha();
                 break;
+            case QS_SB_BG_GRADIENT:
+                mQsSBBackgroundGradient =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                updateStatusbarVisibility();
+                break;
+            case QS_SB_BG_ALPHA:
+                mQsSBBackgroundAlpha =
+                        TunerService.parseInteger(newValue, 255);
+                updateAlpha();
+                break;
             default:
                 break;
         }
     }
 
     private void updateAlpha() {
-        mBackground.getBackground().setAlpha(mQsBackgroundAlpha);
-        mStatusBarBackground.getBackground().setAlpha(mQsBackgroundAlpha);
+        mBackground.getBackground().setAlpha(mQsSBBackgroundAlpha);
+        mStatusBarBackground.getBackground().setAlpha(mQsSBBackgroundAlpha);
     }
 
     @Override
@@ -456,7 +474,7 @@ public class QSContainerImpl extends FrameLayout implements
         boolean hideGradient = mLandscape || mHeaderImageEnabled;
         boolean hideStatusbar = mLandscape && !mHeaderImageEnabled;
 
-        mBackgroundGradient.setVisibility(hideGradient ? View.INVISIBLE : View.VISIBLE);
+        mBackgroundGradient.setVisibility(hideGradient || !mQsSBBackgroundGradient ? View.INVISIBLE : View.VISIBLE);
         mStatusBarBackground.setBackgroundColor(hideGradient ? Color.TRANSPARENT : getResources().getColor(R.color.quick_settings_status_bar_background_color));
         mStatusBarBackground.setVisibility(hideStatusbar ? View.INVISIBLE : View.VISIBLE);
 
