@@ -327,7 +327,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             animateHide(mRightClock, animate, true);
         }
         animateHide(mSystemIconArea, animate, true);
-		animateHide(mCherishLogoRight, animate);
+		animateHide(mCherishLogoRight, animate,true);
         for (View batteryBar: mBatteryBars) {
             animateHide(batteryBar, animate, true);
         }
@@ -368,7 +368,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         animateHide(mNotificationIconAreaInner, animate, true);
         animateHide(mCenteredIconArea, animate, true);
 	animateHide(mCenterClockLayout, animate, true);
-        animateHide(mCustomIconArea, animate);
+        animateHide(mCustomIconArea, animate,true);
     }
 
     public void showNotificationIconArea(boolean animate) {
@@ -392,7 +392,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
         public void hideCarrierName(boolean animate) {
         if (mCustomCarrierLabel != null) {
-            animateHide(mCustomCarrierLabel, animate, true);
+            animateHide(mCustomCarrierLabel, animate, mHasCarrierLabel);
         }
     }
 
