@@ -6128,6 +6128,9 @@ public final class Settings {
          * @hide
          */
         public static final String ALERT_SLIDER_ORDER = "alert_slider_order";
+
+        /** @hide */
+        public static final String BACK_GESTURE_HAPTIC = "back_gesture_haptic";
 		
 		/**
          * Whether to show or hide the edit icon
@@ -6351,6 +6354,7 @@ public final class Settings {
 			 PRIVATE_SETTINGS.add(UI_STYLE);
 			PRIVATE_SETTINGS.add(QS_HEADER_STYLE);
 			PRIVATE_SETTINGS.add(QS_TILE_STYLE);
+           PRIVATE_SETTINGS.add(BACK_GESTURE_HAPTIC);
         }
 
         /**
