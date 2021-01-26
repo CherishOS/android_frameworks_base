@@ -6096,6 +6096,12 @@ public final class Settings {
         public static final String PULSE_SMOOTHING_ENABLED = "pulse_smoothing_enabled";
 		
 		/**
+         * Pulse ambient music visualizer
+         * @hide
+         */
+        public static final String AMBIENT_PULSE_ENABLED = "ambient_pulse_enabled";
+		
+		/**
          * Whether to enable PULSE Edge lights
          * @hide
          */
