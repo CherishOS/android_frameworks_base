@@ -6317,6 +6317,12 @@ public final class Settings {
          * @hide
          */
         public static final String QS_TILE_ICON_PRIMARY = "qs_tile_icon_primary";
+		
+		/**
+         * Whether to enable SmartSpace
+         * @hide
+         */
+        public static final String SMART_SPACE = "smart_space";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
