@@ -10421,12 +10421,6 @@ public final class Settings {
         public static final String LOCKSCREEN_ITEM_PADDING = "lockscreen_item_padding";
 
         /**
-         * Lockscreen Weather Background Selection
-         * @hide
-         */
-        public static final String LOCKSCREEN_WEATHER_SELECTION = "lockscreen_weather_selection";
-
-        /**
          * Whether the Lockdown button should be shown in the power menu.
          * @hide
          */
