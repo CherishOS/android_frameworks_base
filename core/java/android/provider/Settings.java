@@ -6686,6 +6686,12 @@ public final class Settings {
          * @hide
          */
         public static final String SCREEN_STATE_THREEG = "screen_state_threeg";
+	
+	/**
+         * Enable and disable Artwork on background media notification
+         * @hide
+         */
+        public static final String ARTWORK_MEDIA_BACKGROUND = "artwork_media_background";
 
         /**
          * @hide
