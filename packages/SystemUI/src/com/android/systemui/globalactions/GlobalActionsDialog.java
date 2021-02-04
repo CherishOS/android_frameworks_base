@@ -591,34 +591,30 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
               attrs.gravity = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
            break;
            case 2:
-              attrs.windowAnimations = R.style.GlobalActionsAnimationTop;
-              attrs.gravity = Gravity.TOP|Gravity.CENTER_HORIZONTAL;
-           break;
-           case 3:
               attrs.windowAnimations = R.style.GlobalActionsAnimationFly;
               attrs.gravity = Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL;
            break;
-           case 4:
+           case 3:
               attrs.windowAnimations = R.style.GlobalActionsAnimationTn;
               attrs.gravity = Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL;
            break;
-           case 5:
+           case 4:
               attrs.windowAnimations = R.style.GlobalActionsAnimationTranslucent;
               attrs.gravity = Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL;
            break;
-           case 6:
+           case 5:
               attrs.windowAnimations = R.style.GlobalActionsAnimationXylon;
               attrs.gravity = Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL;
            break;
-           case 7:
+           case 6:
               attrs.windowAnimations = R.style.GlobalActionsAnimationCard;
               attrs.gravity = Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL;
            break;
-           case 8:
+           case 7:
               attrs.windowAnimations = R.style.GlobalActionsAnimationTranslucent;
               attrs.gravity = Gravity.TOP|Gravity.CENTER_HORIZONTAL;
            break;
-           case 9:
+           case 8:
               attrs.windowAnimations = R.style.GlobalActionsAnimationTranslucent;
               attrs.gravity = Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
            break;
