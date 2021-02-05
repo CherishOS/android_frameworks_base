@@ -6119,6 +6119,23 @@ public final class Settings {
         public static final String AOD_NOTIFICATION_PULSE_TRIGGER = "ambient_notification_light";
 
         /**
+         * Whether to use accent color for pulse
+         * @hide
+         */
+        public static final String NOTIFICATION_PULSE_ACCENT = "ambient_notification_light_accent";
+
+        /**
+         * Pulse Ambient lights color
+         * @hide
+         */
+        public static final String NOTIFICATION_PULSE_COLOR = "ambient_notification_light_color";
+
+        /**
+         * @hide
+         */
+        public static final String NOTIFICATION_PULSE_COLOR_AUTOMATIC = "ambient_notification_light_color_automatic";
+
+        /**
          * Whether Ambient Edge lights are activated
          * @hide
          */
@@ -6132,37 +6149,22 @@ public final class Settings {
         public static final String PULSE_TRIGGER_REASON = "pulse_trigger_reason";
 
         /**
+         * Notification pulse repeats count - 0 means go by timeout
+         * @hide
+         */
+        public static final String NOTIFICATION_PULSE_REPEATS = "ambient_notification_light_repeats";
+
+        /**
          * Timeout for ambient pulse in seconds - 0 is no timeout
          * @hide
          */
         public static final String AOD_NOTIFICATION_PULSE_TIMEOUT = "ambient_notification_light_timeout";
 
-         /**
-         * Whether to use accent color for pulse
-         * @hide
-         */
-        public static final String NOTIFICATION_PULSE_ACCENT = "ambient_notification_light_accent";
-
-         /**
-         * Pulse Ambient lights color
-         * @hide
-         */
-        public static final String NOTIFICATION_PULSE_COLOR = "ambient_notification_light_color";
-
-         /**
-         * @hide
-         */
-        public static final String NOTIFICATION_PULSE_COLOR_AUTOMATIC = "ambient_notification_light_color_automatic";
-
         /**
+         * Notification pulse animation duration in seconds
          * @hide
          */
-        public static final String AMBIENT_LIGHT_DURATION = "ambient_light_duration";
-
-        /**
-         * @hide
-         */
-        public static final String AMBIENT_LIGHT_REPEAT_COUNT = "ambient_light_repeat_count";
+        public static final String NOTIFICATION_PULSE_DURATION = "ambient_notification_light_duration";
 
         /**
         * Use doubletap as doze pulse triggers
