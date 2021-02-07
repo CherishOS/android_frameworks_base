@@ -6285,10 +6285,10 @@ public final class Settings {
         public static final String QS_TILE_ICON_PRIMARY = "qs_tile_icon_primary";
 		
 		/**
-         * Whether to enable SmartSpace
+         * Toggle for clipboard access toast.
          * @hide
          */
-        public static final String SMART_SPACE = "smart_space";
+        public static final String SHOW_CLIPBOARD_TOAST = "show_clipboard_toast";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
@@ -6854,10 +6854,13 @@ public final class Settings {
         @UnsupportedAppUsage
         private static final HashSet<String> MOVED_TO_GLOBAL;
         static {
-            MOVED_TO_LOCK_SETTINGS = new HashSet<>(3);
+            MOVED_TO_LOCK_SETTINGS = new HashSet<>(6);
             MOVED_TO_LOCK_SETTINGS.add(Secure.LOCK_PATTERN_ENABLED);
             MOVED_TO_LOCK_SETTINGS.add(Secure.LOCK_PATTERN_VISIBLE);
             MOVED_TO_LOCK_SETTINGS.add(Secure.LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED);
+            MOVED_TO_LOCK_SETTINGS.add(Secure.LOCK_PATTERN_SIZE);
+            MOVED_TO_LOCK_SETTINGS.add(Secure.LOCK_DOTS_VISIBLE);
+            MOVED_TO_LOCK_SETTINGS.add(Secure.LOCK_SHOW_ERROR_PATH);
 
             MOVED_TO_GLOBAL = new HashSet<>();
             MOVED_TO_GLOBAL.add(Settings.Global.ADB_ENABLED);
@@ -8052,6 +8055,24 @@ public final class Settings {
         @Deprecated
         public static final String
                 LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED = "lock_pattern_tactile_feedback_enabled";
+
+        /**
+         * Determines the width and height of the LockPatternView widget
+         * @hide
+         */
+        public static final String LOCK_PATTERN_SIZE = "lock_pattern_size";
+
+        /**
+         * Whether lock pattern will show dots (0 = false, 1 = true)
+         * @hide
+         */
+        public static final String LOCK_DOTS_VISIBLE = "lock_pattern_dotsvisible";
+
+        /**
+         * Whether lockscreen error pattern is visible (0 = false, 1 = true)
+         * @hide
+         */
+        public static final String LOCK_SHOW_ERROR_PATH = "lock_pattern_show_error_path";
 
         /**
          * This preference allows the device to be locked given time after screen goes off,
@@ -10666,10 +10687,18 @@ public final class Settings {
                 "qs_show_auto_brightness";
 
         /**
+         * Whether to show qs brightness slider in quickbar
          * @hide
          */
         public static final String QS_SHOW_BRIGHTNESS_SLIDER =
                 "qs_show_brightness_slider";
+
+        /**
+         * Whether to show qs brightness slider when qs is expanded
+         * @hide
+         */
+        public static final String QS_SHOW_BRIGHTNESS_SLIDER_EXPANDED =
+                "qs_show_brightness_slider_show_expanded";
 				
 		/**
          * Whether to show QS brightness slider on bottom
