@@ -5357,6 +5357,12 @@ public final class Settings {
          * @hide
          */
         public static final String QS_QUICKBAR_COLUMNS = "qs_quickbar_columns";
+		 
+		 /**
+         * Whether to use new QS panel bg tint or not
+         * @hide
+         */
+        public static final String QS_PANEL_BG_USE_NEW_TINT = "qs_panel_bg_use_new_tint";
 		
 		/**
          * Settings dashboard icon style
@@ -6267,22 +6273,6 @@ public final class Settings {
          * @hide
          */
         public static final String SWITCH_STYLE = "switch_style";
-
-        /**
-         * Whether to use new QS panel bg tint or not
-         * @hide
-         */
-        public static final String QS_PANEL_BG_USE_NEW_TINT = "qs_panel_bg_use_new_tint";
-
-        /**
-         * @hide
-         */
-        public static final String QS_LABEL_USE_NEW_TINT = "qs_label_use_new_tint";
-
-        /**
-         * @hide
-         */
-        public static final String QS_TILE_ICON_PRIMARY = "qs_tile_icon_primary";
 		
 		/**
          * Toggle for clipboard access toast.
@@ -6457,6 +6447,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(LOCK_SCREEN_WEATHER_ICON_COLOR);
             PRIVATE_SETTINGS.add(LOCK_OWNERINFO_FONTS);
             PRIVATE_SETTINGS.add(LOCKOWNER_FONT_SIZE);
+            PRIVATE_SETTINGS.add(QS_PANEL_BG_USE_NEW_TINT);
             PRIVATE_SETTINGS.add(THEMING_SETTINGS_DASHBOARD_ICONS);
             PRIVATE_SETTINGS.add(ENABLE_CONDITIONS);
             PRIVATE_SETTINGS.add(ENABLE_SUGGESTIONS);
@@ -6500,7 +6491,6 @@ public final class Settings {
 			PRIVATE_SETTINGS.add(QS_HEADER_STYLE);
 			PRIVATE_SETTINGS.add(QS_TILE_STYLE);
            PRIVATE_SETTINGS.add(BACK_GESTURE_HAPTIC);
-            PRIVATE_SETTINGS.add(QS_PANEL_BG_USE_NEW_TINT);
         }
 
         /**
