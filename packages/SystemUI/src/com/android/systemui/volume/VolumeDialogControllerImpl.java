@@ -53,7 +53,6 @@ import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.util.Slog;
-import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityManager;
 
 import androidx.lifecycle.Observer;
@@ -92,6 +91,7 @@ import dagger.Lazy;
 @Singleton
 public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpable {
     private static final String TAG = Util.logTag(VolumeDialogControllerImpl.class);
+
 
     private static final int TOUCH_FEEDBACK_TIMEOUT_MS = 1000;
     private static final int DYNAMIC_STREAM_START_INDEX = 100;
@@ -136,10 +136,6 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
     private boolean mShowA11yStream;
     private boolean mShowVolumeDialog;
     private boolean mShowSafetyWarning;
-
-    private boolean isResumable;
-    private Handler mMediaStateHandler;
-
     private long mLastToggledRingerOn;
     private final NotificationManager mNotificationManager;
 
@@ -185,8 +181,6 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
         mHasVibrator = mVibrator != null && mVibrator.hasVibrator();
         mAudioService = IAudioService.Stub.asInterface(
                 ServiceManager.getService(Context.AUDIO_SERVICE));
-
-        mMediaStateHandler = new Handler();
 
         boolean accessibilityVolumeStreamActive = context.getSystemService(
                 AccessibilityManager.class).isAccessibilityVolumeStreamActive();
@@ -398,7 +392,7 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
     }
 
     private void onNotifyVisibleW(boolean visible) {
-        if (mDestroyed) return;
+        if (mDestroyed) return; 
         mAudio.notifyVolumeControllerVisible(mVolumeController, visible);
         if (!visible) {
             if (updateActiveStreamW(-1)) {
@@ -566,34 +560,6 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
         final StreamState ss = streamStateW(stream);
         if (ss.level == level) return false;
         ss.level = level;
-        if (stream == AudioSystem.STREAM_MUSIC && level == 0
-                  && mAudio.isMusicActive()) {
-            boolean adaptivePlaybackEnabled = Settings.System.getIntForUser(
-                    mContext.getContentResolver(), Settings.System.ADAPTIVE_PLAYBACK_ENABLED, 0,
-                    UserHandle.USER_CURRENT) == 1;
-            if (adaptivePlaybackEnabled) {
-                int adaptivePlaybackTimeout = Settings.System.getIntForUser(
-                        mContext.getContentResolver(), Settings.System.ADAPTIVE_PLAYBACK_TIMEOUT,
-                        30, UserHandle.USER_CURRENT);
-                mAudio.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
-                        KeyEvent.KEYCODE_MEDIA_PAUSE));
-                mAudio.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,
-                        KeyEvent.KEYCODE_MEDIA_PAUSE));
-                isResumable = true;
-                mMediaStateHandler.removeCallbacksAndMessages(null);
-                mMediaStateHandler.postDelayed(() -> {
-                    isResumable = false;
-                }, adaptivePlaybackTimeout * 1000);
-            }
-        }
-        if (stream == AudioSystem.STREAM_MUSIC && level > 0 && isResumable) {
-            mMediaStateHandler.removeCallbacksAndMessages(null);
-            mAudio.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN,
-                    KeyEvent.KEYCODE_MEDIA_PLAY));
-            mAudio.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_UP,
-                    KeyEvent.KEYCODE_MEDIA_PLAY));
-            isResumable = false;
-        }
         if (isLogWorthy(stream)) {
             Events.writeEvent(Events.EVENT_LEVEL_CHANGED, stream, level);
         }
@@ -628,16 +594,6 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
 
     private static boolean isRinger(int stream) {
         return stream == AudioManager.STREAM_RING || stream == AudioManager.STREAM_NOTIFICATION;
-    }
-
-    private boolean updateLinkNotificationConfigW() {
-        boolean linkNotificationWithVolume = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
-        if (mState.linkedNotification == linkNotificationWithVolume) {
-            return false;
-        }
-        mState.linkedNotification = linkNotificationWithVolume;
-        return true;
     }
 
     private boolean updateEffectsSuppressorW(ComponentName effectsSuppressor) {
@@ -1099,8 +1055,6 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
                 Settings.Global.getUriFor(Settings.Global.ZEN_MODE);
         private final Uri ZEN_MODE_CONFIG_URI =
                 Settings.Global.getUriFor(Settings.Global.ZEN_MODE_CONFIG_ETAG);
-        private final Uri VOLUME_LINK_NOTIFICATION_URI =
-                Settings.Secure.getUriFor(Settings.Secure.VOLUME_LINK_NOTIFICATION);
 
         public SettingObserver(Handler handler) {
             super(handler);
@@ -1109,8 +1063,6 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
         public void init() {
             mContext.getContentResolver().registerContentObserver(ZEN_MODE_URI, false, this);
             mContext.getContentResolver().registerContentObserver(ZEN_MODE_CONFIG_URI, false, this);
-            mContext.getContentResolver().registerContentObserver(VOLUME_LINK_NOTIFICATION_URI,
-                    false, this);
         }
 
         public void destroy() {
@@ -1125,9 +1077,6 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
             }
             if (ZEN_MODE_CONFIG_URI.equals(uri)) {
                 changed |= updateZenConfig();
-            }
-            if (VOLUME_LINK_NOTIFICATION_URI.equals(uri)) {
-                changed = updateLinkNotificationConfigW();
             }
 
             if (changed) {

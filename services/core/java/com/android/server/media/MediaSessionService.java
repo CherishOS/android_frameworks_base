@@ -138,7 +138,6 @@ public class MediaSessionService extends SystemService implements Monitor {
     private ContentResolver mContentResolver;
     private SettingsObserver mSettingsObserver;
     private boolean mHasFeatureLeanback;
-    private boolean mAdaptivePlayback;
 
     // The FullUserRecord of the current users. (i.e. The foreground user that isn't a profile)
     // It's always not null after the MediaSessionService is started.
@@ -197,9 +196,6 @@ public class MediaSessionService extends SystemService implements Monitor {
         mHasFeatureLeanback = mContext.getPackageManager().hasSystemFeature(
                 PackageManager.FEATURE_LEANBACK);
 
-        mAdaptivePlayback = Settings.System.getIntForUser(mContentResolver,
-                Settings.System.ADAPTIVE_PLAYBACK_ENABLED,
-                0, UserHandle.USER_CURRENT) == 1;
         updateUser();
 
         instantiateCustomProvider(null);
@@ -1095,16 +1091,10 @@ public class MediaSessionService extends SystemService implements Monitor {
         private void observe() {
             mContentResolver.registerContentObserver(mSecureSettingsUri,
                     false, this, USER_ALL);
-            mContentResolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.ADAPTIVE_PLAYBACK_ENABLED), false, this,
-                    UserHandle.USER_ALL);
         }
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
-            mAdaptivePlayback = Settings.System.getIntForUser(mContentResolver,
-                            Settings.System.ADAPTIVE_PLAYBACK_ENABLED,
-                            0, UserHandle.USER_CURRENT) == 1;
             updateActiveSessionListeners();
         }
     }
@@ -2055,7 +2045,7 @@ public class MediaSessionService extends SystemService implements Monitor {
                             + ". flags=" + flags + ", preferSuggestedStream="
                             + preferSuggestedStream + ", session=" + session);
                 }
-                if ((flags & AudioManager.FLAG_ACTIVE_MEDIA_ONLY) != 0 && !mAdaptivePlayback
+                if ((flags & AudioManager.FLAG_ACTIVE_MEDIA_ONLY) != 0
                         && !AudioSystem.isStreamActive(AudioManager.STREAM_MUSIC, 0)) {
                     if (DEBUG_KEY_EVENT) {
                         Log.d(TAG, "Nothing is playing on the music stream. Skipping volume event,"

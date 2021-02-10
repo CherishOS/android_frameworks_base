@@ -3098,8 +3098,6 @@ public final class Settings {
 
             // At one time in System, then Global, but now back in Secure
             MOVED_TO_SECURE.add(Secure.INSTALL_NON_MARKET_APPS);
-
-            MOVED_TO_SECURE.add(Secure.VOLUME_LINK_NOTIFICATION);
         }
 
         @UnsupportedAppUsage
@@ -5575,22 +5573,6 @@ public final class Settings {
         public static final String STATUSBAR_CLOCK_DATE_POSITION = "statusbar_clock_date_position";
 		
 		/**
-         * Adaptive playback
-         * Automatically pause media when the volume is muted and
-         * will resume automatically when volume is restored.
-         *   0 = disabled
-         *   1 = enabled
-         * @hide
-         */
-        public static final String ADAPTIVE_PLAYBACK_ENABLED = "adaptive_playback_enabled";
-
-        /**
-         * Adaptive playback's timeout in seconds
-         * @hide
-         */
-        public static final String ADAPTIVE_PLAYBACK_TIMEOUT = "adaptive_playback_timeout";
-		
-		/**
          * Whether to show the battery bar
          * @hide
          */
@@ -6281,7 +6263,11 @@ public final class Settings {
         public static final String SHOW_CLIPBOARD_TOAST = "show_clipboard_toast";
 
         /**
+<<<<<<< HEAD
          * Display cutout
+=======
+         * Adaptive playback's timeout in ms
+>>>>>>> parent of 6e7a1250373 (Adaptive Playback: Convert to seconds)
          * @hide
          */
         public static final String DISPLAY_CUTOUT_HIDDEN = "display_cutout_hidden";
@@ -10651,12 +10637,6 @@ public final class Settings {
          * @hide
          */
         public static final String ADVANCED_REBOOT = "advanced_reboot";
-
-        /**
-         * Boolean value whether to link ringtone and notification volume
-         * @hide
-         */
-        public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
 
         /**
          * Whether to vibrate when quick settings tile is pressed.
