@@ -160,11 +160,14 @@ class NotificationSectionsManager @Inject internal constructor(
                 silentHeaderView, layoutInflater, R.layout.status_bar_notification_section_header
         ).apply {
             if (mShowHeaders) {
+                setVisibility(View.VISIBLE)
                 setHeaderText(R.string.notification_section_header_gentle)
                 setOnHeaderClickListener { onGentleHeaderClick() }
                 setOnClearAllClickListener { onClearGentleNotifsClick(it) }
             } else {
                 setVisibility(View.GONE)
+                setOnHeaderClickListener(null)
+                setOnClearAllClickListener(null)
             }
 
             if (mCenterHeaders) {
@@ -177,10 +180,12 @@ class NotificationSectionsManager @Inject internal constructor(
                 alertingHeaderView, layoutInflater, R.layout.status_bar_notification_section_header
         ).apply {
             if (mShowHeaders) {
+                setVisibility(View.VISIBLE)
                 setHeaderText(R.string.notification_section_header_alerting)
                 setOnHeaderClickListener { onGentleHeaderClick() }
             } else {
                 setVisibility(View.GONE)
+                setOnHeaderClickListener(null)
             }
 
             if (mCenterHeaders) {
@@ -193,10 +198,12 @@ class NotificationSectionsManager @Inject internal constructor(
         peopleHubSubscription = null
         peopleHeaderView = reinflateView(peopleHeaderView, layoutInflater, R.layout.people_strip
         ).apply {
-            if (mShowHeaders) {
-                setOnHeaderClickListener(View.OnClickListener { onPeopleHeaderClick() })
-            } else {
+            if (!mShowHeaders) {
                 setVisibility(View.GONE)
+                        setOnHeaderClickListener(null)
+                    } else {
+                        setVisibility(View.VISIBLE)
+                        setOnHeaderClickListener(View.OnClickListener { onPeopleHeaderClick() })
             }
 
             if (mCenterHeaders) {
@@ -212,10 +219,12 @@ class NotificationSectionsManager @Inject internal constructor(
                 incomingHeaderView, layoutInflater, R.layout.status_bar_notification_section_header
         ).apply {
             if (mShowHeaders) {
+                setVisibility(View.VISIBLE)
                 setHeaderText(R.string.notification_section_header_incoming)
                 setOnHeaderClickListener { onGentleHeaderClick() }
             } else {
                 setVisibility(View.GONE)
+                setOnHeaderClickListener(null)
             }
 
             if (mCenterHeaders) {
@@ -227,6 +236,14 @@ class NotificationSectionsManager @Inject internal constructor(
         mediaControlsView =
                 reinflateView(mediaControlsView, layoutInflater, R.layout.keyguard_media_header)
                         .also(keyguardMediaController::attach)
+    }
+
+    fun setHeadersVisibility(visible: Boolean) {
+        if  (mShowHeaders != visible) {
+            mShowHeaders = visible
+            reinflateViews(LayoutInflater.from(parent.context))
+            if (visible) updateSectionBoundaries("headers toggled on")
+        }
     }
 
     override fun beginsSection(view: View, previous: View?): Boolean =
@@ -342,6 +359,7 @@ class NotificationSectionsManager @Inject internal constructor(
         // target, but won't be once they are moved / removed after the pass has completed.
 
         val showHeaders = statusBarStateController.state != StatusBarState.KEYGUARD
+                && mShowHeaders
         val usingPeopleFiltering = sectionsFeatureManager.isFilteringEnabled()
         val usingMediaControls = sectionsFeatureManager.isMediaControlsEnabled()
 
