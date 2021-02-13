@@ -211,10 +211,15 @@ public class IDEClockController implements ClockPlugin {
 
     @Override
     public void onTimeTick() {
+      if (mView != null)
         mView.onTimeChanged();
+      if (mTime != null)
         mTime.refreshTime();
+      if (mDate != null)
         mDate.refreshTime();
+      if (mDay != null)
         mDay.refreshTime();
+      if (mMonth != null)
         mMonth.refreshTime();
     }
 
