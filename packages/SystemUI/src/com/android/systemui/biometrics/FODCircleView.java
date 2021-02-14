@@ -70,7 +70,6 @@ public class FODCircleView extends ImageView implements TunerService.Tunable {
     private final int mSize;
     private final int mDreamingMaxOffset;
     private final int mNavigationBarSize;
-    private final boolean mShouldBoostBrightness;
     private final Paint mPaintFingerprintBackground = new Paint();
     private final Paint mPaintFingerprint = new Paint();
     private final WindowManager.LayoutParams mParams = new WindowManager.LayoutParams();
@@ -82,6 +81,8 @@ public class FODCircleView extends ImageView implements TunerService.Tunable {
     private int mDreamingOffsetX;
     private int mColorBackground;
     private int mDreamingOffsetY;
+
+    private  boolean mShouldBoostBrightness;
 
     private int mColor;
 
@@ -267,7 +268,6 @@ public class FODCircleView extends ImageView implements TunerService.Tunable {
         }
 
         try {
-            mShouldBoostBrightness = daemon.shouldBoostBrightness();
             mPositionX = daemon.getPositionX();
             mPositionY = daemon.getPositionY();
             mSize = daemon.getSize();
@@ -596,6 +596,7 @@ public class FODCircleView extends ImageView implements TunerService.Tunable {
             IFingerprintInscreen daemon = getFingerprintInScreenDaemon();
             try {
                 dimAmount = daemon.getDimAmount(curBrightness);
+                mShouldBoostBrightness = daemon.shouldBoostBrightness();
             } catch (RemoteException e) {
                 // do nothing
             }
