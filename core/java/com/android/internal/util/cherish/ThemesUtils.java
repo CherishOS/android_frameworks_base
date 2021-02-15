@@ -44,6 +44,7 @@ public class ThemesUtils {
             "com.android.systemui.brightness.slider.memestrokegradient",
             "com.android.systemui.brightness.slider.minihalf",
             "com.android.systemui.brightness.slider.half",
+	      "com.android.systemui.brightness.slider.oos",
     };
 
     public static final String[] SOLARIZED_DARK = {
