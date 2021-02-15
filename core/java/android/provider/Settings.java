@@ -6097,11 +6097,6 @@ public final class Settings {
          * @hide
          */
         public static final String QS_HEADER_STYLE = "qs_header_style";
-		
-		/**
-         * @hide
-         */
-        public static final String QS_TILE_STYLE = "qs_tile_style";
 
 		/**
          * @hide
@@ -6498,7 +6493,6 @@ public final class Settings {
 			 PRIVATE_SETTINGS.add(BRIGHTNESS_SLIDER_STYLE);
 			 PRIVATE_SETTINGS.add(UI_STYLE);
 			PRIVATE_SETTINGS.add(QS_HEADER_STYLE);
-			PRIVATE_SETTINGS.add(QS_TILE_STYLE);
            PRIVATE_SETTINGS.add(BACK_GESTURE_HAPTIC);
             PRIVATE_SETTINGS.add(DISPLAY_CUTOUT_HIDDEN);
         }

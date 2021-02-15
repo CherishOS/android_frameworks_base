@@ -163,13 +163,19 @@ public class QSTileHost implements QSHost, Tunable, PluginListener<QSFactory>, D
     public void onPluginConnected(QSFactory plugin, Context pluginContext) {
         // Give plugins priority over creation so they can override if they wish.
         mQsFactories.add(0, plugin);
-        reloadAllTiles();
+        String value = mTunerService.getValue(TILES_SETTING);
+        // Force remove and recreate of all tiles.
+        onTuningChanged(TILES_SETTING, "");
+        onTuningChanged(TILES_SETTING, value);
     }
 
     @Override
     public void onPluginDisconnected(QSFactory plugin) {
         mQsFactories.remove(plugin);
-        reloadAllTiles();
+        // Force remove and recreate of all tiles.
+        String value = mTunerService.getValue(TILES_SETTING);
+        onTuningChanged(TILES_SETTING, "");
+        onTuningChanged(TILES_SETTING, value);
     }
 
     public QSLogger getQSLogger() {

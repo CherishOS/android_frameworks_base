@@ -95,55 +95,27 @@ public static final String[] PANEL_BG_STYLE = {
         "com.jrinfected.panel.outline", // 3
 };
 
-// QS Tile Styles
-public static final String[] QS_TILE_THEMES = {
-    "com.android.systemui.qstile.default", // 0
-    "com.android.systemui.qstile.circletrim", // 1
-    "com.android.systemui.qstile.dualtonecircletrim", // 2
-    "com.android.systemui.qstile.squircletrim", // 3
-    "com.android.systemui.qstile.wavey", // 4
-    "com.android.systemui.qstile.pokesign", // 5
-    "com.android.systemui.qstile.ninja", // 6
-    "com.android.systemui.qstile.dottedcircle", // 7
-    "com.android.systemui.qstile.attemptmountain", // 8
-    "com.android.systemui.qstile.squaremedo", // 9
-    "com.android.systemui.qstile.inkdrop", // 10
-    "com.android.systemui.qstile.cookie", // 11
-    "com.android.systemui.qstile.circleoutline", // 12
-    "com.bootleggers.qstile.cosmos", // 13
-    "com.bootleggers.qstile.divided", // 14
-    "com.bootleggers.qstile.neonlike", // 15
-    "com.bootleggers.qstile.oos", // 16
-    "com.bootleggers.qstile.triangles", // 17
+public static final String[] QS_SHAPE = {
+        "com.jrinfected.qs.shape.a",
+        "com.jrinfected.qs.shape.b",
+        "com.jrinfected.qs.shape.c",
+        "com.jrinfected.qs.shape.d",
+        "com.jrinfected.qs.shape.e",
+        "com.jrinfected.qs.shape.f",
+        "com.jrinfected.qs.shape.g",
+        "com.jrinfected.qs.shape.h",
+        "com.jrinfected.qs.shape.i",
+        "com.jrinfected.qs.shape.j",
+        "com.jrinfected.qs.shape.k",
+        "com.jrinfected.qs.shape.l",
+        "com.jrinfected.qs.shape.m",
+        "com.jrinfected.qs.shape.n",
+        "com.jrinfected.qs.shape.o",
+        "com.jrinfected.qs.shape.p",
+        "com.jrinfected.qs.shape.q",
+        "com.jrinfected.qs.shape.r",
+        "com.jrinfected.qs.shape.s",
 };
-
-// Switches qs tile style to user selected.
-public static void updateNewTileStyle(IOverlayManager om, int userId, int qsTileStyle) {
-    if (qsTileStyle == 0) {
-        stockNewTileStyle(om, userId);
-    } else {
-        try {
-            om.setEnabled(QS_TILE_THEMES[qsTileStyle],
-                    true, userId);
-        } catch (RemoteException e) {
-            Log.w(TAG, "Can't change qs tile style", e);
-        }
-    }
-}
-
-// Switches qs tile style back to stock.
-public static void stockNewTileStyle(IOverlayManager om, int userId) {
-    // skip index 0
-    for (int i = 1; i < QS_TILE_THEMES.length; i++) {
-        String qstiletheme = QS_TILE_THEMES[i];
-        try {
-            om.setEnabled(qstiletheme,
-                    false /*disable*/, userId);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-}
 
 	// QS header themes
     private static final String[] QS_HEADER_THEMES = {
