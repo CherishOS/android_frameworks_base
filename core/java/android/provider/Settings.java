@@ -5381,6 +5381,23 @@ public final class Settings {
         public static final String QS_PANEL_BG_USE_NEW_TINT = "qs_panel_bg_use_new_tint";
 		
 		/**
+         * @hide
+         */
+        public static final String OMNIJAWS_WEATHER_ICON_PACK = "omnijaws_weather_icon_pack";
+		
+		/**
+         * @hide
+         */
+        public static final String OMNI_LOCKSCREEN_WEATHER_ENABLED = "lockscreen_weather_enabled";
+		
+		/**
+        * 0: OmniJaws Style
+        * 1: KeyguardSlice Style
+        * @hide
+        */
+        public static final String AICP_LOCKSCREEN_WEATHER_STYLE = "lockscreen_weather_style";
+		
+		/**
          * Settings dashboard icon style
          * @hide
          */
@@ -5657,6 +5674,35 @@ public final class Settings {
          * @hide
          */
         public static final String FOD_ANIM = "fod_recognizing_animation_list";
+
+        /**
+         * @hide
+         */
+        public static final String LOCKSCREEN_WEATHER_SHOW_TEMP = "lockscreen_weather_show_temp";
+
+        /**
+         * @hide
+         */
+        public static final String LOCKSCREEN_WEATHER_SHOW_CITY = "lockscreen_weather_show_city";
+
+        /**
+         * @hide
+         */
+        public static final String LOCKSCREEN_WEATHER_SHOW_IMAGE = "lockscreen_weather_show_image";
+
+        /**
+	 * Change fonts for the system lockscreen weather temperature
+	 *
+	 * @hide
+	 */
+         public static final String LOCK_WEATHER_TEMP_FONTS = "lock_weather_temp_fonts";
+
+        /**
+	 * Change fonts for the system lockscreen weather city
+	 *
+	 * @hide
+	 */
+         public static final String LOCK_WEATHER_CITY_FONTS = "lock_weather_city_fonts";
 
         /**
          * Whether footer #CherishOS text shows
@@ -6452,6 +6498,9 @@ public final class Settings {
             PRIVATE_SETTINGS.add(LOCK_OWNERINFO_FONTS);
             PRIVATE_SETTINGS.add(LOCKOWNER_FONT_SIZE);
             PRIVATE_SETTINGS.add(QS_PANEL_BG_USE_NEW_TINT);
+            PRIVATE_SETTINGS.add(OMNIJAWS_WEATHER_ICON_PACK);
+            PRIVATE_SETTINGS.add(OMNI_LOCKSCREEN_WEATHER_ENABLED);
+            PRIVATE_SETTINGS.add(AICP_LOCKSCREEN_WEATHER_STYLE);
             PRIVATE_SETTINGS.add(THEMING_SETTINGS_DASHBOARD_ICONS);
             PRIVATE_SETTINGS.add(ENABLE_CONDITIONS);
             PRIVATE_SETTINGS.add(ENABLE_SUGGESTIONS);
@@ -6467,6 +6516,9 @@ public final class Settings {
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_DATE_FORMAT);
 	    PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_DATE_POSITION);
             PRIVATE_SETTINGS.add(SYSTEMUI_PLUGIN_VOLUME);
+            PRIVATE_SETTINGS.add(LOCKSCREEN_WEATHER_SHOW_TEMP);
+            PRIVATE_SETTINGS.add(LOCKSCREEN_WEATHER_SHOW_CITY);
+	    PRIVATE_SETTINGS.add(LOCKSCREEN_WEATHER_SHOW_IMAGE);
             PRIVATE_SETTINGS.add(OMNI_FOOTER_TEXT_SHOW);
             PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_STATE);
             PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_TYPE);
@@ -10376,6 +10428,12 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_ITEM_PADDING = "lockscreen_item_padding";
+
+        /**
+         * Lockscreen Weather Background Selection
+         * @hide
+         */
+        public static final String LOCKSCREEN_WEATHER_SELECTION = "lockscreen_weather_selection";
 
         /**
          * Whether the Lockdown button should be shown in the power menu.

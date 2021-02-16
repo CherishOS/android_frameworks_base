@@ -29,6 +29,7 @@ import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.Html;
+import androidx.core.graphics.ColorUtils;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
@@ -50,6 +51,8 @@ import com.android.keyguard.clock.CustomTextClock;
 import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.keyguard.clock.SmallClockPosition;
+import com.android.systemui.Interpolators;
+import com.android.systemui.omni.CurrentWeatherView;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 
 import java.io.FileDescriptor;
@@ -99,11 +102,14 @@ public class KeyguardStatusView extends GridLayout implements
     private int mTextClockAlignment;
     private int mLockDateAlignment;
     private int mOwnerInfoAlignment;
+    private int mWeatherViewAlignment;
 
     // Date styles paddings
     private int mDateVerPadding;
     private int mDateHorPadding;
     private final SmallClockPosition mClockPosition;
+    private CurrentWeatherView mWeatherView;
+    private boolean mOmniStyle;
 
     private KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
@@ -137,7 +143,8 @@ public class KeyguardStatusView extends GridLayout implements
                 updateTextClockPadding();
                 mClockView.updateClockAlignment();
                 mClockView.updateTextClockPadding();
-	    }
+                updateSettings();
+            }
         }
 
         @Override
@@ -257,6 +264,7 @@ public class KeyguardStatusView extends GridLayout implements
         mOwnerInfo = findViewById(R.id.owner_info);
         mKeyguardSlice = findViewById(R.id.keyguard_status_area);
         mKeyguardSliceView = findViewById(R.id.keyguard_status_area);
+	     mWeatherView = (CurrentWeatherView) findViewById(R.id.weather_container);
 
         mClockView.refreshLockFont();
 	refreshLockDateFont();
@@ -273,7 +281,6 @@ public class KeyguardStatusView extends GridLayout implements
         updateTextClockPadding();
         mClockView.updateClockAlignment();
         mClockView.updateTextClockPadding();
-
         mTextColor = mClockView.getCurrentTextColor();
 
         mKeyguardSlice.setContentChangeListener(this::onSliceContentChanged);
@@ -285,6 +292,7 @@ public class KeyguardStatusView extends GridLayout implements
         updateOwnerInfo();
         updateLogoutView();
         updateDark();
+
     }
 
     public KeyguardSliceView getKeyguardSliceView() {
@@ -330,6 +338,10 @@ public class KeyguardStatusView extends GridLayout implements
                     getResources().getDimensionPixelSize(R.dimen.lock_date_font_size_21));
         }
         loadBottomMargin();
+
+        if (mWeatherView != null) {
+            mWeatherView.onDensityOrFontScaleChanged();
+        }
     }
 
     public void dozeTimeTick() {
@@ -1321,6 +1333,9 @@ public class KeyguardStatusView extends GridLayout implements
         }
 
         final int blendedTextColor = ColorUtils.blendARGB(mTextColor, Color.WHITE, mDarkAmount);
+		if (mWeatherView != null) {
+            mWeatherView.blendARGB(mDarkAmount);
+        }
     }
 
     private void layoutOwnerInfo() {
@@ -1365,4 +1380,54 @@ public class KeyguardStatusView extends GridLayout implements
             Log.e(TAG, "Failed to logout user", re);
         }
     }
+
+    private void updateSettings() {
+        final ContentResolver resolver = getContext().getContentResolver();
+        final Resources res = getContext().getResources();
+        boolean showWeather = Settings.System.getIntForUser(resolver,
+                Settings.System.OMNI_LOCKSCREEN_WEATHER_ENABLED, 0,
+                UserHandle.USER_CURRENT) == 1;
+
+        mOmniStyle = Settings.System.getIntForUser(resolver,
+                Settings.System.AICP_LOCKSCREEN_WEATHER_STYLE, 0,
+                UserHandle.USER_CURRENT) == 0;
+
+        mWeatherViewAlignment = Settings.Secure.getIntForUser(resolver,
+                Settings.Secure.LOCKSCREEN_WEATHER_ALIGNMENT, 1, UserHandle.USER_CURRENT);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                          LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+
+        if (mWeatherView != null) {
+            if (showWeather &&  mOmniStyle) {
+                mWeatherView.setVisibility(View.VISIBLE);
+                mWeatherView.enableUpdates();
+            }
+            if (!showWeather ||  !mOmniStyle) {
+                mWeatherView.setVisibility(View.GONE);
+                mWeatherView.disableUpdates();
+            }
+        }
+        if (mWeatherView != null && mOmniStyle) {
+            switch (mWeatherViewAlignment) {
+                case 0:
+                    params.gravity = Gravity.LEFT;
+                    mWeatherView.setPaddingRelative(updateTextClockPadding() + 8, 0, 0, 0);
+                    mWeatherView.setLayoutParams(params);
+                    break;
+                case 1:
+                default:
+                    params.gravity = Gravity.CENTER;
+                    mWeatherView.setPaddingRelative(0, 0, 0, 0);
+                    mWeatherView.setLayoutParams(params);
+                    break;
+                case 2:
+                    params.gravity = Gravity.RIGHT;
+                    mWeatherView.setPaddingRelative(0, 0, updateTextClockPadding() + 8, 0);
+                    mWeatherView.setLayoutParams(params);
+                    break;
+            }
+        }
+    }
+
 }

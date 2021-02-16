@@ -59,6 +59,7 @@ import com.android.systemui.qs.tiles.UiModeNightTile;
 import com.android.systemui.qs.tiles.SoundTile;
 import com.android.systemui.qs.tiles.UsbTetherTile;
 import com.android.systemui.qs.tiles.UserTile;
+import com.android.systemui.qs.tiles.WeatherTile;
 import com.android.systemui.qs.tiles.WifiTile;
 import com.android.systemui.qs.tiles.WorkModeTile;
 import com.android.systemui.util.leak.GarbageMonitor;
@@ -106,6 +107,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<HWKeysTile> mHWKeysTileProvider;
     private final Provider<CompassTile> mCompassTileProvider;
     private final Provider<CPUInfoTile> mCPUInfoTileProvider;
+    private final Provider<WeatherTile> mWeatherTileProvider;
     private final Provider<HeadphonesBuddyTile> mHeadphonesBuddyTile;
     private final Provider<LiveDisplayTile> mLiveDisplayTileProvider;
     private final Provider<ReadingModeTile> mReadingModeTileProvider;
@@ -147,6 +149,7 @@ public class QSFactoryImpl implements QSFactory {
             Provider<HWKeysTile> hWKeysTileProvider,
             Provider<CompassTile> compassTileProvider,
             Provider<CPUInfoTile> cpuInfoTileProvider,
+            Provider<WeatherTile> weatherTileProvider,
             Provider<HeadphonesBuddyTile> headphonesBuddyTile,
             Provider<LiveDisplayTile> liveDisplayTileProvider,
             Provider<ReadingModeTile> readingModeTileProvider,
@@ -184,6 +187,7 @@ public class QSFactoryImpl implements QSFactory {
         mHWKeysTileProvider = hWKeysTileProvider;
         mCompassTileProvider = compassTileProvider;
         mCPUInfoTileProvider = cpuInfoTileProvider;
+        mWeatherTileProvider = weatherTileProvider;
         mHeadphonesBuddyTile = headphonesBuddyTile;
         mLiveDisplayTileProvider = liveDisplayTileProvider;
         mReadingModeTileProvider = readingModeTileProvider;
@@ -265,6 +269,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mCompassTileProvider.get();
             case "cpuinfo":
                 return mCPUInfoTileProvider.get();
+            case "weather":
+                return mWeatherTileProvider.get();
             case "livedisplay":
                 return mLiveDisplayTileProvider.get();
             case "reading_mode":
