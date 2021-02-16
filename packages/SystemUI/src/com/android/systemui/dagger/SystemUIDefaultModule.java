@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.systemui.dagger;
+package com.android.systemui.dagger;
 
 import static com.android.systemui.Dependency.ALLOW_NOTIFICATION_LONG_PRESS_NAME;
 import static com.android.systemui.Dependency.LEAK_REPORT_EMAIL_NAME;
@@ -61,9 +61,6 @@ import com.android.systemui.statusbar.policy.DeviceProvisionedController;
 import com.android.systemui.statusbar.policy.DeviceProvisionedControllerImpl;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 
-import com.google.android.systemui.NotificationLockscreenUserManagerGoogle;
-import com.google.android.systemui.power.EnhancedEstimatesGoogleImpl;
-
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -76,7 +73,7 @@ import dagger.Provides;
  * overridden by the System UI implementation.
  */
 @Module(includes = {DividerModule.class, QSModule.class})
-public abstract class SystemUIGoogleModule {
+public abstract class SystemUIDefaultModule {
 
     @Singleton
     @Provides
@@ -91,7 +88,7 @@ public abstract class SystemUIGoogleModule {
 
     @Binds
     abstract NotificationLockscreenUserManager bindNotificationLockscreenUserManager(
-            NotificationLockscreenUserManagerGoogle notificationLockscreenUserManager);
+            NotificationLockscreenUserManagerImpl notificationLockscreenUserManager);
 
     @Provides
     @Singleton

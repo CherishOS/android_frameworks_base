@@ -52,8 +52,6 @@ import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.DeviceProvisionedController;
 
-import com.google.android.systemui.assist.uihints.GoogleDefaultUiController;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -200,7 +198,7 @@ public class AssistManager {
             OverviewProxyService overviewProxyService,
             ConfigurationController configurationController,
             Lazy<SysUiState> sysUiState,
-            GoogleDefaultUiController defaultUiController,
+            DefaultUiController defaultUiController,
             AssistLogger assistLogger) {
         mContext = context;
         mDeviceProvisionedController = controller;
