@@ -79,6 +79,7 @@ public class CurrentWeatherView extends FrameLayout implements OmniJawsClient.Om
     private int mCurrentImageColor;
     private int omniRightTextFont;
     private int omniLeftTextFont;
+    private LinearLayout mLayout;
 
     public CurrentWeatherView(Context context) {
         this(context, null);
@@ -122,6 +123,7 @@ public class CurrentWeatherView extends FrameLayout implements OmniJawsClient.Om
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        mLayout = findViewById(R.id.current);
         mCurrentImage  = (ImageView) findViewById(R.id.current_image);
         mLeftText = (TextView) findViewById(R.id.left_text);
         mRightText = (TextView) findViewById(R.id.right_text);
@@ -439,6 +441,23 @@ public class CurrentWeatherView extends FrameLayout implements OmniJawsClient.Om
                 getResources().getDimensionPixelSize(R.dimen.current_weather_image_size);
         mCurrentImage.getLayoutParams().width =
                 getResources().getDimensionPixelSize(R.dimen.current_weather_image_size);
+    }
+
+    public void setViewBackground(Drawable drawRes) {
+        setViewBackground(drawRes, 255);
+    }
+
+    public void setViewBackground(Drawable drawRes, int bgAlpha) {
+        mLayout.setBackground(drawRes);
+        mLayout.getBackground().setAlpha(bgAlpha);
+    }
+
+    public void setViewBackgroundResource(int drawRes) {
+        mLayout.setBackgroundResource(drawRes);
+    }
+
+    public void setViewPadding(int left, int top, int right, int bottom) {
+        mLayout.setPadding(left,top,right,bottom);
     }
 
     private class SettingsObserver extends ContentObserver {

@@ -98,6 +98,7 @@ public class KeyguardStatusView extends GridLayout implements
 
     private int mClockSelection;
     private int mDateSelection;
+    private int mWeatherBgSelection;
     private int mTextClockPadding;
     private int mTextClockAlignment;
     private int mLockDateAlignment;
@@ -1395,6 +1396,9 @@ public class KeyguardStatusView extends GridLayout implements
         mWeatherViewAlignment = Settings.Secure.getIntForUser(resolver,
                 Settings.Secure.LOCKSCREEN_WEATHER_ALIGNMENT, 1, UserHandle.USER_CURRENT);
 
+        mWeatherBgSelection = Settings.Secure.getIntForUser(resolver,
+                Settings.Secure.LOCKSCREEN_WEATHER_SELECTION, 0, UserHandle.USER_CURRENT);
+
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                           LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
@@ -1412,19 +1416,78 @@ public class KeyguardStatusView extends GridLayout implements
             switch (mWeatherViewAlignment) {
                 case 0:
                     params.gravity = Gravity.LEFT;
-                    mWeatherView.setPaddingRelative(updateTextClockPadding() + 8, 0, 0, 0);
+                    mWeatherView.setPaddingRelative(updateTextClockPadding() + 8, 6, 0, 0);
                     mWeatherView.setLayoutParams(params);
                     break;
                 case 1:
                 default:
                     params.gravity = Gravity.CENTER;
-                    mWeatherView.setPaddingRelative(0, 0, 0, 0);
+                    mWeatherView.setPaddingRelative(0, 6, 0, 0);
                     mWeatherView.setLayoutParams(params);
                     break;
                 case 2:
                     params.gravity = Gravity.RIGHT;
-                    mWeatherView.setPaddingRelative(0, 0, updateTextClockPadding() + 8, 0);
+                    mWeatherView.setPaddingRelative(0, 6, updateTextClockPadding() + 8, 0);
                     mWeatherView.setLayoutParams(params);
+                    break;
+            }
+        }
+        if (mWeatherView != null && mOmniStyle) {
+            switch (mWeatherBgSelection) {
+                case 0: // default
+                default:
+                    mWeatherView.setViewBackgroundResource(0);
+                    mDateVerPadding = 0;
+                    mDateHorPadding = 0;
+                    mWeatherView.setViewPadding(mDateHorPadding,mDateVerPadding,mDateHorPadding,mDateVerPadding);
+                    break;
+                case 1: // semi-transparent box
+                    mWeatherView.setViewBackground(getResources().getDrawable(R.drawable.date_box_str_border));
+                    mDateHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.widget_date_box_padding_hor),getResources().getDisplayMetrics()));
+                    mDateVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.widget_date_box_padding_ver),getResources().getDisplayMetrics()));
+                    mWeatherView.setViewPadding(mDateHorPadding,mDateVerPadding,mDateHorPadding,mDateVerPadding);
+                    break;
+                case 2: // semi-transparent box (round)
+                    mWeatherView.setViewBackground(getResources().getDrawable(R.drawable.date_str_border));
+                    mDateHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.widget_date_box_padding_hor),getResources().getDisplayMetrics()));
+                    mDateVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.widget_date_box_padding_ver),getResources().getDisplayMetrics()));
+                    mWeatherView.setViewPadding(mDateHorPadding,mDateVerPadding,mDateHorPadding,mDateVerPadding);
+                    break;
+                case 3: // Q-Now Playing background
+                    mWeatherView.setViewBackground(getResources().getDrawable(R.drawable.ambient_indication_pill_background));
+                    mDateHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.q_nowplay_pill_padding_hor),getResources().getDisplayMetrics()));
+                    mDateVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.q_nowplay_pill_padding_ver),getResources().getDisplayMetrics()));
+                    mWeatherView.setViewPadding(mDateHorPadding,mDateVerPadding,mDateHorPadding,mDateVerPadding);
+                    break;
+                case 4: // accent box
+                    mWeatherView.setViewBackground(getResources().getDrawable(R.drawable.date_str_accent));
+                    mDateHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor),getResources().getDisplayMetrics()));
+                    mDateVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver),getResources().getDisplayMetrics()));
+                    mWeatherView.setViewPadding(mDateHorPadding,mDateVerPadding,mDateHorPadding,mDateVerPadding);
+                    break;
+                case 5: // accent box transparent
+                    mWeatherView.setViewBackground(getResources().getDrawable(R.drawable.date_str_accent), 160);
+                    mDateHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor),getResources().getDisplayMetrics()));
+                    mDateVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver),getResources().getDisplayMetrics()));
+                    mWeatherView.setViewPadding(mDateHorPadding,mDateVerPadding,mDateHorPadding,mDateVerPadding);
+                    break;
+                case 6: // gradient box
+                    mWeatherView.setViewBackground(getResources().getDrawable(R.drawable.date_str_gradient));
+                    mDateHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor),getResources().getDisplayMetrics()));
+                    mDateVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver),getResources().getDisplayMetrics()));
+                    mWeatherView.setViewPadding(mDateHorPadding,mDateVerPadding,mDateHorPadding,mDateVerPadding);
+                    break;
+                case 7: // Dark Accent border
+                    mWeatherView.setViewBackground(getResources().getDrawable(R.drawable.date_str_borderacc));
+                    mDateHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor),getResources().getDisplayMetrics()));
+                    mDateVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver),getResources().getDisplayMetrics()));
+                    mWeatherView.setViewPadding(mDateHorPadding,mDateVerPadding,mDateHorPadding,mDateVerPadding);
+                    break;
+                case 8: // Dark Gradient border
+                    mWeatherView.setViewBackground(getResources().getDrawable(R.drawable.date_str_bordergrad));
+                    mDateHorPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_hor),getResources().getDisplayMetrics()));
+                    mDateVerPadding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.widget_date_accent_box_padding_ver),getResources().getDisplayMetrics()));
+                    mWeatherView.setViewPadding(mDateHorPadding,mDateVerPadding,mDateHorPadding,mDateVerPadding);
                     break;
             }
         }
