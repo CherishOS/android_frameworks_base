@@ -763,7 +763,7 @@ public class StatusBar extends SystemUI implements DemoMode,
      * Public constructor for StatusBar.
      *
      * StatusBar is considered optional, and therefore can not be marked as @Inject directly.
-     * Instead, an @Provide method is included.
+     * Instead, an @Provide method is included. See {@link StatusBarPhoneModule}.
      */
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     public StatusBar(
