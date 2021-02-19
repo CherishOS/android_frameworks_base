@@ -243,7 +243,7 @@ public class KeyguardClockSwitch extends RelativeLayout {
 
     private int getLockClockSize() {
         return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.LOCKCLOCK_FONT_SIZE, 78);
+                Settings.System.LOCKCLOCK_FONT_SIZE, 65);
     }
 
     public void updateClockColor() {
@@ -764,9 +764,84 @@ public class KeyguardClockSwitch extends RelativeLayout {
     public void refreshclocksize() {
         final Resources res = getContext().getResources();
         boolean isPrimary = UserHandle.getCallingUserId() == UserHandle.USER_OWNER;
-        int lockClockSize = isPrimary ? getLockClockSize() : 78;
+        int lockClockSize = isPrimary ? getLockClockSize() : 65;
 
-        if (lockClockSize == 65) {
+        if (lockClockSize == 50) {
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_50));
+        mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_50));
+		} else if (lockClockSize == 51) {
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_51));
+        mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_51));
+        } else if (lockClockSize == 52) {
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_52));
+        mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_52));
+        } else if (lockClockSize == 53) {
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_53));
+        mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_53));
+        } else if (lockClockSize == 54) {
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_54));
+        mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_54));
+        } else if (lockClockSize == 55) {
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_55));
+        mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_55));
+        } else if (lockClockSize == 56) {
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_56));
+        mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_56));
+        } else if (lockClockSize == 57) {
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_57));
+        mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_57));
+        } else if (lockClockSize == 58) {
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_58));
+        mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_58));
+        } else if (lockClockSize == 59) {
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_59));
+        mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_59));
+        } else if (lockClockSize == 60) {
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_60));
+        mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_60));
+        } else if (lockClockSize == 61) {
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_61));
+        mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_61));
+        } else if (lockClockSize == 62) {
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_62));
+        mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_62));
+        } else if (lockClockSize == 63) {
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_63));
+        mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_63));
+        } else if (lockClockSize == 64) {
+        mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_64));
+        mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_64));
+		} else if (lockClockSize == 65) {
         mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                 getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_65));
         mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
@@ -776,7 +851,7 @@ public class KeyguardClockSwitch extends RelativeLayout {
                 getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_66));
         mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                 getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_66));
-        } else if (lockClockSize == 66) {
+        } else if (lockClockSize == 67) {
         mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                 getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_67));
         mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
@@ -791,7 +866,7 @@ public class KeyguardClockSwitch extends RelativeLayout {
                 getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_69));
         mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                 getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_69));
-        } else if (lockClockSize == 70) {
+		} else if (lockClockSize == 70) {
         mClockView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                 getResources().getDimensionPixelSize(R.dimen.lock_clock_font_size_70));
         mClockViewBold.setTextSize(TypedValue.COMPLEX_UNIT_PX,
