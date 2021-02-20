@@ -5826,7 +5826,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
         footerView.setDismissButtonClickListener(v -> {
             if (!mShowDimissButton) {
                 mMetricsLogger.action(MetricsEvent.ACTION_DISMISS_ALL_NOTES);
-                clearNotifications(ROWS_ALL, true /* closeShade */);
+                clearNotifications(ROWS_ALL, true /* closeShade */, false/*forceToLeft*/);
             }
         });
         footerView.setManageButtonClickListener(v -> {
@@ -5838,6 +5838,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
                     if (mShowDimissButton) {
                         mMetricsLogger.action(MetricsEvent.ACTION_DISMISS_ALL_NOTES);
                         clearNotifications(ROWS_ALL, true /* closeShade */);
+                        clearNotifications(ROWS_ALL, true /* closeShade */, false/*forceToLeft*/);
                     }
                 });
             }
