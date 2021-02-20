@@ -94,5 +94,6 @@ public class SystemSettings {
         Settings.System.LOCKSCREEN_MEDIA_ART,
         Settings.System.RINGTONE_VIBRATION_PATTERN,
         Settings.System.CUSTOM_RINGTONE_VIBRATION_PATTERN,
+		 Settings.System.NOTIFICATION_MATERIAL_DISMISS ,
     };
 }
