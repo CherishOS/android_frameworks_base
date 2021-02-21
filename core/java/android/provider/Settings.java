@@ -5373,12 +5373,6 @@ public final class Settings {
          * @hide
          */
         public static final String QS_QUICKBAR_COLUMNS = "qs_quickbar_columns";
-		 
-		 /**
-         * Whether to use new QS panel bg tint or not
-         * @hide
-         */
-        public static final String QS_PANEL_BG_USE_NEW_TINT = "qs_panel_bg_use_new_tint";
 		
 		/**
          * Settings dashboard icon style
@@ -6451,7 +6445,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(LOCK_SCREEN_WEATHER_ICON_COLOR);
             PRIVATE_SETTINGS.add(LOCK_OWNERINFO_FONTS);
             PRIVATE_SETTINGS.add(LOCKOWNER_FONT_SIZE);
-            PRIVATE_SETTINGS.add(QS_PANEL_BG_USE_NEW_TINT);
             PRIVATE_SETTINGS.add(THEMING_SETTINGS_DASHBOARD_ICONS);
             PRIVATE_SETTINGS.add(ENABLE_CONDITIONS);
             PRIVATE_SETTINGS.add(ENABLE_SUGGESTIONS);
