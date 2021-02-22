@@ -64,45 +64,40 @@ LOCAL_REQUIRED_MODULES := \
 	IconPackCircularPixelThemePickerOverlay \
 	IconPackCircularSettingsOverlay \
 	IconPackCircularSystemUIOverlay \
-	IconPackCircularThemePickerOverlay \
-        IconPackFilledAndroidOverlay \
+	IconPackFilledAndroidOverlay \
 	IconPackFilledPixelLauncherOverlay \
 	IconPackFilledPixelThemePickerOverlay \
 	IconPackFilledSettingsOverlay \
 	IconPackFilledSystemUIOverlay \
-	IconPackVictorAndroidOverlay \
-    IconPackVictorLauncherOverlay \
-    IconPackVictorSettingsOverlay \
-    IconPackVictorSystemUIOverlay \
-    IconPackVictorThemePickerOverlay \
-    IconPackSamAndroidOverlay \
-    IconPackSamLauncherOverlay \
-    IconPackSamSettingsOverlay \
-    IconPackSamSystemUIOverlay \
-    IconPackSamThemePickerOverlay \
-    IconPackKaiAndroidOverlay \
-    IconPackKaiLauncherOverlay \
-    IconPackKaiSettingsOverlay \
-    IconPackKaiSystemUIOverlay \
-    IconPackKaiThemePickerOverlay \
+	IconPackKaiAndroidOverlay \
+	IconPackKaiPixelLauncherOverlay \
+	IconPackKaiPixelThemePickerOverlay \
+	IconPackKaiSettingsOverlay \
+	IconPackKaiSystemUIOverlay \
 	IconPackRoundedAndroidOverlay \
 	IconPackRoundedPixelLauncherOverlay \
 	IconPackRoundedPixelThemePickerOverlay \
 	IconPackRoundedSettingsOverlay \
 	IconPackRoundedSystemUIOverlay \
-	IconPackRoundedThemePickerOverlay \
-        IconShapeHeartOverlay \
+	IconPackSamAndroidOverlay \
+	IconPackSamPixelLauncherOverlay \
+	IconPackSamPixelThemePickerOverlay \
+	IconPackSamSettingsOverlay \
+	IconPackSamSystemUIOverlay \
+	IconPackVictorAndroidOverlay \
+	IconPackVictorPixelLauncherOverlay \
+	IconPackVictorPixelThemePickerOverlay \
+	IconPackVictorSettingsOverlay \
+	IconPackVictorSystemUIOverlay \
+	IconShapeHeartOverlay \
+	IconShapeMallowOverlay \
 	IconShapePebbleOverlay \
-        IconShapeCylinderOverlay \
-	IconShapeRoundedHexagonOverlay \
-	IconShapeLeafOverlay \
 	IconShapeRoundedRectOverlay \
 	IconShapeSquareOverlay \
 	IconShapeSquircleOverlay \
 	IconShapeTaperedRectOverlay \
 	IconShapeTeardropOverlay \
 	IconShapeVesselOverlay \
-	IconShapeMallowOverlay \
 	NavigationBarMode3ButtonOverlay \
 	NavigationBarMode2ButtonOverlay \
 	NavigationBarModeGesturalOverlay \
