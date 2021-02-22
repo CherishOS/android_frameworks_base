@@ -111,8 +111,6 @@ class DoubleLineTileLayout(
         updateResources()
     }
 
-    override fun updateSettings() { }
-
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 
         mRecords.forEach {
@@ -121,14 +119,6 @@ class DoubleLineTileLayout(
 
         val height = twoLineHeight + paddingBottom + paddingTop
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), height)
-    }
-
-    override fun isShowTitles(): Boolean {
-        return false
-    }
-
-    override fun getNumColumns(): Int {
-        return 6
     }
 
     private fun calculateMaxColumns(availableWidth: Int): Int {
