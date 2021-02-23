@@ -107,6 +107,7 @@ public static final String[] PANEL_BG_STYLE = {
         "com.android.system.switch.telegram", // 2
         "com.android.system.switch.md2", // 3
         "com.android.system.switch.retro", // 4
+		 "com.android.system.switch.oos", // 5
     };
 
 // QS Tile Styles
