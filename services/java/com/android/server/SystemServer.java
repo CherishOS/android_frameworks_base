@@ -1771,6 +1771,13 @@ public final class SystemServer implements Dumpable {
                 mSystemServiceManager.startService(AutoDimService.class);
                 t.traceEnd();
             }
+
+            if (context.getResources().getBoolean(R.bool.config_dozeAlwaysOnDisplayAvailable)) {
+                t.traceBegin("AutoAODService");
+                mSystemServiceManager.startService(AutoAODService.class);
+                t.traceEnd();
+            }
+
         } catch (Throwable e) {
             Slog.e("System", "******************************************");
             Slog.e("System", "************ Failure starting core service");
