@@ -149,14 +149,13 @@ public class KeyguardAffordanceView extends ImageView {
     }
 
     public void setImageDrawable(@Nullable Drawable drawable, boolean tint, boolean skipTinting) {
-        if (skipTinting) {
-            drawable.setTintList(null);
-            drawable.setTintMode(null);
-        }
         super.setImageDrawable(drawable);
         mShouldTint = tint;
         mSkipTinting = skipTinting;
         updateIconColor();
+        if (mSkipTinting) {
+            setImageTintMode(null);
+        }
     }
 
     /**
