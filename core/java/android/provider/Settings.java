@@ -6248,11 +6248,6 @@ public final class Settings {
          * @hide
          */
         public static final String QS_EDIT_TOGGLE = "qs_edit_toggle";
-		
-		/**
-         * @hide
-         */
-        public static final String USE_OLD_MOBILETYPE = "use_old_mobiletype";
 
         /**
          * Whether to pulse ambient on new music tracks
