@@ -37,7 +37,6 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.UserHandle;
-import android.os.Looper;
 import android.provider.AlarmClock;
 import android.provider.CalendarContract;
 import android.provider.Settings;
@@ -82,7 +81,6 @@ import com.android.systemui.privacy.PrivacyChipEvent;
 import com.android.systemui.privacy.PrivacyItem;
 import com.android.systemui.privacy.PrivacyItemController;
 import com.android.systemui.qs.QSDetail.Callback;
-import com.android.systemui.statusbar.info.DataUsageView;
 import com.android.systemui.qs.carrier.QSCarrierGroup;
 import com.android.systemui.settings.BrightnessController;
 import com.android.systemui.statusbar.CommandQueue;
@@ -174,17 +172,12 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private boolean mMicCameraIndicatorsEnabled;
     private BroadcastDispatcher mBroadcastDispatcher;
 
-    // Data Usage
-    private View mDataUsageLayout;
-    private ImageView mDataUsageImage;
-    private DataUsageView mDataUsageView;
-
     private boolean mLandscape;
     private boolean mHeaderImageEnabled;
 
     private PrivacyItemController mPrivacyItemController;
     private final UiEventLogger mUiEventLogger;
-	
+
     // Used for RingerModeTracker
     private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
 
@@ -202,9 +195,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                     this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System
                     .getUriFor(Settings.System.STATUS_BAR_BATTERY_STYLE), false,
-                    this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System
-                    .getUriFor(Settings.System.QS_DATAUSAGE), false,
                     this, UserHandle.USER_ALL);
             }
 
@@ -297,10 +287,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         iconContainer.addIgnoredSlots(getIgnoredIconSlots());
         iconContainer.setShouldRestrictIcons(false);
         mIconManager = new TintedIconManager(iconContainer, mCommandQueue);
-
-        mDataUsageView = findViewById(R.id.data_sim_usage);
-        mDataUsageLayout = findViewById(R.id.daily_data_usage_layout);
-        mDataUsageImage = findViewById(R.id.daily_data_usage_icon);
 
         mQuickQsBrightness = findViewById(R.id.quick_qs_brightness_bar);
         mBrightnessController = new BrightnessController(getContext(),
@@ -546,7 +532,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         updateResources();
         updateQSBatteryMode();
         updateSBBatteryStyle();
-	updateDataUsageView();
      }
 
      private void updateQSBatteryMode() {
@@ -576,18 +561,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mBatteryRemainingIcon.updatePercentView();
         mBatteryRemainingIcon.updateVisibility();
      }
-
-    private void updateDataUsageView() {
-        if (mDataUsageView.isDataUsageEnabled() != 0) {
-            mDataUsageLayout.setVisibility(View.VISIBLE);
-            mDataUsageImage.setVisibility(View.VISIBLE);
-            mDataUsageView.setVisibility(View.VISIBLE);
-        } else {
-            mDataUsageView.setVisibility(View.GONE);
-            mDataUsageImage.setVisibility(View.GONE);
-            mDataUsageLayout.setVisibility(View.GONE);
-        }
-    }
 
     private void updateStatusIconAlphaAnimator() {
         mStatusIconsAlphaAnimator = new TouchAnimator.Builder()
