@@ -39,6 +39,11 @@ import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.metrics.LogMaker;
 import android.os.Handler;
+import android.os.UserHandle;
+import android.provider.Settings;
+import com.android.settingslib.Utils;
+import com.android.systemui.statusbar.phone.StatusBar;
+import com.android.systemui.statusbar.phone.SystemUIDialog;
 import android.os.RemoteException;
 import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
@@ -53,6 +58,9 @@ import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.app.ActivityManager;
+import android.app.KeyguardManager;
+import android.content.pm.PackageInfo;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.logging.MetricsLogger;
@@ -62,6 +70,7 @@ import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.notification.VisualStabilityManager;
 import com.android.systemui.statusbar.notification.collection.NotificationEntry;
+import android.content.DialogInterface;
 
 import java.lang.annotation.Retention;
 import java.util.List;
@@ -312,6 +321,43 @@ public class NotificationInfo extends LinearLayout implements NotificationGuts.G
         final View settingsButton = findViewById(R.id.info);
         settingsButton.setOnClickListener(getSettingsOnClickListener());
         settingsButton.setVisibility(settingsButton.hasOnClickListeners() ? VISIBLE : GONE);
+
+        // Force stop button
+        final View killButton = findViewById(R.id.force_stop);
+        boolean killButtonEnabled = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.NOTIFICATION_GUTS_KILL_APP_BUTTON, 0,
+                UserHandle.USER_CURRENT) != 0;
+        if (killButtonEnabled && !isThisASystemPackage(mPackageName)) {
+            killButton.setVisibility(View.VISIBLE);
+            killButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    KeyguardManager keyguardManager = (KeyguardManager)
+                            mContext.getSystemService(Context.KEYGUARD_SERVICE);
+                    if (keyguardManager.inKeyguardRestrictedInputMode()) {
+                        // Don't do anything
+                        return;
+                    }
+                    final SystemUIDialog killDialog = new SystemUIDialog(mContext);
+                    killDialog.setTitle(mContext.getText(R.string.force_stop_dlg_title));
+                    killDialog.setMessage(mContext.getText(R.string.force_stop_dlg_text));
+                    killDialog.setPositiveButton(
+                            R.string.dlg_ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // kill pkg
+                            ActivityManager actMan =
+                                    (ActivityManager) mContext.getSystemService(
+                                    Context.ACTIVITY_SERVICE);
+                            actMan.forceStopPackage(mPackageName);
+                        }
+                    });
+                    killDialog.setNegativeButton(R.string.dlg_cancel, null);
+                    killDialog.show();
+                }
+            });
+        } else {
+            killButton.setVisibility(View.GONE);
+        }
     }
 
     private OnClickListener getSettingsOnClickListener() {
@@ -385,6 +431,21 @@ public class NotificationInfo extends LinearLayout implements NotificationGuts.G
             groupNameView.setVisibility(VISIBLE);
         } else {
             groupNameView.setVisibility(GONE);
+        }
+    }
+
+    private boolean isThisASystemPackage(String packageName) {
+        try {
+            final UserHandle userHandle = mSbn.getUser();
+            PackageManager pm = StatusBar.getPackageManagerForUser(mContext,
+                    userHandle.getIdentifier());
+            PackageInfo packageInfo = pm.getPackageInfo(packageName,
+                    PackageManager.GET_SIGNATURES);
+            PackageInfo sys = pm.getPackageInfo("android", PackageManager.GET_SIGNATURES);
+            return (packageInfo != null && packageInfo.signatures != null &&
+                    sys.signatures[0].equals(packageInfo.signatures[0]));
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
         }
     }
 
