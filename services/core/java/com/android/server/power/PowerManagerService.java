@@ -683,6 +683,9 @@ public final class PowerManagerService extends SystemService
     private int mSmartCutoffTemperatureDefaultConfig;
     private int mSmartCutoffResumeTemperatureConfig;
 
+    private boolean mSmartCharginglock=false;
+    private boolean mSmartCutofflock=false;
+
     /**
      * All times are in milliseconds. These constants are kept synchronized with the system
      * global Settings. Any access to this class or its fields should be done while
@@ -2260,54 +2263,73 @@ public final class PowerManagerService extends SystemService
     }
 
     private void updateSmartChargingStatus() {
-        if (mPowerInputSuspended && (mBatteryLevel <= mSmartChargingResumeLevel) ||
-            (mPowerInputSuspended && !mSmartChargingEnabled)) {
-            try {
-                FileUtils.stringToFile(mPowerInputSupsendSysfsNode, mPowerInputResumeValue);
-                mPowerInputSuspended = false;
-            } catch (IOException e) {
-                Slog.e(TAG, "failed to write to " + mPowerInputSupsendSysfsNode);
-            }
-            return;
+
+        if(!mSmartCutoffEnabled){
+            mSmartCutofflock=false;
         }
 
-        if (mSmartChargingEnabled && !mPowerInputSuspended && (mBatteryLevel >= mSmartChargingLevel)) {
-            Slog.i(TAG, "Smart charging reset stats: " + mSmartChargingResetStats);
-            if (mSmartChargingResetStats) {
+        if(!mSmartCutofflock){
+            if (mPowerInputSuspended && (mBatteryLevel <= mSmartChargingResumeLevel) ||
+                (mPowerInputSuspended && !mSmartChargingEnabled)) {
                 try {
-                     mBatteryStats.resetStatistics();
-                } catch (RemoteException e) {
-                         Slog.e(TAG, "failed to reset battery statistics");
+                    FileUtils.stringToFile(mPowerInputSuspendSysfsNode, mPowerInputResumeValue);
+                    mPowerInputSuspended = false;
+                    mSmartCharginglock=false;
+                } catch (IOException e) {
+                    Slog.e(TAG, "failed to write to " + mPowerInputSuspendSysfsNode);
                 }
+                return;
             }
+            if (mSmartChargingEnabled && !mPowerInputSuspended && (mBatteryLevel >= mSmartChargingLevel)) {
+                Slog.i(TAG, "Smart charging reset stats: " + mSmartChargingResetStats);
+                if (mSmartChargingResetStats) {
+                    try {
+                        mBatteryStats.resetStatistics();
+                    } catch (RemoteException e) {
+                            Slog.e(TAG, "failed to reset battery statistics");
+                    }
+                }
 
-            try {
-                FileUtils.stringToFile(mPowerInputSupsendSysfsNode, mPowerInputSupsendValue);
-                mPowerInputSuspended = true;
-            } catch (IOException e) {
-                    Slog.e(TAG, "failed to write to " + mPowerInputSupsendSysfsNode);
+                try {
+                    FileUtils.stringToFile(mPowerInputSuspendSysfsNode, mPowerInputSuspendValue);
+                    mPowerInputSuspended = true;
+                    mSmartCharginglock=true;
+                    mSmartCutofflock=false;
+                } catch (IOException e) {
+                        Slog.e(TAG, "failed to write to " + mPowerInputSuspendSysfsNode);
+                }
             }
         }
     }
 
     private void updateSmartCutoffStatus() {
-        if (mPowerInputSuspended && (mBatteryTemperature <= mSmartCutoffResumeTemperature) ||
-            (mPowerInputSuspended && !mSmartCutoffEnabled)) {
-            try {
-                FileUtils.stringToFile(mPowerInputSuspendSysfsNode, mPowerInputResumeValue);
-                mPowerInputSuspended = false;
-            } catch (IOException e) {
-                Slog.e(TAG, "failed to write to " + mPowerInputSuspendSysfsNode);
-            }
-            return;
+
+        if(!mSmartChargingEnabled){
+            mSmartCharginglock=false;
         }
 
-        if (mSmartCutoffEnabled && !mPowerInputSuspended && (mBatteryTemperature >= mSmartCutoffTemperature)) {
-            try {
-                FileUtils.stringToFile(mPowerInputSuspendSysfsNode, mPowerInputSuspendValue);
-                mPowerInputSuspended = true;
-            } catch (IOException e) {
+        if(!mSmartCharginglock){
+            if (mPowerInputSuspended && (mBatteryTemperature <= mSmartCutoffResumeTemperature) ||
+                (mPowerInputSuspended && !mSmartCutoffEnabled)) {
+                try {
+                    FileUtils.stringToFile(mPowerInputSuspendSysfsNode, mPowerInputResumeValue);
+                    mPowerInputSuspended = false;
+                    mSmartCutofflock=false;
+                } catch (IOException e) {
                     Slog.e(TAG, "failed to write to " + mPowerInputSuspendSysfsNode);
+                }
+                return;
+            }
+
+            if (mSmartCutoffEnabled && !mPowerInputSuspended && (mBatteryTemperature >= mSmartCutoffTemperature)) {
+                try {
+                    FileUtils.stringToFile(mPowerInputSuspendSysfsNode, mPowerInputSuspendValue);
+                    mPowerInputSuspended = true;
+                    mSmartCutofflock=true;
+                    mSmartCharginglock=false;
+                } catch (IOException e) {
+                        Slog.e(TAG, "failed to write to " + mPowerInputSuspendSysfsNode);
+                }
             }
         }
     }
