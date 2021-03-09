@@ -188,30 +188,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     // Used for RingerModeTracker
     private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
 
-    protected ContentResolver mContentResolver;
-
-    private class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            ContentResolver resolver = getContext().getContentResolver();
-            resolver.registerContentObserver(Settings.System
-                    .getUriFor(Settings.System.QS_BATTERY_MODE), false,
-                    this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System
-                    .getUriFor(Settings.System.STATUS_BAR_BATTERY_STYLE), false,
-                    this, UserHandle.USER_ALL);
-            }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            updateSettings();
-        }
-    }
-    private SettingsObserver mSettingsObserver = new SettingsObserver(mHandler);
-
     private boolean mHasTopCutout = false;
     private int mStatusBarPaddingTop = 0;
     private int mRoundedCornerPadding = 0;
@@ -276,8 +252,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                 new ContextThemeWrapper(context, R.style.QSHeaderTheme));
         mCommandQueue = commandQueue;
         mRingerModeTracker = ringerModeTracker;
-        mContentResolver = context.getContentResolver();
-        mSettingsObserver.observe();
         mUiEventLogger = uiEventLogger;
         mBroadcastDispatcher = broadcastDispatcher;
     }
@@ -350,7 +324,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mBatteryRemainingIcon = findViewById(R.id.batteryRemainingIcon);
         // Don't need to worry about tuner settings for this icon
         mBatteryRemainingIcon.setIgnoreTunerUpdates(true);
-        mBatteryRemainingIcon.setPercentShowMode(BatteryMeterView.MODE_ON);
+        // QS will always show the estimate, and BatteryMeterView handles the case where
+        // it's unavailable or charging
+        mBatteryRemainingIcon.setPercentShowMode(BatteryMeterView.MODE_ESTIMATE);
         mRingerModeTextView.setSelected(true);
         mNextAlarmTextView.setSelected(true);
         updateSettings();
@@ -545,8 +521,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                 Settings.System.STATUS_BAR_CUSTOM_HEADER, 0,
                 UserHandle.USER_CURRENT) == 1;
         updateResources();
-        updateQSBatteryMode();
-        updateSBBatteryStyle();
 		updateDataUsageView();
         updateDataUsageImage();
      }
@@ -582,34 +556,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
             mDataUsageImage.setVisibility(View.VISIBLE);
         }
     }
-
-     private void updateQSBatteryMode() {
-        int showEstimate = Settings.System.getInt(mContext.getContentResolver(),
-        Settings.System.QS_BATTERY_MODE, 0);
-        if (showEstimate == 0) {
-            mBatteryRemainingIcon.mShowBatteryPercent = 0;
-            mBatteryRemainingIcon.setPercentShowMode(BatteryMeterView.MODE_OFF);
-        } else if (showEstimate == 1) {
-            mBatteryRemainingIcon.mShowBatteryPercent = 0;
-            mBatteryRemainingIcon.setPercentShowMode(BatteryMeterView.MODE_ON);
-        } else if (showEstimate == 2) {
-            mBatteryRemainingIcon.mShowBatteryPercent = 1;
-            mBatteryRemainingIcon.setPercentShowMode(BatteryMeterView.MODE_OFF);
-        } else if (showEstimate == 3|| showEstimate == 4) {
-            mBatteryRemainingIcon.mShowBatteryPercent = 0;
-            mBatteryRemainingIcon.setPercentShowMode(BatteryMeterView.MODE_ESTIMATE);
-        }
-        mBatteryRemainingIcon.updatePercentView();
-        mBatteryRemainingIcon.updateVisibility();
-     }
-
-     private void updateSBBatteryStyle() {
-        mBatteryRemainingIcon.mBatteryStyle = Settings.System.getInt(mContext.getContentResolver(),
-        Settings.System.STATUS_BAR_BATTERY_STYLE, 0);
-        mBatteryRemainingIcon.updateBatteryStyle();
-        mBatteryRemainingIcon.updatePercentView();
-        mBatteryRemainingIcon.updateVisibility();
-     }
 
     private void updateStatusIconAlphaAnimator() {
         mStatusIconsAlphaAnimator = new TouchAnimator.Builder()
