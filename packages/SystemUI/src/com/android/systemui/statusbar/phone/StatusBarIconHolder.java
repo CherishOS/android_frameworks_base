@@ -73,17 +73,17 @@ public class StatusBarIconHolder {
         holder.mTag = state.subId;
         return holder;
     }
-
-    public static StatusBarIconHolder fromNetworkTraffic() {
-        StatusBarIconHolder holder = new StatusBarIconHolder();
-        holder.mType = TYPE_NETWORK_TRAFFIC;
-        return holder;
-    }
 	
 	public static StatusBarIconHolder fromImsIconState(ImsIconState state) {
         StatusBarIconHolder holder = new StatusBarIconHolder();
         holder.mImsState = state;
         holder.mType = TYPE_IMS;
+        return holder;
+    }
+
+    public static StatusBarIconHolder fromNetworkTraffic() {
+        StatusBarIconHolder holder = new StatusBarIconHolder();
+        holder.mType = TYPE_NETWORK_TRAFFIC;
         return holder;
     }
 
