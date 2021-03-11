@@ -554,6 +554,22 @@ public class CherishUtils {
         }
         return false;
     }
+	
+	public static boolean isNavbarColor(String packageName) {
+        sOverlayService = new OverlayManager();
+        try {
+            List<OverlayInfo> infos = sOverlayService.getOverlayInfosForTarget("com.android.systemui",
+                    UserHandle.myUserId());
+            for (int i = 0, size = infos.size(); i < size; i++) {
+                if (infos.get(i).packageName.equals(packageName)) {
+                    return infos.get(i).isEnabled();
+                }
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     public static class OverlayManager {
         private final IOverlayManager mService;
@@ -602,4 +618,5 @@ public class CherishUtils {
             context.startActivity(intent);
         } catch (Exception e) {}
     }
+	
  }

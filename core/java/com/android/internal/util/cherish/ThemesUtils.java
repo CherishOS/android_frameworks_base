@@ -47,6 +47,11 @@ public class ThemesUtils {
 	      "com.android.systemui.brightness.slider.oos",
     };
 
+    //Navbar colors
+    public static final String NAVBAR_COLOR_PURP = "com.gnonymous.gvisualmod.pgm_purp";
+    public static final String NAVBAR_COLOR_ORCD = "com.gnonymous.gvisualmod.pgm_orcd";
+    public static final String NAVBAR_COLOR_OPRD = "com.gnonymous.gvisualmod.pgm_oprd";
+
     public static final String[] SOLARIZED_DARK = {
             "com.android.theme.solarizeddark.system",
             "com.android.theme.solarizeddark.systemui",
