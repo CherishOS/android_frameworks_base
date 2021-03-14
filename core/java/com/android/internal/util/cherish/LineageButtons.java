@@ -223,7 +223,6 @@ public final class LineageButtons {
                 CherishUtils.launchCamera(context);
                 break;
             case 4: // Flashlight
-                CherishUtils.toggleCameraFlash(false/*no proximity check*/);
                 break;
             case 5: // Application
                 CherishUtils.launchApp(context, leftEdge, isVerticalSwipe);

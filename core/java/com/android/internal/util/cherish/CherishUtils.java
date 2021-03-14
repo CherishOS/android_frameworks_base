@@ -192,19 +192,6 @@ public class CherishUtils {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
-	
-	public static void startAssist() {
-        FireActions.startAssist();
-    }
-	
-	public static void startAssist() {
-            IStatusBarService service = getStatusBarService();
-            if (service != null) {
-                try {
-                    service.startAssist(new Bundle());
-                } catch (RemoteException e) {}
-            }
-        }
 
     // Check to see if device has a camera
     public static boolean hasCamera(Context context) {
@@ -323,57 +310,6 @@ public class CherishUtils {
                 context.getSystemService(Context.AUDIO_SERVICE);
         audioMan.setRingerModeInternal(ringerMode);
         Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
-    }
-
-	
-	public static void killForegroundApp() {
-        FireActions.killForegroundApp();
-    }
-	
-	public static void killForegroundApp() {
-            IStatusBarService service = getStatusBarService();
-            if (service != null) {
-                try {
-                    service.killForegroundApp();
-                } catch (RemoteException e) {
-                    // do nothing.
-                }
-            }
-        }
-		
-	public static void toggleNotifications() {
-        FireActions.toggleNotifications();
-    }
-	
-	public static void toggleQsPanel() {
-        FireActions.toggleQsPanel();
-	}
-	
-	// Toggle notifications panel
-        public static void toggleNotifications() {
-            IStatusBarService service = getStatusBarService();
-            if (service != null) {
-                try {
-                    service.togglePanel();
-                } catch (RemoteException e) {}
-            }
-        }
-		
-	// Toggle qs panel
-        public static void toggleQsPanel() {
-            IStatusBarService service = getStatusBarService();
-            if (service != null) {
-                try {
-                    service.toggleSettingsPanel();
-                } catch (RemoteException e) {}
-            }
-        }
-		
-		public static void clearAllNotifications() {
-			FireActions.clearAllNotifications();
-		}
-	
-
     public static void sendKeycode(int keycode) {
         long when = SystemClock.uptimeMillis();
         final KeyEvent evDown = new KeyEvent(when, when, KeyEvent.ACTION_DOWN, keycode, 0,
@@ -455,6 +391,26 @@ public class CherishUtils {
             e.printStackTrace();
         }
     }
+	
+	public static void killForegroundApp() {
+        FireActions.killForegroundApp();
+    }
+		
+	public static void toggleNotifications() {
+        FireActions.toggleNotifications();
+    }
+	
+	public static void toggleQsPanel() {
+        FireActions.toggleQsPanel();
+	}
+		
+	public static void clearAllNotifications() {
+		FireActions.clearAllNotifications();
+	}
+	
+	public static void startAssist() {
+        FireActions.startAssist();
+    }
 
     private static final class FireActions {
         private static IStatusBarService mStatusBarService = null;
@@ -467,6 +423,8 @@ public class CherishUtils {
                 return mStatusBarService;
             }
         }
+		
+		
         public static void toggleCameraFlash() {
             IStatusBarService service = getStatusBarService();
             if (service != null) {
@@ -477,6 +435,86 @@ public class CherishUtils {
                 }
             }
         }
+		
+		public static void startAssist() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.startAssist(new Bundle());
+                } catch (RemoteException e) {}
+            }
+        }
+
+     public static void killForegroundApp() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.killForegroundApp();
+                } catch (RemoteException e) {
+                    // do nothing.
+                }
+            }
+        }
+
+    // Toggle notifications panel
+        public static void toggleNotifications() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.togglePanel();
+                } catch (RemoteException e) {}
+            }
+        }
+		
+	// Toggle qs panel
+        public static void toggleQsPanel() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.toggleSettingsPanel();
+                } catch (RemoteException e) {}
+            }
+        }
+		
+	// Clear notifications
+        public static void clearAllNotifications() {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.onClearAllNotifications(ActivityManager.getCurrentUser());
+                } catch (RemoteException e) {}
+            }
+        }
+    }
+
+    // Cycle ringer modes
+    public static void toggleRingerModes (Context context) {
+        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        Vibrator mVibrator = (Vibrator) context.getSystemService(VIBRATOR_SERVICE);
+
+        switch (am.getRingerMode()) {
+            case AudioManager.RINGER_MODE_NORMAL:
+                if (mVibrator.hasVibrator()) {
+                    am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                }
+                break;
+            case AudioManager.RINGER_MODE_VIBRATE:
+                am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                NotificationManager notificationManager =
+                        (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+                notificationManager.setInterruptionFilter(
+                        NotificationManager.INTERRUPTION_FILTER_PRIORITY);
+                break;
+            case AudioManager.RINGER_MODE_SILENT:
+                am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                break;
+        }
+    }
+
+    // Volume panel
+    public static void toggleVolumePanel(Context context) {
+        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        am.adjustVolume(AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
     }
 	
 	public static boolean deviceSupportNavigationBar(Context context) {

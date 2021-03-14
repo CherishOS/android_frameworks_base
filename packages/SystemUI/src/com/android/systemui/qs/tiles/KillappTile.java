@@ -19,7 +19,6 @@ package com.android.systemui.qs.tiles;
 import android.content.Intent;
 import android.service.quicksettings.Tile;
 
-import com.android.internal.util.pixeldust.PixeldustUtils;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.systemui.R;
 import com.android.systemui.plugins.ActivityStarter;
@@ -85,7 +84,8 @@ public class KillappTile extends QSTileImpl<QSTile.BooleanState> {
         // Close QS
         getHost().collapsePanels();
         ActivityStarter.OnDismissAction dismissAction = () -> {
-            PixeldustUtils.killForegroundApp();
+
+            CherishUtils.killForegroundApp();
             return false;
         };
         mKeyguardDismissUtil.executeWhenUnlocked(dismissAction, false);
