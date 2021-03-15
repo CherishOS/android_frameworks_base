@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 The PixelDust Project
+ * Copyright (C) 2021 Yet Another AOSP Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +17,6 @@
 
 package com.android.systemui.statusbar.policy;
 
-import java.text.DecimalFormat;
-
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -27,7 +26,6 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
 import android.graphics.PorterDuff.Mode;
-import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.TrafficStats;
@@ -45,12 +43,8 @@ import android.widget.TextView;
 
 import com.android.systemui.R;
 
-/*
-*
-* Seeing how an Integer object in java requires at least 16 Bytes, it seemed awfully wasteful
-* to only use it for a single boolean. 32-bits is plenty of room for what we need it to do.
-*
-*/
+import java.text.DecimalFormat;
+
 public class NetworkTraffic extends TextView {
 
     private static final int INTERVAL = 1500; //ms
@@ -70,7 +64,6 @@ public class NetworkTraffic extends TextView {
         decimalFormat.setMaximumFractionDigits(1);
     }
 
-    private boolean mIsEnabled;
     private boolean mAttached;
     private long totalRxBytes;
     private long totalTxBytes;
@@ -79,12 +72,14 @@ public class NetworkTraffic extends TextView {
     private int mTrafficType;
     private boolean mShowArrow;
     private int mAutoHideThreshold;
-    private int mTintColor;
-    private boolean mTrafficVisible = false;
+    private boolean mScreenOn = true;
     private boolean iBytes;
     private boolean oBytes;
 
-    private boolean mTrafficInHeaderView;
+    int mTintColor;
+    boolean mIsEnabled;
+    boolean mTrafficVisible = false;
+    boolean mTrafficInHeaderView;
 
     private Handler mTrafficHandler = new Handler() {
         @Override
@@ -221,7 +216,7 @@ public class NetworkTraffic extends TextView {
         }
     };
 
-    class SettingsObserver extends ContentObserver {
+    private class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
         }
@@ -255,28 +250,28 @@ public class NetworkTraffic extends TextView {
         }
     }
 
-    /*
-     *  @hide
+    /**
+     * @hide
      */
     public NetworkTraffic(Context context) {
         this(context, null);
     }
 
-    /*
-     *  @hide
+    /**
+     * @hide
      */
     public NetworkTraffic(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    /*
-     *  @hide
+    /**
+     * @hide
      */
     public NetworkTraffic(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         final Resources resources = getResources();
         txtImgPadding = resources.getDimensionPixelSize(R.dimen.net_traffic_txt_img_padding);
-        mTintColor = getCurrentTextColor();
+        mTintColor = resources.getColor(android.R.color.white);
         Handler mHandler = new Handler();
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
         settingsObserver.observe();
@@ -291,6 +286,8 @@ public class NetworkTraffic extends TextView {
             mAttached = true;
             IntentFilter filter = new IntentFilter();
             filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            filter.addAction(Intent.ACTION_SCREEN_ON);
             mContext.registerReceiver(mIntentReceiver, filter, null, getHandler());
         }
         updateSettings();
@@ -299,7 +296,6 @@ public class NetworkTraffic extends TextView {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        clearHandlerCallbacks();
         if (mAttached) {
             mContext.unregisterReceiver(mIntentReceiver);
             mAttached = false;
@@ -312,8 +308,14 @@ public class NetworkTraffic extends TextView {
             String action = intent.getAction();
             if (action == null) return;
 
-            if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+            if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION) && mScreenOn) {
                 updateSettings();
+            } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
+                mScreenOn = true;
+                updateSettings();
+            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                mScreenOn = false;
+                clearHandlerCallbacks();
             }
         }
     };
@@ -342,7 +344,7 @@ public class NetworkTraffic extends TextView {
         }
     }
 
-    private void setMode() {
+    void setMode() {
         ContentResolver resolver = mContext.getContentResolver();
         mIsEnabled = Settings.System.getIntForUser(resolver,
                 Settings.System.NETWORK_TRAFFIC_STATE, 0,
@@ -367,7 +369,7 @@ public class NetworkTraffic extends TextView {
         mTrafficHandler.removeMessages(1);
     }
 
-    private void updateTrafficDrawable() {
+    void updateTrafficDrawable() {
         int intTrafficDrawable;
         if (mIsEnabled && mShowArrow) {
             if (mTrafficType == UP) {
@@ -428,18 +430,13 @@ public class NetworkTraffic extends TextView {
         }
     }
 
-    private void updateVisibility() {
+    void updateVisibility() {
         if (mIsEnabled && mTrafficVisible && mTrafficInHeaderView) {
             setVisibility(View.VISIBLE);
         } else {
             setText("");
             setVisibility(View.GONE);
         }
-    }
-
-    public void setTintColor(int color) {
-        mTintColor = color;
-        updateTrafficDrawable();
     }
 
     public void onDensityOrFontScaleChanged() {
