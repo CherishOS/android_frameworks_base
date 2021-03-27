@@ -453,7 +453,7 @@ public class KeyguardIndicationController implements StateListener,
                     } else {
                         mTextView.switchIndication(indication);
                     }
-                    if (showBatteryBar) {
+                    if (showBatteryBar || showBatteryBarAlways) {
                         mBatteryBar.setVisibility(View.VISIBLE);
                         mBatteryBar.setBatteryPercent(mBatteryLevel);
                         mBatteryBar.setBarColor(Color.WHITE);
@@ -470,6 +470,12 @@ public class KeyguardIndicationController implements StateListener,
                         mTextView.switchIndication(chargeIndicator);
                     } else {
                         mTextView.switchIndication(null);
+                    }
+
+                    if (showBatteryBarAlways) {
+                        mBatteryBar.setVisibility(View.VISIBLE);
+                        mBatteryBar.setBatteryPercent(mBatteryLevel);
+                        mBatteryBar.setBarColor(mTextView.getCurrentTextColor());
                     }
                 }
                 updateChargingIndication();
@@ -512,11 +518,6 @@ public class KeyguardIndicationController implements StateListener,
                     animateText(mTextView, powerIndication);
                 } else {
                     mTextView.switchIndication(powerIndication);
-                }
-                if (showBatteryBar && showBatteryBarAlways) {
-                    mBatteryBar.setVisibility(View.VISIBLE);
-                    mBatteryBar.setBatteryPercent(mBatteryLevel);
-                    mBatteryBar.setBarColor(mTextView.getCurrentTextColor());
                 }
             } else if (!TextUtils.isEmpty(trustManagedIndication)
                     && mKeyguardUpdateMonitor.getUserTrustIsManaged(userId)
