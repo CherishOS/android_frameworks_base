@@ -74,6 +74,8 @@ import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.util.wakelock.SettableWakeLock;
 import com.android.systemui.util.wakelock.WakeLock;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.text.NumberFormat;
@@ -100,6 +102,8 @@ public class KeyguardIndicationController implements StateListener,
     private static final int MSG_SWIPE_UP_TO_UNLOCK = 3;
     private static final long TRANSIENT_BIOMETRIC_ERROR_TIMEOUT = 1300;
     private static final float BOUNCE_ANIMATION_FINAL_Y = 0f;
+
+    private static final String BATTERY_TEMP_PATH = "sys/class/power_supply/battery/temp";
 
     private final Context mContext;
     private final BroadcastDispatcher mBroadcastDispatcher;
@@ -618,13 +622,16 @@ public class KeyguardIndicationController implements StateListener,
                     // to load its emoji colored variant with the uFE0E flag
                     boolean showAmbientBattery = Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.AMBIENT_BATTERY_PERCENT, 0, UserHandle.USER_CURRENT) != 0;
+                    boolean showAmbientBatteryTemperature = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.AMBIENT_BATTERY_TEMPERATURE, 0, UserHandle.USER_CURRENT) != 0;
+                    String bolt = "\u26A1\uFE0E";
+                    CharSequence chargeIndicator = (mPowerPluggedIn ? (bolt + " ") : "") +
+                            NumberFormat.getPercentInstance().format(mBatteryLevel / 100f);
                     if (showAmbientBattery) {
-                        String bolt = "\u26A1\uFE0E";
-                        CharSequence chargeIndicator = (mPowerPluggedIn ? (bolt + " ") : "") +
-                                NumberFormat.getPercentInstance().format(mBatteryLevel / 100f);
                         mTextView.switchIndication(chargeIndicator);
-                    } else {
-                        mTextView.switchIndication(null);
+                    }
+                    if (showAmbientBatteryTemperature) {
+                        mTextView.switchIndication(chargeIndicator + " | " + getBatteryTemp());
                     }
 
                     if (showBatteryBarAlways) {

@@ -5634,6 +5634,12 @@ public final class Settings {
         public static final String CHARGING_ANIMATION = "charging_animation";
 
         /**
+         * Whether to show battery temperature on ambient bottom
+         * @hide
+         */
+        public static final String AMBIENT_BATTERY_TEMPERATURE = "ambient_battery_temperature";
+
+        /**
          * Whether to show charging animation on lock screen
          * @hide
          */
