@@ -168,6 +168,11 @@ public final class ClockManager {
         addBuiltinClock(() -> new IDEClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new FluidClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new TuxClockController(res, layoutInflater, colorExtractor));
+        addBuiltinClock(() -> new IDEJavaClockController(res, layoutInflater, colorExtractor));
+        addBuiltinClock(() -> new ClockertinoClockController(res, layoutInflater, colorExtractor));
+        addBuiltinClock(() -> new GradientFireClockController(res, layoutInflater, colorExtractor));
+        addBuiltinClock(() -> new TypeAltClockController(res, layoutInflater, colorExtractor));
+        addBuiltinClock(() -> new StickerTagClockController(res, layoutInflater, colorExtractor));
 
         // Store the size of the display for generation of clock preview.
         DisplayMetrics dm = res.getDisplayMetrics();
