@@ -98,6 +98,7 @@ final class UiModeManagerService extends SystemService {
     private static final String SYSTEM_PROPERTY_DEVICE_THEME = "persist.sys.theme";
 
     private static final String ACCENT_COLOR_PROP = "persist.sys.theme.accentcolor";
+    private static final String GRADIENT_COLOR_PROP = "persist.sys.theme.gradientcolor";
     private IOverlayManager mOverlayManager;
 
     final Object mLock = new Object();
@@ -331,7 +332,9 @@ final class UiModeManagerService extends SystemService {
         public void onChange(boolean selfChange, Uri uri) {
             if (uri.equals(System.getUriFor(System.ACCENT_COLOR))) {
                 applyAccentColor();
-           }
+            } else if (uri.equals(System.getUriFor(System.GRADIENT_COLOR))) {
+                applyGradientColor();
+            }
         }
     };
 
@@ -414,6 +417,7 @@ final class UiModeManagerService extends SystemService {
         mOverlayManager = IOverlayManager.Stub
                 .asInterface(ServiceManager.getService(Context.OVERLAY_SERVICE));
         applyAccentColor();
+        applyGradientColor();
 
         // Update the initial, static configurations.
         SystemServerInitThreadPool.submit(() -> {
@@ -429,6 +433,8 @@ final class UiModeManagerService extends SystemService {
         publishLocalService(UiModeManagerInternal.class, mLocalService);
 
         context.getContentResolver().registerContentObserver(System.getUriFor(System.ACCENT_COLOR),
+                false, mAccentObserver, UserHandle.USER_ALL);
+        context.getContentResolver().registerContentObserver(System.getUriFor(System.GRADIENT_COLOR),
                 false, mAccentObserver, UserHandle.USER_ALL);
     }
 
@@ -609,6 +615,22 @@ final class UiModeManagerService extends SystemService {
         String accentVal = SystemProperties.get(ACCENT_COLOR_PROP);
         if (!accentVal.equals(colorHex)) {
             SystemProperties.set(ACCENT_COLOR_PROP, colorHex);
+            try {
+                mOverlayManager.reloadAndroidAssets(UserHandle.USER_CURRENT);
+                mOverlayManager.reloadAssets("com.android.settings", UserHandle.USER_CURRENT);
+                mOverlayManager.reloadAssets("com.android.systemui", UserHandle.USER_CURRENT);
+            } catch (Exception e) { }
+        }
+    }
+
+    private void applyGradientColor() {
+        final Context context = getContext();
+        int intColor = System.getIntForUser(context.getContentResolver(),
+                System.GRADIENT_COLOR, 0xFF1A73E8, UserHandle.USER_CURRENT);
+        String colorHex = String.format("%08x", (0xFFFFFFFF & intColor));
+        String gradientVal = SystemProperties.get(GRADIENT_COLOR_PROP);
+        if (!gradientVal.equals(colorHex)) {
+            SystemProperties.set(GRADIENT_COLOR_PROP, colorHex);
             try {
                 mOverlayManager.reloadAndroidAssets(UserHandle.USER_CURRENT);
                 mOverlayManager.reloadAssets("com.android.settings", UserHandle.USER_CURRENT);
