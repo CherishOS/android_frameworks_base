@@ -5310,6 +5310,12 @@ public final class Settings {
          * @hide
          */
         public static final String GAMING_MODE_DYNAMIC_STATE = "gaming_mode_dynamic_state";
+		
+		/**
+         * Control how to handle the display cutout
+         * @hide
+         */
+        public static final String SYSUI_COLORS_ACTIVE = "sysui_colors_active";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
