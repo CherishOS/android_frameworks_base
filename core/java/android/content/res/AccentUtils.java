@@ -1,7 +1,10 @@
 package android.content.res;
 
+import android.app.ActivityThread;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -22,6 +25,8 @@ public class AccentUtils {
 
     private static final String ACCENT_COLOR_PROP = "persist.sys.theme.accentcolor";
     private static final String GRADIENT_COLOR_PROP = "persist.sys.theme.gradientcolor";
+
+    private static final String UNIVERSAL_DISCO = "universal_disco";
 
     static boolean isResourceAccent(String resName) {
         for (String ar : accentResources)
@@ -46,9 +51,11 @@ public class AccentUtils {
     }
 
     private static int getAccentColor(int defaultColor, String property) {
+        final Context context = ActivityThread.currentApplication();
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-        if (cal.get(Calendar.MONTH) == 3 && cal.get(Calendar.DAY_OF_MONTH) == 1) {
+        if (cal.get(Calendar.MONTH) == 3 && cal.get(Calendar.DAY_OF_MONTH) == 1 ||
+            Settings.Secure.getInt(context.getContentResolver(), UNIVERSAL_DISCO, 0) == 1) {
             return ColorUtils.genRandomAccentColor(property == ACCENT_COLOR_PROP);
         }
         try {
