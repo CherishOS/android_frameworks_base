@@ -122,12 +122,13 @@ public class QSContainerImpl extends FrameLayout implements
 
     private SysuiColorExtractor mColorExtractor;
     private IOverlayManager mOverlayManager;
+    private Handler mHandler;
 
     public QSContainerImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
 		mOverlayManager = IOverlayManager.Stub.asInterface(
                 ServiceManager.getService(Context.OVERLAY_SERVICE));
-        Handler mHandler = new Handler();
+        mHandler = new Handler();
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
         settingsObserver.observe();
         mStatusBarHeaderMachine = new StatusBarHeaderMachine(context);
@@ -169,7 +170,9 @@ public class QSContainerImpl extends FrameLayout implements
 
     @Override
     public void onColorsChanged(ColorExtractor colorExtractor, int which) {
-        setQsBackground();
+        mHandler.postDelayed(() -> {
+            setQsBackground();
+        }, 1000);
     }
 	
         // We're saving the bottom separately since otherwise the bottom would be overridden in
