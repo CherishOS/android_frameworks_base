@@ -18,7 +18,9 @@ public class AccentUtils {
 
     private static ArrayList<String> accentResources = new ArrayList<>(
             Arrays.asList("accent_device_default_light",
-                    "accent_device_default_dark"));
+                    "accent_device_default_light",
+                    "accent_device_default_dark",
+                    "gradient_start"));
 
     private static ArrayList<String> gradientResources = new ArrayList<>(
             Arrays.asList("gradient_end"));
