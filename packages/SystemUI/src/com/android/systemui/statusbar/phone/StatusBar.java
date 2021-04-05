@@ -3885,16 +3885,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         updateCorners();
     }
 
-    public void updateSwitchStyle() {
-        int switchStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.SWITCH_STYLE, 0, mLockscreenUserManager.getCurrentUserId());
-        ThemesUtils.updateSwitchStyle(mOverlayManager, mLockscreenUserManager.getCurrentUserId(), switchStyle);
-    }
-
-    public void stockSwitchStyle() {
-        ThemesUtils.stockSwitchStyle(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
-    }
-
     private void updateDozingState() {
         Trace.traceCounter(Trace.TRACE_TAG_APP, "dozing", mDozing ? 1 : 0);
         Trace.beginSection("StatusBar#updateDozingState");
@@ -4400,9 +4390,6 @@ public class StatusBar extends SystemUI implements DemoMode,
 			resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.PULSE_ON_NEW_TRACKS),
                     false, this, UserHandle.USER_ALL);
-	    resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.SWITCH_STYLE),
-                    false, this, UserHandle.USER_ALL);
 		resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.DISPLAY_CUTOUT_HIDDEN),
                     false, this, UserHandle.USER_ALL);
@@ -4464,10 +4451,6 @@ public class StatusBar extends SystemUI implements DemoMode,
 			} else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.PULSE_ON_NEW_TRACKS))) {
                 setPulseOnNewTracks();
-			} else if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.SWITCH_STYLE))) {
-                stockSwitchStyle();
-                updateSwitchStyle();
 			}else if (uri.equals(Settings.System.getUriFor(Settings.System.DISPLAY_CUTOUT_HIDDEN))) {
                 updateCutoutOverlay();
 			} else if (uri.equals(Settings.System.getUriFor(Settings.System.QS_PANEL_BG_USE_NEW_TINT))) {

@@ -6425,11 +6425,6 @@ public final class Settings {
          * @hide
          */
         public static final String AMBIENT_MUSIC_TICKER = "ambient_music_ticker";
-
-        /**
-         * @hide
-         */
-        public static final String SWITCH_STYLE = "switch_style";
 		
 		/**
          * Toggle for clipboard access toast.
