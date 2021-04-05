@@ -108,6 +108,7 @@ import com.android.systemui.statusbar.policy.RemoteInputQuickSettingsDisabler;
 import com.android.systemui.statusbar.policy.TaskHelper;
 import com.android.systemui.statusbar.policy.UserInfoControllerImpl;
 import com.android.systemui.statusbar.policy.UserSwitcherController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.volume.VolumeComponent;
 import com.android.systemui.wmshell.BubblesManager;
 import com.android.wm.shell.bubbles.Bubbles;
@@ -226,7 +227,8 @@ public interface StatusBarPhoneModule {
             UnlockedScreenOffAnimationController unlockedScreenOffAnimationController,
             Optional<StartingSurface> startingSurfaceOptional,
             BurnInProtectionController burnInProtectionController,
-            TaskHelper taskHelper) {
+            TaskHelper taskHelper,
+            TunerService tunerService) {
         return new StatusBar(
                 context,
                 notificationsController,
@@ -318,6 +320,7 @@ public interface StatusBarPhoneModule {
                 unlockedScreenOffAnimationController,
                 startingSurfaceOptional,
                 burnInProtectionController,
-                taskHelper);
+                taskHelper,
+                tunerService);
     }
 }

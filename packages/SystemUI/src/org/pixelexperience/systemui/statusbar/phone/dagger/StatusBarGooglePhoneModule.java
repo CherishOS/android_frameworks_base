@@ -234,7 +234,8 @@ public interface StatusBarGooglePhoneModule {
             Optional<ReverseChargingViewController> reverseChargingController,
             Lazy<Optional<NotificationVoiceReplyClient>> notificationVoiceReplyClient,
             BurnInProtectionController burnInProtectionController,
-            TaskHelper taskHelper) {
+            TaskHelper taskHelper,
+			TunerService tunerService) {
         return new StatusBarGoogle(
                 context, notificationsController, lightBarController, autoHideController, keyguardUpdateMonitor,
                 signalPolicy, pulseExpansionHandler, notificationWakeUpCoordinator, keyguardBypassController,
@@ -259,6 +260,6 @@ public interface StatusBarGooglePhoneModule {
                 locationPublisher, statusBarIconController, lockscreenShadeTransitionController, featureFlags,
                 keyguardUnlockAnimationController, unlockedScreenOffAnimationController, startingSurfaceOptional,
                 smartSpaceController, wallpaperNotifier, reverseChargingController, notificationVoiceReplyClient,
-                burnInProtectionController, taskHelper);
+                burnInProtectionController, taskHelper, tunerService);
     }
 }
