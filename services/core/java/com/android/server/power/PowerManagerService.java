@@ -672,8 +672,8 @@ public final class PowerManagerService extends SystemService
     private int mSmartChargingResumeLevel;
     private int mSmartChargingLevelDefaultConfig;
     private int mSmartChargingResumeLevelDefaultConfig;
-    private static String mPowerInputSupsendSysfsNode;
-    private static String mPowerInputSupsendValue;
+    private static String mPowerInputSuspendSysfsNode;
+    private static String mPowerInputSuspendValue;
     private static String mPowerInputResumeValue;
 
     // Smart Cutoff
@@ -1343,9 +1343,9 @@ public final class PowerManagerService extends SystemService
                 com.android.internal.R.integer.config_smartChargingBatteryLevel);
         mSmartChargingResumeLevelDefaultConfig = resources.getInteger(
                 com.android.internal.R.integer.config_smartChargingBatteryResumeLevel);
-        mPowerInputSupsendSysfsNode = resources.getString(
+        mPowerInputSuspendSysfsNode = resources.getString(
                 com.android.internal.R.string.config_SmartChargingSysfsNode);
-        mPowerInputSupsendValue = resources.getString(
+        mPowerInputSuspendValue = resources.getString(
                 com.android.internal.R.string.config_SmartChargingSupspendValue);
         mPowerInputResumeValue = resources.getString(
                 com.android.internal.R.string.config_SmartChargingResumeValue);
