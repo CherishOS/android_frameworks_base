@@ -6526,11 +6526,6 @@ public final class Settings {
          * @hide
          */
         public static final String ARTWORK_MEDIA_BACKGROUND = "artwork_media_background";
-		
-		/**
-         * @hide
-         */
-        public static final String SWITCH_STYLE = "switch_style";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
