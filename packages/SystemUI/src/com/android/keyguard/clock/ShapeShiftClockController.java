@@ -103,7 +103,6 @@ public class ShapeShiftClockController implements ClockPlugin {
         mDate = view.findViewById(R.id.timedate);
     }
 
-
     @Override
     public void onDestroyView() {
         mView = null;
