@@ -1288,7 +1288,7 @@ public class VolumeDialogImpl implements VolumeDialog,
         final int alpha = useActiveColoring
                 ? Color.alpha(tint.getDefaultColor())
                 : getAlphaAttr(android.R.attr.secondaryContentAlpha);
-        mEnableVolumePanelTint = mContext.getResources().getBoolean(R.bool.config_enableVolumePanelTint);
+        mEnableVolumePanelTint = isVolumePanelTintEnabled();
         final ColorStateList progressTint = useActiveColoring ? null : tint;
         if (!(tint == row.cachedTint)) {
             row.slider.setProgressTintList(mEnableVolumePanelTint ? tint : progressTint);
@@ -1299,6 +1299,11 @@ public class VolumeDialogImpl implements VolumeDialog,
             row.icon.setImageAlpha(alpha);
             row.cachedTint = tint;
         }
+    }
+
+    private boolean isVolumePanelTintEnabled() {
+        return Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.VOLUME_PANEL_TINT, 0, UserHandle.USER_CURRENT) == 1;
     }
 
     private void updateVolumeRowSliderH(VolumeRow row, boolean enable, int vlevel, boolean maxChanged) {

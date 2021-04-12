@@ -5107,7 +5107,13 @@ public final class Settings {
          * @hide
          */
         public static final String POCKET_JUDGE = "pocket_judge";
-		
+
+        /**
+         * Whether to tint the active volume bar with a gradient color
+         * @hide
+         */
+        public static final String VOLUME_PANEL_TINT = "volume_panel_tint";
+
 		/**
          * Whether to show battery percent on ambient bottom
          * @hide
