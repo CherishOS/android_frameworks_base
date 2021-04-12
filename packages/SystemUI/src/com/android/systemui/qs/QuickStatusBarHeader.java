@@ -507,7 +507,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
             mQuickQsBrightness.setVisibility(View.GONE);
         }
 
-        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) getLayoutParams();
+        ViewGroup.LayoutParams lp = getLayoutParams();
         if (mQsDisabled) {
             lp.height = topMargin;
         } else {
@@ -517,7 +517,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
             if (mHeaderImageEnabled) {
                 qsHeight += mHeaderImageHeight;
             }
-            lp.height = Math.max(getMinimumHeight(), qsHeight);
+            lp.height = WRAP_CONTENT;
         }
         setLayoutParams(lp);
 
