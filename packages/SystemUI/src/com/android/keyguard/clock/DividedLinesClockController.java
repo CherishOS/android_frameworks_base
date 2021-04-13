@@ -36,6 +36,9 @@ import com.android.systemui.plugins.ClockPlugin;
 
 import java.util.TimeZone;
 
+import static com.android.systemui.statusbar.phone
+        .KeyguardClockPositionAlgorithm.CLOCK_USE_DEFAULT_Y;
+
 /**
  * Plugin for the default clock face used only to provide a preview.
  */
@@ -64,7 +67,7 @@ public class DividedLinesClockController implements ClockPlugin {
     /**
      * Root view of clock.
      */
-    private ClockLayout mBigClockView;
+    private ClockLayout mView;
 
     /**
      * Text clock in preview view hierarchy.
@@ -72,15 +75,15 @@ public class DividedLinesClockController implements ClockPlugin {
     private TextClock mClock;
 
     /**
+     * Text date in preview view hierarchy.
+     */
+    private TextClock mDate;
+
+    /**
      * Top and bottom dividers in preview view hierarchy.
      */
     private View mTopLine;
     private View mBottomLine;
-
-    /**
-     * Helper to extract colors from wallpaper palette for clock face.
-     */
-    private final ClockPalette mPalette = new ClockPalette();
 
     /**
      * Create a DefaultClockController instance.
@@ -97,16 +100,19 @@ public class DividedLinesClockController implements ClockPlugin {
     }
 
     private void createViews() {
-        mBigClockView = (ClockLayout) mLayoutInflater
+        mView = (ClockLayout) mLayoutInflater
                 .inflate(R.layout.divided_lines_clock, null);
-        mClock = mBigClockView.findViewById(R.id.clock);
+        mClock = mView.findViewById(R.id.clock);
+        mDate = mView.findViewById(R.id.date);
+        mClock.setFormat12Hour("h:mm");
         onTimeTick();
     }
 
     @Override
     public void onDestroyView() {
-        mBigClockView = null;
+        mView = null;
         mClock = null;
+        mDate = null;
         mTopLine = null;
         mBottomLine = null;
     }
@@ -128,11 +134,12 @@ public class DividedLinesClockController implements ClockPlugin {
 
     @Override
     public Bitmap getPreview(int width, int height) {
-        View previewView = mLayoutInflater.inflate(R.layout.divided_lines_preview, null);
+        View previewView = mLayoutInflater.inflate(R.layout.divided_lines_clock, null);
         TextClock previewTime = previewView.findViewById(R.id.clock);
         TextClock previewDate = previewView.findViewById(R.id.date);
         View previewTLine = previewView.findViewById(R.id.topLine);
         View previewBLine = previewView.findViewById(R.id.bottomLine);
+        previewTime.setFormat12Hour("h:mm");
 
         // Initialize state of plugin before generating preview.
         previewTime.setTextColor(Color.WHITE);
@@ -142,48 +149,47 @@ public class DividedLinesClockController implements ClockPlugin {
         ColorExtractor.GradientColors colors = mColorExtractor.getColors(
                 WallpaperManager.FLAG_LOCK);
         setColorPalette(colors.supportsDarkText(), colors.getColorPalette());
+        onTimeTick();
 
         return mRenderer.createPreview(previewView, width, height);
     }
 
     @Override
     public View getView() {
-        return null;
+        if (mView == null) {
+            createViews();
+        }
+        return mView;
     }
 
     @Override
     public View getBigClockView() {
-        if (mBigClockView  == null) {
-            createViews();
-        }
-        return mBigClockView;
+        return null;
     }
 
     @Override
     public int getPreferredY(int totalHeight) {
-        return totalHeight / 2;
+        return CLOCK_USE_DEFAULT_Y;
     }
+
+    @Override
+    public void setStyle(Style style) {}
 
     @Override
     public void setTextColor(int color) {
         mClock.setTextColor(color);
     }
 
-    @Override
     public void setTypeface(Typeface tf) {
         mClock.setTypeface(tf);
     }
 
-    @Override
-    public void setColorPalette(boolean supportsDarkText, int[] colorPalette) {
-        mPalette.setColorPalette(supportsDarkText, colorPalette);
-        updateColor();
+    public void setDateTypeface(Typeface tf) {
+        mDate.setTypeface(tf);
     }
 
-    private void updateColor() {
-        final int primary = mPalette.getPrimaryColor();
-        final int secondary = mPalette.getSecondaryColor();
-    }
+    @Override
+    public void setColorPalette(boolean supportsDarkText, int[] colorPalette) {}
 
     @Override
     public void onTimeTick() {
@@ -191,7 +197,7 @@ public class DividedLinesClockController implements ClockPlugin {
 
     @Override
     public void setDarkAmount(float darkAmount) {
-        mBigClockView.setDarkAmount(darkAmount);
+        mView.setDarkAmount(darkAmount);
     }
 
     @Override

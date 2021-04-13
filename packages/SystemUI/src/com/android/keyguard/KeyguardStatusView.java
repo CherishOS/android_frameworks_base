@@ -209,10 +209,6 @@ public class KeyguardStatusView extends GridLayout implements
         return mClockView.hasCustomClock();
     }
 
-    public boolean hasCustomClockInBigContainer() {
-        return mClockView.hasCustomClockInBigContainer();
-    }
-
     /**
      * Set whether or not the lock screen is showing notifications.
      */

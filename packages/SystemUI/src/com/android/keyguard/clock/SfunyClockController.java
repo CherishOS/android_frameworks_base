@@ -34,6 +34,9 @@ import com.android.systemui.plugins.ClockPlugin;
 
 import java.util.TimeZone;
 
+import static com.android.systemui.statusbar.phone
+        .KeyguardClockPositionAlgorithm.CLOCK_USE_DEFAULT_Y;
+
 /**
  * Plugin for the default clock face used only to provide a preview.
  */
@@ -62,18 +65,13 @@ public class SfunyClockController implements ClockPlugin {
     /**
      * Root view of clock.
      */
-    private ClockLayout mBigClockView;
+    private ClockLayout mView;
 
     /**
      * Text clock for both hour and minute
      */
     private TextClock mHourClock;
     private TextClock mMinuteClock;
-
-    /**
-     * Controller for transition into dark state.
-     */
-    private CrossFadeDarkController mDarkController;
 
     /**
      * Create a DefaultClockController instance.
@@ -90,15 +88,15 @@ public class SfunyClockController implements ClockPlugin {
     }
 
     private void createViews() {
-        mBigClockView = (ClockLayout) mLayoutInflater
+        mView = (ClockLayout) mLayoutInflater
                 .inflate(R.layout.digital_clock_sfuny, null);
-        mHourClock = mBigClockView.findViewById(R.id.clockHour);
-        mMinuteClock = mBigClockView.findViewById(R.id.clockMinute);
+        mHourClock = mView.findViewById(R.id.clockHour);
+        mMinuteClock = mView.findViewById(R.id.clockMinute);
     }
 
     @Override
     public void onDestroyView() {
-        mBigClockView = null;
+        mView = null;
         mHourClock = null;
         mMinuteClock = null;
     }
@@ -140,21 +138,24 @@ public class SfunyClockController implements ClockPlugin {
 
     @Override
     public View getView() {
-        return null;
+        if (mView == null) {
+            createViews();
+        }
+        return mView;
     }
 
     @Override
     public View getBigClockView() {
-        if (mBigClockView == null) {
-            createViews();
-        }
-        return mBigClockView;
+        return null;
     }
 
     @Override
     public int getPreferredY(int totalHeight) {
-        return totalHeight / 2;
+        return CLOCK_USE_DEFAULT_Y;
     }
+
+    @Override
+    public void setStyle(Style style) {}
 
     @Override
     public void setTextColor(int color) {
@@ -162,11 +163,12 @@ public class SfunyClockController implements ClockPlugin {
         mMinuteClock.setTextColor(color);
     }
 
-    @Override
     public void setTypeface(Typeface tf) {
         mHourClock.setTypeface(tf);
         mMinuteClock.setTypeface(tf);
     }
+
+    public void setDateTypeface(Typeface tf) {}
 
     @Override
     public void setColorPalette(boolean supportsDarkText, int[] colorPalette) {}
@@ -177,9 +179,7 @@ public class SfunyClockController implements ClockPlugin {
 
     @Override
     public void setDarkAmount(float darkAmount) {
-        if (mDarkController != null) {
-            mBigClockView.setDarkAmount(darkAmount);
-        }
+        mView.setDarkAmount(darkAmount);
     }
 
     @Override

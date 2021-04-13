@@ -39,6 +39,9 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import static com.android.systemui.statusbar.phone
+        .KeyguardClockPositionAlgorithm.CLOCK_USE_DEFAULT_Y;
+
 /**
  * Plugin for the default clock face used only to provide a preview.
  */
@@ -67,7 +70,7 @@ public class OronosClockController implements ClockPlugin {
     /**
      * Root view of clock.
      */
-    private ClockLayout mBigClockView;
+    private ClockLayout mView;
 
     /**
      * Text clock for both hour and minute
@@ -84,11 +87,6 @@ public class OronosClockController implements ClockPlugin {
     private TimeZone mTimeZone;
 
     /**
-     * Controller for transition into dark state.
-     */
-    private CrossFadeDarkController mDarkController;
-
-    /**
      * Create a DefaultClockController instance.
      *
      * @param res Resources contains title and thumbnail.
@@ -103,11 +101,11 @@ public class OronosClockController implements ClockPlugin {
     }
 
     private void createViews() {
-        mBigClockView = (ClockLayout) mLayoutInflater
+        mView = (ClockLayout) mLayoutInflater
                 .inflate(R.layout.oronos_clock, null);
-        mHourClock = mBigClockView.findViewById(R.id.clockHr);
-        mMinuteClock = mBigClockView.findViewById(R.id.clockMin);
-        mLongDate = mBigClockView.findViewById(R.id.longDate);
+        mHourClock = mView.findViewById(R.id.clockHr);
+        mMinuteClock = mView.findViewById(R.id.clockMin);
+        mLongDate = mView.findViewById(R.id.longDate);
         onTimeTick();
         ColorExtractor.GradientColors colors = mColorExtractor.getColors(
                 WallpaperManager.FLAG_LOCK);
@@ -123,7 +121,7 @@ public class OronosClockController implements ClockPlugin {
 
     @Override
     public void onDestroyView() {
-        mBigClockView = null;
+        mView = null;
         mHourClock = null;
         mMinuteClock = null;
         mLongDate = null;
@@ -192,35 +190,35 @@ public class OronosClockController implements ClockPlugin {
 
     @Override
     public View getView() {
-        return null;
+        if (mView == null) {
+            createViews();
+        }
+        return mView;
     }
 
     @Override
     public View getBigClockView() {
-        if (mBigClockView == null) {
-            createViews();
-        }
-        return mBigClockView;
+        return null;
     }
 
     @Override
     public int getPreferredY(int totalHeight) {
-        return totalHeight / 2;
+        return CLOCK_USE_DEFAULT_Y;
     }
 
     @Override
     public void setStyle(Style style) {}
 
     @Override
-    public void setTextColor(int color) {
-        mHourClock.setTextColor(color);
-        mMinuteClock.setTextColor(color);
-    }
+    public void setTextColor(int color) {}
 
-    @Override
     public void setTypeface(Typeface tf) {
         mHourClock.setTypeface(tf);
         mMinuteClock.setTypeface(tf);
+    }
+
+    public void setDateTypeface(Typeface tf) {
+        mLongDate.setTypeface(tf);
     }
 
     @Override
@@ -260,9 +258,7 @@ public class OronosClockController implements ClockPlugin {
 
     @Override
     public void setDarkAmount(float darkAmount) {
-        if (mDarkController != null) {
-            mBigClockView.setDarkAmount(darkAmount);
-        }
+        mView.setDarkAmount(darkAmount);
     }
 
     @Override
@@ -277,4 +273,3 @@ public class OronosClockController implements ClockPlugin {
         return false;
     }
 }
-

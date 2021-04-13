@@ -150,20 +150,16 @@ public final class ClockManager {
         LayoutInflater layoutInflater = injectionInflater.injectable(LayoutInflater.from(context));
 
         addBuiltinClock(() -> new DefaultClockController(res, layoutInflater, colorExtractor));
-        //addBuiltinClock(() -> new BubbleClockController(res, layoutInflater, colorExtractor));
+        addBuiltinClock(() -> new BubbleClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new AnalogClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new SpectrumClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new SneekyClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new BinaryClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new DividedLinesClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new AltDividedLinesClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new MNMLBoxClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new XMNMLBoxClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new XtndMNMLBoxClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new MNMLMinimalClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new SfunyClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new OronosClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new OronosSqrClockController(res, layoutInflater, colorExtractor));
 		 addBuiltinClock(() -> new ShapeShiftClockController(res, layoutInflater, colorExtractor));
         // Store the size of the display for generation of clock preview.
         DisplayMetrics dm = res.getDisplayMetrics();
@@ -341,8 +337,7 @@ public final class ClockManager {
                     .setTitle(plugin::getTitle)
                     .setId(id)
                     .setThumbnail(plugin::getThumbnail)
-                     // to make the preview bigger in ThemePicker
-                    .setPreview(() -> plugin.getPreview(mWidth / 2, mHeight / 2))
+                    .setPreview(() -> plugin.getPreview(mWidth, mHeight))
                     .build());
         }
 

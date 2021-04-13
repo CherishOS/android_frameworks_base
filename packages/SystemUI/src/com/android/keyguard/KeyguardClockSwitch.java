@@ -138,7 +138,6 @@ public class KeyguardClockSwitch extends RelativeLayout {
     private boolean mShowingHeader;
     private boolean mSupportsDarkText;
     private int[] mColorPalette;
-    private boolean mShowCurrentUserTime;
 
     private int mTextClockAlignment;
     private int mTextClockPadding;
@@ -202,10 +201,6 @@ public class KeyguardClockSwitch extends RelativeLayout {
         return mClockPlugin != null;
     }
 
-    public boolean hasCustomClockInBigContainer() {
-        return hasCustomClock() && mClockPlugin.shouldShowInBigContainer();
-    }
-
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -257,9 +252,6 @@ public class KeyguardClockSwitch extends RelativeLayout {
         if (mClockViewBold != null) {
             mClockViewBold.setTextColor(color);
         }
-        if (mClockPlugin != null) {
-            mClockPlugin.setTextColor(color);
-        }
     }
 
     private void setClockPlugin(ClockPlugin plugin) {
@@ -268,10 +260,6 @@ public class KeyguardClockSwitch extends RelativeLayout {
             View smallClockView = mClockPlugin.getView();
             if (smallClockView != null && smallClockView.getParent() == mSmallClockFrame) {
                 mSmallClockFrame.removeView(smallClockView);
-            }
-            View bigClockView = mClockPlugin.getBigClockView();
-            if (bigClockView != null && bigClockView.getParent() == mSmallClockFrame) {
-                mSmallClockFrame.removeView(bigClockView);
             }
             if (mBigClockContainer != null) {
                 mBigClockContainer.removeAllViews();
@@ -293,32 +281,22 @@ public class KeyguardClockSwitch extends RelativeLayout {
         }
         // Attach small and big clock views to hierarchy.
         View smallClockView = plugin.getView();
-        View bigClockView = plugin.getBigClockView();
-
-        if (plugin.shouldShowInBigContainer()) {
-            if (smallClockView != null) {
-                mSmallClockFrame.addView(smallClockView, -1,
-                        new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        if (smallClockView != null) {
+            mSmallClockFrame.addView(smallClockView, -1,
+                    new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT));
-                mClockView.setVisibility(View.GONE);
-                mClockViewBold.setVisibility(View.GONE);
-            }
-            if (bigClockView != null && mBigClockContainer != null) {
-                mBigClockContainer.addView(bigClockView);
-                updateBigClockVisibility();
-            }
-        } else {
             mClockView.setVisibility(View.GONE);
             mClockViewBold.setVisibility(View.GONE);
-
-            if (bigClockView != null ) {
-                mSmallClockFrame.addView(bigClockView, -1,
-                        new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-            }
         }
-        // Show / hide status area
-        mKeyguardStatusArea.setVisibility(plugin.shouldShowStatusArea() ? View.VISIBLE : View.GONE);
+        View bigClockView = plugin.getBigClockView();
+        if (bigClockView != null && mBigClockContainer != null) {
+            mBigClockContainer.addView(bigClockView);
+            updateBigClockVisibility();
+        }
+        // Hide default clock.
+        if (!plugin.shouldShowStatusArea()) {
+            mKeyguardStatusArea.setVisibility(View.GONE);
+        }
         // Initialize plugin parameters.
         mClockPlugin = plugin;
         mClockPlugin.setStyle(getPaint().getStyle());
@@ -334,16 +312,12 @@ public class KeyguardClockSwitch extends RelativeLayout {
      */
     public void setBigClockContainer(ViewGroup container) {
         if (mClockPlugin != null && container != null) {
-            if (mClockPlugin.shouldShowInBigContainer()) {
-                View bigClockView = mClockPlugin.getBigClockView();
-                if (bigClockView != null) {
-                    container.addView(bigClockView);
-                }
-                mBigClockContainer = container;
-            } else {
-                mBigClockContainer = null;
+            View bigClockView = mClockPlugin.getBigClockView();
+            if (bigClockView != null) {
+                container.addView(bigClockView);
             }
         }
+        mBigClockContainer = container;
         updateBigClockVisibility();
     }
 
@@ -362,13 +336,14 @@ public class KeyguardClockSwitch extends RelativeLayout {
      * It will also update plugin setTextColor if plugin is connected.
      */
     public void setTextColor(int color) {
-        updateClockColor();
+        if (mClockPlugin != null) {
+            mClockPlugin.setTextColor(color);
+        }
     }
 
     public void setShowCurrentUserTime(boolean showCurrentUserTime) {
         mClockView.setShowCurrentUserTime(showCurrentUserTime);
         mClockViewBold.setShowCurrentUserTime(showCurrentUserTime);
-        mShowCurrentUserTime = showCurrentUserTime;
     }
 
     public void setTextSize(int unit, float size) {
@@ -452,8 +427,7 @@ public class KeyguardClockSwitch extends RelativeLayout {
         }
         if (Build.IS_DEBUGGABLE) {
             // Log for debugging b/130888082 (sysui waking up, but clock not updating)
-            Log.d(TAG, "Updating clock: " + mClockView.getText().toString()
-                    .replaceAll("[^\\x00-\\x7F]", ":"));
+            Log.d(TAG, "Updating clock: " + mClockView.getText());
         }
     }
 
@@ -510,254 +484,146 @@ public class KeyguardClockSwitch extends RelativeLayout {
         if (lockClockFont == 0) {
             mClockView.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
 	    mClockViewBold.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
-            }
         }
         if (lockClockFont == 1) {
             mClockView.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
 	    mClockViewBold.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
-            }
 	}
         if (lockClockFont == 2) {
             mClockView.setTypeface(Typeface.create("sans-serif", Typeface.ITALIC));
             mClockViewBold.setTypeface(Typeface.create("sans-serif", Typeface.ITALIC));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif", Typeface.ITALIC));
-            }
         }
         if (lockClockFont == 3) {
             mClockView.setTypeface(Typeface.create("sans-serif", Typeface.BOLD_ITALIC));
             mClockViewBold.setTypeface(Typeface.create("sans-serif", Typeface.BOLD_ITALIC));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif", Typeface.BOLD_ITALIC));
-            }
         }
         if (lockClockFont == 4) {
             mClockView.setTypeface(Typeface.create("sans-serif-light", Typeface.ITALIC));
             mClockViewBold.setTypeface(Typeface.create("sans-serif-light", Typeface.ITALIC));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif-light", Typeface.ITALIC));
-            }
         }
         if (lockClockFont == 5) {
             mClockView.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
-            }
         }
         if (lockClockFont == 6) {
             mClockView.setTypeface(Typeface.create("sans-serif-thin", Typeface.ITALIC));
             mClockViewBold.setTypeface(Typeface.create("sans-serif-thin", Typeface.ITALIC));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif-thin", Typeface.ITALIC));
-            }
         }
         if (lockClockFont == 7) {
             mClockView.setTypeface(Typeface.create("sans-serif-thin", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("sans-serif-thin", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif-thin", Typeface.NORMAL));
-            }
         }
         if (lockClockFont == 8) {
             mClockView.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
-            }
         }
         if (lockClockFont == 9) {
             mClockView.setTypeface(Typeface.create("sans-serif-condensed", Typeface.ITALIC));
             mClockViewBold.setTypeface(Typeface.create("sans-serif-condensed", Typeface.ITALIC));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif-condensed", Typeface.ITALIC));
-            }
         }
         if (lockClockFont == 10) {
             mClockView.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD));
             mClockViewBold.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD));
-            }
         }
         if (lockClockFont == 11) {
             mClockView.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD_ITALIC));
             mClockViewBold.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD_ITALIC));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD_ITALIC));
-            }
         }
         if (lockClockFont == 12) {
             mClockView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-            }
         }
         if (lockClockFont == 13) {
             mClockView.setTypeface(Typeface.create("sans-serif-medium", Typeface.ITALIC));
             mClockViewBold.setTypeface(Typeface.create("sans-serif-medium", Typeface.ITALIC));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif-medium", Typeface.ITALIC));
-            }
         }
         if (lockClockFont == 14) {
             mClockView.setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.NORMAL));
-            }
         }
         if (lockClockFont == 15) {
             mClockView.setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.ITALIC));
             mClockViewBold.setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.ITALIC));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.ITALIC));
-            }
         }
         if (lockClockFont == 16) {
             mClockView.setTypeface(Typeface.create("sans-serif-black", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("sans-serif-black", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif-black", Typeface.NORMAL));
-            }
         }
         if (lockClockFont == 17) {
             mClockView.setTypeface(Typeface.create("sans-serif-black", Typeface.ITALIC));
             mClockViewBold.setTypeface(Typeface.create("sans-serif-black", Typeface.ITALIC));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("sans-serif-black", Typeface.ITALIC));
-            }
         }
         if (lockClockFont == 18) {
             mClockView.setTypeface(Typeface.create("cursive", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("cursive", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("cursive", Typeface.NORMAL));
-            }
         }
         if (lockClockFont == 19) {
             mClockView.setTypeface(Typeface.create("cursive", Typeface.BOLD));
             mClockViewBold.setTypeface(Typeface.create("cursive", Typeface.BOLD));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("cursive", Typeface.BOLD));
-            }
         }
         if (lockClockFont == 20) {
             mClockView.setTypeface(Typeface.create("casual", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("casual", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("casual", Typeface.NORMAL));
-            }
         }
         if (lockClockFont == 21) {
             mClockView.setTypeface(Typeface.create("serif", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("serif", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("serif", Typeface.NORMAL));
-            }
         }
         if (lockClockFont == 22) {
             mClockView.setTypeface(Typeface.create("serif", Typeface.ITALIC));
             mClockViewBold.setTypeface(Typeface.create("serif", Typeface.ITALIC));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("serif", Typeface.ITALIC));
-            }
         }
         if (lockClockFont == 23) {
             mClockView.setTypeface(Typeface.create("serif", Typeface.BOLD));
             mClockViewBold.setTypeface(Typeface.create("serif", Typeface.BOLD));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("serif", Typeface.BOLD));
-            }
         }
         if (lockClockFont == 24) {
             mClockView.setTypeface(Typeface.create("serif", Typeface.BOLD_ITALIC));
             mClockViewBold.setTypeface(Typeface.create("serif", Typeface.BOLD_ITALIC));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("serif", Typeface.BOLD_ITALIC));
-            }
         }
         if (lockClockFont == 25) {
             mClockView.setTypeface(Typeface.create("gobold-light-sys", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("gobold-light-sys", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("gobold-light-sys", Typeface.NORMAL));
-            }
         }
         if (lockClockFont == 26) {
             mClockView.setTypeface(Typeface.create("roadrage-sys", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("roadrage-sys", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("roadrage-sys", Typeface.NORMAL));
-            }
         }
         if (lockClockFont == 27) {
             mClockView.setTypeface(Typeface.create("snowstorm-sys", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("snowstorm-sys", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("snowstorm-sys", Typeface.NORMAL));
-            }
         }
         if (lockClockFont == 28) {
             mClockView.setTypeface(Typeface.create("googlesans-sys", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("googlesans-sys", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("googlesans-sys", Typeface.NORMAL));
-            }
         }
 	if (lockClockFont == 29) {
             mClockView.setTypeface(Typeface.create("neoneon-sys", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("neoneon-sys", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("neoneon-sys", Typeface.NORMAL));
-            }
         }
         if (lockClockFont == 30) {
             mClockView.setTypeface(Typeface.create("themeable-sys", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("themeable-sys", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("themeable-sys", Typeface.NORMAL));
-            }
 	}
 	if (lockClockFont == 31) {
             mClockView.setTypeface(Typeface.create("samsung-sys", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("samsung-sys", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("samsung-sys", Typeface.NORMAL));
-            }
         }
 	if (lockClockFont == 32) {
             mClockView.setTypeface(Typeface.create("mexcellent-sys", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("mexcellent-sys", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("mexcellent-sys", Typeface.NORMAL));
-            }
         }
 	if (lockClockFont == 33) {
             mClockView.setTypeface(Typeface.create("burnstown-sys", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("burnstown-sys", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("burnstown-sys", Typeface.NORMAL));
-            }
         }
         if (lockClockFont == 34) {
             mClockView.setTypeface(Typeface.create("dumbledor-sys", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("dumbledor-sys", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("dumbledor-sys", Typeface.NORMAL));
-            }
         }
         if (lockClockFont == 35) {
             mClockView.setTypeface(Typeface.create("phantombold-sys", Typeface.NORMAL));
             mClockViewBold.setTypeface(Typeface.create("phantombold-sys", Typeface.NORMAL));
-            if (mClockPlugin != null) {
-                mClockPlugin.setTypeface(Typeface.create("phantombold-sys", Typeface.NORMAL));
-            }
         }
     }
 
