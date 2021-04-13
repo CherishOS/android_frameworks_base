@@ -185,7 +185,7 @@ public class SpectrumClockController implements ClockPlugin {
     public void onTimeTick() {
         mSpectrumClock.onTimeChanged();
         mBigClockView.onTimeChanged();
-        mLockClock.refresh();
+        mLockClock.refreshTime();
     }
 
     @Override

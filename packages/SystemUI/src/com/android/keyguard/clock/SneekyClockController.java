@@ -185,7 +185,7 @@ public class SneekyClockController implements ClockPlugin {
     public void onTimeTick() {
         mSneekyClock.onTimeChanged();
         mBigClockView.onTimeChanged();
-        mLockClock.refresh();
+        mLockClock.refreshTime();
     }
 
     @Override
