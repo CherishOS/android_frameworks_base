@@ -26,6 +26,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.EventLog;
 import android.util.Pair;
@@ -372,10 +373,8 @@ public class PhoneStatusBarView extends PanelBar implements Callbacks {
 
         int statusBarPaddingTop = getResources().getDimensionPixelSize(
                 R.dimen.status_bar_padding_top);
-        int statusBarPaddingStart = getResources().getDimensionPixelSize(
-                R.dimen.status_bar_padding_start);
-        int statusBarPaddingEnd = getResources().getDimensionPixelSize(
-                R.dimen.status_bar_padding_end);
+        int statusBarPaddingStart = getCustomStatusBarPaddingStart();
+        int statusBarPaddingEnd = getCustomStatusBarPaddingEnd();
 
         View sbContents = findViewById(R.id.status_bar_contents);
         sbContents.setPaddingRelative(
@@ -395,6 +394,18 @@ public class PhoneStatusBarView extends PanelBar implements Callbacks {
         updateCutoutLocation(StatusBarWindowView.cornerCutoutMargins(mDisplayCutout, getDisplay()));
         updateSafeInsets(StatusBarWindowView.statusBarCornerCutoutMargins(mDisplayCutout,
                 getDisplay(), mRotationOrientation, mStatusBarHeight));
+    }
+
+    private int getCustomStatusBarPaddingStart() {
+        final Resources res = mContext.getResources();
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.CUSTOM_STATUSBAR_PADDING_START, res.getDimensionPixelSize(R.dimen.status_bar_padding_start));
+    }
+
+    private int getCustomStatusBarPaddingEnd() {
+        final Resources res = mContext.getResources();
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.CUSTOM_STATUSBAR_PADDING_END, res.getDimensionPixelSize(R.dimen.status_bar_padding_end));
     }
 
     private void updateCutoutLocation(Pair<Integer, Integer> cornerCutoutMargins) {
