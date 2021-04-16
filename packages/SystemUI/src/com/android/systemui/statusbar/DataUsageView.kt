@@ -26,6 +26,8 @@ class DataUsageView(context: Context, attrs: AttributeSet?) :
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     private val wifiManager: WifiManager =
         context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    private val subManager: SubscriptionManager =
+        context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
     private var formattedInfo: String? = null
     private var shouldUpdateData = false
     private var shouldUpdateDataTextView = false
@@ -74,7 +76,7 @@ class DataUsageView(context: Context, attrs: AttributeSet?) :
             } else {
                 dataController.getDataUsageInfo()
             }
-            prefix = context.resources.getString(R.string.usage_data_prefix)
+            prefix = getSlotCarrierName()
             suffix = context.resources.getString(
                 if (showDailyDataUsage) {
                     R.string.usage_data_today
@@ -97,6 +99,17 @@ class DataUsageView(context: Context, attrs: AttributeSet?) :
                 com.android.internal.R.string.fileSizeSuffix, res.value, res.units
             )
         )
+    }
+
+    private fun getSlotCarrierName(): String {
+        var result: CharSequence = ""
+        val subId = SubscriptionManager.getDefaultDataSubscriptionId()
+        subManager.activeSubscriptionInfoList?.forEach { subInfo ->
+            if (subId == subInfo.subscriptionId) {
+                result = subInfo.displayName
+            }
+        }
+        return result.toString()
     }
 
     private val isWifiConnected: Boolean
