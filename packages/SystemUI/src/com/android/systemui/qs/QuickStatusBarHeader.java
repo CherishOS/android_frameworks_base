@@ -500,10 +500,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
         boolean mIsLandscape = mLandscape && !mHeaderImageEnabled;
         mClockView.useWallpaperTextColor(mIsLandscape);
-
-        int topPadding = mContext.getResources().getDimensionPixelSize(R.dimen.qs_header_top_padding);
-        int bottomPadding = mContext.getResources().getDimensionPixelSize(R.dimen.qs_header_bottom_padding);
-        mQuickQsStatusIcons.setPadding(0,topPadding,0,bottomPadding);
     }
 
     private void updateSettings() {
