@@ -1097,7 +1097,7 @@ public class VolumeDialogImpl implements VolumeDialog,
 
     private void removeRow(VolumeRow volumeRow) {
         mRows.remove(volumeRow);
-        mDialogRowsView.removeView(row.view);
+        mDialogRowsView.removeView(volumeRow.view);
     }
 
     protected void onStateChangedH(State state) {
