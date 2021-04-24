@@ -6556,11 +6556,6 @@ public final class Settings {
          * @hide
          */
         public static final String NOTIFICATION_MATERIAL_DISMISS = "notification_material_dismiss";
-		
-		/**
-         * @hide
-         */
-        public static final String USE_OLD_MOBILETYPE = "use_old_mobiletype";
 
         /**
          * Whether user is allowed to pull down quick settings on secure keyguard.
