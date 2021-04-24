@@ -117,6 +117,10 @@ public static final String[] QS_TILE_THEMES = {
         "com.android.system.switch.stock", // 0
         "com.android.system.switch.md2", // 1
         "com.android.system.switch.oneplus", // 2
+        "com.android.system.switch.narrow", // 3
+        "com.android.system.switch.contained", // 4
+        "com.android.system.switch.retro", // 5
+        "com.android.system.switch.telegram", // 6
     };
 	
 	public static void updateSwitchStyle(IOverlayManager om, int userId, int switchStyle) {
