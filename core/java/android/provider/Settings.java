@@ -6313,6 +6313,12 @@ public final class Settings {
          * @hide
          */
         public static final String QS_TILE_STYLE = "qs_tile_style";
+		
+		/**
+         * Whether to change the transparency of the notifications
+         * @hide
+         */
+        public static final String NOTIFICATION_BG_ALPHA = "notification_bg_alpha";
 
 		/**
          * @hide
