@@ -30,6 +30,30 @@ public class ThemesUtils {
 	
 	public static final String TAG = "ThemesUtils";
 	
+	// Statusbar Signal icons
+    private static final String[] SIGNAL_BAR = {
+        "com.cherish.systemui.signalbar_a",
+        "com.cherish.systemui.signalbar_b",
+        "com.cherish.systemui.signalbar_c",
+        "com.cherish.systemui.signalbar_d",
+        "com.cherish.systemui.signalbar_e",
+        "com.cherish.systemui.signalbar_f",
+        "com.cherish.systemui.signalbar_g",
+        "com.cherish.systemui.signalbar_h",
+    };
+
+    // Statusbar Wifi icons
+    private static final String[] WIFI_BAR = {
+        "com.cherish.systemui.wifibar_a",
+        "com.cherish.systemui.wifibar_b",
+        "com.cherish.systemui.wifibar_c",
+        "com.cherish.systemui.wifibar_d",
+        "com.cherish.systemui.wifibar_e",
+        "com.cherish.systemui.wifibar_f",
+        "com.cherish.systemui.wifibar_g",
+        "com.cherish.systemui.wifibar_h",
+    };
+	
     public static final String[] BRIGHTNESS_SLIDER_THEMES = {
             "com.android.systemui.brightness.slider.default",
             "com.android.systemui.brightness.slider.daniel",
