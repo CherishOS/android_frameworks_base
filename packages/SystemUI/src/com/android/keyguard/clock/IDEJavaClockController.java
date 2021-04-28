@@ -251,7 +251,7 @@ public class IDEJavaClockController implements ClockPlugin {
 
     @Override
     public void onTimeTick() {
-        String buildType = SystemProperties.get("ro.bootleggers.releasetype", "Lost");
+        String buildType = SystemProperties.get("ro.cherish.build_type", "Lost");
         mtextPackageSubclass.setText(buildType.toLowerCase());
         DateFormat dateFormat = DateFormat.getInstanceForSkeleton("EEEEd", Locale.getDefault());
         dateFormat.setContext(DisplayContext.CAPITALIZATION_FOR_STANDALONE);
