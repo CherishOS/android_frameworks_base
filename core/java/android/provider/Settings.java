@@ -5281,81 +5281,6 @@ public final class Settings {
          * @hide
          */
         public static final String VOWIFI_ICON_STYLE = "vowifi_icon_style";
-		
-        /**
-         * @hide
-         */
-        public static final String GLOBAL_ACTIONS_LIST = "global_actions_list";
-
-        /**
-         * Whether to display sound panel in the power menu
-         *
-         * @hide
-         */
-        public static final String GLOBAL_ACTIONS_SOUNDPANEL = "global_actions_soundpanel";
-
-        /**
-         * Whether to display screenshot in the power menu
-         *
-         * @hide
-         */
-        public static final String GLOBAL_ACTIONS_SCREENSHOT = "global_actions_screenshot";
-
-        /**
-         * Whether to display screenrecord in the power menu
-         *
-         * @hide
-         */
-        public static final String GLOBAL_ACTIONS_SCREENRECORD = "global_actions_screenrecord";
-
-        /**
-         * Whether to display settings in the power menu
-         *
-         * @hide
-         */
-        public static final String GLOBAL_ACTIONS_SETTINGS = "global_actions_settings";
-
-        /**
-         * Whether to display lock in the power menu
-         *
-         * @hide
-         */
-        public static final String GLOBAL_ACTIONS_LOCKDOWN = "global_actions_lockdown";
-
-        /**
-         * Whether to display airplane in the power menu
-         *
-         * @hide
-         */
-        public static final String GLOBAL_ACTIONS_AIRPLANE = "global_actions_airplane";
-
-        /**
-         * Whether to display the users option in the power menu
-         *
-         * @hide
-         */
-        public static final String GLOBAL_ACTIONS_USERS = "global_actions_users";
-
-        /**
-         * Whether to display the flashlight option in the power menu
-         *
-         * @hide
-         */
-        public static final String GLOBAL_ACTIONS_FLASHLIGHT = "global_actions_flashlight";
-
-        /**
-         * Whether to display the flashlight option in the power menu
-         *
-         * @hide
-         */
-        public static final String GLOBAL_ACTIONS_EMERGENCY = "global_actions_emergency";
-
-        /**
-         * How many action items before moving to overflow
-         *
-         * @hide
-         */
-        public static final String GLOBAL_ACTIONS_MAX_COLUMNS = "global_actions_max_columns";
 
         /**
          * Wheter to play notification sound and vibration if screen is ON
@@ -11049,11 +10974,6 @@ public final class Settings {
          * @hide
          */
         public static final int ACCESSIBILITY_MAGNIFICATION_MODE_WINDOW = 0x2;
-
-        /**
-         * @hide
-         */
-        public static final String ADVANCED_REBOOT = "advanced_reboot";
 
         /**
          * Whether to vibrate when quick settings tile is pressed.
