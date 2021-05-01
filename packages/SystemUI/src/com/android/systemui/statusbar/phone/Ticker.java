@@ -81,7 +81,6 @@ public abstract class Ticker implements DarkReceiver {
 
     private final class Segment {
         StatusBarNotification notification;
-        Drawable icon;
         CharSequence text;
         int current;
         int next;
@@ -165,9 +164,8 @@ public abstract class Ticker implements DarkReceiver {
             return null;
         }
 
-        Segment(StatusBarNotification n, Drawable icon, CharSequence text) {
+        Segment(StatusBarNotification n, CharSequence text) {
             this.notification = n;
-            this.icon = icon;
             this.text = text;
             int index = 0;
             final int len = text.length();
@@ -269,7 +267,6 @@ public abstract class Ticker implements DarkReceiver {
         if (initialCount > 0) {
             final Segment seg = mSegments.get(0);
             if (n.getPackageName().equals(seg.notification.getPackageName())
-                    && n.getNotification().icon == seg.notification.getNotification().icon
                     && n.getNotification().iconLevel == seg.notification.getNotification().iconLevel
                     && charSequencesEqual(seg.notification.getNotification().tickerText,
                     n.getNotification().tickerText)) {
@@ -277,11 +274,8 @@ public abstract class Ticker implements DarkReceiver {
             }
         }
 
-        final Drawable icon = StatusBarIconView.getIcon(mContext,
-                new StatusBarIcon(n.getPackageName(), n.getUser(), n.getNotification().icon, n.getNotification().iconLevel, 0,
-                        n.getNotification().tickerText));
         final CharSequence text = n.getNotification().tickerText;
-        final Segment newSegment = new Segment(n, icon, text);
+        final Segment newSegment = new Segment(n, text);
 
         // If there's already a notification schedule for this package and id, remove it.
         for (int i=0; i<mSegments.size(); i++) {
@@ -300,7 +294,6 @@ public abstract class Ticker implements DarkReceiver {
 
             mIconSwitcher.setAnimateFirstView(false);
             mIconSwitcher.reset();
-            setAppIconColor(seg.icon);
 
             mTextSwitcher.setAnimateFirstView(false);
             mTextSwitcher.reset();
@@ -384,7 +377,6 @@ public abstract class Ticker implements DarkReceiver {
                     // this makes the icon slide in for the first one for a given
                     // notification even if there are two notifications with the
                     // same icon in a row
-                    setAppIconColor(seg.icon);
                 }
                 CharSequence text = seg.advance();
                 if (text == null) {
@@ -425,12 +417,6 @@ public abstract class Ticker implements DarkReceiver {
             Segment seg = mSegments.get(0);
             mTextSwitcher.setTextColor(mTextColor);
             mIconSwitcher.reset();
-            setAppIconColor(seg.icon);
         }
-    }
-
-    private void setAppIconColor(Drawable icon) {
-        boolean isGrayscale = mNotificationColorUtil.isGrayscaleIcon(icon);
-        mIconSwitcher.setImageDrawableTint(icon, mIconTint, isGrayscale);
     }
 }
