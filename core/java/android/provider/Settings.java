@@ -6876,6 +6876,12 @@ public final class Settings {
         public static final String STATUS_BAR_SHOW_WEATHER_LOCATION = "status_bar_show_weather_location";
 
         /**
+         * Select which lockscreen clock style animation to display
+         * @hide
+         */
+        public static final String LOCKSCREEN_CLOCK_ANIMATION_SELECTION = "lockscreen_clock_animation_selection";
+
+	/**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
