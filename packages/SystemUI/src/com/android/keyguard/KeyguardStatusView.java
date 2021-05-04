@@ -927,6 +927,8 @@ public class KeyguardStatusView extends GridLayout implements
         }
         if (mClockAnimationSelection > 0 && mClockSelection > 3 && mClockSelection < 8) {
             mClockAnimationLottie.setVisibility(View.VISIBLE);
+            mClockAnimationLottie.getLayoutParams().height = updateLottieAnimationSize();
+            mClockAnimationLottie.getLayoutParams().width = updateLottieAnimationSize();
             mClockAnimationLottie.playAnimation();
         } else {
             mClockAnimationLottie.setVisibility(View.GONE);
@@ -1523,4 +1525,9 @@ public class KeyguardStatusView extends GridLayout implements
         }
     }
 
+    private int updateLottieAnimationSize() {
+        final Resources res = mContext.getResources();
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_CLOCK_ANIMATION_SIZE, res.getDimensionPixelSize(R.dimen.lottie_animation_width_height));
+    }
 }
