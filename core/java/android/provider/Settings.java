@@ -6442,12 +6442,6 @@ public final class Settings {
         public static final String AMBIENT_LIGHT_REPEAT_DIRECTION = "ambient_light_repeat_direction";
 
         /**
-         * Ambient Edge Light Layout
-         * @hide
-         */
-        public static final String AMBIENT_LIGHT_LAYOUT = "ambient_light_layout";
-
-        /**
          * Battery style
          * @hide
          */
