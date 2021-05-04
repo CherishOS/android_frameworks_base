@@ -42,7 +42,6 @@ import com.android.systemui.qs.tiles.DataSwitchTile;
 import com.android.systemui.qs.tiles.DcDimmingTile;
 import com.android.systemui.qs.tiles.DndTile;
 import com.android.systemui.qs.tiles.FlashlightTile;
-import com.android.systemui.qs.tiles.GamingModeTile;
 import com.android.systemui.qs.tiles.HeadphonesBuddyTile;
 import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.HeadsUpTile;
@@ -120,7 +119,6 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<HeadphonesBuddyTile> mHeadphonesBuddyTile;
     private final Provider<LiveDisplayTile> mLiveDisplayTileProvider;
     private final Provider<ReadingModeTile> mReadingModeTileProvider;
-    private final Provider<GamingModeTile> mGamingModeTileProvider;
     private final Provider<SmartPixelsTile> mSmartPixelsTileProvider;
     private final Provider<SoundSearchTile> mSoundSearchTileProvider;
     private final Provider<MonoToggleTile> mMonoToggleTileProvider;
@@ -170,7 +168,6 @@ public class QSFactoryImpl implements QSFactory {
             Provider<LiveDisplayTile> liveDisplayTileProvider,
             Provider<PowerMenuTile> powerMenuTileProvider,
             Provider<ReadingModeTile> readingModeTileProvider,
-            Provider<GamingModeTile> gamingModeTileProvider,
             Provider<SmartPixelsTile> smartPixelsTileProvider,
             Provider<SoundSearchTile> soundSearchTileProvider,
             Provider<MonoToggleTile> monoToggleTileProvider,
@@ -214,7 +211,6 @@ public class QSFactoryImpl implements QSFactory {
         mLiveDisplayTileProvider = liveDisplayTileProvider;
         mPowerMenuTileProvider = powerMenuTileProvider;
         mReadingModeTileProvider = readingModeTileProvider;
-        mGamingModeTileProvider = gamingModeTileProvider;
         mSmartPixelsTileProvider = smartPixelsTileProvider;
         mSoundSearchTileProvider = soundSearchTileProvider;
         mMonoToggleTileProvider = monoToggleTileProvider;
@@ -307,8 +303,6 @@ public class QSFactoryImpl implements QSFactory {
                 return mLiveDisplayTileProvider.get();
             case "reading_mode":
                 return mReadingModeTileProvider.get();
-            case "gaming":
-                return mGamingModeTileProvider.get();
             case "smartpixels":
                 return mSmartPixelsTileProvider.get();
             case "soundsearch":

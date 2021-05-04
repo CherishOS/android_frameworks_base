@@ -5248,6 +5248,12 @@ public final class Settings {
          * @hide
          */
         public static final String VIBRATE_ON_NOTIFICATIONS = "vibrate_on_notifications";
+		
+		/**
+         * Whether to show heads up only for dialer and sms apps
+         * @hide
+         */
+        public static final String LESS_BORING_HEADS_UP = "less_boring_heads_up";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
@@ -5874,12 +5880,6 @@ public final class Settings {
         public static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
 		
 		/**
-         * Whether to show heads up only for dialer and sms apps
-         * @hide
-         */
-        public static final String LESS_BORING_HEADS_UP = "less_boring_heads_up";
-		
-		/**
          * Show data usage in QS header
          * @hide
          */
@@ -6030,63 +6030,6 @@ public final class Settings {
          * @hide
          */
         public static final String HEADS_UP_BLACKLIST_VALUES = "heads_up_blacklist_values";
-
-        /**
-         * Gaming mode master switch
-         * @hide
-         */
-        public static final String GAMING_MODE_ENABLED = "gaming_mode_enabled";
-
-        /**
-         * Gaming mode active state - to disable via notification / tile
-         * @hide
-         */
-        public static final String GAMING_MODE_ACTIVE = "gaming_mode_active";
-
-
-        /**
-         * Package name of apps for enabling Gaming mode
-         * @hide
-         */
-        public static final String GAMING_MODE_VALUES = "gaming_mode_values";
-        public static final String GAMING_MODE_DUMMY = "gaming_mode_dummy";
-
-        /**
-         * Whether to disable hardware keys in gaming mode
-         * @hide
-         */
-        public static final String GAMING_MODE_HW_KEYS_TOGGLE = "gaming_mode_hw_keys_toggle";
-
-        /**
-         * Whether to disable heads up gaming mode
-         * @hide
-         */
-        public static final String GAMING_MODE_HEADSUP_TOGGLE = "gaming_mode_headsup_toggle";
-
-        /**
-         * Ringer in gaming mode (0:OFF, 1:Vibrate, 2:DND, 3:Silent)
-         * @hide
-         */
-        public static final String GAMING_MODE_RINGER_MODE = "gaming_mode_ringer_mode";
-
-        /**
-         * Whether to show notifications/toasts (0:OFF, 1:notifications, 2:toasts, 3: all)
-         * @hide
-         */
-        public static final String GAMING_MODE_NOTIFICATIONS = "gaming_mode_notifications";
-
-        /**
-         * Whether to lock brightness in gaming mode
-         * @hide
-         */
-        public static final String GAMING_MODE_MANUAL_BRIGHTNESS_TOGGLE = "gaming_mode_manual_brightness_toggle";
-
-        /**
-         * Whether to automatically enable the gaming mode
-         * if the launched app is a game
-         * @hide
-         */
-        public static final String GAMING_MODE_DYNAMIC_STATE = "gaming_mode_dynamic_state";
 
          /**
          * Whether to enable DOZE only when charging
