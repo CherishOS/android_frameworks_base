@@ -6511,12 +6511,6 @@ public final class Settings {
         public static final String RETICKER_COLORED = "reticker_colored";
 
         /**
-         * Enable and disable Artwork on background media notification
-         * @hide
-         */
-        public static final String ARTWORK_MEDIA_BACKGROUND = "artwork_media_background";
-
-        /**
          * @hide
          */
         public static final String OMNI_KEYGUARD_SHOW_BATTERY_BAR = "sysui_keyguard_show_battery_bar";
