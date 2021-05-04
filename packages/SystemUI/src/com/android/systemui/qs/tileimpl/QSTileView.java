@@ -46,7 +46,7 @@ public class QSTileView extends QSTileBaseView {
     private ImageView mPadLock;
     private int mState;
     private ViewGroup mLabelContainer;
-    private View mExpandIndicator;
+    private ImageView mExpandIndicator;
     private View mExpandSpace;
     private ColorStateList mColorLabelDefault;
     private ColorStateList mColorLabelActive;
@@ -147,8 +147,12 @@ public class QSTileView extends QSTileBaseView {
         } else if (setQsUseNewTint == 1 && !shouldDisco) {
             if (state.state == Tile.STATE_ACTIVE) {
                 mLabel.setTextColor(mColorLabelActive);
+                mExpandIndicator.setImageTintList(mColorLabelActive);
+                mSecondLine.setTextColor(mColorLabelActive);
             } else if (state.state == Tile.STATE_INACTIVE) {
                 mLabel.setTextColor(mColorLabelDefault);
+                mExpandIndicator.setImageTintList(mColorLabelDefault);
+                mSecondLine.setTextColor(mColorLabelDefault);
             }
         }
         boolean dualTarget = DUAL_TARGET_ALLOWED && state.dualTarget;
