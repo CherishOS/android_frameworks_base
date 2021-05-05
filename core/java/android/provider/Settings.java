@@ -5121,24 +5121,6 @@ public final class Settings {
         public static final String AMBIENT_BATTERY_PERCENT = "ambient_battery_percent";
 		
 		/**
-         * Whether to change the transparency of the qs panel
-         * @hide
-         */
-        public static final String QS_PANEL_BG_ALPHA = "qs_panel_bg_alpha";
-		
-		/**
-         * Whether to change the transparency of the qs status bar
-         * @hide
-         */
-        public static final String QS_SB_BG_ALPHA = "qs_sb_bg_alpha";
-
-        /**
-         * Whether to show gradient below status bar in qs panel
-         * @hide
-         */
-        public static final String QS_SB_BG_GRADIENT = "qs_sb_bg_gradient";
-		
-		/**
          * Whether to show status bar on lockscreen
          * @hide
          */
