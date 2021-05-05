@@ -98,26 +98,26 @@ public class AdaptiveIcon extends LayerDrawable {
     }
 
     /**
-     * Set background color for AICP theming.
+     * Set custom background color for theming.
      * @hide
      */
-    public void setBackgroundColorAicp(int color) {
+    public void setCustomBackgroundColor(int color) {
         // Keep mBackgroundColor for resetting
         //mBackgroundColor = color;
         Drawable bg = getDrawable(0);
-        // Remove background from non-AICP setBackgroundColor call
+        // Remove background from non-custom setBackgroundColor call
         bg.clearColorFilter();
         // Apply color
         bg.setTint(color);
         // Fix wellbeing-like icons
-        removeForegroundBackgroundAicp();
+        removeCustomForegroundBackground();
     }
 
     /**
-     * Set foreground color for AICP theming.
+     * Set foreground color for custom theming.
      * @hide
      */
-    public void setForegroundColorAicp(int color) {
+    public void setCustomForegroundColor(int color) {
         Drawable fg = getDrawable(1);
         // Workaround layer drawables containing background (looking at Digital Wellbeing)
         if (fg instanceof LayerDrawable) {
@@ -135,7 +135,7 @@ public class AdaptiveIcon extends LayerDrawable {
      * Looking at you, Digital Wellbeing
      * @hide
      */
-    private void removeForegroundBackgroundAicp() {
+    private void removeCustomForegroundBackground() {
         Drawable fg = getDrawable(1);
         if (fg instanceof LayerDrawable) {
             LayerDrawable ld = (LayerDrawable) fg;
@@ -146,10 +146,10 @@ public class AdaptiveIcon extends LayerDrawable {
     }
 
     /**
-     * Reset foreground and background color for AICP theming.
+     * Reset foreground and background color for custom theming.
      * @hide
      */
-    public void resetColorsAicp() {
+    public void resetCustomColors() {
         // Reset background color
         Drawable bg = getDrawable(0);
         bg.clearColorFilter();
@@ -161,7 +161,7 @@ public class AdaptiveIcon extends LayerDrawable {
             LayerDrawable ld = (LayerDrawable) fg;
             if (ld.getNumberOfLayers() == 2) {
                 fg = ld.getDrawable(1);
-                // Undo changes from removeForegroundBackgroundAicp
+                // Undo changes from removeCustomForegroundBackground
                 ld.getDrawable(0).setTintList(null);
             }
         }
