@@ -122,7 +122,7 @@ public class OctaviDigitalClockController implements ClockPlugin {
 
     @Override
     public Bitmap getThumbnail() {
-        return BitmapFactory.decodeResource(mResources, R.drawable.default_thumbnail);
+        return BitmapFactory.decodeResource(mResources, R.drawable.octavi_digital_preview);
     }
 
     @Override
