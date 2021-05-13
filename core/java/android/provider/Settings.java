@@ -6432,6 +6432,13 @@ public final class Settings {
          * @hide
          */
         public static final String SHOW_APP_VOLUME = "show_app_volume";
+		
+		/**
+         * Whether auto brightness is applied one shot when screen is turned on.
+         * Default 0
+         * @hide
+         */
+        public static final String AUTO_BRIGHTNESS_ONE_SHOT = "auto_brightness_one_shot";
         
         /**
          * Whether to play haptic feedback when touching udfps icon
