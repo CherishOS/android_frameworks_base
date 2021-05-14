@@ -114,7 +114,6 @@ public class MobileSignalController extends SignalController<
 
     // VoWiFi Icon
     private int mVoWiFiIcon;
-    private boolean mIsVowifiAvailable;
     // VoWiFi Icon Style
     private int mVoWiFistyle;
 
@@ -570,13 +569,11 @@ public class MobileSignalController extends SignalController<
         mCurrentState.voiceCapable = tm.isVolteAvailable();
         mCurrentState.videoCapable = tm.isVideoTelephonyAvailable();
         mCurrentState.imsRegistered = mPhone.isImsRegistered(mSubscriptionInfo.getSubscriptionId());
-        mIsVowifiAvailable = tm.isWifiCallingAvailable();
         if (DEBUG) {
             Log.d(mTag, "queryImsState tm=" + tm + " phone=" + mPhone
                     + " voiceCapable=" + mCurrentState.voiceCapable
                     + " videoCapable=" + mCurrentState.videoCapable
-                    + " imsRegistered=" + mCurrentState.imsRegistered
-                    + " mIsVowifiAvailable=" + mIsVowifiAvailable);
+                    + " imsResitered=" + mCurrentState.imsRegistered);
         }
         notifyListenersIfNecessary();
     }
@@ -879,8 +876,7 @@ public class MobileSignalController extends SignalController<
 
     private boolean isVowifiAvailable() {
         return mCurrentState.voiceCapable &&  mCurrentState.imsRegistered
-                && (getDataNetworkType() == TelephonyManager.NETWORK_TYPE_IWLAN
-                || mIsVowifiAvailable);
+                && getDataNetworkType() == TelephonyManager.NETWORK_TYPE_IWLAN;
     }
 
     private MobileIconGroup getVowifiIconGroup() {
