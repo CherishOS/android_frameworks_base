@@ -110,6 +110,11 @@ public class ThemesUtils {
             "com.android.theme.clearspring.systemui",
     };
 
+    public static final String[] DARK_12 = {
+            "com.android.theme.dark12.system",
+            "com.android.theme.dark12.systemui",
+    };
+
     public static final String[] UI_THEMES = {
             "com.android.systemui.ui.default",
             "com.android.systemui.ui.nocornerradius",
