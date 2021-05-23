@@ -18,47 +18,6 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := frameworks-base-overlays
 LOCAL_REQUIRED_MODULES := \
 	FontNotoSerifSourceOverlay \
-        FontAclonicaSourceOverlay \
-        FontAmaranteSourceOverlay \
-        FontBariolSourceOverlay \
-        FontCagliostroSourceOverlay \
-        FontCoolstorySourceOverlay \
-        FontLGSmartGothicSourceOverlay \
-        FontNotoSerifSourceOverlay \
-        FontRosemarySourceOverlay \
-        FontSonySketchSourceOverlay \
-        FontSurferSourceOverlay \
-	FontArbutusSourceOverlay \
-	FontArvoLatoOverlay \
-	FontAntipastoProSourceOverlay \
-	FontEvolveSansSourceOverlay \
-	FontFucekSourceOverlay \
-	FontGoogleSansMediumSourceOverlay \
-	FontLemonMilkSourceOverlay \
-	FontComfortaaSourceOverlay \
-	FontExotwoSourceOverlay \
-	FontStoropiaSourceOverlay \
-	FontUbuntuSourceOverlay \
-	FontComicSansSourceOverlay \
-	FontGoogleSansSourceOverlay \
-	FontNotoSerifSourceOverlay \
-	FontReemKufiSourceOverlay \
-	FontRubikRubikOverlay \
-	FontOdudaSourceOverlay \
-	FontSimpleDaySourceOverlay \
-        FontLinotte \
-	FontOneplusSlateSource \
-	FontSamsungOneSourceOverlay \
-	FontNokiaPureSourceOverlay \
-	FontNunitoSourceOverlay \
-	FontFifa2018SourceOverlay \
-	FontCoconSourceOverlay \
-	FontQuandoSourceOverlay \
-	FontGrandHotelSourceOverlay \
-	FontRedressedSourceOverlay \
-	FontKaiOverlay \
-	FontSamOverlay \
-	FontVictorOverlay \
 	IconPackCircularAndroidOverlay \
 	IconPackCircularPixelLauncherOverlay \
 	IconPackCircularPixelThemePickerOverlay \
