@@ -1405,6 +1405,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
                 count++;
             }
         }
+        if (mKeyguardMediaController.getView().getVisibility() == VISIBLE) count++;
         return count;
     }
 
