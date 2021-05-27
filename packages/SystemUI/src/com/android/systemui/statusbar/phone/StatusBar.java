@@ -4342,9 +4342,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Settings.Secure.CENTER_TEXT_CLOCK),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_MEDIA_BLUR),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_CHARGING_ANIMATION_STYLE),
                     false, this, UserHandle.USER_ALL);
 			resolver.registerContentObserver(Settings.System.getUriFor(
@@ -4436,9 +4433,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                     uri.equals(Settings.Secure.getUriFor(Settings.Secure.LOCKSCREEN_DATE_SELECTION)) ||
                     uri.equals(Settings.Secure.getUriFor(Settings.Secure.CENTER_TEXT_CLOCK))) {
                 updateKeyguardStatusSettings();
-			} else if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_MEDIA_BLUR))) {
-                setLockScreenMediaBlurLevel();
 			} else if (uri.equals(Settings.System.getUriFor(Settings.System.QS_HEADER_STYLE))) {
                 stockQSHeaderStyle();
                 updateQSHeaderStyle();
@@ -4486,7 +4480,6 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mContext.getContentResolver(), Settings.System.NOTIFICATION_MATERIAL_DISMISS, 0,
                 UserHandle.USER_CURRENT) == 1;
 			updateKeyguardStatusSettings();
-			setLockScreenMediaBlurLevel();
 			updateChargingAnimation();
 			updateNavigationBar(false);
 			setScreenBrightnessMode();
@@ -4599,12 +4592,6 @@ public class StatusBar extends SystemUI implements DemoMode,
 	
 	private void updateKeyguardStatusSettings() {
         mNotificationPanelViewController.updateKeyguardStatusSettings();
-    }
-
-    private void setLockScreenMediaBlurLevel() {
-        if (mMediaManager != null) {
-            mMediaManager.setLockScreenMediaBlurLevel();
-        }
     }
 
     private void updateChargingAnimation() {
