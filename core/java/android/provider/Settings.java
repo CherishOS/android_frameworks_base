@@ -6515,10 +6515,6 @@ public final class Settings {
         public static final String STATUS_BAR_LOCKED_ON_SECURE_KEYGUARD =
                 "status_bar_locked_on_secure_keyguard";
 
-        /** reTicker **/
-        public static final String RETICKER_STATUS = "reticker_status";
-        public static final String RETICKER_COLORED = "reticker_colored";
-
         /**
          * @hide
          */
