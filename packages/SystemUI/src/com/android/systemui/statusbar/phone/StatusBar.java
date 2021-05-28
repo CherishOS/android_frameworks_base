@@ -4840,7 +4840,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 	
 	private void Lyric() {
         mLyricEnabled  = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_SHOW_LYRIC, false, UserHandle.USER_CURRENT);
+                Settings.System.STATUS_BAR_SHOW_LYRIC, 1, UserHandle.USER_CURRENT)== 1;
     }
 	
 	private void setGamingMode() {
