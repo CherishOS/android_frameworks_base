@@ -357,30 +357,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             animateShow(batteryBar, animate);
         }
     }
-	
-	public void showLyric(boolean animate) {
-        if (mLyricViewContainer != null) {
-            animateShow(mLyricViewContainer, animate);
-        }
-    }
-
-    public void hideLyric(boolean animate) {
-        if (mLyricViewContainer != null) {
-            animateHide(mLyricViewContainer, animate);
-        }
-    }
-	
-	public void showTicker(boolean animate) {
-        if (mTickerViewContainer != null) {
-            animateShow(mTickerViewContainer, animate);
-        }
-    }
-
-    public void hideTicker(boolean animate) {
-        if (mTickerViewContainer != null) {
-            animateHide(mTickerViewContainer, animate);
-        }
-    }
 
 /*    public void hideClock(boolean animate) {
         animateHide(mClockView, animate, false);
@@ -431,6 +407,30 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         public void hideCarrierName(boolean animate) {
         if (mCustomCarrierLabel != null) {
             animateHide(mCustomCarrierLabel, animate, mHasCarrierLabel);
+        }
+    }
+	
+	public void showLyric(boolean animate) {
+        if (mLyricViewContainer != null) {
+            animateShow(mLyricViewContainer, animate);
+        }
+    }
+
+    public void hideLyric(boolean animate) {
+        if (mLyricViewContainer != null) {
+            animateHide(mLyricViewContainer, animate,true);
+        }
+    }
+	
+	public void showTicker(boolean animate) {
+        if (mTickerViewContainer != null) {
+            animateShow(mTickerViewContainer, animate);
+        }
+    }
+
+    public void hideTicker(boolean animate) {
+        if (mTickerViewContainer != null) {
+            animateHide(mTickerViewContainer, animate,true);
         }
     }
 
