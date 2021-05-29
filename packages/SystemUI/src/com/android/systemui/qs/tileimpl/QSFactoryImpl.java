@@ -29,7 +29,6 @@ import com.android.systemui.qs.external.CustomTile;
 import com.android.systemui.qs.tiles.AirplaneModeTile;
 import com.android.systemui.qs.tiles.AmbientDisplayTile;
 import com.android.systemui.qs.tiles.AODTile;
-import com.android.systemui.qs.tiles.AntiFlickerTile;
 import com.android.systemui.qs.tiles.BatterySaverTile;
 import com.android.systemui.qs.tiles.BluetoothTile;
 import com.android.systemui.qs.tiles.CastTile;
@@ -108,7 +107,6 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<LteTile> mLteTileProvider;
     private final Provider<SoundTile> mSoundTileProvider;
     private final Provider<AmbientDisplayTile> mAmbientDisplayTileProvider;
-    private final Provider<AntiFlickerTile> mAntiFlickerTileProvider;
     private final Provider<CaffeineTile> mCaffeineTileProvider;
     private final Provider<HeadsUpTile> mHeadsUpTileProvider;
     private final Provider<AODTile> mAODTileProvider;
@@ -161,7 +159,6 @@ public class QSFactoryImpl implements QSFactory {
             Provider<LteTile> lteTileProvider,
             Provider<SoundTile> soundTileProvider,
             Provider<UsbTetherTile> usbTetherTileProvider,
-            Provider<AntiFlickerTile> antiFlickerTileProvider,
             Provider<CaffeineTile> caffeineTileProvider,
             Provider<HeadsUpTile> headsupTileProvider,
             Provider<SleepScreenTile> sleepScreenTileProvider,
@@ -207,7 +204,6 @@ public class QSFactoryImpl implements QSFactory {
         mScreenRecordTileProvider = screenRecordTileProvider;
         mLteTileProvider = lteTileProvider;
         mSoundTileProvider = soundTileProvider;
-        mAntiFlickerTileProvider = antiFlickerTileProvider;
         mCaffeineTileProvider = caffeineTileProvider;
         mHeadsUpTileProvider = headsupTileProvider;
         mAmbientDisplayTileProvider = ambientDisplayTileProvider;
@@ -289,8 +285,6 @@ public class QSFactoryImpl implements QSFactory {
                 return mSoundTileProvider.get();
             case "ambient_display":
                 return mAmbientDisplayTileProvider.get();
-            case "anti_flicker":
-                return mAntiFlickerTileProvider.get();
             case "caffeine":
                 return mCaffeineTileProvider.get();
             case "headphonesbuddy":

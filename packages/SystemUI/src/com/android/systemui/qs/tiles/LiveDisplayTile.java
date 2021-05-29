@@ -47,12 +47,14 @@ import com.android.internal.R;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.custom.hardware.LiveDisplayManager;
 
+
 import javax.inject.Inject;
 
 /** Quick settings tile: LiveDisplay mode switcher **/
 public class LiveDisplayTile extends QSTileImpl<LiveDisplayState> {
 
-    private static final Intent DISPLAY_SETTINGS = new Intent("android.settings.DISPLAY_SETTINGS");
+    private static final Intent LIVEDISPLAY_SETTINGS =
+            new Intent("com.android.settings.LIVEDISPLAY_SETTINGS");
 
     private final LiveDisplayObserver mObserver;
     private String mTitle;
@@ -78,6 +80,7 @@ public class LiveDisplayTile extends QSTileImpl<LiveDisplayState> {
     public LiveDisplayTile(QSHost host) {
         super(host);
         mNightDisplayAvailable = ColorDisplayManager.isNightDisplayAvailable(mContext);
+
         Resources res = mContext.getResources();
         TypedArray typedArray = res.obtainTypedArray(R.array.live_display_drawables);
         mEntryIconRes = new int[typedArray.length()];
@@ -180,7 +183,7 @@ public class LiveDisplayTile extends QSTileImpl<LiveDisplayState> {
 
     @Override
     public Intent getLongClickIntent() {
-        return DISPLAY_SETTINGS;
+        return LIVEDISPLAY_SETTINGS;
     }
 
     @Override
