@@ -397,10 +397,28 @@ public class BatteryMeterView extends LinearLayout implements
             switch (mTextChargingSymbol) {
                 case 1:
                 default:
-                    pct = "⚡️ " + pct;
+                    pct = "₹" + pct;
                    break;
                 case 2:
-                    pct = "~ " + pct;
+                    pct = "~" + pct;
+                    break;
+                case 3:
+                    pct = "+" + pct;
+                    break;
+                case 4:
+                    pct = "*" + pct;
+                    break;
+                case 5:
+                    pct = "⚡" + pct;
+                    break;
+                case 6:
+                    pct = "$" + pct;
+                    break;
+                case 7:
+                    pct = "€" + pct;
+                    break;
+                case 8:
+                    pct = "¢" + pct;
                     break;
             }
         }
