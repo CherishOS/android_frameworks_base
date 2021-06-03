@@ -41,13 +41,6 @@ class TelephonyIcons {
     static final int ICON_5G_PLUS = R.drawable.ic_5g_plus_mobiledata;
     static final int ICON_VOWIFI = R.drawable.ic_vowifi;
     static final int ICON_VOWIFI_CALLING = R.drawable.ic_vowifi_calling;
-    static final int ICON_VOWIFI_ASUS = R.drawable.ic_vowifi_asus;
-    static final int ICON_VOWIFI_MOTO = R.drawable.ic_vowifi_moto;
-    static final int ICON_VOWIFI_ONEPLUS = R.drawable.ic_vowifi_oneplus;
-    static final int ICON_VOWIFI_EMUI = R.drawable.ic_vowifi_emui;
-    static final int ICON_VOWIFI_Simple1 = R.drawable.ic_vowifi_simple1;
-    static final int ICON_VOWIFI_Simple2 = R.drawable.ic_vowifi_simple2;
-    static final int ICON_VOWIFI_Simple3 = R.drawable.ic_vowifi_simple3;
     static final int ICON_DATA_DISABLED = R.drawable.stat_sys_data_disabled;
 
     static final MobileIconGroup CARRIER_NETWORK_CHANGE = new MobileIconGroup(
@@ -311,96 +304,7 @@ class TelephonyIcons {
             TelephonyIcons.ICON_VOWIFI_CALLING,
             false);
 
-    static final MobileIconGroup VOWIFI_MOTO = new MobileIconGroup(
-            "VoWIFI_Moto",
-            null,
-            null,
-            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
-            0, 0,
-            0,
-            0,
-            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
-            0,
-            TelephonyIcons.ICON_VOWIFI_MOTO,
-            false);
-
-    static final MobileIconGroup VOWIFI_ASUS = new MobileIconGroup(
-            "VoWIFI_ASUS",
-            null,
-            null,
-            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
-            0, 0,
-            0,
-            0,
-            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
-            0,
-            TelephonyIcons.ICON_VOWIFI_ASUS,
-            false);
-
-    static final MobileIconGroup VOWIFI_ONEPLUS = new MobileIconGroup(
-            "VoWIFI_OnePlus",
-            null,
-            null,
-            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
-            0, 0,
-            0,
-            0,
-            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
-            0,
-            TelephonyIcons.ICON_VOWIFI_ONEPLUS,
-            false);
-
-    static final MobileIconGroup VOWIFI_EMUI = new MobileIconGroup(
-            "VoWIFI_Emui",
-            null,
-            null,
-            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
-            0, 0,
-            0,
-            0,
-            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
-            0,
-            TelephonyIcons.ICON_VOWIFI_EMUI,
-            false);
-	    
-    static final MobileIconGroup VOWIFI_Simple1 = new MobileIconGroup(
-            "VoWIFI_Simple1",
-            null,
-            null,
-            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
-            0, 0,
-            0,
-            0,
-            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
-            0,
-            TelephonyIcons.ICON_VOWIFI_Simple1,
-            false);
-	    
-    static final MobileIconGroup VOWIFI_Simple2 = new MobileIconGroup(
-            "VoWIFI_Simple2",
-            null,
-            null,
-            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
-            0, 0,
-            0,
-            0,
-            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
-            0,
-            TelephonyIcons.ICON_VOWIFI_Simple2,
-            false);
-	    
-    static final MobileIconGroup VOWIFI_Simple3 = new MobileIconGroup(
-            "VoWIFI_Simple3",
-            null,
-            null,
-            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
-            0, 0,
-            0,
-            0,
-            AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
-            0,
-            TelephonyIcons.ICON_VOWIFI_Simple3,
-            false);
+    
 
     /** Mapping icon name(lower case) to the icon object. */
     static final Map<String, MobileIconGroup> ICON_NAME_TO_ICON;
