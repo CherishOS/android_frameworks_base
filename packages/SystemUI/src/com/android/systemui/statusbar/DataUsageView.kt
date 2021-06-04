@@ -50,6 +50,7 @@ class DataUsageView(context: Context, attrs: AttributeSet?) :
         val dataController = DataUsageController(context)
         val info: DataUsageController.DataUsageInfo
         val prefix: String
+        val suffix: String
         if (isWifiConnected) {
             val template: NetworkTemplate
             val wifiInfo = wifiManager.connectionInfo
@@ -60,13 +61,14 @@ class DataUsageView(context: Context, attrs: AttributeSet?) :
             }
             info = dataController.getDataUsageInfo(template)
             prefix = context.resources.getString(R.string.usage_wifi_prefix)
+            suffix = context.resources.getString(R.string.usage_data)
         } else {
             dataController.setSubscriptionId(SubscriptionManager.getDefaultDataSubscriptionId())
-            info = dataController.getDataUsageInfo()
+            info = dataController.getDailyDataUsageInfo()
             prefix = context.resources.getString(R.string.usage_data_prefix)
+            suffix = context.resources.getString(R.string.usage_data_today)
         }
-        formattedInfo = prefix + ": " + formatDataUsage(info.usageLevel) + " "
-                + context.resources.getString(R.string.usage_data)
+        formattedInfo = prefix + ": " + formatDataUsage(info.usageLevel) + " " + suffix
         shouldUpdateDataTextView = true
     }
 
