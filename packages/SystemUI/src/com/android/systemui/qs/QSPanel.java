@@ -288,6 +288,13 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
                 }
             });
         }
+        if (mOPFooterView.getDataUsageView() != null) {
+            mOPFooterView.getDataUsageView().setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                   startDataUsageActivity();
+                }
+            });
+        }
     }
 
     protected QSTileLayout createRegularTileLayout() {
@@ -794,6 +801,10 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
             int visibility = (mExpanded && mOPFooterView.isServicesEnabled()) ? View.VISIBLE : View.GONE;
             mOPFooterView.getServicesButton().setVisibility(visibility);
         }
+        if (mOPFooterView.getDataUsageView() != null) {
+            int visibility = (mExpanded && mOPFooterView.isDataUsageEnabled()) ? View.VISIBLE : View.GONE;
+            mOPFooterView.getDataUsageView().setVisibility(visibility);
+        }
         mIsLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         if (mIsLandscape && mUsingMediaPlayer) {
             LinearLayout.LayoutParams layoutParams = (LayoutParams) mMediaHost.getHostView().getLayoutParams();
@@ -991,6 +1002,13 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
     private void startSettingsActivity() {
         Intent intent = new Intent(android.provider.Settings.ACTION_SETTINGS);
+        Dependency.get(ActivityStarter.class).startActivity(intent, true /* dismissShade */);
+    }
+
+    private void startDataUsageActivity() {
+        Intent intent = new Intent();
+        intent.setClassName("com.android.settings",
+                "com.android.settings.Settings$DataUsageSummaryActivity");
         Dependency.get(ActivityStarter.class).startActivity(intent, true /* dismissShade */);
     }
 

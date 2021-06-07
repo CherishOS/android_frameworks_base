@@ -6705,6 +6705,13 @@ public final class Settings {
         public static final String WFD_LEGACY_VIDEO_MODE = "wfd_legacy_video_mode";
 
         /**
+         * Show Data Usage view in QS Footer.
+         *
+         * @hide
+         */
+        public static final String QS_FOOTER_SHOW_DATAUSAGE = "qs_footer_show_datausage";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *

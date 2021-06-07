@@ -119,7 +119,7 @@ public class OPQSFooter extends LinearLayout {
 
     public void setExpanded(boolean expanded) {
         if (mDataUsageView != null) {
-            mDataUsageView.setVisibility(expanded ? View.VISIBLE : View.GONE);
+            mDataUsageView.setVisibility(isDataUsageEnabled() || expanded ? View.VISIBLE : View.GONE);
             if (expanded) {
                 mDataUsageView.updateUsage();
                 mDataUsageView.setOnClickListener(new View.OnClickListener() {
@@ -180,6 +180,10 @@ public class OPQSFooter extends LinearLayout {
         return mRunningServicesButton;
     }
 
+    public View getDataUsageView() {
+        return mDataUsageView;
+    }
+
     public boolean isSettingsEnabled() {
         return Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.QS_FOOTER_SHOW_SETTINGS, 1) == 1;
@@ -193,6 +197,11 @@ public class OPQSFooter extends LinearLayout {
     public boolean isEditEnabled() {
         return Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.QS_FOOTER_SHOW_EDIT, 1) == 1;
+    }
+
+    public boolean isDataUsageEnabled() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.QS_FOOTER_SHOW_DATAUSAGE, 1) == 1;
     }
 
     private void startDataUsageActivity() {
