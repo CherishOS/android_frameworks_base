@@ -451,7 +451,7 @@ public class BatteryMeterView extends LinearLayout implements
                 mShowPercentMode == MODE_ON || mShowBatteryPercent == BATTERY_PERCENT_SHOW_OUTSIDE;
 		
         if (!(!mIsQsHeader && mBatteryStyle == BATTERY_STYLE_HIDDEN)
-                && drawPercentOnly && (!drawPercentInside || mCharging))&& !mBatteryStateUnknown {
+                && drawPercentOnly && (!drawPercentInside || mCharging)&& !mBatteryStateUnknown) {
             mThemedDrawable.setShowPercent(false);
             mCircleDrawable.setShowPercent(false);
             mFullCircleDrawable.setShowPercent(false);
@@ -543,7 +543,7 @@ public class BatteryMeterView extends LinearLayout implements
         if (mBatteryStateUnknown) {
             mBatteryIconView.setImageDrawable(getUnknownStateDrawable());
         } else {
-            mBatteryIconView.setImageDrawable(mDrawable);
+            mBatteryIconView.setImageDrawable(mThemedDrawable);
         }
 
         updateShowPercent();
