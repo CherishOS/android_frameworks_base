@@ -142,6 +142,7 @@ public class KeyguardIndicationController implements StateListener,
     private int mChargingSpeed;
     private double mChargingWattage;
     private int mBatteryLevel;
+    private boolean mBatteryPresent = true;
     private long mChargingTimeRemaining;
     private float mDisclosureMaxAlpha;
     private int mChargingCurrent;
@@ -435,165 +436,19 @@ public class KeyguardIndicationController implements StateListener,
             mWakeLock.setAcquired(false);
         }
 
-        if (mVisible) {
-            boolean showBatteryBar = Settings.System.getIntForUser(mContext.getContentResolver(),
+        if (!mVisible) {
+            return;
+        }
+
+        // A few places might need to hide the indication, so always start by making it visible
+        mIndicationArea.setVisibility(View.VISIBLE);
+		
+		boolean showBatteryBar = Settings.System.getIntForUser(mContext.getContentResolver(),
                      Settings.System.OMNI_KEYGUARD_SHOW_BATTERY_BAR, 0, UserHandle.USER_CURRENT) == 1;
             boolean showBatteryBarAlways = Settings.System.getIntForUser(mContext.getContentResolver(),
                      Settings.System.OMNI_KEYGUARD_SHOW_BATTERY_BAR_ALWAYS, 0, UserHandle.USER_CURRENT) == 1;
-            int chargingInfoFont = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.LOCKSCREEN_BATTERY_INFO_FONT, 28);
-
-            switch (chargingInfoFont) {
-                case 0:
-                    mTextView.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
-                    break;
-                case 1:
-                    mTextView.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
-                    break;
-                case 2:
-                    mTextView.setTypeface(Typeface.create("sans-serif", Typeface.ITALIC));
-                    break;
-                case 3:
-                    mTextView.setTypeface(Typeface.create("sans-serif", Typeface.BOLD_ITALIC));
-                    break;
-                case 4:
-                    mTextView.setTypeface(Typeface.create("sans-serif-light", Typeface.ITALIC));
-                    break;
-                case 5:
-                    mTextView.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
-                    break;
-                case 6:
-                    mTextView.setTypeface(Typeface.create("sans-serif-thin", Typeface.ITALIC));
-                    break;
-                case 7:
-                    mTextView.setTypeface(Typeface.create("sans-serif-thin", Typeface.NORMAL));
-                    break;
-                case 8:
-                    mTextView.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
-                    break;
-                case 9:
-                    mTextView.setTypeface(Typeface.create("sans-serif-condensed", Typeface.ITALIC));
-                    break;
-                case 10:
-                    mTextView.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD));
-                    break;
-                case 11:
-                    mTextView.setTypeface(Typeface.create("sans-serif-condensed", Typeface.BOLD_ITALIC));
-                    break;
-                case 12:
-                    mTextView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-                    break;
-                case 13:
-                    mTextView.setTypeface(Typeface.create("sans-serif-medium", Typeface.ITALIC));
-                    break;
-                case 14:
-                    mTextView.setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.NORMAL));
-                    break;
-                case 15:
-                    mTextView.setTypeface(Typeface.create("sans-serif-condensed-light", Typeface.ITALIC));
-                    break;
-                case 16:
-                    mTextView.setTypeface(Typeface.create("sans-serif-black", Typeface.NORMAL));
-                    break;
-                case 17:
-                    mTextView.setTypeface(Typeface.create("sans-serif-black", Typeface.ITALIC));
-                    break;
-                case 18:
-                    mTextView.setTypeface(Typeface.create("cursive", Typeface.NORMAL));
-                    break;
-                case 19:
-                    mTextView.setTypeface(Typeface.create("cursive", Typeface.BOLD));
-                    break;
-                case 20:
-                    mTextView.setTypeface(Typeface.create("casual", Typeface.NORMAL));
-                    break;
-                case 21:
-                    mTextView.setTypeface(Typeface.create("serif", Typeface.NORMAL));
-                    break;
-                case 22:
-                    mTextView.setTypeface(Typeface.create("serif", Typeface.ITALIC));
-                    break;
-                case 23:
-                    mTextView.setTypeface(Typeface.create("serif", Typeface.BOLD));
-                    break;
-                case 24:
-                    mTextView.setTypeface(Typeface.create("serif", Typeface.BOLD_ITALIC));
-                    break;
-                case 25:
-                    mTextView.setTypeface(Typeface.create("gobold-light-sys", Typeface.NORMAL));
-                    break;
-                case 26:
-                    mTextView.setTypeface(Typeface.create("roadrage-sys", Typeface.NORMAL));
-                    break;
-                case 27:
-                    mTextView.setTypeface(Typeface.create("snowstorm-sys", Typeface.NORMAL));
-                    break;
-                case 28:
-                    mTextView.setTypeface(Typeface.create("googlesans-sys", Typeface.NORMAL));
-                    break;
-                case 29:
-                    mTextView.setTypeface(Typeface.create("neoneon-sys", Typeface.NORMAL));
-                    break;
-                case 30:
-                    mTextView.setTypeface(Typeface.create("themeable-sys", Typeface.NORMAL));
-                    break;
-                case 31:
-                    mTextView.setTypeface(Typeface.create("samsung-sys", Typeface.NORMAL));
-                    break;
-                case 32:
-                    mTextView.setTypeface(Typeface.create("mexcellent-sys", Typeface.NORMAL));
-                    break;
-                case 33:
-                    mTextView.setTypeface(Typeface.create("burnstown-sys", Typeface.NORMAL));
-                    break;
-                case 34:
-                    mTextView.setTypeface(Typeface.create("dumbledor-sys", Typeface.NORMAL));
-                    break;
-                case 35:
-                    mTextView.setTypeface(Typeface.create("phantombold-sys", Typeface.NORMAL));
-                    break;
-                case 36:
-                    mTextView.setTypeface(Typeface.create("sourcesanspro-sys", Typeface.NORMAL));
-                    break;
-                case 37:
-                    mTextView.setTypeface(Typeface.create("circularstd-sys", Typeface.NORMAL));
-                    break;
-                case 38:
-                    mTextView.setTypeface(Typeface.create("oneplusslate-sys", Typeface.NORMAL));
-                    break;
-                case 39:
-                    mTextView.setTypeface(Typeface.create("aclonica-sys", Typeface.NORMAL));
-                    break;
-                case 40:
-                    mTextView.setTypeface(Typeface.create("amarante-sys", Typeface.NORMAL));
-                    break;
-                case 41:
-                    mTextView.setTypeface(Typeface.create("bariol-sys", Typeface.NORMAL));
-                    break;
-                case 42:
-                    mTextView.setTypeface(Typeface.create("cagliostro-sys", Typeface.NORMAL));
-                    break;
-                case 43:
-                    mTextView.setTypeface(Typeface.create("coolstory-sys", Typeface.NORMAL));
-                    break;
-                case 44:
-                    mTextView.setTypeface(Typeface.create("lgsmartgothic-sys", Typeface.NORMAL));
-                    break;
-                case 45:
-                    mTextView.setTypeface(Typeface.create("rosemary-sys", Typeface.NORMAL));
-                    break;
-                case 46:
-                    mTextView.setTypeface(Typeface.create("sonysketch-sys", Typeface.NORMAL));
-                    break;
-                case 47:
-                    mTextView.setTypeface(Typeface.create("surfer-sys", Typeface.NORMAL));
-                    break;
-                default:
-                    mTextView.setTypeface(Typeface.create("themeable-sys", Typeface.NORMAL));
-                    break;
-            }
-
-            // Walk down a precedence-ordered list of what indication
+		
+		// Walk down a precedence-ordered list of what indication
             // should be shown based on user or device state
             mBatteryBar.setVisibility(View.GONE);
             if (mDozing) {
@@ -648,53 +503,49 @@ public class KeyguardIndicationController implements StateListener,
                 return;
             }
 
-            int userId = KeyguardUpdateMonitor.getCurrentUser();
-            String trustGrantedIndication = getTrustGrantedIndication();
-            String trustManagedIndication = getTrustManagedIndication();
-
-            String powerIndication = null;
-            if (mPowerPluggedIn || mEnableBatteryDefender) {
-                powerIndication = computePowerIndication();
-            }
-
-            boolean isError = false;
-            if (!mKeyguardUpdateMonitor.isUserUnlocked(userId)) {
-                mTextView.switchIndication(com.android.internal.R.string.lockscreen_storage_locked);
-            } else if (!TextUtils.isEmpty(mTransientIndication)) {
+            // Walk down a precedence-ordered list of what indication
+        // should be shown based on user or device state
+        if (mDozing) {
+            // When dozing we ignore any text color and use white instead, because
+            // colors can be hard to read in low brightness.
+            mTextView.setTextColor(Color.WHITE);
+            if (!TextUtils.isEmpty(mTransientIndication)) {
                 mTextView.switchIndication(mTransientIndication);
-                isError = mTransientTextIsError;
-            } else if (!TextUtils.isEmpty(trustGrantedIndication)
-                    && mKeyguardUpdateMonitor.getUserHasTrust(userId)) {
-                if (powerIndication != null) {
-                    String indication = mContext.getResources().getString(
-                            R.string.keyguard_indication_trust_unlocked_plugged_in,
-                            trustGrantedIndication, powerIndication);
-                    mTextView.switchIndication(indication);
-                } else {
-                    mTextView.switchIndication(trustGrantedIndication);
-                }
+                } else if (!mBatteryPresent) {
+                // If there is no battery detected, hide the indication and bail
+                mIndicationArea.setVisibility(View.GONE);
             } else if (!TextUtils.isEmpty(mAlignmentIndication)) {
                 mTextView.switchIndication(mAlignmentIndication);
-                isError = true;
+                mTextView.setTextColor(mContext.getColor(R.color.misalignment_text_color));
             } else if (mPowerPluggedIn || mEnableBatteryDefender) {
-                if (DEBUG_CHARGING_SPEED) {
-                    powerIndication += ",  " + (mChargingWattage / 1000) + " mW";
-                }
+                String indication = computePowerIndication();
                 if (animate) {
-                    animateText(mTextView, powerIndication);
+                    animateText(mTextView, indication);
                 } else {
-                    mTextView.switchIndication(powerIndication);
+                    mTextView.switchIndication(indication);
                 }
-            } else if (!TextUtils.isEmpty(trustManagedIndication)
-                    && mKeyguardUpdateMonitor.getUserTrustIsManaged(userId)
-                    && !mKeyguardUpdateMonitor.getUserHasTrust(userId)) {
-                mTextView.switchIndication(trustManagedIndication);
             } else {
-                mTextView.switchIndication(mRestingIndication);
+                String percentage = NumberFormat.getPercentInstance()
+                        .format(mBatteryLevel / 100f);
+                mTextView.switchIndication(percentage);
             }
-            mTextView.setTextColor(isError ? Utils.getColorError(mContext)
-                    : mInitialTextColorState);
-            updateChargingIndication();
+            if (animate) {
+                animateText(mTextView, powerIndication);
+            } else {
+                mTextView.switchIndication(powerIndication);
+            }
+            hideIndication = !mBatteryPresent;
+        } else if (!TextUtils.isEmpty(trustManagedIndication)
+                && mKeyguardUpdateMonitor.getUserTrustIsManaged(userId)
+                && !mKeyguardUpdateMonitor.getUserHasTrust(userId)) {
+            mTextView.switchIndication(trustManagedIndication);
+        } else {
+            mTextView.switchIndication(mRestingIndication);
+        }
+        mTextView.setTextColor(isError ? Utils.getColorError(mContext)
+                : mInitialTextColorState);
+        if (hideIndication) {
+            mIndicationArea.setVisibility(View.GONE);
         }
     }
 
@@ -1039,6 +890,7 @@ public class KeyguardIndicationController implements StateListener,
         pw.println("  mMessageToShowOnScreenOn: " + mMessageToShowOnScreenOn);
         pw.println("  mDozing: " + mDozing);
         pw.println("  mBatteryLevel: " + mBatteryLevel);
+        pw.println("  mBatteryPresent: " + mBatteryPresent);
         pw.println("  mTextView.getText(): " + (mTextView == null ? null : mTextView.getText()));
         pw.println("  computePowerIndication(): " + computePowerIndication());
     }
@@ -1082,6 +934,7 @@ public class KeyguardIndicationController implements StateListener,
             mBatteryLevel = status.level;
             mBatteryOverheated = status.isOverheated();
             mEnableBatteryDefender = mBatteryOverheated && status.isPluggedIn();
+            mBatteryPresent = status.present;
             try {
                 mChargingTimeRemaining = mPowerPluggedIn
                         ? mBatteryInfo.computeChargeTimeRemaining() : -1;
