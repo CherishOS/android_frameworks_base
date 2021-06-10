@@ -4,8 +4,6 @@ import android.content.Context
 import android.graphics.Canvas
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.net.NetworkTemplate
-import android.net.wifi.WifiManager
 import android.provider.Settings
 import android.telephony.SubscriptionManager
 import android.text.BidiFormatter
@@ -24,8 +22,6 @@ class DataUsageView(context: Context, attrs: AttributeSet?) :
 
     private val connectivityManager: ConnectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    private val wifiManager: WifiManager =
-        context.getSystemService(Context.WIFI_SERVICE) as WifiManager
     private val subManager: SubscriptionManager =
         context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
     private var formattedInfo: String? = null
@@ -59,16 +55,12 @@ class DataUsageView(context: Context, attrs: AttributeSet?) :
             Settings.System.DATA_USAGE_PERIOD, 1
         ) == 0
         if (isWifiConnected) {
-            val template: NetworkTemplate
-            val wifiInfo = wifiManager.connectionInfo
-            template = if (wifiInfo.hiddenSSID || wifiInfo.ssid == WifiManager.UNKNOWN_SSID) {
-                NetworkTemplate.buildTemplateWifiWildcard()
+            info = if (showDailyDataUsage) {
+                dataController.getWifiDailyDataUsageInfo()
             } else {
-                NetworkTemplate.buildTemplateWifi(wifiInfo.ssid)
+                dataController.getWifiDataUsageInfo()
             }
-            info = dataController.getDataUsageInfo(template)
             prefix = context.resources.getString(R.string.usage_wifi_prefix)
-            suffix = context.resources.getString(R.string.usage_data)
         } else {
             dataController.setSubscriptionId(SubscriptionManager.getDefaultDataSubscriptionId())
             info = if (showDailyDataUsage) {
@@ -77,14 +69,14 @@ class DataUsageView(context: Context, attrs: AttributeSet?) :
                 dataController.getDataUsageInfo()
             }
             prefix = getSlotCarrierName()
-            suffix = context.resources.getString(
-                if (showDailyDataUsage) {
-                    R.string.usage_data_today
-                } else {
-                    R.string.usage_data
-                }
-            )
         }
+        suffix = context.resources.getString(
+            if (showDailyDataUsage) {
+                R.string.usage_data_today
+            } else {
+                R.string.usage_data
+            }
+        )
         formattedInfo = prefix + ": " + formatDataUsage(info.usageLevel) + " " + suffix
         shouldUpdateDataTextView = true
     }

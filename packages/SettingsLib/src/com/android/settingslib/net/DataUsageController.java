@@ -28,13 +28,12 @@ import android.app.usage.NetworkStats.Bucket;
 import android.app.usage.NetworkStatsManager;
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.net.INetworkStatsService;
-import android.net.INetworkStatsSession;
 import android.net.NetworkPolicy;
 import android.net.NetworkPolicyManager;
 import android.net.NetworkTemplate;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.RemoteException;
-import android.os.ServiceManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.format.DateUtils;
@@ -61,11 +60,10 @@ public class DataUsageController {
 
     private final Context mContext;
     private final ConnectivityManager mConnectivityManager;
-    private final INetworkStatsService mStatsService;
     private final NetworkPolicyManager mPolicyManager;
     private final NetworkStatsManager mNetworkStatsManager;
+    private final WifiManager mWifiManager;
 
-    private INetworkStatsSession mSession;
     private Callback mCallback;
     private NetworkNameProvider mNetworkController;
     private int mSubscriptionId;
@@ -73,10 +71,9 @@ public class DataUsageController {
     public DataUsageController(Context context) {
         mContext = context;
         mConnectivityManager = ConnectivityManager.from(context);
-        mStatsService = INetworkStatsService.Stub.asInterface(
-                ServiceManager.getService(Context.NETWORK_STATS_SERVICE));
         mPolicyManager = NetworkPolicyManager.from(mContext);
         mNetworkStatsManager = context.getSystemService(NetworkStatsManager.class);
+        mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         mSubscriptionId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
     }
 
@@ -112,13 +109,23 @@ public class DataUsageController {
 
     public DataUsageInfo getDataUsageInfo() {
         NetworkTemplate template = DataUsageUtils.getMobileTemplate(mContext, mSubscriptionId);
-
         return getDataUsageInfo(template);
     }
 
     public DataUsageInfo getWifiDataUsageInfo() {
-        NetworkTemplate template = NetworkTemplate.buildTemplateWifiWildcard();
-        return getDataUsageInfo(template);
+        return getDataUsageInfo(getWifiNetworkTemplate());
+    }
+
+    public DataUsageInfo getWifiDailyDataUsageInfo() {
+        return getDailyDataUsageInfo(getWifiNetworkTemplate());
+    }
+
+    public NetworkTemplate getWifiNetworkTemplate() {
+        final WifiInfo wifiInfo = mWifiManager.getConnectionInfo();
+        if (wifiInfo.getHiddenSSID() || wifiInfo.getSSID().equals(WifiManager.UNKNOWN_SSID)) {
+            return NetworkTemplate.buildTemplateWifiWildcard();
+        }
+        return NetworkTemplate.buildTemplateWifi(wifiInfo.getSSID());
     }
 
     public DataUsageInfo getDataUsageInfo(NetworkTemplate template) {
@@ -160,6 +167,7 @@ public class DataUsageController {
 
     /**
      * Get the total usage level recorded in the network history
+     *
      * @param template the network template to retrieve the network history
      * @return the total usage level recorded in the network history or -1L if there is error
      * retrieving the data.
@@ -186,8 +194,7 @@ public class DataUsageController {
         final NetworkPolicy[] policies = mPolicyManager.getNetworkPolicies();
         if (policies == null) return null;
         final int N = policies.length;
-        for (int i = 0; i < N; i++) {
-            final NetworkPolicy policy = policies[i];
+        for (final NetworkPolicy policy : policies) {
             if (policy != null && template.equals(policy.template)) {
                 return policy;
             }
@@ -196,14 +203,14 @@ public class DataUsageController {
     }
 
     private static String statsBucketToString(Bucket bucket) {
-        return bucket == null ? null : new StringBuilder("Entry[")
-            .append("bucketDuration=").append(bucket.getEndTimeStamp() - bucket.getStartTimeStamp())
-            .append(",bucketStart=").append(bucket.getStartTimeStamp())
-            .append(",rxBytes=").append(bucket.getRxBytes())
-            .append(",rxPackets=").append(bucket.getRxPackets())
-            .append(",txBytes=").append(bucket.getTxBytes())
-            .append(",txPackets=").append(bucket.getTxPackets())
-            .append(']').toString();
+        return bucket == null ? null : "Entry[" +
+                "bucketDuration=" + (bucket.getEndTimeStamp() - bucket.getStartTimeStamp()) +
+                ",bucketStart=" + bucket.getStartTimeStamp() +
+                ",rxBytes=" + bucket.getRxBytes() +
+                ",rxPackets=" + bucket.getRxPackets() +
+                ",txBytes=" + bucket.getTxBytes() +
+                ",txPackets=" + bucket.getTxPackets() +
+                ']';
     }
 
     @VisibleForTesting
@@ -251,22 +258,20 @@ public class DataUsageController {
         }
         final int matchRule = networkTemplate.getMatchRule();
         switch (matchRule) {
-            case NetworkTemplate.MATCH_MOBILE:
-            case NetworkTemplate.MATCH_MOBILE_WILDCARD:
-                return ConnectivityManager.TYPE_MOBILE;
             case NetworkTemplate.MATCH_WIFI:
             case NetworkTemplate.MATCH_WIFI_WILDCARD:
-                return  ConnectivityManager.TYPE_WIFI;
+                return ConnectivityManager.TYPE_WIFI;
             case NetworkTemplate.MATCH_ETHERNET:
-                return  ConnectivityManager.TYPE_ETHERNET;
+                return ConnectivityManager.TYPE_ETHERNET;
+            case NetworkTemplate.MATCH_MOBILE:
+            case NetworkTemplate.MATCH_MOBILE_WILDCARD:
             default:
                 return ConnectivityManager.TYPE_MOBILE;
         }
     }
 
     private String getActiveSubscriberId() {
-        final String actualSubscriberId = getTelephonyManager().getSubscriberId();
-        return actualSubscriberId;
+        return getTelephonyManager().getSubscriberId();
     }
 
     private String formatDateRange(long start, long end) {
