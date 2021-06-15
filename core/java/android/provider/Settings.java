@@ -11133,24 +11133,6 @@ public final class Settings {
          * @hide
          */
         public static final String ADAPTIVE_CONNECTIVITY_ENABLED = "adaptive_connectivity_enabled";
-		
-		/**
-         * @hide
-         */
-        public static final String QS_SHOW_AUTO_BRIGHTNESS =
-                "qs_show_auto_brightness";
-
-        /**
-         * @hide
-         */
-        public static final String QS_SHOW_BRIGHTNESS_SLIDER =
-                "qs_show_brightness_slider";
-				
-		/**
-         * Whether to show QS brightness slider on bottom
-         * @hide
-         */
-        public static final String QS_BRIGHTNESS_POSITION_BOTTOM = "qs_brightness_position_bottom";
 
         /**
          * Whether to show or hide the arrow for back gesture
