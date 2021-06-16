@@ -65,7 +65,6 @@ import dalvik.system.ZygoteHooks;
 import libcore.io.IoUtils;
 
 import java.io.BufferedReader;
-import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -760,13 +759,7 @@ public class ZygoteInit {
         int pid;
 
         try {
-            ZygoteCommandBuffer commandBuffer = new ZygoteCommandBuffer(args);
-            try {
-                parsedArgs = ZygoteArguments.getInstance(commandBuffer);
-            } catch (EOFException e) {
-                throw new AssertionError("Unexpected argument error for forking system server", e);
-            }
-            commandBuffer.close();
+            parsedArgs = new ZygoteArguments(args);
             Zygote.applyDebuggerSystemProperty(parsedArgs);
             Zygote.applyInvokeWithSystemProperty(parsedArgs);
 
@@ -831,7 +824,7 @@ public class ZygoteInit {
      * into new processes are required to either set the priority to the default value or terminate
      * before executing any non-system code.  The native side of this occurs in SpecializeCommon,
      * while the Java Language priority is changed in ZygoteInit.handleSystemServerProcess,
-     * ZygoteConnection.handleChildProc, and Zygote.childMain.
+     * ZygoteConnection.handleChildProc, and Zygote.usapMain.
      *
      * @param argv  Command line arguments used to specify the Zygote's configuration.
      */
