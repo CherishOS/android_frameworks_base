@@ -6534,12 +6534,6 @@ public final class Settings {
         public static final String QS_RUNNING_SERVICES_TOGGLE = "qs_running_services_toggle";
 
         /**
-         * SBC HD priority - whether to use dual channel for SBC by default
-         * @hide
-         */
-        public static final String SBC_HD_PRIORITY = "sbc_hd_priority";
-
-        /**
          * Whether StatusBar icons should use app icon
          * @hide
          */
