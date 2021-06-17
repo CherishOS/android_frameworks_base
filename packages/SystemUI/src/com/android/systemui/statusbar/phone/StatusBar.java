@@ -4571,6 +4571,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mKeyguardBypassController.setBouncerShowing(bouncerShowing);
         mPulseExpansionHandler.setBouncerShowing(bouncerShowing);
         mLockscreenLockIconController.setBouncerShowingScrimmed(isBouncerShowingScrimmed());
+        mLockscreenLockIconController.setBouncerShowing(bouncerShowing);
         if (mStatusBarView != null) mStatusBarView.setBouncerShowing(bouncerShowing);
         updateHideIconsForBouncer(true /* animate */);
         mCommandQueue.recomputeDisableFlags(mDisplayId, true /* animate */);

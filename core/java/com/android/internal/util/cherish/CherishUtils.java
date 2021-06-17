@@ -23,6 +23,7 @@ import android.app.NotificationManager;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.IActivityManager;
+import android.app.IUiModeManager;
 import android.content.Intent;
 import android.hardware.input.InputManager;
 import android.media.AudioManager;
@@ -222,6 +223,18 @@ public class CherishUtils {
     public static boolean isChineseLanguage() {
        return Resources.getSystem().getConfiguration().locale.getLanguage().startsWith(
                Locale.CHINESE.getLanguage());
+    }
+	
+	// Check if system is in dark mode
+    public static boolean isDarkMode() {
+        IUiModeManager uiModeManager = IUiModeManager.Stub.asInterface(
+                    ServiceManager.getService(Context.UI_MODE_SERVICE));
+        try {
+            return uiModeManager.getNightMode() == 2;
+        } catch (android.os.RemoteException e) {
+            // assume light mode
+            return false;
+        }
     }
 
     public static void switchScreenOff(Context ctx) {
