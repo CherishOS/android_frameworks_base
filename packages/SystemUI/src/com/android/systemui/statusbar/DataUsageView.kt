@@ -94,7 +94,7 @@ class DataUsageView(context: Context, attrs: AttributeSet?) :
     }
 
     private fun getSlotCarrierName(): String {
-        var result: CharSequence = ""
+        var result: CharSequence = context.resources.getString(R.string.usage_data_prefix)
         val subId = SubscriptionManager.getDefaultDataSubscriptionId()
         subManager.activeSubscriptionInfoList?.forEach { subInfo ->
             if (subId == subInfo.subscriptionId) {
