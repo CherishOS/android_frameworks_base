@@ -5676,12 +5676,6 @@ public final class Settings {
          */
         public static final String STATUSBAR_CLOCK_AM_PM_STYLE = "statusbar_clock_am_pm_style";
 
-         /**
-         * Screen off fod
-         * @hide
-         */
-        public static final String FOD_GESTURE = "fod_gesture";
-
         /**
          * Shows custom date before clock time
          * 0 - No Date
@@ -5799,18 +5793,6 @@ public final class Settings {
          */
         public static final String STATUSBAR_BATTERY_BAR_BLEND_COLORS_REVERSE =
                 "statusbar_battery_bar_blend_color_reverse";
-
-         /**
-         * FOD recognizing animation
-         * @hide
-         */
-        public static final String FOD_RECOGNIZING_ANIMATION = "fod_recognizing_animation";
-
-         /**
-         * FOD recognizing animation picker
-         * @hide
-         */
-        public static final String FOD_ANIM = "fod_recognizing_animation_list";
 		
 		/**
          * Switch between filters for lockscreen album art
@@ -6013,18 +5995,6 @@ public final class Settings {
          * @hide
          */
         public static final String LIVE_DISPLAY_HINTED = "live_display_hinted";
-		
-		/**
-         * FOD icon picker
-         * @hide
-         */
-        public static final String FOD_ICON = "fod_icon";
-		
-		/**
-         * FOD pressed color
-         * @hide
-         */
-        public static final String FOD_COLOR = "fod_color";
 
         /**
          * Whether to use the custom status bar header or not
