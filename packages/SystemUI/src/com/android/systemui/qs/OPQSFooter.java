@@ -76,6 +76,7 @@ public class OPQSFooter extends LinearLayout {
     private Context mContext;
     private View mSettingsContainer;
     private SettingsButton mSettingsButton;
+    private ImageView mBrightnessButton;
     private View mRunningServicesButton;
     protected View mEdit;
     protected TouchAnimator mFooterAnimator;
@@ -97,6 +98,7 @@ public class OPQSFooter extends LinearLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
 
+        mBrightnessButton = findViewById(R.id.auto_brightness_button);
         mEdit = findViewById(R.id.edit);
         mRunningServicesButton = findViewById(R.id.running_services_button);
         mSettingsButton = findViewById(R.id.settings_button);
@@ -131,9 +133,10 @@ public class OPQSFooter extends LinearLayout {
     }
 
     public void setExpanded(boolean expanded) {
+        mExpanded = expanded;
         if (mDataUsageView != null) {
-            mDataUsageView.setVisibility(isDataUsageEnabled() || expanded ? View.VISIBLE : View.GONE);
-            if (expanded) {
+            mDataUsageView.setVisibility(isDataUsageEnabled() || mExpanded ? View.VISIBLE : View.GONE);
+            if (mExpanded) {
                 mDataUsageView.updateUsage();
                 mDataUsageView.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
@@ -142,7 +145,6 @@ public class OPQSFooter extends LinearLayout {
                 });
             }
         }
-        mExpanded = expanded;
         if (mSettingsButton != null) {
             int visibility = isSettingsEnabled() ? View.VISIBLE : View.GONE;
             mSettingsButton.setVisibility(visibility);
@@ -150,6 +152,10 @@ public class OPQSFooter extends LinearLayout {
         if (mSettingsContainer != null) {
             int visibility = isSettingsEnabled() ? View.VISIBLE : View.GONE;
             mSettingsContainer.setVisibility(visibility);
+        }
+        if (mBrightnessButton != null) {
+            int visibility = (mExpanded && isBrightnessEnabled()) ? View.VISIBLE : View.GONE;
+            mBrightnessButton.setVisibility(visibility);
         }
         if (mEdit != null) {
             int visibility = (mExpanded && isEditEnabled()) ? View.VISIBLE : View.GONE;
@@ -164,6 +170,7 @@ public class OPQSFooter extends LinearLayout {
     @Nullable
     private TouchAnimator createFooterAnimator() {
         TouchAnimator.Builder builder = new TouchAnimator.Builder()
+                .addFloat(mBrightnessButton, "alpha", 0, 0, 1)
                 .addFloat(mEdit, "alpha", 0, 0, 1)
                 .addFloat(mDataUsageView, "alpha", 0, 0, 1)
                 .addFloat(mRunningServicesButton, "alpha", 0, 0, 1);
@@ -196,6 +203,10 @@ public class OPQSFooter extends LinearLayout {
         return mSettingsButton;
     }
 
+    public ImageView getBrightnessButton() {
+        return mBrightnessButton;
+    }
+
     public View getEditButton() {
         return mEdit;
     }
@@ -211,6 +222,14 @@ public class OPQSFooter extends LinearLayout {
     public boolean isSettingsEnabled() {
         return Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.QS_FOOTER_SHOW_SETTINGS, 1) == 1;
+    }
+
+    public boolean isBrightnessEnabled() {
+        boolean isAvailable = (getResources().getBoolean(
+                com.android.internal.R.bool.config_automatic_brightness_available) &&
+                Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.QS_FOOTER_SHOW_BRIGHTNESS_ICON, 1) == 1);
+        return isAvailable;
     }
 
     public boolean isServicesEnabled() {

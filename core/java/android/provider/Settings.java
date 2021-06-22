@@ -6655,6 +6655,12 @@ public final class Settings {
         public static final String CUSTOM_STATUSBAR_PADDING_END  = "custom_statusbar_padding_end";
 
         /**
+         *
+         * @hide
+         */
+        public static final String QS_FOOTER_SHOW_BRIGHTNESS_ICON = "qs_footer_show_brightness_icon";
+
+        /**
          * @hide
          */
         public static final String SWITCH_STYLE = "switch_style";
