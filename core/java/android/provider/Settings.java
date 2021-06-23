@@ -6841,6 +6841,11 @@ public final class Settings {
          * @hide
          */
         public static final String POWER_PROFILE_TYPE = "power_profile_type";
+		
+		/**
+         * @hide
+         */
+        public static final String EDGE_MUSIC_CONTROL = "edge_music_control";
          
         /**
          * Keys we no longer back up under the current schema, but want to continue to
@@ -7071,6 +7076,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(CUSTOM_STATUSBAR_PADDING_END);
 			PRIVATE_SETTINGS.add(INCALL_FEEDBACK_VIBRATE);
             PRIVATE_SETTINGS.add(PROXIMITY_ON_WAKE);
+            PRIVATE_SETTINGS.add(EDGE_MUSIC_CONTROL);
         }
 
         /**

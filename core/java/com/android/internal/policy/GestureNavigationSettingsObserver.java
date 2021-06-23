@@ -293,4 +293,11 @@ public class GestureNavigationSettingsObserver extends ContentObserver {
             Settings.System.RIGHT_VERTICAL_BACK_SWIPE_ACTION, 0,
             UserHandle.USER_CURRENT);
     }
+
+    public boolean getEdgeMusicEnabled() {
+        return Settings.System.getIntForUser(
+               mContext.getContentResolver(), Settings.System.EDGE_MUSIC_CONTROL, 0,
+               UserHandle.USER_CURRENT) == 1;
+    }
+
 }
