@@ -24,6 +24,7 @@ import static android.os.BatteryManager.EXTRA_CHARGING_STATUS;
 import static android.os.BatteryManager.EXTRA_MAX_CHARGING_CURRENT;
 import static android.os.BatteryManager.EXTRA_MAX_CHARGING_VOLTAGE;
 import static android.os.BatteryManager.EXTRA_TEMPERATURE;
+import static android.os.BatteryManager.EXTRA_OEM_CHARGER;
 import static android.os.BatteryManager.EXTRA_PLUGGED;
 import static android.os.BatteryManager.EXTRA_PRESENT;
 import static android.os.BatteryManager.EXTRA_STATUS;
@@ -47,6 +48,7 @@ public class BatteryStatus {
     public static final int CHARGING_SLOWLY = 0;
     public static final int CHARGING_REGULAR = 1;
     public static final int CHARGING_FAST = 2;
+    public static final int CHARGING_OEM = 3;
 
     public final int status;
     public final int level;
@@ -59,6 +61,8 @@ public class BatteryStatus {
     public final Optional<Boolean> incompatibleCharger;
     public final float temperature;
 
+    public final boolean oemChargeStatus;
+
     public static BatteryStatus create(Context context, boolean incompatibleCharger) {
         final Intent batteryChangedIntent = BatteryUtils.getBatteryIntent(context);
         return batteryChangedIntent == null
@@ -67,7 +71,7 @@ public class BatteryStatus {
 
     public BatteryStatus(int status, int level, int plugged, int chargingStatus,
             int maxChargingWattage, boolean present, int maxChargingCurrent, int maxChargingVoltage,
-            float temperature) {
+            float temperature,boolean oemChargeStatus) {
         this.status = status;
         this.level = level;
         this.plugged = plugged;
@@ -75,6 +79,7 @@ public class BatteryStatus {
         this.maxChargingCurrent = maxChargingCurrent;
         this.maxChargingVoltage = maxChargingVoltage;
         this.maxChargingWattage = maxChargingWattage;
+        this.oemChargeStatus = oemChargeStatus;
         this.present = present;
         this.incompatibleCharger = Optional.empty();
         this.temperature = temperature;
@@ -95,6 +100,7 @@ public class BatteryStatus {
         level = getBatteryLevel(batteryChangedIntent);
         chargingStatus = batteryChangedIntent.getIntExtra(EXTRA_CHARGING_STATUS,
                 CHARGING_POLICY_DEFAULT);
+        oemChargeStatus = batteryChangedIntent.getBooleanExtra(EXTRA_OEM_CHARGER, false);
         present = batteryChangedIntent.getBooleanExtra(EXTRA_PRESENT, true);
         temperature = batteryChangedIntent.getIntExtra(EXTRA_TEMPERATURE, -1);
 
@@ -169,7 +175,8 @@ public class BatteryStatus {
                 R.integer.config_chargingSlowlyThreshold);
         final int fastThreshold = context.getResources().getInteger(
                 R.integer.config_chargingFastThreshold);
-        return maxChargingWattage <= 0 ? CHARGING_UNKNOWN :
+        return oemChargeStatus ? CHARGING_OEM :
+                maxChargingWattage <= 0 ? CHARGING_UNKNOWN :
                 maxChargingWattage < slowThreshold ? CHARGING_SLOWLY :
                         maxChargingWattage > fastThreshold ? CHARGING_FAST :
                                 CHARGING_REGULAR;
