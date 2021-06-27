@@ -34,6 +34,7 @@ import android.os.Vibrator;
 import android.provider.AlarmClock;
 import android.provider.CalendarContract;
 import android.provider.Settings;
+import android.provider.AlarmClock;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.DisplayCutout;
@@ -53,6 +54,7 @@ import com.android.settingslib.Utils;
 import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.battery.BatteryMeterView;
+import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.statusbar.phone.StatusBarContentInsetsProvider;
 import com.android.systemui.statusbar.phone.StatusBarIconController;
 import com.android.systemui.statusbar.phone.StatusBarIconController.TintedIconManager;
@@ -658,6 +660,9 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
 
     public void updateEverything() {
         post(() -> setClickable(!mExpanded));
+        if (mExpanded) {
+            setBatteryRemainingOnClick(true);
+        }
     }
 
     private void setContentMargins(View view, int marginStart, int marginEnd) {
@@ -739,5 +744,17 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         }
         mClockView.setClockVisibleByUser(!StatusBarIconController.getIconHideList(
             mContext, newValue).contains("clock"));
+    }
+
+    private void setBatteryRemainingOnClick(boolean enable) {
+        if (enable) {
+            mBatteryRemainingIcon.setOnClickListener(
+                    v -> mActivityStarter.postStartActivityDismissingKeyguard(
+                            new Intent(Intent.ACTION_POWER_USAGE_SUMMARY), 0));
+            mBatteryRemainingIcon.setClickable(true);
+        } else {
+            mBatteryRemainingIcon.setOnClickListener(null);
+            mBatteryRemainingIcon.setClickable(false);
+        }
     }
 }
