@@ -6384,6 +6384,12 @@ public final class Settings {
          * @hide
          */
         public static final String CLIPBOARD_TOAST_INFO = "clipboard_toast_info";
+		
+		/**
+         * Whether to use the Android 11 searchbar in settings, the value is boolean.
+         * 0 = 0ff, 1 = on
+         */
+        public static final String USE_NEW_SEARCHBAR = "use_new_searchbar";
 
         /** @hide */
         public static final String BACK_GESTURE_HEIGHT = "back_gesture_height";
