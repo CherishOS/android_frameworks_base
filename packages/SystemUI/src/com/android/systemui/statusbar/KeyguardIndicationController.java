@@ -722,6 +722,10 @@ public class KeyguardIndicationController implements StateListener,
             mChargingIndicationView.setVisibility(View.GONE);
         }
     }
+	
+	public boolean isChargingIndicationVisible() {
+        return mChargingIndication > 0 && mPowerPluggedIn;
+    }
 
     private boolean hasActiveInDisplayFp() {
         boolean hasInDisplayFingerprint = FodUtils.hasFodSupport(mContext);

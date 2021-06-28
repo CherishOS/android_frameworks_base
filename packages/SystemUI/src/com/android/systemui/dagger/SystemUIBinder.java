@@ -44,8 +44,6 @@ import com.android.systemui.toast.ToastUI;
 import com.android.systemui.util.leak.GarbageMonitor;
 import com.android.systemui.volume.VolumeUI;
 
-import com.google.android.systemui.GoogleServices;
-
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.ClassKey;
@@ -189,10 +187,4 @@ public abstract class SystemUIBinder {
     @IntoMap
     @ClassKey(WindowMagnification.class)
     public abstract SystemUI bindWindowMagnification(WindowMagnification sysui);
-
-    /** Inject into GoogleServices. */
-    @Binds
-    @IntoMap
-    @ClassKey(GoogleServices.class)
-    public abstract SystemUI GoogleServices(GoogleServices sysui);
 }
