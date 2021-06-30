@@ -62,7 +62,7 @@ public class FODIconView extends ImageView {
         R.drawable.fod_icon_default_4,
         R.drawable.fod_icon_madness,
         R.drawable.fod_icon_arc_reactor,
-        R.drawable.fod_icon_octavi,
+        R.drawable.fod_icon_cherish,
         R.drawable.fod_icon_zaid1,
         R.drawable.fod_icon_zaid2,
         R.drawable.fod_icon_zaid3,
