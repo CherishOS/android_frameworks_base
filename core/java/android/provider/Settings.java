@@ -6687,6 +6687,11 @@ public final class Settings {
          */
         public static final String CUSTOM_STATUSBAR_PADDING_END  = "custom_statusbar_padding_end";
 
+        /**
+         * @hide
+         */
+        public static final String SWITCH_STYLE = "switch_style";
+
 	/**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
