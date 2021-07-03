@@ -64,7 +64,6 @@ import com.android.systemui.Interpolators;
 import com.android.systemui.R;
 import com.android.systemui.broadcast.BroadcastDispatcher;
 import com.android.systemui.dock.DockManager;
-import com.android.systemui.omni.BatteryBarView;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
 import com.android.systemui.plugins.statusbar.StatusBarStateController.StateListener;
 import com.android.systemui.statusbar.phone.KeyguardIndicationTextView;
@@ -75,13 +74,10 @@ import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.wakelock.SettableWakeLock;
 import com.android.systemui.util.wakelock.WakeLock;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.text.NumberFormat;
 import java.util.IllegalFormatConversionException;
-import java.util.Random;
 import com.android.internal.util.cherish.FodUtils;
 
 import javax.inject.Inject;
@@ -104,7 +100,6 @@ public class KeyguardIndicationController implements StateListener,
     private static final long TRANSIENT_BIOMETRIC_ERROR_TIMEOUT = 1300;
     private static final float BOUNCE_ANIMATION_FINAL_Y = 0f;
 
-    private static final String BATTERY_TEMP_PATH = "sys/class/power_supply/battery/temp";
 
     private static final String LOCKSCREEN_CHARGING_ANIMATION_STYLE =
             "system:" + Settings.System.LOCKSCREEN_CHARGING_ANIMATION_STYLE;
@@ -155,9 +150,6 @@ public class KeyguardIndicationController implements StateListener,
     private String mMessageToShowOnScreenOn;
 
     private KeyguardUpdateMonitorCallback mUpdateMonitorCallback;
-
-    // omni additions
-    private BatteryBarView mBatteryBar;
 
     private boolean mDozing;
     private final ViewClippingUtil.ClippingParameters mClippingParams =
@@ -223,7 +215,6 @@ public class KeyguardIndicationController implements StateListener,
         mTextView = indicationArea.findViewById(R.id.keyguard_indication_text);
         mInitialTextColorState = mTextView != null ?
                 mTextView.getTextColors() : ColorStateList.valueOf(Color.WHITE);
-        mBatteryBar = indicationArea.findViewById(R.id.battery_bar_view);
 		mDisclosure = indicationArea.findViewById(R.id.keyguard_indication_enterprise_disclosure);
         mDisclosureMaxAlpha = mDisclosure.getAlpha();
         mChargingIndicationView = (LottieAnimationView) indicationArea.findViewById(
@@ -461,24 +452,13 @@ public class KeyguardIndicationController implements StateListener,
 
         // A few places might need to hide the indication, so always start by making it visible
         mIndicationArea.setVisibility(View.VISIBLE);
-		
-		boolean showBatteryBar = Settings.System.getIntForUser(mContext.getContentResolver(),
-                     Settings.System.OMNI_KEYGUARD_SHOW_BATTERY_BAR, 0, UserHandle.USER_CURRENT) == 1;
-            boolean showBatteryBarAlways = Settings.System.getIntForUser(mContext.getContentResolver(),
-                     Settings.System.OMNI_KEYGUARD_SHOW_BATTERY_BAR_ALWAYS, 0, UserHandle.USER_CURRENT) == 1;
 		boolean showAmbientBattery = Settings.System.getIntForUser(mContext.getContentResolver(),
-                        Settings.System.AMBIENT_BATTERY_PERCENT, 0, UserHandle.USER_CURRENT) != 0;
-        boolean showAmbientBatteryTemperature = Settings.System.getIntForUser(mContext.getContentResolver(),
-                        Settings.System.AMBIENT_BATTERY_TEMPERATURE, 0, UserHandle.USER_CURRENT) != 0;  
-        String bolt = "\u26A1\uFE0E";
-                    CharSequence chargeIndicator = (mPowerPluggedIn ? (bolt + " ") : "") +
-                            NumberFormat.getPercentInstance().format(mBatteryLevel / 100f);						
+                        Settings.System.AMBIENT_BATTERY_PERCENT, 0, UserHandle.USER_CURRENT) != 0;				
 		
 		// Walk down a precedence-ordered list of what indication
             // should be shown based on user or device state
-            mBatteryBar.setVisibility(View.GONE);
             if (mDozing) {
-            int userId = KeyguardUpdateMonitor.getCurrentUser();
+			int userId = KeyguardUpdateMonitor.getCurrentUser();
             String trustGrantedIndication = getTrustGrantedIndication();
             String trustManagedIndication = getTrustManagedIndication();
 
@@ -1135,57 +1115,5 @@ public class KeyguardIndicationController implements StateListener,
                 updateIndication(false);
             }
         }
-    }
-
-    private String getBatteryTemp() {
-        String value = readOneLine(BATTERY_TEMP_PATH);
-        return String.format("%s", Integer.parseInt(value) / 10) + "\u2103";
-    }
-
-    private static String readOneLine(String fname) {
-        BufferedReader br;
-        String line = null;
-        try {
-            br = new BufferedReader(new FileReader(fname), 512);
-            try {
-                line = br.readLine();
-            } finally {
-                br.close();
-            }
-        } catch (Exception e) {
-            return null;
-        }
-        return line;
-    }
-
-    private void updateBatteryBarColorMode() {
-        int mColorMode = Settings.System.getIntForUser(mContext.getContentResolver(),
-                     Settings.System.KEYGAURD_BATTERY_BAR_COLOR_MODE, 0, UserHandle.USER_CURRENT);
-        int mColorModeCustom = Settings.System.getIntForUser(mContext.getContentResolver(),
-                     Settings.System.KEYGAURD_BATTERY_BAR_COLOR_CUSTOM, 0xffffffff, UserHandle.USER_CURRENT);
-
-        // if (mColorMode == 0) {
-           // Set Gradient Color
-        // }
-
-        switch (mColorMode) {
-            case 1:
-                int mAccentColor = mContext.getColor(com.android.internal.R.color.gradient_start);
-                mBatteryBar.setBarColor(mAccentColor);
-                break;
-            case 2:
-                mBatteryBar.setBarColor(mRandomColor());
-                break;
-            case 3:
-                mBatteryBar.setBarColor(mColorModeCustom);
-                break;
-            default:
-                break;
-        }
-    }
-
-    public int mRandomColor() {
-    Random rnd = new Random();
-       return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
     }
 }

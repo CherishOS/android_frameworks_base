@@ -6478,26 +6478,6 @@ public final class Settings {
                 "status_bar_locked_on_secure_keyguard";
 
         /**
-         * @hide
-         */
-        public static final String OMNI_KEYGUARD_SHOW_BATTERY_BAR = "sysui_keyguard_show_battery_bar";
-
-        /**
-         * @hide
-         */
-        public static final String OMNI_KEYGUARD_SHOW_BATTERY_BAR_ALWAYS = "sysui_keyguard_show_battery_bar_always";
-
-        /**
-         * @hide
-         */
-        public static final String KEYGAURD_BATTERY_BAR_COLOR_MODE = "keygaurd_battery_bar_color_mode";
-
-        /**
-         * @hide
-         */
-        public static final String KEYGAURD_BATTERY_BAR_COLOR_CUSTOM = "keygaurd_battery_bar_color_custom";
-
-        /**
          * Battery info font
          *
          * @hide
