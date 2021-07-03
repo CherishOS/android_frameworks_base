@@ -647,6 +647,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     private boolean mWallpaperSupported;
 
     private VisualizerView mVisualizerView;
+    private int mChargingAnimation;
 
     private VolumePluginManager mVolumePluginManager;
 
@@ -4742,6 +4743,9 @@ public class StatusBar extends SystemUI implements DemoMode,
 			resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.CENTER_TEXT_CLOCK),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_CHARGING_ANIMATION_STYLE),
+                    false, this, UserHandle.USER_ALL);
 			resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.FORCE_SHOW_NAVBAR),
                     false, this, UserHandle.USER_ALL);
@@ -4865,6 +4869,9 @@ public class StatusBar extends SystemUI implements DemoMode,
                 stockTileStyle();
                 updateTileStyle();
                 mQSPanel.getHost().reloadAllTiles();
+			} else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_CHARGING_ANIMATION_STYLE))) {
+                updateChargingAnimation();
 			} else if (uri.equals(Settings.Secure.getUriFor(
                     Settings.Secure.FP_SWIPE_TO_DISMISS_NOTIFICATIONS))) {
                 setFpToDismissNotifications();
@@ -4913,6 +4920,7 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mContext.getContentResolver(), Settings.System.NOTIFICATION_MATERIAL_DISMISS, 0,
                 UserHandle.USER_CURRENT) == 1;
 			updateKeyguardStatusSettings();
+			updateChargingAnimation();
 			updateNavigationBar(false);
 			setScreenBrightnessMode();
 			setHeadsUpStoplist();
@@ -5036,6 +5044,14 @@ public class StatusBar extends SystemUI implements DemoMode,
 	
 	private void updateKeyguardStatusSettings() {
         mNotificationPanelViewController.updateKeyguardStatusSettings();
+    }
+
+    private void updateChargingAnimation() {
+        mChargingAnimation = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_CHARGING_ANIMATION_STYLE, 1, UserHandle.USER_CURRENT);
+        if (mKeyguardIndicationController != null) {
+            mKeyguardIndicationController.updateChargingIndication(mChargingAnimation);
+        }
     }
 
     private void updateNavigationBar(boolean init) {
