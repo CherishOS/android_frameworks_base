@@ -53,6 +53,7 @@ import com.android.systemui.plugins.DarkIconDispatcher.DarkReceiver;
 import com.android.systemui.settings.CurrentUserTracker;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.policy.ConfigurationController.ConfigurationListener;
+import com.android.systemui.statusbar.policy.KeyguardStateController;
 
 import libcore.icu.LocaleData;
 
@@ -79,6 +80,8 @@ public class Clock extends TextView implements DemoMode, CommandQueue.Callbacks,
     private final CurrentUserTracker mCurrentUserTracker;
     private final CommandQueue mCommandQueue;
     private int mCurrentUserId;
+
+    private KeyguardStateController mKeyguardStateController;
 
     private boolean mClockVisibleByPolicy = true;
     private boolean mClockVisibleByUser = true;
@@ -282,6 +285,7 @@ public class Clock extends TextView implements DemoMode, CommandQueue.Callbacks,
                 mCurrentUserId = newUserId;
             }
         };
+        mKeyguardStateController = Dependency.get(KeyguardStateController.class);
     }
 
     @Override
@@ -345,6 +349,9 @@ public class Clock extends TextView implements DemoMode, CommandQueue.Callbacks,
             }
             mCurrentUserTracker.startTracking();
             mCurrentUserId = mCurrentUserTracker.getCurrentUserId();
+            if (mKeyguardStateController != null) {
+                mKeyguardStateController.addCallback(mKeyguardStateCallback);
+            }
         }
 
         // The time zone may have changed while the receiver wasn't registered, so update the Time
@@ -382,6 +389,9 @@ public class Clock extends TextView implements DemoMode, CommandQueue.Callbacks,
                 Dependency.get(DarkIconDispatcher.class).removeDarkReceiver(this);
             }
             mCurrentUserTracker.stopTracking();
+            if (mKeyguardStateController != null) {
+                mKeyguardStateController.removeCallback(mKeyguardStateCallback);
+            }
         }
     }
 
@@ -438,12 +448,13 @@ public class Clock extends TextView implements DemoMode, CommandQueue.Callbacks,
     }
 
     public boolean shouldBeVisible() {
-        return mClockVisibleByPolicy && mClockVisibleByUser;
+        boolean isInKeyguard = mKeyguardStateController != null && mKeyguardStateController.isShowing();
+        return mClockVisibleByPolicy && mClockVisibleByUser && !isInKeyguard;
     }
 
     protected void updateClockVisibility() {
         boolean visible = ((mClockStyle == STYLE_CLOCK_LEFT) || (mQsHeader))
-                && mShowClock && mClockVisibleByPolicy && mClockVisibleByUser;
+                && mShowClock && shouldBeVisible();
         int visibility = visible ? View.VISIBLE : View.GONE;
         try {
             autoHideHandler.removeCallbacksAndMessages(null);
@@ -781,6 +792,14 @@ public class Clock extends TextView implements DemoMode, CommandQueue.Callbacks,
             setContentDescription(mContentDescriptionFormat.format(mCalendar.getTime()));
         }
     }
+
+    private final KeyguardStateController.Callback mKeyguardStateCallback =
+        new KeyguardStateController.Callback() {
+            @Override
+            public void onKeyguardShowingChanged() {
+                updateClockVisibility();
+            }
+        };
 
     private final BroadcastReceiver mScreenReceiver = new BroadcastReceiver() {
         @Override
