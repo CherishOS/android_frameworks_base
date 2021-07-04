@@ -31,6 +31,8 @@ import android.widget.TextView;
 import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.broadcast.BroadcastDispatcher;
+import com.android.systemui.util.time.ChineseLunarCalendarUtil;
+import com.android.systemui.util.time.VietnameseLunarCalendarUtil;
 
 import java.util.Date;
 import java.util.Locale;
@@ -44,6 +46,7 @@ public class DateView extends TextView {
     private String mLastText;
     private String mDatePattern;
     private final BroadcastDispatcher mBroadcastDispatcher;
+    private boolean mShowLunarCalendar = false;
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -110,6 +113,11 @@ public class DateView extends TextView {
         mBroadcastDispatcher.unregisterReceiver(mIntentReceiver);
     }
 
+    public void setShowLunarCalendar(boolean val) {
+        mShowLunarCalendar = val;
+        updateClock();
+    }
+
     protected void updateClock() {
         if (mDateFormat == null) {
             final Locale l = Locale.getDefault();
@@ -120,7 +128,16 @@ public class DateView extends TextView {
 
         mCurrentTime.setTime(System.currentTimeMillis());
 
-        final String text = mDateFormat.format(mCurrentTime);
+        String text = mDateFormat.format(mCurrentTime);
+        if (mShowLunarCalendar) {
+			String currentLanguage = Locale.getDefault().getDisplayLanguage();
+            if (currentLanguage.toLowerCase().contains("vi")) {
+				text = text + " " + VietnameseLunarCalendarUtil.getLunarDateString();
+			}
+			else{
+                text = text + " " + ChineseLunarCalendarUtil.getLunarDateString();
+			}
+        }
         if (!text.equals(mLastText)) {
             setText(text);
             mLastText = text;

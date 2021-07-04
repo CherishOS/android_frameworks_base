@@ -174,6 +174,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
     private boolean mLandscape;
     private boolean mHeaderImageEnabled;
+	
+	private boolean mChineseLunarCalendar;
 
     private PrivacyItemController mPrivacyItemController;
     private final UiEventLogger mUiEventLogger;
@@ -492,6 +494,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     }
 
     private void updateSettings() {
+		mChineseLunarCalendar = Settings.System.getIntForUser(
+                mContext.getContentResolver(), Settings.System.QS_SHOW_LUNAR_CALENDAR, 0,
+                UserHandle.USER_CURRENT) == 1;
 		mHeaderImageEnabled = Settings.System.getIntForUser(getContext().getContentResolver(),
                 Settings.System.STATUS_BAR_CUSTOM_HEADER, 0,
                 UserHandle.USER_CURRENT) == 1;
@@ -910,6 +915,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                     this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System
                     .getUriFor(Settings.System.QS_CLOCK_LOCATION), false,
+                    this, UserHandle.USER_ALL);
+			resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_SHOW_LUNAR_CALENDAR), false,
                     this, UserHandle.USER_ALL);
         }
 
