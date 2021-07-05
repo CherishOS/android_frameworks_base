@@ -553,6 +553,10 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
                 case 11:
                     resId = R.drawable.ic_volte_margaritov2;
                     break;
+                // Vivo VoLTE icon
+                case 12:
+                    resId = R.drawable.ic_volte_vivo;
+                    break;
                 default:
                     break;
             }
