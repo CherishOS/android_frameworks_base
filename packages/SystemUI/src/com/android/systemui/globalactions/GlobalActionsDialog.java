@@ -197,9 +197,8 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
     public static final String PREFS_CONTROLS_SEEDING_COMPLETED = "SeedingCompleted";
     public static final String PREFS_CONTROLS_FILE = "controls_prefs";
     private static final int SEEDING_MAX = 2;
-
-    private static final String POWER_MENU_BG_ALPHA =
-            "system:" + Settings.System.POWER_MENU_BG_ALPHA;
+    private static final String NOTIFICATION_BG_ALPHA =
+            "system:" + Settings.System.NOTIFICATION_BG_ALPHA;
 
     private final Context mContext;
     private final GlobalActionsManager mWindowManagerFuncs;
@@ -220,8 +219,7 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
     private final UiEventLogger mUiEventLogger;
     private final NotificationShadeDepthController mDepthController;
     private final SysUiState mSysUiState;
-
-    private int mPowerMenuBackgroundAlpha;
+    private int mNotificationBackgroundAlpha;
 
     // Used for RingerModeTracker
     private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
@@ -388,6 +386,9 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
 
         mConfigurationController.addCallback(this);
 
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, NOTIFICATION_BG_ALPHA);
+
         mActivityStarter = activityStarter;
         keyguardStateController.addCallback(new KeyguardStateController.Callback() {
             @Override
@@ -434,9 +435,19 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
                         onPowerMenuLockScreenSettingsChanged();
                     }
                 });
+    }
 
-        final TunerService tunerService = Dependency.get(TunerService.class);
-        tunerService.addTunable(this, POWER_MENU_BG_ALPHA);
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case NOTIFICATION_BG_ALPHA:
+                mNotificationBackgroundAlpha =
+                        TunerService.parseInteger(newValue, 255);
+                GlobalActionsPowerDialog.mNotificationBackgroundAlpha = mNotificationBackgroundAlpha;
+                break;
+            default:
+                break;
+        }
     }
 
     /**
@@ -1861,7 +1872,7 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
             View v = inflater.inflate(com.android.systemui.R.layout.global_actions_grid_item_v2,
                     parent, false /* attach */);
 
-            v.getBackground().setAlpha(mPowerMenuBackgroundAlpha);
+            v.getBackground().setAlpha(mNotificationBackgroundAlpha);
             ImageView icon = v.findViewById(R.id.icon);
             TextView messageView = v.findViewById(R.id.message);
             messageView.setSelected(true); // necessary for marquee to work
@@ -1971,7 +1982,6 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
             View v = inflater.inflate(com.android.systemui.R.layout.global_actions_grid_item_v2,
                     parent, false /* attach */);
 
-            v.getBackground().setAlpha(mPowerMenuBackgroundAlpha);
             ImageView icon = (ImageView) v.findViewById(R.id.icon);
             TextView messageView = (TextView) v.findViewById(R.id.message);
             final boolean enabled = isEnabled();
@@ -2326,19 +2336,6 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
             mAdapter.notifyDataSetChanged();
             mOverflowAdapter.notifyDataSetChanged();
             mPowerAdapter.notifyDataSetChanged();
-        }
-    };
-
-    @Override
-    public void onTuningChanged(String key, String newValue) {
-        switch (key) {
-            case POWER_MENU_BG_ALPHA:
-                mPowerMenuBackgroundAlpha =
-                        TunerService.parseInteger(newValue, 255);
-                GlobalActionsPowerDialog.mPowerMenuBackgroundAlpha = mPowerMenuBackgroundAlpha;
-                break;
-            default:
-                break;
         }
     };
 
