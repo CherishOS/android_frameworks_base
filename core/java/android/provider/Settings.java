@@ -5851,6 +5851,12 @@ public final class Settings {
          * @hide
          */
         public static final String NAV_BAR_COMPACT_LAYOUT = "navigation_bar_compact_layout";
+		
+		/**
+         * Hide Statusbar on LockScreen
+         * @hide
+         */
+        public static final String HIDE_LOCKSCREEN_STATUS_BAR = "hide_lockscreen_status_bar";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
