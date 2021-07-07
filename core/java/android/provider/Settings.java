@@ -6551,6 +6551,12 @@ public final class Settings {
          * @hide
          */
         public static final String HEADER_ICONS_STYLE = "headers_icons_style";
+		
+		/**
+         * Hide Statusbar on LockScreen
+         * @hide
+         */
+        public static final String HIDE_LOCKSCREEN_STATUS_BAR = "hide_lockscreen_status_bar";
 
         /**
          * Whether to enable or disable lockscreen background blur
