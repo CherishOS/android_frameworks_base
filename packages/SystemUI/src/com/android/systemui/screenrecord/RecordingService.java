@@ -24,6 +24,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -59,6 +60,7 @@ import com.android.systemui.settings.UserContextProvider;
 import com.android.systemui.statusbar.phone.KeyguardDismissUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -88,10 +90,12 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
     private static final String ACTION_STOP = "com.android.systemui.screenrecord.STOP";
     private static final String ACTION_STOP_NOTIF =
             "com.android.systemui.screenrecord.STOP_FROM_NOTIF";
+    private static final String ACTION_SHOW_DIALOG = "com.android.systemui.screenrecord.SHOW_DIALOG";
     private static final String ACTION_SHARE = "com.android.systemui.screenrecord.SHARE";
     private static final String ACTION_DELETE = "com.android.systemui.screenrecord.DELETE";
     private static final String PERMISSION_SELF = "com.android.systemui.permission.SELF";
 
+    private final RecordingServiceBinder mBinder;
     private final RecordingController mController;
     private final KeyguardDismissUtil mKeyguardDismissUtil;
     private final Handler mMainHandler;
@@ -126,6 +130,7 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
         mWindowManager = (WindowManager) userContextTracker.getUserContext()
                 .getSystemService(Context.WINDOW_SERVICE);
         mKeyguardDismissUtil = keyguardDismissUtil;
+        mBinder = new RecordingServiceBinder();
     }
 
     /**
@@ -142,9 +147,8 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
      */
     public static Intent getStartIntent(Context context, int resultCode,
             int audioSource, boolean showTaps,
-            boolean showStopDot, boolean lowQuality,
-            boolean longerDuration) {
-            @Nullable MediaProjectionCaptureTarget captureTarget) {
+            @Nullable MediaProjectionCaptureTarget captureTarget,
+            boolean showStopDot, boolean lowQuality, boolean longerDuration) {
         return new Intent(context, RecordingService.class)
                 .setAction(ACTION_START)
                 .putExtra(EXTRA_RESULT_CODE, resultCode)
@@ -156,8 +160,7 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
                 .putExtra(EXTRA_LONGER_DURATION, longerDuration);
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    @Override public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent == null) {
             return Service.START_NOT_STICKY;
         }
@@ -172,6 +175,10 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
                         .values()[intent.getIntExtra(EXTRA_AUDIO_SOURCE, 0)];
                 Log.d(TAG, "recording with audio source" + mAudioSource);
                 mShowTaps = intent.getBooleanExtra(EXTRA_SHOW_TAPS, false);
+                mShowStopDot = intent.getBooleanExtra(EXTRA_SHOW_STOP_DOT, false);
+                mLowQuality = intent.getBooleanExtra(EXTRA_LOW_QUALITY, false);
+                mLongerDuration = intent.getBooleanExtra(EXTRA_LONGER_DURATION, false);
+
                 MediaProjectionCaptureTarget captureTarget =
                         intent.getParcelableExtra(EXTRA_CAPTURE_TARGET,
                                 MediaProjectionCaptureTarget.class);
@@ -181,11 +188,6 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
                         Settings.System.SHOW_TOUCHES, 0) != 0;
 
                 setTapsVisible(mShowTaps);
-
-                mShowStopDot = intent.getBooleanExtra(EXTRA_SHOW_STOP_DOT, false);
-                mLowQuality = intent.getBooleanExtra(EXTRA_LOW_QUALITY, false);
-                mLongerDuration = intent.getBooleanExtra(EXTRA_LONGER_DURATION, false);
-
                 setStopDotVisible(mShowStopDot);
 
                 mRecorder = new ScreenMediaRecorder(
@@ -261,18 +263,30 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
                 mNotificationManager.cancelAsUser(null, NOTIFICATION_VIEW_ID, currentUser);
                 Log.d(TAG, "Deleted recording " + uri);
                 break;
+            case ACTION_SHOW_DIALOG:
+                if (mController != null) {
+                    mController.createScreenRecordDialog(this, null, null, null, null).show();
+                }
+                break;
         }
         return Service.START_STICKY;
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return mBinder;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mController.addCallback((RecordingController.RecordingStateChangeCallback) mBinder);
+    }
+
+    @Override
+    public void onDestroy() {
+        mController.removeCallback((RecordingController.RecordingStateChangeCallback) mBinder);
+        super.onDestroy();
     }
 
     @VisibleForTesting
@@ -544,7 +558,7 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
         mIsDotAtRight = true;
         final int size = (int) (this.getResources()
                 .getDimensionPixelSize(R.dimen.screenrecord_dot_size));
-        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
@@ -564,21 +578,25 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
         inflater.inflate(R.layout.screenrecord_dot, mFrameLayout);
 
         final ImageView dot = (ImageView) mFrameLayout.findViewById(R.id.dot);
-        dot.setOnClickListener(v -> {
-            try {
-                getStopPendingIntent().send();
-            } catch (PendingIntent.CanceledException e) {}
+        dot.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                try {
+                    getStopPendingIntent().send();
+                } catch (PendingIntent.CanceledException e) {}
+            }
         });
 
-        dot.setOnLongClickListener(v -> {
-            dot.setAnimation(null);
-            final WindowManager.LayoutParams layoutParams =
-                    (WindowManager.LayoutParams) mFrameLayout.getLayoutParams();
-            layoutParams.gravity = Gravity.TOP | (mIsDotAtRight? Gravity.LEFT : Gravity.RIGHT);
-            mIsDotAtRight = !mIsDotAtRight;
-            mWindowManager.updateViewLayout(mFrameLayout, layoutParams);
-            dot.startAnimation(getDotAnimation());
-            return true;
+        dot.setOnLongClickListener(new View.OnLongClickListener() {
+            public boolean onLongClick(View v) {
+                dot.setAnimation(null);
+                WindowManager.LayoutParams params =
+                        (WindowManager.LayoutParams) mFrameLayout.getLayoutParams();
+                params.gravity = Gravity.TOP | (mIsDotAtRight? Gravity.LEFT : Gravity.RIGHT);
+                mIsDotAtRight = !mIsDotAtRight;
+                mWindowManager.updateViewLayout(mFrameLayout, params);
+                dot.startAnimation(getDotAnimation());
+                return true;
+            }
         });
 
         dot.startAnimation(getDotAnimation());
@@ -586,7 +604,7 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
 
     private PendingIntent getStopPendingIntent() {
         return PendingIntent.getService(this, REQUEST_CODE, getStopIntent(this),
-            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
 
     private void stopDot() {
@@ -599,7 +617,7 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
     }
 
     private Animation getDotAnimation() {
-        final Animation anim = new AlphaAnimation(0.0f, 1.0f);
+        Animation anim = new AlphaAnimation(0.0f, 1.0f);
         anim.setDuration(500);
         anim.setStartOffset(100);
         anim.setRepeatMode(Animation.REVERSE);
@@ -648,6 +666,68 @@ public class RecordingService extends Service implements ScreenMediaRecorderList
         if (mController.isRecording()) {
             Log.d(TAG, "Stopping recording because the system requested the stop");
             stopService();
+        }
+    }
+
+    private class RecordingServiceBinder extends IRemoteRecording.Stub
+            implements RecordingController.RecordingStateChangeCallback {
+
+        private ArrayList<IRecordingCallback> mCallbackList = new ArrayList<>();
+
+        @Override
+        public void startRecording() throws RemoteException {
+            Intent intent = new Intent(RecordingService.this, RecordingService.class);
+            intent.setAction(ACTION_SHOW_DIALOG);
+            RecordingService.this.startService(intent);
+        }
+
+        @Override
+        public void stopRecording() throws RemoteException {
+            Intent intent = new Intent(RecordingService.this, RecordingService.class);
+            intent.setAction(ACTION_STOP_NOTIF);
+            RecordingService.this.startService(intent);
+        }
+
+        @Override
+        public boolean isRecording() throws RemoteException {
+            return mController.isRecording();
+        }
+
+        @Override
+        public boolean isStarting() throws RemoteException {
+            return mController.isStarting();
+        }
+
+        public void addRecordingCallback(IRecordingCallback callback) throws RemoteException {
+            if (!mCallbackList.contains(callback)) {
+                mCallbackList.add(callback);
+            }
+        }
+
+        public void removeRecordingCallback(IRecordingCallback callback) throws RemoteException {
+            mCallbackList.remove(callback);
+        }
+
+        @Override
+        public void onRecordingStart() {
+            for (IRecordingCallback callback : mCallbackList) {
+                try {
+                    callback.onRecordingStart();
+                } catch (RemoteException e) {
+                    // do nothing
+                }
+            }
+        }
+
+        @Override
+        public void onRecordingEnd() {
+            for (IRecordingCallback callback : mCallbackList) {
+                try {
+                    callback.onRecordingEnd();
+                } catch (RemoteException e) {
+                    // do nothing
+                }
+            }
         }
     }
 }
