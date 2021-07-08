@@ -27,21 +27,21 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Helper functions for uploading to pasty
+ * Helper functions for uploading to Hastebin
  */
-public final class PastyUtils {
-    private static final String TAG = "PastyUtils";
-    private static final String BASE_URL = "https://pasty.lus.pm";
+public final class HastebinUtils {
+    private static final String TAG = "HastebinUtils";
+    private static final String BASE_URL = "https://hastebin.com";
     private static final String API_URL = String.format("%s/documents", BASE_URL);
     private static Handler handler;
 
-    private PastyUtils() {
+    private HastebinUtils() {
     }
 
     /**
-     * Uploads {@code content} to pasty
+     * Uploads {@code content} to Hastebin
      *
-     * @param content the content to upload to pasty
+     * @param content the content to upload to Hastebin
      * @param callback the callback to call on success / failure
      */
     public static void upload(String content, UploadResultCallback callback) {
@@ -75,14 +75,14 @@ public final class PastyUtils {
                         if (!key.isEmpty()) {
                             callback.onSuccess(getUrl(key));
                         } else {
-                            String msg = "Failed to upload to pasty: No key retrieved";
-                            callback.onFail(msg, new PastyException(msg));
+                            String msg = "Failed to upload to Hastebin: No key retrieved";
+                            callback.onFail(msg, new HastebinException(msg));
                         }
                     } finally {
                         urlConnection.disconnect();
                     }
                 } catch (Exception e) {
-                    callback.onFail("Failed to upload to pasty", e);
+                    callback.onFail("Failed to upload to Hastebin", e);
                 }
             }
         });
@@ -97,7 +97,7 @@ public final class PastyUtils {
 
     private static Handler getHandler() {
         if (handler == null) {
-            HandlerThread handlerThread = new HandlerThread("pastyThread");
+            HandlerThread handlerThread = new HandlerThread("HastebinThread");
             if (!handlerThread.isAlive())
                 handlerThread.start();
             handler = new Handler(handlerThread.getLooper());
