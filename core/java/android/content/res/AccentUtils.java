@@ -23,6 +23,11 @@ public final class AccentUtils {
                 ? false
                 :  resName.contains("accent_device_default_dark")
                 || resName.contains("colorAccent")
+                || resName.contains("lockscreen_clock_accent_color")
+                || resName.contains("oneplus_accent_color")
+                || resName.contains("settings_accent_color")
+                || resName.contains("settingsHeaderColor")
+                || resName.contains("dismiss_all_icon_color")
                 || resName.contains("accent_device_default_light");
     }
 
