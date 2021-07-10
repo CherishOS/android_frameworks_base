@@ -192,7 +192,6 @@ extern int register_com_android_internal_os_FuseAppLoop(JNIEnv* env);
 extern int register_com_android_internal_os_KernelCpuUidBpfMapReader(JNIEnv *env);
 extern int register_com_android_internal_os_KernelSingleUidTimeReader(JNIEnv *env);
 extern int register_com_android_internal_os_Zygote(JNIEnv *env);
-extern int register_com_android_internal_os_ZygoteCommandBuffer(JNIEnv *env);
 extern int register_com_android_internal_os_ZygoteInit(JNIEnv *env);
 extern int register_com_android_internal_util_VirtualRefBasePtr(JNIEnv *env);
 
@@ -668,7 +667,6 @@ int AndroidRuntime::startVm(JavaVM** pJavaVM, JNIEnv** pEnv, bool zygote, bool p
     char methodTraceFileBuf[sizeof("-Xmethod-trace-file:") + PROPERTY_VALUE_MAX];
     char methodTraceFileSizeBuf[sizeof("-Xmethod-trace-file-size:") + PROPERTY_VALUE_MAX];
     std::string fingerprintBuf;
-    char javaZygoteForkLoopBuf[sizeof("-XX:ForceJavaZygoteForkLoop=") + PROPERTY_VALUE_MAX];
     char jdwpProviderBuf[sizeof("-XjdwpProvider:") - 1 + PROPERTY_VALUE_MAX];
     char opaqueJniIds[sizeof("-Xopaque-jni-ids:") - 1 + PROPERTY_VALUE_MAX];
     char bootImageBuf[sizeof("-Ximage:") - 1 + PROPERTY_VALUE_MAX];
@@ -869,13 +867,6 @@ int AndroidRuntime::startVm(JavaVM** pJavaVM, JNIEnv** pEnv, bool zygote, bool p
     }
 
     parseRuntimeOption("dalvik.vm.backgroundgctype", backgroundgcOptsBuf, "-XX:BackgroundGC=");
-
-    /*
-     * Enable/disable zygote native fork loop.
-     */
-    parseRuntimeOption("dalvik.vm.force-java-zygote-fork-loop",
-                       javaZygoteForkLoopBuf,
-                       "-XX:ForceJavaZygoteForkLoop=");
 
     /*
      * Enable debugging only for apps forked from zygote.
@@ -1531,7 +1522,6 @@ static const RegJNIRec gRegJNI[] = {
         REG_JNI(register_com_android_internal_content_om_OverlayConfig),
         REG_JNI(register_com_android_internal_os_ClassLoaderFactory),
         REG_JNI(register_com_android_internal_os_Zygote),
-        REG_JNI(register_com_android_internal_os_ZygoteCommandBuffer),
         REG_JNI(register_com_android_internal_os_ZygoteInit),
         REG_JNI(register_com_android_internal_util_VirtualRefBasePtr),
         REG_JNI(register_android_hardware_Camera),
