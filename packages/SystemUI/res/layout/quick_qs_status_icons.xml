@@ -24,26 +24,91 @@
     android:layout_below="@id/quick_status_bar_system_icons"
     android:clipChildren="false"
     android:clipToPadding="false"
-    android:minHeight="20dp"
+    android:minHeight="20.5dp"
     android:clickable="false"
     android:focusable="true"
     android:theme="@style/QSHeaderTheme">
 
-    <com.android.systemui.statusbar.policy.DateView
-        android:id="@+id/date"
-        android:layout_width="wrap_content"
+    <LinearLayout
         android:layout_height="wrap_content"
-        android:layout_gravity="start|center_vertical"
-        android:gravity="center_vertical"
-        android:singleLine="true"
-        android:textAppearance="@style/TextAppearance.QS.Status"
-        systemui:datePattern="@string/abbrev_wday_month_day_no_year_alarm" />
+        android:layout_width="wrap_content"
+        android:layout_marginStart="4dp"
+        android:orientation="vertical"
+        android:gravity="start">
 
-    <com.android.systemui.statusbar.phone.StatusIconContainer
-        android:id="@+id/statusIcons"
+        <LinearLayout 
+            android:id="@+id/clock_layout"
+            android:gravity="start|bottom|center" 
+            android:orientation="horizontal" 
+            android:paddingStart="@dimen/status_bar_start_padding"
+            android:layout_width="match_parent" 
+            android:layout_height="wrap_content">
+
+            <RelativeLayout 
+                android:layout_width="wrap_content" 
+                android:layout_height="wrap_content">
+
+                <TextClock 
+                    android:textSize="16.0dip" 
+                    android:textColor="?android:textColorPrimary" 
+                    android:layout_gravity="start|bottom|center" 
+                    android:layout_width="wrap_content" 
+                    android:layout_height="wrap_content" 
+                    android:singleLine="true" 
+                    android:format12Hour="kk" 
+                    android:format24Hour="kk" />
+
+                <TextClock 
+                    android:textSize="16.0dip" 
+                    android:textColor="@*android:color/accent_device_default" 
+                    android:layout_gravity="left|bottom|center" 
+                    android:layout_width="wrap_content" 
+                    android:layout_height="wrap_content" 
+                    android:singleLine="true" 
+                    android:maxLength="1" 
+                    android:format12Hour="kk" 
+                    android:format24Hour="kk" />
+
+            </RelativeLayout>
+
+            <TextClock 
+                android:textSize="16.0dip" 
+                android:textColor="?android:textColorPrimary" 
+                android:layout_gravity="start|bottom|center" 
+                android:layout_width="wrap_content" 
+                android:layout_height="wrap_content" 
+                android:singleLine="true" 
+                android:format12Hour=":mm" 
+                android:format24Hour=":mm" />
+
+        </LinearLayout>
+
+        <com.android.systemui.statusbar.policy.DateView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="20dip"
+            android:paddingStart="@dimen/status_bar_start_padding"
+            android:layout_gravity="start|center_vertical"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.QS.Status"
+            systemui:datePattern="@string/abbrev_wday_month_day_no_year_alarm" />
+    </LinearLayout>  
+
+    <LinearLayout
+        android:id="@+id/right_side"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:paddingEnd="@dimen/signal_cluster_battery_padding" />
+        android:gravity="center_vertical|end">
+
+        <com.android.systemui.statusbar.phone.StatusIconContainer
+            android:id="@+id/statusIcons"
+            android:paddingStart="@dimen/signal_cluster_battery_padding"
+            android:gravity="center_vertical|end"
+            android:layout_width="wrap_content"
+            android:layout_height="20dip"/>
+
+    </LinearLayout>
 
 </LinearLayout>
