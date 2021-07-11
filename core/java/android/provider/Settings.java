@@ -5119,12 +5119,6 @@ public final class Settings {
         public static final String AMBIENT_BATTERY_PERCENT = "ambient_battery_percent";
 		
 		/**
-         * Whether to show status bar on lockscreen
-         * @hide
-         */
-        public static final String LOCKSCREEN_STATUS_BAR = "lockscreen_status_bar";
-		
-		/**
          * Expand immediately arrow
          */
         public static final String EXPAND_IMMEDIATELY = "expand_immediately";
