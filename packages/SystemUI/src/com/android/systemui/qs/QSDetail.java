@@ -34,6 +34,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.provider.Settings;
+import android.os.UserHandle;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.UiEventLogger;
@@ -92,13 +94,9 @@ public class QSDetail extends LinearLayout {
         for (int i = 0; i < mDetailViews.size(); i++) {
             mDetailViews.valueAt(i).dispatchConfigurationChanged(newConfig);
         }
+         updateResources();
+     }
 
-        // Update top space height in orientation change
-        mQsDetailTopSpace.getLayoutParams().height =
-                mContext.getResources().getDimensionPixelSize(
-                        com.android.internal.R.dimen.quick_qs_offset_height);
-        mQsDetailTopSpace.setLayoutParams(mQsDetailTopSpace.getLayoutParams());
-    }
 
     @Override
     protected void onFinishInflate() {
@@ -159,6 +157,19 @@ public class QSDetail extends LinearLayout {
     }
 
     public void updateResources() {
+        boolean oos_qsclock = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.OOS_QSCLOCK, 1, UserHandle.USER_CURRENT) == 1;
+        if (oos_qsclock) {
+        mQsDetailTopSpace.getLayoutParams().height =
+                mContext.getResources().getDimensionPixelSize(
+                        com.android.internal.R.dimen.quick_qs_offset_height);
+        mQsDetailTopSpace.setLayoutParams(mQsDetailTopSpace.getLayoutParams());
+        } else {
+        mQsDetailTopSpace.getLayoutParams().height =
+                mContext.getResources().getDimensionPixelSize(
+                        com.android.internal.R.dimen.quick_qs_offset_height_normal);
+        mQsDetailTopSpace.setLayoutParams(mQsDetailTopSpace.getLayoutParams());
+        }
         updateDetailText();
     }
 
