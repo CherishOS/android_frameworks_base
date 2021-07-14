@@ -648,6 +648,41 @@ public class KeyguardIndicationController implements StateListener,
                 mChargingIndicationView.getLayoutParams().width = mContext.getResources().getDimensionPixelSize(
                             R.dimen.keyguard_charging_indication_height);
                 break;
+			case 9: // Split
+                    mChargingIndicationView.setFileName("Chris_Gannon_split_loader.json");
+                    mChargingIndicationView.getLayoutParams().height = mContext.getResources().getDimensionPixelSize(
+                                R.dimen.keyguard_charging_indication_height);
+                    mChargingIndicationView.getLayoutParams().width = mContext.getResources().getDimensionPixelSize(
+                                R.dimen.keyguard_charging_indication_height);
+                    break;
+                case 10: // olm
+                mChargingIndicationView.setFileName("john_olm_yellow_animation.json");
+                mChargingIndicationView.getLayoutParams().height = mContext.getResources().getDimensionPixelSize(
+                            R.dimen.keyguard_charging_indication_height);
+                mChargingIndicationView.getLayoutParams().width = mContext.getResources().getDimensionPixelSize(
+                            R.dimen.keyguard_charging_indication_height);
+                break;
+            case 11: // Covid19
+                mChargingIndicationView.setFileName("lottiefiles_covid19.json");
+                mChargingIndicationView.getLayoutParams().height = mContext.getResources().getDimensionPixelSize(
+                            R.dimen.keyguard_charging_indication_height);
+                mChargingIndicationView.getLayoutParams().width = mContext.getResources().getDimensionPixelSize(
+                            R.dimen.keyguard_charging_indication_height);
+                break;
+            case 12: // Wash your hands
+                mChargingIndicationView.setFileName("lottiefiles_wash_your_hands.json");
+                mChargingIndicationView.getLayoutParams().height = mContext.getResources().getDimensionPixelSize(
+                            R.dimen.keyguard_charging_indication_height);
+                mChargingIndicationView.getLayoutParams().width = mContext.getResources().getDimensionPixelSize(
+                            R.dimen.keyguard_charging_indication_height);
+                break;
+            case 13: // Wear mask
+                mChargingIndicationView.setFileName("lottiefiles_wear_mask.json");
+                mChargingIndicationView.getLayoutParams().height = mContext.getResources().getDimensionPixelSize(
+                            R.dimen.keyguard_charging_indication_height);
+                mChargingIndicationView.getLayoutParams().width = mContext.getResources().getDimensionPixelSize(
+                            R.dimen.keyguard_charging_indication_height);
+                break;
             }
             mChargingIndicationView.setVisibility(View.VISIBLE);
             mChargingIndicationView.playAnimation();
