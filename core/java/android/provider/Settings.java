@@ -5079,6 +5079,11 @@ public final class Settings {
         public static final String DOUBLE_TAP_SLEEP_LOCKSCREEN = "double_tap_sleep_lockscreen";
 
         /**
+         * @hide
+         */
+        public static final String LOCKSCREEN_MEDIA_ART = "lockscreen_media_art";
+
+        /**
          * Three Finger Gesture from Oppo
          * @hide
          */
@@ -5171,18 +5176,6 @@ public final class Settings {
          * @hide
          */
         public static final String RINGTONE_VIBRATION_PATTERN = "ringtone_vibration_pattern";
-		
-		/**
-         * Lockscreen media art
-         * @hide
-         */
-        public static final String LOCKSCREEN_MEDIA_METADATA = "lockscreen_media_metadata";
-		
-		/**
-         * Switch between filters for lockscreen album art
-         * @hide
-         */
-        public static final String LOCKSCREEN_ALBUMART_FILTER = "lockscreen_albumart_filter";
 		
 		/**
          * Custom vibration pattern
@@ -5614,6 +5607,12 @@ public final class Settings {
          * @hide
          */
         public static final String FORCE_FULLSCREEN_CUTOUT_APPS = "force_full_screen_cutout_apps";
+
+        /**
+         * media artwork wallpaper blur level on lockscreen
+         * @hide
+         */
+        public static final String LOCKSCREEN_MEDIA_BLUR = "lockscreen_media_blur";
 
         /**
          * Enable and disable Lockscreen visualizer
@@ -6926,7 +6925,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(ENABLE_CONDITIONS);
             PRIVATE_SETTINGS.add(ENABLE_SUGGESTIONS);
             PRIVATE_SETTINGS.add(FORCE_FULLSCREEN_CUTOUT_APPS);
-			PRIVATE_SETTINGS.add(LOCKSCREEN_MEDIA_METADATA);
+            PRIVATE_SETTINGS.add(LOCKSCREEN_MEDIA_ART);
             PRIVATE_SETTINGS.add(CENTER_NOTIFICATION_HEADERS);
             PRIVATE_SETTINGS.add(STATUS_BAR_CLOCK);
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_STYLE);
@@ -11205,14 +11204,6 @@ public final class Settings {
          * @hide
          */
         public static final String MEDIA_CONTROLS_RESUME = "qs_media_resumption";
-
-        /**
-         * Controls which packages are blocked from persisting in media controls when resumption is
-         * enabled. The list of packages is set by the user in the Settings app.
-         * @see Settings.Secure#MEDIA_CONTROLS_RESUME
-         * @hide
-         */
-        public static final String MEDIA_CONTROLS_RESUME_BLOCKED = "qs_media_resumption_blocked";
 
         /**
          * Controls if window magnification is enabled.

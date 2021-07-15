@@ -91,12 +91,12 @@ public class SystemSettings {
         Settings.System.ENABLE_CONDITIONS,
         Settings.System.ENABLE_SUGGESTIONS,
         Settings.System.NOTIFICATION_HEADERS,
+        Settings.System.LOCKSCREEN_MEDIA_ART,
         Settings.System.RINGTONE_VIBRATION_PATTERN,
         Settings.System.CUSTOM_RINGTONE_VIBRATION_PATTERN,
         Settings.System.QS_MEDIA_PLAYER,
         Settings.System.LOCKSCREEN_BATTERY_INFO_FONT,
         Settings.System.COLOR_BUCKET_OVERLAY,
-        Settings.System.LOCKSCREEN_MEDIA_METADATA,
         Settings.System.CUSTOM_STATUSBAR_PADDING_START,
         Settings.System.CUSTOM_STATUSBAR_PADDING_END
     };

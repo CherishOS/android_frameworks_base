@@ -25,7 +25,6 @@ import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.app.Notification;
 import android.content.Context;
-import android.database.ContentObserver;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -38,7 +37,6 @@ import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Trace;
 import android.os.UserHandle;
 import android.provider.DeviceConfig;
@@ -47,19 +45,20 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.provider.Settings;
 import android.util.ArraySet;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.database.ContentObserver;
+import android.content.ContentResolver;
+import android.os.Handler;
+import android.provider.Settings;
 
 import com.android.internal.config.sysui.SystemUiDeviceConfigFlags;
 import com.android.internal.statusbar.NotificationVisibility;
-import com.android.internal.util.cherish.ImageHelper;
 import com.android.systemui.Dependency;
 import com.android.systemui.Dumpable;
 import com.android.systemui.Interpolators;
-import com.android.systemui.R;
 import com.android.systemui.colorextraction.SysuiColorExtractor;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.media.MediaData;
@@ -132,13 +131,14 @@ public class NotificationMediaManager implements Dumpable {
 
     private final DelayableExecutor mMainExecutor;
 
+    private float mLockscreenMediaBlur;
+
     private final Context mContext;
     private final MediaSessionManager mMediaSessionManager;
     private final ArrayList<MediaListener> mMediaListeners;
     private final Lazy<StatusBar> mStatusBarLazy;
     private final MediaArtworkProcessor mMediaArtworkProcessor;
     private final Set<AsyncTask<?, ?, ?>> mProcessArtworkTasks = new ArraySet<>();
-    private final Handler mHandler;
 
     protected NotificationPresenter mPresenter;
     private MediaController mMediaController;
@@ -152,45 +152,37 @@ public class NotificationMediaManager implements Dumpable {
     private ImageView mBackdropFront;
     private ImageView mBackdropBack;
 
-    private boolean mShowCompactMediaSeekbar;
-    private boolean mShowMediaMetadata;
-    private int mAlbumArtFilter;
+    private boolean mLockscreenArt;
 
-    Handler startHandlerThread() {
-        HandlerThread thread = new HandlerThread("NotificationMediaManager");
-        thread.start();
-        return thread.getThreadHandler();
-    }
-
-    private class CustomSettingsObserver extends ContentObserver {
-        CustomSettingsObserver(Handler handler) {
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
             super(handler);
         }
 
         void observe() {
-            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_MEDIA_METADATA),
-                    false, this, UserHandle.USER_ALL);
-            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_ALBUMART_FILTER),
-                    false, this, UserHandle.USER_ALL);
+            ContentResolver resolver = mContext.getContentResolver();
+            // Observe all users' changes
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_MEDIA_ART), false, this,
+                    UserHandle.USER_ALL);
+            updateSettings();
         }
 
-        @Override
+        @Override 
         public void onChange(boolean selfChange) {
-            update();
-        }
-
-        public void update() {
-            mShowMediaMetadata = Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.LOCKSCREEN_MEDIA_METADATA, 0) == 1;
-            mAlbumArtFilter = Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.LOCKSCREEN_ALBUMART_FILTER, 0);
-            dispatchUpdateMediaMetaData(false /* changed */, true /* allowAnimation */);
+            updateSettings();
         }
     }
-    private final CustomSettingsObserver mCustomSettingsObserver;
 
+    public void updateSettings() {
+        ContentResolver resolver = mContext.getContentResolver();
+        mLockscreenArt =  Settings.System.getIntForUser(resolver,
+                Settings.System.LOCKSCREEN_MEDIA_ART, 1,
+                UserHandle.USER_CURRENT) == 1;
+        
+    }
+
+    private boolean mShowCompactMediaSeekbar;
     private final DeviceConfig.OnPropertiesChangedListener mPropertiesChangedListener =
             new DeviceConfig.OnPropertiesChangedListener() {
         @Override
@@ -332,11 +324,9 @@ public class NotificationMediaManager implements Dumpable {
         deviceConfig.addOnPropertiesChangedListener(DeviceConfig.NAMESPACE_SYSTEMUI,
                 mContext.getMainExecutor(),
                 mPropertiesChangedListener);
-
-        mHandler = startHandlerThread();
-        mCustomSettingsObserver = new CustomSettingsObserver(mHandler);
-        mCustomSettingsObserver.observe();
-        mCustomSettingsObserver.update();
+        Handler mHandler = new Handler();
+        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
+        settingsObserver.observe();
     }
 
     private void removeEntry(NotificationEntry entry) {
@@ -652,7 +642,7 @@ public class NotificationMediaManager implements Dumpable {
             }
             mProcessArtworkTasks.clear();
         }
-        if (artworkBitmap != null) {
+        if (artworkBitmap != null && mLockscreenArt) {
             mProcessArtworkTasks.add(new ProcessArtworkTask(this, metaDataChanged,
                     allowEnterAnimation).execute(artworkBitmap));
         } else {
@@ -665,31 +655,8 @@ public class NotificationMediaManager implements Dumpable {
     private void finishUpdateMediaMetaData(boolean metaDataChanged, boolean allowEnterAnimation,
             @Nullable Bitmap bmp) {
         Drawable artworkDrawable = null;
-        if (bmp != null && (mShowMediaMetadata || !ENABLE_LOCKSCREEN_WALLPAPER) &&
-                PlaybackState.STATE_PLAYING == getMediaControllerPlaybackState(mMediaController)) {
-            switch (mAlbumArtFilter) {
-                case 0:
-                default:
-                    artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(), bmp);
-                    break;
-                case 1:
-                    artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(),
-                        ImageHelper.toGrayscale(bmp));
-                    break;
-                case 2:
-                    Drawable aw = new BitmapDrawable(mBackdropBack.getResources(), bmp);
-                    artworkDrawable = new BitmapDrawable(ImageHelper.getColoredBitmap(aw,
-                        mContext.getResources().getColor(R.color.accent_device_default_light)));
-                    break;
-                case 3:
-                    artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(),
-                        ImageHelper.getBlurredImage(mContext, bmp, 7.0f));
-                    break;
-                case 4:
-                    artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(),
-                        ImageHelper.getGrayscaleBlurredImage(mContext, bmp, 7.0f));
-                    break;
-            }
+        if (bmp != null && PlaybackState.STATE_PLAYING == getMediaControllerPlaybackState(mMediaController)) {
+            artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(), bmp);
         }
         boolean hasMediaArtwork = artworkDrawable != null;
         boolean allowWhenShade = false;
@@ -866,7 +833,13 @@ public class NotificationMediaManager implements Dumpable {
     };
 
     private Bitmap processArtwork(Bitmap artwork) {
-        return mMediaArtworkProcessor.processArtwork(mContext, artwork);
+        return mMediaArtworkProcessor.processArtwork(mContext, artwork, mLockscreenMediaBlur);
+    }
+
+    public void setLockScreenMediaBlurLevel() {
+        mLockscreenMediaBlur = (float) Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_MEDIA_BLUR, 25,
+                UserHandle.USER_CURRENT);
     }
 
     @MainThread
