@@ -45,7 +45,6 @@ import com.android.systemui.qs.tiles.DndTile;
 import com.android.systemui.qs.tiles.FlashlightTile;
 import com.android.systemui.qs.tiles.HeadphonesBuddyTile;
 import com.android.systemui.qs.tiles.GamingModeTile;
-import com.android.systemui.qs.tiles.FPSInfoTile;
 import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.HeadsUpTile;
 import com.android.systemui.qs.tiles.HWKeysTile;
@@ -110,7 +109,6 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<SoundTile> mSoundTileProvider;
     private final Provider<AmbientDisplayTile> mAmbientDisplayTileProvider;
     private final Provider<CaffeineTile> mCaffeineTileProvider;
-    private final Provider<FPSInfoTile> mFPSInfoTileProvider;
     private final Provider<HeadsUpTile> mHeadsUpTileProvider;
     private final Provider<AODTile> mAODTileProvider;
     private final Provider<PowerMenuTile> mPowerMenuTileProvider;
@@ -179,7 +177,6 @@ public class QSFactoryImpl implements QSFactory {
             Provider<PowerMenuTile> powerMenuTileProvider,
             Provider<ReadingModeTile> readingModeTileProvider,
             Provider<SmartPixelsTile> smartPixelsTileProvider,
-            Provider<FPSInfoTile> fpsInfoTileProvider,
             Provider<SoundSearchTile> soundSearchTileProvider,
             Provider<MonoToggleTile> monoToggleTileProvider,
             Provider<KillappTile> killappTileProvider,
@@ -227,7 +224,6 @@ public class QSFactoryImpl implements QSFactory {
         mPowerMenuTileProvider = powerMenuTileProvider;
         mReadingModeTileProvider = readingModeTileProvider;
         mSmartPixelsTileProvider = smartPixelsTileProvider;
-        mFPSInfoTileProvider = fpsInfoTileProvider;
         mSoundSearchTileProvider = soundSearchTileProvider;
         mMonoToggleTileProvider = monoToggleTileProvider;
         mKillappTileProvider = killappTileProvider;
@@ -299,8 +295,6 @@ public class QSFactoryImpl implements QSFactory {
                 return mHeadphonesBuddyTile.get();
             case "gaming":
                 return mGamingModeTileProvider.get();
-            case "fpsinfo":
-                return mFPSInfoTileProvider.get();
             case "heads_up":
                 return mHeadsUpTileProvider.get();
             case "powermenu":

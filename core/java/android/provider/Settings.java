@@ -6220,41 +6220,6 @@ public final class Settings {
          * @hide
          */
         public static final String LOCK_POWER_MENU_DISABLED = "lockscreen_power_menu_disabled";
-
-        /**
-         * Status bar carrier label
-         * 0: Hide
-         * 1: Display on keyguard status bar
-         * 2: Display on Normal status bar
-         * 3: Enabled for both
-         * @hide
-         */
-        public static final String STATUS_BAR_SHOW_CARRIER = "status_bar_show_carrier";
-
-        /**
-         * custom carrier label. The value is
-         * String.
-         * @hide
-         */
-        public static final String CUSTOM_CARRIER_LABEL = "custom_carrier_label";
-
-        /**
-         * Carrier Label Custom Color
-         * @hide
-         */
-        public static final String STATUS_BAR_CARRIER_COLOR = "status_bar_carrier_color";
-
-        /**
-         * Settings for carrier label font size
-         * @hide
-         */
-        public static final String STATUS_BAR_CARRIER_FONT_SIZE = "status_bar_carrier_font_size";
-
-        /**
-         * Custom carrier label font style
-         * @hide
-         */
-        public static final String STATUS_BAR_CARRIER_FONT_STYLE = "status_bar_carrier_font_style";
 		
 		/**
          * @hide
@@ -6275,12 +6240,6 @@ public final class Settings {
          * @hide
          */
         public static final String QS_TILE_STYLE = "qs_tile_style";
-		
-		/**
-         * Whether to change the transparency of the notifications
-         * @hide
-         */
-        public static final String NOTIFICATION_BG_ALPHA = "notification_bg_alpha";
 
 		/**
          * @hide
@@ -6532,12 +6491,6 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_BATTERY_INFO_FONT = "lockscreen_battery_info_font";
-
-        /**
-         * Whether to show or hide the running services icon
-         * @hide
-         */
-        public static final String QS_RUNNING_SERVICES_TOGGLE = "qs_running_services_toggle";
 
         /**
          * Whether StatusBar icons should use app icon
@@ -15731,11 +15684,6 @@ public final class Settings {
          * @hide
          */
         public static final String SHOW_CPU_OVERLAY = "show_cpu_overlay";
-		
-		/**
-         * @hide
-         */
-        public static final String SHOW_FPS_OVERLAY = "show_fps_overlay";
 
         /**
          * Enable blocking wakelock

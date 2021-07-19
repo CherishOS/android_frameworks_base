@@ -20,10 +20,10 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 import static android.content.Context.VIBRATOR_SERVICE;
 
 import android.app.NotificationManager;
-import android.content.Intent;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.IActivityManager;
+import android.content.Intent;
 import android.hardware.input.InputManager;
 import android.media.AudioManager;
 import android.os.Looper;
