@@ -22,7 +22,6 @@ import static android.Manifest.permission.OBSERVE_NETWORK_POLICY;
 import static android.Manifest.permission.SHUTDOWN;
 import static android.net.INetd.FIREWALL_BLACKLIST;
 import static android.net.INetd.FIREWALL_CHAIN_DOZABLE;
-import static android.net.INetd.FIREWALL_CHAIN_ISOLATED;
 import static android.net.INetd.FIREWALL_CHAIN_NONE;
 import static android.net.INetd.FIREWALL_CHAIN_POWERSAVE;
 import static android.net.INetd.FIREWALL_CHAIN_STANDBY;
@@ -30,7 +29,6 @@ import static android.net.INetd.FIREWALL_RULE_ALLOW;
 import static android.net.INetd.FIREWALL_RULE_DENY;
 import static android.net.INetd.FIREWALL_WHITELIST;
 import static android.net.NetworkPolicyManager.FIREWALL_CHAIN_NAME_DOZABLE;
-import static android.net.NetworkPolicyManager.FIREWALL_CHAIN_NAME_ISOLATED;
 import static android.net.NetworkPolicyManager.FIREWALL_CHAIN_NAME_POWERSAVE;
 import static android.net.NetworkPolicyManager.FIREWALL_CHAIN_NAME_STANDBY;
 import static android.net.NetworkPolicyManager.FIREWALL_RULE_DEFAULT;
@@ -38,14 +36,12 @@ import static android.net.NetworkStats.SET_DEFAULT;
 import static android.net.NetworkStats.STATS_PER_UID;
 import static android.net.NetworkStats.TAG_NONE;
 import static android.net.TrafficStats.UID_TETHERING;
-import static android.system.OsConstants.ENETDOWN;
 
 import static com.android.server.NetworkManagementSocketTagger.PROP_QTAGUID_ENABLED;
 
 import android.annotation.NonNull;
 import android.app.ActivityManager;
 import android.content.Context;
-import android.database.ContentObserver;
 import android.net.ConnectivityManager;
 import android.net.INetd;
 import android.net.INetdUnsolicitedEventListener;
@@ -56,11 +52,8 @@ import android.net.InterfaceConfiguration;
 import android.net.InterfaceConfigurationParcel;
 import android.net.IpPrefix;
 import android.net.LinkAddress;
-import android.net.LinkProperties;
 import android.net.Network;
-import android.net.NetworkCapabilities;
 import android.net.NetworkPolicyManager;
-import android.net.NetworkRequest;
 import android.net.NetworkStack;
 import android.net.NetworkStats;
 import android.net.NetworkUtils;
@@ -87,7 +80,6 @@ import android.os.StrictMode;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.Trace;
-import android.provider.Settings;
 import android.telephony.DataConnectionRealTimeInfo;
 import android.text.TextUtils;
 import android.util.Log;
@@ -120,7 +112,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @hide
@@ -224,12 +215,6 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
      */
     @GuardedBy("mRulesLock")
     private SparseIntArray mUidFirewallPowerSaveRules = new SparseIntArray();
-    /**
-     * Set of UIDs that are to be blocked/allowed by firewall controller.  This set of Ids matches
-     * unconditionally at all times.
-     */
-    @GuardedBy("mRulesLock")
-    private SparseIntArray mUidFirewallIsolatedRules = new SparseIntArray();
     /** Set of states for the child firewall chains. True if the chain is active. */
     @GuardedBy("mRulesLock")
     final SparseBooleanArray mFirewallChainStates = new SparseBooleanArray();
@@ -263,57 +248,6 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
             new RemoteCallbackList<>();
     private boolean mNetworkActive;
 
-    /* map keys used by netd to keep per app interface restrictions
-     * separate for each use case.
-     */
-    private static final String RESTRICT_USECASE_CELL = "cell";
-    private static final String RESTRICT_USECASE_VPN  = "vpn";
-    private static final String RESTRICT_USECASE_WIFI = "wifi";
-
-    // Helper class for managing per uid interface blacklists.
-    private static class RestrictIf {
-        // Use case string
-        public String useCase;
-        // Interface name
-        public String ifName;
-        // NetworkCapabilities transport type used for this blacklist
-        public int transport;
-        // Active uid blacklist
-        public SparseBooleanArray active;
-        // Desired uid blacklist changes
-        public SparseBooleanArray pending;
-
-        RestrictIf(String useCase, int transport) {
-            this.useCase = useCase;
-            this.ifName = null;
-            this.transport = transport;
-            this.active = new SparseBooleanArray();
-            this.pending = new SparseBooleanArray();
-        }
-    }
-
-    @GuardedBy("mQuotaLock")
-    private RestrictIf[] mRestrictIf = {
-            // Ordered by match preference (in the event we get a callback with
-            // multiple transports).
-            new RestrictIf(RESTRICT_USECASE_VPN, NetworkCapabilities.TRANSPORT_VPN),
-            new RestrictIf(RESTRICT_USECASE_CELL, NetworkCapabilities.TRANSPORT_CELLULAR),
-            new RestrictIf(RESTRICT_USECASE_WIFI, NetworkCapabilities.TRANSPORT_WIFI),
-    };
-
-    private RestrictIf getUseCaseRestrictIf(String useCase) {
-        for (RestrictIf restrictIf : mRestrictIf) {
-            if (restrictIf.useCase.equals(useCase)) {
-                return restrictIf;
-            }
-        }
-        throw new IllegalStateException("Unknown interface restriction");
-    }
-
-    private static int mGlobalCleartextNetworkPolicy = StrictMode.NETWORK_POLICY_ACCEPT;
-
-    private final HashMap<Network, NetworkCapabilities> mNetworkCapabilitiesMap = new HashMap<>();
-
     /**
      * Constructs a new NetworkManagementService instance
      *
@@ -333,22 +267,6 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
         synchronized (mTetheringStatsProviders) {
             mTetheringStatsProviders.put(new NetdTetheringStatsProvider(), "netd");
         }
-
-        mContext.getContentResolver().registerContentObserver(
-                Settings.Global.getUriFor(Settings.Global.CLEARTEXT_NETWORK_POLICY),
-                false,
-                new ContentObserver(mDaemonHandler) {
-                    @Override
-                    public void onChange(boolean selfChange) {
-                        super.onChange(selfChange);
-                        setGlobalCleartextNetworkPolicy(
-                                Settings.Global.getInt(mContext.getContentResolver(),
-                                Settings.Global.CLEARTEXT_NETWORK_POLICY,
-                                StrictMode.NETWORK_POLICY_ACCEPT)
-                        );
-                    }
-                }
-        );
     }
 
     @VisibleForTesting
@@ -375,65 +293,6 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
     }
 
     public void systemReady() {
-        final ConnectivityManager mConnectivityManager =
-                mContext.getSystemService(ConnectivityManager.class);
-
-        final NetworkRequest.Builder builder = new NetworkRequest.Builder()
-                .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN);
-        for (RestrictIf restrictIf : mRestrictIf) {
-            builder.addTransportType(restrictIf.transport);
-        }
-        final NetworkRequest request = builder.build();
-
-        final ConnectivityManager.NetworkCallback mNetworkCallback =
-                new ConnectivityManager.NetworkCallback() {
-            @Override
-            public void onCapabilitiesChanged(Network network,
-                    NetworkCapabilities networkCapabilities) {
-                mNetworkCapabilitiesMap.put(network, networkCapabilities);
-            }
-
-            @Override
-            public void onLinkPropertiesChanged(Network network, LinkProperties linkProperties) {
-                // Callback ordering in Oreo+ is documented to be:
-                // onCapabilitiesChanged, onLinkPropertiesChanged
-                // At this point, we should always find the network in our
-                // local map but guard anyway.
-                NetworkCapabilities nc = mNetworkCapabilitiesMap.get(network);
-                if (nc == null) {
-                    Slog.e(TAG, "onLinkPropertiesChanged: network was not in map: "
-                            + "network=" + network + " linkProperties=" + linkProperties);
-                    return;
-                }
-                RestrictIf matchedRestrictIf = null;
-                for (RestrictIf restrictIf : mRestrictIf) {
-                    if (nc.hasTransport(restrictIf.transport)) {
-                        matchedRestrictIf = restrictIf;
-                        break;
-                    }
-                }
-                if (matchedRestrictIf == null) {
-                    return;
-                }
-                final String iface = linkProperties.getInterfaceName();
-                if (TextUtils.isEmpty(iface)) {
-                    return;
-                }
-                // The post below requires final arguments so
-                final RestrictIf finalRestrictIf = matchedRestrictIf;
-                // Exit the callback ASAP and move further work onto daemon thread
-                mDaemonHandler.post(() ->
-                        updateAppOnInterfaceCallback(finalRestrictIf, iface));
-            }
-
-            @Override
-            public void onLost(Network network) {
-                mNetworkCapabilitiesMap.remove(network);
-            }
-        };
-
-        mConnectivityManager.registerNetworkCallback(request, mNetworkCallback);
-
         if (DBG) {
             final long start = System.currentTimeMillis();
             prepareNativeDaemon();
@@ -727,11 +586,6 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
                 }
             }
 
-            int policy = Settings.Global.getInt(mContext.getContentResolver(),
-                    Settings.Global.CLEARTEXT_NETWORK_POLICY, StrictMode.NETWORK_POLICY_ACCEPT);
-            setGlobalCleartextNetworkPolicy(policy);
-            mGlobalCleartextNetworkPolicy = policy;
-
             size = mUidCleartextPolicy.size();
             if (size > 0) {
                 if (DBG) Slog.d(TAG, "Pushing " + size + " active UID cleartext policies");
@@ -748,11 +602,9 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
             syncFirewallChainLocked(FIREWALL_CHAIN_STANDBY, "standby ");
             syncFirewallChainLocked(FIREWALL_CHAIN_DOZABLE, "dozable ");
             syncFirewallChainLocked(FIREWALL_CHAIN_POWERSAVE, "powersave ");
-            syncFirewallChainLocked(FIREWALL_CHAIN_ISOLATED, "isolated ");
 
             final int[] chains =
-                    {FIREWALL_CHAIN_STANDBY, FIREWALL_CHAIN_DOZABLE, FIREWALL_CHAIN_POWERSAVE,
-                    FIREWALL_CHAIN_ISOLATED};
+                    {FIREWALL_CHAIN_STANDBY, FIREWALL_CHAIN_DOZABLE, FIREWALL_CHAIN_POWERSAVE};
             for (int chain : chains) {
                 if (getFirewallChainState(chain)) {
                     setFirewallChainEnabled(chain, true);
@@ -1553,96 +1405,6 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
         return stableRanges;
     }
 
-    private void updateAppOnInterfaceCallback(RestrictIf restrictIf, String newIface) {
-        synchronized (mQuotaLock) {
-            if (TextUtils.isEmpty(restrictIf.ifName)) {
-                restrictIf.ifName = newIface;
-            } else if (!restrictIf.ifName.equals(newIface)) { // interface name has changed
-                // Prevent new incoming requests colliding with an update in progress
-                for (int i = 0; i < restrictIf.active.size(); i++) {
-                    final int uid = restrictIf.active.keyAt(i);
-                    final boolean restrict = restrictIf.active.valueAt(i);
-                    // Only remove/readd if a restriction is currently in place
-                    if (!restrict) {
-                        continue;
-                    }
-                    setAppOnInterfaceLocked(restrictIf.useCase, restrictIf.ifName, uid, false);
-                    restrictIf.active.setValueAt(i, false);
-                    // Use pending list to queue re-add.
-                    // (Prefer keeping existing pending status if it exists.)
-                    if (restrictIf.pending.indexOfKey(uid) < 0) {
-                        restrictIf.pending.put(uid, true);
-                    }
-                }
-                restrictIf.ifName = newIface;
-            }
-            processPendingAppOnInterfaceLocked(restrictIf);
-        }
-    }
-
-    @Override
-    public void restrictAppOnInterface(String useCase, int uid, boolean restrict) {
-        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
-        synchronized (mQuotaLock) {
-            restrictAppOnInterfaceLocked(getUseCaseRestrictIf(useCase), uid, restrict);
-        }
-    }
-
-    private void restrictAppOnInterfaceLocked(RestrictIf restrictIf, int uid, boolean restrict) {
-        if (TextUtils.isEmpty(restrictIf.ifName)) {
-            // We don't have an interface name yet so queue
-            // the request for when it comes up
-            restrictIf.pending.put(uid, restrict);
-            return;
-        }
-
-        boolean oldValue = restrictIf.active.get(uid, false);
-        if (oldValue == restrict) {
-            return;
-        }
-
-        if (setAppOnInterfaceLocked(restrictIf.useCase, restrictIf.ifName, uid, restrict)) {
-            restrictIf.active.put(uid, restrict);
-        } else {
-            // Perhaps the interface was down, queue to retry after receipt
-            // of the next network callback for this network.
-            restrictIf.pending.put(uid, true);
-        }
-    }
-
-    private boolean setAppOnInterfaceLocked(String useCase, String ifName, int uid,
-            boolean restrict) {
-        boolean ok = true;
-        try {
-            if (restrict) {
-                mNetdService.bandwidthAddRestrictAppOnInterface(useCase, ifName, uid);
-            } else {
-                mNetdService.bandwidthRemoveRestrictAppOnInterface(useCase, ifName, uid);
-            }
-        } catch (RemoteException e) {
-            throw new IllegalStateException(e);
-        } catch (ServiceSpecificException e) {
-            // ENETDOWN is returned when the interface cannot be resolved to an index.
-            // (and is only returned by bandwidthAdd... call)
-            if (e.errorCode == ENETDOWN) {
-                ok = false;
-            } else {
-                throw new IllegalStateException(e);
-            }
-        }
-        return ok;
-    }
-
-    private void processPendingAppOnInterfaceLocked(RestrictIf restrictIf) {
-        // Work on a copy of the pending list since failed add requests
-        // get put back on.
-        SparseBooleanArray pendingList = restrictIf.pending.clone();
-        restrictIf.pending = new SparseBooleanArray();
-        for (int i = 0; i < pendingList.size(); i++) {
-            restrictAppOnInterfaceLocked(restrictIf, pendingList.keyAt(i), pendingList.valueAt(i));
-        }
-    }
-
     @Override
     public void setAllowOnlyVpnForUids(boolean add, UidRange[] uidRanges)
             throws ServiceSpecificException {
@@ -1657,30 +1419,6 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
             Log.w(TAG, "setAllowOnlyVpnForUids(" + add + ", " + Arrays.toString(uidRanges) + ")"
                     + ": netd command failed", e);
             throw e.rethrowAsRuntimeException();
-        }
-    }
-
-    private void applyGlobalCleartextNetworkPolicy(int policy) {
-        final int policyValue;
-        switch (policy) {
-            case StrictMode.NETWORK_POLICY_ACCEPT:
-                policyValue = INetd.PENALTY_POLICY_ACCEPT;
-                break;
-            case StrictMode.NETWORK_POLICY_LOG:
-                policyValue = INetd.PENALTY_POLICY_LOG;
-                break;
-            case StrictMode.NETWORK_POLICY_REJECT:
-                policyValue = INetd.PENALTY_POLICY_REJECT;
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown policy " + policy);
-        }
-
-        try {
-            mNetdService.strictGlobalCleartextPenalty(policyValue);
-            mGlobalCleartextNetworkPolicy = policy;
-        } catch (RemoteException | ServiceSpecificException e) {
-            throw new IllegalStateException(e);
         }
     }
 
@@ -1705,50 +1443,6 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
             mUidCleartextPolicy.put(uid, policy);
         } catch (RemoteException | ServiceSpecificException e) {
             throw new IllegalStateException(e);
-        }
-    }
-
-    @Override
-    public void setDNSCleartextWhitelist(String[] dns) {
-        NetworkStack.checkNetworkStackPermission(mContext);
-
-        try {
-            mNetdService.strictDNSCleartextWhitelist(dns);
-        } catch (RemoteException | ServiceSpecificException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    @Override
-    public void setGlobalCleartextNetworkPolicy(int policy) {
-        NetworkStack.checkNetworkStackPermission(mContext);
-
-        synchronized (mQuotaLock) {
-            final int oldPolicy = mGlobalCleartextNetworkPolicy;
-            if (oldPolicy == policy) {
-                // This also ensures we won't needlessly apply an ACCEPT policy if we've just
-                // enabled strict and the underlying iptables rules are empty.
-                return;
-            }
-
-            // TODO: remove this code after removing prepareNativeDaemon()
-            if (!mStrictEnabled) {
-                // Module isn't enabled yet; stash the requested policy away to
-                // apply later once the daemon is connected.
-                mGlobalCleartextNetworkPolicy = policy;
-                return;
-            }
-
-            // netd does not keep state on strict mode policies, and cannot replace a non-accept
-            // policy without deleting it first. Rather than add state to netd, just always send
-            // it an accept policy when switching between two non-accept policies.
-            // TODO: consider keeping state in netd so we can simplify this code.
-            if (oldPolicy != StrictMode.NETWORK_POLICY_ACCEPT &&
-                    policy != StrictMode.NETWORK_POLICY_ACCEPT) {
-                applyGlobalCleartextNetworkPolicy(StrictMode.NETWORK_POLICY_ACCEPT);
-            }
-
-            applyGlobalCleartextNetworkPolicy(policy);
         }
     }
 
@@ -2012,8 +1706,6 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
                 return FIREWALL_CHAIN_NAME_DOZABLE;
             case FIREWALL_CHAIN_POWERSAVE:
                 return FIREWALL_CHAIN_NAME_POWERSAVE;
-            case FIREWALL_CHAIN_ISOLATED:
-                return FIREWALL_CHAIN_NAME_ISOLATED;
             default:
                 throw new IllegalArgumentException("Bad child chain: " + chain);
         }
@@ -2027,8 +1719,6 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
                 return FIREWALL_WHITELIST;
             case FIREWALL_CHAIN_POWERSAVE:
                 return FIREWALL_WHITELIST;
-            case FIREWALL_CHAIN_ISOLATED:
-                return FIREWALL_BLACKLIST;
             default:
                 return isFirewallEnabled() ? FIREWALL_WHITELIST : FIREWALL_BLACKLIST;
         }
@@ -2072,9 +1762,6 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
                         break;
                     case FIREWALL_CHAIN_POWERSAVE:
                         mNetdService.firewallReplaceUidChain("fw_powersave", true, uids);
-                        break;
-                    case FIREWALL_CHAIN_ISOLATED:
-                        mNetdService.firewallReplaceUidChain("fw_isolated", false, uids);
                         break;
                     case FIREWALL_CHAIN_NONE:
                     default:
@@ -2160,8 +1847,6 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
                 return mUidFirewallDozableRules;
             case FIREWALL_CHAIN_POWERSAVE:
                 return mUidFirewallPowerSaveRules;
-            case FIREWALL_CHAIN_ISOLATED:
-                return mUidFirewallIsolatedRules;
             case FIREWALL_CHAIN_NONE:
                 return mUidFirewallRules;
             default:
@@ -2247,10 +1932,6 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
             pw.println("UID firewall powersave chain enabled: " +
                     getFirewallChainState(FIREWALL_CHAIN_POWERSAVE));
             dumpUidFirewallRule(pw, FIREWALL_CHAIN_NAME_POWERSAVE, mUidFirewallPowerSaveRules);
-
-            pw.println("UID firewall isolated chain enabled: " +
-                    getFirewallChainState(FIREWALL_CHAIN_ISOLATED));
-            dumpUidFirewallRule(pw, FIREWALL_CHAIN_NAME_ISOLATED, mUidFirewallIsolatedRules);
         }
 
         synchronized (mIdleTimerLock) {
@@ -2429,11 +2110,6 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
 
     private boolean isNetworkRestrictedInternal(int uid) {
         synchronized (mRulesLock) {
-            if (getFirewallChainState(FIREWALL_CHAIN_ISOLATED)
-                    && mUidFirewallIsolatedRules.get(uid) == FIREWALL_RULE_DENY) {
-                if (DBG) Slog.d(TAG, "Uid " + uid + " restricted because of isolated mode");
-                return true;
-            }
             if (getFirewallChainState(FIREWALL_CHAIN_STANDBY)
                     && mUidFirewallStandbyRules.get(uid) == FIREWALL_RULE_DENY) {
                 if (DBG) Slog.d(TAG, "Uid " + uid + " restricted because of app standby mode");
@@ -2519,8 +2195,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub {
                 final int[] chains = {
                         FIREWALL_CHAIN_DOZABLE,
                         FIREWALL_CHAIN_STANDBY,
-                        FIREWALL_CHAIN_POWERSAVE,
-                        FIREWALL_CHAIN_ISOLATED
+                        FIREWALL_CHAIN_POWERSAVE
                 };
                 for (int chain : chains) {
                     setFirewallChainState(chain, false);

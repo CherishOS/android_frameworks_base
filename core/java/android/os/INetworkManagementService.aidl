@@ -291,8 +291,6 @@ interface INetworkManagementService
     void setUidMeteredNetworkWhitelist(int uid, boolean enable);
     boolean setDataSaverModeEnabled(boolean enable);
 
-    void setDNSCleartextWhitelist(in String[] dns);
-    void setGlobalCleartextNetworkPolicy(int policy);
     void setUidCleartextNetworkPolicy(int uid, int policy);
 
     /**
@@ -391,9 +389,4 @@ interface INetworkManagementService
     void setAllowOnlyVpnForUids(boolean enable, in UidRange[] uidRanges);
 
     boolean isNetworkRestricted(int uid);
-
-    /**
-     * Restrict UID from accessing a network interface
-     */
-    void restrictAppOnInterface(String key, int uid, boolean restrict);
 }
