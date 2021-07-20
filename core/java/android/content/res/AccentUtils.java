@@ -28,6 +28,13 @@ public final class AccentUtils {
                 || resName.contains("settings_accent_color")
                 || resName.contains("settingsHeaderColor")
                 || resName.contains("dismiss_all_icon_color")
+                || resName.contains("avatar_bg_red")
+                || resName.contains("folder_indicator_color")
+                || resName.contains("accent_color_red")
+                || resName.contains("alert_dialog_color_accent_light")
+                || resName.contains("alert_dialog_color_accent_dark")
+                || resName.contains("oneplus_accent_text_color")
+                || resName.contains("accent_device_default")
                 || resName.contains("accent_device_default_light");
     }
 
