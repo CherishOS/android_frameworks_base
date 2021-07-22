@@ -368,7 +368,12 @@ public class KeyguardClockSwitch extends RelativeLayout {
      * @param darkAmount Amount of transition to doze: 1f for doze and 0f for awake.
      */
     public void setDarkAmount(float darkAmount) {
-        mDarkAmount = darkAmount;
+        if (mStatusBarStateController.isDozing()){
+            mDarkAmount = darkAmount;
+        }
+        else {
+            mDarkAmount = 0.7f;
+        }
         if (mClockPlugin != null) {
             mClockPlugin.setDarkAmount(darkAmount);
         }
