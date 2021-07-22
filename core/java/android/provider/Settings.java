@@ -6643,6 +6643,13 @@ public final class Settings {
         public static final String SCREEN_STATE_TWOG = "screen_state_twog";
 
         /**
+         * Whether to hide notch fill
+         * @hide
+         */
+        public static final String DISPLAY_HIDE_NOTCH = "display_hide_notch";
+
+        /**
+         * Whether to show the lyric on the status bar
          * @hide
          */
         public static final String SCREEN_STATE_THREEG = "screen_state_threeg";
