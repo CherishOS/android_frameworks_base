@@ -16,9 +16,10 @@ public final class AccentUtils {
 
     private static final String TAG = "AccentUtils";
 
-    private static final String ACCENT_COLOR_SETTING = "accent_color";
+    private static final String ACCENT_DARK_SETTING = "accent_dark";
+    private static final String ACCENT_LIGHT_SETTING = "accent_light";
 
-    public static boolean isResourceColorAccent(@Nullable String resName) {
+    public static boolean isResourceDarkAccent(@Nullable String resName) {
         return resName == null
                 ? false
                 :  resName.contains("accent_device_default_dark")
@@ -31,17 +32,38 @@ public final class AccentUtils {
                 || resName.contains("avatar_bg_red")
                 || resName.contains("folder_indicator_color")
                 || resName.contains("accent_color_red")
-                || resName.contains("alert_dialog_color_accent_light")
                 || resName.contains("alert_dialog_color_accent_dark")
+                || resName.contains("oneplus_accent_text_color")
+                || resName.contains("accent_device_default")
+                || resName.contains("accent_device_default_dark");
+    }
+
+    public static boolean isResourceLightAccent(@Nullable String resName) {
+        return resName == null
+                ? false
+                : resName.contains("accent_device_default_light")
+                || resName.contains("colorAccent")
+                || resName.contains("lockscreen_clock_accent_color")
+                || resName.contains("oneplus_accent_color")
+                || resName.contains("settings_accent_color")
+                || resName.contains("dismiss_all_icon_color")
+                || resName.contains("settingsHeaderColor")
+                || resName.contains("avatar_bg_red")
+                || resName.contains("folder_indicator_color")
+                || resName.contains("accent_color_red")
+                || resName.contains("alert_dialog_color_accent_light")
                 || resName.contains("oneplus_accent_text_color")
                 || resName.contains("accent_device_default")
                 || resName.contains("accent_device_default_light");
     }
 
-    public static int getAccent(int defaultColor) {
-        return getAccentColor(defaultColor, ACCENT_COLOR_SETTING);
+    public static int getDarkAccentColor(int defaultColor) {
+        return getAccentColor(defaultColor, ACCENT_DARK_SETTING);
     }
 
+    public static int getLightAccentColor(int defaultColor) {
+        return getAccentColor(defaultColor, ACCENT_LIGHT_SETTING);
+    }
 
     private static int getAccentColor(int defaultColor, String setting) {
         final Context context = ActivityThread.currentApplication();

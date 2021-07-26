@@ -11258,6 +11258,18 @@ public final class Settings {
          * @hide
          */
         public static final String ADAPTIVE_CONNECTIVITY_ENABLED = "adaptive_connectivity_enabled";
+		
+		/**
+         * Dark Accent Color
+         * @hide
+         */
+        public static final String ACCENT_DARK = "accent_dark";
+
+        /**
+         * Light Accent Color
+         * @hide
+         */
+        public static final String ACCENT_LIGHT = "accent_light";
 
         /**
          * Whether to show or hide the arrow for back gesture
