@@ -55,7 +55,6 @@ import com.android.settingslib.development.DevelopmentSettingsEnabler;
 import com.android.settingslib.drawable.UserIconDrawable;
 import com.android.systemui.Dependency;
 import com.android.keyguard.CarrierText;
-import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.R.dimen;
 import com.android.systemui.plugins.ActivityStarter;
@@ -78,6 +77,7 @@ public class OPQSFooter extends LinearLayout {
     protected View mEdit;
     protected TouchAnimator mFooterAnimator;
     protected TouchAnimator mCarrierTextAnimator;
+    private ActivityStarter mActivityStarter;
     private Boolean mExpanded;
     private Boolean mIsLandscape;
     private FrameLayout mFooterActions;
@@ -116,7 +116,6 @@ public class OPQSFooter extends LinearLayout {
             mDataUsageView.setVisibility(expanded ? View.VISIBLE : View.GONE);
             if (expanded) {
                 mDataUsageView.updateUsage();
-                mDataUsageView.setOnClickListener(v -> startDataUsageActivity());
             }
         }
         mExpanded = expanded;
@@ -157,12 +156,5 @@ public class OPQSFooter extends LinearLayout {
             mFooterActions.setVisibility(View.VISIBLE);
         }
 
-    }
-
-    private void startDataUsageActivity() {
-        Intent intent = new Intent();
-        intent.setClassName("com.android.settings",
-                "com.android.settings.Settings$DataUsageSummaryActivity");
-        Dependency.get(ActivityStarter.class).startActivity(intent, true /* dismissShade */);
     }
 }
