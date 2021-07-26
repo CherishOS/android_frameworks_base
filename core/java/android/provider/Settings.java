@@ -6563,13 +6563,6 @@ public final class Settings {
          */
         public static final String TEXT_CHARGING_SYMBOL = "text_charging_symbol";
 
-
-        /**
-         * Weather an oos like  qs clock should be shown
-         * @hide
-         */
-        public static final String OOS_QSCLOCK = "oos_qsclock";
-
         /**
          * Wether auto brightness is applied one shot when screen is turned on
          * @hide
