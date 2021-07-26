@@ -6253,12 +6253,6 @@ public final class Settings {
 
         /** @hide */
         public static final String BACK_GESTURE_HAPTIC = "back_gesture_haptic";
-		
-		/**
-         * Whether to show or hide the edit icon
-         * @hide
-         */
-        public static final String QS_EDIT_TOGGLE = "qs_edit_toggle";
 
         /**
          * Whether to pulse ambient on new music tracks
