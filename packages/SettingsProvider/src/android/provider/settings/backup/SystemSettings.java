@@ -88,8 +88,6 @@ public class SystemSettings {
         Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN,
         Settings.System.THEMING_SETTINGS_DASHBOARD_ICONS,
         Settings.System.CENTER_NOTIFICATION_HEADERS,
-        Settings.System.ENABLE_CONDITIONS,
-        Settings.System.ENABLE_SUGGESTIONS,
         Settings.System.NOTIFICATION_HEADERS,
         Settings.System.LOCKSCREEN_MEDIA_ART,
         Settings.System.RINGTONE_VIBRATION_PATTERN,

@@ -5572,18 +5572,6 @@ public final class Settings {
         public static final String STATUS_BAR_WEATHER_FONT_SIZE = "status_bar_weather_font_size";
 		
 		/**
-         * Disable dashboard conditions in settings
-         * @hide
-         */
-        public static final String ENABLE_CONDITIONS = "enable_conditions";
-
-        /**
-         * Disable dashboard suggestions in settings
-         * @hide
-         */
-        public static final String ENABLE_SUGGESTIONS = "enable_suggestions";
-		
-		/**
          * Controls whether to show notification headers
          * @hide
          */
@@ -6897,8 +6885,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(OMNI_LOCKSCREEN_WEATHER_ENABLED);
             PRIVATE_SETTINGS.add(AICP_LOCKSCREEN_WEATHER_STYLE);
             PRIVATE_SETTINGS.add(THEMING_SETTINGS_DASHBOARD_ICONS);
-            PRIVATE_SETTINGS.add(ENABLE_CONDITIONS);
-            PRIVATE_SETTINGS.add(ENABLE_SUGGESTIONS);
             PRIVATE_SETTINGS.add(FORCE_FULLSCREEN_CUTOUT_APPS);
             PRIVATE_SETTINGS.add(LOCKSCREEN_MEDIA_ART);
             PRIVATE_SETTINGS.add(CENTER_NOTIFICATION_HEADERS);
