@@ -601,16 +601,21 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
                 UserHandle.USER_CURRENT) == 1;
         final Resources res = mContext.getResources();
         if (!mClockLocation) {
-                padding = res.getDimensionPixelSize(R.dimen.qs_panel_padding_top);
-            } else {
-                padding = res.getDimensionPixelSize(R.dimen.qs_header_tooltip_height);
-            }
+            padding = res.getDimensionPixelSize(R.dimen.qs_panel_padding_top);
+        } else {
+            padding = res.getDimensionPixelSize(R.dimen.qs_header_tooltip_height);
+        }
+            
 
         if (mUsingHorizontalLayout) {
             // When using the horizontal layout, our space is quite constrained. We therefore
             // reduce some of the padding on the top, which makes the brightness bar overlapp,
             // but since that has naturally quite a bit of built in padding, that's fine.
-            padding = (int) (padding * 0.6f);
+            if (!mClockLocation) {
+                padding = res.getDimensionPixelSize(R.dimen.qs_panel_padding_top);
+            } else {
+                padding = res.getDimensionPixelSize(R.dimen.qs_header_tooltip_height);
+            }
         }
         setPaddingRelative(getPaddingStart(),
                 padding,
