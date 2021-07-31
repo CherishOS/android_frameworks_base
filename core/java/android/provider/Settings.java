@@ -6734,6 +6734,12 @@ public final class Settings {
          * @hide
          */
         public static final String QS_SHOW_LUNAR_CALENDAR = "qs_show_lunar_calendar";
+		
+		/**
+         * Battery saver profiles
+         * @hide
+         */
+        public static final String POWER_PROFILE_TYPE = "power_profile_type";
          
         /**
          * Keys we no longer back up under the current schema, but want to continue to
