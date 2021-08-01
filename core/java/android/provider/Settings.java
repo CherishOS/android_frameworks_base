@@ -10769,7 +10769,6 @@ public final class Settings {
          * @hide
          */
         public static final String SYSUI_ROUNDED_SIZE = "sysui_rounded_size";
-        public static final String SYSUI_ROUNDED_CONTENT_PADDING = "sysui_rounded_content_padding";
 
         /**
          * Setting to disable rounded corner preferences and use frameworks values instead
