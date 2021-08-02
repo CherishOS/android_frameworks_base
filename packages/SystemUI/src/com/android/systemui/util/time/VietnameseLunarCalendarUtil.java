@@ -31,7 +31,7 @@ public class VietnameseLunarCalendarUtil {
     public static final int FLAG_INCLUDE_CHINESE_ZODIAC = 1 << 3;
 
     public static String getLunarDateString() {
-        return getLunarDateString(FLAG_INCLUDE_MONTH | FLAG_INCLUDE_DATE);
+        return getLunarDateString(FLAG_INCLUDE_DATE | FLAG_INCLUDE_MONTH);
     }
 
     public static String getLunarDateString(int flag) {
@@ -69,7 +69,7 @@ public class VietnameseLunarCalendarUtil {
         if (isLeapMonth) {
             return "Thg" + "Nhuận" + DIGITS[month - 1];
         } else {
-            return "Thg" + DIGITS[month - 1];
+            return "(" + DIGITS[month - 1];
         }
     }
 
