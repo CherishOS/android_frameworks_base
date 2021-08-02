@@ -46,7 +46,7 @@ public class DateView extends TextView {
     private String mLastText;
     private String mDatePattern;
     private final BroadcastDispatcher mBroadcastDispatcher;
-    private boolean mShowLunarCalendar = false;
+    private boolean mShowLunarCalendar = true;
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -135,7 +135,7 @@ public class DateView extends TextView {
 				text = text + " " + VietnameseLunarCalendarUtil.getLunarDateString();
 			}
 			else{
-                text = text + " " + ChineseLunarCalendarUtil.getLunarDateString();
+                text = text + " ";
 			}
         }
         if (!text.equals(mLastText)) {

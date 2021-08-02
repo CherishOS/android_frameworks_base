@@ -46,14 +46,14 @@ public class VietnameseLunarCalendarUtil {
             sb.append(convYear(year, zodiac));
             sb.append(" ");
         }
+		if ((flag & FLAG_INCLUDE_DATE) == FLAG_INCLUDE_DATE) {
+            int date = chineseCalendar.get(ChineseCalendar.DATE);
+            sb.append(convDate(date));
+        }
         if ((flag & FLAG_INCLUDE_MONTH) == FLAG_INCLUDE_MONTH) {
             int month = chineseCalendar.get(ChineseCalendar.MONTH) + 1;
             boolean isLeapMonth = chineseCalendar.get(ChineseCalendar.IS_LEAP_MONTH) == 1;
             sb.append(convMonth(month, isLeapMonth));
-        }
-        if ((flag & FLAG_INCLUDE_DATE) == FLAG_INCLUDE_DATE) {
-            int date = chineseCalendar.get(ChineseCalendar.DATE);
-            sb.append(convDate(date));
         }
         return sb.toString();
     }
@@ -67,23 +67,23 @@ public class VietnameseLunarCalendarUtil {
 
     private static String convMonth(int month, boolean isLeapMonth) {
         if (isLeapMonth) {
-            return "Thg" + "Nhuận" + DIGITS[month - 1];
+            return DIGITS[month - 1] + ")" + "Nhuận";
         } else {
-            return "(" + DIGITS[month - 1];
+            return DIGITS[month - 1]+ ")" ;
         }
     }
 
     private static String convDate(int d) {
         if (d <= 10) {
-            return "Mùng " + DIGITS[d - 1];
+            return "(Mùng" + DIGITS[d - 1]+"-";
         } else if (d < 20) {
-            return "1" + DIGITS[d % 10 - 1];
+            return "(1" + DIGITS[d % 10 - 1]+"-";
         } else if (d == 20) {
-            return  "20";
+            return  "(20-";
         } else if (d < 30) {
-            return "2" + DIGITS[d % 10 - 1];
+            return "(2" + DIGITS[d % 10 - 1]+"-";
         } else if (d == 30) {
-            return  "30";
+            return  "(30-";
         }
         return "";
     }
