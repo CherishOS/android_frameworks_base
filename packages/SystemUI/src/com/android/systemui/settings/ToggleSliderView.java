@@ -224,3 +224,4 @@ public class ToggleSliderView extends RelativeLayout implements ToggleSlider {
         }
     };
 }
+
