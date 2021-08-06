@@ -6093,18 +6093,6 @@ public final class Settings {
         public static final String HEADS_UP_BLACKLIST_VALUES = "heads_up_blacklist_values";
 
          /**
-         * Whether to enable DOZE only when charging
-         * @hide
-         */
-        public static final String DOZE_ON_CHARGE = "doze_on_charge";
-
-        /**
-         * hidden stting of the current atate of DOZE only when charging
-         * @hide
-         */
-        public static final String DOZE_ON_CHARGE_NOW = "doze_on_charge_now";
-
-         /**
          * Whether to enable PULSE Edge lights
          * @hide
          */
@@ -11520,6 +11508,19 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_QUICK_QS_PULLDOWN = "status_bar_quick_qs_pulldown";
+
+         /**
+         * Whether to enable DOZE only when charging
+         * @hide
+         */
+        public static final String DOZE_ON_CHARGE = "doze_on_charge";
+
+        /**
+         * hidden stting of the current atate of DOZE only when charging
+         * @hide
+         */
+        public static final String DOZE_ON_CHARGE_NOW = "doze_on_charge_now";
+
     }
 
     /**
