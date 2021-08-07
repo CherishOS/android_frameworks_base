@@ -61,6 +61,7 @@ import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.ScreenRecordTile;
 import com.android.systemui.qs.tiles.SleepScreenTile;
 import com.android.systemui.qs.tiles.ScreenshotTile;
+import com.android.systemui.qs.tiles.SleepModeTile;
 import com.android.systemui.qs.tiles.SmartPixelsTile;
 import com.android.systemui.qs.tiles.SoundSearchTile;
 import com.android.systemui.qs.tiles.SyncTile;
@@ -116,6 +117,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<SleepScreenTile> mSleepScreenTileProvider;
     private final Provider<DataSwitchTile> mDataSwitchTileProvider;
     private final Provider<ScreenshotTile> mScreenshotTileProvider;
+    private final Provider<SleepModeTile> mSleepModeTileProvider;
     private final Provider<GamingModeTile> mGamingModeTileProvider;
     private final Provider<HWKeysTile> mHWKeysTileProvider;
     private final Provider<CompassTile> mCompassTileProvider;
@@ -183,7 +185,8 @@ public class QSFactoryImpl implements QSFactory {
             Provider<AODTile> aodTileProvider,
             Provider<SyncTile> syncTileProvider,
             Provider<VpnTile> vpnTileProvider,
-            Provider<AntiFlickerTile> antiFlickerTileProvider) {
+            Provider<AntiFlickerTile> antiFlickerTileProvider,
+            Provider<SleepModeTile> sleepModeTileProvider) {
         mQsHostLazy = qsHostLazy;
         mWifiTileProvider = wifiTileProvider;
         mBluetoothTileProvider = bluetoothTileProvider;
@@ -232,6 +235,7 @@ public class QSFactoryImpl implements QSFactory {
         mSyncTileProvider = syncTileProvider;
         mVpnTileProvider = vpnTileProvider;
         mAntiFlickerTileProvider = antiFlickerTileProvider;
+        mSleepModeTileProvider = sleepModeTileProvider;
     }
 
     public QSTile createTile(String tileSpec) {
@@ -337,6 +341,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mVpnTileProvider.get();
             case "anti_flicker":
                 return mAntiFlickerTileProvider.get();
+            case "sleep_mode":
+                return mSleepModeTileProvider.get();
         }
 
         // Custom tiles
