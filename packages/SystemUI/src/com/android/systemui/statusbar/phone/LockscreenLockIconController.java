@@ -82,7 +82,6 @@ public class LockscreenLockIconController {
     private boolean mDocked;
     private boolean mWakeAndUnlockRunning;
     private boolean mShowingLaunchAffordance;
-    private boolean mBouncerShowing;
     private boolean mBouncerShowingScrimmed;
     private boolean mFingerprintUnlock;
     private int mStatusBarState = StatusBarState.SHADE;
@@ -423,18 +422,12 @@ public class LockscreenLockIconController {
         update();
     }
 
-    /** Sets whether the bouncer is showing (scrimmed). */
+    /** Sets whether the bouncer is showing. */
     public void setBouncerShowingScrimmed(boolean bouncerShowing) {
         mBouncerShowingScrimmed = bouncerShowing;
         if (mKeyguardBypassController.getBypassEnabled()) {
             update();
         }
-    }
-
-    /** Sets whether the bouncer is showing. */
-    public void setBouncerShowing(boolean bouncerShowing) {
-        mBouncerShowing = bouncerShowing;
-        updateIconVisibility();
     }
 
     /**
@@ -533,7 +526,7 @@ public class LockscreenLockIconController {
                 || mShowingLaunchAffordance;
         boolean fingerprintOrBypass = mFingerprintUnlock
                 || mKeyguardBypassController.getBypassEnabled();
-        if (fingerprintOrBypass || mBouncerShowing) {
+        if (fingerprintOrBypass && !mBouncerShowingScrimmed) {
             if ((mHeadsUpManagerPhone.isHeadsUpGoingAway()
                     || mHeadsUpManagerPhone.hasPinnedHeadsUp()
                     || mStatusBarState == StatusBarState.KEYGUARD
