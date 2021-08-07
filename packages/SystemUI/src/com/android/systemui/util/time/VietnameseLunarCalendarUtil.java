@@ -75,15 +75,15 @@ public class VietnameseLunarCalendarUtil {
 
     private static String convDate(int d) {
         if (d <= 10) {
-            return "(Mùng" + DIGITS[d - 1]+"-";
+            return "(Mùng " + DIGITS[d - 1]+" thg ";
         } else if (d < 20) {
-            return "(1" + DIGITS[d % 10 - 1]+"-";
+            return "(1" + DIGITS[d % 10 - 1]+" thg ";
         } else if (d == 20) {
-            return  "(20-";
+            return  "(20 thg ";
         } else if (d < 30) {
-            return "(2" + DIGITS[d % 10 - 1]+"-";
+            return "(2" + DIGITS[d % 10 - 1]+" thg ";
         } else if (d == 30) {
-            return  "(30-";
+            return  "(30 thg ";
         }
         return "";
     }
