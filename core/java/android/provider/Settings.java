@@ -6478,6 +6478,12 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_BLUR = "lockscreen_blur";
+
+        /**
+         * Check the proximity sensor during wakeup
+         * @hide
+         */
+        public static final String PROXIMITY_ON_WAKE = "proximity_on_wake";
 		
 		/**
          * Hold current font name and name of the originating package Uses "|" as a delimiter
@@ -6965,6 +6971,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(CUSTOM_STATUSBAR_PADDING_START);
             PRIVATE_SETTINGS.add(CUSTOM_STATUSBAR_PADDING_END);
 			PRIVATE_SETTINGS.add(INCALL_FEEDBACK_VIBRATE);
+            PRIVATE_SETTINGS.add(PROXIMITY_ON_WAKE);
         }
 
         /**

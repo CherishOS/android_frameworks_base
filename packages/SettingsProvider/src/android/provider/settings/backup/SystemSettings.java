@@ -98,5 +98,6 @@ public class SystemSettings {
         Settings.System.CUSTOM_STATUSBAR_PADDING_START,
         Settings.System.CUSTOM_STATUSBAR_PADDING_END,
         Settings.System.INCALL_FEEDBACK_VIBRATE,
+        Settings.System.PROXIMITY_ON_WAKE,
     };
 }
