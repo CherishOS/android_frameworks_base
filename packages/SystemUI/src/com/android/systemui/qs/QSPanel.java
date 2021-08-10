@@ -299,6 +299,14 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
                 }
             });
         }
+        if (mOPFooterView.getSettingsButton() != null) {
+            mOPFooterView.getSettingsButton().setOnLongClickListener(new View.OnLongClickListener() {
+                public boolean onLongClick(View v) {
+                   startCherishSettingsActivity();
+                   return true;
+                }
+            });
+        }
         if (mOPFooterView.getEditButton() != null) {
             mOPFooterView.getEditButton().setOnClickListener(view ->
                 Dependency.get(ActivityStarter.class).postQSRunnableDismissingKeyguard(() ->
@@ -1089,7 +1097,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
     @Override
     public boolean onLongClick(View v) {
         if (v == mOPFooterView.getSettingsButton()) {
-            startConfigCenterActivity();
+            startCherishSettingsActivity();
             if (mVibrator != null) {
                 if (mVibrator.hasVibrator()) {
                     mVibrator.vibrate(VibrationEffect.get(VibrationEffect.EFFECT_HEAVY_CLICK));
@@ -1137,6 +1145,13 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
         Intent intent = new Intent();
         intent.setClassName("com.android.settings",
                 "com.android.settings.Settings$DataUsageSummaryActivity");
+        Dependency.get(ActivityStarter.class).startActivity(intent, true /* dismissShade */);
+    }
+
+    private void startCherishSettingsActivity() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setClassName("com.android.settings",
+            "com.android.settings.Settings$CherishSettingsActivity");
         Dependency.get(ActivityStarter.class).startActivity(intent, true /* dismissShade */);
     }
 
