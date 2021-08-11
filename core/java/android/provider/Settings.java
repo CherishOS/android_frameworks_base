@@ -6479,12 +6479,6 @@ public final class Settings {
         public static final String LOCKSCREEN_BATTERY_INFO_FONT = "lockscreen_battery_info_font";
 
         /**
-         * Whether StatusBar icons should use app icon
-         * @hide
-         */
-        public static final String STATUSBAR_ICONS_STYLE = "statusbar_icons_style";
-
-        /**
          * Whether should the icons on notification headers have the app color
          * @hide
          */
@@ -7002,7 +6996,6 @@ public final class Settings {
 			PRIVATE_SETTINGS.add(QS_PANEL_BG_COLOR);
             PRIVATE_SETTINGS.add(QS_PANEL_BG_USE_FW);
 			 PRIVATE_SETTINGS.add(QS_TILES_BG_DISCO);
-            PRIVATE_SETTINGS.add(STATUSBAR_ICONS_STYLE);
             PRIVATE_SETTINGS.add(HEADER_ICONS_STYLE);
             PRIVATE_SETTINGS.add(COLOR_BUCKET_OVERLAY);
             PRIVATE_SETTINGS.add(DISPLAY_CUTOUT_MODE);
