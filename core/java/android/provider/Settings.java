@@ -5336,6 +5336,12 @@ public final class Settings {
         public static final String GAMING_MODE_USE_GAME_DRIVER = "gaming_mode_use_game_driver";
 		
 		/**
+          * Opacity adjustment for the GamingMode's menu
+          * @hide
+          */
+        public static final String GAMING_MODE_MENU_OPACITY = "gaming_mode_menu_opacity";
+		
+		/**
          * Control how to handle the display cutout
          * @hide
          */
