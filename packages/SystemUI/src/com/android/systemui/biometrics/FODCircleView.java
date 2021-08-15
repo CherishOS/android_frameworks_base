@@ -42,6 +42,7 @@ import android.pocket.IPocketCallback;
 import android.pocket.PocketManager;
 import android.provider.Settings;
 import android.net.Uri;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -75,16 +76,13 @@ public class FODCircleView extends ImageView{
     private final int mDreamingMaxOffset;
     private final int mNavigationBarSize;
     private final boolean mShouldBoostBrightness;
-    private final boolean mShouldEnableDimlayer;
     private final Paint mPaintFingerprintBackground = new Paint();
     private final LayoutParams mParams = new LayoutParams();
     private final LayoutParams mPressedParams = new LayoutParams();
     private final WindowManager mWindowManager;
 
-    private FODIconView mFODIcon;
     private IFingerprintInscreen mFingerprintInscreenDaemon;
-    private vendor.lineage.biometrics.fingerprint.inscreen.V1_1.IFingerprintInscreen
-        mFingerprintInscreenDaemonV1_1;
+    private FODIconView mFODIcon;
 
     private int mColorBackground;
     private int mDreamingOffsetY;
@@ -302,8 +300,6 @@ public class FODCircleView extends ImageView{
             mPositionX = daemon.getPositionX();
             mPositionY = daemon.getPositionY();
             mSize = daemon.getSize();
-            mShouldEnableDimlayer = mFingerprintInscreenDaemonV1_1 == null ||
-                    mFingerprintInscreenDaemonV1_1.shouldEnableDimlayer();
         } catch (RemoteException e) {
             throw new RuntimeException("Failed to retrieve FOD circle position or size");
         }
@@ -343,6 +339,7 @@ public class FODCircleView extends ImageView{
         mParams.type = WindowManager.LayoutParams.TYPE_DISPLAY_OVERLAY;
         mParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                 WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
+                WindowManager.LayoutParams.FLAG_DIM_BEHIND |
                 WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH |
                 WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
         mParams.gravity = Gravity.TOP | Gravity.LEFT;
@@ -353,11 +350,8 @@ public class FODCircleView extends ImageView{
 
         mParams.setTitle("Fingerprint on display");
         mPressedParams.setTitle("Fingerprint on display.touched");
-		
-		if (!mShouldEnableDimlayer) {
-            mParams.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            mParams.dimAmount = 0.0f;
-        }
+        
+        mParams.dimAmount = 0.0f;
 
         mPressedView = new ImageView(mContext)  {
             @Override
@@ -508,9 +502,6 @@ public class FODCircleView extends ImageView{
                     mFingerprintInscreenDaemon.asBinder().linkToDeath((cookie) -> {
                         mFingerprintInscreenDaemon = null;
                     }, 0);
-                    mFingerprintInscreenDaemonV1_1 =
-                        vendor.lineage.biometrics.fingerprint.inscreen.V1_1.IFingerprintInscreen
-                                .castFrom(mFingerprintInscreenDaemon);
                 }
             } catch (NoSuchElementException | RemoteException e) {
                 // do nothing
@@ -622,6 +613,16 @@ public class FODCircleView extends ImageView{
         setVisibility(View.GONE);
         hideCircle();
         dispatchHide();
+    }
+
+    public int getHeight(boolean includeDecor) {
+        DisplayMetrics dm = new DisplayMetrics();
+        if (includeDecor) {
+            mWindowManager.getDefaultDisplay().getMetrics(dm);
+        } else {
+            mWindowManager.getDefaultDisplay().getRealMetrics(dm);
+        }
+        return dm.heightPixels - mPositionY + mSize / 2;
     }
 
     private void updateAlpha() {

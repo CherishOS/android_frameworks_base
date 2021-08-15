@@ -519,10 +519,18 @@ public class TypedArray {
             if (resId > 0) {
                 String resName = this.mAssets.getResourceName(resId);
                 int newColor = defValue;
-                if (AccentUtils.isResourceAccent(resName))
-                    newColor = AccentUtils.getNewAccentColor(defValue);
-                if (AccentUtils.isResourceGradient(resName))
-                    newColor = AccentUtils.getNewGradientColor(defValue);
+
+                AccentUtils utils = new AccentUtils();
+                if (utils.isResourceDarkAccent(resName))
+                    newColor = utils.getDarkAccentColor(defValue);
+                else if (utils.isResourceLightAccent(resName))
+                    newColor = utils.getLightAccentColor(defValue);
+                else if (utils.isResourceAccentBackground(resName))
+                    newColor = utils.getBackgroundAccentColor(defValue);
+                else if (utils.isResourceAccentOverlayLight(resName))
+                    newColor = utils.getOverlayLightAccentColor(defValue);
+                else if (utils.isResourceAccentOverlayDark(resName))
+                    newColor = utils.getOverlayDarkAccentColor(defValue);
                 if (newColor != defValue)
                     return newColor;
             }

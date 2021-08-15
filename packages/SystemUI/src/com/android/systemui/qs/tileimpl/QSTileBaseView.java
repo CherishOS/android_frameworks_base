@@ -141,7 +141,6 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
                 Settings.System.QS_PANEL_BG_USE_NEW_TINT, 2, UserHandle.USER_CURRENT);	
 		mShouldDisco = Settings.System.getIntForUser(context.getContentResolver(),
                 Settings.System.QS_TILES_BG_DISCO, 0, UserHandle.USER_CURRENT) == 1;
-
         if (setQsUseNewTint == 1) {
             if (mShouldDisco) {
                 setActiveColor(context);

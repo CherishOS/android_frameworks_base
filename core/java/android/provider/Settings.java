@@ -11174,8 +11174,8 @@ public final class Settings {
          * @hide
          */
         public static final String GESTURE_NAVBAR_RADIUS = "gesture_navbar_radius";
-		
-		/**
+
+        /**
          * Monet base accent.
          * Do not override.
          * @hide
@@ -11313,6 +11313,18 @@ public final class Settings {
          * @hide
          */
         public static final String ADAPTIVE_CONNECTIVITY_ENABLED = "adaptive_connectivity_enabled";
+		
+		/**
+         * Dark Accent Color
+         * @hide
+         */
+        public static final String ACCENT_DARK = "accent_dark";
+
+        /**
+         * Light Accent Color
+         * @hide
+         */
+        public static final String ACCENT_LIGHT = "accent_light";
 
         /**
          * Whether to show or hide the arrow for back gesture
@@ -11432,6 +11444,13 @@ public final class Settings {
          * @hide
          */
         public static final String PULSE_SOLID_UNITS_ROUNDED = "pulse_solid_units_rounded";
+
+        /**
+         * RGB Accent Color
+         * @hide
+         */
+        public static final String ACCENT_COLOR = "accent_color";
+
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to

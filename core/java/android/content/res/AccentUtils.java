@@ -1,74 +1,122 @@
 package android.content.res;
 
-import android.app.ActivityThread;
-import android.content.Context;
+import android.annotation.NonNull;
+import android.annotation.Nullable;
 import android.graphics.Color;
-import android.os.SystemProperties;
-import android.provider.Settings;
 import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
+import android.content.Context;
+import android.provider.Settings;
+import android.app.ActivityThread;
 
 /** @hide */
 public class AccentUtils {
-    private static final String TAG = "AccentUtils";
 
-    private static ArrayList<String> accentResources = new ArrayList<>(
-            Arrays.asList("accent_device_default_light",
-                    "accent_device_default_light",
-                    "accent_device_default_dark",
-                    "gradient_start"));
+    private MonetWannabe monet;
 
-    private static ArrayList<String> gradientResources = new ArrayList<>(
-            Arrays.asList("gradient_end"));
-
-    private static final String ACCENT_COLOR_PROP = "persist.sys.theme.accentcolor";
-    private static final String GRADIENT_COLOR_PROP = "persist.sys.theme.gradientcolor";
-
-    private static final String UNIVERSAL_DISCO = "universal_disco";
-
-    static boolean isResourceAccent(String resName) {
-        for (String ar : accentResources)
-            if (resName.contains(ar))
-                return true;
-        return false;
+    public AccentUtils() {
+        this.monet = new MonetWannabe(ActivityThread.currentApplication());
     }
 
-    static boolean isResourceGradient(String resName) {
-        for (String gr : gradientResources)
-            if (resName.contains(gr))
-                return true;
-        return false;
+    private final String TAG = "AccentUtils";
+
+    private final String ACCENT_DARK_SETTING = "accent_dark";
+    private final String ACCENT_LIGHT_SETTING = "accent_light";
+
+    public boolean isResourceDarkAccent(@Nullable String resName) {
+        return resName != null && resName.contains("accent_device_default_dark") || resName.contains("colorAccent") || resName.contains("lockscreen_clock_accent_color") || resName.contains("oneplus_accent_color") || resName.contains("settings_accent_color") || resName.contains("settingsHeaderColor") || resName.contains("dismiss_all_icon_color") || resName.contains("avatar_bg_red") || resName.contains("folder_indicator_color") || resName.contains("accent_color_red") || resName.contains("alert_dialog_color_accent_dark") || resName.contains("oneplus_accent_text_color") || resName.contains("accent_device_default");
     }
 
-    public static int getNewAccentColor(int defaultColor) {
-        return getAccentColor(defaultColor, ACCENT_COLOR_PROP);
+    public boolean isResourceLightAccent(@Nullable String resName) {
+        return resName != null && resName.contains("accent_device_default_light") || resName.contains("colorAccent") || resName.contains("lockscreen_clock_accent_color") || resName.contains("oneplus_accent_color") || resName.contains("settings_accent_color") || resName.contains("settingsHeaderColor") || resName.contains("dismiss_all_icon_color") || resName.contains("avatar_bg_red") || resName.contains("folder_indicator_color") || resName.contains("accent_color_red") || resName.contains("alert_dialog_color_accent_dark") || resName.contains("oneplus_accent_text_color") || resName.contains("accent_device_default");
     }
 
-    public static int getNewGradientColor(int defaultColor) {
-        return getAccentColor(defaultColor, GRADIENT_COLOR_PROP);
+    public boolean isResourceAccentBackground(@Nullable String resName) {
+        return resName != null && resName.contains("accent_background_device_default") || resName.contains("colorAccent") || resName.contains("lockscreen_clock_accent_color") || resName.contains("oneplus_accent_color") || resName.contains("settings_accent_color") || resName.contains("settingsHeaderColor") || resName.contains("dismiss_all_icon_color") || resName.contains("avatar_bg_red") || resName.contains("folder_indicator_color") || resName.contains("accent_color_red") || resName.contains("alert_dialog_color_accent_dark") || resName.contains("oneplus_accent_text_color") || resName.contains("accent_device_default");
     }
 
-    private static int getAccentColor(int defaultColor, String property) {
+    public boolean isResourceAccentOverlayLight(@Nullable String resName) {
+        return resName != null && resName.contains("accent_overlay_device_default_light") || resName.contains("colorAccent") || resName.contains("lockscreen_clock_accent_color") || resName.contains("oneplus_accent_color") || resName.contains("settings_accent_color") || resName.contains("settingsHeaderColor") || resName.contains("dismiss_all_icon_color") || resName.contains("avatar_bg_red") || resName.contains("folder_indicator_color") || resName.contains("accent_color_red") || resName.contains("alert_dialog_color_accent_dark") || resName.contains("oneplus_accent_text_color") || resName.contains("accent_device_default");
+    }
+
+    public boolean isResourceAccentOverlayDark(@Nullable String resName) {
+        return resName != null && resName.contains("accent_overlay_device_default_dark") || resName.contains("colorAccent") || resName.contains("lockscreen_clock_accent_color") || resName.contains("oneplus_accent_color") || resName.contains("settings_accent_color") || resName.contains("settingsHeaderColor") || resName.contains("dismiss_all_icon_color") || resName.contains("avatar_bg_red") || resName.contains("folder_indicator_color") || resName.contains("accent_color_red") || resName.contains("alert_dialog_color_accent_dark") || resName.contains("oneplus_accent_text_color") || resName.contains("accent_device_default");
+    }
+
+    public int getDarkAccentColor(int defaultColor) {
+        return getAccentColor(monet, defaultColor, ACCENT_DARK_SETTING);
+    }
+
+    public int getLightAccentColor(int defaultColor) {
+        return getAccentColor(monet, defaultColor, ACCENT_LIGHT_SETTING);
+    }
+
+    public int getBackgroundAccentColor(int defaultColor) {
         final Context context = ActivityThread.currentApplication();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        if (cal.get(Calendar.MONTH) == 3 && cal.get(Calendar.DAY_OF_MONTH) == 1 ||
-            Settings.Secure.getInt(context.getContentResolver(), UNIVERSAL_DISCO, 0) == 1) {
-            return ColorUtils.genRandomAccentColor(property == ACCENT_COLOR_PROP);
-        }
         try {
-            String colorValue = SystemProperties.get(property, "-1");
-            return "-1".equals(colorValue)
-                    ? defaultColor
-                    : Color.parseColor("#" + colorValue);
+            if (MonetWannabe.isMonetEnabled(context)) {
+                int colorValue = monet.getAccentColorBackground();
+                return colorValue == -1 ? defaultColor : colorValue;
+            } else {
+                return defaultColor;
+            }
+            
         } catch (Exception e) {
-            Log.e(TAG, "Failed to set accent: " + e.getMessage() +
-                    "\nSetting default: " + defaultColor);
+            Log.e(TAG, "Setting default for monetwannabe");
             return defaultColor;
+        }
+    }
+
+    public int getOverlayLightAccentColor(int defaultColor) {
+        final Context context = ActivityThread.currentApplication();
+        try {
+            if (MonetWannabe.isMonetEnabled(context)) {
+                int colorValue = monet.getAccentColorOverlayLight();
+                return colorValue == -1 ? defaultColor : colorValue;
+            } else {
+                return defaultColor;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Setting default for monetwannabe");
+            return defaultColor;
+        }
+    }
+
+    public int getOverlayDarkAccentColor(int defaultColor) {
+        final Context context = ActivityThread.currentApplication();
+        try {
+            if (MonetWannabe.isMonetEnabled(context)) {
+                int colorValue = monet.getAccentColorOverlayDark();
+                return colorValue == -1 ? defaultColor : colorValue;
+            } else {
+                return defaultColor;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Setting default for monetwannabe");
+            return defaultColor;
+        }
+    }
+
+    private int getAccentColor(@NonNull MonetWannabe monet, int defaultColor, String setting) {
+        final Context context = ActivityThread.currentApplication();
+        if (!MonetWannabe.isMonetEnabled(context)) {
+            try {
+                String colorValue = Settings.Secure.getString(context.getContentResolver(), setting);
+                return (colorValue == null || "-1".equals(colorValue)) ?
+                    defaultColor : Color.parseColor("#" + colorValue);
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to set accent: " + e.getMessage() +
+                        "\nSetting default: " + defaultColor);
+                return defaultColor;
+            }
+        } else {
+            try {
+                int colorValue = monet.getAccentColor();
+                return colorValue == -1 ? defaultColor : colorValue;
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to set monet accent: " + e.getMessage() + 
+                        "\nSetting default: " + defaultColor);
+                return defaultColor;
+            }
         }
     }
 }
