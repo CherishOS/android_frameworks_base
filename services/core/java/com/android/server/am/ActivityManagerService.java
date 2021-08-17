@@ -18014,18 +18014,12 @@ public class ActivityManagerService extends IActivityManager.Stub
                 if (mGamingModeController.topAppChanged(mCurResumedPackage) && !mGamingModeController.isGamingModeActivated()) {
                     Settings.System.putInt(mContext.getContentResolver(),
                         Settings.System.GAMING_MODE_ACTIVE, 1);
-                    mCurResumedPackagex = mCurResumedPackage;
-                    mCurResumedUidx = uid;
-                } else if (mCurResumedUidx == uid && mGamingModeController.topAppChanged(mCurResumedPackagex)) {
-                    if (!mGamingModeController.isGamingModeActivated())
-                        Settings.System.putInt(mContext.getContentResolver(),
-                                Settings.System.GAMING_MODE_ACTIVE, 1);
                 } else if (!mGamingModeController.topAppChanged(mCurResumedPackage) &&
                         mGamingModeController.isGamingModeActivated()) {
                     Settings.System.putInt(mContext.getContentResolver(),
                         Settings.System.GAMING_MODE_ACTIVE, 0);
                 }
-            }
+           }
         }
         return r;
     }

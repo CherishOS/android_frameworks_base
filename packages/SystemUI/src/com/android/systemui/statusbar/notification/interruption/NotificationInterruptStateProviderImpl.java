@@ -67,12 +67,15 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
     private final StatusBarStateController mStatusBarStateController;
     private final NotificationFilter mNotificationFilter;
     private final ContentResolver mContentResolver;
+    private final Context mContext;
     private final PowerManager mPowerManager;
     private final IDreamManager mDreamManager;
     private final AmbientDisplayConfiguration mAmbientDisplayConfiguration;
     private final BatteryController mBatteryController;
     private final ContentObserver mHeadsUpObserver;
     private HeadsUpManager mHeadsUpManager;
+    private boolean mLessBoringHeadsUp;
+    private TelecomManager mTm;
 
     ActivityManager mAm;
     private ArrayList<String> mStoplist = new ArrayList<String>();
@@ -82,9 +85,6 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
     protected boolean mUseHeadsUp = false;
 
     private boolean mSkipHeadsUp = false;
-    private boolean mLessBoringHeadsUp = false;
-    private TelecomManager mTm;
-    private Context mContext;
 
     @Inject
     public NotificationInterruptStateProviderImpl(
@@ -99,7 +99,6 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
             HeadsUpManager headsUpManager,
             @Main Handler mainHandler) {
         mContext = context;
-        mTm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
         mContentResolver = contentResolver;
         mPowerManager = powerManager;
         mDreamManager = dreamManager;
@@ -107,6 +106,7 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
         mAmbientDisplayConfiguration = ambientDisplayConfiguration;
         mNotificationFilter = notificationFilter;
         mStatusBarStateController = statusBarStateController;
+        mTm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
         mHeadsUpManager = headsUpManager;
         mAm = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
         setHeadsUpStoplist();
@@ -253,6 +253,10 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
         }
 
         if (!canAlertAwakeCommon(entry)) {
+            return false;
+        }
+
+        if (shouldSkipHeadsUp(sbn)) {
             return false;
         }
 
