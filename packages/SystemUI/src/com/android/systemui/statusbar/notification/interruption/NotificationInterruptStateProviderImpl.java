@@ -308,7 +308,7 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
         return true;
     }
 
-    private void setUseLessBoringHeadsUp(boolean lessBoring) {
+    public void setUseLessBoringHeadsUp(boolean lessBoring) {
         mLessBoringHeadsUp = lessBoring;
     }
 
