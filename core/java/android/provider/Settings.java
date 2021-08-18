@@ -5276,6 +5276,11 @@ public final class Settings {
           * @hide
           */
         public static final String GAMING_MODE_DISABLE_GESTURE = "gaming_mode_disable_gesture";
+		
+		/**
+          * @hide
+          */
+        public static final String GAMING_MODE_DISABLE_HW_KEYS = "gaming_mode_disable_hw_keys";
 
         /**
           * Change performance level in gaming mode
