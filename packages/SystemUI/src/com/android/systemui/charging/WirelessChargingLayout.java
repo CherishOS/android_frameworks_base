@@ -21,13 +21,18 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.Animatable;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.animation.PathInterpolator;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.airbnb.lottie.LottieAnimationView;
 
 import com.android.systemui.Interpolators;
 import com.android.systemui.R;
@@ -39,6 +44,8 @@ import java.text.NumberFormat;
  */
 public class WirelessChargingLayout extends FrameLayout {
     public final static int UNKNOWN_BATTERY_LEVEL = -1;
+
+    private int mChargingAnimation;
 
     public WirelessChargingLayout(Context context) {
         super(context);
@@ -65,10 +72,21 @@ public class WirelessChargingLayout extends FrameLayout {
         final boolean showTransmittingBatteryLevel =
                 (transmittingBatteryLevel != UNKNOWN_BATTERY_LEVEL);
 
+        mChargingAnimation = Settings.System.getIntForUser(context.getContentResolver(),
+                Settings.System.CHARGING_ANIMATION_STYLE, 1, UserHandle.USER_CURRENT);
+
         // set style based on background
-        int style = R.style.ChargingAnim_WallpaperBackground;
-        if (isDozing) {
-            style = R.style.ChargingAnim_DarkBackground;
+        int style;
+        if (mChargingAnimation == 0) {
+            style = R.style.ChargingAnim_WallpaperBackground;
+            if (isDozing) {
+                style = R.style.ChargingAnim_DarkBackground;
+            }
+        } else {
+            style = R.style.ChargingLottieAnim_WallpaperBackground;
+            if (isDozing) {
+                style = R.style.ChargingLottieAnim_DarkBackground;
+            }
         }
 
         inflate(new ContextThemeWrapper(context, style), R.layout.wireless_charging_layout, this);
@@ -76,6 +94,38 @@ public class WirelessChargingLayout extends FrameLayout {
         // where the circle animation occurs:
         final ImageView chargingView = findViewById(R.id.wireless_charging_view);
         final Animatable chargingAnimation = (Animatable) chargingView.getDrawable();
+        final LottieAnimationView chargingLottie = findViewById(R.id.wireless_charging_lottie);
+
+        switch (mChargingAnimation) {
+            default:
+            case 1:
+                chargingLottie.setFileName("sdb_charging_animation.json");
+		chargingLottie.setSpeed(1.3f);
+                break;
+            case 2:
+                chargingLottie.setFileName("meme_ui_animation.json");
+		chargingLottie.setSpeed(0.5f);
+                break;
+            case 3:
+                chargingLottie.setFileName("explosion_charging_animation.json");
+                chargingLottie.setSpeed(1f);
+                break;
+            case 4:
+                chargingLottie.setFileName("rainbow_charging_animation.json");
+                chargingLottie.setSpeed(1f);
+                break;
+            case 5:
+                chargingLottie.setFileName("fire_charging_animation.json");
+                chargingLottie.setSpeed(1.3f);
+                break;
+        }
+        if (mChargingAnimation > 0) {
+            chargingView.setVisibility(View.GONE);
+            chargingLottie.setVisibility(View.VISIBLE);
+        } else {
+            chargingLottie.setVisibility(View.GONE);
+            chargingView.setVisibility(View.VISIBLE);
+        }
 
         // amount of battery:
         final TextView percentage = findViewById(R.id.wireless_charging_percentage);
@@ -121,7 +171,11 @@ public class WirelessChargingLayout extends FrameLayout {
         animatorSet.playTogether(textSizeAnimator, textOpacityAnimator, textFadeAnimator);
 
         if (!showTransmittingBatteryLevel) {
-            chargingAnimation.start();
+            if (mChargingAnimation > 0) {
+                chargingLottie.playAnimation();
+            } else {
+                chargingAnimation.start();
+            }
             animatorSet.start();
             return;
         }
@@ -190,7 +244,11 @@ public class WirelessChargingLayout extends FrameLayout {
         AnimatorSet animatorSetIcon = new AnimatorSet();
         animatorSetIcon.playTogether(textOpacityAnimatorIcon, textFadeAnimatorIcon);
 
-        chargingAnimation.start();
+        if (mChargingAnimation > 0) {
+            chargingLottie.playAnimation();
+        } else {
+            chargingAnimation.start();
+        }
         animatorSet.start();
         animatorSetTransmitting.start();
         animatorSetIcon.start();

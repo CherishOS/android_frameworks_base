@@ -23,6 +23,8 @@ import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.Slog;
 import android.view.Gravity;
@@ -35,7 +37,7 @@ import android.view.WindowManager;
  */
 public class WirelessChargingAnimation {
 
-    public static final long DURATION = 1133;
+    public static final long DURATION = 2500;
     private static final String TAG = "WirelessChargingView";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
@@ -102,6 +104,7 @@ public class WirelessChargingAnimation {
         private View mNextView;
         private WindowManager mWM;
         private Callback mCallback;
+        private int mChargingAnimation;
 
         public WirelessChargingView(Context context, @Nullable Looper looper,
                 int transmittingBatteryLevel, int batteryLevel, Callback callback,
@@ -110,6 +113,9 @@ public class WirelessChargingAnimation {
             mNextView = new WirelessChargingLayout(context, transmittingBatteryLevel, batteryLevel,
                     isDozing);
             mGravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER;
+
+            mChargingAnimation = Settings.System.getIntForUser(context.getContentResolver(),
+                     Settings.System.CHARGING_ANIMATION_STYLE, 1, UserHandle.USER_CURRENT);
 
             final WindowManager.LayoutParams params = mParams;
             params.height = WindowManager.LayoutParams.WRAP_CONTENT;
@@ -122,7 +128,11 @@ public class WirelessChargingAnimation {
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                     | WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 
-            params.dimAmount = .3f;
+            if (mChargingAnimation == 1) {
+                params.dimAmount = 1f;
+            } else {
+                params.dimAmount = 0.6f;
+            }
 
             if (looper == null) {
                 // Use Looper.myLooper() if looper is not specified.
