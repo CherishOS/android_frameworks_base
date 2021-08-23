@@ -27,7 +27,6 @@ import android.util.SparseArray;
 import android.content.ContentResolver;
 import android.database.ContentObserver;
 import android.os.Handler;
-import android.net.Uri;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -89,11 +88,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private View mRightClock;
     private boolean mShowClock = true;
     private final Handler mHandler = new Handler();
-    private View mWeatherImageView;
-    private View mWeatherTextView;
-    private int mShowWeather;
-    private boolean mWeatherInHeaderView;
-    private View mCustomCarrierLabel;
     private int mShowCarrierLabel;
     private boolean mHasCarrierLabel;
 
@@ -117,12 +111,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
        }
 
        @Override
-       public void onChange(boolean selfChange, Uri uri) {
-            if ((uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP))) ||
-                (uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_SHOW_WEATHER_LOCATION)))){
-              updateSettings(true);
-           }
-        }
+       public void onChange(boolean selfChange) {
+           updateSettings(true);
+       }
     }
     private SettingsObserver mSettingsObserver = new SettingsObserver(mHandler);
     private ContentResolver mContentResolver;
@@ -194,8 +185,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
  		mBatteryBars[0] = mStatusBar.findViewById(R.id.battery_bar);
         mBatteryBars[1] = mStatusBar.findViewById(R.id.battery_bar_1);
         mCherishLogoRight = mStatusBar.findViewById(R.id.cherish_logo_right);
-        mWeatherTextView = mStatusBar.findViewById(R.id.weather_temp);
-        mWeatherImageView = mStatusBar.findViewById(R.id.weather_image);
         showSystemIconArea(false);
         initEmergencyCryptkeeperText();
         animateHide(mClockView, false, false);
