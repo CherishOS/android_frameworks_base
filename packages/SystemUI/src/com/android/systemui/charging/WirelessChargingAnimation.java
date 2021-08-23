@@ -105,6 +105,7 @@ public class WirelessChargingAnimation {
         private WindowManager mWM;
         private Callback mCallback;
         private int mChargingAnimation;
+        private boolean mChargingAnimationBg;
 
         public WirelessChargingView(Context context, @Nullable Looper looper,
                 int transmittingBatteryLevel, int batteryLevel, Callback callback,
@@ -117,6 +118,9 @@ public class WirelessChargingAnimation {
             mChargingAnimation = Settings.System.getIntForUser(context.getContentResolver(),
                      Settings.System.CHARGING_ANIMATION_STYLE, 1, UserHandle.USER_CURRENT);
 
+            mChargingAnimationBg = Settings.System.getIntForUser(context.getContentResolver(),
+                     Settings.System.CHARGING_ANIMATION_BG, 0, UserHandle.USER_CURRENT) != 0;
+
             final WindowManager.LayoutParams params = mParams;
             params.height = WindowManager.LayoutParams.WRAP_CONTENT;
             params.width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -128,10 +132,14 @@ public class WirelessChargingAnimation {
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                     | WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 
-            if (mChargingAnimation == 1) {
+            if (mChargingAnimationBg) {
                 params.dimAmount = 1f;
             } else {
-                params.dimAmount = 0.6f;
+                if (mChargingAnimation == 2) {
+                    params.dimAmount = 1f;
+                } else {
+                    params.dimAmount = 0.6f;
+                }
             }
 
             if (looper == null) {
