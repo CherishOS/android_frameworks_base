@@ -125,11 +125,11 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
        @Override
        public void onChange(boolean selfChange, Uri uri) {
-		   if ((uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP))) ||
+            if ((uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP))) ||
                 (uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_SHOW_WEATHER_LOCATION)))){
-           updateSettings(true);
-       }
-    }
+              updateSettings(true);
+           }
+        }
 	}
     private SettingsObserver mSettingsObserver = new SettingsObserver(mHandler);
     private ContentResolver mContentResolver;
@@ -557,9 +557,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     }
 
     public void updateSettings(boolean animate) {
-		mShowWeather = Settings.System.getIntForUser(getContext().getContentResolver(),
+		mShowWeather = Settings.System.getIntForUser(mContentResolver,
                 Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP, 0, UserHandle.USER_CURRENT);
-        mWeatherInHeaderView = Settings.System.getIntForUser(getContext().getContentResolver(),
+        mWeatherInHeaderView = Settings.System.getIntForUser(mContentResolver,
                 Settings.System.STATUS_BAR_SHOW_WEATHER_LOCATION, 0, UserHandle.USER_CURRENT) == 1;
         mShowClock = Settings.System.getIntForUser(mContentResolver,
                 Settings.System.STATUS_BAR_CLOCK, 1,
