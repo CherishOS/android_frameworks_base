@@ -6219,12 +6219,6 @@ public final class Settings {
         public static final String AMBIENT_LIGHT_PULSE_FOR_ALL = "ambient_light_pulse_for_all";
 
         /**
-        * Use doubletap as doze pulse triggers
-        * @hide
-        */
-        public static final String DOZE_TRIGGER_DOUBLETAP = "doze_trigger_doubletap";
-
-        /**
          * Some creation simillar to samsung OneUI
          * @hide
          */
