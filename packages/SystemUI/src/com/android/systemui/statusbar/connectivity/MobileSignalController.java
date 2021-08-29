@@ -128,6 +128,9 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
     private boolean mShowVolteIcon;
     private boolean mIsVowifiAvailable;
 
+    // Volte Icon Style
+    private int mVolteIconStyle = 1;
+
     private final MobileStatusTracker.Callback mMobileCallback =
             new MobileStatusTracker.Callback() {
                 private String mLastStatus;
@@ -318,6 +321,9 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
             resolver.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.DATA_DISABLED_ICON), false,
                     this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.VOLTE_ICON_STYLE), false,
+                    this, UserHandle.USER_ALL);
             updateSettings();
         }
 
@@ -338,6 +344,11 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
         mDataDisabledIcon = Settings.System.getIntForUser(resolver,
                 Settings.System.DATA_DISABLED_ICON, 1,
                 UserHandle.USER_CURRENT) == 1;
+
+        mVolteIconStyle = Settings.System.getIntForUser(resolver,
+                Settings.System.VOLTE_ICON_STYLE, 1,
+                UserHandle.USER_CURRENT);
+
         mConfig = Config.readConfig(mContext);
         setConfiguration(mConfig);
         notifyListeners();
@@ -470,16 +481,6 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
 
     private boolean isVolteSwitchOn() {
         return mImsManager != null && mImsManager.isEnhanced4gLteModeSettingEnabledByUser();
-    }
-
-    private int getVolteResId() {
-        int resId = 0;
-
-        if ((mCurrentState.voiceCapable || mCurrentState.videoCapable)
-                && mCurrentState.imsRegistered) {
-            resId = R.drawable.ic_volte;
-        }
-        return resId;
     }
 
     private void setListeners() {
