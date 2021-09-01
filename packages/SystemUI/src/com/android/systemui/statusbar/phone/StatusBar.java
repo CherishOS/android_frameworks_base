@@ -3266,7 +3266,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     }
 
     public void haltLyricTicker() {
-        if (mLyricTicker != null && mLyricEnabled) {
+        if (mLyricTicker != null) {
             mLyricTicker.halt();
         }
     }
@@ -4954,6 +4954,9 @@ public class StatusBar extends SystemUI implements DemoMode,
 	private void Lyric() {
         mLyricEnabled  = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.STATUS_BAR_SHOW_LYRIC, 1, UserHandle.USER_CURRENT)== 1;
+            if (mLyricEnabled == false) {
+                    haltLyricTicker();
+                }
     }
 
     private void setQsBatteryPercentMode() {
