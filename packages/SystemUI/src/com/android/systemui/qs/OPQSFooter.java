@@ -186,7 +186,7 @@ public class OPQSFooter extends LinearLayout {
         String text = isBuildTextString();
             // Set as selected for marquee before its made visible, then it won't be announced when
             // it's made visible.
-        if (isBuildTextEnabled()) {
+        if (!isBuildTextEnabled()) {
             mBuildText.setText(text == null || text == "" ? "KeeptheLove" : text);
             mBuildText.setSelected(true);
             mBuildText.setVisibility(View.VISIBLE);
@@ -267,7 +267,7 @@ public class OPQSFooter extends LinearLayout {
 
     public boolean isBuildTextEnabled() {
         return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.OMNI_FOOTER_TEXT_SHOW, 1) == 1;
+                Settings.System.OMNI_FOOTER_TEXT_SHOW, 0) == 1;
     }
 
     public boolean isSettingsEnabled() {
