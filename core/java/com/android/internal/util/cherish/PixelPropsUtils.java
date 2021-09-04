@@ -29,6 +29,7 @@ public class PixelPropsUtils {
     private static final boolean DEBUG = false;
 
     private static final Map<String, Object> propsToChange;
+	private static final Map<String, Object> propsToChangePixel2;
     private static final Map<String, Object> propsToChangePixel3XL;
     private static final Map<String, Object> propsToChangeOGPixelXL;
 
@@ -44,7 +45,6 @@ public class PixelPropsUtils {
             "com.google.android.apps.wallpaper.pixel",
             "com.google.android.as",
             "com.google.android.dialer",
-            "com.google.android.gms.location.history",
             "com.google.android.inputmethod.latin",
             "com.google.android.soundpicker",
             "com.google.pixel.dynamicwallpapers",
@@ -52,12 +52,16 @@ public class PixelPropsUtils {
             "com.google.android.apps.safetyhub",
             "com.google.android.apps.turbo",
             "com.google.android.apps.wallpaper",
-            "com.google.android.apps.maps",
-            "com.google.android.gms"
+            "com.google.android.apps.maps"
     };
 
     private static final String[] packagesToChangePixel3XL = {
             "com.google.android.googlequicksearchbox"
+    };
+	
+	private static final String[] packagesToChangePixel2 = {
+            "com.google.android.gms",
+            "com.google.android.gms.location.history"
     };
 
     private static final String[] packagesToChangeOGPixelXL = {
@@ -87,6 +91,13 @@ public class PixelPropsUtils {
         propsToChangePixel3XL.put("PRODUCT", "crosshatch");
         propsToChangePixel3XL.put("MODEL", "Pixel 3 XL");
         propsToChangePixel3XL.put("FINGERPRINT", "google/crosshatch/crosshatch:11/RQ3A.210805.001.A1/7474174:user/release-keys");
+		propsToChangePixel2 = new HashMap<>();
+        propsToChangePixel2.put("BRAND", "google");
+        propsToChangePixel2.put("MANUFACTURER", "Google");
+        propsToChangePixel2.put("DEVICE", "walleye");
+        propsToChangePixel2.put("PRODUCT", "walleye");
+        propsToChangePixel2.put("MODEL", "Pixel 2");
+        propsToChangePixel2.put("FINGERPRINT", "google/walleye/walleye:8.1.0/OPM1.171019.011/4448085:user/release-keys");
         propsToChangeOGPixelXL = new HashMap<>();
         propsToChangeOGPixelXL.put("BRAND", "google");
         propsToChangeOGPixelXL.put("MANUFACTURER", "Google");
@@ -115,6 +126,16 @@ public class PixelPropsUtils {
                 Log.d(TAG, "Defining props for: " + packageName);
             }
             for (Map.Entry<String, Object> prop : propsToChangePixel3XL.entrySet()) {
+                String key = prop.getKey();
+                Object value = prop.getValue();
+                setPropValue(key, value);
+            }
+        }
+		if (Arrays.asList(packagesToChangePixel2).contains(packageName)){
+            if (DEBUG){
+                Log.d(TAG, "Defining props for: " + packageName);
+            }
+            for (Map.Entry<String, Object> prop : propsToChangePixel2.entrySet()) {
                 String key = prop.getKey();
                 Object value = prop.getValue();
                 setPropValue(key, value);
