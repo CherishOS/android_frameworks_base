@@ -93,9 +93,12 @@ public class TaskTapPointerEventListener implements PointerEventListener {
             case MotionEvent.ACTION_HOVER_MOVE: {
                 final int x = (int) motionEvent.getX();
                 final int y = (int) motionEvent.getY();
-                if (mTouchExcludeRegion.contains(x, y)) {
-                    restorePointerIcon(x, y);
-                    break;
+
+                synchronized (this) {
+                    if (mTouchExcludeRegion.contains(x, y)) {
+                        restorePointerIcon(x, y);
+                        break;
+                    }
                 }
                 final Task task = mDisplayContent.findTaskForResizePoint(x, y);
                 int iconType = TYPE_NOT_SPECIFIED;
