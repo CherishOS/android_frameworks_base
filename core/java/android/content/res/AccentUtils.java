@@ -53,10 +53,16 @@ public class AccentUtils {
         return resName != null && resName.contains("accent_background_device_default") || resName.contains("colorAccent") || resName.contains("lockscreen_clock_accent_color") || resName.contains("oneplus_accent_color") || resName.contains("settings_accent_color") || resName.contains("settingsHeaderColor") || resName.contains("dismiss_all_icon_color") || resName.contains("avatar_bg_red") || resName.contains("folder_indicator_color") || resName.contains("accent_color_red") || resName.contains("alert_dialog_color_accent_dark") || resName.contains("oneplus_accent_text_color") || resName.contains("accent_device_default");
     }
 
-    public boolean isResourceAccentOverlayLight(@Nullable String resName) {
-        return resName != null && resName.contains("accent_overlay_device_default") || resName.contains("colorAccent") || resName.contains("lockscreen_clock_accent_color") || resName.contains("oneplus_accent_color") || resName.contains("settings_accent_color") || resName.contains("settingsHeaderColor") || resName.contains("dismiss_all_icon_color") || resName.contains("avatar_bg_red") || resName.contains("folder_indicator_color") || resName.contains("accent_color_red") || resName.contains("alert_dialog_color_accent_dark") || resName.contains("oneplus_accent_text_color") || resName.contains("accent_device_default");
-    }
-
+    public boolean isResourceAccentOverlay(@Nullable String resName) {
+        return resName != null && resName.contains("accent_overlay_device_default") || 
+        resName.contains("colorAccent") || resName.contains("lockscreen_clock_accent_color") || 
+        resName.contains("oneplus_accent_color") || resName.contains("settings_accent_color") || 
+        resName.contains("settingsHeaderColor") || resName.contains("dismiss_all_icon_color") || 
+        resName.contains("avatar_bg_red") || resName.contains("folder_indicator_color") || 
+        resName.contains("accent_color_red") || 
+        resName.contains("alert_dialog_color_accent_dark") || 
+        resName.contains("oneplus_accent_text_color") || 
+        resName.contains("accent_device_default");
     }
 
     public boolean isResourceBackgroundColor(@Nullable String resName) {
