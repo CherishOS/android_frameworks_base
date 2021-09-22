@@ -147,8 +147,6 @@ public class ThemeOverlayController extends SystemUI {
                      reloadAssets("com.android.systemui");
                      reloadAssets("com.android.settings");
                      reloadAssets("com.dot.packageinstaller");
-                     Settings.Secure.putString(mContext.getContentResolver(), 
-                            Settings.Secure.MONET_BASE_ACCENT, String.valueOf(MonetWannabe.updateMonet(mContext)));
                 }
                  if (monetEnabled && uri.equals(Settings.Secure.getUriFor(Settings.Secure.MONET_CHROMA))) {
                 mMonetWatcher.forceUpdate();     
