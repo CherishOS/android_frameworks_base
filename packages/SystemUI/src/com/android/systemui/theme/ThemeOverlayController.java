@@ -141,12 +141,14 @@ public class ThemeOverlayController extends SystemUI {
                      reloadAssets("com.android.systemui");
                      reloadAssets("com.android.settings");
                     reloadAssets("com.dot.packageinstaller");
+                    reloadAssets("com.cherish.settings");
                  } else if (monetEnabled && (uri.equals(Settings.Secure.getUriFor(Settings.Secure.MONET_COLOR_GEN)) ||
                            uri.equals(Settings.Secure.getUriFor(Settings.Secure.MONET_PALETTE)))) {
                      reloadAssets("android");
                      reloadAssets("com.android.systemui");
                      reloadAssets("com.android.settings");
                      reloadAssets("com.dot.packageinstaller");
+                     reloadAssets("com.cherish.settings");
                 }
                  if (monetEnabled && uri.equals(Settings.Secure.getUriFor(Settings.Secure.MONET_CHROMA))) {
                 mMonetWatcher.forceUpdate();     
