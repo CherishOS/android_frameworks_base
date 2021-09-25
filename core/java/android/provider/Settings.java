@@ -4937,6 +4937,14 @@ public final class Settings {
                 "button_backlight_only_when_pressed";
 
         /**
+         * Setting to determine whether or not to show the battery percentage in the qs status bar header.
+         *    0 - Show remaining time
+         *    1 - Show percentage
+         * @hide
+         */
+        public static final String DO_LEFT_BATTERY_TEXT = "do_left_battery_text";
+
+        /**
          * Whether or not to enable multiple audio focus.
          * When enabled, requires more management by user over application playback activity,
          * for instance pausing media apps when another starts.
