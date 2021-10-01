@@ -6410,6 +6410,12 @@ public final class Settings {
         public static final String NOTIFICATION_MATERIAL_DISMISS_STYLE = "notification_material_dismiss_style";
 
         /**
+         * Toggle between stock and color coded battery icon
+         * @hide
+         */
+        public static final String BATTERY_LEVEL_COLORS = "battery_level_colors";
+
+        /**
          * @hide
          */
         public static final String NOTIFICATION_MATERIAL_DISMISS_BGSTYLE = "notification_material_dismiss_bgstyle";
@@ -6540,6 +6546,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(OPTIMIZED_CHARGE_ENABLED);
             PRIVATE_SETTINGS.add(OPTIMIZED_CHARGE_CEILING);
             PRIVATE_SETTINGS.add(OPTIMIZED_CHARGE_FLOOR);
+            PRIVATE_SETTINGS.add(BATTERY_LEVEL_COLORS);
         }
 
         /**
