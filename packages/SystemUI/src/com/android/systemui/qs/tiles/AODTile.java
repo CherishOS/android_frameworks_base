@@ -16,7 +16,6 @@
 
 package com.android.systemui.qs.tiles;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.net.Uri;
@@ -70,8 +69,6 @@ public class AODTile extends QSTileImpl<BooleanState> {
         ) {
         super(host, uiEventLogger, backgroundLooper, mainHandler, falsingManager, metricsLogger,
                 statusBarStateController, activityStarter, qsLogger);
-        mAodDisabled = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.DOZE_ALWAYS_ON, 1) == 0;
     }
 
     @Override
@@ -90,6 +87,17 @@ public class AODTile extends QSTileImpl<BooleanState> {
         Settings.Secure.putIntForUser(mContext.getContentResolver(),
                 Settings.Secure.DOZE_ALWAYS_ON,
                 mAodDisabled ? 0 : 1, UserHandle.USER_CURRENT);
+        refreshState();
+    }
+
+    @Override
+    protected void handleLongClick(@Nullable View view) {
+        // always toggle on/off on long click
+        Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                Settings.Secure.DOZE_ALWAYS_ON, getAodState() != 0 ? 0 : 1,
+                UserHandle.USER_CURRENT);
+        Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                Settings.Secure.DOZE_ON_CHARGE, 0, UserHandle.USER_CURRENT);
         refreshState();
     }
 
@@ -122,7 +130,7 @@ public class AODTile extends QSTileImpl<BooleanState> {
         return MetricsEvent.CHERISH_SETTINGS;
     }
 
-    private ContentObserver mObserver = new ContentObserver(mHandler) {
+    private final ContentObserver mObserver = new ContentObserver(mHandler) {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             refreshState();
