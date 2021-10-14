@@ -288,6 +288,7 @@ public class StatusBarSignalPolicy implements SignalCallback,
         state.typeSpacerVisible = mMobileStates.size() > 1
                && mMobileStates.get(1).subId == state.subId
                && state.typeId != 0;
+        state.volteId = indicators.volteId;
 
         if (DEBUG) {
             Log.d(TAG, "MobileIconStates: "
@@ -622,6 +623,7 @@ public class StatusBarSignalPolicy implements SignalCallback,
         public boolean needsLeadingPadding;
         public CharSequence typeContentDescription;
         public boolean typeSpacerVisible;
+        public int volteId;
 
         private MobileIconState(int subId) {
             super();
@@ -643,8 +645,9 @@ public class StatusBarSignalPolicy implements SignalCallback,
                     && showTriangle == that.showTriangle
                     && roaming == that.roaming
                     && needsLeadingPadding == that.needsLeadingPadding
-                    && Objects.equals(typeContentDescription, that.typeContentDescription)
-                    && typeSpacerVisible == that.typeSpacerVisible;
+                    && typeSpacerVisible == that.typeSpacerVisible
+                    && volteId == that.volteId
+		            && Objects.equals(typeContentDescription, that.typeContentDescription);
         }
 
         @Override
@@ -671,6 +674,7 @@ public class StatusBarSignalPolicy implements SignalCallback,
             other.needsLeadingPadding = needsLeadingPadding;
             other.typeContentDescription = typeContentDescription;
             other.typeSpacerVisible = typeSpacerVisible;
+            other.volteId = volteId;
         }
 
         private static List<MobileIconState> copyStates(List<MobileIconState> inStates) {
@@ -688,7 +692,7 @@ public class StatusBarSignalPolicy implements SignalCallback,
             return "MobileIconState(subId=" + subId + ", strengthId=" + strengthId
                     + ", showTriangle=" + showTriangle + ", roaming=" + roaming
                     + ", typeId=" + typeId + ", typeSpacerVisible=" + typeSpacerVisible
-                    + ", visible=" + visible + ")";
+                    + ", visible=" + visible + ", volteId=" + volteId + ")";
         }
     }
 }
