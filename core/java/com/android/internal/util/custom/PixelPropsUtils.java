@@ -37,6 +37,8 @@ public class PixelPropsUtils {
             "com.breel.wallpapers20",
             "com.google.android.apps.customization.pixel",
             "com.google.android.apps.fitness",
+            "com.google.android.apps.gcs",
+            "com.google.android.apps.pixelmigrate",
             "com.google.android.apps.recorder",
             "com.google.android.apps.subscriptions.red",
             "com.google.android.apps.tachyon",
@@ -69,7 +71,8 @@ public class PixelPropsUtils {
     };
 
     private static final String[] packagesToChangePixel3XL = {
-            "com.google.android.googlequicksearchbox"
+            "com.google.android.googlequicksearchbox",
+            "com.google.android.gm"
     };
 
     static {
