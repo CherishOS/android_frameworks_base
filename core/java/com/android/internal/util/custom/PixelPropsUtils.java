@@ -52,6 +52,7 @@ public class PixelPropsUtils {
             "com.google.android.apps.nbu.files",
             "com.google.android.contacts",
             "com.google.android.apps.messaging",
+            "com.google.android.contacts",
             "com.google.android.gms.location.history",
             "com.google.android.inputmethod.latin",
             "com.google.android.soundpicker",
@@ -67,7 +68,8 @@ public class PixelPropsUtils {
     };
 
     private static final String[] packagesToChangePixelXL = {
-            "com.google.android.apps.photos"
+            "com.google.android.apps.photos",
+            "com.android.chrome",
     };
 
     private static final String[] packagesToChangePixel3XL = {
