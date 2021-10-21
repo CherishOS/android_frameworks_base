@@ -102,5 +102,6 @@ public class SystemSettings {
         Settings.System.EDGE_LIGHT_CUSTOM_COLOR,
         Settings.System.ENABLE_RIPPLE_EFFECT,
         Settings.System.VOLUME_KEY_CURSOR_CONTROL,
+        Settings.System.TORCH_POWER_BUTTON_GESTURE,
     };
 }
