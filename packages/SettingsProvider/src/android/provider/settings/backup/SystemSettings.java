@@ -96,5 +96,6 @@ public class SystemSettings {
         Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL,
         Settings.System.LOCKSCREEN_BATTERY_INFO,
         Settings.System.VOLUME_KEY_CURSOR_CONTROL,
+        Settings.System.TORCH_POWER_BUTTON_GESTURE,
     };
 }
