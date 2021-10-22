@@ -263,7 +263,7 @@ public class NetworkTraffic extends TextView {
     public NetworkTraffic(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
-        mTintColor = Color.WHITE;
+        mTintColor = getCurrentTextColor();
         mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         mIsConnected = mConnectivityManager.getActiveNetwork() != null;
         SettingsObserver settingsObserver = new SettingsObserver(getHandler());
