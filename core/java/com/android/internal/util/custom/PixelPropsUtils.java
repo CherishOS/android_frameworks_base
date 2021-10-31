@@ -48,7 +48,8 @@ public class PixelPropsUtils {
             "com.amazon.avod.thirdpartyclient",
             "com.disney.disneyplus",
             "com.netflix.mediaclient",
-            "in.startv.hotstar"
+            "in.startv.hotstar",
+     	    "com.google.android.apps.wallpaper"
     };
 
     private static ArrayList<String> allProps = new ArrayList<>(Arrays.asList("BRAND", "MANUFACTURER", "DEVICE", "PRODUCT", "MODEL", "FINGERPRINT"));
