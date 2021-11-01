@@ -1394,7 +1394,7 @@ public class FingerprintManager implements BiometricAuthenticator, BiometricFing
         // warn and use the default if all else fails.
         // TODO(b/196639965): update string
         Slog.w(TAG, "Invalid error message: " + errMsg + ", " + vendorCode);
-        return retry;
+        return "";
     }
 
     /**
