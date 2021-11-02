@@ -3694,6 +3694,7 @@ public class NotificationPanelViewController extends PanelViewController {
     }
 
     public void dozeTimeTick() {
+        mLockIconViewController.dozeTimeTick();
         mKeyguardBottomArea.dozeTimeTick();
         mKeyguardStatusViewController.dozeTimeTick();
         if (mInterpolatedDarkAmount > 0) {
@@ -3919,6 +3920,9 @@ public class NotificationPanelViewController extends PanelViewController {
     @Override
     protected TouchHandler createTouchHandler() {
         return new TouchHandler() {
+
+            private long mLastTouchDownTime = -1L;
+
             @Override
             public boolean onInterceptTouchEvent(MotionEvent event) {
                 if (mBlockTouches || mQsFullyExpanded && mQs.disallowPanelTouches()) {
@@ -3948,6 +3952,19 @@ public class NotificationPanelViewController extends PanelViewController {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (event.getDownTime() == mLastTouchDownTime) {
+                        // An issue can occur when swiping down after unlock, where multiple down
+                        // events are received in this handler with identical downTimes. Until the
+                        // source of the issue can be located, detect this case and ignore.
+                        // see b/193350347
+                        Log.w(TAG, "Duplicate down event detected... ignoring");
+                        return true;
+                    }
+                    mLastTouchDownTime = event.getDownTime();
+                }
+
+
                 if (mBlockTouches || (mQsFullyExpanded && mQs != null
                         && mQs.disallowPanelTouches())) {
                     return false;
@@ -4015,10 +4032,6 @@ public class NotificationPanelViewController extends PanelViewController {
                 if (event.getActionMasked() == MotionEvent.ACTION_DOWN && isFullyExpanded()
                         && mStatusBarKeyguardViewManager.isShowing()) {
                     mStatusBarKeyguardViewManager.updateKeyguardPosition(event.getX());
-                }
-
-                if (mLockIconViewController.onTouchEvent(event)) {
-                    return true;
                 }
 
                 handled |= super.onTouch(v, event);
