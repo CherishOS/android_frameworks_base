@@ -6239,6 +6239,12 @@ public final class Settings {
         public static final String SMART_CHARGING_RESUME_LEVEL = "smart_charging_resume_level";
         
         /**
+         * Whether to play haptic feedback when touching udfps icon
+         * @hide
+         */
+        public static final String UDFPS_HAPTIC_FEEDBACK = "udfps_haptic_feedback";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
