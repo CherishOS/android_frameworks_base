@@ -5914,6 +5914,12 @@ public final class Settings {
          * @hide
          */
         public static final String LIVE_DISPLAY_HINTED = "live_display_hinted";
+		
+		/**
+         * Whether to show battery estimates in QS
+         * @hide
+         */
+        public static final String QS_SHOW_BATTERY_ESTIMATE = "qs_show_battery_estimate";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
