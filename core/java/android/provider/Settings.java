@@ -6165,6 +6165,13 @@ public final class Settings {
         public static final String UDFPS_ANIM = "udfps_anim";
 
         /**
+
+         * Whether to play haptic feedback when touching udfps icon
+         * @hide
+         */
+        public static final String UDFPS_HAPTIC_FEEDBACK = "udfps_haptic_feedback";
+
+        /**
          * @hide
          */
         public static final String UDFPS_ANIM_STYLE = "udfps_anim_style";
