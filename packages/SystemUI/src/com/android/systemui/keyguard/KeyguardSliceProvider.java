@@ -24,6 +24,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
 import android.graphics.Typeface;
 import android.graphics.drawable.Icon;
 import android.icu.text.DateFormat;
@@ -159,6 +160,8 @@ public class KeyguardSliceProvider extends SliceProvider implements
     protected final Uri mWeatherUri;
     private OmniJawsClient mWeatherClient;
     private OmniJawsClient.WeatherInfo mWeatherData;
+    private SettingsObserver mSettingsObserver;
+    private boolean mShowWeatherSlice;
 
     /**
      * Receiver responsible for time ticking and updating the date format.
@@ -197,6 +200,35 @@ public class KeyguardSliceProvider extends SliceProvider implements
                     }
                 }
             };
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            mContentResolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_WEATHER_ENABLED), false, this,
+                    UserHandle.USER_ALL);
+            updateShowWeatherSlice();
+        }
+
+        void unobserve() {
+            mContentResolver.unregisterContentObserver(this);
+        }
+
+        void updateShowWeatherSlice() {
+            mShowWeatherSlice = Settings.System.getIntForUser(mContentResolver,
+                    Settings.System.LOCKSCREEN_WEATHER_ENABLED,
+                    0, UserHandle.USER_CURRENT) != 0;
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateShowWeatherSlice();
+            notifyChange();
+        }
+    }
 
     public static KeyguardSliceProvider getAttachedInstance() {
         return KeyguardSliceProvider.sInstance;
@@ -292,7 +324,7 @@ public class KeyguardSliceProvider extends SliceProvider implements
     }
 
     protected void addWeatherLocked(ListBuilder builder) {
-        if (!mWeatherClient.isOmniJawsEnabled() || mWeatherData == null) {
+        if (!mShowWeatherSlice || !mWeatherClient.isOmniJawsEnabled() || mWeatherData == null) {
             return;
         }
         IconCompat weatherIcon = SliceViewUtil.createIconFromDrawable(mWeatherClient.getWeatherConditionImage(mWeatherData.conditionCode));
@@ -347,6 +379,8 @@ public class KeyguardSliceProvider extends SliceProvider implements
             KeyguardSliceProvider.sInstance = this;
             registerClockUpdate();
             updateClockLocked();
+            mSettingsObserver = new SettingsObserver(mHandler);
+            mSettingsObserver.observe();
             enableWeatherUpdates();
         }
         return true;
@@ -365,6 +399,7 @@ public class KeyguardSliceProvider extends SliceProvider implements
                 getContext().unregisterReceiver(mIntentReceiver);
             }
             disableWeatherUpdates();
+            mSettingsObserver.unobserve();
             KeyguardSliceProvider.sInstance = null;
         }
     }
@@ -587,7 +622,9 @@ public class KeyguardSliceProvider extends SliceProvider implements
     }
 
     private void disableWeatherUpdates() {
-        mWeatherClient.removeObserver(this);
+        if (mWeatherClient != null) {
+            mWeatherClient.removeObserver(this);
+        }
     }
 
     @Override
@@ -614,8 +651,10 @@ public class KeyguardSliceProvider extends SliceProvider implements
     }
 
     private void queryAndUpdateWeather() {
-        mWeatherClient.queryWeather();
-        mWeatherData = mWeatherClient.getWeatherInfo();
-        notifyChange();
+        if (mWeatherClient != null) {
+            mWeatherClient.queryWeather();
+            mWeatherData = mWeatherClient.getWeatherInfo();
+            notifyChange();
+        }
     }
 }
