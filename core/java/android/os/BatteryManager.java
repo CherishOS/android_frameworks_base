@@ -162,6 +162,13 @@ public class BatteryManager {
      */
     @SystemApi
     public static final String EXTRA_EVENT_TIMESTAMP = "android.os.extra.EVENT_TIMESTAMP";
+	
+	/**
+     * Extra for {@link android.content.Intent#ACTION_BATTERY_CHANGED}:
+     * boolean value to detect fast charging
+     * {@hide}
+     */
+    public static final String EXTRA_DASH_CHARGER = "dash_charger";
 
     /**
      * Extra for {@link android.content.Intent#ACTION_BATTERY_CHANGED}:
