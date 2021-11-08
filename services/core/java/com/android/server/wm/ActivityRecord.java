@@ -365,6 +365,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import com.android.server.DssController;
+
 /**
  * An entry in the history task, representing an activity.
  */
@@ -8462,6 +8464,9 @@ final class ActivityRecord extends WindowToken implements WindowManagerService.A
 
         setLastReportedConfiguration(getProcessGlobalConfiguration(), newMergedOverrideConfig);
 
+        DssController dssController = DssController.getService();
+        dssController.scaleExistingConfiguration(newMergedOverrideConfig, packageName);
+
         if (mState == INITIALIZING) {
             // No need to relaunch or schedule new config for activity that hasn't been launched
             // yet. We do, however, return after applying the config to activity record, so that
@@ -8649,6 +8654,12 @@ final class ActivityRecord extends WindowToken implements WindowManagerService.A
         }
 
         startFreezingScreenLocked(0);
+
+        Configuration globalConfig = new Configuration(getProcessGlobalConfiguration());
+        Configuration overrideConfig = new Configuration(getMergedOverrideConfiguration());
+        DssController dssController = DssController.getService();
+        dssController.scaleExistingConfiguration(overrideConfig, packageName);
+        dssController.scaleExistingConfiguration(globalConfig, packageName);
 
         try {
             ProtoLog.i(WM_DEBUG_STATES, "Moving to %s Relaunching %s callers=%s" ,

@@ -157,6 +157,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.android.server.DssController;
+
 // TODO: This class has become a dumping ground. Let's
 // - Move things relating to the hierarchy to RootWindowContainer
 // - Move things relating to activity life cycles to maybe a new class called ActivityLifeCycler
@@ -837,12 +839,26 @@ public class ActivityTaskSupervisor implements RecentTasks.Callbacks {
                 // Because we could be starting an Activity in the system process this may not go
                 // across a Binder interface which would create a new Configuration. Consequently
                 // we have to always create a new Configuration here.
+
+                Configuration globalConfig = new Configuration(proc.
+                                                    prepareConfigurationForLaunchingActivity());
+                Configuration overrideConfig = new Configuration(r.
+                                                   getMergedOverrideConfiguration());
                 final Configuration procConfig = proc.prepareConfigurationForLaunchingActivity();
                 final MergedConfiguration mergedConfiguration = new MergedConfiguration(
-                        procConfig, r.getMergedOverrideConfiguration());
+                        globalConfig, overrideConfig);
                 r.setLastReportedConfiguration(mergedConfiguration);
 
                 logIfTransactionTooLarge(r.intent, r.getSavedState());
+                // To keep the code simple, we only apply DSS scaling to the config when we send
+                // it to the app (here), and un-scale it when we receive it from the app
+                // (in ActivityRecord::getConfigurationChanges). We don't store a DSS-scaled config
+                // in mLastReportedConfiguration since it requires much more workaround code.
+                DssController dssController = DssController.getService();
+                dssController.scaleExistingConfiguration(overrideConfig,
+                        proc.mInfo.packageName);
+                dssController.scaleExistingConfiguration(globalConfig, proc.mInfo.packageName);
+                mergedConfiguration.setConfiguration(globalConfig, overrideConfig);
 
                 if (r.isEmbedded()) {
                     // Sending TaskFragmentInfo to client to ensure the info is updated before

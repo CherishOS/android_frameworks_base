@@ -80,6 +80,8 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.android.server.DssController;
+
 /**
  * The Activity Manager (AM) package manages the lifecycle of processes in the system through
  * ProcessRecord. However, it is important for the Window Manager (WM) package to be aware
@@ -1365,6 +1367,9 @@ public class WindowProcessController extends ConfigurationContainer<Configuratio
             }
             return;
         }
+
+        DssController dssController = DssController.getService();
+        dssController.scaleExistingConfiguration(config, mName);
 
         if (mPauseConfigurationDispatchCount > 0) {
             mHasPendingConfigurationChange = true;

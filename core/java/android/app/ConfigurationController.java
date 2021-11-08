@@ -43,6 +43,9 @@ import com.android.internal.annotations.GuardedBy;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import android.app.ActivityThread;
+import android.content.res.ResourcesImpl;
+
 /**
  * A client side controller to handle process level configuration changes.
  * @hide
@@ -266,6 +269,18 @@ class ConfigurationController {
                 && densityDpi != DisplayMetrics.DENSITY_DEVICE) {
             DisplayMetrics.DENSITY_DEVICE = densityDpi;
             Bitmap.setDefaultDensity(densityDpi);
+        }
+
+        // Change DisplayMetrics.DENSITY_DEVICE and default density for bitmaps, but at the same
+        // time we tell Resources class to load all resources for the original density in order to
+        // make all loaded resources independent of current dss value.
+        final float mDssScale = ActivityThread.currentActivityThread().getDssScale();
+        if (mDssScale != 1) {
+            DisplayMetrics.DENSITY_DEVICE = densityDpi;
+            Bitmap.setDefaultDensity(DisplayMetrics.DENSITY_DEVICE);
+            ResourcesImpl.setLoadDensityDpi((int)(densityDpi / mDssScale + .5f));
+        } else {
+            ResourcesImpl.setLoadDensityDpi(Configuration.DENSITY_DPI_UNDEFINED);
         }
     }
 

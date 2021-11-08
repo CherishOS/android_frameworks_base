@@ -450,11 +450,21 @@ public class ResourcesImpl {
                     keyboardHidden = mConfiguration.keyboardHidden;
                 }
 
+                // Make possible to force a particular density value for all loading
+                // resources. When dss is applied, we want to load all resources
+                // for the original density in order to make them independent of
+                // current dss value.
+                int loadDensityDpi = mConfiguration.densityDpi;
+                if (sLoadDensityDpi !=
+                        Configuration.DENSITY_DPI_UNDEFINED) {
+                    loadDensityDpi = sLoadDensityDpi;
+                }
+
                 mAssets.setConfiguration(mConfiguration.mcc, mConfiguration.mnc,
                         adjustLanguageTag(mConfiguration.getLocales().get(0).toLanguageTag()),
                         mConfiguration.orientation,
                         mConfiguration.touchscreen,
-                        mConfiguration.densityDpi, mConfiguration.keyboard,
+                        loadDensityDpi, mConfiguration.keyboard,
                         keyboardHidden, mConfiguration.navigation, width, height,
                         mConfiguration.smallestScreenWidthDp,
                         mConfiguration.screenWidthDp, mConfiguration.screenHeightDp,
@@ -1464,5 +1474,12 @@ public class ResourcesImpl {
         public void pop() {
             mSize--;
         }
+    }
+
+    private static int sLoadDensityDpi = Configuration.DENSITY_DPI_UNDEFINED;
+
+    /** Loads a different set of resources */
+    public static void setLoadDensityDpi(int loadDensityDpi) {
+        sLoadDensityDpi = loadDensityDpi;
     }
 }

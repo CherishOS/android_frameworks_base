@@ -78,7 +78,9 @@ oneway interface IApplicationThread {
             int debugMode, boolean enableBinderTracking, boolean trackAllocation,
             boolean restrictedBackupMode, boolean persistent, in Configuration config,
             in CompatibilityInfo compatInfo, in Map services,
-            in Bundle coreSettings, in String buildSerial, in AutofillOptions autofillOptions,
+            in Bundle coreSettings,
+            float dssScale,
+            in String buildSerial, in AutofillOptions autofillOptions,
             in ContentCaptureOptions contentCaptureOptions, in long[] disabledCompatChanges,
             in SharedMemory serializedSystemFontMap);
     void runIsolatedEntryPoint(in String entryPoint, in String[] entryPointArgs);
