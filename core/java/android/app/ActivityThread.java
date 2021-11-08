@@ -98,6 +98,7 @@ import android.database.sqlite.SQLiteDebug.DbStats;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.HardwareRenderer;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.hardware.display.DisplayManagerGlobal;
 import android.media.MediaFrameworkInitializer;
@@ -8000,5 +8001,21 @@ public final class ActivityThread extends ClientTransactionHandler
      */
     public float getDssScale() {
         return mDssScale;
+    }
+
+    @UnsupportedAppUsage
+    public static boolean applyDssScaleIfNeeded(DisplayInfo info, Rect bounds) {
+        final ActivityThread thread = sCurrentActivityThread;
+        if (thread != null) {
+            final float dssScale = thread.mDssScale;
+            if (dssScale != 1.0f) {
+                final int width = (int) (bounds.width() * dssScale + .5f);
+                final int height = (int) (bounds.height() * dssScale + .5f);
+                info.logicalWidth = info.appWidth = width;
+                info.logicalHeight = info.appHeight = height;
+                return true;
+            }
+        }
+        return false;
     }
 }
