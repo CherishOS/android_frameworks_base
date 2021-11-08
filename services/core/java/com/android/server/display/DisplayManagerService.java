@@ -137,6 +137,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
+import com.android.server.DssController;
+
 /**
  * Manages attached displays.
  * <p>
@@ -425,6 +427,8 @@ public final class DisplayManagerService extends SystemService {
     @EnabledSince(targetSdkVersion = android.os.Build.VERSION_CODES.S)
     static final long DISPLAY_MODE_RETURNS_PHYSICAL_REFRESH_RATE = 170503758L;
 
+    private DssController mDssController;
+
     public DisplayManagerService(Context context) {
         this(context, new Injector());
     }
@@ -456,6 +460,8 @@ public final class DisplayManagerService extends SystemService {
         ColorSpace[] colorSpaces = SurfaceControl.getCompositionColorSpaces();
         mWideColorSpace = colorSpaces[1];
         mAllowNonNativeRefreshRateOverride = mInjector.getAllowNonNativeRefreshRateOverride();
+
+        mDssController = DssController.getService();
 
         mSystemReady = false;
     }
@@ -879,15 +885,30 @@ public final class DisplayManagerService extends SystemService {
         return info;
     }
 
-    private DisplayInfo getDisplayInfoInternal(int displayId, int callingUid) {
+    private DisplayInfo getDisplayInfoInternal(int displayId, int callingUid, int callingPid) {
         synchronized (mSyncRoot) {
             final LogicalDisplay display = mLogicalDisplayMapper.getDisplayLocked(displayId);
             if (display != null) {
-                final DisplayInfo info =
+                DisplayInfo info =
                         getDisplayInfoForFrameRateOverride(display.getFrameRateOverrides(),
                                 display.getDisplayInfoLocked(), callingUid);
                 if (info.hasAccess(callingUid)
                         || isUidPresentOnDisplayInternal(callingUid, displayId)) {
+                    // if the app pid is in configured for scaling then return the fakeInfo which
+                    // is half the resolution of DisplayInfo
+                    if (mDssController.isScaledApp(callingPid)) {
+                        float dssScale = mDssController.getScalingFactor(callingPid);
+                        DisplayInfo fakeInfo = new DisplayInfo(info);
+                        fakeInfo.logicalDensityDpi = (int)(fakeInfo.logicalDensityDpi *
+                                dssScale + .5f);
+                        fakeInfo.physicalXDpi = (int)(fakeInfo.physicalXDpi * dssScale + .5f);
+                        fakeInfo.physicalYDpi = (int)(fakeInfo.physicalYDpi * dssScale + .5f);
+                        fakeInfo.logicalHeight = (int)(fakeInfo.logicalHeight * dssScale + .5f);
+                        fakeInfo.logicalWidth = (int)(fakeInfo.logicalWidth * dssScale + .5f);
+                        fakeInfo.appHeight = (int)(fakeInfo.appHeight * dssScale + .5f);
+                        fakeInfo.appWidth = (int)(fakeInfo.appWidth * dssScale + .5f);
+                        info = fakeInfo;
+                    }
                     return info;
                 }
             }
@@ -2369,9 +2390,10 @@ public final class DisplayManagerService extends SystemService {
         @Override // Binder call
         public DisplayInfo getDisplayInfo(int displayId) {
             final int callingUid = Binder.getCallingUid();
+            final int callingPid = Binder.getCallingPid();
             final long token = Binder.clearCallingIdentity();
             try {
-                return getDisplayInfoInternal(displayId, callingUid);
+                return getDisplayInfoInternal(displayId, callingUid, callingPid);
             } finally {
                 Binder.restoreCallingIdentity(token);
             }
@@ -3270,7 +3292,7 @@ public final class DisplayManagerService extends SystemService {
 
         @Override
         public DisplayInfo getDisplayInfo(int displayId) {
-            return getDisplayInfoInternal(displayId, Process.myUid());
+            return getDisplayInfoInternal(displayId, Process.myUid(), Process.myPid());
         }
 
         @Override

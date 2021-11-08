@@ -196,6 +196,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import android.app.ActivityThread;
+
 /**
  * <p>
  * This class represents the basic building block for user interface components. A View
@@ -15120,6 +15122,13 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
             mAttachInfo.mViewRootImpl.getWindowVisibleDisplayFrame(outRect);
             return;
         }
+
+        ActivityThread activityThread = ActivityThread.currentActivityThread();
+        if (activityThread != null) {
+            float dssScale = activityThread.getDssScale();
+            outRect.scale(dssScale);
+        }
+
         // The view is not attached to a display so we don't have a context.
         // Make a best guess about the display size.
         Display d = DisplayManagerGlobal.getInstance().getRealDisplay(Display.DEFAULT_DISPLAY);

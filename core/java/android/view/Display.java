@@ -59,6 +59,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import android.app.ActivityThread;
+
 /**
  * Provides information about the size and density of a logical display.
  * <p>
@@ -1362,6 +1364,15 @@ public final class Display {
             if (shouldReportMaxBounds()) {
                 final Rect bounds = mResources.getConfiguration()
                         .windowConfiguration.getMaxBounds();
+                if (ActivityThread.applyDssScaleIfNeeded(mDisplayInfo, bounds)) {
+                    outSize.x = mDisplayInfo.logicalWidth;
+                    outSize.y = mDisplayInfo.logicalHeight;
+                    if (DEBUG) {
+                        Log.d(TAG, "getRealSize determined from max bounds with DSS scale: "
+                                + outSize);
+                    }
+                    return;
+                }
                 outSize.x = bounds.width();
                 outSize.y = bounds.height();
                 if (DEBUG) {
@@ -1430,6 +1441,16 @@ public final class Display {
         synchronized (mLock) {
             updateDisplayInfoLocked();
             if (shouldReportMaxBounds()) {
+                if (ActivityThread.applyDssScaleIfNeeded(mDisplayInfo,
+                        mResources.getConfiguration().windowConfiguration.getMaxBounds())) {
+                    mDisplayInfo.getLogicalMetrics(outMetrics,
+                            CompatibilityInfo.DEFAULT_COMPATIBILITY_INFO, null);
+                    if (DEBUG) {
+                        Log.d(TAG, "getRealMetrics determined from max bounds with DSS scale: "
+                                + outMetrics);
+                    }
+                    return;
+                }
                 mDisplayInfo.getMaxBoundsMetrics(outMetrics,
                         CompatibilityInfo.DEFAULT_COMPATIBILITY_INFO,
                         mResources.getConfiguration());
