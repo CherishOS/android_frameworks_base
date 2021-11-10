@@ -1172,6 +1172,10 @@ public abstract class WindowOrientationListener {
                         return;
                     }
                 }
+                if (mRotationResolverService == null) {
+                    // Bail out because RotationResolverManagerService wasn't started
+                    return;
+                }
 
                 String packageName = null;
                 if (mActivityTaskManagerInternal != null) {
