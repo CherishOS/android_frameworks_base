@@ -6099,6 +6099,13 @@ public final class Settings {
          */
         @Readable
         public static final String ENABLE_FLOATING_ROTATION_BUTTON = "enable_floating_rotation_button";
+		
+		/**
+         * Enable fod detection even when screen is off
+         * Default value is 0
+         * @hide
+         */
+        public static final String SCREEN_OFF_FOD = "screen_off_fod";
 
         /**
          * These are all public system settings
