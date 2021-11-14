@@ -11533,6 +11533,13 @@ public final class Settings {
         public static final String TORCH_LONG_PRESS_POWER = "torch_long_press_power";
 
         /**
+         * Whether to show privacy indicator for location
+         * Default value is based on it's device config flag
+         * @hide
+         */
+        public static final String ENABLE_LOCATION_PRIVACY_INDICATOR = "enable_location_privacy_indicator";
+
+        /**
          * These entries are considered common between the personal and the managed profile,
          * since the managed profile doesn't get to change them.
          */
