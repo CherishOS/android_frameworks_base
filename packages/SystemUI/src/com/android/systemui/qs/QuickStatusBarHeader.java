@@ -22,6 +22,7 @@ import static com.android.systemui.battery.BatteryMeterView.BATTERY_STYLE_FULL_C
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
@@ -33,6 +34,8 @@ import android.os.UserHandle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.provider.AlarmClock;
+import android.provider.CalendarContract;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.DisplayCutout;
@@ -47,8 +50,10 @@ import androidx.annotation.NonNull;
 
 import com.android.internal.policy.SystemBarUtils;
 import com.android.settingslib.Utils;
+import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.battery.BatteryMeterView;
+import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.qs.QSDetail.Callback;
 import com.android.systemui.statusbar.phone.StatusBarContentInsetsProvider;
 import com.android.systemui.statusbar.phone.StatusBarIconController.TintedIconManager;
@@ -63,7 +68,8 @@ import java.util.List;
  * View that contains the top-most bits of the QS panel (primarily the status bar with date, time,
  * battery, carrier info and privacy icons) and also contains the {@link QuickQSPanel}.
  */
-public class QuickStatusBarHeader extends FrameLayout {
+public class QuickStatusBarHeader extends FrameLayout implements
+        View.OnClickListener, View.OnLongClickListener {
 
     private boolean mExpanded;
     private boolean mQsDisabled;
@@ -119,9 +125,14 @@ public class QuickStatusBarHeader extends FrameLayout {
 
     private NetworkTraffic mNetworkTraffic;
     private boolean mShowNetworkTraffic;
+	
+	private final ActivityStarter mActivityStarter;
+    private final Vibrator mVibrator;
 
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mActivityStarter = Dependency.get(ActivityStarter.class);
+        mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         Handler mHandler = new Handler();
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
         settingsObserver.observe();
@@ -148,6 +159,7 @@ public class QuickStatusBarHeader extends FrameLayout {
         mIconContainer = findViewById(R.id.statusIcons);
         mPrivacyChip = findViewById(R.id.privacy_chip);
         mDateView = findViewById(R.id.date);
+        mDateView.setOnClickListener(this);
         mClockDateView = findViewById(R.id.date_clock);
         mSecurityHeaderView = findViewById(R.id.header_text_container);
         mClockIconsSeparator = findViewById(R.id.separator);
@@ -157,6 +169,8 @@ public class QuickStatusBarHeader extends FrameLayout {
 
         mClockContainer = findViewById(R.id.clock_container);
         mClockView = findViewById(R.id.clock);
+        mClockView.setOnClickListener(this);
+        mClockView.setOnLongClickListener(this);
         mDatePrivacySeparator = findViewById(R.id.space);
         // Tint for the battery icons are handled in setupHost()
         mBatteryRemainingIcon = findViewById(R.id.batteryRemainingIcon);
@@ -228,6 +242,36 @@ public class QuickStatusBarHeader extends FrameLayout {
     public void onRtlPropertiesChanged(int layoutDirection) {
         super.onRtlPropertiesChanged(layoutDirection);
         updateResources();
+    }
+
+    @Override
+    public void onClick(View v) {
+        // Clock view is still there when the panel is not expanded
+        // Making sure we get the date action when the user clicks on it
+        // but actually is seeing the date
+        if (mExpanded && v == mClockView) {
+            mActivityStarter.postStartActivityDismissingKeyguard(new Intent(
+                    AlarmClock.ACTION_SHOW_ALARMS), 0);
+        } else if (v == mDateView || (v == mClockView && !mExpanded)) {
+            Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+            builder.appendPath("time");
+            builder.appendPath(Long.toString(System.currentTimeMillis()));
+            Intent todayIntent = new Intent(Intent.ACTION_VIEW, builder.build());
+            mActivityStarter.postStartActivityDismissingKeyguard(todayIntent, 0);
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        if (v == mClockView || v == mDateView) {
+            Intent nIntent = new Intent(Intent.ACTION_MAIN);
+            nIntent.setClassName("com.android.settings",
+                    "com.android.settings.Settings$DateTimeSettingsActivity");
+            mActivityStarter.startActivity(nIntent, true /* dismissShade */);
+            mVibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
+            return true;
+        }
+        return false;
     }
 
     private void setDatePrivacyContainersWidth(boolean landscape) {
