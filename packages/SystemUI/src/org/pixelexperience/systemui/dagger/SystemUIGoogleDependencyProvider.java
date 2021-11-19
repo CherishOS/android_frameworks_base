@@ -302,7 +302,7 @@ import com.google.android.systemui.statusbar.notification.voicereplies.Notificat
 import com.google.android.systemui.statusbar.notification.voicereplies.NotificationVoiceReplyLogger;
 import com.google.android.systemui.statusbar.notification.voicereplies.NotificationVoiceReplyManager;
 import com.google.android.systemui.statusbar.phone.WallpaperNotifier;
-import com.google.android.systemui.theme.ThemeOverlayControllerGoogle;
+import org.protonaosp.systemui.theme.CustomThemeOverlayController;
 
 import org.pixelexperience.systemui.GoogleServices;
 import org.pixelexperience.systemui.assist.AssistManagerGoogle;
@@ -500,8 +500,8 @@ public class SystemUIGoogleDependencyProvider {
 
     @Provides
     @SysUISingleton
-    static ThemeOverlayControllerGoogle provideThemeOverlayControllerGoogle(Context context, BroadcastDispatcher broadcastDispatcher, @Background Handler handler, @Main Executor executor, @Background Executor executorB, ThemeOverlayApplier themeOverlayApplier, SecureSettings secureSettings, SystemPropertiesHelper systemPropertiesHelper, @Main Resources resources, WallpaperManager wallpaperManager, UserManager userManager, DumpManager dumpManager, DeviceProvisionedController deviceProvisionedController, UserTracker userTracker, FeatureFlags featureFlags, WakefulnessLifecycle wakefulnessLifecycle, ConfigurationController configurationController) {
-        return new ThemeOverlayControllerGoogle(context, broadcastDispatcher, handler, executor, executorB, themeOverlayApplier, secureSettings, systemPropertiesHelper, resources, wallpaperManager, userManager, dumpManager, deviceProvisionedController, userTracker, featureFlags, wakefulnessLifecycle, configurationController);
+    static CustomThemeOverlayController provideThemeOverlayControllerGoogle(Context context, BroadcastDispatcher broadcastDispatcher, @Background Handler handler, @Main Executor executor, @Background Executor executorB, ThemeOverlayApplier themeOverlayApplier, SecureSettings secureSettings, SystemPropertiesHelper systemPropertiesHelper, @Main Resources resources, WallpaperManager wallpaperManager, UserManager userManager, DumpManager dumpManager, DeviceProvisionedController deviceProvisionedController, UserTracker userTracker, FeatureFlags featureFlags, WakefulnessLifecycle wakefulnessLifecycle, ConfigurationController configurationController) {
+        return new CustomThemeOverlayController(context, broadcastDispatcher, handler, executor, executorB, themeOverlayApplier, secureSettings, systemPropertiesHelper, resources, wallpaperManager, userManager, dumpManager, deviceProvisionedController, userTracker, featureFlags, wakefulnessLifecycle, configurationController);
     }
 
     @Provides
