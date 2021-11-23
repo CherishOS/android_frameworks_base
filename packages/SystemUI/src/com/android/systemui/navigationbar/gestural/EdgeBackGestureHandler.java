@@ -240,9 +240,6 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
     private int mRightInset;
     private int mSysUiFlags;
 
-    private float mEdgeHeightLeft;
-    private float mEdgeHeightRight;
-
     private int mEdgeHeight;
 
     // For Tf-Lite model.
@@ -383,9 +380,6 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
         mEdgeWidthRight = mGestureNavigationSettingsObserver.getRightSensitivity(res);
         mIsBackGestureAllowed =
                 !mGestureNavigationSettingsObserver.areNavigationButtonForcedVisible();
-
-        mEdgeHeightLeft = mDisplaySize.y / mGestureNavigationSettingsObserver.getLeftHeight();
-        mEdgeHeightRight = mDisplaySize.y / mGestureNavigationSettingsObserver.getRightHeight();
 
         final DisplayMetrics dm = res.getDisplayMetrics();
         final float defaultGestureHeight = res.getDimension(
@@ -669,14 +663,6 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
     private boolean isWithinInsets(int x, int y) {
         // Disallow if we are in the bottom gesture area
         if (y >= (mDisplaySize.y - mBottomGestureHeight)) {
-            return false;
-        }
-
-        // Disallow if gesture height is mmore than allowed
-        if ((mIsOnLeftEdge && y < (mDisplaySize.y
-                 - mBottomGestureHeight - (int) mEdgeHeightLeft)) ||
-                 (!mIsOnLeftEdge && y < (mDisplaySize.y
-                 - mBottomGestureHeight - (int) mEdgeHeightRight))) {
             return false;
         }
 
