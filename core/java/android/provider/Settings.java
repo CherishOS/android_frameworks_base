@@ -5920,6 +5920,13 @@ public final class Settings {
          * @hide
          */
         public static final String QS_SHOW_BATTERY_ESTIMATE = "qs_show_battery_estimate";
+		
+		/**
+         * Whether to hide navbar pill and keyboard space.
+         * Default 0.
+         * @hide
+         */
+        public static final String FULLSCREEN_GESTURES = "fullscreen_gestures";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
