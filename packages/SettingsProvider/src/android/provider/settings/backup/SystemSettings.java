@@ -100,5 +100,9 @@ public class SystemSettings {
         Settings.System.NOTIFICATION_HEADERS,
         Settings.System.VOLUME_DIALOG_TIMEOUT,
         Settings.System.SCREEN_OFF_FOD,
+        Settings.System.QS_SHOW_BRIGHTNESS,
+        Settings.System.QQS_SHOW_BRIGHTNESS,
+        Settings.System.QS_BRIGHTNESS_POSITION_BOTTOM,
+        Settings.System.QS_SHOW_AUTO_BRIGHTNESS_BUTTON,
     };
 }
