@@ -308,6 +308,8 @@ public interface CentralSurfaces extends Dumpable, LifecycleOwner {
 
     QSPanelController getQSPanelController();
 
+    void setBlockedGesturalNavigation(boolean blocked);
+
     /** @deprecated Use {@link DisplayMetricsRepository} instead. */
     @Deprecated
     float getDisplayDensity();

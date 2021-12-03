@@ -92,6 +92,7 @@ class ShadeViewControllerEmptyImpl @Inject constructor() : ShadeViewController {
     override val shadeHeadsUpTracker = ShadeHeadsUpTrackerEmptyImpl()
     override val shadeFoldAnimator = ShadeFoldAnimatorEmptyImpl()
     override fun showIsland(show: Boolean) {}
+    override fun setBlockedGesturalNavigation(blocked: Boolean) {}
 }
 
 class ShadeHeadsUpTrackerEmptyImpl : ShadeHeadsUpTracker {
