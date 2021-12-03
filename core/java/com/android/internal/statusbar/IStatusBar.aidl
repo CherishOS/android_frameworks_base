@@ -348,4 +348,9 @@ oneway interface IStatusBar
     void showMediaOutputSwitcher(String packageName);
 
     void toggleCameraFlash();
+
+    /**
+     * Used to block or unblock usage of gestural navigation
+     */
+    void setBlockedGesturalNavigation(boolean blocked);
 }
