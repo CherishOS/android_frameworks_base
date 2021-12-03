@@ -325,4 +325,9 @@ oneway interface IStatusBar
     void unregisterNearbyMediaDevicesProvider(in INearbyMediaDevicesProvider provider);
 
     void toggleCameraFlash();
+
+    /**
+     * Used to block or unblock usage of gestural navigation
+     */
+    void setBlockedGesturalNavigation(boolean blocked);
 }
