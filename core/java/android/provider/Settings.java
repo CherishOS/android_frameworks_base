@@ -6213,6 +6213,15 @@ public final class Settings {
          * @hide
          */
         public static final String PULSE_ON_NEW_TRACKS = "pulse_on_new_tracks";
+		
+		
+		/**
+         * Enable fod detection even when screen is off
+         * Default value is 0
+         * @hide
+         */
+        @Readable
+        public static final String SCREEN_OFF_FOD = "screen_off_fod";
 
         /**
          * These are all public system settings
