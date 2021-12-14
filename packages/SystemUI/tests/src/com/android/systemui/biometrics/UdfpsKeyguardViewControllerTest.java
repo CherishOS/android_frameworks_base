@@ -16,57 +16,102 @@
 
 package com.android.systemui.biometrics;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.atLeast;
+import static android.media.AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY;
 
-import static org.mockito.Mockito.eq;
+import static junit.framework.Assert.assertEquals;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyFloat;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import android.content.Context;
+import android.content.res.TypedArray;
+import android.hardware.biometrics.ComponentInfoInternal;
+import android.hardware.biometrics.SensorProperties;
+import android.hardware.display.DisplayManager;
+import android.hardware.fingerprint.FingerprintManager;
+import android.hardware.fingerprint.FingerprintSensorProperties;
+import android.hardware.fingerprint.FingerprintSensorPropertiesInternal;
+import android.hardware.fingerprint.IUdfpsOverlayController;
+import android.hardware.fingerprint.IUdfpsOverlayControllerCallback;
+import android.os.Handler;
+import android.os.PowerManager;
+import android.os.RemoteException;
+import android.os.Vibrator;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper.RunWithLooper;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.WindowManager;
+import android.view.accessibility.AccessibilityManager;
 
 import androidx.test.filters.SmallTest;
 
 import com.android.keyguard.KeyguardUpdateMonitor;
+import com.android.systemui.R;
 import com.android.systemui.SysuiTestCase;
 import com.android.systemui.dump.DumpManager;
-import com.android.systemui.keyguard.KeyguardViewMediator;
+import com.android.systemui.keyguard.ScreenLifecycle;
+import com.android.systemui.plugins.FalsingManager;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
 import com.android.systemui.statusbar.LockscreenShadeTransitionController;
-import com.android.systemui.statusbar.StatusBarState;
+import com.android.systemui.statusbar.phone.KeyguardBypassController;
 import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.statusbar.phone.StatusBarKeyguardViewManager;
+import com.android.systemui.statusbar.phone.UnlockedScreenOffAnimationController;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
-import com.android.systemui.util.concurrency.DelayableExecutor;
+import com.android.systemui.util.concurrency.Execution;
+import com.android.systemui.util.concurrency.FakeExecution;
+import com.android.systemui.util.concurrency.FakeExecutor;
+import com.android.systemui.util.time.FakeSystemClock;
+import com.android.systemui.util.time.SystemClock;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
+import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
 
 @SmallTest
 @RunWith(AndroidTestingRunner.class)
-@RunWithLooper
-public class UdfpsKeyguardViewControllerTest extends SysuiTestCase {
+@RunWithLooper(setAsMainLooper = true)
+public class UdfpsControllerTest extends SysuiTestCase {
+
+    // Use this for inputs going into SystemUI. Use UdfpsController.mUdfpsSensorId for things
+    // leaving SystemUI.
+    private static final int TEST_UDFPS_SENSOR_ID = 1;
+
+    @Rule
+    public MockitoRule rule = MockitoJUnit.rule();
+
+    // Unit under test
+    private UdfpsController mUdfpsController;
+
     // Dependencies
+    private Execution mExecution;
     @Mock
-    private UdfpsKeyguardView mView;
+    private LayoutInflater mLayoutInflater;
     @Mock
-    private Context mResourceContext;
+    private FingerprintManager mFingerprintManager;
+    @Mock
+    private WindowManager mWindowManager;
+    @Mock
+    private UdfpsHbmProvider mHbmProvider;
     @Mock
     private StatusBarStateController mStatusBarStateController;
     @Mock
@@ -74,330 +119,477 @@ public class UdfpsKeyguardViewControllerTest extends SysuiTestCase {
     @Mock
     private StatusBarKeyguardViewManager mStatusBarKeyguardViewManager;
     @Mock
-    private LockscreenShadeTransitionController mLockscreenShadeTransitionController;
-    @Mock
     private DumpManager mDumpManager;
-    @Mock
-    private DelayableExecutor mExecutor;
     @Mock
     private KeyguardUpdateMonitor mKeyguardUpdateMonitor;
     @Mock
+    private IUdfpsOverlayControllerCallback mUdfpsOverlayControllerCallback;
+    @Mock
+    private FalsingManager mFalsingManager;
+    @Mock
+    private PowerManager mPowerManager;
+    @Mock
+    private AccessibilityManager mAccessibilityManager;
+    @Mock
+    private LockscreenShadeTransitionController mLockscreenShadeTransitionController;
+    @Mock
+    private ScreenLifecycle mScreenLifecycle;
+    @Mock
+    private Vibrator mVibrator;
+    @Mock
+    private UdfpsHapticsSimulator mUdfpsHapticsSimulator;
+    @Mock
     private KeyguardStateController mKeyguardStateController;
     @Mock
-    private KeyguardViewMediator mKeyguardViewMediator;
+    private KeyguardBypassController mKeyguardBypassController;
+    @Mock
+    private DisplayManager mDisplayManager;
+    @Mock
+    private Handler mHandler;
     @Mock
     private ConfigurationController mConfigurationController;
     @Mock
-    private UdfpsController mUdfpsController;
+    private SystemClock mSystemClock;
+    @Mock
+    private UnlockedScreenOffAnimationController mUnlockedScreenOffAnimationController;
 
-    private UdfpsKeyguardViewController mController;
+    private FakeExecutor mFgExecutor;
+
+    // Stuff for configuring mocks
+    @Mock
+    private UdfpsView mUdfpsView;
+    @Mock
+    private UdfpsEnrollView mEnrollView;
+    @Mock
+    private UdfpsKeyguardView mKeyguardView;
+    @Mock
+    private UdfpsKeyguardViewController mUdfpsKeyguardViewController;
+    @Mock
+    private TypedArray mBrightnessValues;
+    @Mock
+    private TypedArray mBrightnessBacklight;
 
     // Capture listeners so that they can be used to send events
-    @Captor private ArgumentCaptor<StatusBarStateController.StateListener> mStateListenerCaptor;
-    private StatusBarStateController.StateListener mStatusBarStateListener;
+    @Captor private ArgumentCaptor<IUdfpsOverlayController> mOverlayCaptor;
+    private IUdfpsOverlayController mOverlayController;
+    @Captor private ArgumentCaptor<UdfpsView.OnTouchListener> mTouchListenerCaptor;
+    @Captor private ArgumentCaptor<Runnable> mOnIlluminatedRunnableCaptor;
+    @Captor private ArgumentCaptor<ScreenLifecycle.Observer> mScreenObserverCaptor;
+    private ScreenLifecycle.Observer mScreenObserver;
 
-    @Captor private ArgumentCaptor<StatusBar.ExpansionChangedListener> mExpansionListenerCaptor;
-    private List<StatusBar.ExpansionChangedListener> mExpansionListeners;
-
-    @Captor private ArgumentCaptor<StatusBarKeyguardViewManager.AlternateAuthInterceptor>
-            mAltAuthInterceptorCaptor;
-    private StatusBarKeyguardViewManager.AlternateAuthInterceptor mAltAuthInterceptor;
-
-    @Captor private ArgumentCaptor<KeyguardStateController.Callback>
-            mKeyguardStateControllerCallbackCaptor;
-    private KeyguardStateController.Callback mKeyguardStateControllerCallback;
+    @Captor private ArgumentCaptor<UdfpsAnimationViewController> mAnimViewControllerCaptor;
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        when(mView.getContext()).thenReturn(mResourceContext);
-        when(mResourceContext.getString(anyInt())).thenReturn("test string");
-        when(mKeyguardViewMediator.isAnimatingScreenOff()).thenReturn(false);
-        mController = new UdfpsKeyguardViewController(
-                mView,
+        setUpResources();
+        mExecution = new FakeExecution();
+
+        when(mLayoutInflater.inflate(R.layout.udfps_view, null, false))
+                .thenReturn(mUdfpsView);
+        when(mLayoutInflater.inflate(R.layout.udfps_enroll_view, null))
+                .thenReturn(mEnrollView); // for showOverlay REASON_ENROLL_ENROLLING
+        when(mLayoutInflater.inflate(R.layout.udfps_keyguard_view, null))
+                .thenReturn(mKeyguardView); // for showOverlay REASON_AUTH_FPM_KEYGUARD
+        when(mEnrollView.getContext()).thenReturn(mContext);
+        when(mKeyguardStateController.isOccluded()).thenReturn(false);
+        final List<FingerprintSensorPropertiesInternal> props = new ArrayList<>();
+
+        final List<ComponentInfoInternal> componentInfo = new ArrayList<>();
+        componentInfo.add(new ComponentInfoInternal("faceSensor" /* componentId */,
+                "vendor/model/revision" /* hardwareVersion */, "1.01" /* firmwareVersion */,
+                "00000001" /* serialNumber */, "" /* softwareVersion */));
+        componentInfo.add(new ComponentInfoInternal("matchingAlgorithm" /* componentId */,
+                "" /* hardwareVersion */, "" /* firmwareVersion */, "" /* serialNumber */,
+                "vendor/version/revision" /* softwareVersion */));
+
+        props.add(new FingerprintSensorPropertiesInternal(TEST_UDFPS_SENSOR_ID,
+                SensorProperties.STRENGTH_STRONG,
+                5 /* maxEnrollmentsPerUser */,
+                componentInfo,
+                FingerprintSensorProperties.TYPE_UDFPS_OPTICAL,
+                true /* resetLockoutRequiresHardwareAuthToken */));
+        when(mFingerprintManager.getSensorPropertiesInternal()).thenReturn(props);
+        mFgExecutor = new FakeExecutor(new FakeSystemClock());
+        mUdfpsController = new UdfpsController(
+                mContext,
+                mExecution,
+                mLayoutInflater,
+                mFingerprintManager,
+                mWindowManager,
                 mStatusBarStateController,
+                mFgExecutor,
                 mStatusBar,
                 mStatusBarKeyguardViewManager,
-                mKeyguardUpdateMonitor,
-                mExecutor,
                 mDumpManager,
-                mKeyguardViewMediator,
+                mKeyguardUpdateMonitor,
+                mFalsingManager,
+                mPowerManager,
+                mAccessibilityManager,
                 mLockscreenShadeTransitionController,
-                mConfigurationController,
+                mScreenLifecycle,
+                mVibrator,
+                mUdfpsHapticsSimulator,
+                Optional.of(mHbmProvider),
                 mKeyguardStateController,
-                mUdfpsController);
+                mKeyguardBypassController,
+                mDisplayManager,
+                mHandler,
+                mConfigurationController,
+                mSystemClock,
+                mUnlockedScreenOffAnimationController);
+        verify(mFingerprintManager).setUdfpsOverlayController(mOverlayCaptor.capture());
+        mOverlayController = mOverlayCaptor.getValue();
+        verify(mScreenLifecycle).addObserver(mScreenObserverCaptor.capture());
+        mScreenObserver = mScreenObserverCaptor.getValue();
+
+        assertEquals(TEST_UDFPS_SENSOR_ID, mUdfpsController.mSensorProps.sensorId);
+    }
+
+    private void setUpResources() {
+        when(mBrightnessValues.length()).thenReturn(2);
+        when(mBrightnessValues.getFloat(0, PowerManager.BRIGHTNESS_OFF_FLOAT)).thenReturn(1f);
+        when(mBrightnessValues.getFloat(1, PowerManager.BRIGHTNESS_OFF_FLOAT)).thenReturn(2f);
+        when(mBrightnessBacklight.length()).thenReturn(2);
+        when(mBrightnessBacklight.getFloat(0, PowerManager.BRIGHTNESS_OFF_FLOAT)).thenReturn(1f);
+        when(mBrightnessBacklight.getFloat(1, PowerManager.BRIGHTNESS_OFF_FLOAT)).thenReturn(2f);
     }
 
     @Test
-    public void testRegistersExpansionChangedListenerOnAttached() {
-        mController.onViewAttached();
-        captureExpansionListeners();
+    public void dozeTimeTick() throws RemoteException {
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD, mUdfpsOverlayControllerCallback);
+        mFgExecutor.runAllReady();
+        mUdfpsController.dozeTimeTick();
+        verify(mUdfpsView).dozeTimeTick();
     }
 
     @Test
-    public void testRegistersStatusBarStateListenersOnAttached() {
-        mController.onViewAttached();
-        captureStatusBarStateListeners();
+    public void onActionDownTouch_whenCanDismissLockScreen_entersDevice() throws RemoteException {
+        // GIVEN can dismiss lock screen and the current animation is an UdfpsKeyguardViewController
+        when(mKeyguardStateController.canDismissLockScreen()).thenReturn(true);
+        when(mUdfpsView.isWithinSensorArea(anyFloat(), anyFloat())).thenReturn(true);
+        when(mUdfpsView.getAnimationViewController()).thenReturn(mUdfpsKeyguardViewController);
+
+        // GIVEN that the overlay is showing
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD, mUdfpsOverlayControllerCallback);
+        mFgExecutor.runAllReady();
+
+        // WHEN ACTION_DOWN is received
+        verify(mUdfpsView).setOnTouchListener(mTouchListenerCaptor.capture());
+        MotionEvent downEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 0, 0, 0);
+        mTouchListenerCaptor.getValue().onTouch(mUdfpsView, downEvent);
+        downEvent.recycle();
+
+        // THEN notify keyguard authenticate to dismiss the keyguard
+        verify(mStatusBarKeyguardViewManager).notifyKeyguardAuthenticated(anyBoolean());
     }
 
     @Test
-    public void testViewControllerQueriesSBStateOnAttached() {
-        mController.onViewAttached();
-        verify(mStatusBarStateController).getState();
-        verify(mStatusBarStateController).getDozeAmount();
+    public void onActionMove_dozing_setDeviceEntryIntent() throws RemoteException {
+        // GIVEN the current animation is UdfpsKeyguardViewController and device IS dozing
+        when(mKeyguardStateController.canDismissLockScreen()).thenReturn(false);
+        when(mUdfpsView.isWithinSensorArea(anyFloat(), anyFloat())).thenReturn(true);
+        when(mUdfpsView.getAnimationViewController()).thenReturn(mUdfpsKeyguardViewController);
+        when(mStatusBarStateController.isDozing()).thenReturn(true);
 
-        final float dozeAmount = .88f;
-        when(mStatusBarStateController.getState()).thenReturn(StatusBarState.SHADE_LOCKED);
-        when(mStatusBarStateController.getDozeAmount()).thenReturn(dozeAmount);
-        captureStatusBarStateListeners();
+        // GIVEN that the overlay is showing
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD, mUdfpsOverlayControllerCallback);
+        mFgExecutor.runAllReady();
 
-        mController.onViewAttached();
-        verify(mView, atLeast(1)).setPauseAuth(true);
-        verify(mView).onDozeAmountChanged(dozeAmount, dozeAmount);
+        // WHEN ACTION_DOWN is received
+        verify(mUdfpsView).setOnTouchListener(mTouchListenerCaptor.capture());
+        MotionEvent moveEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_MOVE, 0, 0, 0);
+        mTouchListenerCaptor.getValue().onTouch(mUdfpsView, moveEvent);
+        moveEvent.recycle();
+
+        // THEN device entry intent is never to true b/c device was dozing on touch
+        verify(mKeyguardBypassController, never()).setUserHasDeviceEntryIntent(true);
     }
 
     @Test
-    public void testListenersUnregisteredOnDetached() {
-        mController.onViewAttached();
-        captureStatusBarStateListeners();
-        captureExpansionListeners();
-        captureKeyguardStateControllerCallback();
-        mController.onViewDetached();
+    public void onActionMove_onKeyguard_setDeviceEntryIntent() throws RemoteException {
+        // GIVEN the current animation is UdfpsKeyguardViewController and device isn't dozing
+        when(mKeyguardStateController.canDismissLockScreen()).thenReturn(false);
+        when(mUdfpsView.isWithinSensorArea(anyFloat(), anyFloat())).thenReturn(true);
+        when(mUdfpsView.getAnimationViewController()).thenReturn(mUdfpsKeyguardViewController);
+        when(mStatusBarStateController.isDozing()).thenReturn(false);
 
-        verify(mStatusBarStateController).removeCallback(mStatusBarStateListener);
-        for (StatusBar.ExpansionChangedListener listener : mExpansionListeners) {
-            verify(mStatusBar).removeExpansionChangedListener(listener);
-        }
-        verify(mKeyguardStateController).removeCallback(mKeyguardStateControllerCallback);
+        // GIVEN that the overlay is showing
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD, mUdfpsOverlayControllerCallback);
+        mFgExecutor.runAllReady();
+
+        // WHEN ACTION_DOWN is received
+        verify(mUdfpsView).setOnTouchListener(mTouchListenerCaptor.capture());
+        MotionEvent moveEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_MOVE, 0, 0, 0);
+        mTouchListenerCaptor.getValue().onTouch(mUdfpsView, moveEvent);
+        moveEvent.recycle();
+
+        // THEN device entry intent is set to true
+        verify(mKeyguardBypassController).setUserHasDeviceEntryIntent(true);
     }
 
     @Test
-    public void testDozeEventsSentToView() {
-        mController.onViewAttached();
-        captureStatusBarStateListeners();
+    public void onActionMove_onEnrollment_neverSetDeviceEntryIntent() throws RemoteException {
+        // GIVEN the current animation is UdfpsEnrollViewController
+        when(mKeyguardStateController.canDismissLockScreen()).thenReturn(false);
+        when(mUdfpsView.isWithinSensorArea(anyFloat(), anyFloat())).thenReturn(true);
+        when(mUdfpsView.getAnimationViewController()).thenReturn(
+                mock(UdfpsEnrollViewController.class));
 
-        final float linear = .55f;
-        final float eased = .65f;
-        mStatusBarStateListener.onDozeAmountChanged(linear, eased);
+        // GIVEN that the overlay is showing
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_ENROLL_ENROLLING, mUdfpsOverlayControllerCallback);
+        mFgExecutor.runAllReady();
 
-        verify(mView).onDozeAmountChanged(linear, eased);
+        // WHEN ACTION_DOWN is received
+        verify(mUdfpsView).setOnTouchListener(mTouchListenerCaptor.capture());
+        MotionEvent moveEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_MOVE, 0, 0, 0);
+        mTouchListenerCaptor.getValue().onTouch(mUdfpsView, moveEvent);
+        moveEvent.recycle();
+
+        // THEN device entry intent is never set
+        verify(mKeyguardBypassController, never()).setUserHasDeviceEntryIntent(anyBoolean());
     }
 
     @Test
-    public void testShouldPauseAuthBouncerShowing() {
-        mController.onViewAttached();
-        captureStatusBarStateListeners();
+    public void onActionMoveTouch_whenCanDismissLockScreen_entersDevice() throws RemoteException {
+        // GIVEN can dismiss lock screen and the current animation is an UdfpsKeyguardViewController
+        when(mKeyguardStateController.canDismissLockScreen()).thenReturn(true);
+        when(mUdfpsView.isWithinSensorArea(anyFloat(), anyFloat())).thenReturn(true);
+        when(mUdfpsView.getAnimationViewController()).thenReturn(mUdfpsKeyguardViewController);
 
-        sendStatusBarStateChanged(StatusBarState.KEYGUARD);
+        // GIVEN that the overlay is showing
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD, mUdfpsOverlayControllerCallback);
+        mFgExecutor.runAllReady();
 
-        assertFalse(mController.shouldPauseAuth());
+        // WHEN ACTION_MOVE is received
+        verify(mUdfpsView).setOnTouchListener(mTouchListenerCaptor.capture());
+        MotionEvent moveEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_MOVE, 0, 0, 0);
+        mTouchListenerCaptor.getValue().onTouch(mUdfpsView, moveEvent);
+        moveEvent.recycle();
+
+        // THEN notify keyguard authenticate to dismiss the keyguard
+        verify(mStatusBarKeyguardViewManager).notifyKeyguardAuthenticated(anyBoolean());
     }
 
     @Test
-    public void testShouldNotPauseAuthOnKeyguard() {
-        mController.onViewAttached();
-        captureStatusBarStateListeners();
+    public void onMultipleTouch_whenCanDismissLockScreen_entersDeviceOnce() throws RemoteException {
+        // GIVEN can dismiss lock screen and the current animation is an UdfpsKeyguardViewController
+        when(mKeyguardStateController.canDismissLockScreen()).thenReturn(true);
+        when(mUdfpsView.isWithinSensorArea(anyFloat(), anyFloat())).thenReturn(true);
+        when(mUdfpsView.getAnimationViewController()).thenReturn(mUdfpsKeyguardViewController);
 
-        sendStatusBarStateChanged(StatusBarState.KEYGUARD);
+        // GIVEN that the overlay is showing
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD, mUdfpsOverlayControllerCallback);
+        mFgExecutor.runAllReady();
 
-        assertFalse(mController.shouldPauseAuth());
+        // WHEN multiple touches are received
+        verify(mUdfpsView).setOnTouchListener(mTouchListenerCaptor.capture());
+        MotionEvent downEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 0, 0, 0);
+        mTouchListenerCaptor.getValue().onTouch(mUdfpsView, downEvent);
+        downEvent.recycle();
+        MotionEvent moveEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_MOVE, 0, 0, 0);
+        mTouchListenerCaptor.getValue().onTouch(mUdfpsView, moveEvent);
+        mTouchListenerCaptor.getValue().onTouch(mUdfpsView, moveEvent);
+        moveEvent.recycle();
+
+        // THEN notify keyguard authenticate to dismiss the keyguard
+        verify(mStatusBarKeyguardViewManager).notifyKeyguardAuthenticated(anyBoolean());
     }
 
     @Test
-    public void testShouldPauseAuthIsLaunchTransitionFadingAway() {
-        // GIVEN view is attached and we're on the keyguard (see testShouldNotPauseAuthOnKeyguard)
-        mController.onViewAttached();
-        captureStatusBarStateListeners();
-        sendStatusBarStateChanged(StatusBarState.KEYGUARD);
-
-        // WHEN isLaunchTransitionFadingAway=true
-        captureKeyguardStateControllerCallback();
-        when(mKeyguardStateController.isLaunchTransitionFadingAway()).thenReturn(true);
-        mKeyguardStateControllerCallback.onLaunchTransitionFadingAwayChanged();
-
-        // THEN pause auth
-        assertTrue(mController.shouldPauseAuth());
+    public void showUdfpsOverlay_addsViewToWindow() throws RemoteException {
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD, mUdfpsOverlayControllerCallback);
+        mFgExecutor.runAllReady();
+        verify(mWindowManager).addView(eq(mUdfpsView), any());
     }
 
     @Test
-    public void testShouldPauseAuthOnShadeLocked() {
-        mController.onViewAttached();
-        captureStatusBarStateListeners();
-
-        sendStatusBarStateChanged(StatusBarState.SHADE_LOCKED);
-
-        assertTrue(mController.shouldPauseAuth());
+    public void hideUdfpsOverlay_removesViewFromWindow() throws RemoteException {
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD, mUdfpsOverlayControllerCallback);
+        mOverlayController.hideUdfpsOverlay(TEST_UDFPS_SENSOR_ID);
+        mFgExecutor.runAllReady();
+        verify(mWindowManager).removeView(eq(mUdfpsView));
     }
 
     @Test
-    public void testShouldPauseAuthOnShade() {
-        mController.onViewAttached();
-        captureStatusBarStateListeners();
+    public void hideUdfpsOverlay_resetsAltAuthBouncerWhenShowing() throws RemoteException {
+        // GIVEN overlay was showing and the udfps bouncer is showing
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD, mUdfpsOverlayControllerCallback);
+        when(mStatusBarKeyguardViewManager.isShowingAlternateAuth()).thenReturn(true);
 
-        // WHEN not on keyguard yet (shade = home)
-        sendStatusBarStateChanged(StatusBarState.SHADE);
+        // WHEN the overlay is hidden
+        mOverlayController.hideUdfpsOverlay(TEST_UDFPS_SENSOR_ID);
+        mFgExecutor.runAllReady();
 
-        // THEN pause auth
-        assertTrue(mController.shouldPauseAuth());
+        // THEN the udfps bouncer is reset
+        verify(mStatusBarKeyguardViewManager).resetAlternateAuth(eq(true));
     }
 
     @Test
-    public void testShouldPauseAuthAnimatingScreenOffFromShade() {
-        mController.onViewAttached();
-        captureStatusBarStateListeners();
+    public void testSubscribesToOrientationChangesWhenShowingOverlay() throws Exception {
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD, mUdfpsOverlayControllerCallback);
+        mFgExecutor.runAllReady();
 
-        // WHEN transitioning from home/shade => keyguard + animating screen off
-        mStatusBarStateListener.onStatePreChange(StatusBarState.SHADE, StatusBarState.KEYGUARD);
-        when(mKeyguardViewMediator.isAnimatingScreenOff()).thenReturn(true);
+        verify(mDisplayManager).registerDisplayListener(any(), eq(mHandler));
 
-        // THEN pause auth
-        assertTrue(mController.shouldPauseAuth());
+        mOverlayController.hideUdfpsOverlay(TEST_UDFPS_SENSOR_ID);
+        mFgExecutor.runAllReady();
+
+        verify(mDisplayManager).unregisterDisplayListener(any());
     }
 
     @Test
-    public void testDoNotPauseAuthAnimatingScreenOffFromLS() {
-        mController.onViewAttached();
-        captureStatusBarStateListeners();
+    public void fingerDown() throws RemoteException {
+        // Configure UdfpsView to accept the ACTION_DOWN event
+        when(mUdfpsView.isIlluminationRequested()).thenReturn(false);
+        when(mUdfpsView.isWithinSensorArea(anyFloat(), anyFloat())).thenReturn(true);
 
-        // WHEN animating screen off transition from LS => AOD
-        sendStatusBarStateChanged(StatusBarState.KEYGUARD);
-        when(mKeyguardViewMediator.isAnimatingScreenOff()).thenReturn(true);
-
-        // THEN don't pause auth
-        assertFalse(mController.shouldPauseAuth());
+        // GIVEN that the overlay is showing
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD, mUdfpsOverlayControllerCallback);
+        mFgExecutor.runAllReady();
+        // WHEN ACTION_DOWN is received
+        verify(mUdfpsView).setOnTouchListener(mTouchListenerCaptor.capture());
+        MotionEvent downEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 0, 0, 0);
+        mTouchListenerCaptor.getValue().onTouch(mUdfpsView, downEvent);
+        downEvent.recycle();
+        MotionEvent moveEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_MOVE, 0, 0, 0);
+        mTouchListenerCaptor.getValue().onTouch(mUdfpsView, moveEvent);
+        moveEvent.recycle();
+        // THEN FingerprintManager is notified about onPointerDown
+        verify(mFingerprintManager).onPointerDown(eq(mUdfpsController.mSensorProps.sensorId), eq(0),
+                eq(0), eq(0f), eq(0f));
+        // AND illumination begins
+        verify(mUdfpsView).startIllumination(mOnIlluminatedRunnableCaptor.capture());
+        // AND onIlluminatedRunnable notifies FingerprintManager about onUiReady
+        mOnIlluminatedRunnableCaptor.getValue().run();
+        verify(mFingerprintManager).onUiReady(eq(mUdfpsController.mSensorProps.sensorId));
     }
 
     @Test
-    public void testOverrideShouldPauseAuthOnShadeLocked() {
-        mController.onViewAttached();
-        captureStatusBarStateListeners();
-        captureAltAuthInterceptor();
-
-        sendStatusBarStateChanged(StatusBarState.SHADE_LOCKED);
-        assertTrue(mController.shouldPauseAuth());
-
-        mAltAuthInterceptor.showAlternateAuthBouncer(); // force show
-        assertFalse(mController.shouldPauseAuth());
-        assertTrue(mAltAuthInterceptor.isShowingAlternateAuthBouncer());
-
-        mAltAuthInterceptor.hideAlternateAuthBouncer(); // stop force show
-        assertTrue(mController.shouldPauseAuth());
-        assertFalse(mAltAuthInterceptor.isShowingAlternateAuthBouncer());
+    public void aodInterrupt() throws RemoteException {
+        // GIVEN that the overlay is showing and screen is on and fp is running
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD, mUdfpsOverlayControllerCallback);
+        mScreenObserver.onScreenTurnedOn();
+        mFgExecutor.runAllReady();
+        when(mKeyguardUpdateMonitor.isFingerprintDetectionRunning()).thenReturn(true);
+        // WHEN fingerprint is requested because of AOD interrupt
+        mUdfpsController.onAodInterrupt(0, 0, 2f, 3f);
+        // THEN illumination begins
+        // AND onIlluminatedRunnable that notifies FingerprintManager is set
+        verify(mUdfpsView).startIllumination(mOnIlluminatedRunnableCaptor.capture());
+        mOnIlluminatedRunnableCaptor.getValue().run();
+        verify(mFingerprintManager).onPointerDown(eq(mUdfpsController.mSensorProps.sensorId), eq(0),
+                eq(0), eq(3f) /* minor */, eq(2f) /* major */);
     }
 
     @Test
-    public void testOnDetachedStateReset() {
-        // GIVEN view is attached
-        mController.onViewAttached();
-        captureAltAuthInterceptor();
-
-        // WHEN view is detached
-        mController.onViewDetached();
-
-        // THEN remove alternate auth interceptor
-        verify(mStatusBarKeyguardViewManager).removeAlternateAuthInterceptor(mAltAuthInterceptor);
+    public void cancelAodInterrupt() throws RemoteException {
+        // GIVEN AOD interrupt
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD, mUdfpsOverlayControllerCallback);
+        mScreenObserver.onScreenTurnedOn();
+        mFgExecutor.runAllReady();
+        when(mKeyguardUpdateMonitor.isFingerprintDetectionRunning()).thenReturn(true);
+        mUdfpsController.onAodInterrupt(0, 0, 0f, 0f);
+        when(mUdfpsView.isIlluminationRequested()).thenReturn(true);
+        // WHEN it is cancelled
+        mUdfpsController.onCancelUdfps();
+        // THEN the illumination is hidden
+        verify(mUdfpsView).stopIllumination();
     }
 
     @Test
-    public void testFadeInWithStatusBarExpansion() {
-        // GIVEN view is attached
-        mController.onViewAttached();
-        captureExpansionListeners();
-        captureKeyguardStateControllerCallback();
-        reset(mView);
-
-        // WHEN status bar expansion is 0
-        updateStatusBarExpansion(0, true);
-
-        // THEN alpha is 0
-        verify(mView).setUnpausedAlpha(0);
+    public void aodInterruptTimeout() throws RemoteException {
+        // GIVEN AOD interrupt
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD, mUdfpsOverlayControllerCallback);
+        mScreenObserver.onScreenTurnedOn();
+        mFgExecutor.runAllReady();
+        when(mKeyguardUpdateMonitor.isFingerprintDetectionRunning()).thenReturn(true);
+        mUdfpsController.onAodInterrupt(0, 0, 0f, 0f);
+        when(mUdfpsView.isIlluminationRequested()).thenReturn(true);
+        // WHEN it times out
+        mFgExecutor.advanceClockToNext();
+        mFgExecutor.runAllReady();
+        // THEN the illumination is hidden
+        verify(mUdfpsView).stopIllumination();
     }
 
     @Test
-    public void testShowUdfpsBouncer() {
-        // GIVEN view is attached and status bar expansion is 0
-        mController.onViewAttached();
-        captureExpansionListeners();
-        captureKeyguardStateControllerCallback();
-        captureAltAuthInterceptor();
-        updateStatusBarExpansion(0, true);
-        reset(mView);
-        when(mView.getContext()).thenReturn(mResourceContext);
-        when(mResourceContext.getString(anyInt())).thenReturn("test string");
+    public void aodInterruptScreenOff() throws RemoteException {
+        // GIVEN screen off
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD, mUdfpsOverlayControllerCallback);
+        mScreenObserver.onScreenTurnedOff();
+        mFgExecutor.runAllReady();
 
-        // WHEN status bar expansion is 0 but udfps bouncer is requested
-        mAltAuthInterceptor.showAlternateAuthBouncer();
+        // WHEN aod interrupt is received
+        when(mKeyguardUpdateMonitor.isFingerprintDetectionRunning()).thenReturn(true);
+        mUdfpsController.onAodInterrupt(0, 0, 0f, 0f);
 
-        // THEN alpha is 255
-        verify(mView).setUnpausedAlpha(255);
+        // THEN no illumination because screen is off
+        verify(mUdfpsView, never()).startIllumination(any());
     }
 
     @Test
-    public void testTransitionToFullShadeProgress() {
-        // GIVEN view is attached and status bar expansion is 1f
-        mController.onViewAttached();
-        captureExpansionListeners();
-        updateStatusBarExpansion(1f, true);
-        reset(mView);
+    public void aodInterrupt_fingerprintNotRunning() throws RemoteException {
+        // GIVEN showing overlay
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD, mUdfpsOverlayControllerCallback);
+        mScreenObserver.onScreenTurnedOn();
+        mFgExecutor.runAllReady();
 
-        // WHEN we're transitioning to the full shade
-        float transitionProgress = .6f;
-        mController.setTransitionToFullShadeProgress(transitionProgress);
+        // WHEN aod interrupt is received when the fingerprint service isn't running
+        when(mKeyguardUpdateMonitor.isFingerprintDetectionRunning()).thenReturn(false);
+        mUdfpsController.onAodInterrupt(0, 0, 0f, 0f);
 
-        // THEN alpha is between 0 and 255
-        verify(mView).setUnpausedAlpha((int) ((1f - transitionProgress) * 255));
+        // THEN no illumination because screen is off
+        verify(mUdfpsView, never()).startIllumination(any());
     }
 
     @Test
-    public void testShowUdfpsBouncer_transitionToFullShadeProgress() {
-        // GIVEN view is attached and status bar expansion is 1f
-        mController.onViewAttached();
-        captureExpansionListeners();
-        captureKeyguardStateControllerCallback();
-        captureAltAuthInterceptor();
-        updateStatusBarExpansion(1f, true);
-        mAltAuthInterceptor.showAlternateAuthBouncer();
-        reset(mView);
+    public void playHapticOnTouchUdfpsArea() throws RemoteException {
+        // Configure UdfpsView to accept the ACTION_DOWN event
+        when(mUdfpsView.isIlluminationRequested()).thenReturn(false);
+        when(mUdfpsView.isWithinSensorArea(anyFloat(), anyFloat())).thenReturn(true);
 
-        // WHEN we're transitioning to the full shade
-        mController.setTransitionToFullShadeProgress(1.0f);
+        // GIVEN that the overlay is showing
+        mOverlayController.showUdfpsOverlay(TEST_UDFPS_SENSOR_ID,
+                IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD, mUdfpsOverlayControllerCallback);
+        mFgExecutor.runAllReady();
 
-        // THEN alpha is 255 (b/c udfps bouncer is requested)
-        verify(mView).setUnpausedAlpha(255);
-    }
+        // WHEN ACTION_DOWN is received
+        verify(mUdfpsView).setOnTouchListener(mTouchListenerCaptor.capture());
+        MotionEvent downEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 0, 0, 0);
+        mTouchListenerCaptor.getValue().onTouch(mUdfpsView, downEvent);
+        downEvent.recycle();
+        MotionEvent moveEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_MOVE, 0, 0, 0);
+        mTouchListenerCaptor.getValue().onTouch(mUdfpsView, moveEvent);
+        moveEvent.recycle();
 
-    private void sendStatusBarStateChanged(int statusBarState) {
-        mStatusBarStateListener.onStateChanged(statusBarState);
-    }
+        // THEN click haptic is played
+        verify(mVibrator).vibrate(
+                anyInt(),
+                anyString(),
+                eq(mUdfpsController.EFFECT_CLICK),
+                eq("udfps-onStart"),
+                eq(UdfpsController.VIBRATION_SONIFICATION_ATTRIBUTES));
 
-    private void captureStatusBarStateListeners() {
-        verify(mStatusBarStateController).addCallback(mStateListenerCaptor.capture());
-        mStatusBarStateListener = mStateListenerCaptor.getValue();
-    }
-
-    private void captureExpansionListeners() {
-        verify(mStatusBar, times(2))
-                .addExpansionChangedListener(mExpansionListenerCaptor.capture());
-        // first (index=0) is from super class, UdfpsAnimationViewController.
-        // second (index=1) is from UdfpsKeyguardViewController
-        mExpansionListeners = mExpansionListenerCaptor.getAllValues();
-    }
-
-    private void updateStatusBarExpansion(float expansion, boolean expanded) {
-        for (StatusBar.ExpansionChangedListener listener : mExpansionListeners) {
-            listener.onExpansionChanged(expansion, expanded);
-        }
-    }
-
-    private void captureAltAuthInterceptor() {
-        verify(mStatusBarKeyguardViewManager).setAlternateAuthInterceptor(
-                mAltAuthInterceptorCaptor.capture());
-        mAltAuthInterceptor = mAltAuthInterceptorCaptor.getValue();
-    }
-
-    private void captureKeyguardStateControllerCallback() {
-        verify(mKeyguardStateController).addCallback(
-                mKeyguardStateControllerCallbackCaptor.capture());
-        mKeyguardStateControllerCallback = mKeyguardStateControllerCallbackCaptor.getValue();
+        // THEN make sure vibration attributes has so that it always will play the haptic,
+        // even in battery saver mode
+        assertEquals(USAGE_ASSISTANCE_ACCESSIBILITY,
+                UdfpsController.VIBRATION_SONIFICATION_ATTRIBUTES.getUsage());
     }
 }
