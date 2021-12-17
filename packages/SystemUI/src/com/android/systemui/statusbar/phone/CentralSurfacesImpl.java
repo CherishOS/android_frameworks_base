@@ -63,6 +63,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.om.IOverlayManager;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -243,6 +244,8 @@ import com.android.systemui.volume.VolumeComponent;
 import com.android.wm.shell.bubbles.Bubbles;
 import com.android.wm.shell.startingsurface.SplashscreenContentDrawer;
 import com.android.wm.shell.startingsurface.StartingSurface;
+
+import com.android.internal.util.cherish.ThemesUtils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -634,6 +637,7 @@ public class CentralSurfacesImpl extends CoreStartable implements
     private final UserSwitcherController mUserSwitcherController;
     private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
     protected final BatteryController mBatteryController;
+    private IOverlayManager mOverlayManager;
     protected boolean mPanelExpanded;
     private UiModeManager mUiModeManager;
     private LogMaker mStatusBarStateLog;
@@ -883,6 +887,8 @@ public class CentralSurfacesImpl extends CoreStartable implements
     public void start() {
         mScreenLifecycle.addObserver(mScreenObserver);
         mWakefulnessLifecycle.addObserver(mWakefulnessObserver);
+        mOverlayManager = IOverlayManager.Stub.asInterface(
+                ServiceManager.getService(Context.OVERLAY_SERVICE));
         mUiModeManager = mContext.getSystemService(UiModeManager.class);
         if (mBubblesOptional.isPresent()) {
             mBubblesOptional.get().setExpandListener(mBubbleExpandListener);
