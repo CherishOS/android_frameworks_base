@@ -194,5 +194,7 @@ public class SecureSettings {
         Settings.Secure.LOCKSCREEN_SHOW_CONTROLS,
         Settings.Secure.LOCKSCREEN_SHOW_WALLET,
         Settings.Secure.GESTURE_NAVBAR_LENGTH_MODE,
+        Settings.Secure.TORCH_DOUBLE_TAP_POWER_GESTURE_ENABLED,
+        Settings.Secure.TORCH_LONG_PRESS_POWER,
     };
 }
