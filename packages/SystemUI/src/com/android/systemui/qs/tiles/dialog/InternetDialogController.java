@@ -619,7 +619,8 @@ public class InternetDialogController implements WifiEntry.DisconnectCallback,
         final MergedCarrierEntry mergedCarrierEntry =
                 mAccessPointController.getMergedCarrierEntry();
         if (mergedCarrierEntry != null && mergedCarrierEntry.canConnect()) {
-            mergedCarrierEntry.connect(null /* ConnectCallback */, false);
+            mergedCarrierEntry.connect(null /* ConnectCallback */);
+//            mergedCarrierEntry.connect(null /* ConnectCallback */, false);
             makeOverlayToast(R.string.wifi_wont_autoconnect_for_now);
         }
     }
