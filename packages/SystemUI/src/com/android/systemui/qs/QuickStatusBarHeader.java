@@ -138,6 +138,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
     private boolean mConfigShowBatteryEstimate;
 
     private boolean mUseCombinedQSHeader;
+    private boolean mShowClock;
     private boolean mShowDate;
 
     private final ActivityStarter mActivityStarter;
@@ -205,7 +206,6 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                 STATUS_BAR_BATTERY_STYLE,
                 QS_BATTERY_STYLE,
                 QS_SHOW_BATTERY_PERCENT,
-                StatusBarIconController.ICON_HIDE_LIST,
                 SHOW_QS_CLOCK,
                 SHOW_QS_DATE);
     }
@@ -442,7 +442,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
 
                     @Override
                     public void onAnimationStarted() {
-                        if (mShowDate) {
+                        if (mShowClock && mShowDate) {
                             mClockDateView.setVisibility(View.VISIBLE);
                             mClockDateView.setFreezeSwitching(true);
                         }
@@ -455,7 +455,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                     @Override
                     public void onAnimationAtStart() {
                         super.onAnimationAtStart();
-                        if (mShowDate) {
+                        if (mShowClock && mShowDate) {
                             mClockDateView.setFreezeSwitching(false);
                             mClockDateView.setVisibility(View.VISIBLE);
                         }
@@ -687,20 +687,19 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                         TunerService.parseInteger(newValue, 2));
                 break;
             case SHOW_QS_CLOCK:
-                boolean showClock =
+                mShowClock =
                         TunerService.parseIntegerSwitch(newValue, true);
-                mClockView.setClockVisibleByUser(showClock);
+                mClockView.setClockVisibleByUser(mShowClock);
+                mClockDateView.setVisibility(mShowClock && mShowDate ? View.VISIBLE : View.GONE);
                 break;
             case SHOW_QS_DATE:
                 mShowDate =
                         TunerService.parseIntegerSwitch(newValue, true);
                 mDateContainer.setVisibility(mShowDate ? View.VISIBLE : View.GONE);
-                mClockDateView.setVisibility(mShowDate ? View.VISIBLE : View.GONE);
+                mClockDateView.setVisibility(mShowClock && mShowDate ? View.VISIBLE : View.GONE);
                 break;
             default:
                 break;
         }
-		 mClockView.setClockVisibleByUser(!StatusBarIconController.getIconHideList(
-                mContext, newValue).contains("clock"));
     }
 }
