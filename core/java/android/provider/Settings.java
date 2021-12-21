@@ -6418,6 +6418,21 @@ public final class Settings {
          * @hide
          */
         public static final String INCREASING_RING_RAMP_UP_TIME = "increasing_ring_ramp_up_time";
+		
+		/**
+         * @hide
+         */
+        public static final String UDFPS_ANIM = "udfps_anim";
+
+        /**
+         * @hide
+         */
+        public static final String UDFPS_ANIM_STYLE = "udfps_anim_style";
+
+        /**
+         * @hide
+         */
+        public static final String UDFPS_ICON = "udfps_icon";
 
         /**
          * These are all public system settings
