@@ -540,6 +540,21 @@ public class PagedTileLayout extends ViewPager implements QSTileLayout {
         if (mPages.size() == 0) return 0;
         return mPages.get(0).mRecords.size();
     }
+	
+	@Override
+    public int getResourceColumns() {
+        if (mPages.size() == 0) return TileLayout.NO_MAX_COLUMNS;
+        TileLayout currentPage = mPages.get(getCurrentPageNumber());
+        return currentPage.getResourceColumns();
+    }
+
+    @Override
+    public void updateSettings() {
+        for (int i = 0; i < mPages.size(); i++) {
+            mPages.get(i).updateSettings();
+        }
+        mDistributeTiles = true;
+    }
 
     public void startTileReveal(Set<String> tileSpecs, final Runnable postAnimation) {
         if (tileSpecs.isEmpty() || mPages.size() < 2 || getScrollX() != 0 || !beginFakeDrag()) {
