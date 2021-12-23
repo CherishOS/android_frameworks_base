@@ -17,11 +17,19 @@ package com.android.systemui.qs;
 import static android.app.StatusBarManager.DISABLE2_QUICK_SETTINGS;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.UserHandle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.DisplayCutout;
@@ -44,6 +52,7 @@ import com.android.systemui.statusbar.phone.StatusBarIconController.TintedIconMa
 import com.android.systemui.statusbar.phone.StatusIconContainer;
 import com.android.systemui.statusbar.policy.Clock;
 import com.android.systemui.statusbar.policy.ClockEQS;
+import com.android.systemui.statusbar.policy.NetworkTraffic;
 import com.android.systemui.statusbar.policy.VariableDateView;
 
 import java.util.List;
@@ -106,8 +115,14 @@ public class QuickStatusBarHeader extends FrameLayout {
 
     private boolean mUseCombinedQSHeader;
 
+    private NetworkTraffic mNetworkTraffic;
+    private boolean mShowNetworkTraffic;
+
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
+        Handler mHandler = new Handler();
+        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
+        settingsObserver.observe();
     }
 
     /**
@@ -144,6 +159,7 @@ public class QuickStatusBarHeader extends FrameLayout {
         mDatePrivacySeparator = findViewById(R.id.space);
         // Tint for the battery icons are handled in setupHost()
         mBatteryRemainingIcon = findViewById(R.id.batteryRemainingIcon);
+        mNetworkTraffic = findViewById(R.id.network_traffic);
 
         updateResources();
         Configuration config = mContext.getResources().getConfiguration();
@@ -374,7 +390,9 @@ public class QuickStatusBarHeader extends FrameLayout {
     }
 
     void setChipVisibility(boolean visibility) {
-        if (visibility) {
+        mPrivacyChip.setVisibility(visibility ? View.VISIBLE : View.GONE);
+        mNetworkTraffic.setChipVisibility(visibility);
+        if (visibility || mShowNetworkTraffic) {
             // Animates the icons and battery indicator from alpha 0 to 1, when the chip is visible
             mIconsAlphaAnimator = mIconsAlphaAnimatorFixed;
             mIconsAlphaAnimator.setPosition(mKeyguardExpansionFraction);
@@ -384,6 +402,34 @@ public class QuickStatusBarHeader extends FrameLayout {
             mBatteryRemainingIcon.setAlpha(1);
         }
 
+    }
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System
+                    .getUriFor(Settings.System.NETWORK_TRAFFIC_LOCATION),
+                    false, this, UserHandle.USER_ALL);
+        }
+
+        /*
+         *  @hide
+         */
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.NETWORK_TRAFFIC_LOCATION))) {
+                mShowNetworkTraffic = Settings.System.
+                        getIntForUser(mContext.getContentResolver(),
+                        Settings.System.NETWORK_TRAFFIC_LOCATION, 0,
+                        UserHandle.USER_CURRENT) == 2;
+                setChipVisibility(mPrivacyChip.getVisibility() == View.VISIBLE);
+            }
+        }
     }
 
     /** */
