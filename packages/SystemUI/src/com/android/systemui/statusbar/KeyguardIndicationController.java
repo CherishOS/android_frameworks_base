@@ -792,13 +792,15 @@ public class KeyguardIndicationController {
     }
 
     protected String computePowerIndication() {
+        if (mPowerCharged) {
+            return mContext.getResources().getString(R.string.keyguard_charged);
+        }
+
         int chargingId;
+        String percentage = NumberFormat.getPercentInstance().format(mBatteryLevel / 100f);
         if (mBatteryOverheated) {
             chargingId = R.string.keyguard_plugged_in_charging_limited;
-            String percentage = NumberFormat.getPercentInstance().format(mBatteryLevel / 100f);
             return mContext.getResources().getString(chargingId, percentage);
-        } else if (mPowerCharged) {
-            return mContext.getResources().getString(R.string.keyguard_charged);
         }
 
         final boolean hasChargingTime = mChargingTimeRemaining > 0;
@@ -830,7 +832,6 @@ public class KeyguardIndicationController {
                     : R.string.keyguard_plugged_in;
         }
 
-        String percentage = NumberFormat.getPercentInstance().format(mBatteryLevel / 100f);
         if (hasChargingTime) {
             String chargingTimeFormatted = Formatter.formatShortElapsedTimeRoundingUpToMinutes(
                     mContext, mChargingTimeRemaining);
