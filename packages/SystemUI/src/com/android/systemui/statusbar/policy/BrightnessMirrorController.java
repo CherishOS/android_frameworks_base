@@ -80,10 +80,7 @@ public class BrightnessMirrorController
         });
         mVisibilityCallback = visibilityCallback;
         updateResources();
-        boolean show = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.QS_SHOW_AUTO_BRIGHTNESS_BUTTON, 1) == 1;
-        ImageView icon = mBrightnessMirror.findViewById(R.id.brightness_icon);
-        icon.setVisibility(show ? View.VISIBLE : View.GONE);
+        updateIcon();
     }
 
     public void showMirror() {
