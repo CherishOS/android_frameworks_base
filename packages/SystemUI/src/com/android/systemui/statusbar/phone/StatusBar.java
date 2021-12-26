@@ -4978,6 +4978,10 @@ public class StatusBar extends SystemUI implements DemoMode,
             } else if (uri.equals(Settings.System.getUriFor(Settings.System.BURN_IN_PROTECTION)) ||
                 uri.equals(Settings.System.getUriFor(Settings.System.BURN_IN_PROTECTION_INTERVAL))) {
                 updateBurnInSets();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL)) ||
+                uri.equals(Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS_MODE))) {
+                setScreenBrightnessMode();
             }
         }
 
