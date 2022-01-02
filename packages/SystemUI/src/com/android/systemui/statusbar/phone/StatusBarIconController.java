@@ -22,6 +22,8 @@ import static com.android.systemui.statusbar.phone.StatusBarIconHolder.TYPE_WIFI
 import android.annotation.Nullable;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.ArraySet;
 import android.view.View;
@@ -366,6 +368,8 @@ public interface StatusBarIconController {
 
         protected ArrayList<String> mBlockList = new ArrayList<>();
 
+        private final boolean mShowNotificationCount;
+
         public IconManager(
                 ViewGroup group,
                 StatusBarLocation location,
@@ -376,6 +380,10 @@ public interface StatusBarIconController {
             mGroup = group;
             mMobileContextProvider = mobileContextProvider;
             mContext = group.getContext();
+            mShowNotificationCount = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUSBAR_NOTIF_COUNT,
+                mContext.getResources().getBoolean(R.bool.config_statusBarShowNumber) ? 1 : 0,
+                UserHandle.USER_CURRENT) == 1;
             mLocation = location;
 
             reloadDimens();
@@ -450,6 +458,7 @@ public interface StatusBarIconController {
         protected StatusBarIconView addIcon(int index, String slot, boolean blocked,
                 StatusBarIcon icon) {
             StatusBarIconView view = onCreateStatusBarIconView(slot, blocked);
+            view.setShowCount(mShowNotificationCount);
             view.set(icon);
             mGroup.addView(view, index, onCreateLayoutParams());
             return view;
