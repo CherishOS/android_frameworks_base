@@ -10785,6 +10785,12 @@ public final class Settings {
          */
         public static final String DEVICE_STATE_ROTATION_LOCK =
                 "device_state_rotation_lock";
+		
+		/**
+         * Whether tethering is allowed to use VPN upstreams
+         */
+        @SuppressLint("NoSettingsProvider")
+        public static final String TETHERING_ALLOW_VPN_UPSTREAMS = "tethering_allow_vpn_upstreams";
 
         /**
          * These entries are considered common between the personal and the managed profile,
