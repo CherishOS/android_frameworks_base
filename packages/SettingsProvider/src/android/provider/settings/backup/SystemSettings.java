@@ -105,5 +105,6 @@ public class SystemSettings {
         Settings.System.QS_SHOW_BATTERY_ESTIMATE,
         Settings.System.ENABLE_FLOATING_ROTATION_BUTTON,
         Settings.System.SCREEN_OFF_FOD,
+        Settings.System.SCREEN_OFF_ANIMATION,
     };
 }
