@@ -4842,6 +4842,12 @@ public final class Settings {
         public static final String DATE_FORMAT = "date_format";
 
         /**
+         * Defines the screen-off animation to display
+         * @hide
+         */
+        public static final String SCREEN_OFF_ANIMATION = "screen_off_animation";
+
+        /**
          * Whether the setup wizard has been run before (on first boot), or if
          * it still needs to be run.
          *
@@ -6278,6 +6284,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(STATUS_BAR_CLOCK_AUTO_HIDE);
             PRIVATE_SETTINGS.add(STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION);
             PRIVATE_SETTINGS.add(STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION);
+            PRIVATE_SETTINGS.add(SCREEN_OFF_ANIMATION);
         }
 
         /**
