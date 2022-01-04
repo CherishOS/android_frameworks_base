@@ -101,18 +101,23 @@ public class CherishUtils {
         return true;
     }
 
-    // Check to see if Wifi is connected
-    public static boolean isWifiConnected(Context context) {
+    // Check if device is connected to the internet
+    public static boolean isConnected(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = null;
-        if (cm != null) {
-            activeNetwork = cm.getActiveNetworkInfo();
-        }
-        NetworkInfo wifi = null;
-        if (cm != null) {
-            wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        }
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting() && wifi.isConnected();
+        if (cm == null) return false;
+
+        NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        return wifi.isConnected() || mobile.isConnected();
+    }
+
+    // Check if device is connected to Wi-Fi
+    public static boolean isWiFiConnected(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) return false;
+
+        NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        return wifi.isConnected();
     }
 
     // Check to see if Mobile data is connected
