@@ -47,6 +47,7 @@ import com.android.systemui.media.dagger.MediaProjectionModule;
 import com.android.systemui.model.SysUiState;
 import com.android.systemui.navigationbar.NavigationBarComponent;
 import com.android.systemui.people.PeopleModule;
+import com.android.systemui.omni.dagger.OmniModule;
 import com.android.systemui.plugins.BcSmartspaceDataPlugin;
 import com.android.systemui.privacy.PrivacyModule;
 import com.android.systemui.qs.FgsManagerController;
@@ -149,7 +150,8 @@ import dagger.Provides;
             TunerModule.class,
             UserModule.class,
             UtilModule.class,
-            WalletModule.class
+            WalletModule.class,
+            OmniModule.class
         },
         subcomponents = {
             CentralSurfacesComponent.class,
