@@ -99,5 +99,10 @@ public class SystemSettings {
         Settings.System.TORCH_POWER_BUTTON_GESTURE,
         Settings.System.ENABLE_RIPPLE_EFFECT,
         Settings.System.QS_PANEL_STYLE,
+        Settings.System.EDGE_LIGHT_ENABLED,
+        Settings.System.EDGE_LIGHT_ALWAYS_TRIGGER_ON_PULSE,
+        Settings.System.EDGE_LIGHT_REPEAT_ANIMATION,
+        Settings.System.EDGE_LIGHT_COLOR_MODE,
+        Settings.System.EDGE_LIGHT_CUSTOM_COLOR,
     };
 }
