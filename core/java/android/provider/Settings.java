@@ -6452,6 +6452,13 @@ public final class Settings {
         public static final String OMNI_CUSTOM_FP_ICON = "custom_fingerprint_icon";
 		
 		/**
+         * Whether to show floating rotation button
+         * @hide
+         */
+        @Readable
+        public static final String ENABLE_FLOATING_ROTATION_BUTTON = "enable_floating_rotation_button";
+		
+		/**
          * These are all public system settings
          *
          * @hide
