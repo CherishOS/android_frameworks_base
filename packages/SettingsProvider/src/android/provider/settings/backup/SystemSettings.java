@@ -103,5 +103,6 @@ public class SystemSettings {
         Settings.System.QS_FOOTER_TEXT_STRING,
         Settings.System.ACCELEROMETER_ROTATION_ANGLES,
         Settings.System.QS_SHOW_BATTERY_ESTIMATE,
+        Settings.System.ENABLE_FLOATING_ROTATION_BUTTON,
     };
 }

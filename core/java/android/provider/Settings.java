@@ -6072,6 +6072,13 @@ public final class Settings {
          */
         @Readable
         public static final String QS_SHOW_BATTERY_ESTIMATE = "qs_show_battery_estimate";
+		
+		/**
+         * Whether to show floating rotation button
+         * @hide
+         */
+        @Readable
+        public static final String ENABLE_FLOATING_ROTATION_BUTTON = "enable_floating_rotation_button";
 
         /**
          * These are all public system settings
