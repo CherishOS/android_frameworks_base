@@ -7078,6 +7078,13 @@ public final class Settings {
         public static final String GESTURE_NAVBAR_RADIUS = "gesture_navbar_radius";
 
         /**
+         * Whether to show floating rotation button
+         * @hide
+         */
+        @Readable
+        public static final String ENABLE_FLOATING_ROTATION_BUTTON = "enable_floating_rotation_button";
+
+        /**
          * Whether to enable Smart Pixels
          * @hide
          */
