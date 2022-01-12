@@ -157,8 +157,10 @@ public class ThemeOverlayApplier implements Dumpable {
     private final Executor mBgExecutor;
     private final String mLauncherPackage;
     private final String mThemePickerPackage;
+    private boolean mIsBlackTheme;
 
     @Inject
+
     public ThemeOverlayApplier(OverlayManager overlayManager,
             @Background Executor bgExecutor,
             @Named(ThemeModule.LAUNCHER_PACKAGE) String launcherPackage,
@@ -262,6 +264,21 @@ public class ThemeOverlayApplier implements Dumpable {
         });
     }
 
+    public void setIsBlackTheme(boolean black) {
+        mIsBlackTheme = black;
+    }
+
+    public void applyBlackTheme(boolean enable) {
+        mBgExecutor.execute(() -> {
+            try {
+                mOverlayManager.setEnabled("com.android.system.theme.black",
+                        enable, UserHandle.SYSTEM);
+            } catch (SecurityException | IllegalStateException e) {
+                Log.e(TAG, "setEnabled failed", e);
+            }
+        });
+    }
+
     @VisibleForTesting
     protected OverlayManagerTransaction.Builder getTransactionBuilder() {
         return new OverlayManagerTransaction.Builder();
@@ -274,6 +291,10 @@ public class ThemeOverlayApplier implements Dumpable {
         if (DEBUG) {
             Log.d(TAG, "setEnabled: " + identifier.getPackageName() + " category: "
                     + category + ": " + enabled);
+        }
+
+        if (OVERLAY_CATEGORY_SYSTEM_PALETTE.equals(category)) {
+            enabled = enabled && !mIsBlackTheme;
         }
 
         OverlayInfo overlayInfo = mOverlayManager.getOverlayInfo(identifier,
