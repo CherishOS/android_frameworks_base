@@ -67,9 +67,9 @@ import com.android.systemui.util.leak.GarbageMonitor;
 import com.android.systemui.qs.tiles.CaffeineTile;
 import com.android.systemui.qs.tiles.AmbientDisplayTile;
 import com.android.systemui.qs.tiles.UsbTetherTile;
-import com.google.android.systemui.qs.tiles.BatterySaverTileGoogle;
-import com.google.android.systemui.qs.tiles.OverlayToggleTile;
-import com.google.android.systemui.qs.tiles.ReverseChargingTile;
+
+import org.pixelexperience.systemui.qs.tiles.BatterySaverTileGoogle;
+import org.pixelexperience.systemui.qs.tiles.ReverseChargingTile;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -79,7 +79,6 @@ import dagger.Lazy;
 @SysUISingleton
 public class QSFactoryImplGoogle extends QSFactoryImpl {
     private final Provider<BatterySaverTileGoogle> mBatterySaverTileGoogleProvider;
-    private final Provider<OverlayToggleTile> mOverlayToggleTileProvider;
     private final Provider<ReverseChargingTile> mReverseChargingTileProvider;
 
     @Inject
@@ -131,7 +130,6 @@ public class QSFactoryImplGoogle extends QSFactoryImpl {
             Provider<LiveDisplayTile> liveDisplayTileProvider,
             Provider<ReadingModeTile> readingModeTileProvider,
             Provider<AntiFlickerTile> antiFlickerTileProvider,
-	    Provider<OverlayToggleTile> overlayToggleTileProvider,
             Provider<ReverseChargingTile> reverseChargingTileProvider) {
         super(qsHostLazy,
                 customTileBuilderProvider,
@@ -182,7 +180,6 @@ public class QSFactoryImplGoogle extends QSFactoryImpl {
                 antiFlickerTileProvider);
         this.mReverseChargingTileProvider = reverseChargingTileProvider;
         this.mBatterySaverTileGoogleProvider = batterySaverTileGoogleProvider;
-        this.mOverlayToggleTileProvider = overlayToggleTileProvider;
     }
 
     @Override
@@ -195,10 +192,10 @@ public class QSFactoryImplGoogle extends QSFactoryImpl {
     }
 
     private QSTileImpl createTileInternal(String str) {
-        if (str.equals("ott")) {
-            return this.mOverlayToggleTileProvider.get();
-        } else if (str.equals("reverse")) {
+        if (str.equals("reverse")) {
             return this.mReverseChargingTileProvider.get();
+        } else if (str.equals("battery")) {
+            return this.mBatterySaverTileGoogleProvider.get();
         }
         return null;
     }
