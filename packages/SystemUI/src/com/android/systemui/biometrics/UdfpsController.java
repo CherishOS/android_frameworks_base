@@ -662,7 +662,6 @@ public class UdfpsController implements DozeReceiver, UdfpsHbmProvider {
         if (CherishUtils.isPackageInstalled(mContext, "com.cherish.udfps.resources")) {
             mUdfpsAnimation = new UdfpsAnimation(mContext, mWindowManager, mSensorProps);
         }
-    }
 
         mUdfpsVendorCode = mContext.getResources().getInteger(R.integer.config_udfps_vendor_code);
         mSystemSettings = systemSettings;

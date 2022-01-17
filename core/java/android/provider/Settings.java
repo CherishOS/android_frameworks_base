@@ -6181,7 +6181,17 @@ public final class Settings {
          */
         public static final String UDFPS_ICON = "udfps_icon";
 		
-		/**)
+		/**
+         * @hide
+         */
+        public static final String OMNI_CUSTOM_FP_ICON_ENABLED = "custom_fp_icon_enabled";
+
+        /**
+         * @hide
+         */
+        public static final String OMNI_CUSTOM_FP_ICON = "custom_fingerprint_icon";
+		
+		/**
          * These are all public system settings
          *
          * @hide
