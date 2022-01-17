@@ -21,7 +21,6 @@ import android.annotation.FloatRange;
 import android.annotation.IntRange;
 import android.annotation.NonNull;
 import android.graphics.Color;
-import android.util.Log;
 
 import com.android.internal.graphics.cam.Cam;
 
@@ -31,8 +30,6 @@ import com.android.internal.graphics.cam.Cam;
  * A set of color-related utility methods, building upon those available in {@code Color}.
  */
 public final class ColorUtils {
-
-    private static final String TAG = "ColorUtils";
 
     private static final double XYZ_WHITE_REFERENCE_X = 95.047;
     private static final double XYZ_WHITE_REFERENCE_Y = 100;
@@ -95,10 +92,8 @@ public final class ColorUtils {
      */
     public static double calculateContrast(@ColorInt int foreground, @ColorInt int background) {
         if (Color.alpha(background) != 255) {
-            Log.w(TAG, String.format(
-                    "Background should not be translucent: #%s",
-                    Integer.toHexString(background)));
-            background = setAlphaComponent(background, 255);
+            throw new IllegalArgumentException("background can not be translucent: #"
+                    + Integer.toHexString(background));
         }
         if (Color.alpha(foreground) < 255) {
             // If the foreground is translucent, composite the foreground over the background
@@ -150,10 +145,8 @@ public final class ColorUtils {
     public static int calculateMinimumAlpha(@ColorInt int foreground, @ColorInt int background,
             float minContrastRatio) {
         if (Color.alpha(background) != 255) {
-            Log.w(TAG, String.format(
-                    "Background should not be translucent: #%s",
-                    Integer.toHexString(background)));
-            background = setAlphaComponent(background, 255);
+            throw new IllegalArgumentException("background can not be translucent: #"
+                    + Integer.toHexString(background));
         }
 
         ContrastCalculator contrastCalculator = (fg, bg, alpha) -> {
