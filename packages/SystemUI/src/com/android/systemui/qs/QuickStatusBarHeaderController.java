@@ -76,9 +76,6 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
     private boolean mMicCameraIndicatorsEnabled;
     private boolean mLocationIndicatorsEnabled;
     private boolean mPrivacyChipLogged;
-    private final String mCameraSlot;
-    private final String mMicSlot;
-    private final String mLocationSlot;
 
     private PrivacyItemController.Callback mPICCallback = new PrivacyItemController.Callback() {
         @Override
@@ -104,7 +101,6 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
         }
 
         private void update() {
-            updatePrivacyIconSlots();
             setChipVisibility(!mPrivacyChip.getPrivacyList().isEmpty());
         }
     };
@@ -158,10 +154,6 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
 
         mIconManager = new StatusBarIconController.TintedIconManager(mIconContainer, featureFlags);
         mDemoModeReceiver = new ClockDemoModeReceiver(mClockView);
-
-        mCameraSlot = getResources().getString(com.android.internal.R.string.status_bar_camera);
-        mMicSlot = getResources().getString(com.android.internal.R.string.status_bar_microphone);
-        mLocationSlot = getResources().getString(com.android.internal.R.string.status_bar_location);
     }
 
     @Override
@@ -172,7 +164,6 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
         mLocationIndicatorsEnabled = mPrivacyItemController.getLocationAvailable();
 
         // Ignore privacy icons because they show in the space above QQS
-        updatePrivacyIconSlots();
         mIconContainer.addIgnoredSlot(
                 getResources().getString(com.android.internal.R.string.status_bar_managed_profile));
         mIconContainer.setShouldRestrictIcons(false);
@@ -254,27 +245,6 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
             mPrivacyLogger.logChipVisible(false);
         }
         mView.setChipVisibility(chipVisible && getChipEnabled());
-    }
-
-    private void updatePrivacyIconSlots() {
-        if (getChipEnabled()) {
-            if (mMicCameraIndicatorsEnabled) {
-                mIconContainer.addIgnoredSlot(mCameraSlot);
-                mIconContainer.addIgnoredSlot(mMicSlot);
-            } else {
-                mIconContainer.removeIgnoredSlot(mCameraSlot);
-                mIconContainer.removeIgnoredSlot(mMicSlot);
-            }
-            if (mLocationIndicatorsEnabled) {
-                mIconContainer.addIgnoredSlot(mLocationSlot);
-            } else {
-                mIconContainer.removeIgnoredSlot(mLocationSlot);
-            }
-        } else {
-            mIconContainer.removeIgnoredSlot(mCameraSlot);
-            mIconContainer.removeIgnoredSlot(mMicSlot);
-            mIconContainer.removeIgnoredSlot(mLocationSlot);
-        }
     }
 
     private boolean getChipEnabled() {
