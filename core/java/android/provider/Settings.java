@@ -6029,6 +6029,12 @@ public final class Settings {
          */
         public static final String STATUSBAR_ICONS_STYLE = "statusbar_icons_style";
 		
+		/**
+         * Force full screen for devices with cutout
+         * @hide
+         */
+        public static final String FORCE_FULLSCREEN_CUTOUT_APPS = "force_full_screen_cutout_apps";
+		
 			/**
          * Whether to enable PULSE Edge lights
          * @hide
@@ -6632,6 +6638,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_ADJUSTMENT);
             PRIVATE_SETTINGS.add(DISPLAY_PICTURE_ADJUSTMENT);
             PRIVATE_SETTINGS.add(LIVE_DISPLAY_HINTED);
+			PRIVATE_SETTINGS.add(FORCE_FULLSCREEN_CUTOUT_APPS);
         }
 
         /**
