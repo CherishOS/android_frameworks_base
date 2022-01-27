@@ -28,13 +28,8 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Handler;
 import android.os.UserManager;
-import android.os.UserHandle;
-import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.util.TypedValue;
@@ -91,8 +86,6 @@ public class KeyguardStatusBarView extends RelativeLayout implements
     private boolean mBatteryCharging;
     private boolean mBatteryListening;
 
-    private int mShowCarrierLabel;
-
     private TextView mCarrierLabel;
     private ImageView mMultiUserAvatar;
     private BatteryMeterView mBatteryView;
@@ -132,22 +125,9 @@ public class KeyguardStatusBarView extends RelativeLayout implements
     private int mTopClipping;
     private final Rect mClipRect = new Rect(0, 0, 0, 0);
 
-    private ContentObserver mObserver = new ContentObserver(new Handler()) {
-        public void onChange(boolean selfChange, Uri uri) {
-            showStatusBarCarrier();
-            updateVisibilities();
-        }
-    };
-
     public KeyguardStatusBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mUserManager = UserManager.get(getContext());
-        showStatusBarCarrier();
-    }
-
-    private void showStatusBarCarrier() {
-        mShowCarrierLabel = Settings.System.getIntForUser(getContext().getContentResolver(),
-                Settings.System.STATUS_BAR_SHOW_CARRIER, 1, UserHandle.USER_CURRENT);
     }
 
     @Override
@@ -253,15 +233,6 @@ public class KeyguardStatusBarView extends RelativeLayout implements
             }
         }
         mBatteryView.setForceShowPercent(mBatteryCharging && mShowPercentAvailable);
-        if (mCarrierLabel != null) {
-            if (mShowCarrierLabel == 1 || mShowCarrierLabel == 3) {
-                mCarrierLabel.setVisibility(View.VISIBLE);
-                mCarrierLabel.setSelected(true);
-            } else {
-                mCarrierLabel.setVisibility(View.GONE);
-                mCarrierLabel.setSelected(false);
-            }
-        }
     }
 
     private void updateSystemIconsLayoutParams() {
@@ -409,8 +380,6 @@ public class KeyguardStatusBarView extends RelativeLayout implements
         mIconManager.setBlockList(mBlockedIcons);
         Dependency.get(StatusBarIconController.class).addIconGroup(mIconManager);
         mAnimationScheduler.addCallback(this);
-        getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
-		        Settings.System.STATUS_BAR_SHOW_CARRIER), false, mObserver);
         onThemeChanged();
     }
 
