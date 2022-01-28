@@ -1381,6 +1381,9 @@ public class EdgeBackGestureHandler implements PluginListener<NavigationEdgeBack
             case 13: // Switch recent app
                 CherishUtils.switchToLastApp(mContext);
                 break;
+            case 14: // Powermenu
+                CherishUtils.showPowerMenu();
+                break;
         }
     }
 
