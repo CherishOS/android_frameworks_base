@@ -1056,6 +1056,9 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
             case 17: // Partial Screenshot
                 CherishUtils.takeScreenshot(false);
                 break;
+            case 18: // Hush Mute
+                ActionUtils.triggerHushMute(mContext);
+                break;
         }
     }
 
