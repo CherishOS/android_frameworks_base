@@ -199,6 +199,16 @@ public class CherishUtils {
         FireActions.sendSystemKeyToStatusBar(keyCode);
     }
 
+    // Launch Power Menu dialog
+    public static void showPowerMenu() {
+        final IWindowManager wm = WindowManagerGlobal.getWindowManagerService();
+        try {
+            wm.showGlobalActions();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static final class FireActions {
         private static IStatusBarService mStatusBarService = null;
         private static IStatusBarService getStatusBarService() {
