@@ -6448,6 +6448,12 @@ public final class Settings {
         public static final String ENABLE_FLOATING_ROTATION_BUTTON = "enable_floating_rotation_button";
 		
 		/**
+         * Whether to enable Photos unlimited storage
+         * @hide
+         */
+        public static final String USE_PHOTOS_SPOOF = "use_photos_spoof";
+		
+		/**
          * These are all public system settings
          *
          * @hide

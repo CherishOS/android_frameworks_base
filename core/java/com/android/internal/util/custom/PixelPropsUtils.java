@@ -16,6 +16,7 @@
 package com.android.internal.util.custom;
 
 import android.os.Build;
+import android.os.SystemProperties;
 import android.util.Log;
 
 import java.lang.reflect.Field;
@@ -166,7 +167,14 @@ public class PixelPropsUtils {
             }
   
             if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
-                propsToChange = propsToChangePixelXL;
+                final String useSpoof = SystemProperties.get("persist.sys.photo", "1");
+                boolean enable = ("1".equals(useSpoof)) ? true : false;
+                if (!enable && packageName != null &&
+                        packageName.equals("com.google.android.apps.photos")) {
+                    propsToChange = propsToChangePixel6;
+                } else {
+                    propsToChange = propsToChangePixelXL;
+                }
             }
 
             if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
