@@ -6445,15 +6445,21 @@ public final class Settings {
          * @hide
          */
         public static final String OMNI_CUSTOM_FP_ICON = "custom_fingerprint_icon";
+	
+        /**
+         * Show app volume rows in volume panel
+         * @hide
+         */
+        public static final String SHOW_APP_VOLUME = "show_app_volume";
 		
-		/**
+        /**
          * Whether to show floating rotation button
          * @hide
          */
         @Readable
-        public static final String ENABLE_FLOATING_ROTATION_BUTTON = "enable_floating_rotation_button";
-		
-		/**
+        public static final String ENABLE_FLOATING_ROTATION_BUTTON = "enable_floating_rotation_button";	
+
+	/**
          * Whether to enable Photos unlimited storage
          * @hide
          */
@@ -18229,6 +18235,13 @@ public final class Settings {
         @SdkConstant(SdkConstant.SdkConstantType.ACTIVITY_INTENT_ACTION)
         public static final String ACTION_VOLUME =
                 "android.settings.panel.action.VOLUME";
+
+        /**
+         * @hide
+         */
+        public static final String ACTION_APP_VOLUME =
+                "android.settings.panel.action.APP_VOLUME";
+
     }
 
     /**
