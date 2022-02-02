@@ -207,5 +207,6 @@ public class SecureSettings {
         Settings.Secure.STATUS_BAR_SHOW_VIBRATE_ICON,
         Settings.Secure.SCREEN_OFF_UDFPS_ENABLED,
         Settings.Secure.GESTURE_NAVBAR_LENGTH_MODE,
+        Settings.Secure.DISABLE_SECURE_TILES_ON_LOCKSCREEN,
     };
 }

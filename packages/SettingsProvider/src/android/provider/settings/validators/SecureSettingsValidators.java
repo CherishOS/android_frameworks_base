@@ -339,5 +339,6 @@ public class SecureSettingsValidators {
         VALIDATORS.put(Secure.ODI_CAPTIONS_VOLUME_UI_ENABLED, BOOLEAN_VALIDATOR);
         VALIDATORS.put(Secure.SCREEN_OFF_UDFPS_ENABLED, BOOLEAN_VALIDATOR);
         VALIDATORS.put(Secure.GESTURE_NAVBAR_LENGTH_MODE, new InclusiveIntegerRangeValidator(0, 2));
+        VALIDATORS.put(Secure.DISABLE_SECURE_TILES_ON_LOCKSCREEN, BOOLEAN_VALIDATOR);
     }
 }
