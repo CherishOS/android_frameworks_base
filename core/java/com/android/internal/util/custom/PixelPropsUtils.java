@@ -67,6 +67,13 @@ public class PixelPropsUtils {
             "com.google.android.android.apps.messaging",
 	    "com.google.android.gm"
     };
+	
+	private static final String[] streamingPackagesToChange = {
+            "com.amazon.avod.thirdpartyclient",
+            "com.disney.disneyplus",
+            "com.netflix.mediaclient",
+            "in.startv.hotstar"
+    };
 
     private static final String[] packagesToKeep = {
         "com.google.android.GoogleCamera",
@@ -159,7 +166,11 @@ public class PixelPropsUtils {
             return;
         }
         if (packageName.startsWith("com.google.")
-                || Arrays.asList(extraPackagesToChange).contains(packageName)) {
+                || Arrays.asList(extraPackagesToChange).contains(packageName)
+                || Arrays.asList(streamingPackagesToChange).contains(packageName)) {
+                final String streamPropSpoof = SystemProperties.get("persist.sys.stream", "1");
+                boolean dontSpoofStream = ("0".equals(streamPropSpoof)) ? true : false;
+                if (dontSpoofStream && Arrays.asList(streamingPackagesToChange).contains(packageName)) return;
             Map<String, Object> propsToChange = propsToChangePixel6;
 
             if (Arrays.asList(packagesToChangePixel5).contains(packageName)) {

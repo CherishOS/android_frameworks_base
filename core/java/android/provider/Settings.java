@@ -6466,6 +6466,12 @@ public final class Settings {
         public static final String USE_PHOTOS_SPOOF = "use_photos_spoof";
 		
 		/**
+         * Whether to enable spoofing for streaming apps
+         * @hide
+         */
+        public static final String USE_STREAM_SPOOF = "use_stream_spoof";
+		
+		/**
          * Force full screen for devices with cutout
          * @hide
          */
