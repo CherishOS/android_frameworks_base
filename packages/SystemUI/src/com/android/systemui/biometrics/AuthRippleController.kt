@@ -23,6 +23,8 @@ import android.content.Context
 import android.graphics.PointF
 import android.hardware.biometrics.BiometricSourceType
 import android.util.DisplayMetrics
+import android.os.UserHandle
+import android.provider.Settings
 import android.util.Log
 import androidx.annotation.VisibleForTesting
 import com.android.keyguard.KeyguardUpdateMonitor
@@ -83,8 +85,8 @@ class AuthRippleController @Inject constructor(
     private var udfpsRadius: Float = -1f
 
     private val isRippleEnabled: Boolean
-        get() = Settings.System.getInt(context.contentResolver,
-            Settings.System.ENABLE_RIPPLE_EFFECT, 1) == 1
+        get() = Settings.System.getIntForUser(context.contentResolver,
+            Settings.System.ENABLE_RIPPLE_EFFECT, 1, UserHandle.USER_CURRENT) == 1
 
     override fun onInit() {
         mView.setAlphaInDuration(sysuiContext.resources.getInteger(
