@@ -297,21 +297,27 @@ class AppLockManagerService(private val context: Context) :
             true /* requireFull */, tag, AppLockManagerService::class.qualifiedName)
     }
 
+    private inline fun <R> clearAndExecute(body: () -> R): R {
+        val ident = Binder.clearCallingIdentity()
+        try {
+            return body()
+        } finally {
+            Binder.restoreCallingIdentity(ident)
+        }
+    }
+
     private fun unlockInternal(
         pkg: String,
         userId: Int,
         onSuccess: () -> Unit,
         onCancel: () -> Unit,
     ) {
-        val ident = Binder.clearCallingIdentity()
-        try {
+        clearAndExecute {
             if (!biometricUnlocker.canUnlock()) {
                 Slog.e(TAG, "Application cannot be unlocked with biometrics or device credentials")
                 return
             }
             biometricUnlocker.unlock(getLabelForPackage(pkg, userId), onSuccess, onCancel)
-        } finally {
-            Binder.restoreCallingIdentity(ident)
         }
     }
 
@@ -623,13 +629,15 @@ class AppLockManagerService(private val context: Context) :
                 logD("Ignoring requireUnlock call for special user $userId")
                 return false
             }
-            val callingUserId = UserHandle.getCallingUserId()
-            val ident = Binder.clearCallingIdentity()
-            try {
-                val isManagedProfile = userManager.getUserInfo(callingUserId).isManagedProfile()
+            if (!isDeviceSecure) {
+                logD("Device is not secure, app does not require unlock")
+                return false
+            }
+            clearAndExecute {
+                val isManagedProfile = userManager.getUserInfo(userId).isManagedProfile()
                 logD("isManagedProfile = $isManagedProfile")
                 if (isManagedProfile) {
-                    logD("User id $callingUserId belongs to a work profile, ignoring requireUnlock")
+                    logD("User id $userId belongs to a work profile, ignoring requireUnlock")
                     return false
                 }
                 // If device is locked then there is no point in proceeding.
@@ -637,12 +645,6 @@ class AppLockManagerService(private val context: Context) :
                     logD("Device is locked, app does not require unlock")
                     return false
                 }
-            } finally {
-                Binder.restoreCallingIdentity(ident)
-            }
-            if (!isDeviceSecure) {
-                logD("Device is not secure, app does not require unlock")
-                return false
             }
             logD("requireUnlock: packageName = $packageName")
             val actualUserId = getActualUserId(userId, "requireUnlock")
@@ -670,22 +672,19 @@ class AppLockManagerService(private val context: Context) :
                 logD("Ignoring unlock call for special user $userId")
                 return
             }
-            val callingUserId = UserHandle.getCallingUserId()
-            val ident = Binder.clearCallingIdentity()
-            try {
-                val isManagedProfile = userManager.getUserInfo(callingUserId).isManagedProfile()
-                logD("isManagedProfile = $isManagedProfile")
-                if (isManagedProfile) {
-                    Slog.w(TAG, "User id $callingUserId belongs to a work profile, should not " +
-                        "be calling unlock()")
-                    return
-                }
-            } finally {
-                Binder.restoreCallingIdentity(ident)
-            }
             if (!isDeviceSecure) {
                 Slog.w(TAG, "Device is not secure, should not be calling unlock()")
                 return
+            }
+            val ident = Binder.clearCallingIdentity()
+            clearAndExecute {
+                val isManagedProfile = userManager.getUserInfo(userId).isManagedProfile()
+                logD("isManagedProfile = $isManagedProfile")
+                if (isManagedProfile) {
+                    Slog.w(TAG, "User id $userId belongs to a work profile, should not " +
+                        "be calling unlock()")
+                    return
+                }
             }
             logD("unlock: packageName = $packageName")
             val actualUserId = getActualUserId(userId, "unlock")
@@ -741,18 +740,14 @@ class AppLockManagerService(private val context: Context) :
                 logD("Ignoring isNotificationSecured call for special user $userId")
                 return false
             }
-            val callingUserId = UserHandle.getCallingUserId()
-            val ident = Binder.clearCallingIdentity()
-            try {
-                val isManagedProfile = userManager.getUserInfo(callingUserId).isManagedProfile()
+            clearAndExecute {
+                val isManagedProfile = userManager.getUserInfo(userId).isManagedProfile()
                 logD("isManagedProfile = $isManagedProfile")
                 if (isManagedProfile) {
-                    logD("User id $callingUserId belongs to a work profile, " +
+                    logD("User id $userId belongs to a work profile, " +
                         "ignoring isNotificationSecured")
                     return false
                 }
-            } finally {
-                Binder.restoreCallingIdentity(ident)
             }
             logD("isNotificationSecured: " +
                     "packageName = $packageName, " +
