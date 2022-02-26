@@ -11427,6 +11427,12 @@ public final class Settings {
          * @hide
          */
         public static final String PULSE_SOLID_UNITS_ROUNDED = "pulse_solid_units_rounded";
+		
+		/** Whether to show lockscreen media art
+         *
+         * @hide
+         */
+        public static final String LOCKSCREEN_MEDIA_METADATA = "lockscreen_media_metadata";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
