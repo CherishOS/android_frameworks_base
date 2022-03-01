@@ -12,21 +12,23 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * Helper functions mostly for device configuration and some utilities
  * including a fun ViewGroup crawler and dpi conversion
- * 
+ *
  */
 
 package com.android.internal.util.hwkeys;
 
 import android.app.ActivityManager;
+import android.app.ActivityOptions;
 import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -52,24 +54,30 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.os.UserHandle;
 import android.os.Vibrator;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.util.Log;
 import android.view.Display;
+import android.provider.MediaStore;
 import android.view.IWindowManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
+import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.util.hwkeys.ActionConstants.Defaults;
@@ -99,6 +107,8 @@ public final class ActionUtils {
     public static final String ANIM = "anim";
     public static final String INTENT_SCREENSHOT = "action_take_screenshot";
     public static final String INTENT_REGION_SCREENSHOT = "action_take_region_screenshot";
+
+    private static final String TAG = ActionUtils.class.getSimpleName();
 
     private static IStatusBarService mStatusBarService = null;
 
@@ -247,7 +257,7 @@ public final class ActionUtils {
     /**
      * This method converts dp unit to equivalent pixels, depending on device
      * density.
-     * 
+     *
      * @param dp A value in dp (density independent pixels) unit. Which we need
      *            to convert into pixels
      * @param context Context to get resources and device specific display
@@ -279,7 +289,7 @@ public final class ActionUtils {
     /**
      * This method converts device specific pixels to density independent
      * pixels.
-     * 
+     *
      * @param px A value in px (pixels) unit. Which we need to convert into db
      * @param context Context to get resources and device specific display
      *            metrics
@@ -483,7 +493,7 @@ public final class ActionUtils {
         return (Integer) getValue(context, resName, INT, null, pkg);
     }
 
-    public static int getColor(Context context, String resName, String pkg) {        
+    public static int getColor(Context context, String resName, String pkg) {
         return (Integer) getValue(context, resName, COLOR, null, pkg);
     }
 
@@ -671,7 +681,7 @@ public final class ActionUtils {
     }
 
     /**
-     * 
+     *
      * @param Target package resources
      * @param drawableName
      * @param Target package name
@@ -692,7 +702,7 @@ public final class ActionUtils {
     }
 
     /**
-     * 
+     *
      * @param Target package resources
      * @param drawableName
      * @param Target package name
@@ -723,7 +733,7 @@ public final class ActionUtils {
     }
 
     /**
-     * 
+     *
      * @param Context of the calling package
      * @param the action we want a drawable for
      * @return if a system action drawable is requested, we try to get the drawable
@@ -757,7 +767,7 @@ public final class ActionUtils {
     }
 
     /**
-     * 
+     *
      * @param calling package context, usually Settings for the custom action list adapter
      * @param target package resources, usually SystemUI
      * @param drawableName
@@ -854,16 +864,6 @@ public final class ActionUtils {
         }
     }
 
-    // Screenshot
-    public static void takeScreenshot(boolean full) {
-        IWindowManager wm = WindowManagerGlobal.getWindowManagerService();
-        try {
-            wm.sendCustomAction(new Intent(INTENT_SCREENSHOT));
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-
     // Toggle notifications panel
     public static void toggleNotifications() {
         IStatusBarService service = getStatusBarService();
@@ -910,5 +910,75 @@ public final class ActionUtils {
                 am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                 break;
         }
+    }
+
+    // Switch to last app
+    public static void switchToLastApp(Context context) {
+        final ActivityManager am =
+                (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager.RunningTaskInfo lastTask = getLastTask(context, am);
+
+        if (lastTask != null) {
+            am.moveTaskToFront(lastTask.id, ActivityManager.MOVE_TASK_NO_USER_ACTION,
+                    getAnimation(context).toBundle());
+        }
+    }
+
+    private static ActivityOptions getAnimation(Context context) {
+        return ActivityOptions.makeCustomAnimation(context,
+                com.android.internal.R.anim.custom_app_in,
+                com.android.internal.R.anim.custom_app_out);
+    }
+
+    private static ActivityManager.RunningTaskInfo getLastTask(Context context,
+            final ActivityManager am) {
+        final List<String> packageNames = getCurrentLauncherPackages(context);
+        final List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(5);
+        for (int i = 1; i < tasks.size(); i++) {
+            String packageName = tasks.get(i).topActivity.getPackageName();
+            if (!packageName.equals(context.getPackageName())
+                    && !packageName.equals(PACKAGE_SYSTEMUI)
+                    && !packageNames.contains(packageName)) {
+                return tasks.get(i);
+            }
+        }
+        return null;
+    }
+
+    private static List<String> getCurrentLauncherPackages(Context context) {
+        final PackageManager pm = context.getPackageManager();
+        final List<ResolveInfo> homeActivities = new ArrayList<>();
+        pm.getHomeActivities(homeActivities);
+        final List<String> packageNames = new ArrayList<>();
+        for (ResolveInfo info : homeActivities) {
+            final String name = info.activityInfo.packageName;
+            if (!name.equals("com.android.settings")) {
+                packageNames.add(name);
+            }
+        }
+        return packageNames;
+    }
+
+    // Trigger Hush Mute mode
+    public static void triggerHushMute(Context context) {
+        // We can't call AudioService#silenceRingerModeInternal from here, so this is a partial copy of it
+        int silenceRingerSetting = Settings.Secure.getIntForUser(context.getContentResolver(),
+                Settings.Secure.VOLUME_HUSH_GESTURE, Settings.Secure.VOLUME_HUSH_OFF,
+                UserHandle.USER_CURRENT);
+
+        int ringerMode;
+        int toastText;
+        if (silenceRingerSetting == Settings.Secure.VOLUME_HUSH_VIBRATE) {
+            ringerMode = AudioManager.RINGER_MODE_VIBRATE;
+            toastText = com.android.internal.R.string.volume_dialog_ringer_guidance_vibrate;
+        } else {
+            // VOLUME_HUSH_MUTE and VOLUME_HUSH_OFF
+            ringerMode = AudioManager.RINGER_MODE_SILENT;
+            toastText = com.android.internal.R.string.volume_dialog_ringer_guidance_silent;
+        }
+        AudioManager audioMan = (AudioManager)
+                context.getSystemService(Context.AUDIO_SERVICE);
+        audioMan.setRingerModeInternal(ringerMode);
+        Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
     }
 }
