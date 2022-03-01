@@ -104,7 +104,7 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
     private long mAutoHideThreshold;
     private int mUnits;
     protected int mIconTint = 0;
-    protected int newTint = Color.WHITE;
+    protected int newTint;
 
     private Drawable mDrawable;
 
@@ -137,6 +137,7 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
     public NetworkTraffic(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mContext = context;
+        newTint = getCurrentTextColor();
         mConnectivityManager =
                 (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
