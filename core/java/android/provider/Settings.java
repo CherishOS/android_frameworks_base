@@ -5382,13 +5382,7 @@ public final class Settings {
          * @hide
          */
         public static final String QS_SHOW_AUTO_BRIGHTNESS_BUTTON = "qs_show_auto_brightness_button";
-		
-		/**
-         * Volume panel on left
-         * @hide
-         */
-        public static final String VOLUME_PANEL_ON_LEFT = "volume_panel_on_left";
-		
+
 		/**
          * Whether or not volume button music controls should be enabled to seek media tracks
          * @hide
