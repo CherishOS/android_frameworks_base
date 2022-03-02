@@ -2280,7 +2280,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
         BiometricAuthenticated face = mUserFaceAuthenticated.get(getCurrentUser());
         return mAssistantVisible && mKeyguardOccluded
                 && !(face != null && face.mAuthenticated)
-                && !mUserHasTrust.get(getCurrentUser(), false) && !mIsDeviceInPocket;
+                && !mUserHasTrust.get(getCurrentUser(), false);
     }
 
     @VisibleForTesting
