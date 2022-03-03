@@ -45,6 +45,7 @@ import com.android.systemui.statusbar.phone.StatusBarWindowView;
 import com.android.systemui.statusbar.phone.StatusIconContainer;
 import com.android.systemui.statusbar.policy.Clock;
 import com.android.systemui.statusbar.policy.DateView;
+import com.android.systemui.statusbar.policy.ClockEQS;
 import com.android.systemui.statusbar.policy.VariableDateView;
 import com.android.systemui.statusbar.policy.NetworkTraffic;
 import com.android.systemui.tuner.TunerService;
@@ -144,7 +145,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         mNetworkTraffic = findViewById(R.id.networkTraffic);
 
         mClockContainer = findViewById(R.id.clock_container);
-        mClockView = findViewById(R.id.clock);
+        mClockView = findViewById(R.id.clock_eqs);
         mClockView.setQsHeader();
         mDatePrivacySeparator = findViewById(R.id.space);
         // Tint for the battery icons are handled in setupHost()
