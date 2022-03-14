@@ -424,8 +424,8 @@ public class NetworkTraffic extends TextView implements TunerService.Tunable {
                 setEnabled();
                 if (mEnabled) {
                     setLines(1);
-                    String txtFont = getResources().getString(com.android.internal.R.string.config_bodyFontFamily);
-                    setTypeface(Typeface.create(txtFont, Typeface.BOLD));
+                    String txtFont = getResources().getString(com.android.internal.R.string.config_headlineFontFamily);
+                    setTypeface(Typeface.create(txtFont, Typeface.NORMAL));
                     setLineSpacing(0.85f, 0.85f);
                 }
                 updateViews();
