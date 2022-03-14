@@ -89,5 +89,6 @@ public class SystemSettings {
         Settings.System.FLASHLIGHT_ON_CALL_RATE,
         Settings.System.VOLUME_DIALOG_TIMEOUT,
         Settings.System.FULLSCREEN_GESTURES,
+        Settings.System.DOZE_ON_CHARGE,
     };
 }
