@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.TrafficStats;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.os.Message;
@@ -24,10 +25,15 @@ import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.systemui.R;
+
+import java.util.Locale;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 /*
 *
@@ -118,6 +124,8 @@ public class NetworkTraffic extends TextView {
 
         private CharSequence formatDecimal(long speed) {
             DecimalFormat decimalFormat;
+            DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.getDefault());
+            otherSymbols.setDecimalSeparator('.');
             String unit;
             String formatSpeed;
             SpannableString spanUnitString;
@@ -125,30 +133,30 @@ public class NetworkTraffic extends TextView {
 
             if (speed >= GB) {
                 unit = "GB";
-                decimalFormat = new DecimalFormat("0.00");
+                decimalFormat = new DecimalFormat("0.00", otherSymbols);
                 formatSpeed =  decimalFormat.format(speed / (float)GB);
             } else if (speed >= 100 * MB) {
-                decimalFormat = new DecimalFormat("000");
+                decimalFormat = new DecimalFormat("000", otherSymbols);
                 unit = "MB";
                 formatSpeed =  decimalFormat.format(speed / (float)MB);
             } else if (speed >= 10 * MB) {
-                decimalFormat = new DecimalFormat("00.0");
+                decimalFormat = new DecimalFormat("00.0", otherSymbols);
                 unit = "MB";
                 formatSpeed =  decimalFormat.format(speed / (float)MB);
             } else if (speed >= MB) {
-                decimalFormat = new DecimalFormat("0.00");
+                decimalFormat = new DecimalFormat("0.00", otherSymbols);
                 unit = "MB";
                 formatSpeed =  decimalFormat.format(speed / (float)MB);
             } else if (speed >= 100 * KB) {
-                decimalFormat = new DecimalFormat("000");
+                decimalFormat = new DecimalFormat("000", otherSymbols);
                 unit = "KB";
                 formatSpeed =  decimalFormat.format(speed / (float)KB);
             } else if (speed >= 10 * KB) {
-                decimalFormat = new DecimalFormat("00.0");
+                decimalFormat = new DecimalFormat("00.0", otherSymbols);
                 unit = "KB";
                 formatSpeed =  decimalFormat.format(speed / (float)KB);
             } else {
-                decimalFormat = new DecimalFormat("0.00");
+                decimalFormat = new DecimalFormat("0.00", otherSymbols);
                 unit = "KB";
                 formatSpeed = decimalFormat.format(speed / (float)KB);
             }
@@ -159,7 +167,12 @@ public class NetworkTraffic extends TextView {
             spanUnitString = new SpannableString(unit + symbol);
             spanUnitString.setSpan(getUnitRelativeSizeSpan(), 0, (unit + symbol).length(),
                     Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-            return TextUtils.concat(spanSpeedString, "\n", spanUnitString);
+
+            CharSequence trafficString = (mLocation == 1)
+                    ? TextUtils.concat(spanSpeedString, "\n", spanUnitString)
+                    : TextUtils.concat(spanSpeedString, " ", spanUnitString);
+
+            return trafficString;
         }
 
         private boolean shouldHide(long rxData, long txData, long timeDelta) {
@@ -284,15 +297,23 @@ public class NetworkTraffic extends TextView {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NETWORK_TRAFFIC_REFRESH_INTERVAL),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NETWORK_TRAFFIC_FONT_SIZE),
+                    false, this, UserHandle.USER_ALL);
         }
 
         /*
          *  @hide
          */
         @Override
-        public void onChange(boolean selfChange) {
-            setMode();
-            update();
+        public void onChange(boolean selfChange, Uri uri) {
+            if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.NETWORK_TRAFFIC_FONT_SIZE))) {
+                updateTextSize();
+            } else {
+                setMode();
+                update();
+            }
         }
     }
 
@@ -345,8 +366,10 @@ public class NetworkTraffic extends TextView {
                 Settings.System.NETWORK_TRAFFIC_REFRESH_INTERVAL, 1,
                 UserHandle.USER_CURRENT);
         setGravity(Gravity.CENTER);
-        setMaxLines(2);
+        int maxLines = (mLocation == 1) ? 2 : 1;
+        setMaxLines(maxLines);
         setSpacingAndFonts();
+        updateTextSize();
         updateTrafficDrawable();
         setVisibility(View.GONE);
         mVisible = false;
@@ -365,17 +388,31 @@ public class NetworkTraffic extends TextView {
 
     protected void setSpacingAndFonts() {
         String txtFont = getResources().getString(com.android.internal.R.string.config_headlineFontFamily);
-        setTypeface(Typeface.create(txtFont, Typeface.BOLD));
+        setTypeface(Typeface.create(txtFont, Typeface.NORMAL));
         setLineSpacing(0.85f, 0.85f);
     }
 
     public void onDensityOrFontScaleChanged() {
         setSpacingAndFonts();
+        updateTextSize();
         update();
     }
 
     public void setTintColor(int color) {
         mTintColor = color;
         updateTrafficDrawable();
+    }
+
+    private void updateTextSize() {
+        int size;
+        if (mLocation == 0) { // 0 = statusbar
+            size = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.NETWORK_TRAFFIC_FONT_SIZE, 18,
+                    UserHandle.USER_CURRENT);
+            setTextSize(TypedValue.COMPLEX_UNIT_DIP, (float)size);
+        } else {
+            size = getResources().getDimensionPixelSize(R.dimen.net_traffic_multi_text_size);
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, (float)size);
+        }
     }
 }
