@@ -5594,36 +5594,6 @@ public final class Settings {
          * @hide
          */
         public static final String ROAMING_INDICATOR_ICON = "roaming_indicator_icon";
-		
-		/**
-         * Whether to show network traffic indicator in statusbar
-         * @hide
-         */
-        public static final String NETWORK_TRAFFIC_STATE = "network_traffic_state";
-
-        /**
-         * Where to show network traffic indicator
-         * @hide
-         */
-        public static final String NETWORK_TRAFFIC_LOCATION = "network_traffic_location";
-
-        /**
-         * Network traffic inactivity threshold (default is 1 kBs)
-         * @hide
-         */
-        public static final String NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD = "network_traffic_autohide_threshold";
-		
-		/**
-         * Specify refresh duration for network traffic
-         * @hide
-         */
-        public static final String NETWORK_TRAFFIC_REFRESH_INTERVAL = "network_traffic_refresh_interval";
-		
-		/**
-         * What to show in the network traffic indicator
-         * @hide
-         */
-        public static final String NETWORK_TRAFFIC_MODE = "network_traffic_mode";
 
         /**
          * Whether the battery light should be enabled (if hardware supports it)
@@ -5873,12 +5843,6 @@ public final class Settings {
          * @hide
          */
         public static final String ANIM_TILE_INTERPOLATOR = "anim_tile_interpolator";
-
-        /**
-         * What size to show for network traffic indicator in statusbar
-         * @hide
-         */
-        public static final String NETWORK_TRAFFIC_FONT_SIZE = "network_traffic_font_size";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
