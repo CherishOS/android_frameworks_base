@@ -5851,6 +5851,12 @@ public final class Settings {
         public static final String QS_TRANSPARENCY = "qs_transparency";
 
         /**
+         * Settings Dashboard Style
+         * @hide
+         */
+        public static final String SETTINGS_DASHBOARD_STYLE = "settings_dashboard_style";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
