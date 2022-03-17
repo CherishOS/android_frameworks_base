@@ -5991,7 +5991,7 @@ public final class Settings {
          * Settings Dashboard Style
          * @hide
          */
-        public static final String SETTINGS_DASHBOARD_GMS = "settings_dashboard_gms";
+        public static final String SETTINGS_DASHBOARD_STYLE = "settings_dashboard_style";
 		
 		/**
          * Whether to show IME space
