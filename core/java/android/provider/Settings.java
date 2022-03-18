@@ -5481,72 +5481,6 @@ public final class Settings {
          */
         public static final String STATUS_BAR_QUICK_QS_PULLDOWN = "status_bar_quick_qs_pulldown";
 
-        /**
-         * Show or hide clock
-         * 0 - hide
-         * 1 - show (default)
-         * @hide
-         */
-        public static final String STATUSBAR_CLOCK = "statusbar_clock";
-
-        /**
-         * Style of clock
-         * 0 - Left Clock (default)
-         * 1 - Center Clock
-         * 2 - Right Clock
-         * @hide
-         */
-        public static final String STATUSBAR_CLOCK_STYLE = "statusbar_clock_style";
-
-        /**
-         * Whether to show seconds next to clock in status bar
-         * 0 - hide (default)
-         * 1 - show
-         * @hide
-         */
-        public static final String STATUSBAR_CLOCK_SECONDS = "statusbar_clock_seconds";
-
-        /**
-         * AM/PM Style for clock options
-         * 0 - Normal AM/PM
-         * 1 - Small AM/PM
-         * 2 - No AM/PM  (default)
-         * @hide
-         */
-        public static final String STATUSBAR_CLOCK_AM_PM_STYLE = "statusbar_clock_am_pm_style";
-
-        /**
-         * Shows custom date before clock time
-         * 0 - No Date
-         * 1 - Small Date
-         * 2 - Normal Date
-         * @hide
-         */
-        public static final String STATUSBAR_CLOCK_DATE_DISPLAY = "statusbar_clock_date_display";
-
-        /**
-         * Sets the date string style
-         * 0 - Regular style
-         * 1 - Lowercase
-         * 2 - Uppercase
-         * @hide
-         */
-        public static final String STATUSBAR_CLOCK_DATE_STYLE = "statusbar_clock_date_style";
-
-        /**
-         * Stores the java DateFormat string for the date
-         * @hide
-         */
-        public static final String STATUSBAR_CLOCK_DATE_FORMAT = "statusbar_clock_date_format";
-
-        /**
-         * Position of date
-         * 0 - Left of clock
-         * 1 - Right of clock
-         * @hide
-         */
-        public static final String STATUSBAR_CLOCK_DATE_POSITION = "statusbar_clock_date_position";
-
        /**
          * Whether to wake the display when plugging or unplugging the charger
          *
@@ -5979,24 +5913,6 @@ public final class Settings {
          * @hide
          */
         public static final String FORCE_FULLSCREEN_CUTOUT_APPS = "force_full_screen_cutout_apps";
-
-        /**
-         * Whether to auto hide clock
-         * @hide
-         */
-        public static final String STATUS_BAR_CLOCK_AUTO_HIDE = "status_bar_clock_auto_hide";
-
-        /**
-         * Auto hide clock hours duration
-         * @hide
-         */
-        public static final String STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION = "status_bar_clock_auto_hide_hduration";
-
-        /**
-         * Auto hide clock seconds duration
-         * @hide
-         */
-        public static final String STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION = "status_bar_clock_auto_hide_sduration";
 		
 			/**
          * Whether to enable PULSE Edge lights
@@ -6261,14 +6177,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE_VENDOR_HINT);
             PRIVATE_SETTINGS.add(DOUBLE_TAP_SLEEP_LOCKSCREEN);
             PRIVATE_SETTINGS.add(DOUBLE_TAP_SLEEP_GESTURE);
-            PRIVATE_SETTINGS.add(STATUSBAR_CLOCK);
-            PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_STYLE);
-            PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_SECONDS);
-            PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_AM_PM_STYLE);
-            PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_DATE_DISPLAY);
-            PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_DATE_STYLE);
-            PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_DATE_FORMAT);
-            PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_DATE_POSITION);
             PRIVATE_SETTINGS.add(VOLTE_ICON_STYLE);
             PRIVATE_SETTINGS.add(BATTERY_LIGHT_ENABLED);
             PRIVATE_SETTINGS.add(BATTERY_LIGHT_ALLOW_ON_DND);
@@ -6281,9 +6189,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(FLASHLIGHT_ON_CALL_IGNORE_DND);
             PRIVATE_SETTINGS.add(FLASHLIGHT_ON_CALL_RATE);
             PRIVATE_SETTINGS.add(STATUSBAR_ICONS_STYLE);
-            PRIVATE_SETTINGS.add(STATUS_BAR_CLOCK_AUTO_HIDE);
-            PRIVATE_SETTINGS.add(STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION);
-            PRIVATE_SETTINGS.add(STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION);
             PRIVATE_SETTINGS.add(SCREEN_OFF_ANIMATION);
         }
 

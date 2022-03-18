@@ -54,7 +54,6 @@ import com.android.systemui.statusbar.phone.StatusBarContentInsetsProvider;
 import com.android.systemui.statusbar.phone.StatusBarIconController.TintedIconManager;
 import com.android.systemui.statusbar.phone.StatusIconContainer;
 import com.android.systemui.statusbar.policy.Clock;
-import com.android.systemui.statusbar.policy.ClockEQS;
 import com.android.systemui.statusbar.policy.NetworkTraffic;
 import com.android.systemui.statusbar.policy.VariableDateView;
 
@@ -157,8 +156,7 @@ public class QuickStatusBarHeader extends FrameLayout {
         mPrivacyContainer = findViewById(R.id.privacy_container);
 
         mClockContainer = findViewById(R.id.clock_container);
-        mClockView = findViewById(R.id.clock_eqs);
-        mClockView.setQsHeader();
+        mClockView = findViewById(R.id.clock);
         mDatePrivacySeparator = findViewById(R.id.space);
         // Tint for the battery icons are handled in setupHost()
         mBatteryRemainingIcon = findViewById(R.id.batteryRemainingIcon);
@@ -446,7 +444,6 @@ public class QuickStatusBarHeader extends FrameLayout {
         if (mExpanded == expanded) return;
         mExpanded = expanded;
         quickQSPanelController.setExpanded(expanded);
-	mDateView.setVisibility(mClockView.isClockDateEnabled() ? View.INVISIBLE : View.VISIBLE);
         updateEverything();
     }
 

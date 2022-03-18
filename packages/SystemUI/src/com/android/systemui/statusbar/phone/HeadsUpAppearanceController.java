@@ -16,12 +16,8 @@
 
 package com.android.systemui.statusbar.phone;
 
-import android.content.ContentResolver;
-import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.os.UserHandle;
-import android.provider.Settings;
 import android.view.View;
 
 import com.android.internal.annotations.VisibleForTesting;
@@ -232,11 +228,6 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
     }
 
     private void setShown(boolean isShown) {
-        final int clockStyle = Settings.System.getIntForUser(mClockView.getContext().getContentResolver(),
-                Settings.System.STATUSBAR_CLOCK_STYLE, 0, UserHandle.USER_CURRENT);
-        final boolean isClockVisible = Settings.System.getIntForUser(mClockView.getContext().getContentResolver(),
-                Settings.System.STATUSBAR_CLOCK, 1,
-                UserHandle.USER_CURRENT) == 1;
         if (mShown != isShown) {
             mShown = isShown;
             if (isShown) {
@@ -251,11 +242,7 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
                     hide(mOperatorNameView, View.INVISIBLE);
                 }
             } else {
-                if (clockStyle == 0 && isClockVisible) {
-                    show(mClockView);
-                } else {
-                    mClockView.setVisibility(View.GONE);
-                }
+                show(mClockView);
                 if (mCenteredIconView.getVisibility() != View.GONE) {
                     show(mCenteredIconView);
                 }
