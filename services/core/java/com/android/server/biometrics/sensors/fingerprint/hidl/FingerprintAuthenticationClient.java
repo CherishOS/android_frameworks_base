@@ -123,7 +123,7 @@ class FingerprintAuthenticationClient extends AuthenticationClient<IBiometricsFi
         if (authenticated) {
             mState = STATE_STOPPED;
             resetFailedAttempts(getTargetUserId());
-            mSensorOverlays.hide(getSensorId());
+            mSensorOverlays.hide(getFreshDaemon(), getSensorId());
         } else {
             mState = STATE_STARTED_PAUSED_ATTEMPTED;
             final @LockoutTracker.LockoutMode int lockoutMode =
@@ -136,7 +136,7 @@ class FingerprintAuthenticationClient extends AuthenticationClient<IBiometricsFi
                 // Send the error, but do not invoke the FinishCallback yet. Since lockout is not
                 // controlled by the HAL, the framework must stop the sensor before finishing the
                 // client.
-                mSensorOverlays.hide(getSensorId());
+                mSensorOverlays.hide(getFreshDaemon(), getSensorId());
                 onErrorInternal(errorCode, 0 /* vendorCode */, false /* finish */);
                 cancel();
             }
@@ -151,7 +151,7 @@ class FingerprintAuthenticationClient extends AuthenticationClient<IBiometricsFi
             BiometricNotificationUtils.showBadCalibrationNotification(getContext());
         }
 
-        mSensorOverlays.hide(getSensorId());
+        mSensorOverlays.hide(getFreshDaemon(), getSensorId());
     }
 
     private void resetFailedAttempts(int userId) {
@@ -179,7 +179,7 @@ class FingerprintAuthenticationClient extends AuthenticationClient<IBiometricsFi
 
     @Override
     protected void startHalOperation() {
-        mSensorOverlays.show(getSensorId(), getShowOverlayReason(), this);
+        mSensorOverlays.show(getFreshDaemon(), getSensorId(), getShowOverlayReason(), this);
 
         try {
             // GroupId was never used. In fact, groupId is always the same as userId.
@@ -188,14 +188,14 @@ class FingerprintAuthenticationClient extends AuthenticationClient<IBiometricsFi
             Slog.e(TAG, "Remote exception when requesting auth", e);
             onError(BiometricFingerprintConstants.FINGERPRINT_ERROR_HW_UNAVAILABLE,
                     0 /* vendorCode */);
-            mSensorOverlays.hide(getSensorId());
+            mSensorOverlays.hide(getFreshDaemon(), getSensorId());
             mCallback.onClientFinished(this, false /* success */);
         }
     }
 
     @Override
     protected void stopHalOperation() {
-        mSensorOverlays.hide(getSensorId());
+        mSensorOverlays.hide(getFreshDaemon(), getSensorId());
 
         try {
             getFreshDaemon().cancel();
