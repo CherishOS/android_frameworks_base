@@ -57,7 +57,8 @@ public class PixelPropsUtils {
             "com.android.chrome",
             "com.android.vending",
             "com.breel.wallpapers20",
-            "com.nothing.smartcenter"
+            "com.nothing.smartcenter",
+            "com.nhs.online.nhsonline"
     };
 
     private static final String[] customGoogleCameraPackages = {
