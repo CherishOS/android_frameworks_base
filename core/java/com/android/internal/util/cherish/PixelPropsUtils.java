@@ -105,6 +105,11 @@ public class PixelPropsUtils {
             "com.epicgames.portal"
     };
 
+    private static final Map<String, Object> propsToChangeMI10;
+    private static final String[] packagesToChangeMI10 = {
+            "com.mobile.legends"
+    };
+
     private static final String[] packagesToKeep = {
             "com.google.android.dialer",
             "com.google.android.euicc",
@@ -170,6 +175,8 @@ public class PixelPropsUtils {
         propsToChangeOP8P = new HashMap<>();
         propsToChangeOP8P.put("MODEL", "IN2020");
         propsToChangeOP8P.put("MANUFACTURER", "OnePlus");
+        propsToChangeMI10 = new HashMap<>();
+        propsToChangeMI10.put("MODEL", "Mi 10 Pro");
     }
 
     private static boolean isGoogleCameraPackage(String packageName){
@@ -223,6 +230,10 @@ public class PixelPropsUtils {
 
             if (Arrays.asList(packagesToChangeOP8P).contains(packageName)) {
                 propsToChange.putAll(propsToChangeOP8P);
+            }
+
+            if (Arrays.asList(packagesToChangeMI10).contains(packageName)) {
+                propsToChange.putAll(propsToChangeMI10);
             }
 
             if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
