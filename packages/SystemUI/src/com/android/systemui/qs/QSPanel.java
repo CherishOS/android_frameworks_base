@@ -124,7 +124,9 @@ public class QSPanel extends LinearLayout implements Tunable {
     private PageIndicator mFooterPageIndicator;
     private int mContentMarginStart;
     private int mContentMarginEnd;
-    private boolean mUsingHorizontalLayout;
+    private int mMaxColumnsPortrait;
+    private int mMaxColumnsLandscape;
+    protected boolean mUsingHorizontalLayout;
 
     private Record mDetailRecord;
 
@@ -142,6 +144,8 @@ public class QSPanel extends LinearLayout implements Tunable {
                 R.dimen.quick_settings_bottom_margin_media);
         mMediaTopMargin = getResources().getDimensionPixelSize(
                 R.dimen.qs_tile_margin_vertical);
+        mMaxColumnsPortrait = getResources().getInteger(R.integer.qs_panel_num_columns);
+        mMaxColumnsLandscape = getResources().getInteger(R.integer.qs_panel_num_columns_landscape);
         mContext = context;
 
         mAutomaticAvailable = getResources().getBoolean(
@@ -799,7 +803,7 @@ public class QSPanel extends LinearLayout implements Tunable {
             reAttachMediaHost(mediaHostView, horizontal);
             if (needsDynamicRowsAndColumns()) {
                 mTileLayout.setMinRows(horizontal ? 2 : 1);
-                mTileLayout.setMaxColumns(horizontal ? 2 : 4);
+                mTileLayout.setMaxColumns(horizontal ? 4 : mMaxColumnsPortrait);
             }
             updateMargins(mediaHostView);
             if (mHorizontalLinearLayout == null) return;

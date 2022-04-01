@@ -324,8 +324,8 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
 
                     // Icons
                     translateContent(
-                            quickTileView.getIcon(),
-                            tileView.getIcon(),
+                            quickTileView.getIconWithBackground(),
+                            tileView.getIconWithBackground(),
                             view,
                             xOffset,
                             yOffset,
@@ -358,11 +358,11 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
                             translationYBuilder
                     );
 
-                    firstPageBuilder.addFloat(quickTileView.getSecondaryLabel(), "alpha", 0, 1);
+                    firstPageBuilder.addFloat(quickTileView.getLabelContainer(), "alpha", 0, 1);
 
                     mAnimatedQsViews.add(tileView);
                     mAllViews.add(quickTileView);
-                    mAllViews.add(quickTileView.getSecondaryLabel());
+                    mAllViews.add(quickTileView.getLabelContainer());
                 } else if (mFullRows && isIconInAnimatedRow(count)) {
 
                     firstPageBuilder.addFloat(tileView, "translationY", -heightDiff, 0);
@@ -385,8 +385,8 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
                     mOtherTilesExpandAnimator.addView(tileView);
                     tileView.setClipChildren(true);
                     tileView.setClipToPadding(true);
-                    firstPageBuilder.addFloat(tileView.getSecondaryLabel(), "alpha", 0, 1);
-                    mAllViews.add(tileView.getSecondaryLabel());
+                    firstPageBuilder.addFloat(tileView.getLabelContainer(), "alpha", 0, 1);
+                    mAllViews.add(tileView.getLabelContainer());
                 }
 
                 mAllViews.add(tileView);
