@@ -6232,7 +6232,7 @@ public class Notification implements Parcelable
                             ContrastColorUtil.resolveSecondaryColor(
                                     mContext, getColors(p).getBackgroundColor(), mInNightMode),
                             R.dimen.notification_action_disabled_container_alpha);
-                }
+                }                
                 if (isLegacy()) {
                     title = ContrastColorUtil.clearColorSpans(title);
                 } else {
