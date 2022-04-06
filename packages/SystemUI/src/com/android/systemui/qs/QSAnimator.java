@@ -440,7 +440,8 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
         mNonfirstPageAnimator = new TouchAnimator.Builder()
                 .addFloat(mQuickQsPanel, "alpha", 1, 0)
                 .setListener(mNonFirstPageListener)
-                .setEndDelay(.5f)
+                .setInterpolator(Interpolators.ALPHA_OUT)
+                .setEndDelay(0.5f)
                 .build();
         mNonfirstPageDelayedAnimator = new TouchAnimator.Builder()
                 .setStartDelay(.14f)
@@ -467,7 +468,6 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
                     qsBrightness.getMeasuredHeight() * 0.5f, 0);
             mBrightnessAnimator = new Builder()
                     .addFloat(qsBrightness, "alpha", 0, 1)
-                    .addFloat(qsBrightness, "sliderScaleY", 0.3f, 1)
                     .setInterpolator(Interpolators.ALPHA_IN)
                     .setStartDelay(0.3f)
                     .build();
