@@ -334,7 +334,7 @@ public class QSPanel extends LinearLayout implements Tunable {
                 }
                 break;
             case QS_BRIGHTNESS_SLIDER_POSITION:
-                mTop = TunerService.parseInteger(newValue, 0) == 0;
+                mTop = TunerService.parseInteger(newValue, 1) == 0;
                 updateBrightnessSliderPosition();
                 break;
             case QS_SHOW_AUTO_BRIGHTNESS:
