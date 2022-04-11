@@ -111,8 +111,16 @@ public class DarkIconDispatcherImpl implements SysuiDarkIconDispatcher,
     @Override
     public void applyDarkIntensity(float darkIntensity) {
         mDarkIntensity = darkIntensity;
+		int light;int dark;
+		if (BarBackgroundUpdater.mStatusEnabled) {
+			light = BarBackgroundUpdater.parseColorLight;
+			dark = BarBackgroundUpdater.parseColorDark;
+	    } else {
+        	light = mLightModeIconColorSingleTone;
+        	dark = mDarkModeIconColorSingleTone;
+        }
         mIconTint = (int) ArgbEvaluator.getInstance().evaluate(darkIntensity,
-                mLightModeIconColorSingleTone, mDarkModeIconColorSingleTone);
+                light, dark);
         applyIconTint();
     }
 

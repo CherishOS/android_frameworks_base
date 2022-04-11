@@ -262,6 +262,8 @@ import javax.inject.Provider;
 @CentralSurfacesComponent.CentralSurfacesScope
 public final class NotificationPanelViewController extends PanelViewController {
 
+    public static boolean mKeyguardShowingDsb;
+
     private static final boolean DEBUG_LOGCAT = Compile.IS_DEBUG && Log.isLoggable(TAG, Log.DEBUG);
     private static final boolean SPEW_LOGCAT = Compile.IS_DEBUG && Log.isLoggable(TAG, Log.VERBOSE);
     private static final boolean DEBUG_DRAWABLE = false;
@@ -4962,7 +4964,7 @@ public final class NotificationPanelViewController extends PanelViewController {
             boolean goingToFullShade = mStatusBarStateController.goingToFullShade();
             boolean keyguardFadingAway = mKeyguardStateController.isKeyguardFadingAway();
             int oldState = mBarState;
-            boolean keyguardShowing = statusBarState == KEYGUARD;
+            boolean keyguardShowing = mKeyguardShowingDsb = statusBarState == KEYGUARD;
 
             if (mDozeParameters.shouldDelayKeyguardShow()
                     && oldState == StatusBarState.SHADE

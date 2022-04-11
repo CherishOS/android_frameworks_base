@@ -31,10 +31,12 @@ import android.view.View;
 
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
+import android.os.Handler;
 import com.android.settingslib.Utils;
 import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.navigationbar.buttons.ButtonInterface;
+import com.android.systemui.statusbar.phone.BarBackgroundUpdater;
 
 public class NavigationHandle extends View implements ButtonInterface {
 
@@ -47,6 +49,8 @@ public class NavigationHandle extends View implements ButtonInterface {
     private boolean mIsDreaming = false;
     private boolean mIsKeyguard = false;
     private boolean mRequiresInvalidate;
+    private int mOverrideIconColor;
+    public Handler mHandler = new Handler();
 
     private KeyguardUpdateMonitor mUpdateMonitor;
 
@@ -95,6 +99,14 @@ public class NavigationHandle extends View implements ButtonInterface {
 
         mUpdateMonitor = Dependency.get(KeyguardUpdateMonitor.class);
         mUpdateMonitor.registerCallback(mMonitorCallback);
+
+        BarBackgroundUpdater.addListener(new BarBackgroundUpdater.UpdateListener(this) {
+        @Override
+        public void onUpdateNavigationBarIconColor(int previousColor, int color) {
+            mOverrideIconColor = color;
+            updateNavigationHandle();
+            }
+	    });
     }
 
     @Override
@@ -156,7 +168,7 @@ public class NavigationHandle extends View implements ButtonInterface {
 
     @Override
     public void setDarkIntensity(float intensity) {
-        int color = (int) ArgbEvaluator.getInstance().evaluate(intensity, mLightColor, mDarkColor);
+        int color = !BarBackgroundUpdater.mNavigationEnabled ? (int) ArgbEvaluator.getInstance().evaluate(intensity, mLightColor, mDarkColor) : mOverrideIconColor;
         if (mPaint.getColor() != color) {
             mPaint.setColor(color);
             if (getVisibility() == VISIBLE && getAlpha() > 0) {
@@ -166,6 +178,14 @@ public class NavigationHandle extends View implements ButtonInterface {
                 mRequiresInvalidate = true;
             }
         }
+    }
+
+    public void updateNavigationHandle() {
+        mHandler.post(() -> { 
+            if (BarBackgroundUpdater.mNavigationEnabled) {
+                mPaint.setColor(mOverrideIconColor);
+            }
+        });
     }
 
     @Override

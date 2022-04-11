@@ -42,6 +42,10 @@ import android.view.View;
 import com.android.settingslib.Utils;
 import com.android.systemui.R;
 
+import android.os.Handler;
+
+import com.android.systemui.statusbar.phone.BarBackgroundUpdater;
+
 /**
  * Drawable for {@link KeyButtonView}s that supports tinting between two colors, rotation and shows
  * a shadow. AnimatedVectorDrawable will only support tinting from intensities but has no support
@@ -50,31 +54,34 @@ import com.android.systemui.R;
 public class KeyButtonDrawable extends Drawable {
 
     public static final FloatProperty<KeyButtonDrawable> KEY_DRAWABLE_ROTATE =
-        new FloatProperty<KeyButtonDrawable>("KeyButtonRotation") {
-            @Override
-            public void setValue(KeyButtonDrawable drawable, float degree) {
-                drawable.setRotation(degree);
-            }
+            new FloatProperty<KeyButtonDrawable>("KeyButtonRotation") {
+                @Override
+                public void setValue(KeyButtonDrawable drawable, float degree) {
+                    drawable.setRotation(degree);
+                }
 
-            @Override
-            public Float get(KeyButtonDrawable drawable) {
-                return drawable.getRotation();
-            }
-        };
+                @Override
+                public Float get(KeyButtonDrawable drawable) {
+                    return drawable.getRotation();
+                }
+            };
 
     public static final FloatProperty<KeyButtonDrawable> KEY_DRAWABLE_TRANSLATE_Y =
-        new FloatProperty<KeyButtonDrawable>("KeyButtonTranslateY") {
-            @Override
-            public void setValue(KeyButtonDrawable drawable, float y) {
-                drawable.setTranslationY(y);
-            }
+            new FloatProperty<KeyButtonDrawable>("KeyButtonTranslateY") {
+                @Override
+                public void setValue(KeyButtonDrawable drawable, float y) {
+                    drawable.setTranslationY(y);
+                }
 
-            @Override
-            public Float get(KeyButtonDrawable drawable) {
-                return drawable.getTranslationY();
-            }
-        };
+                @Override
+                public Float get(KeyButtonDrawable drawable) {
+                    return drawable.getTranslationY();
+                }
+            };
 
+    private Handler mHandler = new Handler();
+
+    private int mOverrideIconColor;
     private final Paint mIconPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
     private final Paint mShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
     private final ShadowDrawableState mState;
@@ -97,7 +104,7 @@ public class KeyButtonDrawable extends Drawable {
     };
 
     public KeyButtonDrawable(Drawable d, @ColorInt int lightColor, @ColorInt int darkColor,
-            boolean horizontalFlip, Color ovalBackgroundColor) {
+                             boolean horizontalFlip, Color ovalBackgroundColor) {
         this(d, new ShadowDrawableState(lightColor, darkColor,
                 d instanceof AnimatedVectorDrawable, horizontalFlip, ovalBackgroundColor));
     }
@@ -115,12 +122,39 @@ public class KeyButtonDrawable extends Drawable {
             mAnimatedDrawable.setCallback(mAnimatedDrawableCallback);
             setDrawableBounds(mAnimatedDrawable);
         }
+        BarBackgroundUpdater.addListener(new BarBackgroundUpdater.UpdateListener(this) {
+
+            @Override
+            public void onUpdateNavigationBarIconColor(int previousColor, int color) {
+                mOverrideIconColor = color;
+                updateKeyButtonDrawable();
+            }
+        });
+    }
+
+    public void updateKeyButtonDrawable() {
+        mHandler.postAtFrontOfQueue(() -> {
+            if (BarBackgroundUpdater.mNavigationEnabled) {
+                setTint(mOverrideIconColor);
+            }
+        });
     }
 
     public void setDarkIntensity(float intensity) {
         mState.mDarkIntensity = intensity;
+        int light;
+        int dark;
+        int dsbColor;
+        if (!BarBackgroundUpdater.mNavigationEnabled) {
+            light = mState.mLightColor;
+            dark = mState.mDarkColor;
+        } else {
+            dsbColor = mOverrideIconColor;
+            light = dsbColor;
+            dark = dsbColor;
+        }
         final int color = (int) ArgbEvaluator.getInstance()
-                .evaluate(intensity, mState.mLightColor, mState.mDarkColor);
+                .evaluate(intensity, light, dark);
         updateShadowAlpha();
         setColorFilter(new PorterDuffColorFilter(color, Mode.SRC_ATOP));
     }
@@ -315,7 +349,8 @@ public class KeyButtonDrawable extends Drawable {
         return mState.canApplyTheme();
     }
 
-    @ColorInt int getDrawableBackgroundColor() {
+    @ColorInt
+    int getDrawableBackgroundColor() {
         return mState.mOvalBackgroundColor.toArgb();
     }
 
@@ -395,6 +430,7 @@ public class KeyButtonDrawable extends Drawable {
 
     /**
      * Prevent shadow clipping by offsetting the drawable bounds by the shadow and its offset
+     *
      * @param d the drawable to set the bounds
      */
     private void setDrawableBounds(Drawable d) {
@@ -430,7 +466,7 @@ public class KeyButtonDrawable extends Drawable {
         final Color mOvalBackgroundColor;
 
         public ShadowDrawableState(@ColorInt int lightColor, @ColorInt int darkColor,
-                boolean animated, boolean horizontalFlip, Color ovalBackgroundColor) {
+                                   boolean animated, boolean horizontalFlip, Color ovalBackgroundColor) {
             mLightColor = lightColor;
             mDarkColor = darkColor;
             mSupportsAnimation = animated;
@@ -460,11 +496,11 @@ public class KeyButtonDrawable extends Drawable {
      * {@link #create(Context, int, boolean, boolean)}.
      */
     public static KeyButtonDrawable create(Context lightContext, Context darkContext,
-            @DrawableRes int iconResId, boolean hasShadow, Color ovalBackgroundColor) {
+                                           @DrawableRes int iconResId, boolean hasShadow, Color ovalBackgroundColor) {
         return create(lightContext,
-            Utils.getColorAttrDefaultColor(lightContext, R.attr.singleToneColor),
-            Utils.getColorAttrDefaultColor(darkContext, R.attr.singleToneColor),
-            iconResId, hasShadow, ovalBackgroundColor);
+                Utils.getColorAttrDefaultColor(lightContext, R.attr.singleToneColor),
+                Utils.getColorAttrDefaultColor(darkContext, R.attr.singleToneColor),
+                iconResId, hasShadow, ovalBackgroundColor);
     }
 
     /**
@@ -472,8 +508,8 @@ public class KeyButtonDrawable extends Drawable {
      * {@link #create(Context, int, boolean, boolean)}.
      */
     public static KeyButtonDrawable create(Context context, @ColorInt int lightColor,
-            @ColorInt int darkColor, @DrawableRes int iconResId, boolean hasShadow,
-            Color ovalBackgroundColor) {
+                                           @ColorInt int darkColor, @DrawableRes int iconResId, boolean hasShadow,
+                                           Color ovalBackgroundColor) {
         final Resources res = context.getResources();
         boolean isRtl = res.getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
         Drawable d = context.getDrawable(iconResId);
