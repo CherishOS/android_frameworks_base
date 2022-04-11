@@ -6515,6 +6515,12 @@ public final class Settings {
         public static final String POCKET_JUDGE = "pocket_judge";
 		
 		/**
+		 * @hide
+         * Whether to enable taskbar.
+         */
+        public static final String ENABLE_TASKBAR = "enable_taskbar";
+		
+		/**
          * These are all public system settings
          *
          * @hide
