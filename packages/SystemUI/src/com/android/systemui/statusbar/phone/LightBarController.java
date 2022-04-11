@@ -26,6 +26,7 @@ import static com.android.systemui.statusbar.phone.BarTransitions.MODE_TRANSPARE
 import android.annotation.ColorInt;
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.Handler;
 import android.view.InsetsFlags;
 import android.view.ViewDebug;
 import android.view.WindowInsetsController.Appearance;
@@ -56,6 +57,12 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
     private final SysuiDarkIconDispatcher mStatusBarIconController;
     private final BatteryController mBatteryController;
     private BiometricUnlockController mBiometricUnlockController;
+
+    private Handler mHandler = new Handler();
+    private int mNavigationBarOverrideIconColor;
+    private int mPreviousOverrideNavigationBarIconColor;
+    private int mPreviousOverrideStatusBarIconColor;
+    private int mStatusBarOverrideIconColor;
 
     private LightBarTransitionsController mNavigationBarController;
     private @Appearance int mAppearance;
@@ -107,6 +114,37 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
         if (ctx.getDisplayId() == DEFAULT_DISPLAY) {
             dumpManager.registerDumpable(getClass().getSimpleName(), this);
         }
+        BarBackgroundUpdater.addListener(new BarBackgroundUpdater.UpdateListener(this) {
+            public void onUpdateStatusBarIconColor(int previousIconColor, int iconColor) {
+                mPreviousOverrideStatusBarIconColor = previousIconColor;
+                mStatusBarOverrideIconColor = iconColor;
+                updateStatusIcon();
+            }
+
+            public void onUpdateNavigationBarIconColor(int previousIconColor, int iconColor) {
+                mPreviousOverrideNavigationBarIconColor = previousIconColor;
+                mNavigationBarOverrideIconColor = iconColor;
+                updateNavigationIcon();
+            }
+        });
+    }
+
+    public void updateNavigationIcon() {
+        mHandler.post(() -> {
+            if (BarBackgroundUpdater.mNavigationEnabled) {
+                if (mNavigationBarController != null) {
+                    mNavigationBarController.setIconsDark(mNavigationBarOverrideIconColor != -1, animateChange());
+                }
+            }
+        });
+    }
+
+    public void updateStatusIcon() {
+        mHandler.post(() -> {
+            if (BarBackgroundUpdater.mStatusEnabled) {
+                mStatusBarIconController.getTransitionsController().setIconsDark(mStatusBarOverrideIconColor != -1, animateChange());
+            }
+        });
     }
 
     @ColorInt
@@ -226,6 +264,7 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
     }
 
     private void updateStatus() {
+        if (BarBackgroundUpdater.mStatusEnabled) return;
         final int numStacks = mAppearanceRegions.length;
         final ArrayList<Rect> lightBarBounds = new ArrayList<>();
 
@@ -258,7 +297,8 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
 
     private void updateNavigation() {
         if (mNavigationBarController != null
-                && mNavigationBarController.supportsIconTintForNavMode(mNavigationMode)) {
+                && mNavigationBarController.supportsIconTintForNavMode(mNavigationMode)
+                && !BarBackgroundUpdater.mNavigationEnabled) {
             mNavigationBarController.setIconsDark(mNavigationLight, animateChange());
         }
     }

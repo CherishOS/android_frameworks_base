@@ -61,9 +61,15 @@ import com.android.systemui.R;
 import com.android.systemui.recents.OverviewProxyService;
 import com.android.systemui.shared.system.QuickStepContract;
 
+import android.graphics.PorterDuff.Mode;
+import android.os.Handler;
+import com.android.systemui.statusbar.phone.BarBackgroundUpdater;
+
 public class KeyButtonView extends ImageView implements ButtonInterface {
     private static final String TAG = KeyButtonView.class.getSimpleName();
 
+    private Handler mHandler = new Handler();
+    private int mOverrideIconColor;
     private final boolean mPlaySounds;
     private final UiEventLogger mUiEventLogger;
     private int mContentDescriptionRes;
@@ -177,11 +183,29 @@ public class KeyButtonView extends ImageView implements ButtonInterface {
         setBackground(mRipple);
         setWillNotDraw(false);
         forceHasOverlappingRendering(false);
+        BarBackgroundUpdater.addListener(new BarBackgroundUpdater.UpdateListener(this) {
+
+            @Override
+            public void onUpdateNavigationBarIconColor(int previousColor, int color) {
+                mOverrideIconColor = color;
+                updateKeyButtonView();
+            }
+        });
     }
 
     @Override
     public boolean isClickable() {
         return mCode != KEYCODE_UNKNOWN || super.isClickable();
+    }
+
+    public void updateKeyButtonView() {
+        mHandler.post(() -> {
+            Drawable drawable = getDrawable();
+            if (BarBackgroundUpdater.mNavigationEnabled && drawable != null) {
+                setColorFilter(mOverrideIconColor);
+                ((KeyButtonDrawable) drawable).setColorFilter(mOverrideIconColor, Mode.SRC_ATOP);
+            }
+        });
     }
 
     public void setCode(int code) {

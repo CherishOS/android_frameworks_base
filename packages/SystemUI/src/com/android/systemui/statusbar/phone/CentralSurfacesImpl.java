@@ -184,6 +184,7 @@ import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.keyguard.ScreenLifecycle;
 import com.android.systemui.keyguard.WakefulnessLifecycle;
 import com.android.systemui.model.SysUiState;
+import com.android.systemui.nad.ResourceUtils;
 import com.android.systemui.navigationbar.NavigationBarController;
 import com.android.systemui.navigationbar.NavigationBarView;
 import com.android.systemui.plugins.DarkIconDispatcher;
@@ -1264,6 +1265,10 @@ public class CentralSurfacesImpl extends CoreStartable implements
         updateDisplaySize(); // populates mDisplayMetrics
         updateResources();
         updateTheme();
+
+        Context ctx = mContext;
+        String name = ctx.getPackageName();
+        ResourceUtils.init(name, ctx);
 
         inflateStatusBarWindow();
         mNotificationShadeWindowView.setOnTouchListener(getStatusBarWindowTouchListener());
