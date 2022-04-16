@@ -11836,6 +11836,12 @@ public final class Settings {
          * @hide
          */
         public static final String ENABLE_CAMERA_PRIVACY_INDICATOR = "enable_camera_privacy_indicator";
+		
+		/**
+         * Whether to turn on black theme
+         * @hide
+         */
+        public static final String SYSTEM_BLACK_THEME = "system_black_theme";
 
         /**
          * @hide
