@@ -5994,6 +5994,12 @@ public final class Settings {
         public static final String SETTINGS_DASHBOARD_STYLE = "settings_dashboard_style";
 		
 		/**
+         * Settings Layout
+         * @hide
+         */
+        public static final String ALT_SETTINGS_LAYOUT = "alt_settings_layout";
+		
+		/**
          * Whether to show IME space
          * @hide
          */
