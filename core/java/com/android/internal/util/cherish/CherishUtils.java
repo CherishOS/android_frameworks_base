@@ -417,7 +417,6 @@ public static void sendSystemKeyToStatusBar(int keyCode) {
         private NotificationManager mNotificationManager;
         private WifiManager mWifiManager;
         private SensorPrivacyManager mSensorPrivacyManager;
-        private LocationManager mLocationManager;
         private BluetoothAdapter mBluetoothAdapter;
         private int mSubscriptionId;
         private Toast mToast;
@@ -425,9 +424,9 @@ public static void sendSystemKeyToStatusBar(int keyCode) {
         private boolean mSleepModeEnabled;
 
         private static boolean mWifiState;
-        private static boolean mLocationState;
         private static boolean mCellularState;
         private static boolean mBluetoothState;
+        private static int mLocationState;
         private static int mRingerState;
         private static int mZenState;
 
@@ -441,7 +440,6 @@ public static void sendSystemKeyToStatusBar(int keyCode) {
             mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
             mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
             mWifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
-            mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
             mSensorPrivacyManager = (SensorPrivacyManager) mContext.getSystemService(Context.SENSOR_PRIVACY_SERVICE);
             mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             mSubscriptionId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
@@ -496,25 +494,14 @@ public static void sendSystemKeyToStatusBar(int keyCode) {
             }
         }
 
-        private boolean isLocationEnabled() {
-            if (mLocationManager == null) {
-                mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-            }
-            try {
-                return mLocationManager.isLocationEnabledForUser(UserHandle.of(ActivityManager.getCurrentUser()));
-            } catch (Exception e) {
-                return false;
-            }
+        private int getLocationMode() {
+            return Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                    Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_OFF, UserHandle.USER_CURRENT);
         }
 
-        private void setLocationEnabled(boolean enable) {
-            if (mLocationManager == null) {
-                mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-            }
-            try {
-                mLocationManager.setLocationEnabledForUser(enable, UserHandle.of(ActivityManager.getCurrentUser()));
-            } catch (Exception e) {
-            }
+        private void setLocationMode(int mode) {
+            Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                    Settings.Secure.LOCATION_MODE, mode, UserHandle.USER_CURRENT);
         }
 
         private boolean isBluetoothEnabled() {
@@ -633,8 +620,8 @@ public static void sendSystemKeyToStatusBar(int keyCode) {
             final boolean disableLocation = Settings.Secure.getIntForUser(mContext.getContentResolver(),
                     Settings.Secure.SLEEP_MODE_LOCATION_TOGGLE, 1, UserHandle.USER_CURRENT) == 1;
             if (disableLocation) {
-                mLocationState = isLocationEnabled();
-                setLocationEnabled(false);
+                mLocationState = getLocationMode();
+                setLocationMode(Settings.Secure.LOCATION_MODE_OFF);
             }
 
             // Disable Sensors
@@ -693,8 +680,8 @@ public static void sendSystemKeyToStatusBar(int keyCode) {
             // Enable Location
             final boolean disableLocation = Settings.Secure.getIntForUser(mContext.getContentResolver(),
                     Settings.Secure.SLEEP_MODE_LOCATION_TOGGLE, 1, UserHandle.USER_CURRENT) == 1;
-            if (disableLocation && mLocationState != isLocationEnabled()) {
-                setLocationEnabled(mLocationState);
+            if (disableLocation && mLocationState != getLocationMode()) {
+                setLocationMode(mLocationState);
             }
 
             // Enable Sensors
@@ -724,9 +711,9 @@ public static void sendSystemKeyToStatusBar(int keyCode) {
         }
 
         private void addNotification() {
-            final Intent intent = new Intent(SLEEP_MODE_TURN_OFF);
+            Intent intent = new Intent(SLEEP_MODE_TURN_OFF);
             intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND | Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND);
-            final PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             // Display a notification
             Notification.Builder builder = new Notification.Builder(mContext, SystemNotificationChannels.SLEEP)
@@ -739,7 +726,7 @@ public static void sendSystemKeyToStatusBar(int keyCode) {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(false);
 
-            final Notification notification = builder.build();
+            Notification notification = builder.build();
             mNotificationManager.notify(SLEEP_NOTIFICATION_ID, notification);
         }
 
@@ -777,11 +764,11 @@ public static void sendSystemKeyToStatusBar(int keyCode) {
                 super(handler);
             }
 
-        void observe() {
-                mContext.getContentResolver().registerContentObserver(Settings.Secure.getUriFor(
+            void observe() {
+                ContentResolver resolver = mContext.getContentResolver();
+                resolver.registerContentObserver(Settings.Secure.getUriFor(
                         Settings.Secure.SLEEP_MODE_ENABLED), false, this,
                         UserHandle.USER_ALL);
-                update();
             }
 
             @Override
