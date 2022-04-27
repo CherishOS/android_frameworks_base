@@ -100,5 +100,9 @@ public class SystemSettings {
         Settings.System.VOLUME_KEY_CURSOR_CONTROL,
         Settings.System.TORCH_POWER_BUTTON_GESTURE,
         Settings.System.QS_PANEL_STYLE,
+	Settings.System.QS_TILE_LABEL_HIDE,
+        Settings.System.QS_TILE_VERTICAL_LAYOUT,
+        Settings.System.QS_LAYOUT,
+        Settings.System.QQS_LAYOUT
     };
 }
