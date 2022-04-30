@@ -290,7 +290,9 @@ public class CentralSurfacesImpl extends CoreStartable implements
     private static final String LESS_BORING_HEADS_UP =
             "system:" + Settings.System.LESS_BORING_HEADS_UP;
     private static final String STATUS_BAR_BRIGHTNESS_CONTROL =
-            "system:" + Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL;
+            "system:" + Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL;	
+	private static final String QS_TRANSPARENCY =
+            "system:" + Settings.System.QS_TRANSPARENCY;
 
     private static final int MSG_OPEN_SETTINGS_PANEL = 1002;
     private static final int MSG_LAUNCH_TRANSITION_TIMEOUT = 1003;
@@ -974,6 +976,7 @@ public class CentralSurfacesImpl extends CoreStartable implements
 
         mTunerService.addTunable(this, LESS_BORING_HEADS_UP);
         mTunerService.addTunable(this, STATUS_BAR_BRIGHTNESS_CONTROL);
+		mTunerService.addTunable(this, QS_TRANSPARENCY);
 
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
 
@@ -4428,6 +4431,10 @@ public class CentralSurfacesImpl extends CoreStartable implements
                 boolean lessBoringHeadsUp =
                         TunerService.parseIntegerSwitch(newValue, false);
                 mNotificationInterruptStateProvider.setUseLessBoringHeadsUp(lessBoringHeadsUp);
+                break;
+			case QS_TRANSPARENCY:
+                mScrimController.setCustomScrimAlpha(
+                        TunerService.parseInteger(newValue, 100));
                 break;
             default:
                 break;
