@@ -71,6 +71,7 @@ class PrivacyItemController @Inject constructor(
             "com.android.networkstack.tethering",
             "com.android.systemui",
             "com.google.android.settings.intelligence",
+            "com.mediatek.ims",
         )
         val CAMERA_WHITELIST_PKG = arrayOf(
             "org.pixelexperience.faceunlock",
