@@ -856,6 +856,48 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 case 10:
                     resId = R.drawable.ic_volte_vivo;
                     break;
+                case 11:
+                    resId = R.drawable.ic_volte_aris;
+                    break;
+                case 12:
+                    resId = R.drawable.ic_volte_beast;
+                    break;
+                case 13:
+                    resId = R.drawable.ic_volte_ios;
+                    break;
+                case 14:
+                    resId = R.drawable.ic_volte_lr;
+                    break;
+                case 15:
+                    resId = R.drawable.ic_volte_realme;
+                    break;
+                case 16:
+                    resId = R.drawable.ic_volte_typeA;
+                    break;
+                case 17:
+                    resId = R.drawable.ic_volte_typeB;
+                    break;
+                case 18:
+                    resId = R.drawable.ic_volte_typeC;
+                    break;
+                case 19:
+                    resId = R.drawable.ic_volte_typeD;
+                    break;
+                case 20:
+                    resId = R.drawable.ic_volte_typeE;
+                    break;
+                case 21:
+                    resId = R.drawable.ic_volte_vcircle;
+                    break;
+                case 22:
+                    resId = R.drawable.ic_volte_vimeo;
+                    break;
+                case 23:
+                    resId = R.drawable.ic_volte_volit;
+                    break;
+                case 24:
+                    resId = R.drawable.ic_volte_zirco;
+                    break; 
                 // Dynamic
                 case 1:
                 default:
@@ -959,6 +1001,48 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 case 10:
                     resId = R.drawable.ic_volte_vivo;
                     break;
+                case 11:
+                    resId = R.drawable.ic_volte_aris;
+                    break;
+                case 12:
+                    resId = R.drawable.ic_volte_beast;
+                    break;
+                case 13:
+                    resId = R.drawable.ic_volte_ios;
+                    break;
+                case 14:
+                    resId = R.drawable.ic_volte_lr;
+                    break;
+                case 15:
+                    resId = R.drawable.ic_volte_realme;
+                    break;
+                case 16:
+                    resId = R.drawable.ic_volte_typeA;
+                    break;
+                case 17:
+                    resId = R.drawable.ic_volte_typeB;
+                    break;
+                case 18:
+                    resId = R.drawable.ic_volte_typeC;
+                    break;
+                case 19:
+                    resId = R.drawable.ic_volte_typeD;
+                    break;
+                case 20:
+                    resId = R.drawable.ic_volte_typeE;
+                    break;
+                case 21:
+                    resId = R.drawable.ic_volte_vcircle;
+                    break;
+                case 22:
+                    resId = R.drawable.ic_volte_vimeo;
+                    break;
+                case 23:
+                    resId = R.drawable.ic_volte_volit;
+                    break;
+                case 24:
+                    resId = R.drawable.ic_volte_zirco;
+                    break; 
                  // Dynamic
                 case 1:
                 default:
@@ -1044,6 +1128,48 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 case 10:
                     resId = R.drawable.ic_volte_vivo;
                     break;
+                case 11:
+                    resId = R.drawable.ic_volte_aris;
+                    break;
+                case 12:
+                    resId = R.drawable.ic_volte_beast;
+                    break;
+                case 13:
+                    resId = R.drawable.ic_volte_ios;
+                    break;
+                case 14:
+                    resId = R.drawable.ic_volte_lr;
+                    break;
+                case 15:
+                    resId = R.drawable.ic_volte_realme;
+                    break;
+                case 16:
+                    resId = R.drawable.ic_volte_typeA;
+                    break;
+                case 17:
+                    resId = R.drawable.ic_volte_typeB;
+                    break;
+                case 18:
+                    resId = R.drawable.ic_volte_typeC;
+                    break;
+                case 19:
+                    resId = R.drawable.ic_volte_typeD;
+                    break;
+                case 20:
+                    resId = R.drawable.ic_volte_typeE;
+                    break;
+                case 21:
+                    resId = R.drawable.ic_volte_vcircle;
+                    break;
+                case 22:
+                    resId = R.drawable.ic_volte_vimeo;
+                    break;
+                case 23:
+                    resId = R.drawable.ic_volte_volit;
+                    break;
+                case 24:
+                    resId = R.drawable.ic_volte_zirco;
+                    break; 
                 // Dynamic
                 case 1:
                 default:
@@ -1088,6 +1214,48 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 case 10:
                     resId = R.drawable.ic_volte_vivo;
                     break;
+                case 11:
+                    resId = R.drawable.ic_volte_aris;
+                    break;
+                case 12:
+                    resId = R.drawable.ic_volte_beast;
+                    break;
+                case 13:
+                    resId = R.drawable.ic_volte_ios;
+                    break;
+                case 14:
+                    resId = R.drawable.ic_volte_lr;
+                    break;
+                case 15:
+                    resId = R.drawable.ic_volte_realme;
+                    break;
+                case 16:
+                    resId = R.drawable.ic_volte_typeA;
+                    break;
+                case 17:
+                    resId = R.drawable.ic_volte_typeB;
+                    break;
+                case 18:
+                    resId = R.drawable.ic_volte_typeC;
+                    break;
+                case 19:
+                    resId = R.drawable.ic_volte_typeD;
+                    break;
+                case 20:
+                    resId = R.drawable.ic_volte_typeE;
+                    break;
+                case 21:
+                    resId = R.drawable.ic_volte_vcircle;
+                    break;
+                case 22:
+                    resId = R.drawable.ic_volte_vimeo;
+                    break;
+                case 23:
+                    resId = R.drawable.ic_volte_volit;
+                    break;
+                case 24:
+                    resId = R.drawable.ic_volte_zirco;
+                    break; 
                 // Dynamic
                 case 1:
                 default:
@@ -1136,6 +1304,48 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 case 10:
                     resId = R.drawable.ic_volte_vivo;
                     break;
+                case 11:
+                    resId = R.drawable.ic_volte_aris;
+                    break;
+                case 12:
+                    resId = R.drawable.ic_volte_beast;
+                    break;
+                case 13:
+                    resId = R.drawable.ic_volte_ios;
+                    break;
+                case 14:
+                    resId = R.drawable.ic_volte_lr;
+                    break;
+                case 15:
+                    resId = R.drawable.ic_volte_realme;
+                    break;
+                case 16:
+                    resId = R.drawable.ic_volte_typeA;
+                    break;
+                case 17:
+                    resId = R.drawable.ic_volte_typeB;
+                    break;
+                case 18:
+                    resId = R.drawable.ic_volte_typeC;
+                    break;
+                case 19:
+                    resId = R.drawable.ic_volte_typeD;
+                    break;
+                case 20:
+                    resId = R.drawable.ic_volte_typeE;
+                    break;
+                case 21:
+                    resId = R.drawable.ic_volte_vcircle;
+                    break;
+                case 22:
+                    resId = R.drawable.ic_volte_vimeo;
+                    break;
+                case 23:
+                    resId = R.drawable.ic_volte_volit;
+                    break;
+                case 24:
+                    resId = R.drawable.ic_volte_zirco;
+                    break; 
                 // Dynamic
                 case 1:
                 default:
