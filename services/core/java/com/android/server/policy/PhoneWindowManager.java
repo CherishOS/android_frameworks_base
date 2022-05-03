@@ -215,7 +215,7 @@ import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.ScreenshotHelper;
 import com.android.server.ExtconStateObserver;
 import com.android.server.ExtconUEventObserver;
-import com.android.internal.cherish.hardware.LineageHardwareManager;
+import com.android.internal.custom.hardware.LineageHardwareManager;
 import com.android.internal.util.hwkeys.ActionHandler;
 import com.android.internal.util.hwkeys.ActionUtils;
 import com.android.internal.util.ScreenshotHelper;
