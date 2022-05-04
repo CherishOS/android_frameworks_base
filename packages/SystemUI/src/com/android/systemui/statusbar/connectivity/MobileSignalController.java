@@ -644,41 +644,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
 
         int resId = 0;
         if (mCurrentState.imsRegistered && mVolteIcon) {
-            switch(mVoLTEstyle) {
-                // VoLTE
-                case 1:
-                    resId = R.drawable.ic_volte1;
-                    break;
-                // OOS VoLTE
-                case 2:
-                    resId = R.drawable.ic_volte2;
-                    break;
-                // HD Icon
-                case 3:
-                    resId = R.drawable.ic_hd_volte;
-                    break;
-				// ASUS VoLTE
-                case 4:
-                    resId = R.drawable.ic_volte3;
-                    break;
-				// CAF HD Icon
-                case 5:
-                    resId = R.drawable.ic_hd2_volte;
-                    break;
-				// MIUI 11 VoLTE icon
-                case 6:
-                    resId = R.drawable.ic_volte_miui;
-                    break;
-				// EMUI icon
-                case 7:
-                    resId = R.drawable.ic_volte_emui;
-                    break;
- 	        //Vo
-                case 0:
-                default:
-                    resId = R.drawable.ic_volte;
-                    break;
-            }
+            resId = getVolteResId();
         }
 
         int volteId = mShowVolteIcon && isVolteSwitchOn() && mVolteIcon ? resId : 0;
