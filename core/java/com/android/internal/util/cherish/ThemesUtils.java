@@ -41,6 +41,7 @@ public class ThemesUtils {
             "com.custom.systemui.signalbar_f",
             "com.custom.systemui.signalbar_g",
             "com.custom.systemui.signalbar_h",
+            "com.android.systemui.signalbar_j",
             "com.custom.systemui.signalbar_aa",
             "com.custom.systemui.signalbar_ab",
             "com.custom.systemui.signalbar_ac",
@@ -74,5 +75,7 @@ public class ThemesUtils {
             "com.custom.systemui.wifibar_f",
             "com.custom.systemui.wifibar_g",
             "com.custom.systemui.wifibar_h",
+            "com.android.systemui.wifibar_i",
+            "com.android.systemui.wifibar_j",
     };
 }
