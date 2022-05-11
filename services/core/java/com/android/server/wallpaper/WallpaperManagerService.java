@@ -3057,6 +3057,13 @@ public class WallpaperManagerService extends IWallpaperManager.Stub
             ParcelFileDescriptor fd = ParcelFileDescriptor.open(wallpaper.wallpaperFile,
                     MODE_CREATE|MODE_READ_WRITE|MODE_TRUNCATE);
             if (!SELinux.restorecon(wallpaper.wallpaperFile)) {
+                try {
+                    if (fd != null) {
+                        fd.close();
+                    }
+                } catch (IOException e) {
+                    Slog.e(TAG, "Error closing fd");
+                }
                 Slog.w(TAG, "restorecon failed for wallpaper file: " +
                         wallpaper.wallpaperFile.getPath());
                 return null;
