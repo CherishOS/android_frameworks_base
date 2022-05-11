@@ -39,7 +39,6 @@ import com.android.systemui.qs.tiles.DataSwitchTile;
 import com.android.systemui.qs.tiles.DeviceControlsTile;
 import com.android.systemui.qs.tiles.DndTile;
 import com.android.systemui.qs.tiles.FlashlightTile;
-import com.android.systemui.qs.tiles.GamingModeTile;
 import com.android.systemui.qs.tiles.HeadsUpTile;
 import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.InternetTile;
@@ -130,7 +129,6 @@ public class QSFactoryImplGoogle extends QSFactoryImpl {
             Provider<MonoToggleTile> monoToggleTileProvider,
             Provider<SoundSearchTile> soundSearchTileProvider,
             Provider<MusicTile> musicTileProvider,
-            Provider<GamingModeTile> gamingModeTileProvider,
             Provider<PowerShareTile> powerShareTileProvider,
             Provider<CompassTile> compassTileProvider,
             Provider<LiveDisplayTile> liveDisplayTileProvider,
@@ -179,8 +177,7 @@ public class QSFactoryImplGoogle extends QSFactoryImpl {
                 rebootTileProvider,
                 monoToggleTileProvider,
                 soundSearchTileProvider,
-				musicTileProvider,
-                gamingModeTileProvider,
+		musicTileProvider,
                 powerShareTileProvider,
                 compassTileProvider,
                 liveDisplayTileProvider,

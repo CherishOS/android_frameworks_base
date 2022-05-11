@@ -41,7 +41,6 @@ import com.android.systemui.qs.tiles.DataSwitchTile;
 import com.android.systemui.qs.tiles.DeviceControlsTile;
 import com.android.systemui.qs.tiles.DndTile;
 import com.android.systemui.qs.tiles.FlashlightTile;
-import com.android.systemui.qs.tiles.GamingModeTile;
 import com.android.systemui.qs.tiles.HeadsUpTile;
 import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.InternetTile;
@@ -126,7 +125,6 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<MonoToggleTile> mMonoToggleTileProvider;
     private final Provider<MusicTile> mMusicTileProvider;
     private final Provider<SoundSearchTile> mSoundSearchTileProvider;
-    private final Provider<GamingModeTile> mGamingModeTileProvider;
     private final Provider<PowerShareTile> mPowerShareTileProvider;
     private final Provider<CompassTile> mCompassTileProvider;
     private final Provider<LiveDisplayTile> mLiveDisplayTileProvider;
@@ -182,7 +180,6 @@ public class QSFactoryImpl implements QSFactory {
             Provider<MonoToggleTile> monoToggleTileProvider,
             Provider<SoundSearchTile> soundSearchTileProvider,
             Provider<MusicTile> musicTileProvider,
-            Provider<GamingModeTile> gamingModeTileProvider,
             Provider<PowerShareTile> powerShareTileProvider,
             Provider<CompassTile> compassTileProvider,
             Provider<LiveDisplayTile> liveDisplayTileProvider,
@@ -233,7 +230,6 @@ public class QSFactoryImpl implements QSFactory {
         mMonoToggleTileProvider = monoToggleTileProvider;
         mMusicTileProvider = musicTileProvider;
         mSoundSearchTileProvider = soundSearchTileProvider;
-        mGamingModeTileProvider = gamingModeTileProvider;
         mPowerShareTileProvider = powerShareTileProvider;
         mCompassTileProvider = compassTileProvider;
         mLiveDisplayTileProvider = liveDisplayTileProvider;
@@ -335,8 +331,6 @@ public class QSFactoryImpl implements QSFactory {
                 return mSoundSearchTileProvider.get();
             case "music":
                 return mMusicTileProvider.get();
-            case "gamingmode":
-                return mGamingModeTileProvider.get();
             // Additional tiles.
             case "powershare":
                 return mPowerShareTileProvider.get();

@@ -21,18 +21,14 @@ import static com.android.systemui.statusbar.phone.StatusBar.MULTIUSER_DEBUG;
 import android.annotation.Nullable;
 import android.app.KeyguardManager;
 import android.content.ContentResolver;
-import android.app.Notification;
 import android.content.Context;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.service.notification.NotificationListenerService;
-import android.os.UserHandle;
-import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
 import android.service.vr.IVrManager;
 import android.service.vr.IVrStateCallbacks;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.Slog;
 import android.view.View;
@@ -122,8 +118,6 @@ public class StatusBarNotificationPresenter implements NotificationPresenter,
     private TextView mNotificationPanelDebugText;
 
     protected boolean mVrMode;
-    private boolean mGamingModeActive;
-    private boolean mGamingModeNoAlert;
 
     public StatusBarNotificationPresenter(Context context,
             NotificationPanelViewController panel,
@@ -184,11 +178,6 @@ public class StatusBarNotificationPresenter implements NotificationPresenter,
         mKeyguardManager = context.getSystemService(KeyguardManager.class);
         mBarService = IStatusBarService.Stub.asInterface(
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
-
-        mGamingModeActive = Settings.System.getIntForUser(context.getContentResolver(),
-                Settings.System.GAMING_MODE_ACTIVE, 0, UserHandle.USER_CURRENT) != 0;
-        mGamingModeNoAlert = Settings.System.getIntForUser(context.getContentResolver(),
-                Settings.System.GAMING_MODE_DISABLE_NOTIFICATION_ALERT, 1, UserHandle.USER_CURRENT) != 0;
 
         IVrManager vrManager = IVrManager.Stub.asInterface(ServiceManager.getService(
                 Context.VR_SERVICE));
@@ -270,14 +259,6 @@ public class StatusBarNotificationPresenter implements NotificationPresenter,
     @Override
     public void onThemeChanged() {
         onDensityOrFontScaleChanged();
-    }
-
-    public void setGamingModeActive(boolean value) {
-        mGamingModeActive = value;
-    }
-
-    public void setGamingModeNoAlert(boolean value) {
-        mGamingModeNoAlert = value;
     }
 
     private void updateNotificationsOnUiModeChanged() {
@@ -526,14 +507,7 @@ public class StatusBarNotificationPresenter implements NotificationPresenter,
             if (sbn.getIsContentSecure()) {
                 return true;
             }
-            if (isDeviceInVrMode()) {
-                return true;
-            } else {
-                final Notification notification = sbn.getNotification();
-                return (mGamingModeActive && mGamingModeNoAlert &&
-                    !TextUtils.equals(notification.category, Notification.CATEGORY_CALL) &&
-                    !TextUtils.equals(notification.category, Notification.CATEGORY_ALARM));
-            }
+            return isDeviceInVrMode();
         }
 
         @Override
