@@ -56,6 +56,8 @@ import android.annotation.Nullable;
 import android.app.PendingIntent;
 import android.app.StatusBarManager;
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.content.Context;
 import android.database.ContentObserver;
@@ -76,6 +78,7 @@ import android.os.UserHandle;
 import android.os.UserManager;
 import android.os.VibrationEffect;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.transition.ChangeBounds;
 import android.transition.Transition;
 import android.transition.TransitionListenerAdapter;
@@ -5263,10 +5266,14 @@ public final class NotificationPanelViewController implements Dumpable {
                 } else {
                     icon = mView.getContext().getPackageManager().getApplicationIcon(pkgname);
                 }
-            } catch (android.content.pm.PackageManager.NameNotFoundException e) {
+            } catch (NameNotFoundException e) {
+                return;
             }
-            if (row.getEntry().getSbn().getNotification().extras.getString("android.text") != null) {
-                reTickerContent = row.getEntry().getSbn().getNotification().extras.getString("android.text");
+            String content = row.getEntry().getSbn().getNotification().extras.getString("android.text");
+            if (!TextUtils.isEmpty(content)) {
+                reTickerContent = content;
+            } else {
+                return;
             }
             String reTickerAppName = row.getEntry().getSbn().getNotification().extras.getString("android.title");
             PendingIntent reTickerIntent = row.getEntry().getSbn().getNotification().contentIntent;
@@ -5278,9 +5285,9 @@ public final class NotificationPanelViewController implements Dumpable {
                 col = row.getEntry().getSbn().getNotification().color;
                 mAppExceptions = mView.getContext().getResources().getStringArray(R.array.app_exceptions);
                 //check if we need to override the color
-                for (int i=0; i < mAppExceptions.length; i++) {
+                for (int i = 0; i < mAppExceptions.length; i++) {
                     if (mAppExceptions[i].contains(pkgname)) {
-                        col = Color.parseColor(mAppExceptions[i+=1]);
+                        col = Color.parseColor(mAppExceptions[i += 1]);
                     }
                 }
                 dw.setTint(col);
