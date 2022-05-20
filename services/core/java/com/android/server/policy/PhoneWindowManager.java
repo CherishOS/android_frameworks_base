@@ -688,7 +688,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int MSG_HANDLE_ALL_APPS = 22;
     private static final int MSG_LAUNCH_ASSIST = 23;
     private static final int MSG_RINGER_TOGGLE_CHORD = 24;
-    private static final int MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK = 29;
+    private static final int MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK = 25;
 
     private SwipeToScreenshotListener mSwipeToScreenshot;
     private boolean mSwipeToScreenshotEnabled = false;
