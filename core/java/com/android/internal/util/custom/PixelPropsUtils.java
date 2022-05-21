@@ -17,7 +17,6 @@
  */
 package com.android.internal.util.custom;
 
-import android.app.Application;
 import android.os.Build;
 import android.os.SystemProperties;
 import android.util.Log;
@@ -33,7 +32,8 @@ public class PixelPropsUtils {
 
     public static final String PACKAGE_GMS = "com.google.android.gms";
     public static final String PACKAGE_NETFLIX = "com.netflix.mediaclient";
-    private static final String DEVICE = "ro.product.device";
+    public static final String PACKAGE_SETTINGS_SERVICES = "com.google.android.settings.intelligence";
+    private static final String DEVICE = "ro.cherish.device";
     private static final String TAG = PixelPropsUtils.class.getSimpleName();
     private static final boolean DEBUG = false;
 
@@ -47,18 +47,19 @@ public class PixelPropsUtils {
     private static final Map<String, Object> propsToChangeMI11;
     private static final Map<String, ArrayList<String>> propsToKeep;
 
+    // Packages to Spoof as Pixel 6 Pro
     private static final String[] packagesToChangePixel6 = {
             "com.google.android.apps.customization.pixel",
             "com.google.android.apps.nexuslauncher",
             "com.google.android.apps.subscriptions.red",
             "com.google.android.apps.wallpaper",
             "com.google.android.apps.wallpaper.pixel",
-            "com.google.android.settings.intelligence",
             "com.google.pixel.dynamicwallpapers",
             "com.google.pixel.livewallpaper",
             PACKAGE_GMS
     };
-
+	
+    // Packages to Spoof as Pixel XL
     private static final String[] packagesToChangePixelXL = {
             "com.samsung.accessory",
             "com.samsung.accessory.fridaymgr",
@@ -72,13 +73,14 @@ public class PixelPropsUtils {
             "com.samsung.android.waterplugin"
     };
 
+    // Packages to Spoof as Pixel 6 Pro
     private static final String[] extraPackagesToChange = {
             "com.android.chrome",
-            "com.android.vending",
             "com.breel.wallpapers20",
             "com.nhs.online.nhsonline"
     };
 
+    // Packages to Keep with original device
     private static final String[] packagesToKeep = {
             "com.google.android.GoogleCamera",
             "com.google.android.GoogleCamera.Cameight",
@@ -100,6 +102,7 @@ public class PixelPropsUtils {
             "com.google.ar.core"
     };
 
+    // Packages to Spoof as Streaming
     private static final String[] streamingPackagesToChange = {
             "com.amazon.avod.thirdpartyclient",
             "com.disney.disneyplus",
@@ -107,12 +110,14 @@ public class PixelPropsUtils {
             "in.startv.hotstar"
     };
 
+    // Packages to Spoof as ROG 1
     private static final String[] packagesToChangeROG1 = {
             "com.dts.freefireth",
             "com.dts.freefiremax",
             "com.madfingergames.legends"
     };
 
+    // Packages to Spoof as Pixel 5
     private static final String[] packagesToChangeXP5 = {
             "com.activision.callofduty.shooter",
             "com.tencent.tmgp.kr.codm",
@@ -120,6 +125,7 @@ public class PixelPropsUtils {
             "com.vng.codmvn"
     };
 
+    // Packages to Spoof as OnePlus 8 Pro
     private static final String[] packagesToChangeOP8P = {
             "com.riotgames.league.wildrift",
             "com.riotgames.league.wildrifttw",
@@ -127,6 +133,7 @@ public class PixelPropsUtils {
             "com.netease.lztgglobal"
     };
 
+    // Packages to Spoof as Mi 11
     private static final String[] packagesToChangeMI11 = {
             "com.mobile.legends",
             "com.pubg.imobile",
@@ -161,7 +168,7 @@ public class PixelPropsUtils {
 
     static {
         propsToKeep = new HashMap<>();
-        propsToKeep.put("com.google.android.settings.intelligence", new ArrayList<>(Collections.singletonList("FINGERPRINT")));
+        propsToKeep.put(PACKAGE_SETTINGS_SERVICES, new ArrayList<>(Collections.singletonList("FINGERPRINT")));
         propsToChange = new HashMap<>();
         propsToChangePixel6 = new HashMap<>();
         propsToChangePixel6.put("BRAND", "google");
@@ -200,25 +207,12 @@ public class PixelPropsUtils {
         propsToChangeMI11.put("MODEL", "M2102K1G");
     }
 
-    public static void setProps(Application app) {
-        String packageName = app.getPackageName();
+    public static void setProps(String packageName) {
         if (packageName == null) {
             return;
         }
         if (Arrays.asList(packagesToKeep).contains(packageName)) {
             return;
-        }
-        if (Arrays.asList(pixelCodenames).contains(SystemProperties.get(DEVICE))) {
-            if (packageName.equals(PACKAGE_GMS) && app.getProcessName().equals("com.google.android.gms.unstable")) {
-                setPropValue("MODEL", SystemProperties.get("ro.product.model") + " ");
-                setPropValue("PRODUCT", SystemProperties.get(DEVICE));
-                sIsGms = true;
-            }
-            return;
-        }
-        if (packageName.equals(PACKAGE_GMS) && app.getProcessName().equals("com.google.android.gms.unstable")) {
-            setPropValue("MODEL", "Pixel 5" + " ");
-            sIsGms = true;
         }
         if (packageName.startsWith("com.google.")
                 || Arrays.asList(extraPackagesToChange).contains(packageName)) {
@@ -255,8 +249,11 @@ public class PixelPropsUtils {
                 if (DEBUG) Log.d(TAG, "Defining " + key + " prop for: " + packageName);
                 setPropValue(key, value);
             }
+            if (packageName.equals(PACKAGE_GMS)) {
+                sIsGms = true;
+            }
             // Set proper indexing fingerprint
-            if (packageName.equals("com.google.android.settings.intelligence")) {
+            if (packageName.equals(PACKAGE_SETTINGS_SERVICES)) {
                 setPropValue("FINGERPRINT", Build.VERSION.INCREMENTAL);
             }
         } else {
