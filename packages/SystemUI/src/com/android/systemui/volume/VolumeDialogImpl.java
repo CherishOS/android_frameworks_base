@@ -1293,10 +1293,14 @@ public class VolumeDialogImpl implements VolumeDialog,
             mExpandRows.setOnClickListener(v -> {
                 mExpanded = !mExpanded;
                 updateRowsH(mDefaultRow, true);
-                if (!mExpanded) {
+                if (!mExpanded && !mVolumePanelOnLeft) {
                     rotateIcon();
-                } else {
+                } else if (!mExpanded && mVolumePanelOnLeft) {
                     rotateIconReverse();
+                } else if (mExpanded && mVolumePanelOnLeft) {
+                   rotateIcon();
+                } else {
+                   rotateIconReverse();
                 }
             });
             mExpandRows.setOnLongClickListener(new View.OnLongClickListener() {
