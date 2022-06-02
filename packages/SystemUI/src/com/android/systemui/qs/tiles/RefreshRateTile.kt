@@ -163,7 +163,7 @@ class RefreshRateTile @Inject constructor(
             updateSettings(newMinRate, newMinRate)
         } else if (minRate == supportedRefreshRates.last()) {
             // Peak mode, cycle to auto mode
-            updateSettings(NO_CONFIG, supportedRefreshRates.last())
+            updateSettings(DEFAULT_REFRESH_RATE, supportedRefreshRates.last())
         }
     }
 
