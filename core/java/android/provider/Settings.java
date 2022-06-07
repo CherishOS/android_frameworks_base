@@ -6068,6 +6068,12 @@ public final class Settings {
          */
         public static final String HIGH_TOUCH_SENSITIVITY_ENABLE =
                 "high_touch_sensitivity_enable";
+				
+		/**
+         * boolean value. toggles narrow navigation bar in gestural nav mode
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_GESTURAL_NARROW = "navigation_bar_gestural_narrow";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
