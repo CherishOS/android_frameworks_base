@@ -810,10 +810,9 @@ public class NavigationBarView extends FrameLayout implements
 
         updateRecentsIcon();
 
-        final boolean mShowIMESpace = getShowIMESpace();
         boolean showCursorKeys = mShowCursorKeys
                 && (mNavigationIconHints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0;
-        final boolean showImeSwitcher = mImeVisible && mShowIMESpace &&
+        final boolean showImeSwitcher = mImeVisible &&
                 // IME switcher can be shown while gestural mode is enabled because
                 // the cursor keys must be hidden anyway
                 (isGesturalMode(mNavBarMode) ||
@@ -845,8 +844,8 @@ public class NavigationBarView extends FrameLayout implements
         boolean disableHomeHandle = disableRecent
                 && ((mDisabledFlags & View.STATUS_BAR_DISABLE_HOME) != 0);
 
-        boolean disableBack = (isGesturalMode(mNavBarMode) && !mShowIMESpace) || (!useAltBack && (mEdgeBackGestureHandler.isHandlingGestures()
-                || ((mDisabledFlags & View.STATUS_BAR_DISABLE_BACK) != 0)));
+        boolean disableBack = !useAltBack && (mEdgeBackGestureHandler.isHandlingGestures()
+                || ((mDisabledFlags & View.STATUS_BAR_DISABLE_BACK) != 0));
 
         // When screen pinning, don't hide back and home when connected service or back and
         // recents buttons when disconnected from launcher service in screen pinning mode,
@@ -1572,12 +1571,6 @@ public class NavigationBarView extends FrameLayout implements
         } else {
             mRegionSamplingHelper.stop();
         }
-    }
-	
-	private boolean getShowIMESpace() {
-        return Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.NAVIGATION_BAR_IME_SPACE, 1,
-                UserHandle.USER_CURRENT) == 1;
     }
 
     private CustomSettingsObserver mCustomSettingsObserver = new CustomSettingsObserver();
