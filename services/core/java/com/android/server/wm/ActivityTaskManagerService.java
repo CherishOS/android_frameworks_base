@@ -284,6 +284,7 @@ import com.android.server.sdksandbox.SdkSandboxManagerLocal;
 import com.android.server.statusbar.StatusBarManagerInternal;
 import com.android.server.uri.NeededUriGrants;
 import com.android.server.uri.UriGrantsManagerInternal;
+import com.android.server.usage.AppStandbyInternal;
 import com.android.server.wallpaper.WallpaperManagerInternal;
 import com.android.wm.shell.Flags;
 
@@ -803,6 +804,7 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
     private int mDeviceOwnerUid = Process.INVALID_UID;
 
     private Set<Integer> mProfileOwnerUids = new ArraySet<Integer>();
+    public AppStandbyInternal mAppStandbyInternal;
 
     private CutoutFullscreenController mCutoutFullscreenController;
 
@@ -889,6 +891,7 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
             // TODO(b/258792202) Cleanup once ASM is ready to launch
             ActivitySecurityModelFeatureFlags.initialize(mContext.getMainExecutor(), pm);
         }
+        mAppStandbyInternal = LocalServices.getService(AppStandbyInternal.class);
     }
 
     public void onInitPowerManagement() {
