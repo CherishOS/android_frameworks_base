@@ -99,8 +99,6 @@ public class SystemSettings {
         Settings.System.AOD_NOTIFICATION_PULSE_TIMEOUT,
         Settings.System.NOTIFICATION_PULSE_DURATION,
         Settings.System.NOTIFICATION_HEADERS,
-        Settings.System.QS_FOOTER_TEXT_SHOW,
-        Settings.System.QS_FOOTER_TEXT_STRING,
         Settings.System.ACCELEROMETER_ROTATION_ANGLES,
         Settings.System.QS_SHOW_BATTERY_ESTIMATE,
         Settings.System.ENABLE_FLOATING_ROTATION_BUTTON,

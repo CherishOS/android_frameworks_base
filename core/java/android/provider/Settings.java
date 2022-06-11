@@ -6151,18 +6151,6 @@ public final class Settings {
         public static final String PULSE_LIGHT_LAYOUT_STYLE = "pulse_light_layout_style";
 		
 		/**
-         * Whether to show qs footer text
-         * @hide
-         */
-        public static final String QS_FOOTER_TEXT_SHOW = "qs_footer_text_show";
-		
-		/**
-         * QS footer text
-         * @hide
-         */
-        public static final String QS_FOOTER_TEXT_STRING = "qs_footer_text_string";
-		
-		/**
          * Whether to show battery estimates in QS
          * @hide
          */
