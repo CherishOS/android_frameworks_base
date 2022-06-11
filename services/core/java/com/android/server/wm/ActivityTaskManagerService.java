@@ -263,6 +263,7 @@ import com.android.server.policy.PermissionPolicyInternal;
 import com.android.server.statusbar.StatusBarManagerInternal;
 import com.android.server.uri.NeededUriGrants;
 import com.android.server.uri.UriGrantsManagerInternal;
+import com.android.server.usage.AppStandbyInternal;
 
 import com.android.internal.util.custom.cutout.CutoutFullscreenController;
 
@@ -780,6 +781,8 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
 
     private CutoutFullscreenController mCutoutFullscreenController;
 
+    public AppStandbyInternal mAppStandbyInternal;
+
     private final class SettingObserver extends ContentObserver {
         private final Uri mFontScaleUri = Settings.System.getUriFor(FONT_SCALE);
         private final Uri mHideErrorDialogsUri = Settings.Global.getUriFor(HIDE_ERROR_DIALOGS);
@@ -861,6 +864,7 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
             mTaskSupervisor.onSystemReady();
             mActivityClientController.onSystemReady();
         }
+        mAppStandbyInternal = LocalServices.getService(AppStandbyInternal.class);
     }
 
     public void onInitPowerManagement() {
