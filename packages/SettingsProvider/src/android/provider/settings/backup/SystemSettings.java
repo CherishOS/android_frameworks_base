@@ -90,6 +90,10 @@ public class SystemSettings {
         Settings.System.VOLUME_DIALOG_TIMEOUT,
         Settings.System.FULLSCREEN_GESTURES,
         Settings.System.ARTWORK_MEDIA_BACKGROUND,
+        Settings.System.ARTWORK_MEDIA_BACKGROUND_ENABLE_BLUR,
+        Settings.System.ARTWORK_MEDIA_BACKGROUND_BLUR_RADIUS,
+        Settings.System.ARTWORK_MEDIA_BACKGROUND_FADE_PERCENT,
+        Settings.System.ARTWORK_MEDIA_BACKGROUND_ALPHA,
         Settings.System.DOZE_ON_CHARGE,
         Settings.System.NOTIFICATION_PULSE,
         Settings.System.AOD_NOTIFICATION_PULSE,
@@ -110,6 +114,5 @@ public class SystemSettings {
         Settings.System.RINGTONE_VIBRATION_PATTERN,
         Settings.System.CUSTOM_RINGTONE_VIBRATION_PATTERN,
         Settings.System.BATTERY_LEVEL_COLORS,
-        Settings.System.ARTWORK_MEDIA_BACKGROUND_ALPHA,
     };
 }

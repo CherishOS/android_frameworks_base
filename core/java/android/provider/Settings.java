@@ -5535,6 +5535,24 @@ public final class Settings {
         public static final String ARTWORK_MEDIA_BACKGROUND_ALPHA = "artwork_media_background_alpha";
 		
 		/**
+         * Whether to enable artwork blur
+         * @hide
+         */
+        public static final String ARTWORK_MEDIA_BACKGROUND_ENABLE_BLUR = "artwork_media_background_enable_blur";
+
+        /**
+         * Adjust blur radius for background media
+         * @hide
+         */
+        public static final String ARTWORK_MEDIA_BACKGROUND_BLUR_RADIUS = "artwork_media_background_blur_radius";
+
+        /**
+         * Adjust fade filter percent for background media
+         * @hide
+         */
+        public static final String ARTWORK_MEDIA_BACKGROUND_FADE_PERCENT = "artwork_media_background_fade_percent";
+		
+		/**
          * Whether to blink flashlight for incoming calls
          * 0 = Disabled (Default)
          * 1 = Blink flashlight only in Ringer mode
