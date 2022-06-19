@@ -57,8 +57,9 @@ import java.util.List;
 public class QSFooterView extends FrameLayout {
     private PageIndicator mPageIndicator;
     private TextView mUsageText;
-    private View mEditButton;
     private View mEditLayout;
+    private View mEditButton;
+    private View mSpace;
 
     @Nullable
     protected TouchAnimator mFooterAnimator;
@@ -66,8 +67,6 @@ public class QSFooterView extends FrameLayout {
     private boolean mQsDisabled;
     private boolean mExpanded;
     private float mExpansionAmount;
-
-    private boolean mShowEditIcon;
 
     @Nullable
     private OnClickListener mExpandClickListener;
@@ -77,6 +76,7 @@ public class QSFooterView extends FrameLayout {
     private WifiManager mWifiManager;
     private SubscriptionManager mSubManager;
     private boolean mShouldShowDataUsage;
+    private boolean mShowEditIcon;
 
     public QSFooterView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -93,6 +93,7 @@ public class QSFooterView extends FrameLayout {
         mUsageText = findViewById(R.id.build);
         mEditButton = findViewById(android.R.id.edit);
         mEditLayout = findViewById(R.id.edit_layout);
+        mSpace = findViewById(R.id.spacer);
 
         updateResources();
         setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
@@ -232,32 +233,27 @@ public class QSFooterView extends FrameLayout {
     void updateEverything() {
         post(() -> {
             updateVisibilities();
-            updateClickabilities();
             setClickable(false);
         });
     }
 
-    private void updateClickabilities() {
-    }
-
     private void updateVisibilities() {
-		mShouldShowDataUsage = Settings.System.getIntForUser(mContext.getContentResolver(),
+        mShouldShowDataUsage = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.QS_FOOTER_DATA_USAGE, 0,
                 UserHandle.USER_CURRENT) == 1;
-
-        mUsageText.setVisibility(mShouldShowDataUsage && mExpanded ? View.VISIBLE : View.GONE);
-        if ((mExpanded) && mShouldShowDataUsage) setUsageText();
         mShowEditIcon = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.QS_FOOTER_SHOW_EDIT, 1,
                 UserHandle.USER_CURRENT) == 1;
 
-        if (mExpanded && mShouldShowBuildText) {
-            mBuildText.setVisibility(View.VISIBLE);
-            mEditButton.setVisibility(mShowEditIcon ? View.VISIBLE : View.INVISIBLE);
-            mEditLayout.setVisibility(mShowEditIcon ? View.VISIBLE : View.INVISIBLE);
-            setBuildText();
+        if (mExpanded && mShouldShowDataUsage) {
+            mUsageText.setVisibility(View.VISIBLE);
+            mSpace.setVisibility(View.GONE);
+            mEditButton.setVisibility(mShowEditIcon ? View.VISIBLE : View.GONE);
+            mEditLayout.setVisibility(mShowEditIcon ? View.VISIBLE : View.GONE);
+            setUsageText();
         } else {
-            mBuildText.setVisibility(View.INVISIBLE);
+            mUsageText.setVisibility(View.GONE);
+            mSpace.setVisibility(View.INVISIBLE);
             mEditButton.setVisibility(mShowEditIcon ? View.VISIBLE : View.INVISIBLE);
             mEditLayout.setVisibility(mShowEditIcon ? View.VISIBLE : View.INVISIBLE);
         }
