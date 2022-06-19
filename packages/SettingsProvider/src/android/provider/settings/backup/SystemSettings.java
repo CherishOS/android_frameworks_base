@@ -99,5 +99,6 @@ public class SystemSettings {
         Settings.System.CUSTOM_NOTIFICATION_VIBRATION_PATTERN,
         Settings.System.VOLUME_KEY_CURSOR_CONTROL,
         Settings.System.TORCH_POWER_BUTTON_GESTURE,
+        Settings.System.QS_PANEL_STYLE,
     };
 }
