@@ -98,5 +98,6 @@ public class SystemSettings {
         Settings.System.VOLUME_KEY_CURSOR_CONTROL,
         Settings.System.TORCH_POWER_BUTTON_GESTURE,
         Settings.System.ENABLE_RIPPLE_EFFECT,
+        Settings.System.QS_PANEL_STYLE,
     };
 }
