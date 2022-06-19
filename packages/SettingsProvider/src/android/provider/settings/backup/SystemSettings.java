@@ -103,5 +103,7 @@ public class SystemSettings {
         Settings.System.AMBIENT_WAKE_GESTURES,
         Settings.System.NETWORK_TRAFFIC_STATE,
         Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD,
+        Settings.System.TORCH_POWER_BUTTON_GESTURE,
+        Settings.System.QS_PANEL_STYLE,
     };
 }
