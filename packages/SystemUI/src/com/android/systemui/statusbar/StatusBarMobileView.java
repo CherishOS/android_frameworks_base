@@ -113,6 +113,12 @@ public class StatusBarMobileView extends BaseStatusBarFrameLayout implements Dar
         outRect.top += translationY;
         outRect.bottom += translationY;
     }
+	
+	@Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        mMobileGroup.measure(widthMeasureSpec, heightMeasureSpec);
+        setMeasuredDimension(mMobileGroup.getMeasuredWidth(), mMobileGroup.getMeasuredHeight());
+    }
 
     private void init() {
         mDualToneHandler = new DualToneHandler(getContext());
