@@ -249,5 +249,6 @@ public class SystemSettingsValidators {
         VALIDATORS.put(System.INCREASING_RING_RAMP_UP_TIME, new InclusiveFloatRangeValidator(5, 60));
         VALIDATORS.put(System.AMBIENT_WAKE_GESTURES, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.SWIPE_TO_SCREENSHOT, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.QS_PANEL_STYLE, NON_NEGATIVE_INTEGER_VALIDATOR);
     }
 }

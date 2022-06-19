@@ -108,5 +108,6 @@ public class SystemSettings {
         Settings.System.NOTIFICATION_COOLDOWN_ALL,
         Settings.System.NOTIFICATION_COOLDOWN_VIBRATE_UNLOCKED,
         Settings.System.AMBIENT_WAKE_GESTURES,
+        Settings.System.QS_PANEL_STYLE,
     };
 }
