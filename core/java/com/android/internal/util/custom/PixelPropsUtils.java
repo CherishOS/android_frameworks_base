@@ -50,13 +50,6 @@ public class PixelPropsUtils {
 
     // Packages to Spoof as Pixel 6 Pro
     private static final String[] packagesToChangePixel6 = {
-            "com.google.android.apps.customization.pixel",
-            "com.google.android.apps.nexuslauncher",
-            "com.google.android.apps.subscriptions.red",
-            "com.google.android.apps.wallpaper",
-            "com.google.android.apps.wallpaper.pixel",
-            "com.google.pixel.dynamicwallpapers",
-            "com.google.pixel.livewallpaper",
             PACKAGE_GMS
     };
 	
@@ -128,6 +121,12 @@ public class PixelPropsUtils {
 
     // Packages to Spoof as OnePlus 8 Pro
     private static final String[] packagesToChangeOP8P = {
+            "com.tencent.ig",
+            "com.pubg.imobile",
+            "com.pubg.krmobile",
+            "com.vng.pubgmobile",
+            "com.rekoo.pubgm",
+            "com.tencent.tmgp.pubgmhd",
             "com.riotgames.league.wildrift",
             "com.riotgames.league.wildrifttw",
             "com.riotgames.league.wildriftvn",
@@ -137,13 +136,7 @@ public class PixelPropsUtils {
     // Packages to Spoof as Mi 11
     private static final String[] packagesToChangeMI11 = {
             "com.mobile.legends",
-            "com.pubg.imobile",
-            "com.pubg.krmobile",
-            "com.rekoo.pubgm",
-            "com.tencent.ig",
-            "com.tencent.tmgp.pubgmhd",
-            "com.tencent.tmgp.sgame",
-            "com.vng.pubgmobile"
+            "com.tencent.tmgp.sgame"
     };
 
     // Codenames of devices using Star spoofing for apps
