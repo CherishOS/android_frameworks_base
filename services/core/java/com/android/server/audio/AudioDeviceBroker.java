@@ -735,7 +735,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
                     .set(MediaMetrics.Property.STATUS, data.mInfo.getProfile())
                     .record();
             synchronized (mDeviceStateLock) {
-                postBluetoothA2dpDeviceConfigChange(data.mNewDevice);
+                if (mDeviceInventory.isA2dpDeviceConnected(data.mPreviousDevice)) {
+                    postBluetoothA2dpDeviceConfigChange(data.mNewDevice);
+                } else {
+                    btMediaMetricRecord(data.mNewDevice, MediaMetrics.Value.CONNECTED, data);
+                    sendLMsgNoDelay(MSG_L_BT_ACTIVE_DEVICE_CHANGE_EXT, SENDMSG_QUEUE,
+                            createBtDeviceInfo(data, data.mNewDevice,
+                                    BluetoothProfile.STATE_CONNECTED));
+                }
             }
         } else {
             synchronized (mDeviceStateLock) {
