@@ -18,6 +18,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -130,7 +131,13 @@ public class TileAdapter extends RecyclerView.Adapter<Holder> implements TileSta
         mMinNumTiles = context.getResources().getInteger(R.integer.quick_settings_min_num_tiles);
         mNumColumns = context.getResources().getInteger(NUM_COLUMNS_ID);
         //mAccessibilityDelegate = new TileAdapterDelegate();
-        mNumColumns = OmniUtils.getQSColumnsCount(mContext, mNumColumns);
+    	boolean isPortrait = context.getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_PORTRAIT;
+	if (isPortrait) {
+        mNumColumns = OmniUtils.getQSColumnsPortrait(mContext, mNumColumns);
+        } else {
+        mNumColumns = OmniUtils.getQSColumnsLandscape(mContext, mNumColumns);
+        }
         mSizeLookup.setSpanIndexCacheEnabled(true);
     }
 
@@ -151,7 +158,13 @@ public class TileAdapter extends RecyclerView.Adapter<Holder> implements TileSta
      */
     public boolean updateNumColumns() {
         int numColumns = mContext.getResources().getInteger(NUM_COLUMNS_ID);
-        numColumns = OmniUtils.getQSColumnsCount(mContext, numColumns);
+    	boolean isPortrait = mContext.getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_PORTRAIT;
+	if (isPortrait) {
+        mNumColumns = OmniUtils.getQSColumnsPortrait(mContext, mNumColumns);
+        } else {
+        mNumColumns = OmniUtils.getQSColumnsLandscape(mContext, mNumColumns);
+        }
         if (numColumns != mNumColumns) {
             mNumColumns = numColumns;
             return true;
