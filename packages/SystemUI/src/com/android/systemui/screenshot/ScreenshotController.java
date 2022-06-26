@@ -91,6 +91,7 @@ import android.window.WindowContext;
 import com.android.internal.app.ChooserActivity;
 import com.android.internal.logging.UiEventLogger;
 import com.android.internal.policy.PhoneWindow;
+import com.android.internal.statusbar.IStatusBarService;
 import com.android.settingslib.applications.InterestingConfigChanges;
 import com.android.systemui.R;
 import com.android.systemui.dagger.qualifiers.Main;
@@ -267,6 +268,7 @@ public class ScreenshotController {
     private final PhoneWindow mWindow;
     private final DisplayManager mDisplayManager;
     private final ScrollCaptureController mScrollCaptureController;
+    private final IStatusBarService mStatusBarService;
     private final LongScreenshotData mLongScreenshotHolder;
     private final Vibrator mVibrator;
     private final boolean mIsLowRamDevice;
@@ -348,6 +350,7 @@ public class ScreenshotController {
             ImageExporter imageExporter,
             @Main Executor mainExecutor,
             ScrollCaptureController scrollCaptureController,
+            IStatusBarService statusBarService,
             LongScreenshotData longScreenshotHolder,
             ActivityManager activityManager) {
         mScreenshotSmartActions = screenshotSmartActions;
@@ -357,6 +360,7 @@ public class ScreenshotController {
         mImageExporter = imageExporter;
         mMainExecutor = mainExecutor;
         mScrollCaptureController = scrollCaptureController;
+        mStatusBarService = statusBarService;
         mLongScreenshotHolder = longScreenshotHolder;
         mIsLowRamDevice = activityManager.isLowRamDevice();
         mBgExecutor = Executors.newSingleThreadExecutor();
@@ -744,6 +748,12 @@ public class ScreenshotController {
                     .overridePendingAppTransitionRemote(runner, DEFAULT_DISPLAY);
         } catch (Exception e) {
             Log.e(TAG, "Error overriding screenshot app transition", e);
+        }
+
+        try {
+            mStatusBarService.collapsePanels();
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error during collapsing panels", e);
         }
     }
 
