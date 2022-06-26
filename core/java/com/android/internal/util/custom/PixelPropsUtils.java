@@ -50,7 +50,8 @@ public class PixelPropsUtils {
 
     // Packages to Spoof as Pixel 6 Pro
     private static final String[] packagesToChangePixel6 = {
-            PACKAGE_GMS
+            PACKAGE_GMS,
+            "com.google.android.inputmethod.latin"
     };
 	
     // Packages to Spoof as Pixel XL
