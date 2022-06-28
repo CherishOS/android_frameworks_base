@@ -2512,19 +2512,21 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
     }
 
     private void handleSettingsChange(boolean userSwitch) {
+        boolean needReset = userSwitch;
         mPendingScreenBrightnessSetting = getScreenBrightnessSetting();
         mPendingAutoBrightnessAdjustment = getAutoBrightnessAdjustmentSetting();
         if (userSwitch) {
             // Don't treat user switches as user initiated change.
             setCurrentScreenBrightness(mPendingScreenBrightnessSetting);
             updateAutoBrightnessAdjustment();
-            if (mAutomaticBrightnessController != null) {
-                mAutomaticBrightnessController.resetShortTermModel();
-            }
         }
+        needReset |= mPendingAutoBrightnessAdjustment != mAutoBrightnessAdjustment;
         // We don't bother with a pending variable for VR screen brightness since we just
         // immediately adapt to it.
         mScreenBrightnessForVr = getScreenBrightnessForVrSetting();
+        if (mAutomaticBrightnessController != null && needReset) {
+            mAutomaticBrightnessController.resetShortTermModel();
+        }
         sendUpdatePowerState();
     }
 
