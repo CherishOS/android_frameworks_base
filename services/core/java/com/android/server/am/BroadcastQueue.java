@@ -1399,7 +1399,7 @@ public final class BroadcastQueue {
         if (isBootCompletedIntent(r.intent) &&
                 mService.shouldSkipBootCompletedBroadcastForPackage(
                         info.activityInfo.applicationInfo)) {
-            Slog.i(TAG, "BOOT_COMPLETED broadcast skipped because of strict standby for "
+            Slog.i(TAG, "BOOT_COMPLETED broadcast skipped for "
                     + info.activityInfo.applicationInfo.packageName);
             skip = true;
         }

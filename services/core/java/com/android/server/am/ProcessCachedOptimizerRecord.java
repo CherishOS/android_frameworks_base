@@ -92,6 +92,18 @@ final class ProcessCachedOptimizerRecord {
     @GuardedBy("mProcLock")
     private boolean mPendingFreeze;
 
+    /**
+     * This process has been force froze
+     */
+    @GuardedBy("mProcLock")
+    private boolean mForceFrozen;
+
+    /**
+     * Whether we should ignore temporary unfreeze for it
+     */
+    @GuardedBy("mProcLock")
+    private boolean mIgnoreTempUnfreeze;
+
     @GuardedBy("mProcLock")
     long getLastCompactTime() {
         return mLastCompactTime;
@@ -190,6 +202,26 @@ final class ProcessCachedOptimizerRecord {
     @GuardedBy("mProcLock")
     void setFreezeExempt(boolean exempt) {
         mFreezeExempt = exempt;
+    }
+
+    @GuardedBy("mProcLock")
+    boolean isForceFrozen() {
+        return mForceFrozen;
+    }
+
+    @GuardedBy("mProcLock")
+    void setForceFrozen(boolean forceFrozen) {
+        mForceFrozen = forceFrozen;
+    }
+
+    @GuardedBy("mProcLock")
+    boolean ignoreTempUnfreeze() {
+        return mIgnoreTempUnfreeze;
+    }
+
+    @GuardedBy("mProcLock")
+    void setIgnoreTempUnfreeze(boolean ignore) {
+        mIgnoreTempUnfreeze = ignore;
     }
 
     ProcessCachedOptimizerRecord(ProcessRecord app) {

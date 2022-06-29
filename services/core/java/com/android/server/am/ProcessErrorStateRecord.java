@@ -253,6 +253,9 @@ class ProcessErrorStateRecord {
             } else if (mApp.isKilled()) {
                 Slog.i(TAG, "Skipping died app ANR: " + this + " " + annotation);
                 return;
+            } else if (mApp.mOptRecord.isForceFrozen()) {
+                Slog.i(TAG, "ANR is ignored because of force freeze: " + this + " " + annotation);
+                return;
             }
 
             // In case we come through here for the same app before completing
