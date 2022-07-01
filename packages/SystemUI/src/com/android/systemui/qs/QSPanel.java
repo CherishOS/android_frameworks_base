@@ -63,6 +63,7 @@ import com.android.systemui.settings.brightness.BrightnessSliderController;
 import com.android.systemui.plugins.qs.QSTileView;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.tuner.TunerService.Tunable;
+import org.omnirom.omnilib.utils.OmniUtils;
 
 import java.lang.Runnable;
 import java.util.ArrayList;
@@ -124,7 +125,9 @@ public class QSPanel extends LinearLayout implements Tunable {
     private PageIndicator mFooterPageIndicator;
     private int mContentMarginStart;
     private int mContentMarginEnd;
-    private boolean mUsingHorizontalLayout;
+    private int mMaxColumnsPortrait;
+    private int mMaxColumnsLandscape;
+    protected boolean mUsingHorizontalLayout;
 
     private Record mDetailRecord;
 
@@ -142,6 +145,10 @@ public class QSPanel extends LinearLayout implements Tunable {
                 R.dimen.quick_settings_bottom_margin_media);
         mMediaTopMargin = getResources().getDimensionPixelSize(
                 R.dimen.qs_tile_margin_vertical);
+	mMaxColumnsPortrait = Math.max(2, getResources().getInteger(R.integer.quick_qs_panel_num_columns));
+	mMaxColumnsPortrait = OmniUtils.getQuickQSColumnsPortrait(context, mMaxColumnsPortrait);
+	mMaxColumnsLandscape = Math.max(2, getResources().getInteger(R.integer.quick_qs_panel_num_columns_landscape));
+	mMaxColumnsLandscape = OmniUtils.getQuickQSColumnsPortrait(context, mMaxColumnsLandscape);
         mContext = context;
 
         mAutomaticAvailable = getResources().getBoolean(
