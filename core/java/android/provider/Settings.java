@@ -6542,6 +6542,12 @@ public final class Settings {
         public static final String DISPLAY_SETTINGS_WALLPAPER_ZOOM = "display_settings_wallpaper_zoom";
 
         /**
+         * Whether to take partial screenshot with volume down + power click.
+         * @hide
+         */
+        public static final String CLICK_PARTIAL_SCREENSHOT = "click_partial_screenshot";
+
+        /**
          * These are all public system settings
          *
          * @hide
