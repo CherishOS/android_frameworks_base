@@ -70,6 +70,7 @@ public class PixelPropsUtils {
     // Packages to Spoof as Pixel 6 Pro
     private static final String[] extraPackagesToChange = {
             "com.android.chrome",
+            "com.android.vending",
             "com.breel.wallpapers20",
             "com.nhs.online.nhsonline"
     };
