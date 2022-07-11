@@ -195,6 +195,7 @@ public class ActivityTaskSupervisor implements RecentTasks.Callbacks {
     private static final int REPORT_PIP_MODE_CHANGED_MSG = FIRST_SUPERVISOR_TASK_MSG + 15;
     private static final int START_HOME_MSG = FIRST_SUPERVISOR_TASK_MSG + 16;
     private static final int TOP_RESUMED_STATE_LOSS_TIMEOUT_MSG = FIRST_SUPERVISOR_TASK_MSG + 17;
+    private static final int STRICT_STANDBY_KILL_MSG = FIRST_SUPERVISOR_TASK_MSG + 18;
 
     // Used to indicate that windows of activities should be preserved during the resize.
     static final boolean PRESERVE_WINDOWS = true;
@@ -1603,24 +1604,12 @@ public class ActivityTaskSupervisor implements RecentTasks.Callbacks {
             return;
         }
 
-        // Determine if the process(es) for this task should be killed.
-        final String pkg = component.getPackageName();
-
-        if (mService.mAppStandbyInternal.isStrictStandbyPolicyEnabled() &&
-                getAppOpsManager().checkOpNoThrow(
-                        AppOpsManager.OP_RUN_ANY_IN_BACKGROUND,
-                        task.effectiveUid, pkg) != AppOpsManager.MODE_ALLOWED) {
-            try {
-                ActivityManager.getService().forceStopPackage(pkg, task.mUserId);
-                return;
-            } catch (RemoteException e) {
-                Slog.e(TAG, "Force stop failed, falling back to old path...");
-            } finally {
-                mService.mAppStandbyInternal.restrictApp(
-                        pkg, task.mUserId, REASON_MAIN_FORCED_BY_USER, 0);
-            }
+        if (mService.mAppStandbyInternal.isStrictStandbyPolicyEnabled()) {
+            mHandler.sendMessage(mHandler.obtainMessage(STRICT_STANDBY_KILL_MSG, task));
         }
 
+        // Determine if the process(es) for this task should be killed.
+        final String pkg = component.getPackageName();
         ArrayList<Object> procsToKill = new ArrayList<>();
         ArrayMap<String, SparseArray<WindowProcessController>> pmap =
                 mService.mProcessNames.getMap();
@@ -2411,6 +2400,22 @@ public class ActivityTaskSupervisor implements RecentTasks.Callbacks {
                     if (processName != null) {
                         mService.mAmInternal.killProcess(processName, uid,
                                 "restartActivityProcessTimeout");
+                    }
+                } break;
+                case STRICT_STANDBY_KILL_MSG: {
+                    Task task = (Task) msg.obj;
+                    String pkg = task.getBaseIntent().getComponent().getPackageName();
+
+                    if (getAppOpsManager().checkOpNoThrow(
+                            AppOpsManager.OP_RUN_ANY_IN_BACKGROUND,
+                            task.effectiveUid, pkg) != AppOpsManager.MODE_ALLOWED) {
+                        try {
+                            ActivityManager.getService().forceStopPackage(pkg, task.mUserId);
+                        } catch (RemoteException e) {
+                            Slog.e(TAG, "Strict standby force stop failed...");
+                        }
+                        mService.mAppStandbyInternal.restrictApp(
+                                pkg, task.mUserId, REASON_MAIN_FORCED_BY_USER, 0);
                     }
                 } break;
             }
