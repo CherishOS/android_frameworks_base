@@ -151,6 +151,7 @@ public final class PermissionManager {
     public static final String KILL_APP_REASON_GIDS_CHANGED =
             "permission grant or revoke changed gids";
 
+    private static final String CNE_PKG = "com.qualcomm.qti.cne";
     private static final String SYSTEM_PKG = "android";
     private static final String BLUETOOTH_PKG = "com.android.bluetooth";
     private static final String PHONE_SERVICES_PKG = "com.android.phone";
@@ -1163,6 +1164,7 @@ public final class PermissionManager {
     public static Set<String> getIndicatorExemptedPackages(@NonNull Context context) {
         updateIndicatorExemptedPackages(context);
         ArraySet<String> pkgNames = new ArraySet<>();
+        pkgNames.add(CNE_PKG);
         pkgNames.add(SYSTEM_PKG);
         // Scanning for Bluetooth devices when Bluetooth is enabled is considered
         // to be location access. It shouldn't be shown for the OS implementation
