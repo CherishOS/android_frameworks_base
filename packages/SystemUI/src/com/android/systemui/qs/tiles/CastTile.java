@@ -110,7 +110,6 @@ public class CastTile extends QSTileImpl<BooleanState> {
     @Override
     public BooleanState newTileState() {
         BooleanState state = new BooleanState();
-        state.handlesLongClick = false;
         return state;
     }
 
@@ -131,12 +130,7 @@ public class CastTile extends QSTileImpl<BooleanState> {
 
     @Override
     public Intent getLongClickIntent() {
-        return new Intent(Settings.ACTION_CAST_SETTINGS);
-    }
-
-    @Override
-    protected void handleLongClick(@Nullable View view) {
-        handleClick(view);
+        return CAST_SETTINGS;
     }
 
     @Override
