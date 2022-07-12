@@ -192,12 +192,12 @@ class AppLockManagerService(
                 }.map {
                     atmInternal.getActivityName(it)?.packageName
                 }.filterNotNull().toSet()
-                logD("topPackages = $topPackages",
-                    "currentTopPackages = $currentTopPackages")
+                logD("currentTopPackages = $currentTopPackages")
                 // We should return early if current top packages
                 // are empty to avoid doing anything absurd.
                 if (currentTopPackages.isEmpty()) return@launch
                 val packagesToLock = mutex.withLock {
+                    logD("topPackages = $topPackages")
                     val packages = topPackages.filter {
                         !currentTopPackages.contains(it) && unlockedPackages.contains(it)
                     }.toSet()
