@@ -89,6 +89,7 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
     protected boolean mUseHeadsUp = false;
 
     private boolean mLessBoringHeadsUp = false;
+    private boolean mReTicker = false;
     private TelecomManager mTm;
     private Context mContext;
 
@@ -441,7 +442,7 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
             return false;
         }
 
-        if (shouldSkipHeadsUp(entry)) {
+        if (!mReTicker && shouldSkipHeadsUp(entry)) {
             mLogger.logNoHeadsUpShouldSkipPackage(entry);
             return false;
         }
@@ -604,6 +605,11 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
     @Override
     public void setUseLessBoringHeadsUp(boolean lessBoring) {
         mLessBoringHeadsUp = lessBoring;
+    }
+
+    @Override
+    public void setUseReticker(boolean reTicker) {
+        mReTicker = reTicker;
     }
 
     public boolean shouldSkipHeadsUp(NotificationEntry entry) {

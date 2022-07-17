@@ -306,6 +306,8 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
             "system:" + Settings.System.FORCE_SHOW_NAVBAR;
     private static final String LESS_BORING_HEADS_UP =
             "system:" + Settings.System.LESS_BORING_HEADS_UP;
+    private static final String RETICKER_STATUS =
+            "system:" + Settings.System.RETICKER_STATUS;
 
     private static final int MSG_OPEN_SETTINGS_PANEL = 1002;
     private static final int MSG_LAUNCH_TRANSITION_TIMEOUT = 1003;
@@ -973,6 +975,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
         mColorExtractor.addOnColorsChangedListener(mOnColorsChangedListener);
         mTunerService.addTunable(this, FORCE_SHOW_NAVBAR);
         mTunerService.addTunable(this, LESS_BORING_HEADS_UP);
+        mTunerService.addTunable(this, RETICKER_STATUS);
 
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
 
@@ -4294,6 +4297,11 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
                 boolean lessBoringHeadsUp =
                         TunerService.parseIntegerSwitch(newValue, false);
                 mNotificationInterruptStateProvider.setUseLessBoringHeadsUp(lessBoringHeadsUp);
+                break;
+            case RETICKER_STATUS:
+                boolean reTicker =
+                        TunerService.parseIntegerSwitch(newValue, false);
+                mNotificationInterruptStateProvider.setUseReticker(reTicker);
                 break;
             default:
                 break;
