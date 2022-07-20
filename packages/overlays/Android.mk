@@ -74,10 +74,16 @@ LOCAL_REQUIRED_MODULES := \
     IconPackAcherusAndroidOverlay \
     IconPackAcherusSystemUIOverlay \
     IconShapeCloudyOverlay \
+    IconShapeCloudyRoundedOverlay \
     IconShapeCylinderOverlay \
+    IconShapeCylinderRoundedOverlay \
     IconShapeFlowerOverlay \
+    IconShapeFlowerRoundedOverlay \
     IconShapeHeartOverlay \
+    IconShapeHeartRoundedOverlay \
     IconShapeHexagonOverlay \
+    IconShapeLeafRoundedOverlay \
+    IconShapePebbleRoundedOverlay \
     IconShapeLeafOverlay \
     IconShapePebbleOverlay \
     IconShapeRoundedHexagonOverlay \
@@ -88,6 +94,9 @@ LOCAL_REQUIRED_MODULES := \
     IconShapeTaperedRectOverlay \
     IconShapeTeardropOverlay \
     IconShapeVesselOverlay \
+    DefaultButSquareOverlay \
+    GoogleShapesOverlay \
+    RiceShapesOverlay \
     NavigationBarMode3ButtonOverlay \
     NavigationBarModeGesturalOverlay \
     NavigationBarModeGesturalOverlayNarrowBack \
