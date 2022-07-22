@@ -324,6 +324,9 @@ public abstract class MediaOutputBaseAdapter extends
                             }
                         }
                         mSeekBar.setVolume(currentVolume);
+                    } else {
+                        endAnimateCornerAndVolume();
+                        mSeekBar.setVolume(currentVolume);
                     }
                 }
             } else if (mController.isAdvancedLayoutSupported() && currentVolume == 0) {
@@ -468,6 +471,11 @@ public abstract class MediaOutputBaseAdapter extends
             mVolumeAnimator.setIntValues(fromProgress, toProgress);
             mVolumeAnimator.start();
             mCornerAnimator.start();
+        }
+
+        private void endAnimateCornerAndVolume() {
+            mVolumeAnimator.end();
+            mCornerAnimator.end();
         }
 
         private void initAnimator() {
