@@ -109,6 +109,7 @@ public class QSPanel extends LinearLayout implements Tunable {
     private int mContentMarginEnd;
     private int mMaxColumnsPortrait;
     private int mMaxColumnsLandscape;
+    private int mMaxColumnsMediaPlayer;
     protected boolean mUsingHorizontalLayout;
 
     @Nullable
@@ -131,10 +132,6 @@ public class QSPanel extends LinearLayout implements Tunable {
                 R.dimen.quick_settings_bottom_margin_media);
         mMediaTopMargin = getResources().getDimensionPixelSize(
                 R.dimen.qs_tile_margin_vertical);
-	mMaxColumnsPortrait = Math.max(2, getResources().getInteger(R.integer.quick_qs_panel_num_columns));
-	mMaxColumnsPortrait = OmniUtils.getQuickQSColumnsPortrait(context, mMaxColumnsPortrait);
-	mMaxColumnsLandscape = Math.max(3, getResources().getInteger(R.integer.quick_qs_panel_num_columns_landscape));
-	mMaxColumnsLandscape = OmniUtils.getQuickQSColumnsLandscape(context, mMaxColumnsLandscape);
         mContext = context;
 
         setOrientation(VERTICAL);
@@ -146,6 +143,10 @@ public class QSPanel extends LinearLayout implements Tunable {
 
         TunerService tunerService = Dependency.get(TunerService.class);
         mTop = tunerService.getValue(QS_BRIGHTNESS_SLIDER_POSITION, 0) == 0;
+        mMaxColumnsPortrait = Math.max(2, getResources().getInteger(R.integer.quick_qs_panel_num_columns));
+        mMaxColumnsPortrait = OmniUtils.getQSColumnsPortrait(mContext, mMaxColumnsPortrait);
+        mMaxColumnsLandscape = getResources().getInteger(R.integer.quick_qs_panel_num_columns_landscape);
+        mMaxColumnsMediaPlayer = getResources().getInteger(R.integer.quick_qs_panel_num_columns_media);
     }
 
     void initialize() {
@@ -434,13 +435,20 @@ public class QSPanel extends LinearLayout implements Tunable {
         mOnConfigurationChangedListeners.forEach(
                 listener -> listener.onConfigurationChange(newConfig));
 	if (mTileLayout != null) {
-            boolean isLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
-            if (isLandscape) {
-               mTileLayout.setMaxColumns(mTileLayout.getResourceColumnsLand());
-            } else {
-               mTileLayout.setMaxColumns(mTileLayout.getResourceColumnsPortrait());
-            }
-        }
+           updateColumns();
+       }
+    }
+
+    public void updateColumns() {
+	boolean isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+	
+        int mColumnsMediaPlayer = mUsingHorizontalLayout ? 
+            mMaxColumnsMediaPlayer : 
+            mMaxColumnsLandscape;
+
+        mTileLayout.setMaxColumns(isLandscape ? 
+            mColumnsMediaPlayer : 
+            mMaxColumnsPortrait);
     }
 
     @Override
@@ -675,7 +683,7 @@ public class QSPanel extends LinearLayout implements Tunable {
                 } else {
                    mTileLayout.setMinRows(horizontal ? 1 : 1);
                 }
-                mTileLayout.setMaxColumns(horizontal ? 3 : mMaxColumnsPortrait);
+                updateColumns();
             }
             updateMargins(mediaHostView);
             mHorizontalLinearLayout.setVisibility(horizontal ? View.VISIBLE : View.GONE);
@@ -805,8 +813,6 @@ public class QSPanel extends LinearLayout implements Tunable {
         int getNumVisibleTiles();
 
         int getResourceColumnsPortrait();
-        
-        int getResourceColumnsLand();
 
         void updateSettings();
     }
