@@ -25,6 +25,7 @@ LOCAL_REQUIRED_MODULES := \
     DisplayCutoutEmulationHoleOverlay \
     DisplayCutoutEmulationTallOverlay \
     DisplayCutoutEmulationWaterfallOverlay \
+	 NotchBarKillerOverlay \
     FontNotoSerifSourceOverlay \
     IconPackCircularAndroidOverlay \
     IconPackCircularLauncherOverlay \
