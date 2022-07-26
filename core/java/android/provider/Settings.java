@@ -6561,6 +6561,11 @@ public final class Settings {
          * @hide
          */
         public static final String QS_TRANSPARENCY = "qs_transparency";
+		
+		/**
+         * @hide
+         */
+        public static final String SECONDARY_COLOR_CLOCK = "use_secondary_color_clock";
 
         /**
          * These are all public system settings
