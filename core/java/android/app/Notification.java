@@ -5463,14 +5463,12 @@ public class Notification implements Parcelable
             int pillColor = Colors.flattenAlpha(getColors(p).getProtectionColor(), bgColor);
             int textColor = Colors.flattenAlpha(getPrimaryTextColor(p), pillColor);
             contentView.setInt(R.id.expand_button, "setDefaultTextColor", textColor);
-            contentView.setInt(R.id.expand_button, "setDefaultPillColor", pillColor);
             // Use different highlighted colors for conversations' unread count
             if (p.mHighlightExpander) {
                 pillColor = Colors.flattenAlpha(getColors(p).getTertiaryAccentColor(), bgColor);
                 textColor = Colors.flattenAlpha(getColors(p).getOnAccentTextColor(), pillColor);
             }
             contentView.setInt(R.id.expand_button, "setHighlightTextColor", textColor);
-            contentView.setInt(R.id.expand_button, "setHighlightPillColor", pillColor);
         }
 
         private void bindHeaderChronometerAndTime(RemoteViews contentView,
