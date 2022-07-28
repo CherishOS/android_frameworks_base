@@ -17374,11 +17374,6 @@ public class ActivityManagerService extends IActivityManager.Stub
                 SystemProperties.getBoolean("sys.android.screenshot", false);
         }
     }
-
-    @Override
-    public boolean shouldForceCutoutFullscreen(String packageName) {
-        return mActivityTaskManager.shouldForceCutoutFullscreen(packageName);
-    }
     
     boolean shouldSkipBootCompletedBroadcastForPackage(ApplicationInfo info) {
         return (mActivityTaskManager.mAppStandbyInternal.isStrictStandbyPolicyEnabled()
