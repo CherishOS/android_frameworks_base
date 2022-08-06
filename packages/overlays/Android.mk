@@ -95,8 +95,9 @@ LOCAL_REQUIRED_MODULES := \
     IconShapeTeardropOverlay \
     IconShapeVesselOverlay \
     DefaultButSquareOverlay \
+    DefaultButBouncyOverlay \
     GoogleShapesOverlay \
-    RiceShapesOverlay \
+	OutlineShapesOverlay \
     NavigationBarMode3ButtonOverlay \
     NavigationBarModeGesturalOverlay \
     NavigationBarModeGesturalOverlayNarrowBack \
