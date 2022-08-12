@@ -32,6 +32,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.os.UserHandle;
+import android.provider.Settings;
 
 import com.android.settingslib.Utils;
 import com.android.systemui.R;
@@ -200,7 +202,13 @@ public class QSIconViewImpl extends QSIconView {
             mColorAnimator.setValues(values);
             mColorAnimator.removeAllListeners();
             mColorAnimator.addUpdateListener(animation -> {
-                setTint(iv, (int) animation.getAnimatedValue());
+				boolean isQSStyleEnabled = Settings.System.getIntForUser(getContext().getContentResolver(),
+                		Settings.System.QS_TILE_STYLE, 0, UserHandle.USER_CURRENT) != 0;
+		if (isQSStyleEnabled) {
+                  setTint(iv, toColor);
+                } else {
+                  setTint(iv, (int) animation.getAnimatedValue());
+                }
             });
             mColorAnimator.addListener(new EndRunnableAnimatorListener(endRunnable));
 
@@ -247,8 +255,15 @@ public class QSIconViewImpl extends QSIconView {
             case Tile.STATE_INACTIVE:
                 return Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary);
             case Tile.STATE_ACTIVE:
-                return Utils.getColorAttrDefaultColor(context,
+                boolean isQSStyleEnabled = Settings.System.getIntForUser(context.getContentResolver(),
+                		Settings.System.QS_TILE_STYLE, 0, UserHandle.USER_CURRENT) != 0;
+            	if (isQSStyleEnabled) {
+                  return Utils.getColorAttrDefaultColor(context,
+                        com.android.internal.R.attr.colorAccent);
+		} else {
+                  return Utils.getColorAttrDefaultColor(context,
                         com.android.internal.R.attr.textColorPrimaryInverse);
+		       }
             default:
                 Log.e("QSIconView", "Invalid state " + state);
                 return 0;

@@ -23,6 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.os.UserHandle;
+import android.provider.Settings;
 
 import androidx.annotation.Nullable;
 
@@ -257,15 +259,30 @@ public class BrightnessSliderController extends ViewController<BrightnessSliderV
          *                 hierarchy will not be attached
          */
         public BrightnessSliderController create(Context context, @Nullable ViewGroup viewRoot) {
-            int layout = getLayout();
-            BrightnessSliderView root = (BrightnessSliderView) LayoutInflater.from(context)
+            boolean isQSStyleEnabled = Settings.System.getIntForUser(context.getContentResolver(),
+                		Settings.System.QS_TILE_STYLE, 0, UserHandle.USER_CURRENT) != 0;
+	    if (isQSStyleEnabled) {
+	       int customLayout = getCustomLayout();
+            	BrightnessSliderView customRoot = (BrightnessSliderView) LayoutInflater.from(context)
+                    .inflate(customLayout, viewRoot, false);
+               return new BrightnessSliderController(customRoot, mFalsingManager);
+	    } else {
+               int layout = getLayout();
+           	BrightnessSliderView root = (BrightnessSliderView) LayoutInflater.from(context)
                     .inflate(layout, viewRoot, false);
-            return new BrightnessSliderController(root, mFalsingManager);
+               return new BrightnessSliderController(root, mFalsingManager);
+            }
+            
         }
 
         /** Get the layout to inflate based on what slider to use */
         private int getLayout() {
-            return R.layout.quick_settings_brightness_dialog;
+              return R.layout.quick_settings_brightness_dialog;
+        }
+        
+        /** Get the custom layout to inflate based on what slider to use */
+        private int getCustomLayout() {
+              return R.layout.quick_settings_brightness_dialog_custom;
         }
     }
 }
