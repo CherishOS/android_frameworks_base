@@ -98,6 +98,7 @@ LOCAL_REQUIRED_MODULES := \
     DefaultButBouncyOverlay \
     GoogleShapesOverlay \
 	OutlineShapesOverlay \
+    RoundedOutlineShapesOverlay \
     NavigationBarMode3ButtonOverlay \
     NavigationBarModeGesturalOverlay \
     NavigationBarModeGesturalOverlayNarrowBack \
