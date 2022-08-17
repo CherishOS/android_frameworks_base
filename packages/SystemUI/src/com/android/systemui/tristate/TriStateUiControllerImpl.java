@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2019 CypherOS
- * Copyright (C) 2020 Paranoid Android
- * Copyright (C) 2020-2021 crDroid Android Project
+ *           (C) 2014-2020 Paranoid Android
+ *           (C) 2020-2023 crDroid Android Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
+import android.util.DisplayUtils;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Display;
@@ -50,8 +51,6 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.internal.policy.SystemBarUtils;
-import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.tristate.TriStateUiController;
 import com.android.systemui.tristate.TriStateUiController.UserActivityListener;
@@ -114,9 +113,12 @@ public class TriStateUiControllerImpl implements TriStateUiController,
 
     private Context mContext;
     private final VolumeDialogController mVolumeDialogController;
+    private final ConfigurationController mConfigurationController;
+    private final TunerService mTunerService;
+
     private final Callbacks mVolumeDialogCallback = new Callbacks() {
         @Override
-        public void onShowRequested(int reason) { }
+        public void onShowRequested(int reason, boolean keyguardLocked, int lockTaskModeState) { }
 
         @Override
         public void onDismissRequested(int reason) { }
@@ -138,6 +140,9 @@ public class TriStateUiControllerImpl implements TriStateUiController,
 
         @Override
         public void onShowSafetyWarning(int flags) { }
+
+        @Override
+        public void onShowCsdWarning(int csdWarning, int durationMs) { }
 
         @Override
         public void onAccessibilityModeChanged(Boolean showA11yStream) { }
@@ -239,9 +244,16 @@ public class TriStateUiControllerImpl implements TriStateUiController,
         }
     }
 
-    public TriStateUiControllerImpl(Context context) {
+    public TriStateUiControllerImpl(
+            Context context,
+            VolumeDialogController volumeDialogController,
+            ConfigurationController configurationController,
+            TunerService tunerService) {
         mContext =
                 new ContextThemeWrapper(context, R.style.qs_theme);
+        mVolumeDialogController = volumeDialogController;
+        mConfigurationController = configurationController;
+        mTunerService = tunerService;
         mHandler = new H(this);
         mOrientationListener = new OrientationEventListener(mContext, 3) {
             @Override
@@ -249,7 +261,6 @@ public class TriStateUiControllerImpl implements TriStateUiController,
                 checkOrientationType();
             }
         };
-        mVolumeDialogController = (VolumeDialogController) Dependency.get(VolumeDialogController.class);
         mIntentAction = context.getResources().getString(com.android.internal.R.string.config_alertSliderIntent);
         mIntentActionSupported = mIntentAction != null && !mIntentAction.isEmpty();
 
@@ -259,10 +270,7 @@ public class TriStateUiControllerImpl implements TriStateUiController,
         } else {
             filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
         }
-        mContext.registerReceiver(mSliderStateReceiver, filter);
-
-        final TunerService tunerService = Dependency.get(TunerService.class);
-        tunerService.addTunable(this, ALERT_SLIDER_NOTIFICATIONS);
+        mContext.registerReceiver(mSliderStateReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
     }
 
     @Override
@@ -299,13 +307,15 @@ public class TriStateUiControllerImpl implements TriStateUiController,
         mWindowType = windowType;
         mDensity = mContext.getResources().getConfiguration().densityDpi;
         mListener = listener;
-        ((ConfigurationController) Dependency.get(ConfigurationController.class)).addCallback(this);
+        mConfigurationController.addCallback(this);
         mVolumeDialogController.addCallback(mVolumeDialogCallback, mHandler);
+        mTunerService.addTunable(this, ALERT_SLIDER_NOTIFICATIONS);
         initDialog();
     }
 
     public void destroy() {
-        ((ConfigurationController) Dependency.get(ConfigurationController.class)).removeCallback(this);
+        mTunerService.removeTunable(this);
+        mConfigurationController.removeCallback(this);
         mVolumeDialogController.removeCallback(mVolumeDialogCallback);
         mContext.unregisterReceiver(mSliderStateReceiver);
     }
@@ -453,7 +463,7 @@ public class TriStateUiControllerImpl implements TriStateUiController,
                         }
                         positionY2 = res.getDimensionPixelSize(R.dimen.tri_state_up_dialog_position_deep_land);
                         if (isTsKeyRight) {
-                            positionY2 += SystemBarUtils.getStatusBarHeight(mContext);
+                            positionY2 += res.getDimensionPixelSize(com.android.internal.R.dimen.status_bar_height);
                         }
                         if (mPosition == POSITION_TOP) {
                             positionX = res.getDimensionPixelSize(R.dimen.tri_state_up_dialog_position_l);
@@ -477,7 +487,7 @@ public class TriStateUiControllerImpl implements TriStateUiController,
                             gravity = 85;
                         }
                         positionX = res.getDimensionPixelSize(R.dimen.tri_state_up_dialog_position_deep);
-                        positionY = SystemBarUtils.getStatusBarHeight(mContext);
+                        positionY = res.getDimensionPixelSize(R.dimen.status_bar_height);
                         if (mPosition == POSITION_TOP) {
                             positionY += res.getDimensionPixelSize(R.dimen.tri_state_up_dialog_position);
                             bg = !isTsKeyRight ? R.drawable.right_dialog_tri_state_down_bg : R.drawable.left_dialog_tri_state_down_bg;
@@ -507,7 +517,7 @@ public class TriStateUiControllerImpl implements TriStateUiController,
                         }
                         positionY2 = res.getDimensionPixelSize(R.dimen.tri_state_up_dialog_position_deep_land);
                         if (!isTsKeyRight) {
-                            positionY2 += SystemBarUtils.getStatusBarHeight(mContext);
+                            positionY2 += res.getDimensionPixelSize(com.android.internal.R.dimen.status_bar_height);
                         }
                         if (mPosition == POSITION_TOP) {
                             positionX = res.getDimensionPixelSize(R.dimen.tri_state_up_dialog_position_l);
@@ -550,7 +560,7 @@ public class TriStateUiControllerImpl implements TriStateUiController,
                             positionY2 = res.getDimensionPixelSize(R.dimen.tri_state_down_dialog_position);
                             bg = isTsKeyRight ? R.drawable.right_dialog_tri_state_down_bg : R.drawable.left_dialog_tri_state_down_bg;
                         }
-                        positionY2 += SystemBarUtils.getStatusBarHeight(mContext);;
+                        positionY2 += res.getDimensionPixelSize(com.android.internal.R.dimen.status_bar_height);
                         break;
                 }
                 if (mTriStateMode != -1) {
@@ -574,10 +584,13 @@ public class TriStateUiControllerImpl implements TriStateUiController,
                     }
                     mDialogPosition = positionY2;
                 }
+
+                final float scaleFactor = DisplayUtils.getScaleFactor(mContext);
+
                 positionY = res.getDimensionPixelSize(R.dimen.tri_state_dialog_padding);
                 mWindowLayoutParams.gravity = gravity;
-                mWindowLayoutParams.y = positionY2 - positionY;
-                mWindowLayoutParams.x = positionX - positionY;
+                mWindowLayoutParams.y = (int) ((positionY2 - positionY) * scaleFactor);
+                mWindowLayoutParams.x = (int) ((positionX - positionY) * scaleFactor);
                 mWindow.setAttributes(mWindowLayoutParams);
                 mHandler.sendEmptyMessageDelayed(MSG_RESET_SCHEDULE, DIALOG_TIMEOUT);
             }
