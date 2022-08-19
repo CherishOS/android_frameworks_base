@@ -102,10 +102,10 @@ interface QSModuleCherish {
     @IntoMap
     @StringKey(VolumeTile.TILE_SPEC)
     fun bindVolumeTile(volumeTile: VolumeTile): QSTileImpl<*>
-}
 
     /** Inject WifiTile into tileMap in QSModule */
     @Binds
     @IntoMap
     @StringKey(WifiTile.TILE_SPEC)
     fun bindWifiTile(wifiTile: WifiTile): QSTileImpl<*>
+}
