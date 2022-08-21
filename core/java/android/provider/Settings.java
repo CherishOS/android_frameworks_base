@@ -6245,6 +6245,18 @@ public final class Settings {
         public static final String UDFPS_HAPTIC_FEEDBACK = "udfps_haptic_feedback";
 
         /**
+         * Whether to enable or disable vibration on succesful fingerprint auth
+         * @hide
+         */
+        public static final String UDFPS_SUCCESS_VIBRATE = "udfps_success_vib";
+
+        /**
+         * Whether to enable or disable vibration on failed fingerprint auth
+         * @hide
+         */
+        public static final String UDFPS_ERROR_VIBRATE = "udfps_error_vib";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
