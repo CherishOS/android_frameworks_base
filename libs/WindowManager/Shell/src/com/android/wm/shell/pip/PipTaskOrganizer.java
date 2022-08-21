@@ -68,6 +68,7 @@ import android.util.Log;
 import android.view.Choreographer;
 import android.view.Display;
 import android.view.Surface;
+import android.util.Log;
 import android.view.SurfaceControl;
 import android.window.TaskOrganizer;
 import android.window.TaskSnapshot;
