@@ -10926,6 +10926,15 @@ public final class Settings {
                 "launcher_taskbar_education_showing";
 
         /**
+         * Whether UDFPS is active while the screen is off.
+         *
+         * <p>1 if true, 0 or unset otherwise.
+         *
+         * @hide
+         */
+        public static final String SCREEN_OFF_UDFPS_ENABLED = "screen_off_udfps_enabled";
+
+        /**
          * These entries are considered common between the personal and the managed profile,
          * since the managed profile doesn't get to change them.
          */
