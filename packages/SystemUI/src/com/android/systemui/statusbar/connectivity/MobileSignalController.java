@@ -144,7 +144,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
             "system:" + Settings.System.VOLTE_ICON_STYLE;
 
     // Volte Icon Style
-    private int mVoLTEstyle;
+    private int mVoLTEstyle = 0;
 
     private final MobileStatusTracker.Callback mMobileCallback =
             new MobileStatusTracker.Callback() {
@@ -290,7 +290,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
                 new ArrayList<Integer>(ImsFeature.STATE_LOG_MAP.keySet()),
                 new FeatureConnector.Listener<ImsManager> () {
                     @Override
-                    public void connectionReady(ImsManager manager)
+                    public void connectionReady(ImsManager manager, int subId)
                             throws ImsException {
                         Log.d(mTag, "ImsManager: connection ready.");
                         mImsManager = manager;
@@ -341,7 +341,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
                 break;
 			case VOLTE_ICON_STYLE:
                 mVoLTEstyle =
-                    TunerService.parseIntegerSwitch(newValue, true);
+                    TunerService.parseInteger(newValue, 0);
                 notifyListeners();
                 break;
             default:
