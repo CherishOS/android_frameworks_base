@@ -112,6 +112,15 @@ public class ThemeOverlayApplier implements Dumpable {
     @VisibleForTesting
     static final String OVERLAY_CATEGORY_ICON_WIFI =
             "android.theme.customization.wifi_icon";
+    @VisibleForTesting
+    static final String OVERLAY_CATEGORY_UI_STYLE_ANDROID =
+            "android.theme.customization.style.android";
+    @VisibleForTesting
+    static final String OVERLAY_CATEGORY_UI_STYLE_SETTINGS =
+            "android.theme.customization.style.settings";
+    @VisibleForTesting
+    static final String OVERLAY_CATEGORY_UI_STYLE_SYSUI =
+            "android.theme.customization.style.systemui";
 
     /*
      * All theme customization categories used by the system, in order that they should be applied,
@@ -123,6 +132,9 @@ public class ThemeOverlayApplier implements Dumpable {
             OVERLAY_CATEGORY_SHAPE,
             OVERLAY_CATEGORY_FONT,
             OVERLAY_CATEGORY_ACCENT_COLOR,
+            OVERLAY_CATEGORY_UI_STYLE_ANDROID,
+            OVERLAY_CATEGORY_UI_STYLE_SETTINGS,
+            OVERLAY_CATEGORY_UI_STYLE_SYSUI,
             OVERLAY_CATEGORY_ICON_ANDROID,
             OVERLAY_CATEGORY_ICON_SYSUI,
             OVERLAY_CATEGORY_ICON_SETTINGS,
@@ -137,6 +149,7 @@ public class ThemeOverlayApplier implements Dumpable {
             OVERLAY_CATEGORY_ACCENT_COLOR,
             OVERLAY_CATEGORY_FONT,
             OVERLAY_CATEGORY_SHAPE,
+            OVERLAY_CATEGORY_UI_STYLE_ANDROID,
             OVERLAY_CATEGORY_ICON_ANDROID,
             OVERLAY_CATEGORY_ICON_SYSUI);
 
@@ -174,6 +187,9 @@ public class ThemeOverlayApplier implements Dumpable {
         mCategoryToTargetPackage.put(OVERLAY_CATEGORY_ACCENT_COLOR, ANDROID_PACKAGE);
         mCategoryToTargetPackage.put(OVERLAY_CATEGORY_FONT, ANDROID_PACKAGE);
         mCategoryToTargetPackage.put(OVERLAY_CATEGORY_SHAPE, ANDROID_PACKAGE);
+        mCategoryToTargetPackage.put(OVERLAY_CATEGORY_UI_STYLE_ANDROID, ANDROID_PACKAGE);
+        mCategoryToTargetPackage.put(OVERLAY_CATEGORY_UI_STYLE_SETTINGS, SETTINGS_PACKAGE);
+        mCategoryToTargetPackage.put(OVERLAY_CATEGORY_UI_STYLE_SYSUI, SYSUI_PACKAGE);
         mCategoryToTargetPackage.put(OVERLAY_CATEGORY_ICON_ANDROID, ANDROID_PACKAGE);
         mCategoryToTargetPackage.put(OVERLAY_CATEGORY_ICON_SYSUI, SYSUI_PACKAGE);
         mCategoryToTargetPackage.put(OVERLAY_CATEGORY_ICON_SETTINGS, SETTINGS_PACKAGE);
