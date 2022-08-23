@@ -917,7 +917,7 @@ final class DefaultPermissionGrantPolicy {
         }
 
         // Updater app
-        grantPermissionsToSystemPackage(pm, "com.cherish.updater", userId, NOTIFICATION_PERMISSIONS);
+        grantSystemFixedPermissionsToSystemPackage(pm, "com.cherish.updater", userId, NOTIFICATION_PERMISSIONS);
 
         // There is no real "marker" interface to identify the shared storage backup, it is
         // hardcoded in BackupManagerService.SHARED_BACKUP_AGENT_PACKAGE.
@@ -941,6 +941,18 @@ final class DefaultPermissionGrantPolicy {
 
         String clockAppPackage = getDefaultSystemHandlerActivityPackage(pm, AlarmClock.ACTION_SET_ALARM, userId);
         grantPermissionsToSystemPackage(pm, clockAppPackage, userId, NOTIFICATION_PERMISSIONS);
+
+        String[] notifPackages = {
+            "com.android.camera2",
+            "com.google.android.apps.safetyhub",
+            "com.google.android.calendar",
+            "com.google.android.contacts",
+            "com.google.android.dialer",
+            "com.google.android.markup",
+        };
+        for (String pkg : notifPackages) {
+            grantPermissionsToSystemPackage(pm, pkg, userId, NOTIFICATION_PERMISSIONS);
+        }
     }
 
     private String getDefaultSystemHandlerActivityPackageForCategory(PackageManagerWrapper pm,
