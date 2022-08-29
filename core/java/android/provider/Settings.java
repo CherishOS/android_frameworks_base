@@ -5806,6 +5806,14 @@ public final class Settings {
          * @hide
          */
         public static final String QS_SHOW_BATTERY_PERCENT = "qs_show_battery_percent";
+		
+		/**
+         * Statusbar clock background
+         * 0 - hide accented chip
+         * 1 - show accented chip (default)
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_CHIP = "statusbar_clock_chip";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
