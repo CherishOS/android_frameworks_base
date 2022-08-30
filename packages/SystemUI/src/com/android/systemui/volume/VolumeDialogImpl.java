@@ -159,6 +159,8 @@ public class VolumeDialogImpl implements VolumeDialog,
 
     private static final String VOLUME_PANEL_ON_LEFT =
             Settings.Secure.VOLUME_PANEL_ON_LEFT;
+    public static final String VOLUME_MEDIA_OUTPUT_TOGGLE =
+            "system:" + Settings.System.VOLUME_MEDIA_OUTPUT_TOGGLE;
 
     private static final long USER_ATTEMPT_GRACE_PERIOD = 1000;
     private static final int UPDATE_ANIMATION_DURATION = 80;
@@ -310,6 +312,8 @@ public class VolumeDialogImpl implements VolumeDialog,
 
     // Number of animating rows
     private int mAnimatingRows = 0;
+    
+    private boolean mShowMediaController = true;
 
     public VolumeDialogImpl(
             Context context,
@@ -364,6 +368,7 @@ public class VolumeDialogImpl implements VolumeDialog,
         if (!mShowActiveStreamOnly) {
             mTunerService.addTunable(mTunable, VOLUME_PANEL_ON_LEFT);
         }
+        mTunerService.addTunable(mTunable, VOLUME_MEDIA_OUTPUT_TOGGLE);
 
         initDimens();
     }
@@ -754,6 +759,9 @@ public class VolumeDialogImpl implements VolumeDialog,
                         mControllerCallbackH.onConfigurationChanged();
                     });
                 }
+            } else if (VOLUME_MEDIA_OUTPUT_TOGGLE.equals(key)) {
+                mShowMediaController =  TunerService.parseIntegerSwitch(newValue, true);
+                initSettingsH(mActivityManager.getLockTaskModeState());
             }
         }
     };
@@ -1238,7 +1246,11 @@ public class VolumeDialogImpl implements VolumeDialog,
     }
 
     private boolean isMediaControllerAvailable(MediaController mediaController) {
-        return mediaController != null && !TextUtils.isEmpty(mediaController.getPackageName());
+	if (mShowMediaController) {
+          return mediaController != null && !TextUtils.isEmpty(mediaController.getPackageName());
+        } else {
+          return false;
+        }
     }
 
     private boolean isBluetoothA2dpConnected() {
