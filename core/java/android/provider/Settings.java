@@ -6071,6 +6071,11 @@ public final class Settings {
          * @hide
          */
         public static final String QS_PANEL_STYLE = "qs_panel_style";
+        
+	/**
+         * @hide
+         */
+        public static final String VOLUME_MEDIA_OUTPUT_TOGGLE = "volume_media_output_toggle";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
