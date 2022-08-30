@@ -6415,6 +6415,11 @@ public final class Settings {
          * @hide
          */
         public static final String POWER_MENU_ANIMATIONS = "power_menu_animations";
+        
+	/**
+         * @hide
+         */
+        public static final String VOLUME_MEDIA_OUTPUT_TOGGLE = "volume_media_output_toggle";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
