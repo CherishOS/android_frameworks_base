@@ -33,6 +33,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.graphics.Rect;
 
 import com.android.systemui.Dependency;
 import com.android.systemui.R;
@@ -72,7 +73,7 @@ public class UdfpsAnimation extends ImageView {
     private Resources mApkResources;
 
     public UdfpsAnimation(Context context, WindowManager windowManager,
-            FingerprintSensorPropertiesInternal props) {
+           FingerprintSensorPropertiesInternal props) {
         super(context);
         mContext = context;
 
