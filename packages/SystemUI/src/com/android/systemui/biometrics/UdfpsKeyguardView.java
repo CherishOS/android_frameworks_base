@@ -103,7 +103,6 @@ public class UdfpsKeyguardView extends UdfpsAnimationView {
         inflater.inflate(R.layout.udfps_keyguard_view_internal, this,
                 mLayoutInflaterFinishListener);
 
-        updateIcon();
     }
 
     @Override
@@ -320,6 +319,7 @@ public class UdfpsKeyguardView extends UdfpsAnimationView {
             updatePadding();
             updateColor();
             updateAlpha();
+            updateIcon();
             parent.addView(view);
 
             // requires call to invalidate to update the color
