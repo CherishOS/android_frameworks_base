@@ -441,6 +441,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
     private int mCornerRadius;
     private int mMinimumPaddings;
     private int mQsTilePadding;
+    private int mQsTileColumns;
     private boolean mSkinnyNotifsInLandscape;
     private int mSidePaddings;
     private final Rect mBackgroundAnimationRect = new Rect();
@@ -1009,6 +1010,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
         mMinimumPaddings = res.getDimensionPixelSize(R.dimen.notification_side_paddings);
         mQsTilePadding = res.getDimensionPixelOffset(R.dimen.qs_tile_margin_horizontal);
         mQsTileColumns = res.getInteger(R.integer.quick_settings_num_columns);
+        mQsTileColumns = res.getInteger(R.integer.quick_settings_num_columns);
         if (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
         mQsTileColumns = OmniUtils.getQSColumnsPortrait(mContext, mQsTileColumns);
         } else {
@@ -1035,7 +1037,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
             return;
         }
         final int innerWidth = viewWidth - mMinimumPaddings * 2;
-        final int qsTileWidth = (innerWidth - mQsTilePadding * 3) / 4;
+        final int qsTileWidth = (innerWidth - mQsTilePadding * (mQsTileColumns - 1)) / mQsTileColumns;
         mSidePaddings = mMinimumPaddings + qsTileWidth + mQsTilePadding;
     }
 
