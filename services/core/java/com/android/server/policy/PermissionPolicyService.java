@@ -56,9 +56,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.PackageManagerInternal;
-import android.content.pm.PackageManagerInternal.PackageListObserver;
 import android.content.pm.PermissionInfo;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -193,33 +193,6 @@ public final class PermissionPolicyService extends SystemService {
         final IAppOpsService appOpsService = IAppOpsService.Stub.asInterface(
                 ServiceManager.getService(Context.APP_OPS_SERVICE));
 
-        mPackageManagerInternal.getPackageList(new PackageListObserver() {
-            @Override
-            public void onPackageAdded(String packageName, int uid) {
-                final int userId = UserHandle.getUserId(uid);
-                if (isStarted(userId)) {
-                    synchronizePackagePermissionsAndAppOpsForUser(packageName, userId);
-                }
-            }
-
-            @Override
-            public void onPackageChanged(String packageName, int uid) {
-                final int userId = UserHandle.getUserId(uid);
-                if (isStarted(userId)) {
-                    synchronizePackagePermissionsAndAppOpsForUser(packageName, userId);
-                    resetAppOpPermissionsIfNotRequestedForUid(uid);
-                }
-            }
-
-            @Override
-            public void onPackageRemoved(String packageName, int uid) {
-                final int userId = UserHandle.getUserId(uid);
-                if (isStarted(userId)) {
-                    resetAppOpPermissionsIfNotRequestedForUid(uid);
-                }
-            }
-        });
-
         mPermissionManagerInternal.addOnRuntimePermissionStateChangedListener(
                 this::synchronizePackagePermissionsAndAppOpsAsyncForUser);
 
@@ -290,6 +263,7 @@ public final class PermissionPolicyService extends SystemService {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
         intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
+        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
         intentFilter.addDataScheme("package");
 
         getContext().registerReceiverAsUser(new BroadcastReceiver() {
@@ -299,6 +273,25 @@ public final class PermissionPolicyService extends SystemService {
 
             @Override
             public void onReceive(Context context, Intent intent) {
+                int uid = intent.getIntExtra(Intent.EXTRA_UID, -1);
+                Uri uri = intent.getData();
+                String packageName = uri != null ? uri.getSchemeSpecificPart() : null;
+                if (uid == -1 || packageName == null) {
+                    return;
+                }
+                switch (intent.getAction()) {
+                    case Intent.ACTION_PACKAGE_ADDED:
+                        onPackageAdded(packageName, uid);
+                        break;
+                    case Intent.ACTION_PACKAGE_CHANGED:
+                        onPackageChanged(packageName, uid);
+                        break;
+                    case Intent.ACTION_PACKAGE_REMOVED:
+                        onPackageRemoved(packageName, uid);
+                        return;
+                    default:
+                        return;
+                }
                 boolean hasSetupRun = true;
                 try {
                     final ContentResolver cr = getContext().getContentResolver();
@@ -307,7 +300,6 @@ public final class PermissionPolicyService extends SystemService {
                 } catch (Settings.SettingNotFoundException e) {
                     // Ignore error, assume setup has run
                 }
-                int uid = intent.getIntExtra(Intent.EXTRA_UID, -1);
                 // If there is no valid package for the given UID, return immediately
                 if (mPackageManagerInternal.getPackage(uid) == null) {
                     return;
@@ -341,6 +333,28 @@ public final class PermissionPolicyService extends SystemService {
                     mPermControllerManagers.put(user, manager);
                 }
                 manager.updateUserSensitiveForApp(uid);
+            }
+
+            private void onPackageAdded(String packageName, int uid) {
+                final int userId = UserHandle.getUserId(uid);
+                if (isStarted(userId)) {
+                    synchronizePackagePermissionsAndAppOpsForUser(packageName, userId);
+                }
+            }
+
+            private void onPackageChanged(String packageName, int uid) {
+                final int userId = UserHandle.getUserId(uid);
+                if (isStarted(userId)) {
+                    synchronizePackagePermissionsAndAppOpsForUser(packageName, userId);
+                    resetAppOpPermissionsIfNotRequestedForUid(uid);
+                }
+            }
+
+            private void onPackageRemoved(String packageName, int uid) {
+                final int userId = UserHandle.getUserId(uid);
+                if (isStarted(userId)) {
+                    resetAppOpPermissionsIfNotRequestedForUid(uid);
+                }
             }
         }, UserHandle.ALL, intentFilter, null, null);
 
