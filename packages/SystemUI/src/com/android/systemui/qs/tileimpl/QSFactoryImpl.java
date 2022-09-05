@@ -51,7 +51,6 @@ import com.android.systemui.qs.tiles.InternetTile;
 import com.android.systemui.qs.tiles.LiveDisplayTile;
 import com.android.systemui.qs.tiles.LocationTile;
 import com.android.systemui.qs.tiles.MicrophoneToggleTile;
-import com.android.systemui.qs.tiles.MusicTile;
 import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.NightDisplayTile;
 import com.android.systemui.qs.tiles.OneHandedModeTile;
@@ -127,11 +126,9 @@ public class QSFactoryImpl implements QSFactory {
 	private final Provider<DataSwitchTile> mDataSwitchTileProvider;
     private final Provider<SoundSearchTile> mSoundSearchTileProvider;
     private final Provider<VpnTile> mVpnTileProvider;
-    private final Provider<MusicTile> mMusicTileProvider;
     private final Provider<LiveDisplayTile> mLiveDisplayTileProvider;
     private final Provider<ReadingModeTile> mReadingModeTileProvider;
     private final Provider<AntiFlickerTile> mAntiFlickerTileProvider;
-
     private final Lazy<QSHost> mQsHostLazy;
     private final Provider<CustomTile.Builder> mCustomTileBuilderProvider;
 
@@ -181,7 +178,6 @@ public class QSFactoryImpl implements QSFactory {
 			Provider<DataSwitchTile> dataSwitchTileProvider,
             Provider<SoundSearchTile> soundSearchTileProvider,
             Provider<VpnTile> vpnTileProvider,
-            Provider<MusicTile> musicTileProvider,
             Provider<LiveDisplayTile> liveDisplayTileProvider,
             Provider<ReadingModeTile> readingModeTileProvider,
             Provider<AntiFlickerTile> antiFlickerTileProvider) {
@@ -230,7 +226,6 @@ public class QSFactoryImpl implements QSFactory {
 		mDataSwitchTileProvider = dataSwitchTileProvider;
         mSoundSearchTileProvider = soundSearchTileProvider;
         mVpnTileProvider = vpnTileProvider;
-        mMusicTileProvider = musicTileProvider;
         mLiveDisplayTileProvider = liveDisplayTileProvider;
         mReadingModeTileProvider = readingModeTileProvider;
         mAntiFlickerTileProvider = antiFlickerTileProvider;
@@ -334,8 +329,6 @@ public class QSFactoryImpl implements QSFactory {
                 return mSoundSearchTileProvider.get();
             case "vpn":
                 return mVpnTileProvider.get();
-            case "music":
-                return mMusicTileProvider.get();
             case "livedisplay":
                 return mLiveDisplayTileProvider.get();
             case "reading_mode":
