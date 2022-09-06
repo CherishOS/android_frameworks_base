@@ -392,6 +392,13 @@ class BluetoothRouteProvider {
     private void addActiveDevices(BluetoothDevice device) {
         // Let the given device be the first active device
         BluetoothRouteInfo activeBtRoute = mBluetoothRoutes.get(device.getAddress());
+        if (activeBtRoute == null) {
+            if (DEBUG) {
+                Log.d(TAG, "activeBtRoute is null");
+            }
+            return;
+        }
+
         addActiveRoute(activeBtRoute);
 
         // A bluetooth route with the same route ID should be added.
