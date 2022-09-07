@@ -51,9 +51,7 @@ import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
 import android.view.WindowManager;
-
 import com.android.systemui.media.MediaProjectionCaptureTarget;
-import com.android.systemui.R;
 import java.io.File;
 import java.io.Closeable;
 import java.io.IOException;
@@ -90,8 +88,6 @@ public class ScreenMediaRecorder extends MediaProjection.Callback {
     private ScreenRecordingAudioSource mAudioSource;
     private final MediaProjectionCaptureTarget mCaptureRegion;
     private final Handler mHandler;
-    private int mMaxRefreshRate;
-    private String mAvcProfileLevel;
 
     private Context mContext;
     ScreenMediaRecorderListener mListener;
@@ -106,10 +102,6 @@ public class ScreenMediaRecorder extends MediaProjection.Callback {
         mCaptureRegion = captureRegion;
         mListener = listener;
         mAudioSource = audioSource;
-        mMaxRefreshRate = mContext.getResources().getInteger(
-                R.integer.config_screenRecorderMaxFramerate);
-        mAvcProfileLevel = mContext.getResources().getString(
-                R.string.config_screenRecorderAVCProfileLevel);
     }
 
     private void prepare() throws IOException, RemoteException, RuntimeException {
@@ -148,7 +140,6 @@ public class ScreenMediaRecorder extends MediaProjection.Callback {
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         wm.getDefaultDisplay().getRealMetrics(metrics);
         int refreshRate = (int) wm.getDefaultDisplay().getRefreshRate();
-        if (mMaxRefreshRate != 0 && refreshRate > mMaxRefreshRate) refreshRate = mMaxRefreshRate;
         int[] dimens = getSupportedSize(metrics.widthPixels, metrics.heightPixels, refreshRate);
         int width = dimens[0];
         int height = dimens[1];
@@ -157,8 +148,8 @@ public class ScreenMediaRecorder extends MediaProjection.Callback {
                 * VIDEO_FRAME_RATE_TO_RESOLUTION_RATIO;
         mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
         mMediaRecorder.setVideoEncodingProfileLevel(
-                MediaCodecInfo.CodecProfileLevel.AVCProfileMain,
-                getAvcProfileLevelCodeByName(mAvcProfileLevel));
+                MediaCodecInfo.CodecProfileLevel.AVCProfileHigh,
+                MediaCodecInfo.CodecProfileLevel.AVCLevel3);
         mMediaRecorder.setVideoSize(width, height);
         mMediaRecorder.setVideoFrameRate(refreshRate);
         mMediaRecorder.setVideoEncodingBitRate(vidBitRate);
@@ -201,21 +192,6 @@ public class ScreenMediaRecorder extends MediaProjection.Callback {
                     mMediaProjection, mAudioSource == MIC_AND_INTERNAL);
         }
 
-    }
-
-    /**
-     * Match human-readable AVC level name to its constant value.
-     */
-    private int getAvcProfileLevelCodeByName(final String levelName) {
-        switch (levelName) {
-            case "3": return MediaCodecInfo.CodecProfileLevel.AVCLevel3;
-            case "3.1": return MediaCodecInfo.CodecProfileLevel.AVCLevel31;
-            case "3.2": return MediaCodecInfo.CodecProfileLevel.AVCLevel32;
-            case "4": return MediaCodecInfo.CodecProfileLevel.AVCLevel4;
-            case "4.1": return MediaCodecInfo.CodecProfileLevel.AVCLevel41;
-            default:
-            case "4.2": return MediaCodecInfo.CodecProfileLevel.AVCLevel42;
-        }
     }
 
     /**
