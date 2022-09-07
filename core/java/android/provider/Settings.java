@@ -6128,6 +6128,13 @@ public final class Settings {
          */
         public static final String HIGH_TOUCH_SENSITIVITY_ENABLE =
                 "high_touch_sensitivity_enable";
+		
+		/**
+         * Whether to show the kill app button in notification guts
+         * @hide
+         */
+        public static final String NOTIFICATION_GUTS_KILL_APP_BUTTON =
+                "notification_guts_kill_app_button";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
