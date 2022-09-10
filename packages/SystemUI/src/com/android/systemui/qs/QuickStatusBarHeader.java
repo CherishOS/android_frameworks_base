@@ -78,6 +78,9 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
     private static final String SHOW_QS_DATE =
             "system:" + Settings.System.SHOW_QS_DATE;
 
+    private static final String QS_WEATHER_POSITION =
+            "system:" + Settings.System.QS_WEATHER_POSITION;
+
     private boolean mExpanded;
     private boolean mQsDisabled;
 
@@ -113,6 +116,8 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
     private BatteryMeterView mBatteryRemainingIcon;
     private StatusIconContainer mIconContainer;
     private View mPrivacyChip;
+    
+    private int mQQSWeather;
 
     @Nullable
     private TintedIconManager mTintedIconManager;
@@ -206,7 +211,8 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                 QS_SHOW_BATTERY_PERCENT,
                 StatusBarIconController.ICON_HIDE_LIST,
                 SHOW_QS_CLOCK,
-                SHOW_QS_DATE);
+                SHOW_QS_DATE,
+                QS_WEATHER_POSITION);
     }
 
     void onAttach(TintedIconManager iconManager,
@@ -652,6 +658,19 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         setChipVisibility(mPrivacyChip.getVisibility() == View.VISIBLE);
     }
 
+    private void updateQSWeatherPosition() {
+        if (mQQSWeather == 0) {
+            mQsWeatherHeaderView.setVisibility(View.GONE);
+            mQsWeatherView.setVisibility(View.VISIBLE);
+        } else if (mQQSWeather == 1) {
+            mQsWeatherHeaderView.setVisibility(View.VISIBLE);
+            mQsWeatherView.setVisibility(View.GONE);
+        } else {
+            mQsWeatherHeaderView.setVisibility(View.VISIBLE);
+            mQsWeatherView.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void onTuningChanged(String key, String newValue) {
         switch (key) {
@@ -679,6 +698,11 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                         TunerService.parseIntegerSwitch(newValue, true);
                 mDateContainer.setVisibility(mShowDate ? View.VISIBLE : View.GONE);
                 mClockDateView.setVisibility(mShowDate ? View.VISIBLE : View.GONE);
+                break;
+            case QS_WEATHER_POSITION:
+                mQQSWeather =
+                       TunerService.parseInteger(newValue, 2);
+                updateQSWeatherPosition();
                 break;
             default:
                 break;
