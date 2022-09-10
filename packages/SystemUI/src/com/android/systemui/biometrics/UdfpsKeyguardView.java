@@ -38,10 +38,10 @@ import android.widget.ImageView;
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
-
 import com.android.internal.util.cherish.CherishUtils;
 
 import com.android.settingslib.Utils;
+import android.graphics.Color;
 import com.android.systemui.R;
 import com.android.systemui.animation.Interpolators;
 
@@ -202,8 +202,7 @@ public class UdfpsKeyguardView extends UdfpsAnimationView {
             return;
         }
 
-        mTextColorPrimary = Utils.getColorAttrDefaultColor(mContext,
-            android.R.attr.textColorPrimary);
+        mTextColorPrimary = Color.parseColor("#FFFFFF");
         mLockScreenFp.invalidate(); // updated with a valueCallback
     }
 
