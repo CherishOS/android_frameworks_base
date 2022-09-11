@@ -95,5 +95,6 @@ public class SystemSettings {
         Settings.System.USE_OLD_MOBILETYPE,
         Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL,
         Settings.System.LOCKSCREEN_BATTERY_INFO,
+        Settings.System.VOLUME_KEY_CURSOR_CONTROL,
     };
 }
