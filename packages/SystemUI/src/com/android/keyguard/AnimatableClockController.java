@@ -65,6 +65,7 @@ public class AnimatableClockController extends ViewController<AnimatableClockVie
     private final String mBurmeseNumerals;
     private final float mBurmeseLineSpacing;
     private final float mDefaultLineSpacing;
+    private final float mBrokenFontLineSpacing;
 
     public AnimatableClockController(
             AnimatableClockView view,
@@ -85,6 +86,8 @@ public class AnimatableClockController extends ViewController<AnimatableClockVie
                 R.dimen.keyguard_clock_line_spacing_scale_burmese);
         mDefaultLineSpacing = resources.getFloat(
                 R.dimen.keyguard_clock_line_spacing_scale);
+        mBrokenFontLineSpacing = resources.getFloat(
+                R.dimen.keyguard_clock_line_spacing_scale_broken);
     }
 
     private void reset() {
@@ -218,13 +221,41 @@ public class AnimatableClockController extends ViewController<AnimatableClockVie
         return mIsDozing;
     }
 
+    /**
+     * Check if font is broken
+     */
+    public boolean isBrokenFont() {
+        String font = getContext().getString(com.android.internal.R.string.config_headlineFontFamily);
+        if (font.equalsIgnoreCase("nothingdot57")
+             || font.equalsIgnoreCase("aclonica") 
+             || font.equalsIgnoreCase("bariol")
+             || font.equalsIgnoreCase("comfortaa")
+             || font.equalsIgnoreCase("coolstory")
+             || font.equalsIgnoreCase("jtleonor")
+             || font.equalsIgnoreCase("linotte")
+             || font.equalsIgnoreCase("misans")
+             || font.equalsIgnoreCase("sans-serif")
+             || font.equalsIgnoreCase("accuratist")
+             || font.equalsIgnoreCase("inter_custom")
+             || font.equalsIgnoreCase("opposans")
+             || font.equalsIgnoreCase("robotocondensed")
+             || font.equalsIgnoreCase("nokiapure")) {
+          return true;
+        } else {
+          return false;
+        }
+    }
+    
     private void updateLocale() {
         Locale currLocale = Locale.getDefault();
+        boolean mIsBrokenFont = isBrokenFont();
         if (!Objects.equals(currLocale, mLocale)) {
             mLocale = currLocale;
             NumberFormat nf = NumberFormat.getInstance(mLocale);
             if (nf.format(FORMAT_NUMBER).equals(mBurmeseNumerals)) {
                 mView.setLineSpacingScale(mBurmeseLineSpacing);
+            } else if (mIsBrokenFont && !nf.format(FORMAT_NUMBER).equals(mBurmeseNumerals)) {
+                mView.setLineSpacingScale(mBrokenFontLineSpacing);
             } else {
                 mView.setLineSpacingScale(mDefaultLineSpacing);
             }
@@ -233,8 +264,13 @@ public class AnimatableClockController extends ViewController<AnimatableClockVie
     }
 
     private void initColors() {
+        String font = getContext().getString(com.android.internal.R.string.config_headlineFontFamily);
+        if (font.equalsIgnoreCase("nothingdot57")) {
+        mLockScreenColor = Color.parseColor("#f0f2f2");
+        } else {
         mLockScreenColor = Utils.getColorAttrDefaultColor(getContext(),
                 com.android.systemui.R.attr.wallpaperTextColorAccent);
+	}
         mView.setColors(mDozingColor, mLockScreenColor);
         mView.animateDoze(mIsDozing, false);
     }
