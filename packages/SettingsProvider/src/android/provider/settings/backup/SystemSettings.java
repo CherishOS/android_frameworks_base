@@ -97,5 +97,6 @@ public class SystemSettings {
         Settings.System.CUSTOM_RINGTONE_VIBRATION_PATTERN,
         Settings.System.NOTIFICATION_VIBRATION_PATTERN,
         Settings.System.CUSTOM_NOTIFICATION_VIBRATION_PATTERN,
+        Settings.System.VOLUME_KEY_CURSOR_CONTROL,
     };
 }
