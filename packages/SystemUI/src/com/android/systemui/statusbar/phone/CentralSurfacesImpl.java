@@ -942,6 +942,7 @@ public class CentralSurfacesImpl extends CoreStartable implements
 
         mPanelExpansionStateManager.addExpansionListener(this::onPanelExpansionChanged);
 
+
         mBubbleExpandListener =
                 (isExpanding, key) -> mContext.getMainExecutor().execute(() -> {
                     mNotificationsController.requestNotificationUpdate("onBubbleExpandChanged");
