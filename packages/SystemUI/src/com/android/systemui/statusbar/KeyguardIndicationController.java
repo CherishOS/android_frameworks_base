@@ -49,7 +49,6 @@ import android.content.IntentFilter;
 import android.content.pm.UserInfo;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
-import android.database.ContentObserver;
 import android.graphics.Color;
 import android.hardware.biometrics.BiometricFaceConstants;
 import android.hardware.biometrics.BiometricSourceType;
@@ -98,7 +97,6 @@ import com.android.systemui.statusbar.phone.KeyguardIndicationTextView;
 import com.android.systemui.statusbar.phone.StatusBarKeyguardViewManager;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.util.concurrency.DelayableExecutor;
-import com.android.systemui.util.settings.SystemSettings;
 import com.android.systemui.util.wakelock.SettableWakeLock;
 import com.android.systemui.util.wakelock.WakeLock;
 
@@ -217,11 +215,6 @@ public class KeyguardIndicationController {
         }
     };
 
-    private final SystemSettings mSystemSettings;
-    private final ContentObserver mSettingsObserver;
-
-    private boolean mShowBatteryInfo = false;
-
     /**
      * Creates a new KeyguardIndicationController and registers callbacks.
      */
@@ -245,9 +238,7 @@ public class KeyguardIndicationController {
             ScreenLifecycle screenLifecycle,
             KeyguardBypassController keyguardBypassController,
             AccessibilityManager accessibilityManager,
-            FaceHelpMessageDeferral faceHelpMessageDeferral,
-            SystemSettings systemSettings,
-            @Background Handler backgroundHandler) {
+            FaceHelpMessageDeferral faceHelpMessageDeferral) {
         mContext = context;
         mBroadcastDispatcher = broadcastDispatcher;
         mDevicePolicyManager = devicePolicyManager;
@@ -266,7 +257,6 @@ public class KeyguardIndicationController {
         mKeyguardBypassController = keyguardBypassController;
         mAccessibilityManager = accessibilityManager;
         mScreenLifecycle = screenLifecycle;
-        mSystemSettings = systemSettings;
         mScreenLifecycle.addObserver(mScreenObserver);
 
         mFaceAcquiredMessageDeferral = faceHelpMessageDeferral;
@@ -291,26 +281,6 @@ public class KeyguardIndicationController {
                 }
             }
         };
-        mSettingsObserver = new ContentObserver(backgroundHandler) {
-            @Override
-            public void onChange(boolean selfChange) {
-                updateSettings();
-            }
-        };
-        backgroundHandler.post(() -> {
-            updateSettings();
-        });
-    }
-
-    private void updateSettings() {
-        final boolean showBatteryInfo = mSystemSettings.getIntForUser(
-            Settings.System.LOCKSCREEN_BATTERY_INFO, 1,
-            UserHandle.USER_CURRENT
-        ) == 1;
-        mHandler.post(() -> {
-            mShowBatteryInfo = showBatteryInfo;
-            updateLockScreenBatteryMsg(true /* animate */);
-        });
     }
 
     /** Call this after construction to finish setting up the instance. */
@@ -327,11 +297,6 @@ public class KeyguardIndicationController {
         mKeyguardStateController.addCallback(mKeyguardStateCallback);
 
         mStatusBarStateListener.onDozingChanged(mStatusBarStateController.isDozing());
-        mSystemSettings.registerContentObserverForUser(
-            Settings.System.LOCKSCREEN_BATTERY_INFO,
-            mSettingsObserver,
-            UserHandle.USER_ALL
-        );
     }
 
     public void setIndicationArea(ViewGroup indicationArea) {
@@ -368,7 +333,6 @@ public class KeyguardIndicationController {
     public void destroy() {
         mHandler.removeCallbacksAndMessages(null);
         mBroadcastDispatcher.unregisterReceiver(mBroadcastReceiver);
-        mSystemSettings.unregisterContentObserver(mSettingsObserver);
     }
 
     private void handleAlignStateChanged(int alignState) {
@@ -968,21 +932,36 @@ public class KeyguardIndicationController {
                     : R.string.keyguard_plugged_in;
         }
 
-        final String percentage = NumberFormat.getPercentInstance().format(mBatteryLevel / 100f);
-        String batteryInfo = "\n";
-        if (mShowBatteryInfo) {
-            batteryInfo += (mChargingCurrent / 1000) + "mA";
-            batteryInfo += " · " + String.format("%.1f", (mChargingVoltage / 1000000)) + "V";
-            batteryInfo += " · " +  mTemperature / 10 + "°C";
+        String batteryInfo = "";
+        boolean showbatteryInfo = Settings.System.getIntForUser(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_BATTERY_INFO, 1, UserHandle.USER_CURRENT) == 1;
+        if (showbatteryInfo) {
+            if (mChargingCurrent > 0) {
+                batteryInfo = batteryInfo + (mChargingCurrent / 1000) + "mA";
+            }
+            if (mChargingVoltage > 0) {
+                batteryInfo = (batteryInfo == "" ? "" : batteryInfo + " · ") +
+                        String.format("%.1f", (mChargingVoltage / 1000 / 1000)) + "V";
+            }
+            if (mTemperature > 0) {
+                batteryInfo = (batteryInfo == "" ? "" : batteryInfo + " · ") +
+                        mTemperature / 10 + "°C";
+            }
+            if (batteryInfo != "") {
+                batteryInfo = "\n" + batteryInfo;
+            }
         }
 
+        String percentage = NumberFormat.getPercentInstance().format(mBatteryLevel / 100f);
         if (hasChargingTime) {
             String chargingTimeFormatted = Formatter.formatShortElapsedTimeRoundingUpToMinutes(
                     mContext, mChargingTimeRemaining);
-            return mContext.getResources().getString(chargingId, chargingTimeFormatted,
-                    percentage) + batteryInfo;
+            String chargingText = mContext.getResources().getString(chargingId, chargingTimeFormatted,
+                    percentage);
+            return chargingText + batteryInfo;
         } else {
-            return mContext.getResources().getString(chargingId, percentage) + batteryInfo;
+            String chargingText =  mContext.getResources().getString(chargingId, percentage);
+            return chargingText + batteryInfo;
         }
     }
 
