@@ -59,20 +59,17 @@ public class PixelPropsUtils {
             "com.breel.wallpapers20",
             "com.nothing.smartcenter",
             "com.nhs.online.nhsonline",
-            "com.snapchat.android"
+            "com.snapchat.android",
+            "com.amazon.avod.thirdpartyclient",
+            "com.disney.disneyplus",
+            "com.netflix.mediaclient",
+            "in.startv.hotstar"
     };
 
     private static final String[] customGoogleCameraPackages = {
             "com.google.android.MTCL83",
             "com.google.android.UltraCVM",
             "com.google.android.apps.cameralite"
-    };
-
-    private static final String[] streamingPackagesToChange = {
-        "com.amazon.avod.thirdpartyclient",
-        "com.disney.disneyplus",
-        "com.netflix.mediaclient",
-        "in.startv.hotstar"
     };
 
     private static final Map<String, Object> propsToChangeROG1;
@@ -204,8 +201,7 @@ public class PixelPropsUtils {
         }
         if (packageName.startsWith("com.google.")
                 || packageName.startsWith(SAMSUNG)
-                || Arrays.asList(extraPackagesToChange).contains(packageName)
-                || Arrays.asList(streamingPackagesToChange).contains(packageName)) {
+                || Arrays.asList(extraPackagesToChange).contains(packageName)) {
 
             Map<String, Object> propsToChange = new HashMap<>();
 
