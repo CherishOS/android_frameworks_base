@@ -82,7 +82,7 @@ import com.android.systemui.util.concurrency.DelayableExecutor;
 import com.android.systemui.util.concurrency.Execution;
 import com.android.systemui.util.settings.SecureSettings;
 import com.android.systemui.util.time.SystemClock;
-
+import com.android.internal.util.cherish.CherishUtils;
 import com.android.systemui.R;
 
 import java.util.HashSet;
@@ -184,6 +184,7 @@ public class UdfpsController implements DozeReceiver {
     private final AmbientDisplayConfiguration mAmbientDisplayConfiguration;
     private final SecureSettings mSecureSettings;
     private boolean mScreenOffUdfpsEnabled;
+	private UdfpsAnimation mUdfpsAnimation;
 
     private boolean mDisableNightMode;
     private boolean mNightModeActive;
@@ -732,6 +733,9 @@ public class UdfpsController implements DozeReceiver {
                 }
             }
         );
+        if (CherishUtils.isPackageInstalled(mContext, "com.cherish.udfps.resources")) {
+            mUdfpsAnimation = new UdfpsAnimation(mContext, mWindowManager, mSensorProps);
+        }
     }
 
     private void updateScreenOffUdfpsState() {
@@ -795,6 +799,12 @@ public class UdfpsController implements DozeReceiver {
 
         mOverlay = overlay;
         final int requestReason = overlay.getRequestReason();
+
+        if (mUdfpsAnimation != null) {
+            mUdfpsAnimation.setIsKeyguard(requestReason ==
+                    BiometricOverlayConstants.REASON_AUTH_KEYGUARD);
+        }
+
         if (requestReason == REASON_AUTH_KEYGUARD
                 && !mKeyguardUpdateMonitor.isFingerprintDetectionRunning()) {
             Log.d(TAG, "Attempting to showUdfpsOverlay when fingerprint detection"
@@ -982,6 +992,9 @@ public class UdfpsController implements DozeReceiver {
         for (Callback cb : mCallbacks) {
             cb.onFingerDown();
         }
+        if (mUdfpsAnimation != null) {
+            mUdfpsAnimation.show();
+        }
     }
 
     private void onFingerUp(long requestId, @NonNull UdfpsView view) {
@@ -1004,6 +1017,9 @@ public class UdfpsController implements DozeReceiver {
             for (Callback cb : mCallbacks) {
                 cb.onFingerUp();
             }
+        }
+        if (mUdfpsAnimation != null) {
+            mUdfpsAnimation.hide();
         }
         mOnFingerDown = false;
         if (view.isIlluminationRequested()) {
