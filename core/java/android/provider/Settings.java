@@ -6161,6 +6161,13 @@ public final class Settings {
          * @hide
          */
         public static final String TORCH_POWER_BUTTON_GESTURE = "torch_power_button_gesture";
+		
+		
+		/**
+         * Whether to enable the ripple animation on fingerprint unlock
+         * @hide
+         */
+        public static final String ENABLE_RIPPLE_EFFECT = "enable_ripple_effect";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
