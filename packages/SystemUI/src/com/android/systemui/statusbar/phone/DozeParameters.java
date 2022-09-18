@@ -363,6 +363,10 @@ public class DozeParameters implements
         return 2 * getPulseVisibleDuration();
     }
 
+    public boolean doubleTapNeedsProximityCheck() {
+        return mResources.getBoolean(R.bool.doze_double_tap_proximity_check);
+    }
+
     public boolean doubleTapReportsTouchCoordinates() {
         return mResources.getBoolean(R.bool.doze_double_tap_reports_touch_coordinates);
     }
@@ -383,6 +387,10 @@ public class DozeParameters implements
      */
     private boolean singleTapUsesProx() {
         return mResources.getBoolean(R.bool.doze_single_tap_uses_prox);
+    }
+
+    public boolean longPressNeedsProximityCheck() {
+        return mResources.getBoolean(R.bool.doze_long_press_proximity_check);
     }
 
     /**
