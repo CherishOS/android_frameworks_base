@@ -222,16 +222,16 @@ public class LocationControllerImpl extends BroadcastReceiver implements Locatio
 
     private boolean getAllAccessesSetting() {
         return mDeviceConfigProxy.getBoolean(DeviceConfig.NAMESPACE_PRIVACY,
-                SystemUiDeviceConfigFlags.PROPERTY_LOCATION_INDICATORS_SMALL_ENABLED, true);
+                SystemUiDeviceConfigFlags.PROPERTY_LOCATION_INDICATORS_SMALL_ENABLED, false);
     }
 
     private boolean getShowSystemFlag() {
         return mDeviceConfigProxy.getBoolean(DeviceConfig.NAMESPACE_PRIVACY,
-                SystemUiDeviceConfigFlags.PROPERTY_LOCATION_INDICATORS_SHOW_SYSTEM, true);
+                SystemUiDeviceConfigFlags.PROPERTY_LOCATION_INDICATORS_SHOW_SYSTEM, false);
     }
 
     private boolean getShowSystemSetting() {
-        return mSecureSettings.getIntForUser(Settings.Secure.LOCATION_SHOW_SYSTEM_OPS, 1,
+        return mSecureSettings.getIntForUser(Settings.Secure.LOCATION_SHOW_SYSTEM_OPS, 0,
                 UserHandle.USER_CURRENT) == 1;
     }
 
