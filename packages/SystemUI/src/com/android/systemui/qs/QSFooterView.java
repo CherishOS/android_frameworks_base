@@ -101,12 +101,12 @@ public class QSFooterView extends FrameLayout {
         String suffix;
         if (isWifiConnected()) {
             info = mDataController.getWifiDailyDataUsageInfo();
-            suffix = getWifiSsid();
+            suffix = mContext.getResources().getString(R.string.usage_wifi_default_suffix);
         } else {
             mDataController.setSubscriptionId(
                     SubscriptionManager.getDefaultDataSubscriptionId());
             info = mDataController.getDailyDataUsageInfo();
-            suffix = getSlotCarrierName();
+            suffix = mContext.getResources().getString(R.string.usage_data_default_suffix);
         }
         mUsageText.setText(formatDataUsage(info.usageLevel) + " " +
                 mContext.getResources().getString(R.string.usage_data) +
@@ -128,31 +128,6 @@ public class QSFooterView extends FrameLayout {
                     capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
         } else {
             return false;
-        }
-    }
-
-    private String getSlotCarrierName() {
-        CharSequence result = mContext.getResources().getString(R.string.usage_data_default_suffix);
-        int subId = mSubManager.getDefaultDataSubscriptionId();
-        final List<SubscriptionInfo> subInfoList =
-                mSubManager.getActiveSubscriptionInfoList(true);
-        if (subInfoList != null) {
-            for (SubscriptionInfo subInfo : subInfoList) {
-                if (subId == subInfo.getSubscriptionId()) {
-                    result = subInfo.getDisplayName();
-                    break;
-                }
-            }
-        }
-        return result.toString();
-    }
-
-    private String getWifiSsid() {
-        final WifiInfo wifiInfo = mWifiManager.getConnectionInfo();
-        if (wifiInfo.getHiddenSSID() || wifiInfo.getSSID() == WifiManager.UNKNOWN_SSID) {
-            return mContext.getResources().getString(R.string.usage_wifi_default_suffix);
-        } else {
-            return wifiInfo.getSSID().replace("\"", "");
         }
     }
 
@@ -241,7 +216,7 @@ public class QSFooterView extends FrameLayout {
                 Settings.System.QS_FOOTER_DATA_USAGE, 0,
                 UserHandle.USER_CURRENT) == 1;
 
-        mUsageText.setVisibility(mShouldShowDataUsage && mExpanded ? View.VISIBLE : View.GONE);
+        mUsageText.setVisibility(mShouldShowDataUsage && mExpanded ? View.VISIBLE : View.INVISIBLE);
         if ((mExpanded) && mShouldShowDataUsage) setUsageText();
     }
 }
