@@ -27,6 +27,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.hardware.fingerprint.FingerprintSensorPropertiesInternal;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.DisplayUtils;
 import android.util.Log;
 import android.util.MathUtils;
 import android.view.Gravity;
@@ -79,15 +80,17 @@ public class UdfpsAnimation extends ImageView {
 
         mWindowManager = windowManager;
 
-        mMaxBurnInOffsetX = context.getResources()
-            .getDimensionPixelSize(R.dimen.udfps_burn_in_offset_x);
-        mMaxBurnInOffsetY = context.getResources()
-            .getDimensionPixelSize(R.dimen.udfps_burn_in_offset_y);
+        final float scaleFactor = DisplayUtils.getScaleFactor(mContext);
+
+        mMaxBurnInOffsetX = (int) (context.getResources()
+            .getDimensionPixelSize(R.dimen.udfps_burn_in_offset_x) * scaleFactor);
+        mMaxBurnInOffsetY = (int) (context.getResources()
+            .getDimensionPixelSize(R.dimen.udfps_burn_in_offset_y) * scaleFactor);
 
         mUdfpsAnimationPackage = "com.pixeldust.udfps.resources";
 
         mAnimationSize = mContext.getResources().getDimensionPixelSize(R.dimen.udfps_animation_size);
-        mAnimationOffset = mContext.getResources().getDimensionPixelSize(R.dimen.udfps_animation_offset);
+        mAnimationOffset = (int) (mContext.getResources().getDimensionPixelSize(R.dimen.udfps_animation_offset) * scaleFactor);
 
         mAnimParams.height = mAnimationSize;
         mAnimParams.width = mAnimationSize;
@@ -98,7 +101,7 @@ public class UdfpsAnimation extends ImageView {
                 | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         mAnimParams.gravity = Gravity.TOP | Gravity.CENTER;
-        mAnimParams.y = props.getLocation().sensorLocationY - props.getLocation().sensorRadius
+        mAnimParams.y = (int) (props.getLocation().sensorLocationY * scaleFactor) - (int) (props.getLocation().sensorRadius * scaleFactor)
                 - (mAnimationSize / 2) + mAnimationOffset;
 
         try {
