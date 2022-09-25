@@ -212,6 +212,7 @@ import com.android.server.twilight.TwilightService;
 import com.android.server.uri.UriGrantsManagerService;
 import com.android.server.usage.UsageStatsService;
 import com.android.server.utils.TimingsTraceAndSlog;
+import com.android.server.vibrator.LinearmotorVibratorService;
 import com.android.server.vibrator.VibratorManagerService;
 import com.android.server.vr.VrManagerService;
 import com.android.server.webkit.WebViewUpdateService;
@@ -2569,6 +2570,10 @@ public final class SystemServer implements Dumpable {
                 mSystemServiceManager.startService(PocketBridgeService.class);
                 t.traceEnd();
             }
+
+            t.traceBegin("StartLinearmotorVibratorService");
+            mSystemServiceManager.startService(LinearmotorVibratorService.class);
+            t.traceEnd();
         }
 
         t.traceBegin("StartMediaProjectionManager");
