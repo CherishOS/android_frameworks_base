@@ -119,14 +119,12 @@ public class SparkCircleClockController implements ClockPlugin {
 
     
     public void onTimeTick() {
-        ClockLayout clockLayout = mView;
-        if (clockLayout != null) {
-            clockLayout.onTimeChanged();
-        }
-        ClockLayout clockLayout2 = mBigClockView;
-        if (clockLayout2 != null) {
-            clockLayout2.onTimeChanged();
-        }
+        mView.onTimeChanged();
+        mBigClockView.onTimeChanged();
+        mDateClock.refreshTime();
+        mTimeClock1.refreshTime();
+        mTimeClock2.refreshTime();
+        mTimeClock3.refreshTime();
     }
 
     

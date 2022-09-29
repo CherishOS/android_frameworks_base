@@ -27,30 +27,21 @@ public class OOSClockController implements ClockPlugin {
     private TextClock mTimeClock;
     private TextClock mTimeClockAccented;
     private ClockLayout mView;
-
     
     public String getName() {
         return "oos";
     }
 
-    
     public String getTitle() {
         return "OxygenOS";
     }
-
-    
-    public void onTimeZoneChanged(TimeZone timeZone) {
-    }
-
     
     public boolean usesPreferredY() {
         return false;
     }
-
     
     public void setStyle(Paint.Style style) {
     }
-
     
     public boolean shouldShowStatusArea() {
         return false;
@@ -76,7 +67,6 @@ public class OOSClockController implements ClockPlugin {
         mDate = (TextClock) view.findViewById(R.id.timedate);
     }
 
-    
     public void onDestroyView() {
         mView = null;
         mTimeClock = null;
@@ -84,14 +74,11 @@ public class OOSClockController implements ClockPlugin {
         mDate = null;
         mTimeClockAccented = null;
     }
-
-
     
     public Bitmap getThumbnail() {
         return BitmapFactory.decodeResource(mResources, R.drawable.default_thumbnail);
     }
 
-    
     public Bitmap getPreview(int width, int height) {
 
         View inflate = mLayoutInflater.inflate(R.layout.digital_clock_oos_preview, (ViewGroup) null);
@@ -102,7 +89,6 @@ public class OOSClockController implements ClockPlugin {
         return mRenderer.createPreview(inflate, width, height);
     }
 
-    
     public View getView() {
         if (mView == null) {
             createViews();
@@ -110,17 +96,14 @@ public class OOSClockController implements ClockPlugin {
         return mView;
     }
 
-    
     public View getBigClockView() {
         return mBigView;
     }
 
-    
     public int getPreferredY(int totalHeight) {
         return totalHeight / 6;
     }
 
-    
     public void setTextColor(int color) {
         mTimeClock.setTextColor(color);
         mDay.setTextColor(color);
@@ -128,7 +111,6 @@ public class OOSClockController implements ClockPlugin {
         mColor = color;
     }
 
-    
     public void setColorPalette(boolean supportsDarkText, int[] colorPalette) {
         if (colorPalette == null || colorPalette.length == 0) {
             return;
@@ -139,14 +121,8 @@ public class OOSClockController implements ClockPlugin {
 
     
     public void onTimeTick() {
-        ClockLayout clockLayout = mView;
-        if (clockLayout != null) {
-            clockLayout.onTimeChanged();
-        }
-        ClockLayout clockLayout2 = mBigView;
-        if (clockLayout2 != null) {
-            clockLayout2.onTimeChanged();
-        }
+        mView.onTimeChanged();
+        mBigView.onTimeChanged();
         mTimeClock.refreshTime();
         mTimeClockAccented.refreshTime();
         mDay.refreshTime();
@@ -154,7 +130,6 @@ public class OOSClockController implements ClockPlugin {
         setTextColor(mColor);
     }
 
-    
     public void setDarkAmount(float darkAmount) {
         ClockLayout clockLayout = mView;
         if (clockLayout != null) {
@@ -167,5 +142,9 @@ public class OOSClockController implements ClockPlugin {
             i2 = Utils.getColorAttrDefaultColor(mTimeClock.getContext(), R.attr.wallpaperTextColorAccent);
         }
         mColor = i2;
+    }
+
+    public void onTimeZoneChanged(TimeZone timeZone) {
+        onTimeTick();
     }
 }
