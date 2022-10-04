@@ -5703,6 +5703,11 @@ public final class Settings {
 		/**
          * @hide
          */
+        public static final String USE_TILES_ON_SECURE_KEYGUARD = "use_tiles_on_secure_keyguard";
+		
+		/**
+         * @hide
+         */
         public static final String USE_OLD_MOBILETYPE = "use_old_mobiletype";
 		
 		/**
@@ -11920,13 +11925,6 @@ public final class Settings {
          * @hide
          */
         public static final String GESTURE_NAVBAR_LENGTH_MODE = "gesture_navbar_length_mode";
-
-        /**
-         * Whether to disable secure qs tiles on lockscreen.
-         * Default 1
-         * @hide
-         */
-        public static final String DISABLE_SECURE_TILES_ON_LOCKSCREEN = "disable_secure_tiles_on_lockscreen";
 
         /**
          * Whether to disable qs on secure lockscreen.
