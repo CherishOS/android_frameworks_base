@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2021 CorvusOS
+ * Copyright (C) 2017 AICP
+ *		 2021 CorvusOS
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,65 +23,47 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.ContentObserver;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.android.systemui.R;
 import com.android.systemui.omni.OmniJawsClient;
 
-import java.util.Arrays;
-
-public class KGWeatherText extends TextView implements
+public class KGWeatherImage extends ImageView implements
         OmniJawsClient.OmniJawsObserver {
 
-    private static final String TAG = KGWeatherText.class.getSimpleName();
+    private String TAG = KGWeatherImage.class.getSimpleName();
 
     private static final boolean DEBUG = false;
 
     private Context mContext;
 
     private int mQsWeatherEnabled;
+    private Drawable mWeatherImage;
     private OmniJawsClient mWeatherClient;
     private OmniJawsClient.WeatherInfo mWeatherData;
     private boolean mEnabled;
+    private boolean mAttached;
 
     Handler mHandler;
 
-    class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.KG_SHOW_WEATHER_TEMP), false, this,
-                    UserHandle.USER_ALL);
-            updateSettings(false);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            updateSettings(true);
-        }
-    }
-
-    public KGWeatherText(Context context) {
+    public KGWeatherImage(Context context) {
         this(context, null);
-
     }
 
-    public KGWeatherText(Context context, AttributeSet attrs) {
+    public KGWeatherImage(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public KGWeatherText(Context context, AttributeSet attrs, int defStyle) {
+    public KGWeatherImage(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         final Resources resources = getResources();
         mContext = context;
@@ -89,6 +72,11 @@ public class KGWeatherText extends TextView implements
         mEnabled = mWeatherClient.isOmniJawsEnabled();
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
         settingsObserver.observe();
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
     }
 
     @Override
@@ -106,6 +94,25 @@ public class KGWeatherText extends TextView implements
         mWeatherClient.cleanupObserver();
     }
 
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.KG_SHOW_WEATHER_TEMP), false, this,
+                    UserHandle.USER_ALL);
+            updateSettings();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
+    }
+
     @Override
     public void weatherUpdated() {
         if (DEBUG) Log.d(TAG, "weatherUpdated");
@@ -117,27 +124,16 @@ public class KGWeatherText extends TextView implements
         if (DEBUG) Log.d(TAG, "weatherError " + errorReason);
     }
 
-    public void updateSettings(boolean onChange) {
+    public void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
         mQsWeatherEnabled = Settings.System.getIntForUser(
                 resolver, Settings.System.KG_SHOW_WEATHER_TEMP, 0,
                 UserHandle.USER_CURRENT);
-        if ((mQsWeatherEnabled != 0 && mQsWeatherEnabled != 5)) {
+        if ((mQsWeatherEnabled == 1 || mQsWeatherEnabled == 2 || mQsWeatherEnabled == 5)) {
             mWeatherClient.setOmniJawsEnabled(true);
             queryAndUpdateWeather();
         } else {
             setVisibility(View.GONE);
-        }
-
-        if (onChange && mQsWeatherEnabled == 0) {
-            // Disable OmniJaws if tile isn't used either
-            String[] tiles = Settings.Secure.getStringForUser(resolver,
-                    Settings.Secure.QS_TILES, UserHandle.USER_CURRENT).split(",");
-            boolean weatherTileEnabled = Arrays.asList(tiles).contains("weather");
-            Log.d(TAG, "Weather tile enabled " + weatherTileEnabled);
-            if (!weatherTileEnabled) {
-                mWeatherClient.setOmniJawsEnabled(false);
-            }
         }
     }
 
@@ -147,18 +143,13 @@ public class KGWeatherText extends TextView implements
             if (mEnabled) {
                 mWeatherClient.queryWeather();
                 mWeatherData = mWeatherClient.getWeatherInfo();
+                mWeatherImage = mWeatherClient.getWeatherConditionImage(mWeatherData.conditionCode);
                 if (mWeatherData != null) {
-                    if ((mQsWeatherEnabled != 0 || mQsWeatherEnabled != 5)) {
-                        if (mQsWeatherEnabled == 2 || mQsWeatherEnabled == 4) {
-                            setText(mWeatherData.temp);
-                        } else {
-                            String wDot = "\u00b7";
-                            setText(mWeatherData.temp + mWeatherData.tempUnits);
-                            setTextSize(16.0f);
-                        }
-                        if (mQsWeatherEnabled != 0 && mQsWeatherEnabled != 5) {
-                            setVisibility(View.VISIBLE);
-                        }
+                    if ((mQsWeatherEnabled == 1
+                            || mQsWeatherEnabled == 2
+                            || mQsWeatherEnabled == 5)) {
+                        setImageDrawable(mWeatherImage);
+                        setVisibility(View.VISIBLE);
                     }
                 } else {
                     setVisibility(View.GONE);
