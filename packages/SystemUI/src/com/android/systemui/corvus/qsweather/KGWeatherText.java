@@ -153,7 +153,7 @@ public class KGWeatherText extends TextView implements
                             setText(mWeatherData.temp);
                         } else {
                             String wDot = "\u00b7";
-                            setText(mWeatherData.temp + mWeatherData.tempUnits);
+                            setText(mWeatherData.temp + "  " + mWeatherData.tempUnits + "  " + mWeatherData.condition);
                             setTextSize(16.0f);
                         }
                         if (mQsWeatherEnabled != 0 && mQsWeatherEnabled != 5) {
