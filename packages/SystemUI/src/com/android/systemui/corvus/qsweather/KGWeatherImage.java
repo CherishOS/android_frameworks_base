@@ -147,7 +147,8 @@ public class KGWeatherImage extends ImageView implements
                 if (mWeatherData != null) {
                     if ((mQsWeatherEnabled == 1
                             || mQsWeatherEnabled == 2
-                            || mQsWeatherEnabled == 5)) {
+                            || mQsWeatherEnabled == 5
+                            || mQsWeatherEnabled == 6)) {
                         setImageDrawable(mWeatherImage);
                         setVisibility(View.VISIBLE);
                     }

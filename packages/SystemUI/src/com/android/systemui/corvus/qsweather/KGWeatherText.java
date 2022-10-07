@@ -151,9 +151,11 @@ public class KGWeatherText extends TextView implements
                     if ((mQsWeatherEnabled != 0 || mQsWeatherEnabled != 5)) {
                         if (mQsWeatherEnabled == 2 || mQsWeatherEnabled == 4) {
                             setText(mWeatherData.temp);
+                        } else if (mQsWeatherEnabled == 6) {
+                            setText(mWeatherData.temp + mWeatherData.tempUnits + " ~ "  + mWeatherData.condition);
+                            setTextSize(16.0f);
                         } else {
-                            String wDot = "\u00b7";
-                            setText(mWeatherData.temp + "  " + mWeatherData.tempUnits + "  " + mWeatherData.condition);
+                            setText(mWeatherData.temp + mWeatherData.tempUnits);
                             setTextSize(16.0f);
                         }
                         if (mQsWeatherEnabled != 0 && mQsWeatherEnabled != 5) {
