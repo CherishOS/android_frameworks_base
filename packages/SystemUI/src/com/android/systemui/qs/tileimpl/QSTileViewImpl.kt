@@ -669,7 +669,7 @@ open class QSTileViewImpl @JvmOverloads constructor(
                 else if(qsPanelStyle == 3) 
                     colorActiveRandom 
                 else colorActive
-            state == Tile.STATE_INACTIVE -> if(qsPanelStyle == 2 || qsPanelStyle ==3) colorInactiveAlpha else colorInactive
+            state == Tile.STATE_INACTIVE -> if(qsPanelStyle >= 1) colorInactiveAlpha else colorInactive
             else -> {
                 Log.e(TAG, "Invalid state $state")
                 0
