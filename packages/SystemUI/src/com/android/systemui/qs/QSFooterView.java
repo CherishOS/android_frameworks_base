@@ -103,7 +103,7 @@ public class QSFooterView extends FrameLayout {
         DataUsageController.DataUsageInfo info;
         String suffix;
         if (isWifiConnected()) {
-            info = mDataController.getWifiDailyDataUsageInfo();
+             info = mDataController.getWifiDailyDataUsageInfo();
             suffix = mContext.getResources().getString(R.string.usage_wifi_default_suffix);
         } else {
             mDataController.setSubscriptionId(
@@ -111,9 +111,13 @@ public class QSFooterView extends FrameLayout {
             info = mDataController.getDailyDataUsageInfo();
             suffix = mContext.getResources().getString(R.string.usage_data_default_suffix);
         }
-        mUsageText.setText(formatDataUsage(info.usageLevel) + " " +
-                mContext.getResources().getString(R.string.usage_data) +
-                " (" + suffix + ")");
+        if (info != null) {
+          mUsageText.setText(formatDataUsage(info.usageLevel) + " " +
+                  mContext.getResources().getString(R.string.usage_data) +
+                  " (" + suffix + ")");
+        } else {
+           mUsageText.setText(" ");
+	}
     }
 
     private CharSequence formatDataUsage(long byteValue) {
