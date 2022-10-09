@@ -266,6 +266,7 @@ public class VolumeDialogImpl implements VolumeDialog,
     private View mExpandRowsView;
     private View mAppVolumeView;
     private ImageButton mAppVolumeIcon;
+    private View mAppVolumeSpacer;
     private FrameLayout mZenIcon;
     private final List<VolumeRow> mRows = new ArrayList<>();
     private ConfigurableTexts mConfigurableTexts;
@@ -684,6 +685,7 @@ public class VolumeDialogImpl implements VolumeDialog,
 
         mAppVolumeView = mDialog.findViewById(R.id.app_volume_container);
         mAppVolumeIcon = mDialog.findViewById(R.id.app_volume);
+        mAppVolumeSpacer = mDialog.findViewById(R.id.app_volume_container_spacer);
 
         if (mRows.isEmpty()) {
             if (!AudioSystem.isSingleVolume(mContext)) {
@@ -1344,6 +1346,7 @@ public class VolumeDialogImpl implements VolumeDialog,
     public void initAppVolumeH() {
         if (mAppVolumeView != null) {
             mAppVolumeView.setVisibility(shouldShowAppVolume() ? VISIBLE : GONE);
+            mAppVolumeSpacer.setVisibility(shouldShowAppVolume() ? VISIBLE : GONE);
         }
         if (mAppVolumeIcon != null) {
             mAppVolumeIcon.setOnClickListener(v -> {
