@@ -6255,12 +6255,6 @@ public final class Settings {
         public static final String SHOW_QS_DATE = "show_qs_date";
 		
 		/**
-         * Whether to show data usage in qs footer
-         * @hide
-         */
-        public static final String QS_FOOTER_DATA_USAGE = "qs_footer_data_usage";
-		
-		/**
          * Whether edge light is enabled.
          * Default 0
          * @hide
