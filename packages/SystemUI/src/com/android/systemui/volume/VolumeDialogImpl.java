@@ -2301,14 +2301,14 @@ public class VolumeDialogImpl implements VolumeDialog,
                 : Utils.getColorAttr(mContext, com.android.internal.R.attr.colorAccentPrimary);
         final int alpha = useActiveColoring
                 ? Color.alpha(colorTint.getDefaultColor())
-                : getAlphaAttr(android.R.attr.disabledAlpha);
+                : getAlphaAttr(android.R.attr.secondaryContentAlpha);
 
         final ColorStateList bgTint = useActiveColoring
                 ? Utils.getColorAttr(mContext, android.R.attr.colorBackgroundFloating)
-                : Utils.getColorAttr(mContext, com.android.internal.R.attr.colorAccentCustom);
+                : Utils.getColorAttr(mContext, com.android.internal.R.attr.textColorOnAccent);
 
         final ColorStateList inverseTextTint = Utils.getColorAttr(
-                mContext, com.android.internal.R.attr.colorAccentCustom);
+                mContext, com.android.internal.R.attr.textColorOnAccent);
 
         row.sliderProgressSolid.setTintList(colorTint);
         if (row.sliderProgressIcon != null) {
