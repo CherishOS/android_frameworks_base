@@ -574,6 +574,12 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             animateShow(mSystemIconArea, animate);
             animateShow(mCustomIconArea, animate);
             animateShow(mCenterClockLayout, animate);
+		} else {
+            // We are in the middle of a system status event animation, which will animate the
+            // alpha (but not the visibility). Allow the view to become visible again
+            mSystemIconArea.setVisibility(View.VISIBLE);
+            mCustomIconArea.setVisibility(View.VISIBLE);
+			 mCenterClockLayout.setVisibility(View.VISIBLE);
         }
     }
 
