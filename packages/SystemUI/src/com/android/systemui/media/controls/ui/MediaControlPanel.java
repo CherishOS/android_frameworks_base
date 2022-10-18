@@ -231,6 +231,8 @@ public class MediaControlPanel {
     @VisibleForTesting
     MultiRippleController.Companion.RipplesFinishedListener mRipplesFinishedListener = null;
 
+    private final SysuiColorExtractor mColorExtractor = Dependency.get(SysuiColorExtractor.class);
+
     /**
      * Initialize a new control panel
      *
