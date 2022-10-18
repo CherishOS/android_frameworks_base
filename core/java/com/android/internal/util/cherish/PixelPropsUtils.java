@@ -51,6 +51,9 @@ public class PixelPropsUtils {
     private static final String DEVICE = "org.pixelexperience.device";
     private static final boolean DEBUG = false;
 
+    private static final Boolean sEnablePixelProps =
+            Resources.getSystem().getBoolean(R.bool.config_enablePixelProps);
+
     private static final String SAMSUNG = "com.samsung.";
 
     private static final Map<String, Object> propsToChangeGeneric;
@@ -247,6 +250,11 @@ public class PixelPropsUtils {
     }
 
     public static void setProps(Application app) {
+        if (!sEnablePixelProps) {
+            dlog("Pixel props is disabled by config");
+            return;
+        }
+
         propsToChangeGeneric.forEach((k, v) -> setPropValue(k, v));
 
         final String packageName = app.getPackageName();
