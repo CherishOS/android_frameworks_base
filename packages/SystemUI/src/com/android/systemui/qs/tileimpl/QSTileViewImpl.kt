@@ -26,10 +26,8 @@ import android.content.res.Resources.ID_NULL
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.RippleDrawable
 import android.os.Trace
-import android.provider.Settings
 import android.service.quicksettings.Tile
 import android.text.TextUtils
-import android.os.UserHandle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -53,8 +51,6 @@ import com.android.systemui.plugins.qs.QSTileView
 import com.android.systemui.qs.tileimpl.QSIconViewImpl.QS_ANIM_LENGTH
 import java.util.Objects
 
-import org.omnirom.omnilib.utils.OmniUtils;
-
 private const val TAG = "QSTileViewImpl"
 open class QSTileViewImpl @JvmOverloads constructor(
     context: Context,
@@ -69,7 +65,6 @@ open class QSTileViewImpl @JvmOverloads constructor(
         private const val SECONDARY_LABEL_NAME = "secondaryLabel"
         private const val CHEVRON_NAME = "chevron"
         const val UNAVAILABLE_ALPHA = 0.3f
-        const val TILE_ALPHA = 0.2f
         @VisibleForTesting
         internal const val TILE_STATE_RES_PREFIX = "tile_states_"
     }
@@ -98,14 +93,6 @@ open class QSTileViewImpl @JvmOverloads constructor(
             android.R.attr.colorAccent)
     private val colorInactive = Utils.getColorAttrDefaultColor(context, R.attr.offStateColor)
     private val colorUnavailable = Utils.applyAlpha(UNAVAILABLE_ALPHA, colorInactive)
-
-    private var colorActiveStyle = Utils.applyAlpha(TILE_ALPHA, Utils.getColorAttrDefaultColor(context,
-            android.R.attr.colorAccent))
-    private val colorInactiveStyle = resources.getColor(R.color.qs_translucent_bg)
-    private val colorLabelActiveStyle =
-            Utils.getColorAttrDefaultColor(context, com.android.internal.R.attr.colorAccent)
-    private val colorSecondaryLabelActiveStyle =
-            Utils.getColorAttrDefaultColor(context, com.android.internal.R.attr.colorAccent)
 
     private val colorLabelActive =
             Utils.getColorAttrDefaultColor(context, com.android.internal.R.attr.textColorPrimaryInverse)
@@ -155,28 +142,11 @@ open class QSTileViewImpl @JvmOverloads constructor(
     private var lastVisibility = View.VISIBLE
 
     private val locInScreen = IntArray(2)
-    private var vertical = false
-    private val forceHideCheveron = true;
-    private var labelHide = false
 
     init {
         setId(generateViewId())
-
-        vertical = resources.getBoolean(R.bool.qs_tile_vertical_layout)
-        vertical = OmniUtils.getQSTileVerticalLayout(context, if (vertical) 1 else 0)
-        if (vertical) {
-            orientation = LinearLayout.VERTICAL
-            gravity = Gravity.CENTER_HORIZONTAL or Gravity.CENTER_VERTICAL
-        } else {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL or Gravity.START
-        }
-
-        labelHide = OmniUtils.getQSTileLabelHide(context)
-
-        if (labelHide)
-            gravity = Gravity.CENTER_HORIZONTAL or Gravity.CENTER_VERTICAL
-
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL or Gravity.START
         importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
         clipChildren = false
         clipToPadding = false
@@ -185,7 +155,7 @@ open class QSTileViewImpl @JvmOverloads constructor(
         setColor(getBackgroundColorForState(QSTile.State.DEFAULT_STATE))
 
         val padding = resources.getDimensionPixelSize(R.dimen.qs_tile_padding)
-        val startPadding = if (vertical) padding else resources.getDimensionPixelSize(R.dimen.qs_tile_start_padding)
+        val startPadding = resources.getDimensionPixelSize(R.dimen.qs_tile_start_padding)
         setPaddingRelative(startPadding, padding, padding, padding)
 
         val iconSize = resources.getDimensionPixelSize(R.dimen.qs_icon_size)
@@ -221,24 +191,11 @@ open class QSTileViewImpl @JvmOverloads constructor(
             width = iconSize
         }
 
-        vertical = resources.getBoolean(R.bool.qs_tile_vertical_layout)
-        vertical = OmniUtils.getQSTileVerticalLayout(context, if (vertical) 1 else 0)
-        if (vertical) {
-            orientation = LinearLayout.VERTICAL
-            gravity = Gravity.CENTER_HORIZONTAL or Gravity.CENTER_VERTICAL
-        } else {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL or Gravity.START
-        }
-
-        if (labelHide)
-            gravity = Gravity.CENTER_HORIZONTAL or Gravity.CENTER_VERTICAL
-
         val padding = resources.getDimensionPixelSize(R.dimen.qs_tile_padding)
-        val startPadding = if (vertical) padding else resources.getDimensionPixelSize(R.dimen.qs_tile_start_padding)
+        val startPadding = resources.getDimensionPixelSize(R.dimen.qs_tile_start_padding)
         setPaddingRelative(startPadding, padding, padding, padding)
 
-        val labelMargin = if (vertical) 0 else resources.getDimensionPixelSize(R.dimen.qs_label_container_margin)
+        val labelMargin = resources.getDimensionPixelSize(R.dimen.qs_label_container_margin)
         (labelContainer.layoutParams as MarginLayoutParams).apply {
             marginStart = labelMargin
         }
@@ -260,7 +217,7 @@ open class QSTileViewImpl @JvmOverloads constructor(
 
     private fun createAndAddLabels() {
         labelContainer = LayoutInflater.from(context)
-                .inflate(if (vertical) R.layout.qs_tile_label_vertical else R.layout.qs_tile_label,this, false) as IgnorableChildLinearLayout
+                .inflate(R.layout.qs_tile_label, this, false) as IgnorableChildLinearLayout
         label = labelContainer.requireViewById(R.id.tile_label)
         secondaryLabel = labelContainer.requireViewById(R.id.app_label)
         if (collapsed) {
@@ -274,9 +231,7 @@ open class QSTileViewImpl @JvmOverloads constructor(
         }
         setLabelColor(getLabelColorForState(QSTile.State.DEFAULT_STATE))
         setSecondaryLabelColor(getSecondaryLabelColorForState(QSTile.State.DEFAULT_STATE))
-
-        if (!labelHide)
-            addView(labelContainer)
+        addView(labelContainer)
     }
 
     private fun createAndAddSideView() {
@@ -309,8 +264,7 @@ open class QSTileViewImpl @JvmOverloads constructor(
         // is too short.
         val constrainedSquishiness = constrainSquishiness(squishinessFraction)
         bottom = top + (actualHeight * constrainedSquishiness).toInt()
-        scrollY = (actualHeight - height) / if (vertical) 7 else 2
-        label.alpha = if (!vertical) 1.0f else Math.pow(squishinessFraction.toDouble(), 7.0).toFloat()
+        scrollY = (actualHeight - height) / 2
     }
 
     override fun updateAccessibilityOrder(previousView: View?): View {
@@ -608,7 +562,7 @@ open class QSTileViewImpl @JvmOverloads constructor(
             customDrawableView.setImageDrawable(state.sideViewCustomDrawable)
             customDrawableView.visibility = VISIBLE
             chevronView.visibility = GONE
-        } else if ((state !is BooleanState || state.forceExpandIcon) && !forceHideCheveron) {
+        } else if (state !is BooleanState || state.forceExpandIcon) {
             customDrawableView.setImageDrawable(null)
             customDrawableView.visibility = GONE
             chevronView.visibility = VISIBLE
@@ -647,21 +601,7 @@ open class QSTileViewImpl @JvmOverloads constructor(
         return locInScreen.get(1) >= -height
     }
 
-    private fun isQSStyleEnabled(): Boolean = Settings.System.getIntForUser(context.contentResolver, 
-    Settings.System.QS_TILE_STYLE, 0,  UserHandle.USER_CURRENT) != 0
-
     private fun getBackgroundColorForState(state: Int): Int {
-    	return if (isQSStyleEnabled()) {
-        return when (state) {
-            Tile.STATE_ACTIVE -> colorActiveStyle
-            Tile.STATE_INACTIVE -> colorInactiveStyle
-            Tile.STATE_UNAVAILABLE -> colorUnavailable
-            else -> {
-                Log.e(TAG, "Invalid state $state")
-                0
-            }
-          }
-       } else {
         return when (state) {
             Tile.STATE_ACTIVE -> colorActive
             Tile.STATE_INACTIVE -> colorInactive
@@ -670,22 +610,10 @@ open class QSTileViewImpl @JvmOverloads constructor(
                 Log.e(TAG, "Invalid state $state")
                 0
             }
-          }
-      }
+        }
     }
 
     private fun getLabelColorForState(state: Int): Int {
-    	return if (isQSStyleEnabled()) {
-        return when (state) {
-            Tile.STATE_ACTIVE -> colorLabelActiveStyle
-            Tile.STATE_INACTIVE -> colorLabelInactive
-            Tile.STATE_UNAVAILABLE -> colorLabelUnavailable
-            else -> {
-                Log.e(TAG, "Invalid state $state")
-                0
-            }
-        }
-       } else {
         return when (state) {
             Tile.STATE_ACTIVE -> colorLabelActive
             Tile.STATE_INACTIVE -> colorLabelInactive
@@ -695,21 +623,9 @@ open class QSTileViewImpl @JvmOverloads constructor(
                 0
             }
         }
-      }   
     }
 
     private fun getSecondaryLabelColorForState(state: Int): Int {
-    	return if (isQSStyleEnabled()) {
-        return when (state) {
-            Tile.STATE_ACTIVE -> colorSecondaryLabelActiveStyle
-            Tile.STATE_INACTIVE -> colorSecondaryLabelInactive
-            Tile.STATE_UNAVAILABLE -> colorSecondaryLabelUnavailable
-            else -> {
-                Log.e(TAG, "Invalid state $state")
-                0
-            }
-        }
-       } else {
         return when (state) {
             Tile.STATE_ACTIVE -> colorSecondaryLabelActive
             Tile.STATE_INACTIVE -> colorSecondaryLabelInactive
@@ -719,7 +635,6 @@ open class QSTileViewImpl @JvmOverloads constructor(
                 0
             }
         }
-      }
     }
 
     private fun getChevronColorForState(state: Int): Int = getSecondaryLabelColorForState(state)

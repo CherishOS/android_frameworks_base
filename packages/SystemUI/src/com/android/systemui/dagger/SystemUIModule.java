@@ -44,7 +44,6 @@ import com.android.systemui.log.dagger.LogModule;
 import com.android.systemui.lowlightclock.LowLightClockController;
 import com.android.systemui.model.SysUiState;
 import com.android.systemui.navigationbar.NavigationBarComponent;
-import com.android.systemui.omni.dagger.OmniModule;
 import com.android.systemui.plugins.BcSmartspaceDataPlugin;
 import com.android.systemui.privacy.PrivacyModule;
 import com.android.systemui.recents.Recents;
@@ -138,8 +137,7 @@ import dagger.Provides;
             TunerModule.class,
             UserModule.class,
             UtilModule.class,
-            WalletModule.class,
-            OmniModule.class
+            WalletModule.class
         },
         subcomponents = {
             CentralSurfacesComponent.class,

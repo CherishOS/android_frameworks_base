@@ -38,9 +38,6 @@ import com.android.systemui.settings.brightness.BrightnessMirrorHandler;
 import com.android.systemui.settings.brightness.BrightnessSliderController;
 import com.android.systemui.statusbar.policy.BrightnessMirrorController;
 import com.android.systemui.tuner.TunerService;
-import android.content.res.Configuration;
-
-import org.omnirom.omnilib.utils.OmniUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,17 +52,9 @@ public class QuickQSPanelController extends QSPanelControllerBase<QuickQSPanel> 
     private final QSPanel.OnConfigurationChangedListener mOnConfigurationChangedListener =
             newConfig -> {
                 int newMaxTiles = getResources().getInteger(R.integer.quick_qs_panel_max_tiles);
-    		boolean isPortrait = getResources().getConfiguration().orientation
-                	== Configuration.ORIENTATION_PORTRAIT;
-                if (isPortrait) {
-                newMaxTiles = OmniUtils.getQuickQSColumnsPortrait(getContext(), newMaxTiles);
-                } else {
-                newMaxTiles = 5;
-                }
                 if (newMaxTiles != mView.getNumQuickTiles()) {
                     setMaxTiles(newMaxTiles);
                 }
-                mView.updateColumns();
             };
 
     private final boolean mUsingCollapsedLandscapeMedia;
@@ -138,7 +127,6 @@ public class QuickQSPanelController extends QSPanelControllerBase<QuickQSPanel> 
         });
 
         mView.addOnConfigurationChangedListener(mOnConfigurationChangedListener);
-        mView.updateColumns();
         mBrightnessMirrorHandler.onQsPanelAttached();
     }
 
@@ -176,7 +164,6 @@ public class QuickQSPanelController extends QSPanelControllerBase<QuickQSPanel> 
 
     private void setMaxTiles(int parseNumTiles) {
         mView.setMaxTiles(parseNumTiles);
-        mView.updateColumns();
         setTiles();
     }
 
