@@ -75,7 +75,9 @@ public class PixelPropsUtils {
             "com.android.chrome",
             "com.android.vending",
             "com.breel.wallpapers20",
-            "com.nhs.online.nhsonline"
+            "com.nhs.online.nhsonline",
+            "com.google.android.gms.persistent",
+            "com.google.android.as"
     };
 
     // Packages to Keep with original device
