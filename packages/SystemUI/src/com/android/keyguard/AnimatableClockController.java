@@ -111,6 +111,7 @@ public class AnimatableClockController extends ViewController<AnimatableClockVie
         @Override
         public void onReceive(Context context, Intent intent) {
             updateLocale();
+            updateColors();
         }
     };
 
@@ -159,7 +160,7 @@ public class AnimatableClockController extends ViewController<AnimatableClockVie
         mStatusBarStateController.addCallback(mStatusBarStateListener);
 
         refreshTime();
-        initColors();
+        updateColors();
         mView.animateDoze(mIsDozing, false);
     }
 
@@ -227,25 +228,56 @@ public class AnimatableClockController extends ViewController<AnimatableClockVie
      * Check if font is broken
      */
     public boolean isBrokenFont() {
-        String font = getContext().getString(com.android.internal.R.string.config_headlineFontFamily);
-        if (font.equalsIgnoreCase("nothingdot57")
-             || font.equalsIgnoreCase("aclonica") 
-             || font.equalsIgnoreCase("bariol")
-             || font.equalsIgnoreCase("comfortaa")
-             || font.equalsIgnoreCase("coolstory")
-             || font.equalsIgnoreCase("jtleonor")
-             || font.equalsIgnoreCase("linotte")
-             || font.equalsIgnoreCase("misans")
-             || font.equalsIgnoreCase("sans-serif")
-             || font.equalsIgnoreCase("accuratist")
-             || font.equalsIgnoreCase("inter_custom")
-             || font.equalsIgnoreCase("opposans")
-             || font.equalsIgnoreCase("robotocondensed")
-             || font.equalsIgnoreCase("nokiapure")) {
-          return true;
-        } else {
-          return false;
-        }
+        int customClockFont = Settings.Secure.getIntForUser(getContext().getContentResolver(),
+                Settings.Secure.KG_CUSTOM_CLOCK_FONT , 0, UserHandle.USER_CURRENT);
+	boolean isBroken = false;
+                
+	switch (customClockFont) {
+		case 23:
+		isBroken = true;
+		break;
+		case 2:
+		isBroken = true;
+		break;
+		case 4:
+		isBroken = true;
+		break;
+		case 7:
+		isBroken = true;
+		break;
+		case 9:
+		isBroken = true;
+		break;
+		case 17:
+		isBroken = true;
+		break;
+		case 20:
+		isBroken = true;
+		break;
+		case 21:
+		isBroken = true;
+		break;
+		case 1:
+		isBroken = true;
+		break;
+		case 16:
+		isBroken = true;
+		break;
+		case 27:
+		isBroken = true;
+		break;
+		case 33:
+		isBroken = true;
+		break;
+		case 22:
+		isBroken = true;
+		break;
+		default:
+		isBroken = false;
+		break;
+	  }
+	  
+	  return isBroken;
     }
     
     private void updateLocale() {
@@ -265,12 +297,13 @@ public class AnimatableClockController extends ViewController<AnimatableClockVie
         }
     }
 
-    private void initColors() {
-        boolean isSecondaryColor = Settings.System.getIntForUser(getContext().getContentResolver(),
-                Settings.System.SECONDARY_COLOR_CLOCK, 0, UserHandle.USER_CURRENT) != 0;
-        if (isSecondaryColor) {
-        mLockScreenColor = Utils.getColorAttrDefaultColor(getContext(),
-                com.android.systemui.R.attr.wallpaperTextColorSecondary);
+    private void updateColors() {
+        boolean isCustomColorEnabled = Settings.Secure.getIntForUser(getContext().getContentResolver(),
+                Settings.Secure.KG_CUSTOM_CLOCK_COLOR_ENABLED, 0, UserHandle.USER_CURRENT) != 0;
+        int customClockColor = Settings.Secure.getIntForUser(getContext().getContentResolver(),
+                Settings.Secure.KG_CUSTOM_CLOCK_COLOR, 0x92FFFFFF, UserHandle.USER_CURRENT);
+        if (isCustomColorEnabled) {
+        mLockScreenColor = customClockColor;
         } else {
         mLockScreenColor = Utils.getColorAttrDefaultColor(getContext(),
                 com.android.systemui.R.attr.wallpaperTextColorAccent);

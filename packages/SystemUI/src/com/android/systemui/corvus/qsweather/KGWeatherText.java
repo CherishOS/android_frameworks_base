@@ -152,7 +152,19 @@ public class KGWeatherText extends TextView implements
                         if (mQsWeatherEnabled == 2 || mQsWeatherEnabled == 4) {
                             setText(mWeatherData.temp);
                         } else if (mQsWeatherEnabled == 6) {
-                            setText(mWeatherData.temp + mWeatherData.tempUnits + " ~ "  + mWeatherData.condition);
+                            String formattedCondition = mWeatherData.condition;
+                            if (formattedCondition.toLowerCase().contains("clouds")) {
+                              formattedCondition = "CLOUDY";
+                            } else if (formattedCondition.toLowerCase().contains("rain")) {
+                              formattedCondition = "RAINY";
+                            } else if (formattedCondition.toLowerCase().contains("clear")) {
+                              formattedCondition = "SUNNY";
+                            } else if (formattedCondition.toLowerCase().contains("storm")) {
+                              formattedCondition = "STORMY";
+                            } else {
+                              formattedCondition = mWeatherData.condition;
+                            }
+                            setText(mWeatherData.temp + mWeatherData.tempUnits + " ~ "  + formattedCondition);
                             setTextSize(16.0f);
                         } else {
                             setText(mWeatherData.temp + mWeatherData.tempUnits);

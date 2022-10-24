@@ -120,7 +120,7 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
 
     private boolean mOnlyClock = false;
     private Executor mUiExecutor;
-    private boolean mCanShowDoubleLineClock = true;
+    private boolean mCanShowDoubleLineClock = false;
     private ContentObserver mDoubleLineClockObserver = new ContentObserver(null) {
         @Override
         public void onChange(boolean change) {

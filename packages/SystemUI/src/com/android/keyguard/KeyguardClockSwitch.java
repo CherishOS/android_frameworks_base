@@ -9,6 +9,8 @@ import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.database.ContentObserver;
 import android.graphics.Paint;
@@ -178,12 +180,263 @@ public class KeyguardClockSwitch extends RelativeLayout {
     }
 
     public void onThemeChanged() {
-        String font = mContext.getString(com.android.internal.R.string.config_headlineFontFamily);
-        if (font.equalsIgnoreCase("nothingdot57")) {
-        Typeface ndot57 = Typeface.create("nothingdot57", Typeface.NORMAL);
-
-        mClockView.setTypeface(ndot57);
-        mLargeClockView.setTypeface(ndot57);
+        int customClockFont = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.KG_CUSTOM_CLOCK_FONT , 0, UserHandle.USER_CURRENT);
+        
+        switch (customClockFont) {
+        	case 0:
+        	Typeface sansSF = Typeface.create("sans-serif", Typeface.NORMAL);
+        	mClockView.setTypeface(sansSF);
+        	mLargeClockView.setTypeface(sansSF);
+        	break;
+        	case 1:
+        	Typeface accuratist = Typeface.create("accuratist", Typeface.NORMAL);
+        	mClockView.setTypeface(accuratist);
+        	mLargeClockView.setTypeface(accuratist);
+        	break;
+        	case 2:
+        	Typeface aclonica = Typeface.create("aclonica", Typeface.NORMAL);
+        	mClockView.setTypeface(aclonica);
+        	mLargeClockView.setTypeface(aclonica);
+        	break;
+        	case 3:
+        	Typeface amarante = Typeface.create("amarante", Typeface.NORMAL);
+        	mClockView.setTypeface(amarante);
+        	mLargeClockView.setTypeface(amarante);
+        	break;
+        	case 4:
+        	Typeface bariol = Typeface.create("bariol", Typeface.NORMAL);
+        	mClockView.setTypeface(bariol);
+        	mLargeClockView.setTypeface(bariol);
+        	break;
+        	case 5:
+        	Typeface cagliostro = Typeface.create("cagliostro", Typeface.NORMAL);
+        	mClockView.setTypeface(cagliostro);
+        	mLargeClockView.setTypeface(cagliostro);
+        	break;
+        	case 6:
+        	Typeface cocon = Typeface.create("cocon", Typeface.NORMAL);
+        	mClockView.setTypeface(cocon);
+        	mLargeClockView.setTypeface(cocon);
+        	break;
+        	case 7:
+        	Typeface comfortaa = Typeface.create("comfortaa", Typeface.NORMAL);
+        	mClockView.setTypeface(comfortaa);
+        	mLargeClockView.setTypeface(comfortaa);
+        	break;
+        	case 8:
+        	Typeface comicsans = Typeface.create("comicsans", Typeface.NORMAL);
+        	mClockView.setTypeface(comicsans);
+        	mLargeClockView.setTypeface(comicsans);
+        	break;
+        	case 9:
+        	Typeface coolstory = Typeface.create("coolstory", Typeface.NORMAL);
+        	mClockView.setTypeface(coolstory);
+        	mLargeClockView.setTypeface(coolstory);
+        	break;
+        	case 10:
+        	Typeface exotwo = Typeface.create("exotwo", Typeface.NORMAL);
+        	mClockView.setTypeface(exotwo);
+        	mLargeClockView.setTypeface(exotwo);
+        	break;
+        	case 11:
+        	Typeface fifa2018 = Typeface.create("fifa2018", Typeface.NORMAL);
+        	mClockView.setTypeface(fifa2018);
+        	mLargeClockView.setTypeface(fifa2018);
+        	break;
+        	case 12:
+        	Typeface fluidsans = Typeface.create("fluid-sans", Typeface.NORMAL);
+        	mClockView.setTypeface(fluidsans);
+        	mLargeClockView.setTypeface(fluidsans);
+        	break;
+        	case 13:
+        	Typeface googlesans = Typeface.create("googlesans", Typeface.NORMAL);
+        	mClockView.setTypeface(googlesans);
+        	mLargeClockView.setTypeface(googlesans);
+        	break;
+        	case 14:
+        	Typeface grandhotel = Typeface.create("grandhotel", Typeface.NORMAL);
+        	mClockView.setTypeface(grandhotel);
+        	mLargeClockView.setTypeface(grandhotel);
+        	break;
+        	case 15:
+        	Typeface harmonyossans = Typeface.create("harmonyos-sans", Typeface.NORMAL);
+        	mClockView.setTypeface(harmonyossans);
+        	mLargeClockView.setTypeface(harmonyossans);
+        	break;
+        	case 16:
+        	Typeface intercustom = Typeface.create("inter_custom", Typeface.NORMAL);
+        	mClockView.setTypeface(intercustom);
+        	mLargeClockView.setTypeface(intercustom);
+        	break;
+        	case 17:
+        	Typeface jtleonor = Typeface.create("jtleonor", Typeface.NORMAL);
+        	mClockView.setTypeface(jtleonor);
+        	mLargeClockView.setTypeface(jtleonor);
+        	break;
+        	case 18:
+        	Typeface latobold = Typeface.create("lato-bold", Typeface.NORMAL);
+        	mClockView.setTypeface(latobold);
+        	mLargeClockView.setTypeface(latobold);
+        	break;
+        	case 19:
+        	Typeface lgsmartgothic = Typeface.create("lgsmartgothic", Typeface.NORMAL);
+        	mClockView.setTypeface(lgsmartgothic);
+        	mLargeClockView.setTypeface(lgsmartgothic);
+        	break;
+        	case 20:
+        	Typeface linotte = Typeface.create("linotte", Typeface.NORMAL);
+        	mClockView.setTypeface(linotte);
+        	mLargeClockView.setTypeface(linotte);
+        	break;
+        	case 21:
+        	Typeface misans = Typeface.create("misans", Typeface.NORMAL);
+        	mClockView.setTypeface(misans);
+        	mLargeClockView.setTypeface(misans);
+        	break;
+        	case 22:
+        	Typeface nokiapure = Typeface.create("nokiapure", Typeface.NORMAL);
+        	mClockView.setTypeface(nokiapure);
+        	mLargeClockView.setTypeface(nokiapure);
+        	break;
+        	case 23:
+        	Typeface nothingdot57 = Typeface.create("nothingdot57", Typeface.NORMAL);
+        	mClockView.setTypeface(nothingdot57);
+        	mLargeClockView.setTypeface(nothingdot57);
+        	break;
+        	case 24:
+        	Typeface nunitobold = Typeface.create("nunito-bold", Typeface.NORMAL);
+        	mClockView.setTypeface(nunitobold);
+        	mLargeClockView.setTypeface(nunitobold);
+        	break;
+        	case 25:
+        	Typeface opsans = Typeface.create("op-sans", Typeface.NORMAL);
+        	mClockView.setTypeface(opsans);
+        	mLargeClockView.setTypeface(opsans);
+        	break;
+        	case 26:
+        	Typeface oneplusslate = Typeface.create("oneplusslate", Typeface.NORMAL);
+        	mClockView.setTypeface(oneplusslate);
+        	mLargeClockView.setTypeface(oneplusslate);
+        	break;
+        	case 27:
+        	Typeface opposans = Typeface.create("opposans", Typeface.NORMAL);
+        	mClockView.setTypeface(opposans);
+        	mLargeClockView.setTypeface(opposans);
+        	break;
+        	case 28:
+        	Typeface oswaldbold = Typeface.create("oswald-bold", Typeface.NORMAL);
+        	mClockView.setTypeface(oswaldbold);
+        	mLargeClockView.setTypeface(oswaldbold);
+        	break;
+        	case 29:
+        	Typeface productsansvh = Typeface.create("productsansvh", Typeface.NORMAL);
+        	mClockView.setTypeface(productsansvh);
+        	mLargeClockView.setTypeface(productsansvh);
+        	break;
+        	case 30:
+        	Typeface quando = Typeface.create("quando", Typeface.NORMAL);
+        	mClockView.setTypeface(quando);
+        	mLargeClockView.setTypeface(quando);
+        	break;
+        	case 31:
+        	Typeface redressed = Typeface.create("redressed", Typeface.NORMAL);
+        	mClockView.setTypeface(redressed);
+        	mLargeClockView.setTypeface(redressed);
+        	break;
+        	case 32:
+        	Typeface reemkufi = Typeface.create("reemkufi", Typeface.NORMAL);
+        	mClockView.setTypeface(reemkufi);
+        	mLargeClockView.setTypeface(reemkufi);
+        	break;
+        	case 33:
+        	Typeface robotocondensed = Typeface.create("robotocondensed", Typeface.NORMAL);
+        	mClockView.setTypeface(robotocondensed);
+        	mLargeClockView.setTypeface(robotocondensed);
+        	break;
+        	case 34:
+        	Typeface rosemary = Typeface.create("rosemary", Typeface.NORMAL);
+        	mClockView.setTypeface(rosemary);
+        	mLargeClockView.setTypeface(rosemary);
+        	break;
+        	case 35:
+        	Typeface rubikbold = Typeface.create("rubik-bold", Typeface.NORMAL);
+        	mClockView.setTypeface(rubikbold);
+        	mLargeClockView.setTypeface(rubikbold);
+        	break;
+        	case 36:
+        	Typeface samsungone = Typeface.create("samsungone", Typeface.NORMAL);
+        	mClockView.setTypeface(samsungone);
+        	mLargeClockView.setTypeface(samsungone);
+        	break;
+        	case 37:
+        	Typeface sanfrancisco = Typeface.create("sanfrancisco", Typeface.NORMAL);
+        	mClockView.setTypeface(sanfrancisco);
+        	mLargeClockView.setTypeface(sanfrancisco);
+        	break;
+        	case 38:
+        	Typeface simpleday = Typeface.create("simpleday", Typeface.NORMAL);
+        	mClockView.setTypeface(simpleday);
+        	mLargeClockView.setTypeface(simpleday);
+        	break;
+        	case 39:
+        	Typeface sonysketch = Typeface.create("sonysketch", Typeface.NORMAL);
+        	mClockView.setTypeface(sonysketch);
+        	mLargeClockView.setTypeface(sonysketch);
+        	break;
+        	case 40:
+        	Typeface storopia = Typeface.create("storopia", Typeface.NORMAL);
+        	mClockView.setTypeface(storopia);
+        	mLargeClockView.setTypeface(storopia);
+        	break;
+        	case 41:
+        	Typeface surfer = Typeface.create("surfer", Typeface.NORMAL);
+        	mClockView.setTypeface(surfer);
+        	mLargeClockView.setTypeface(surfer);
+        	break;
+        	case 42:
+        	Typeface ubuntu = Typeface.create("ubuntu", Typeface.NORMAL);
+        	mClockView.setTypeface(ubuntu);
+        	mLargeClockView.setTypeface(ubuntu);
+        	break;
+        	case 43:
+        	Typeface manrope = Typeface.create("manrope", Typeface.NORMAL);
+        	mClockView.setTypeface(manrope);
+        	mLargeClockView.setTypeface(manrope);
+        	break;
+        	case 44:
+        	Typeface notosans = Typeface.create("noto-sans", Typeface.NORMAL);
+        	mClockView.setTypeface(notosans);
+        	mLargeClockView.setTypeface(notosans);
+        	break;
+        	case 45:
+        	Typeface recursivecasual = Typeface.create("recursive-casual", Typeface.NORMAL);
+        	mClockView.setTypeface(recursivecasual);
+        	mLargeClockView.setTypeface(recursivecasual);
+        	break;
+        	case 46:
+        	Typeface recursive = Typeface.create("recursive", Typeface.NORMAL);
+        	mClockView.setTypeface(recursive);
+        	mLargeClockView.setTypeface(recursive);
+        	break;
+        	case 47:
+        	Typeface robotosystem = Typeface.create("roboto-system", Typeface.NORMAL);
+        	mClockView.setTypeface(robotosystem);
+        	mLargeClockView.setTypeface(robotosystem);
+        	break;
+        	case 48:
+        	Typeface sourcesans = Typeface.create("source-sans", Typeface.NORMAL);
+        	mClockView.setTypeface(sourcesans);
+        	mLargeClockView.setTypeface(sourcesans);
+        	break;
+        	case 49:
+        	Typeface serif = Typeface.create("serif", Typeface.NORMAL);
+        	mClockView.setTypeface(serif);
+        	mLargeClockView.setTypeface(serif);
+        	break;
+        	default:
+        	break;
+        	
         }
     }
     
