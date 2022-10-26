@@ -12145,6 +12145,13 @@ public final class Settings {
                 "device_state_rotation_lock";
 
         /**
+         *  Toggle the media squiggle animation
+         *  0 = 0ff, 1 = on
+         * @hide
+         */
+        public static final String SHOW_MEDIA_SQUIGGLE_ANIMATION = "show_media_squiggle_animation";
+
+        /**
          * Control whether communal mode is allowed on this device.
          *
          * @hide
