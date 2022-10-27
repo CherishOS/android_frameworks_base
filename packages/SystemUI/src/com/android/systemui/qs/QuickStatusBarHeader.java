@@ -190,8 +190,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         // Tint for the battery icons are handled in setupHost()
         mBatteryRemainingIcon = findViewById(R.id.batteryRemainingIcon);
         mBatteryRemainingIcon.mQS = true;
-        mBatteryRemainingIcon.setOnClickListener(this);
-
+        mBatteryRemainingIcon.setOnLongClickListener(this);
         Configuration config = mContext.getResources().getConfiguration();
         setDatePrivacyContainersWidth(config.orientation == Configuration.ORIENTATION_LANDSCAPE);
 
@@ -473,11 +472,13 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
             mIconsAlphaAnimator = mIconsAlphaAnimatorFixed;
             mIconsAlphaAnimator.setPosition(mKeyguardExpansionFraction);
             mBatteryRemainingIcon.setClickable(!visibility || mKeyguardExpansionFraction == 1f);
+            setBatteryRemainingOnClick(false);
         } else {
             mIconsAlphaAnimator = null;
             mIconContainer.setAlpha(1);
             mBatteryRemainingIcon.setAlpha(1);
             mBatteryRemainingIcon.setClickable(true);
+            setBatteryRemainingOnClick(true);
         }
     }
 
@@ -639,6 +640,9 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
 
     public void updateEverything() {
         post(() -> setClickable(!mExpanded));
+        if (mExpanded) {
+            setBatteryRemainingOnClick(true);
+        }
     }
 
     private void setContentMargins(View view, int marginStart, int marginEnd) {
@@ -700,6 +704,18 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                 break;
             default:
                 break;
+        }
+    }
+
+    private void setBatteryRemainingOnClick(boolean enable) {
+        if (enable) {
+            mBatteryRemainingIcon.setOnClickListener(
+                    v -> mActivityStarter.postStartActivityDismissingKeyguard(
+                            new Intent(Intent.ACTION_POWER_USAGE_SUMMARY), 0));
+            mBatteryRemainingIcon.setClickable(true);
+        } else {
+            mBatteryRemainingIcon.setOnClickListener(null);
+            mBatteryRemainingIcon.setClickable(false);
         }
     }
 }
