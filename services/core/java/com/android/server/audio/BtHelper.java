@@ -714,7 +714,11 @@ public class BtHelper {
         if (state == BluetoothHeadset.STATE_AUDIO_CONNECTED) {
             // Make sure that the state transitions to CONNECTING even if we cannot initiate
             // the connection.
-            broadcastScoConnectionState(AudioManager.SCO_AUDIO_STATE_CONNECTING);
+                if (mScoAudioState == SCO_STATE_ACTIVE_INTERNAL) {
+                    Log.i(TAG, "SCO already connected, Not broadcasting SCO_AUDIO_STATE_CONNECTING");
+                } else {
+                    broadcastScoConnectionState(AudioManager.SCO_AUDIO_STATE_CONNECTING);
+                }
             switch (mScoAudioState) {
                 case SCO_STATE_INACTIVE:
                     mScoAudioMode = scoAudioMode;
