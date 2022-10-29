@@ -1001,7 +1001,7 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
                 ActionUtils.switchScreenOff(mContext);
                 break;
             case 7: // Screenshot
-                ActionUtils.takeScreenshot(true);
+                CherishUtils.takeScreenshot(true);
                 break;
             case 8: // Notification panel
                 ActionUtils.toggleNotifications();
@@ -1020,6 +1020,21 @@ public class EdgeBackGestureHandler extends CurrentUserTracker
                 break;
             case 13: // Switch recent app
                 ActionUtils.switchToLastApp(mContext);
+                break;
+            case 14: // Skip song
+                CherishUtils.sendSystemKeyToStatusBar(KeyEvent.KEYCODE_MEDIA_NEXT);
+                break;
+            case 15: // Previous song
+                CherishUtils.sendSystemKeyToStatusBar(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+                break;
+            case 16: // Powermenu
+                CherishUtils.showPowerMenu();
+                break;
+            case 17: // Partial Screenshot
+                CherishUtils.takeScreenshot(false);
+                break;
+            case 18: // Hush Mute
+                ActionUtils.triggerHushMute(mContext);
                 break;
         }
     }
