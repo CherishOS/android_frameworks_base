@@ -217,6 +217,7 @@ public class KeyguardStatusViewController extends ViewController<KeyguardStatusV
 
     private void refreshTime() {
         mKeyguardClockSwitchController.refresh();
+        mView.onThemeChanged();
     }
 
     private final ConfigurationController.ConfigurationListener mConfigurationListener =
@@ -225,16 +226,19 @@ public class KeyguardStatusViewController extends ViewController<KeyguardStatusV
         public void onLocaleListChanged() {
             refreshTime();
             mKeyguardClockSwitchController.onLocaleListChanged();
+            mView.onThemeChanged();
         }
 
         @Override
         public void onDensityOrFontScaleChanged() {
             mKeyguardClockSwitchController.onDensityOrFontScaleChanged();
+            mView.onThemeChanged();
         }
 
         @Override
         public void onThemeChanged() {
             mKeyguardClockSwitchController.onThemeChanged();
+            mView.onThemeChanged();
         }
     };
 

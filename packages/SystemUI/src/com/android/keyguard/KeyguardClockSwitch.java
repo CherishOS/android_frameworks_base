@@ -181,7 +181,7 @@ public class KeyguardClockSwitch extends RelativeLayout {
 
     public void onThemeChanged() {
         int customClockFont = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                Settings.Secure.KG_CUSTOM_CLOCK_FONT , 0, UserHandle.USER_CURRENT);
+                Settings.Secure.KG_CUSTOM_CLOCK_FONT , 23, UserHandle.USER_CURRENT);
         
         switch (customClockFont) {
         	case 0:

@@ -11992,6 +11992,13 @@ public final class Settings {
          * @hide
          */
         public static final String ENABLE_PROJECTION_PRIVACY_INDICATOR = "enable_projection_privacy_indicator";
+		
+		/**
+         * Change fonts for the system lockscreen date
+         *
+         * @hide
+         */
+        public static final String KG_CUSTOM_DATE_FONT = "kg_custom_date_font";
 
         /**
          * Pulse navbar music visualizer
