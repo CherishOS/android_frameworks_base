@@ -831,8 +831,8 @@ public class CentralSurfacesImpl extends CoreStartable implements
             WiredChargingRippleController wiredChargingRippleController,
             TunerService tunerService,
             IDreamManager dreamManager,
+            SysUiState sysUiState,
             TaskHelper taskHelper) {
-            SysUiState sysUiState) {
         super(context);
         mNotificationsController = notificationsController;
         mFragmentService = fragmentService;
@@ -918,6 +918,7 @@ public class CentralSurfacesImpl extends CoreStartable implements
         mDreamOverlayStateController = dreamOverlayStateController;
         mTunerService = tunerService;
         mSysUiState = sysUiState;
+        mTaskHelper = taskHelper;
         mPulseController = new PulseControllerImpl(mContext, this, mCommandQueue, mUiBgExecutor);
 
         mLockscreenShadeTransitionController = lockscreenShadeTransitionController;
@@ -930,8 +931,9 @@ public class CentralSurfacesImpl extends CoreStartable implements
         mScreenOffAnimationController = screenOffAnimationController;
 
         mPanelExpansionStateManager.addExpansionListener(this::onPanelExpansionChanged);
+        
+        
 
-        mTaskHelper = taskHelper;
 
         mBubbleExpandListener =
                 (isExpanding, key) -> mContext.getMainExecutor().execute(() -> {
