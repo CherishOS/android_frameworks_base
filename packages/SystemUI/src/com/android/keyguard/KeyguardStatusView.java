@@ -343,6 +343,11 @@ public class KeyguardStatusView extends GridLayout {
         	mKeyguardSlice.setViewsTypeface(serif);
         	mKeyguardWeather.setTypeface(serif);
         	break;
+        	case 50:
+        	Typeface googlesansclock = Typeface.create("googlesansclock", Typeface.NORMAL);
+        	mKeyguardSlice.setViewsTypeface(googlesansclock);
+        	mKeyguardWeather.setTypeface(googlesansclock);
+        	break;
         	default:
         	break;
         	
