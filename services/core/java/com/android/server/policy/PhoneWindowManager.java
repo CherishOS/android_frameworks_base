@@ -91,7 +91,7 @@ import static com.android.server.wm.WindowManagerPolicyProto.ROTATION_MODE;
 import static com.android.server.wm.WindowManagerPolicyProto.SCREEN_ON_FULLY;
 import static com.android.server.wm.WindowManagerPolicyProto.WINDOW_MANAGER_DRAW_COMPLETE;
 import com.android.internal.util.ScreenshotHelper;
-import com.android.internal.util.spark.CherishUtils;
+import com.android.internal.util.cherish.CherishUtils;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.Nullable;
@@ -6081,21 +6081,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         return mDefaultDisplayPolicy.hasNavigationBar();
     }
 
-    @Override
-    public void sendCustomAction(Intent intent) {
-        String action = intent.getAction();
-    }
 
     @Override
     public void sendCustomAction(Intent intent) {
         String action = intent.getAction();
         if (action != null) {
-            if (SparkUtils.INTENT_SCREENSHOT.equals(action)) {
+            if (CherishUtils.INTENT_SCREENSHOT.equals(action)) {
                 mContext.enforceCallingOrSelfPermission(Manifest.permission.ACCESS_SURFACE_FLINGER,
                         TAG + "sendCustomAction permission denied");
                             interceptScreenshotChord(TAKE_SCREENSHOT_FULLSCREEN,
                                     SCREENSHOT_KEY_CHORD, getScreenshotChordLongPressDelay());
-            } else if (SparkUtils.INTENT_REGION_SCREENSHOT.equals(action)) {
+            } else if (CherishUtils.INTENT_REGION_SCREENSHOT.equals(action)) {
                 mContext.enforceCallingOrSelfPermission(Manifest.permission.ACCESS_SURFACE_FLINGER,
                         TAG + "sendCustomAction permission denied");
                             interceptScreenshotChord(TAKE_SCREENSHOT_SELECTED_REGION,

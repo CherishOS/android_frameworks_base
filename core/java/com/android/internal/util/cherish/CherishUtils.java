@@ -86,7 +86,7 @@ public class CherishUtils {
     private static final int NO_CUTOUT = -1;
 
     private static OverlayManager mOverlayService;
-
+    
     public static final String INTENT_SCREENSHOT = "action_take_screenshot";
     public static final String INTENT_REGION_SCREENSHOT = "action_take_region_screenshot";
 
@@ -238,6 +238,10 @@ public class CherishUtils {
         FireActions.toggleCameraFlash();
     }
 
+    public static void killForegroundApp() {
+        FireActions.killForegroundApp();
+    }
+    
     public static void sendKeycode(int keycode) {
         long when = SystemClock.uptimeMillis();
         final KeyEvent evDown = new KeyEvent(when, when, KeyEvent.ACTION_DOWN, keycode, 0,
@@ -308,22 +312,22 @@ public static void sendSystemKeyToStatusBar(int keyCode) {
             }
         }
 
-    public static void sendSystemKeyToStatusBar(int keyCode) {
-            IStatusBarService service = getStatusBarService();
-            if (service != null) {
-                try {
-                    service.handleSystemKey(keyCode);
-                } catch (RemoteException e) {
-                    // do nothing.
-                }
-            }
-        }
-
     public static void killForegroundApp() {
             IStatusBarService service = getStatusBarService();
             if (service != null) {
                 try {
                     service.killForegroundApp();
+                } catch (RemoteException e) {
+                    // do nothing.
+                }
+            }
+        }
+            
+    public static void sendSystemKeyToStatusBar(int keyCode) {
+            IStatusBarService service = getStatusBarService();
+            if (service != null) {
+                try {
+                    service.handleSystemKey(keyCode);
                 } catch (RemoteException e) {
                     // do nothing.
                 }
@@ -339,10 +343,6 @@ public static void sendSystemKeyToStatusBar(int keyCode) {
                     // do nothing.
                 }
             }
-        }
-        
-        public static void killForegroundApp() {
-               FireActions.killForegroundApp();
         }
     }
 
