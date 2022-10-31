@@ -2495,12 +2495,25 @@ public class WallpaperManagerService extends IWallpaperManager.Stub
     public WallpaperInfo getWallpaperInfo(int userId) {
         final boolean allow =
                 hasPermission(READ_WALLPAPER_INTERNAL) || hasPermission(QUERY_ALL_PACKAGES);
-        if (allow) {
-            userId = ActivityManager.handleIncomingUser(Binder.getCallingPid(),
-                    Binder.getCallingUid(), userId, false, true, "getWallpaperInfo", null);
-            synchronized (mLock) {
-                WallpaperData wallpaper = mWallpaperMap.get(userId);
-                if (wallpaper != null && wallpaper.connection != null) {
+
+        final int pid = Binder.getCallingPid();
+        final int uid = Binder.getCallingUid();
+        userId = ActivityManager.handleIncomingUser(pid, uid, userId, false, true,
+                "getWallpaperInfo", null);
+
+        synchronized (mLock) {
+            WallpaperData wallpaper = mWallpaperMap.get(userId);
+            if (wallpaper != null && wallpaper.connection != null) {
+                if (allow) {
+                    return wallpaper.connection.mInfo;
+                }
+
+                // Return the wallpaper info if the caller is getting
+                // the wallpaper of its own setting
+                final ComponentName wallpaperComponent = wallpaper.wallpaperComponent;
+                final boolean packageBelongsToUid = wallpaperComponent != null
+                        && packageBelongsToUid(wallpaperComponent.getPackageName(), uid);
+                if (packageBelongsToUid) {
                     return wallpaper.connection.mInfo;
                 }
             }
