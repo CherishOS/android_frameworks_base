@@ -2915,10 +2915,23 @@ public final class PowerManagerService extends SystemService
                         >= powerGroup.getLastWakeTimeLocked()) {
                     groupNextTimeout = lastUserActivityTimeNoChangeLights + screenOffTimeout;
                     if (now < groupNextTimeout) {
-                        if (powerGroup.isPolicyBrightLocked() || powerGroup.isPolicyVrLocked()) {
+                        // MIUI MOD: START
+                        // if (powerGroup.isPolicyBrightLocked() || powerGroup.isPolicyVrLocked()) {
+                        if (powerGroup.isPolicyVrLocked()) {
+                        // END
                             groupUserActivitySummary = USER_ACTIVITY_SCREEN_BRIGHT;
                         } else if (powerGroup.isPolicyDimLocked()) {
                             groupUserActivitySummary = USER_ACTIVITY_SCREEN_DIM;
+                        // MIUI ADD: START
+                        } else if (powerGroup.isPolicyBrightLocked()){
+                            groupNextTimeout = lastUserActivityTimeNoChangeLights + screenOffTimeout - screenDimDuration;
+                            if (now > groupNextTimeout) {
+                                groupNextTimeout = lastUserActivityTimeNoChangeLights + screenOffTimeout;
+                                groupUserActivitySummary = USER_ACTIVITY_SCREEN_DIM;
+                            } else {
+                                groupUserActivitySummary = USER_ACTIVITY_SCREEN_BRIGHT;
+                            }
+                        // END
                         }
                     }
                 }
