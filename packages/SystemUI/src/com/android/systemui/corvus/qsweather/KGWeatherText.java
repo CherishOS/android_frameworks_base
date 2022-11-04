@@ -154,21 +154,25 @@ public class KGWeatherText extends TextView implements
                         } else if (mQsWeatherEnabled == 6) {
                             String formattedCondition = mWeatherData.condition;
                             if (formattedCondition.toLowerCase().contains("clouds")) {
-                              formattedCondition = "CLOUDY";
+                              formattedCondition = "Cloudy";
                             } else if (formattedCondition.toLowerCase().contains("rain")) {
-                              formattedCondition = "RAINY";
+                              formattedCondition = "Rainy";
                             } else if (formattedCondition.toLowerCase().contains("clear")) {
-                              formattedCondition = "SUNNY";
+                              formattedCondition = "Sunny";
                             } else if (formattedCondition.toLowerCase().contains("storm")) {
-                              formattedCondition = "STORMY";
+                              formattedCondition = "Stormy";
+                            } else if (formattedCondition.toLowerCase().contains("snow")) {
+                              formattedCondition = "Snowy";
+                            } else if (formattedCondition.toLowerCase().contains("wind")) {
+                              formattedCondition = "Windy";
+                            } else if (formattedCondition.toLowerCase().contains("mist")) {
+                              formattedCondition = "Misty";
                             } else {
                               formattedCondition = mWeatherData.condition;
                             }
                             setText(mWeatherData.temp + mWeatherData.tempUnits + " ~ "  + formattedCondition);
-                            setTextSize(16.0f);
                         } else {
                             setText(mWeatherData.temp + mWeatherData.tempUnits);
-                            setTextSize(16.0f);
                         }
                         if (mQsWeatherEnabled != 0 && mQsWeatherEnabled != 5) {
                             setVisibility(View.VISIBLE);

@@ -242,6 +242,16 @@ public class KeyguardSliceView extends LinearLayout {
         updateTextColors();
     }
 
+    public void setViewsTextSize(float textSize) {
+        int childCount = mRow.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View v = mRow.getChildAt(i);
+            if (v instanceof TextView) {
+                ((TextView) v).setTextSize(textSize);
+            }
+        }
+    }
+
     public void setViewsTypeface(Typeface tf) {
         int childCount = mRow.getChildCount();
         for (int i = 0; i < childCount; i++) {
