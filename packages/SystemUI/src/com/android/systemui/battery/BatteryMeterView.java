@@ -416,7 +416,7 @@ public class BatteryMeterView extends LinearLayout implements DarkReceiver {
 
     private void setPercentTextAtCurrentLevel() {
 
-        String bolt = "\u26A1\uFE0E";
+        String bolt = "\u26A1";
         CharSequence mChargeIndicator = mCharging && (mBatteryStyle == BATTERY_STYLE_HIDDEN ||
             mBatteryStyle == BATTERY_STYLE_TEXT) ? (bolt + " ") : ""; 
         String percentText = mChargeIndicator + NumberFormat.getPercentInstance().format(mLevel / 100f);
