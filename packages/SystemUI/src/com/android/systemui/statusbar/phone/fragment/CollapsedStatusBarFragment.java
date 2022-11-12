@@ -758,7 +758,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     public void updateSettings(boolean animate) {
 
         mShowSBClockBg = Settings.System.getIntForUser(mContentResolver,
-                Settings.System.STATUSBAR_CLOCK_CHIP, 1,
+                Settings.System.STATUSBAR_CLOCK_CHIP, 0,
                 UserHandle.USER_CURRENT) == 1;
 
         if (mShowSBClockBg) {
