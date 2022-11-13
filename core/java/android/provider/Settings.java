@@ -6111,14 +6111,6 @@ public final class Settings {
          */
         public static final String HIGH_TOUCH_SENSITIVITY_ENABLE =
                 "high_touch_sensitivity_enable";
-				
-		/**
-         * Gesture navbar IME space.
-         * Supported modes: 0 for normal length, 1 for narrow and 2 for hidden.
-         * Default 0.
-         * @hide
-         */
-        public static final String NAVIGATION_BAR_IME_SPACE = "navigation_bar_ime_space";
 		
 		/** @hide */
         public static final String BACK_GESTURE_HEIGHT = "back_gesture_height";
