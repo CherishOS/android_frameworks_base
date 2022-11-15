@@ -332,16 +332,25 @@ public class MediaOutputBroadcastDialog extends MediaOutputBaseDialog {
     }
 
     private void handleUpdateFailedUi() {
-        final Button positiveBtn = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-        mBroadcastErrorMessage.setVisibility(View.VISIBLE);
+        Button positiveBtn = null;
+        if (mAlertDialog != null) {
+            positiveBtn = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        }
+        if (mBroadcastErrorMessage != null) {
+            mBroadcastErrorMessage.setVisibility(View.VISIBLE);
+        }
         if (mRetryCount < MAX_BROADCAST_INFO_UPDATE) {
             if (positiveBtn != null) {
                 positiveBtn.setEnabled(true);
             }
-            mBroadcastErrorMessage.setText(R.string.media_output_broadcast_update_error);
+            if (mBroadcastErrorMessage != null) {
+                mBroadcastErrorMessage.setText(R.string.media_output_broadcast_update_error);
+            }
         } else {
             mRetryCount = 0;
-            mBroadcastErrorMessage.setText(R.string.media_output_broadcast_last_update_error);
+            if (mBroadcastErrorMessage != null) {
+                mBroadcastErrorMessage.setText(R.string.media_output_broadcast_last_update_error);
+            }
         }
     }
 }
