@@ -6630,10 +6630,15 @@ public final class Settings {
         public static final String QS_TILE_LABEL_SIZE = "qs_tile_label_size";
 
         /**
+         * Force show navigation bar setting.
          * @hide
          */
+        public static final String FORCE_SHOW_NAVBAR = "force_show_navbar";
+
+        /**
+		 * @hide
+         */
         public static final String RECENTS_LOCKED_TASKS = "recents_locked_tasks";
-		
 		
 		/**
          * Whether to show IME space
