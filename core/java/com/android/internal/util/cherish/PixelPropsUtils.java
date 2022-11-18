@@ -210,7 +210,7 @@ public class PixelPropsUtils {
             return;
         }
         if (packageName.equals(PACKAGE_NETFLIX) && !SystemProperties.getBoolean(
-                "persist.pixelpropsutils.spoof_netflix", false)) {
+                "persist.sys.spoof_netflix", false)) {
             if (DEBUG) Log.d(TAG, "Netflix spoofing disabled by system prop");
             return;
         }
