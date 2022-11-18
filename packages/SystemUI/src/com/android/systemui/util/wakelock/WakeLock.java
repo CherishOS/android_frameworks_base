@@ -110,9 +110,7 @@ public interface WakeLock {
                 } else {
                     mActiveClients.put(why, count - 1);
                 }
-                if (inner.isHeld()) {
-                    inner.release();
-                }
+                inner.release();
             }
 
             /** @see PowerManager.WakeLock#wrap(Runnable) */

@@ -98,6 +98,7 @@ import android.database.sqlite.SQLiteDebug.DbStats;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.HardwareRenderer;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.hardware.display.DisplayManagerGlobal;
 import android.media.MediaFrameworkInitializer;
@@ -248,6 +249,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
+import android.content.res.ResourcesImpl;
+import android.view.DisplayInfo;
 /**
  * This manages the execution of the main thread in an
  * application process, scheduling and executing activities,
@@ -525,6 +528,8 @@ public final class ActivityThread extends ClientTransactionHandler
 
     /** A client side controller to handle process level configuration changes. */
     private ConfigurationController mConfigurationController;
+
+    private float mDssScale = 1.0f;
 
     /** Activity client record, used for bookkeeping for the real {@link Activity} instance. */
     public static final class ActivityClientRecord {
@@ -897,6 +902,8 @@ public final class ActivityThread extends ClientTransactionHandler
 
         AutofillOptions autofillOptions;
 
+        float dssScale;
+
         /**
          * Content capture options for the application - when null, it means ContentCapture is not
          * enabled for the package.
@@ -1126,6 +1133,7 @@ public final class ActivityThread extends ClientTransactionHandler
                 boolean enableBinderTracking, boolean trackAllocation,
                 boolean isRestrictedBackupMode, boolean persistent, Configuration config,
                 CompatibilityInfo compatInfo, Map services, Bundle coreSettings,
+                float dssScale,
                 String buildSerial, AutofillOptions autofillOptions,
                 ContentCaptureOptions contentCaptureOptions, long[] disabledCompatChanges,
                 SharedMemory serializedSystemFontMap,
@@ -1178,6 +1186,7 @@ public final class ActivityThread extends ClientTransactionHandler
             data.initProfilerInfo = profilerInfo;
             data.buildSerial = buildSerial;
             data.autofillOptions = autofillOptions;
+            data.dssScale = dssScale;
             data.contentCaptureOptions = contentCaptureOptions;
             data.disabledCompatChanges = disabledCompatChanges;
             data.mSerializedSystemFontMap = serializedSystemFontMap;
@@ -4535,7 +4544,7 @@ public final class ActivityThread extends ClientTransactionHandler
         Service s = mServices.get(data.token);
         if (DEBUG_SERVICE)
             Slog.v(TAG, "handleBindService s=" + s + " rebind=" + data.rebind);
-        if (s != null) {
+        if (s != null && createData != null) {
             try {
                 data.intent.setExtrasClassLoader(s.getClassLoader());
                 data.intent.prepareToEnterProcess(isProtectedComponent(createData.info),
@@ -4566,7 +4575,7 @@ public final class ActivityThread extends ClientTransactionHandler
     private void handleUnbindService(BindServiceData data) {
         CreateServiceData createData = mServicesData.get(data.token);
         Service s = mServices.get(data.token);
-        if (s != null) {
+        if (s != null && createData != null) {
             try {
                 data.intent.setExtrasClassLoader(s.getClassLoader());
                 data.intent.prepareToEnterProcess(isProtectedComponent(createData.info),
@@ -4673,7 +4682,7 @@ public final class ActivityThread extends ClientTransactionHandler
     private void handleServiceArgs(ServiceArgsData data) {
         CreateServiceData createData = mServicesData.get(data.token);
         Service s = mServices.get(data.token);
-        if (s != null) {
+        if (s != null && createData != null) {
             try {
                 if (data.args != null) {
                     data.args.setExtrasClassLoader(s.getClassLoader());
@@ -6489,6 +6498,8 @@ public final class ActivityThread extends ClientTransactionHandler
         Process.setStartTimes(SystemClock.elapsedRealtime(), SystemClock.uptimeMillis(),
                 data.startRequestedElapsedTime, data.startRequestedUptime);
 
+        mDssScale = data.dssScale;
+
         AppCompatCallbacks.install(data.disabledCompatChanges);
         // Let libcore handle any compat changes after installing the list of compat changes.
         AppSpecializationHooks.handleCompatChangesBeforeBindingApplication();
@@ -7984,4 +7995,27 @@ public final class ActivityThread extends ClientTransactionHandler
     // ------------------ Regular JNI ------------------------
     private native void nPurgePendingResources();
     private native void nInitZygoteChildHeapProfiling();
+
+    /**
+     * Gets scale value on appplication layer
+     */
+    public float getDssScale() {
+        return mDssScale;
+    }
+
+    @UnsupportedAppUsage
+    public static boolean applyDssScaleIfNeeded(DisplayInfo info, Rect bounds) {
+        final ActivityThread thread = sCurrentActivityThread;
+        if (thread != null) {
+            final float dssScale = thread.mDssScale;
+            if (dssScale != 1.0f) {
+                final int width = (int) (bounds.width() * dssScale + .5f);
+                final int height = (int) (bounds.height() * dssScale + .5f);
+                info.logicalWidth = info.appWidth = width;
+                info.logicalHeight = info.appHeight = height;
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -92,6 +92,7 @@ public class BrightnessController implements ToggleSlider.Listener, MirroredBrig
 
         @Override
         public void onDisplayChanged(int displayId) {
+            if (mUserChangedBrightness) return;
             mBackgroundHandler.post(mUpdateSliderRunnable);
         }
     };
@@ -105,6 +106,7 @@ public class BrightnessController implements ToggleSlider.Listener, MirroredBrig
     private float mBrightnessMax = PowerManager.BRIGHTNESS_MAX;
 
     private ValueAnimator mSliderAnimator;
+    private boolean mUserChangedBrightness;
 
     @Override
     public void setMirror(BrightnessMirrorController controller) {
@@ -362,6 +364,7 @@ public class BrightnessController implements ToggleSlider.Listener, MirroredBrig
                     BrightnessSynchronizer.brightnessFloatToInt(valFloat));
 
         }
+        mUserChangedBrightness = tracking && !stopTracking;
         setBrightness(valFloat);
         if (!tracking) {
             AsyncTask.execute(new Runnable() {
@@ -399,8 +402,11 @@ public class BrightnessController implements ToggleSlider.Listener, MirroredBrig
     private void updateIcon(boolean automatic) {
         if (mIcon != null) {
             mIcon.setImageResource(mAutomatic ?
-                    com.android.systemui.R.drawable.ic_qs_brightness_auto_on :
-                    com.android.systemui.R.drawable.ic_qs_brightness_auto_off);
+                    com.android.systemui.R.drawable.ic_qs_brightness_auto_on_new :
+                    com.android.systemui.R.drawable.ic_qs_brightness_auto_off_new);
+            mIcon.setBackgroundResource(mAutomatic ?
+                    com.android.systemui.R.drawable.bg_qs_brightness_auto_on :
+                    com.android.systemui.R.drawable.bg_qs_brightness_auto_off);
         }
     }
 

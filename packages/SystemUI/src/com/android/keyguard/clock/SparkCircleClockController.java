@@ -21,11 +21,7 @@ public class SparkCircleClockController implements ClockPlugin {
     private ClockLayout mBigClockView;
     private final SysuiColorExtractor mColorExtractor;
     private float mDarkAmount;
-    private TextClock mDateClock;
     private final LayoutInflater mLayoutInflater;
-    private TextClock mTimeClock1;
-    private TextClock mTimeClock2;
-    private TextClock mTimeClock3;
     private final ViewPreviewer mRenderer = new ViewPreviewer();
     private final Resources mResources;
     private ClockLayout mView;
@@ -119,14 +115,8 @@ public class SparkCircleClockController implements ClockPlugin {
 
     
     public void onTimeTick() {
-        ClockLayout clockLayout = mView;
-        if (clockLayout != null) {
-            clockLayout.onTimeChanged();
-        }
-        ClockLayout clockLayout2 = mBigClockView;
-        if (clockLayout2 != null) {
-            clockLayout2.onTimeChanged();
-        }
+        mView.onTimeChanged();
+        mBigClockView.onTimeChanged();
     }
 
     

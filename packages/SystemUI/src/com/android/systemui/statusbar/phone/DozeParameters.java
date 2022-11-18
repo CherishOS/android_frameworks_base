@@ -347,7 +347,7 @@ public class DozeParameters implements
     }
 
     private boolean willAnimateFromLockScreenToAod() {
-        return getAlwaysOn() && mKeyguardShowing;
+        return canControlUnlockedScreenOff() && mKeyguardShowing;
     }
 
     private boolean getBoolean(String propName, int resId) {
@@ -361,6 +361,10 @@ public class DozeParameters implements
 
     public int getPulseVisibleDurationExtended() {
         return 2 * getPulseVisibleDuration();
+    }
+
+    public boolean doubleTapNeedsProximityCheck() {
+        return mResources.getBoolean(R.bool.doze_double_tap_proximity_check);
     }
 
     public boolean doubleTapReportsTouchCoordinates() {
@@ -383,6 +387,10 @@ public class DozeParameters implements
      */
     private boolean singleTapUsesProx() {
         return mResources.getBoolean(R.bool.doze_single_tap_uses_prox);
+    }
+
+    public boolean longPressNeedsProximityCheck() {
+        return mResources.getBoolean(R.bool.doze_long_press_proximity_check);
     }
 
     /**

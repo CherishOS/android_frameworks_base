@@ -293,6 +293,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import com.android.server.DssController;
+
 /**
  * System service for managing activities and their containers (task, displays,... ).
  *
@@ -4348,9 +4350,15 @@ public class ActivityTaskManagerService extends IActivityTaskManager.Stub {
         for (int i = pidMap.size() - 1; i >= 0; i--) {
             final int pid = pidMap.keyAt(i);
             final WindowProcessController app = pidMap.get(pid);
+
+            Configuration appConfig = new Configuration(mTempConfig);
+            // If the process name in configured in List set scaledConfig else set normal Config
+            DssController dssController = DssController.getService();
+            appConfig = dssController.createScaledConfiguration(appConfig, app.mName);
+
             ProtoLog.v(WM_DEBUG_CONFIGURATION, "Update process config of %s to new "
-                    + "config %s", app.mName, mTempConfig);
-            app.onConfigurationChanged(mTempConfig);
+                    + "config %s", app.mName, appConfig);
+            app.onConfigurationChanged(appConfig);
         }
 
         final Message msg = PooledLambda.obtainMessage(

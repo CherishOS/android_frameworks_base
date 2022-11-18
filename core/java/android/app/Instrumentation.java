@@ -63,7 +63,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
-import com.android.internal.util.cherish.AttestationHooks;
+
 import com.android.internal.util.cherish.PixelPropsUtils;
 
 /**
@@ -1233,8 +1233,7 @@ public class Instrumentation {
         Application app = getFactory(context.getPackageName())
                 .instantiateApplication(cl, className);
         app.attach(context);
-        AttestationHooks.initApplicationBeforeOnCreate(app);
-        String packageName = app.getPackageName();
+        String packageName = context.getPackageName();
         PixelPropsUtils.setProps(packageName);
         return app;
     }
@@ -1253,8 +1252,7 @@ public class Instrumentation {
             ClassNotFoundException {
         Application app = (Application)clazz.newInstance();
         app.attach(context);
-        AttestationHooks.initApplicationBeforeOnCreate(app);
-        String packageName = app.getPackageName();
+        String packageName = context.getPackageName();
         PixelPropsUtils.setProps(packageName);
         return app;
     }

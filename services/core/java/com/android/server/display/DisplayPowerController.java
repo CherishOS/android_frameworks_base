@@ -42,8 +42,10 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Parcel;
 import android.os.PowerManager;
 import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.Trace;
@@ -74,6 +76,8 @@ import com.android.server.display.utils.SensorUtils;
 import com.android.server.display.whitebalance.DisplayWhiteBalanceController;
 import com.android.server.display.whitebalance.DisplayWhiteBalanceFactory;
 import com.android.server.display.whitebalance.DisplayWhiteBalanceSettings;
+import com.android.server.lights.LightsManager;
+import com.android.server.lights.LogicalLight;
 import com.android.server.policy.WindowManagerPolicy;
 
 import java.io.PrintWriter;
@@ -176,6 +180,9 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
     // Battery stats.
     @Nullable
     private final IBatteryStats mBatteryStats;
+
+    // The lights manager.
+    private final LightsManager mLights;
 
     // The sensor manager.
     private final SensorManager mSensorManager;
@@ -474,6 +481,9 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
     private int mOnProximityPositiveMessages;
     private int mOnProximityNegativeMessages;
 
+    // Wether auto brightness is applied one shot when screen is turned on
+    private boolean mAutoBrightnessOneShot = false;
+
     // Animators.
     private ObjectAnimator mColorFadeOnAnimator;
     private ObjectAnimator mColorFadeOffAnimator;
@@ -497,6 +507,12 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
     private final String mSuspendBlockerIdProxPositive;
     private final String mSuspendBlockerIdProxNegative;
     private final String mSuspendBlockerIdProxDebounce;
+
+    // MIUI ADD: START
+    // For SurfaceFlinger to calculate alpha.
+    private IBinder mISurfaceFlinger;
+    private static final int TRANSACTION_NOTIFY_DIM = 31107;
+    // END
 
     /**
      * Creates the display power controller.
@@ -522,6 +538,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         mHandler = new DisplayControllerHandler(handler.getLooper());
         mLastBrightnessEvent = new BrightnessEvent(mDisplayId);
         mTempBrightnessEvent = new BrightnessEvent(mDisplayId);
+        mLights = LocalServices.getService(LightsManager.class);
 
         if (mDisplayId == Display.DEFAULT_DISPLAY) {
             mBatteryStats = BatteryStatsService.getService();
@@ -539,8 +556,12 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         // TODO: b/186428377 update brightness setting when display changes
         mBrightnessSetting = brightnessSetting;
         mOnBrightnessChangeRunnable = onBrightnessChangeRunnable;
+        mAutoBrightnessOneShot = getAutoBrightnessOneShotSetting();
 
         PowerManager pm = context.getSystemService(PowerManager.class);
+
+        // MIUI ADD: START
+        mISurfaceFlinger = ServiceManager.getService("SurfaceFlinger");
 
         final Resources resources = context.getResources();
 
@@ -771,6 +792,13 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                 if (!mPendingRequestChangedLocked) {
                     mPendingRequestChangedLocked = true;
                     sendUpdatePowerStateLocked();
+                    // MIUI ADD: START
+                    if(DisplayPowerRequest.POLICY_DIM == request.policy){
+                        sendDimStateToSurfaceFlinger(true);
+                    }else{
+                        sendDimStateToSurfaceFlinger(false);
+                    }
+                    // END
                 }
             }
 
@@ -981,6 +1009,9 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                 false /*notifyForDescendants*/, mSettingsObserver, UserHandle.USER_ALL);
         mContext.getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.SCREEN_AUTO_BRIGHTNESS_ADJ),
+                false /*notifyForDescendants*/, mSettingsObserver, UserHandle.USER_ALL);
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.AUTO_BRIGHTNESS_ONE_SHOT),
                 false /*notifyForDescendants*/, mSettingsObserver, UserHandle.USER_ALL);
     }
 
@@ -1316,6 +1347,26 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         if (state == Display.STATE_OFF) {
             brightnessState = PowerManager.BRIGHTNESS_OFF_FLOAT;
             mBrightnessReasonTemp.setReason(BrightnessReason.REASON_SCREEN_OFF);
+            LogicalLight buttonsLight = mLights.getLight(LightsManager.LIGHT_ID_BUTTONS);
+            if (buttonsLight != null) {
+                buttonsLight.setBrightness(brightnessState);
+            }
+            LogicalLight keyboardLight = mLights.getLight(LightsManager.LIGHT_ID_KEYBOARD);
+            if (keyboardLight != null) {
+                keyboardLight.setBrightness(brightnessState);
+            }
+        }
+
+        // Disable button and keyboard lights when dozing
+        if (state == Display.STATE_DOZE || state == Display.STATE_DOZE_SUSPEND) {
+            LogicalLight buttonsLight = mLights.getLight(LightsManager.LIGHT_ID_BUTTONS);
+            if (buttonsLight != null) {
+                buttonsLight.setBrightness(PowerManager.BRIGHTNESS_OFF_FLOAT);
+            }
+            LogicalLight keyboardLight = mLights.getLight(LightsManager.LIGHT_ID_KEYBOARD);
+            if (keyboardLight != null) {
+                keyboardLight.setBrightness(PowerManager.BRIGHTNESS_OFF_FLOAT);
+            }
         }
 
         // Always use the VR brightness when in the VR state.
@@ -1375,6 +1426,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
             brightnessAdjustmentFlags = BrightnessReason.ADJUSTMENT_AUTO;
             mAppliedTemporaryAutoBrightnessAdjustment = false;
         }
+
         // Apply brightness boost.
         // We do this here after deciding whether auto-brightness is enabled so that we don't
         // disable the light sensor during this temporary state.  That way when boost ends we will
@@ -1400,7 +1452,8 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                     mBrightnessConfiguration,
                     mLastUserSetScreenBrightness,
                     userSetBrightnessChanged, autoBrightnessAdjustment,
-                    autoBrightnessAdjustmentChanged, mPowerRequest.policy);
+                    autoBrightnessAdjustmentChanged, mPowerRequest.policy,
+                    mAutoBrightnessOneShot);
         }
 
         if (mBrightnessTracker != null) {
@@ -2347,7 +2400,14 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         // We don't bother with a pending variable for VR screen brightness since we just
         // immediately adapt to it.
         mScreenBrightnessForVr = getScreenBrightnessForVrSetting();
+        mAutoBrightnessOneShot = getAutoBrightnessOneShotSetting();
         sendUpdatePowerState();
+    }
+
+    private boolean getAutoBrightnessOneShotSetting() {
+        return Settings.System.getIntForUser(mContext.getContentResolver(),
+            Settings.System.AUTO_BRIGHTNESS_ONE_SHOT, 0,
+            UserHandle.USER_CURRENT) == 1;
     }
 
     private float getAutoBrightnessAdjustmentSetting() {
@@ -3203,4 +3263,28 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
             return false;
         }
     }
+
+    // MIUI ADD: START
+    public void sendDimStateToSurfaceFlinger(boolean isDim) {
+        if (DEBUG) {
+            Slog.d(TAG, "sendDimStateToSurfaceFlinger is dim "+isDim);
+        }
+        if (mISurfaceFlinger != null) {
+            final Parcel data = Parcel.obtain();
+            data.writeInterfaceToken("android.ui.ISurfaceComposer");
+            int val = isDim ? 1:0;
+            data.writeInt(val);
+            data.writeInt(262);
+            data.writeString("system");
+            try {
+                mISurfaceFlinger.transact(TRANSACTION_NOTIFY_DIM, data,
+                        null, IBinder.FLAG_ONEWAY);
+            } catch (RemoteException | SecurityException ex) {
+                Slog.e(TAG, "Failed to send brightness to SurfaceFlinger", ex);
+            } finally {
+                data.recycle();
+            }
+        }
+    }
+    // END
 }

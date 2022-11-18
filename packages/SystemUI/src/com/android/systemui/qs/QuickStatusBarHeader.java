@@ -78,6 +78,9 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
     private static final String SHOW_QS_DATE =
             "system:" + Settings.System.SHOW_QS_DATE;
 
+    private static final String QS_WEATHER_POSITION =
+            "system:" + Settings.System.QS_WEATHER_POSITION;
+
     private boolean mExpanded;
     private boolean mQsDisabled;
 
@@ -97,6 +100,9 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
     private View mStatusIconsView;
     private View mContainer;
 
+    private View mQsWeatherView;
+    private View mQsWeatherHeaderView; 
+
     private View mQSCarriers;
     private ViewGroup mClockContainer;
     private Clock mClockView;
@@ -110,6 +116,8 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
     private BatteryMeterView mBatteryRemainingIcon;
     private StatusIconContainer mIconContainer;
     private View mPrivacyChip;
+    
+    private int mQQSWeather;
 
     @Nullable
     private TintedIconManager mTintedIconManager;
@@ -170,6 +178,10 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         mDateView.setOnClickListener(this);
         mClockDateView = findViewById(R.id.date_clock);
         mClockDateView.setOnClickListener(this);
+        mQsWeatherView = findViewById(R.id.qs_weather_view);
+        mQsWeatherView.setOnLongClickListener(this);
+        mQsWeatherHeaderView = findViewById(R.id.weather_view_header);
+        mQsWeatherHeaderView.setOnLongClickListener(this);
         mClockIconsSeparator = findViewById(R.id.separator);
         mRightLayout = findViewById(R.id.rightLayout);
         mDateContainer = findViewById(R.id.date_container);
@@ -201,7 +213,8 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                 QS_SHOW_BATTERY_PERCENT,
                 StatusBarIconController.ICON_HIDE_LIST,
                 SHOW_QS_CLOCK,
-                SHOW_QS_DATE);
+                SHOW_QS_DATE,
+                QS_WEATHER_POSITION);
     }
 
     void onAttach(TintedIconManager iconManager,
@@ -281,6 +294,13 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
             nIntent.setClassName("com.android.settings",
                     "com.android.settings.Settings$DateTimeSettingsActivity");
             mActivityStarter.startActivity(nIntent, true /* dismissShade */);
+            mVibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
+            return true;
+        } else if (v == mQsWeatherHeaderView || v == mQsWeatherView) {
+            Intent wIntent = new Intent(Intent.ACTION_MAIN);
+            wIntent.setClassName("org.omnirom.omnijaws",
+                    "org.omnirom.omnijaws.SettingsActivity");
+            mActivityStarter.startActivity(wIntent, true /* dismissShade */);
             mVibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
             return true;
         }
@@ -409,6 +429,8 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                 // These views appear on expanding down
                 .addFloat(mDateView, "alpha", 0, 0, 1)
                 .addFloat(mClockDateView, "alpha", 1, 0, 0)
+                .addFloat(mQsWeatherHeaderView, "alpha", 0, 0, 1)
+                .addFloat(mQsWeatherView, "alpha", 1, 0, 0)
                 .addFloat(mQSCarriers, "alpha", 0, 1)
                 .setListener(new TouchAnimator.ListenerAdapter() {
                     @Override
@@ -645,6 +667,19 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         setChipVisibility(mPrivacyChip.getVisibility() == View.VISIBLE);
     }
 
+    private void updateQSWeatherPosition() {
+        if (mQQSWeather == 0) {
+            mQsWeatherHeaderView.setVisibility(View.GONE);
+            mQsWeatherView.setVisibility(View.VISIBLE);
+        } else if (mQQSWeather == 1) {
+            mQsWeatherHeaderView.setVisibility(View.VISIBLE);
+            mQsWeatherView.setVisibility(View.GONE);
+        } else {
+            mQsWeatherHeaderView.setVisibility(View.VISIBLE);
+            mQsWeatherView.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void onTuningChanged(String key, String newValue) {
         switch (key) {
@@ -672,6 +707,11 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                         TunerService.parseIntegerSwitch(newValue, true);
                 mDateContainer.setVisibility(mShowDate ? View.VISIBLE : View.GONE);
                 mClockDateView.setVisibility(mShowDate ? View.VISIBLE : View.GONE);
+                break;
+            case QS_WEATHER_POSITION:
+                mQQSWeather =
+                       TunerService.parseInteger(newValue, 2);
+                updateQSWeatherPosition();
                 break;
             default:
                 break;
