@@ -35,6 +35,8 @@ public class PixelPropsUtils {
     private static final String DEVICE = "ro.product.device";
     private static final boolean DEBUG = false;
 
+    public static final String PACKAGE_NETFLIX = "com.netflix.mediaclient";
+
     private static final Map<String, Object> propsToChange;
     private static final Map<String, Object> propsToChangePixel5;
     private static final Map<String, Object> propsToChangePixel7Pro;
@@ -70,7 +72,8 @@ public class PixelPropsUtils {
             "com.android.chrome",
             "com.android.vending",
             "com.breel.wallpapers20",
-            "com.nhs.online.nhsonline"
+            "com.nhs.online.nhsonline",
+            PACKAGE_NETFLIX
     };
 
     private static final String[] packagesToKeep = {
@@ -204,6 +207,11 @@ public class PixelPropsUtils {
             return;
         }
         if (Arrays.asList(packagesToKeep).contains(packageName)) {
+            return;
+        }
+        if (packageName.equals(PACKAGE_NETFLIX) && !SystemProperties.getBoolean(
+                "persist.pixelpropsutils.spoof_netflix", false)) {
+            if (DEBUG) Log.d(TAG, "Netflix spoofing disabled by system prop");
             return;
         }
         if (packageName.startsWith("com.google.")
