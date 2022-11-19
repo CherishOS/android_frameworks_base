@@ -325,6 +325,9 @@ public final class ViewRootImpl implements ViewParent,
      */
     private static final int KEEP_CLEAR_AREA_REPORT_RATE_MILLIS = 100;
 
+    public static final int BACK_FOCUS_TIMEOUT = 5000;
+    private BackFocusKeeper mBackFocusKeeper;
+
     @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
     static final ThreadLocal<HandlerActionQueue> sRunQueues = new ThreadLocal<HandlerActionQueue>();
 
@@ -978,8 +981,9 @@ public final class ViewRootImpl implements ViewParent,
         mFastScrollSoundEffectsEnabled = audioManager.areNavigationRepeatSoundEffectsEnabled();
 
         mScrollCaptureRequestTimeout = SCROLL_CAPTURE_REQUEST_TIMEOUT_MILLIS;
+        mBackFocusKeeper=new BackFocusKeeper();
         mOnBackInvokedDispatcher = new WindowOnBackInvokedDispatcher(
-                context.getApplicationInfo().isOnBackInvokedCallbackEnabled());
+                context.getApplicationInfo().isOnBackInvokedCallbackEnabled(), mBackFocusKeeper);
     }
 
     public static void addFirstDrawHandler(Runnable callback) {
@@ -3812,6 +3816,12 @@ public final class ViewRootImpl implements ViewParent,
         // is lost, so we don't need to to force a flush - there might be other events such as
         // text changes, but these should be flushed independently.
         if (hasWindowFocus) {
+            if (mHandler.hasMessages(MSG_BACK_FOCUS_TIMEOUT)) {
+                mHandler.removeMessages(MSG_BACK_FOCUS_TIMEOUT);
+                if (mBackFocusKeeper.mOnBackInvokedCallback != null) {
+                    mBackFocusKeeper.mOnBackInvokedCallback.run();
+                }
+            }
             handleContentCaptureFlush();
         }
     }
@@ -5469,7 +5479,7 @@ public final class ViewRootImpl implements ViewParent,
     private static final int MSG_WINDOW_TOUCH_MODE_CHANGED = 34;
     private static final int MSG_KEEP_CLEAR_RECTS_CHANGED = 35;
     private static final int MSG_REPORT_KEEP_CLEAR_RECTS = 36;
-
+    public  static final int MSG_BACK_FOCUS_TIMEOUT =37;
 
     final class ViewRootHandler extends Handler {
         @Override
@@ -5535,6 +5545,8 @@ public final class ViewRootImpl implements ViewParent,
                     return "MSG_WINDOW_TOUCH_MODE_CHANGED";
                 case MSG_KEEP_CLEAR_RECTS_CHANGED:
                     return "MSG_KEEP_CLEAR_RECTS_CHANGED";
+                case MSG_BACK_FOCUS_TIMEOUT:
+                    return "MSG_BACK_FOCUS_TIMEOUT";
             }
             return super.getMessageName(message);
         }
@@ -5750,6 +5762,9 @@ public final class ViewRootImpl implements ViewParent,
                 }   break;
                 case MSG_REQUEST_SCROLL_CAPTURE:
                     handleScrollCaptureRequest((IScrollCaptureResponseListener) msg.obj);
+                    break;
+                case MSG_BACK_FOCUS_TIMEOUT:
+                    handleBackFocusTimeout();
                     break;
             }
         }
@@ -11124,5 +11139,18 @@ public final class ViewRootImpl implements ViewParent,
         } catch (RemoteException e) {
             return false;
         }
+    }
+
+    void handleBackFocusTimeout(){
+        Log.e(TAG, "back focus timeout: ");
+        //TODO: report ANR
+    }
+
+     public class BackFocusKeeper {
+        public boolean hasWindowFocus() {
+            return mAttachInfo.mHasWindowFocus;
+        }
+
+        public Runnable mOnBackInvokedCallback;
     }
 }
