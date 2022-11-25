@@ -44,8 +44,15 @@ public class PixelPropsUtils {
     private static final Map<String, ArrayList<String>> propsToKeep;
 
     private static final String[] packagesToChangePixel7Pro = {
+            "com.google.android.apps.googleassistant",
+            "com.google.android.apps.nbu.files",
+            "com.google.android.apps.podcasts",
+            "com.google.android.apps.privacy.wildlife",
+            "com.google.android.apps.tachyon",
             "com.google.android.apps.wallpaper",
-            "com.google.android.apps.privacy.wildlife"
+            "com.google.android.contacts",
+            "com.google.android.deskclock",
+            "com.google.android.inputmethod.latin"
     };
 
     private static final String[] packagesToChangePixelXL = {
@@ -74,9 +81,13 @@ public class PixelPropsUtils {
 
     private static final Map<String, Object> propsToChangeROG1;
     private static final String[] packagesToChangeROG1 = {
-            "com.dts.freefireth",
-            "com.dts.freefiremax",
             "com.madfingergames.legends"
+    };
+    
+    private static final Map<String, Object> propsToChangeROG3;
+    private static final String[] packagesToChangeROG3 = {
+            "com.pearlabyss.blackdesertm",
+            "com.pearlabyss.blackdesertm.gl"
     };
 
     private static final Map<String, Object> propsToChangeXP5;
@@ -89,6 +100,7 @@ public class PixelPropsUtils {
 
     private static final Map<String, Object> propsToChangeOP8P;
     private static final String[] packagesToChangeOP8P = {
+            "com.netease.lztgglobal",
             "com.tencent.ig",
             "com.pubg.imobile",
             "com.pubg.krmobile",
@@ -102,11 +114,23 @@ public class PixelPropsUtils {
             "com.epicgames.portal"
     };
 
-    private static final Map<String, Object> propsToChangeMI11;
-    private static final String[] packagesToChangeMI11 = {
+    private static final Map<String, Object> propsToChangeOP9R;
+    private static final String[] packagesToChangeOP9R = {
+            "com.epicgames.fortnite",
+            "com.epicgames.portal"
+    };
+
+    private static final Map<String, Object> propsToChangeMI11T;
+    private static final String[] packagesToChangeMI11T = {
             "com.ea.gp.apexlegendsmobilefps",
             "com.mobile.legends",
             "com.tencent.tmgp.sgame"
+    };
+
+    private static final Map<String, Object> propsToChangeF4;
+    private static final String[] packagesToChangeF4 = {
+            "com.dts.freefiremax",
+            "com.dts.freefireth"
     };
 
     private static final String[] packagesToKeep = {
@@ -169,17 +193,24 @@ public class PixelPropsUtils {
         propsToChangeROG1 = new HashMap<>();
         propsToChangeROG1.put("MODEL", "ASUS_Z01QD");
         propsToChangeROG1.put("MANUFACTURER", "asus");
+        propsToChangeROG3 = new HashMap<>();
+        propsToChangeROG3.put("MODEL", "ASUS_I003D");
+        propsToChangeROG3.put("MANUFACTURER", "asus");
         propsToChangeXP5 = new HashMap<>();
         propsToChangeXP5.put("MODEL", "SO-52A");
+        propsToChangeXP5.put("MANUFACTURER", "Sony");
         propsToChangeOP8P = new HashMap<>();
         propsToChangeOP8P.put("MODEL", "IN2020");
         propsToChangeOP8P.put("MANUFACTURER", "OnePlus");
-        propsToChangeMI11 = new HashMap<>();
-        propsToChangeMI11.put("BRAND", "Xiaomi");
-        propsToChangeMI11.put("MANUFACTURER", "Xiaomi");
-        propsToChangeMI11.put("DEVICE", "star");
-        propsToChangeMI11.put("PRODUCT", "star");
-        propsToChangeMI11.put("MODEL", "M2102K1G");
+        propsToChangeOP9R = new HashMap<>();
+        propsToChangeOP9R.put("MODEL", "LE2101");
+        propsToChangeOP9R.put("MANUFACTURER", "OnePlus");
+        propsToChangeMI11T = new HashMap<>();
+        propsToChangeMI11T.put("MODEL", "21081111RG");
+        propsToChangeMI11T.put("MANUFACTURER", "Xiaomi");
+        propsToChangeF4 = new HashMap<>();
+        propsToChangeF4.put("MODEL", "22021211RG");
+        propsToChangeF4.put("MANUFACTURER", "Xiaomi");
     }
 
     private static boolean isGoogleCameraPackage(String packageName){
@@ -239,8 +270,14 @@ public class PixelPropsUtils {
             propsToChange.putAll(propsToChangeXP5);
         } else if (Arrays.asList(packagesToChangeOP8P).contains(packageName)) {
             propsToChange.putAll(propsToChangeOP8P);
-        } else if (Arrays.asList(packagesToChangeMI11).contains(packageName)) {
-            propsToChange.putAll(propsToChangeMI11);
+        } else if (Arrays.asList(packagesToChangeMI11T).contains(packageName)) {
+            propsToChange.putAll(propsToChangeMI11T);
+        } else if (Arrays.asList(packagesToChangeROG3).contains(packageName)) {
+            propsToChange.putAll(propsToChangeROG3);
+        } else if (Arrays.asList(packagesToChangeOP9R).contains(packageName)) {
+            propsToChange.putAll(propsToChangeOP9R);
+        } else if (Arrays.asList(packagesToChangeF4).contains(packageName)) {
+            propsToChange.putAll(propsToChangeF4);
         }
 
         if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
