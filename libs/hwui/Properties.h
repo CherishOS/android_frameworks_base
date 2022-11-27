@@ -135,7 +135,7 @@ enum DebugLevel {
  * Allows to set rendering pipeline mode to OpenGL (default), Skia OpenGL
  * or Vulkan.
  */
-#define PROPERTY_RENDERER "debug.hwui.renderer"
+#define PROPERTY_RENDERER "persist.sys.hwui.renderer"
 
 /**
  * Allows to collect a recording of Skia drawing commands.
