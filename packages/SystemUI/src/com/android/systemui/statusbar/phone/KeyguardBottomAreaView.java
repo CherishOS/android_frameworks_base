@@ -447,18 +447,18 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         updateLeftAffordanceIcon();
 
         lp = mWalletButton.getLayoutParams();
-        lp.width = getResources().getDimensionPixelSize(R.dimen.keyguard_affordance_fixed_width);
-        lp.height = getResources().getDimensionPixelSize(R.dimen.keyguard_affordance_fixed_height);
+        lp.width = getResources().getDimensionPixelSize(R.dimen.keyguard_affordance_width);
+        lp.height = getResources().getDimensionPixelSize(R.dimen.keyguard_affordance_height);
         mWalletButton.setLayoutParams(lp);
 
         lp = mQRCodeScannerButton.getLayoutParams();
-        lp.width = getResources().getDimensionPixelSize(R.dimen.keyguard_affordance_fixed_width);
-        lp.height = getResources().getDimensionPixelSize(R.dimen.keyguard_affordance_fixed_height);
+        lp.width = getResources().getDimensionPixelSize(R.dimen.keyguard_affordance_width);
+        lp.height = getResources().getDimensionPixelSize(R.dimen.keyguard_affordance_height);
         mQRCodeScannerButton.setLayoutParams(lp);
 
         lp = mControlsButton.getLayoutParams();
-        lp.width = getResources().getDimensionPixelSize(R.dimen.keyguard_affordance_fixed_width);
-        lp.height = getResources().getDimensionPixelSize(R.dimen.keyguard_affordance_fixed_height);
+        lp.width = getResources().getDimensionPixelSize(R.dimen.keyguard_affordance_width);
+        lp.height = getResources().getDimensionPixelSize(R.dimen.keyguard_affordance_height);
         mControlsButton.setLayoutParams(lp);
 
         mIndicationPadding = getResources().getDimensionPixelSize(
@@ -1204,6 +1204,8 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         mWalletButton.getDrawable().setTint(iconColor);
         mControlsButton.getDrawable().setTint(iconColor);
         mQRCodeScannerButton.getDrawable().setTint(iconColor);
+        mRightAffordanceView.getDrawable().setTint(iconColor);
+        mLeftAffordanceView.getDrawable().setTint(iconColor);
 
         ColorStateList bgColor = Utils.getColorAttr(
                 mContext,
@@ -1211,6 +1213,8 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         mWalletButton.setBackgroundTintList(bgColor);
         mControlsButton.setBackgroundTintList(bgColor);
         mQRCodeScannerButton.setBackgroundTintList(bgColor);
+        mRightAffordanceView.setBackgroundTintList(bgColor);
+        mLeftAffordanceView.setBackgroundTintList(bgColor);
     }
 
     /**

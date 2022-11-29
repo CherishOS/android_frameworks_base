@@ -5733,6 +5733,30 @@ public final class Settings {
          * @hide
          */
         public static final String DATA_DISABLED_ICON = "data_disabled_icon";
+		
+		/**
+         * Keyguard weather temperature
+         * 0: Hide the temperature
+         * 1: Display the temperature with scale and image
+         * 2: Display the temperature without scale and with image
+         * 3: Display the temparature with scale and without image
+         * 4: Display the temperature without scale and without image
+         * 5: Display the temperature image
+         * @hide
+         */
+	public static final String KG_SHOW_WEATHER_TEMP = "kg_show_weather_temp";
+
+	/**
+         * Launcher weather temperature
+         * 0: Hide the temperature
+         * 1: Display the temperature with scale and image
+         * 2: Display the temperature without scale and with image
+         * 3: Display the temparature with scale and without image
+         * 4: Display the temperature without scale and without image
+         * 5: Display the temperature image
+         * @hide
+         */
+	public static final String LAUNCHER_SHOW_WEATHER_TEMP = "launcher_show_weather_temp";
 
         /**
          * Whether to enable statusbar brightness control
@@ -6314,6 +6338,11 @@ public final class Settings {
          * @hide
          */
         public static final String SETTINGS_DASHBOARD_STYLE = "settings_dashboard_style";
+		
+		/**
+         * @hide
+         */
+        public static final String SMALL_CLOCK_DOUBLE_LINE = "small_clock_double_line";
 
         /**
          * Gestures nav: left long back swipe action
@@ -6648,6 +6677,29 @@ public final class Settings {
         public static final String BUTTON_BACKLIGHT_ONLY_WHEN_PRESSED =
                 "button_backlight_only_when_pressed";
 
+	/**
+         * QS weather temperature
+         * 0: Hide the temperature
+         * 1: Display the temperature with scale and image
+         * 2: Display the temperature without scale and with image
+         * 3: Display the temparature with scale and without image
+         * 4: Display the temperature without scale and without image
+         * 5: Display the temperature image
+         * @hide
+         */
+	public static final String QS_SHOW_WEATHER_TEMP = "qs_show_weather_temp";
+
+	/**
+         * @hide
+         */
+        public static final String OMNIJAWS_WEATHER_ICON_PACK = "omnijaws_weather_icon_pack";
+
+        /**
+         * Date font size QS
+         * @hide
+         */
+        public static final String QS_WEATHER_POSITION = "qs_weather_position";
+
         /**
          * Whether to show data usage in qs footer
          * @hide
@@ -6831,6 +6883,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(TRANSPARENT_POWER_MENU);
             PRIVATE_SETTINGS.add(TRANSPARENT_POWER_DIALOG_DIM);
             PRIVATE_SETTINGS.add(BUTTON_BACKLIGHT_ONLY_WHEN_PRESSED);
+	         PRIVATE_SETTINGS.add(OMNIJAWS_WEATHER_ICON_PACK);
         }
 
         /**
@@ -11969,6 +12022,13 @@ public final class Settings {
          * @hide
          */
         public static final String ENABLE_PROJECTION_PRIVACY_INDICATOR = "enable_projection_privacy_indicator";
+		
+		/**
+         * Change fonts for the system lockscreen date
+         *
+         * @hide
+         */
+        public static final String KG_CUSTOM_DATE_FONT = "kg_custom_date_font";
 
         /**
          * Pulse navbar music visualizer
@@ -12071,6 +12131,21 @@ public final class Settings {
          * @hide
          */
         public static final String PULSE_SMOOTHING_ENABLED = "pulse_smoothing_enabled";
+        
+        /**
+         * @hide
+         */
+        public static final String KG_CUSTOM_CLOCK_COLOR = "kg_custom_clock_color";
+
+        /**
+         * @hide
+         */
+        public static final String KG_CUSTOM_CLOCK_COLOR_ENABLED = "kg_custom_clock_color_enabled";
+        
+        /**
+         * @hide
+         */
+        public static final String KG_CUSTOM_CLOCK_FONT = "kg_custom_clock_font";
 
 	/**
          * Pulse gravity

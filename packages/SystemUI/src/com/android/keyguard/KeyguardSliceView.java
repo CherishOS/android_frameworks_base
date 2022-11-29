@@ -28,6 +28,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.graphics.text.LineBreaker;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Trace;
 import android.text.TextUtils;
@@ -143,8 +144,13 @@ public class KeyguardSliceView extends LinearLayout {
             mTitle.setVisibility(VISIBLE);
 
             SliceItem mainTitle = header.getTitleItem();
-            CharSequence title = mainTitle != null ? mainTitle.getText() : null;
-            mTitle.setText(title);
+            if (mainTitle == null) {
+              mTitle.setText(null);
+            } else if (mainTitle.getText().toString().length() > 13) {
+              mTitle.setText(" ~ " + mainTitle.getText().toString().substring(0, Math.min(13, mainTitle.getText().toString().length())) + "...");
+            } else {
+              mTitle.setText(" ~ " + mainTitle.getText().toString());
+            }
             if (header.getPrimaryAction() != null
                     && header.getPrimaryAction().getAction() != null) {
                 clickActions.put(mTitle, header.getPrimaryAction().getAction());
@@ -180,7 +186,15 @@ public class KeyguardSliceView extends LinearLayout {
             clickActions.put(button, pendingIntent);
 
             final SliceItem titleItem = rc.getTitleItem();
-            button.setText(titleItem == null ? null : titleItem.getText());
+            if (titleItem == null) {
+              button.setText(null);
+            } else if (titleItem.getText().toString().length() > 13) {
+              button.setText(titleItem.getText().toString().substring(0, Math.min(13, titleItem.getText().toString().length())) + "...");
+            } else {
+              button.setText(titleItem.getText().toString());
+            }
+
+
             button.setContentDescription(rc.getContentDescription());
 
             Drawable iconDrawable = null;
@@ -226,6 +240,26 @@ public class KeyguardSliceView extends LinearLayout {
         mDarkAmount = darkAmount;
         mRow.setDarkAmount(darkAmount);
         updateTextColors();
+    }
+
+    public void setViewsTextSize(float textSize) {
+        int childCount = mRow.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View v = mRow.getChildAt(i);
+            if (v instanceof TextView) {
+                ((TextView) v).setTextSize(textSize);
+            }
+        }
+    }
+
+    public void setViewsTypeface(Typeface tf) {
+        int childCount = mRow.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View v = mRow.getChildAt(i);
+            if (v instanceof TextView) {
+                ((TextView) v).setTypeface(tf);
+            }
+        }
     }
 
     private void updateTextColors() {
@@ -435,7 +469,6 @@ public class KeyguardSliceView extends LinearLayout {
         }
 
         public void onOverlayChanged() {
-            setTextAppearance(sStyleId);
         }
 
         @Override
@@ -447,7 +480,7 @@ public class KeyguardSliceView extends LinearLayout {
         private void updatePadding() {
             boolean hasText = !TextUtils.isEmpty(getText());
             boolean isDate = Uri.parse(KeyguardSliceProvider.KEYGUARD_DATE_URI).equals(getTag());
-            int padding = (int) getContext().getResources()
+            int padding = (int) mContext.getResources()
                     .getDimension(R.dimen.widget_horizontal_padding) / 2;
             int iconPadding = (int) mContext.getResources()
                     .getDimension(R.dimen.widget_icon_padding);

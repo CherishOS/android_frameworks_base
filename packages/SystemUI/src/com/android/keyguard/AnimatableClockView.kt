@@ -22,6 +22,8 @@ import android.annotation.IntRange
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.text.TextUtils
 import android.text.format.DateFormat
 import android.util.AttributeSet
@@ -74,6 +76,10 @@ class AnimatableClockView @JvmOverloads constructor(
     val lockScreenWeight: Int
         get() = if (useBoldedVersion()) lockScreenWeightInternal + 100 else lockScreenWeightInternal
 
+
+    private fun isSmallClockSingleLine(): Boolean = Settings.System.getIntForUser(context.contentResolver, 
+    Settings.System.SMALL_CLOCK_DOUBLE_LINE, 0,  UserHandle.USER_CURRENT) == 0
+
     init {
         val animatableClockViewAttributes = context.obtainStyledAttributes(
             attrs, R.styleable.AnimatableClockView, defStyleAttr, defStyleRes
@@ -100,12 +106,8 @@ class AnimatableClockView @JvmOverloads constructor(
             defStyleAttr, defStyleRes
         )
 
-        isSingleLineInternal =
-            try {
-                textViewAttributes.getBoolean(android.R.styleable.TextView_singleLine, false)
-            } finally {
-                textViewAttributes.recycle()
-            }
+	setSingleLine(isSmallClockSingleLine())
+        isSingleLineInternal = isSmallClockSingleLine()
 
         refreshFormat()
     }
