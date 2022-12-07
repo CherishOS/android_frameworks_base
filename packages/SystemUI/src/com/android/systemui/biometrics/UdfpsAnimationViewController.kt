@@ -31,10 +31,10 @@ import java.io.PrintWriter
 /**
  * Handles:
  * 1. registering for listeners when its view is attached and unregistering on view detached
- * 2. pausing UDFPS when FingerprintManager may still be running but we temporarily want to hide
+ * 2. pausing udfps when fingerprintManager may still be running but we temporarily want to hide
  * the affordance. this allows us to fade the view in and out nicely (see shouldPauseAuth)
  * 3. sending events to its view including:
- * - enabling and disabling of the UDFPS display mode
+ * - illumination events
  * - sensor position changes
  * - doze time event
  */
@@ -167,20 +167,19 @@ abstract class UdfpsAnimationViewController<T : UdfpsAnimationView>(
     }
 
     /**
-     * The display began transitioning into the UDFPS mode and the fingerprint manager started
-     * authenticating.
+     * Udfps has started illuminating and the fingerprint manager is working on authenticating.
      */
-    fun onDisplayConfiguring() {
-        view.onDisplayConfiguring()
+    fun onIlluminationStarting() {
+        view.onIlluminationStarting()
         view.postInvalidate()
     }
 
     /**
-     * The display transitioned away from the UDFPS mode and the fingerprint manager stopped
-     * authenticating.
+     * Udfps has stopped illuminating and the fingerprint manager is no longer attempting to
+     * authenticate.
      */
-    fun onDisplayUnconfigured() {
-        view.onDisplayUnconfigured()
+    fun onIlluminationStopped() {
+        view.onIlluminationStopped()
         view.postInvalidate()
     }
 

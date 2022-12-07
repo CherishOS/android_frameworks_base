@@ -126,7 +126,7 @@ public class UdfpsControllerTest extends SysuiTestCase {
     @Mock
     private WindowManager mWindowManager;
     @Mock
-    private UdfpsDisplayModeProvider mDisplayModeProvider;
+    private UdfpsHbmProvider mHbmProvider;
     @Mock
     private StatusBarStateController mStatusBarStateController;
     @Mock
@@ -194,7 +194,7 @@ public class UdfpsControllerTest extends SysuiTestCase {
     private IUdfpsOverlayController mOverlayController;
     @Captor private ArgumentCaptor<UdfpsView.OnTouchListener> mTouchListenerCaptor;
     @Captor private ArgumentCaptor<View.OnHoverListener> mHoverListenerCaptor;
-    @Captor private ArgumentCaptor<Runnable> mOnDisplayConfiguredCaptor;
+    @Captor private ArgumentCaptor<Runnable> mOnIlluminatedRunnableCaptor;
     @Captor private ArgumentCaptor<ScreenLifecycle.Observer> mScreenObserverCaptor;
     private ScreenLifecycle.Observer mScreenObserver;
 
@@ -257,7 +257,7 @@ public class UdfpsControllerTest extends SysuiTestCase {
                 mVibrator,
                 mUdfpsHapticsSimulator,
                 mUdfpsShell,
-                Optional.of(mDisplayModeProvider),
+                Optional.of(mHbmProvider),
                 mKeyguardStateController,
                 mDisplayManager,
                 mHandler,
@@ -507,7 +507,7 @@ public class UdfpsControllerTest extends SysuiTestCase {
         final float expectedMajor = touchMajor / scaleFactor;
 
         // Configure UdfpsView to accept the ACTION_DOWN event
-        when(mUdfpsView.isDisplayConfigured()).thenReturn(false);
+        when(mUdfpsView.isIlluminationRequested()).thenReturn(false);
         when(mUdfpsView.isWithinSensorArea(anyFloat(), anyFloat())).thenReturn(true);
 
         // Show the overlay.
@@ -585,7 +585,7 @@ public class UdfpsControllerTest extends SysuiTestCase {
     @Test
     public void fingerDown() throws RemoteException {
         // Configure UdfpsView to accept the ACTION_DOWN event
-        when(mUdfpsView.isDisplayConfigured()).thenReturn(false);
+        when(mUdfpsView.isIlluminationRequested()).thenReturn(false);
         when(mUdfpsView.isWithinSensorArea(anyFloat(), anyFloat())).thenReturn(true);
         when(mKeyguardUpdateMonitor.isFingerprintDetectionRunning()).thenReturn(true);
 
@@ -612,12 +612,12 @@ public class UdfpsControllerTest extends SysuiTestCase {
         verify(mFingerprintManager, never()).onPointerDown(anyLong(), anyInt(), anyInt(), anyInt(),
                 anyFloat(), anyFloat());
         verify(mLatencyTracker).onActionStart(eq(LatencyTracker.ACTION_UDFPS_ILLUMINATE));
-        // AND display configuration begins
-        verify(mUdfpsView).configureDisplay(mOnDisplayConfiguredCaptor.capture());
+        // AND illumination begins
+        verify(mUdfpsView).startIllumination(mOnIlluminatedRunnableCaptor.capture());
         verify(mLatencyTracker, never()).onActionEnd(eq(LatencyTracker.ACTION_UDFPS_ILLUMINATE));
         verify(mKeyguardUpdateMonitor).onUdfpsPointerDown(eq((int) TEST_REQUEST_ID));
-        // AND onDisplayConfigured notifies FingerprintManager about onUiReady
-        mOnDisplayConfiguredCaptor.getValue().run();
+        // AND onIlluminatedRunnable notifies FingerprintManager about onUiReady
+        mOnIlluminatedRunnableCaptor.getValue().run();
         mBiometricsExecutor.runAllReady();
         InOrder inOrder = inOrder(mAlternateTouchProvider, mLatencyTracker);
         inOrder.verify(mAlternateTouchProvider).onUiReady();
@@ -635,10 +635,10 @@ public class UdfpsControllerTest extends SysuiTestCase {
         // WHEN fingerprint is requested because of AOD interrupt
         mUdfpsController.onAodInterrupt(0, 0, 2f, 3f);
         mFgExecutor.runAllReady();
-        // THEN display configuration begins
-        // AND onDisplayConfigured notifies FingerprintManager about onUiReady
-        verify(mUdfpsView).configureDisplay(mOnDisplayConfiguredCaptor.capture());
-        mOnDisplayConfiguredCaptor.getValue().run();
+        // THEN illumination begins
+        // AND onIlluminatedRunnable that notifies FingerprintManager is set
+        verify(mUdfpsView).startIllumination(mOnIlluminatedRunnableCaptor.capture());
+        mOnIlluminatedRunnableCaptor.getValue().run();
         mBiometricsExecutor.runAllReady();
         verify(mAlternateTouchProvider).onPointerDown(eq(TEST_REQUEST_ID),
                 eq(0), eq(0), eq(3f) /* minor */, eq(2f) /* major */);
@@ -656,11 +656,11 @@ public class UdfpsControllerTest extends SysuiTestCase {
         mFgExecutor.runAllReady();
         when(mKeyguardUpdateMonitor.isFingerprintDetectionRunning()).thenReturn(true);
         mUdfpsController.onAodInterrupt(0, 0, 0f, 0f);
-        when(mUdfpsView.isDisplayConfigured()).thenReturn(true);
+        when(mUdfpsView.isIlluminationRequested()).thenReturn(true);
         // WHEN it is cancelled
         mUdfpsController.onCancelUdfps();
-        // THEN the display is unconfigured
-        verify(mUdfpsView).unconfigureDisplay();
+        // THEN the illumination is hidden
+        verify(mUdfpsView).stopIllumination();
     }
 
     @Test
@@ -673,12 +673,12 @@ public class UdfpsControllerTest extends SysuiTestCase {
         when(mKeyguardUpdateMonitor.isFingerprintDetectionRunning()).thenReturn(true);
         mUdfpsController.onAodInterrupt(0, 0, 0f, 0f);
         mFgExecutor.runAllReady();
-        when(mUdfpsView.isDisplayConfigured()).thenReturn(true);
+        when(mUdfpsView.isIlluminationRequested()).thenReturn(true);
         // WHEN it times out
         mFgExecutor.advanceClockToNext();
         mFgExecutor.runAllReady();
-        // THEN the display is unconfigured
-        verify(mUdfpsView).unconfigureDisplay();
+        // THEN the illumination is hidden
+        verify(mUdfpsView).stopIllumination();
     }
 
     @Test
@@ -745,8 +745,8 @@ public class UdfpsControllerTest extends SysuiTestCase {
         when(mKeyguardUpdateMonitor.isFingerprintDetectionRunning()).thenReturn(true);
         mUdfpsController.onAodInterrupt(0, 0, 0f, 0f);
 
-        // THEN display doesn't get configured because it's off
-        verify(mUdfpsView, never()).configureDisplay(any());
+        // THEN no illumination because screen is off
+        verify(mUdfpsView, never()).startIllumination(any());
     }
 
     @Test
@@ -762,14 +762,14 @@ public class UdfpsControllerTest extends SysuiTestCase {
         when(mKeyguardUpdateMonitor.isFingerprintDetectionRunning()).thenReturn(false);
         mUdfpsController.onAodInterrupt(0, 0, 0f, 0f);
 
-        // THEN display doesn't get configured because it's off
-        verify(mUdfpsView, never()).configureDisplay(any());
+        // THEN no illumination because screen is off
+        verify(mUdfpsView, never()).startIllumination(any());
     }
 
     @Test
     public void playHapticOnTouchUdfpsArea_a11yTouchExplorationEnabled() throws RemoteException {
         // Configure UdfpsView to accept the ACTION_DOWN event
-        when(mUdfpsView.isDisplayConfigured()).thenReturn(false);
+        when(mUdfpsView.isIlluminationRequested()).thenReturn(false);
         when(mUdfpsView.isWithinSensorArea(anyFloat(), anyFloat())).thenReturn(true);
 
         // GIVEN that the overlay is showing and a11y touch exploration enabled
@@ -804,7 +804,7 @@ public class UdfpsControllerTest extends SysuiTestCase {
     @Test
     public void noHapticOnTouchUdfpsArea_a11yTouchExplorationDisabled() throws RemoteException {
         // Configure UdfpsView to accept the ACTION_DOWN event
-        when(mUdfpsView.isDisplayConfigured()).thenReturn(false);
+        when(mUdfpsView.isIlluminationRequested()).thenReturn(false);
         when(mUdfpsView.isWithinSensorArea(anyFloat(), anyFloat())).thenReturn(true);
 
         // GIVEN that the overlay is showing and a11y touch exploration NOT enabled

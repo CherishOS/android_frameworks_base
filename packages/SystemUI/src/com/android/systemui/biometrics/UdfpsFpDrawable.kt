@@ -23,7 +23,7 @@ import android.graphics.Canvas
  */
 class UdfpsFpDrawable(context: Context) : UdfpsDrawable(context) {
     override fun draw(canvas: Canvas) {
-        if (isDisplayConfigured) {
+        if (isIlluminationShowing) {
             return
         }
         fingerprintDrawable.draw(canvas)

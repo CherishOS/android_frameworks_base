@@ -197,7 +197,7 @@ public class UdfpsEnrollDrawable extends UdfpsDrawable {
 
     @Override
     public void draw(@NonNull Canvas canvas) {
-        if (isDisplayConfigured()) {
+        if (isIlluminationShowing()) {
             return;
         }
 

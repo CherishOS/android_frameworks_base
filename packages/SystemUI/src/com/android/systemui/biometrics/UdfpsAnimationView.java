@@ -54,13 +54,13 @@ public abstract class UdfpsAnimationView extends FrameLayout {
         getDrawable().onSensorRectUpdated(bounds);
     }
 
-    void onDisplayConfiguring() {
-        getDrawable().setDisplayConfigured(true);
+    void onIlluminationStarting() {
+        getDrawable().setIlluminationShowing(true);
         getDrawable().invalidateSelf();
     }
 
-    void onDisplayUnconfigured() {
-        getDrawable().setDisplayConfigured(false);
+    void onIlluminationStopped() {
+        getDrawable().setIlluminationShowing(false);
         getDrawable().invalidateSelf();
     }
 

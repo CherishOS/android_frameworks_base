@@ -30,7 +30,7 @@ import com.android.systemui.BootCompleteCacheImpl;
 import com.android.systemui.appops.dagger.AppOpsModule;
 import com.android.systemui.assist.AssistModule;
 import com.android.systemui.biometrics.AlternateUdfpsTouchProvider;
-import com.android.systemui.biometrics.UdfpsDisplayModeProvider;
+import com.android.systemui.biometrics.UdfpsHbmProvider;
 import com.android.systemui.biometrics.dagger.BiometricsModule;
 import com.android.systemui.classifier.FalsingModule;
 import com.android.systemui.controls.dagger.ControlsModule;
@@ -199,7 +199,7 @@ public abstract class SystemUIModule {
     abstract CentralSurfaces optionalCentralSurfaces();
 
     @BindsOptionalOf
-    abstract UdfpsDisplayModeProvider optionalUdfpsDisplayModeProvider();
+    abstract UdfpsHbmProvider optionalUdfpsHbmProvider();
 
     @BindsOptionalOf
     abstract AlternateUdfpsTouchProvider optionalUdfpsTouchProvider();

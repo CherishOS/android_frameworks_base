@@ -266,7 +266,7 @@ class AuthRippleController @Inject constructor(
             acquireInfo: Int
         ) {
             if (biometricSourceType == BiometricSourceType.FINGERPRINT &&
-                    BiometricFingerprintConstants.shouldDisableUdfpsDisplayMode(acquireInfo) &&
+                    BiometricFingerprintConstants.shouldTurnOffHbm(acquireInfo) &&
                     acquireInfo != BiometricFingerprintConstants.FINGERPRINT_ACQUIRED_GOOD) {
                 // received an 'acquiredBad' message, so immediately retract
                 mView.retractDwellRipple()
