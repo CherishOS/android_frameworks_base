@@ -32,6 +32,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
+import android.os.PowerManager;
+import android.app.AlertDialog;
+import android.app.IActivityManager;
+import android.app.ActivityManager;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.camera2.CameraAccessException;
@@ -77,6 +83,13 @@ public class CherishUtils {
     private static final int NO_CUTOUT = -1;
 
     private static OverlayManager mOverlayService;
+	
+	public static void switchScreenOff(Context ctx) {
+        PowerManager pm = (PowerManager) ctx.getSystemService(Context.POWER_SERVICE);
+        if (pm!= null) {
+            pm.goToSleep(SystemClock.uptimeMillis());
+        }
+    }
 
     public static boolean isChineseLanguage() {
        return Resources.getSystem().getConfiguration().locale.getLanguage().startsWith(
