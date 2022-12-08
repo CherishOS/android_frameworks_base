@@ -83,6 +83,13 @@ public class CherishUtils {
     private static final int NO_CUTOUT = -1;
 
     private static OverlayManager mOverlayService;
+	
+	public static void switchScreenOff(Context ctx) {
+        PowerManager pm = (PowerManager) ctx.getSystemService(Context.POWER_SERVICE);
+        if (pm!= null) {
+            pm.goToSleep(SystemClock.uptimeMillis());
+        }
+    }
 
     public static boolean isChineseLanguage() {
        return Resources.getSystem().getConfiguration().locale.getLanguage().startsWith(
