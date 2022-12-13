@@ -6102,18 +6102,6 @@ public final class Settings {
         public static final String UDFPS_HAPTIC_FEEDBACK = "udfps_haptic_feedback";
 
         /**
-         * Keys we no longer back up under the current schema, but want to continue to
-         * process when restoring historical backup datasets.
-         *
-         * All settings in {@link LEGACY_RESTORE_SETTINGS} array *must* have a non-null validator,
-         * otherwise they won't be restored.
-         *
-         * @hide
-         */
-        public static final String[] LEGACY_RESTORE_SETTINGS = {
-        };
-
-        /**
          * Force full screen for devices with cutout
          * @hide
          */
@@ -6140,6 +6128,28 @@ public final class Settings {
          */
         @Readable
         public static final String CUSTOM_NOTIFICATION_VIBRATION_PATTERN = "custom_notification_vibration_pattern";
+
+        /**
+         * Whether to show the clock in the right or left position or show it in the center
+         * 0: show the clock in the right position (LTR)
+         * 1: show the clock in the center
+         * 2: show the clock in the left position (LTR)
+         * default: 0
+         * @hide
+         */
+        public static final String STATUS_BAR_CLOCK = "status_bar_clock";
+
+        /**
+         * Keys we no longer back up under the current schema, but want to continue to
+         * process when restoring historical backup datasets.
+         *
+         * All settings in {@link LEGACY_RESTORE_SETTINGS} array *must* have a non-null validator,
+         * otherwise they won't be restored.
+         *
+         * @hide
+         */
+        public static final String[] LEGACY_RESTORE_SETTINGS = {
+        };
 
         /**
          * These are all public system settings
