@@ -217,7 +217,6 @@ public class UdfpsController implements DozeReceiver, Dumpable {
 
     private UdfpsAnimation mUdfpsAnimation;
 
-    private boolean mDisableSmartPixels;
     private boolean mLowPowerMode = false;
     private boolean mSmartPixelsFlag = false;
     private int mSmartPixelsEnabled = 0;
@@ -251,9 +250,7 @@ public class UdfpsController implements DozeReceiver, Dumpable {
     private final ScreenLifecycle.Observer mScreenObserver = new ScreenLifecycle.Observer() {
         @Override
         public void onScreenTurnedOn() {
-            if (mDisableSmartPixels) {
-                isSmartPixelsEnabled();
-            }
+            isSmartPixelsEnabled();
             mScreenOn = true;
             if (mAodInterruptRunnable != null) {
                 mAodInterruptRunnable.run();
@@ -874,7 +871,6 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         }
         mUdfpsVendorCode = mContext.getResources().getInteger(R.integer.config_udfpsVendorCode);
         mDisableNightMode = UdfpsUtils.hasUdfpsSupport(mContext);
-        mDisableSmartPixels = UdfpsUtils.hasUdfpsSupport(mContext);
 
         mAmbientDisplayConfiguration = new AmbientDisplayConfiguration(mContext);
         mPerf = new BoostFramework();
@@ -1213,7 +1209,7 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         mExecution.assertIsMainThread();
 
         if (!mSmartPixelsFlag) {
-            if (mDisableSmartPixels && ((mSmartPixelsEnabled == 1) || ((mSmartPixelsOnPowerSave == 1) && mLowPowerMode))) {
+            if ((mSmartPixelsEnabled == 1) || ((mSmartPixelsOnPowerSave == 1) && mLowPowerMode)) {
                 disableSmartPixels();
             }
             mSmartPixelsFlag = true;
@@ -1319,7 +1315,7 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         mActivePointerId = -1;
         mAcquiredReceived = false;
 
-        if (mDisableSmartPixels && ((mSmartPixelsEnabled == 1) || ((mSmartPixelsOnPowerSave == 1) && mLowPowerMode))) {
+        if ((mSmartPixelsEnabled == 1) || ((mSmartPixelsOnPowerSave == 1) && mLowPowerMode)) {
             enableSmartPixels();
         }
         mSmartPixelsFlag = false;
