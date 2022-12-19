@@ -40,6 +40,8 @@ import com.android.internal.statusbar.StatusBarIcon;
 import com.android.systemui.R;
 import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.demomode.DemoModeCommandReceiver;
+import com.android.systemui.flags.FeatureFlags;
+import com.android.systemui.flags.Flags;
 import com.android.systemui.plugins.DarkIconDispatcher;
 import com.android.systemui.plugins.DarkIconDispatcher.DarkReceiver;
 import com.android.systemui.statusbar.BaseStatusBarWifiView;
@@ -320,7 +322,7 @@ public interface StatusBarIconController {
     /**
      * Turns info from StatusBarIconController into ImageViews in a ViewGroup.
      */
-    class IconManager implements DemoModeCommandReceiver  {
+    class IconManager implements DemoModeCommandReceiver {
         protected final ViewGroup mGroup;
         private final StatusBarLocation mLocation;
         private final StatusBarPipelineFlags mStatusBarPipelineFlags;
@@ -338,9 +340,6 @@ public interface StatusBarIconController {
         protected DemoStatusIcons mDemoStatusIcons;
 
         protected ArrayList<String> mBlockList = new ArrayList<>();
-
-		private boolean mIsOldSignalStyle = false;
-
         private final boolean mNewIconStyle;
         private final boolean mShowNotificationCount;
 
@@ -470,7 +469,6 @@ public interface StatusBarIconController {
             StatusBarMobileView view = onCreateStatusBarMobileView(state.subId, slot);
             view.applyMobileState(state);
             mGroup.addView(view, index, onCreateLayoutParams());
-            view.updateDisplayType(mIsOldSignalStyle);
 
             if (mIsInDemoMode) {
                 Context mobileContext = mMobileContextProvider
@@ -505,7 +503,7 @@ public interface StatusBarIconController {
         private StatusBarMobileView onCreateStatusBarMobileView(int subId, String slot) {
             Context mobileContext = mMobileContextProvider.getMobileContextForSub(subId, mContext);
             StatusBarMobileView view = StatusBarMobileView
-                    .fromContext(mobileContext, slot);
+                    fromContext(mobileContext, slot, mFeatureFlags.isEnabled(Flags.COMBINED_STATUS_BAR_SIGNAL_ICONS));
             return view;
         }
 
@@ -670,19 +668,6 @@ public interface StatusBarIconController {
 
         protected DemoStatusIcons createDemoStatusIcons() {
             return new DemoStatusIcons((LinearLayout) mGroup, mIconSize);
-        }
-
-        protected void setMobileSignalStyle(boolean isOldSignalStyle) {
-            mIsOldSignalStyle = isOldSignalStyle;
-        }
-
-        protected void updateMobileIconStyle() {
-            for (int i = 0; i < mGroup.getChildCount(); i++) {
-                final View child = mGroup.getChildAt(i);
-                if (child instanceof StatusBarMobileView) {
-                    ((StatusBarMobileView) child).updateDisplayType(mIsOldSignalStyle);
-                }
-            }
         }
     }
 }

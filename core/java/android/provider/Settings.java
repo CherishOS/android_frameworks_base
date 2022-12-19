@@ -5722,58 +5722,7 @@ public final class Settings {
          * @hide
          */
         public static final String NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD = "network_traffic_autohide_threshold";
-		
-		/**
-         * @hide
-         */
-        public static final String USE_OLD_MOBILETYPE = "use_old_mobiletype";
-		
-		/**
-         * Whether to display roaming indicator for roaming signal connection
-         * @hide
-         */
-        public static final String ROAMING_INDICATOR_ICON = "roaming_indicator_icon";
-
-        /**
-         * Whether to show VoLTE icon or not
-         * @hide
-         */
-        @Readable
-        public static final String SHOW_VOLTE_ICON = "show_volte_icon";
-
-        /**
-         * VoLTE icon style
-         * @hide
-         */
-        @Readable
-        public static final String VOLTE_ICON_STYLE = "volte_icon_style";
-
-        /**
-         * Whether to show VoWiFi icon or not
-         * @hide
-         */
-        @Readable
-        public static final String VOWIFI_ICON = "vowifi_icon";
-
-        /**
-         * VoWiFi icon style
-         * @hide
-         */
-        @Readable
-        public static final String VOWIFI_ICON_STYLE = "vowifi_icon_style";
-
-        /**
-         * Whether to display 4G icon instead LTE
-         * @hide
-         */
-        public static final String SHOW_FOURG_ICON = "show_fourg_icon";
-		
-		/**
-         * Whether to display cross sign for a data disabled connection
-         * @hide
-         */
-        public static final String DATA_DISABLED_ICON = "data_disabled_icon";
-
+	
         /**
          * Whether to enable statusbar brightness control
          * @hide

@@ -44,8 +44,6 @@ public class MobileStatusTracker {
     private final Handler mReceiverHandler;
     private final MobileTelephonyCallback mTelephonyCallback;
 
-    private boolean mListening = false;
-
     /**
      * MobileStatusTracker constructors
      *
@@ -87,10 +85,6 @@ public class MobileStatusTracker {
         } else {
             mPhone.unregisterTelephonyCallback(mTelephonyCallback);
         }
-    }
-
-    public boolean isListening() {
-        return mListening;
     }
 
     private void updateDataSim() {
