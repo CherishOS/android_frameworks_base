@@ -6169,7 +6169,7 @@ public final class NotificationPanelViewController implements Dumpable {
                     break;
                 case RETICKER_STATUS:
                     mReTickerStatus =
-                            TunerService.parseIntegerSwitch(newValue, false);
+                            TunerService.parseIntegerSwitch(newValue, true);
                     break;
                 case RETICKER_COLORED:
                     mReTickerColored =
@@ -6880,7 +6880,7 @@ public final class NotificationPanelViewController implements Dumpable {
             mReTickerContentTV.setText(mergedContentText);
             mReTickerContentTV.setTextAppearance(mView.getContext(), R.style.TextAppearance_Notifications_reTicker);
             mReTickerContentTV.setSelected(true);
-            RetickerAnimations.doBounceAnimationIn(mReTickerComeback);
+            RetickerAnimations.revealAnimation(mReTickerComeback);
             if (reTickerIntent != null) {
                 mReTickerComeback.setOnClickListener(v -> {
                     final GameSpaceManager gameSpace = mCentralSurfaces.getGameSpaceManager();
@@ -6890,7 +6890,7 @@ public final class NotificationPanelViewController implements Dumpable {
                         } catch (PendingIntent.CanceledException e) {
                         }
                     }
-                    RetickerAnimations.doBounceAnimationOut(mReTickerComeback, mNotificationStackScroller);
+                    RetickerAnimations.revealAnimationHide(mReTickerComeback, mNotificationStackScroller);
                     reTickerViewVisibility();
                 });
             }
@@ -6914,7 +6914,7 @@ public final class NotificationPanelViewController implements Dumpable {
     }
 
     public void reTickerDismissal() {
-        RetickerAnimations.doBounceAnimationOut(mReTickerComeback, mNotificationStackScroller);
+        RetickerAnimations.revealAnimationHide(mReTickerComeback, mNotificationStackScroller);
         mReTickerComeback.getViewTreeObserver().removeOnComputeInternalInsetsListener(mInsetsListener);
     }
 
