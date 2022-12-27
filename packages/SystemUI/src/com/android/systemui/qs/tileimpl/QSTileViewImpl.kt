@@ -125,11 +125,11 @@ open class QSTileViewImpl @JvmOverloads constructor(
     private val colorSecondaryLabelUnavailable =
         Utils.getColorAttrDefaultColor(context, com.android.internal.R.attr.textColorTertiary)
 
-    // QS Style 3
+    // QS Style 2
     private val colorActiveAlpha = Utils.applyAlpha(TILE_ALPHA, Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent))
-    private val colorInactiveAlpha = Utils.applyAlpha(INACTIVE_ALPHA, Utils.getColorAttrDefaultColor(context, R.attr.offStateColor))
+    private val colorInactiveAlpha = resources.getColor(R.color.qs_translucent_bg)
 
-    // QS Style 4
+    // QS Style 3
     private var randomColor: Random = Random()
     
     @SuppressLint("NewApi")
