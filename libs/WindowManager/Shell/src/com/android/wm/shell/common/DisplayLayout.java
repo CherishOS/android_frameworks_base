@@ -29,6 +29,8 @@ import static android.view.Surface.ROTATION_0;
 import static android.view.Surface.ROTATION_270;
 import static android.view.Surface.ROTATION_90;
 
+import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_GESTURAL;
+
 import android.annotation.IntDef;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
@@ -38,6 +40,7 @@ import android.content.res.Resources;
 import android.graphics.Insets;
 import android.graphics.Rect;
 import android.os.SystemProperties;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Size;
@@ -77,6 +80,7 @@ public class DisplayLayout {
     public static final int NAV_BAR_RIGHT = 1 << 1;
     public static final int NAV_BAR_BOTTOM = 1 << 2;
 
+
     private int mUiMode;
     private int mWidth;
     private int mHeight;
@@ -87,6 +91,7 @@ public class DisplayLayout {
     private final Rect mStableInsets = new Rect();
     private boolean mHasNavigationBar = false;
     private boolean mHasStatusBar = false;
+    private boolean mIsHideIMESpaceEnabled = false;
     private int mNavBarFrameHeight = 0;
     private boolean mAllowSeamlessRotationDespiteNavBarMoving = false;
     private boolean mNavigationBarCanMove = false;
@@ -163,6 +168,8 @@ public class DisplayLayout {
         rawDisplay.getDisplayInfo(info);
         init(info, context.getResources(), hasNavigationBar(info, context, displayId),
                 hasStatusBar(displayId));
+        mIsHideIMESpaceEnabled = Settings.System.getIntForUser(context.getContentResolver(),
+                Settings.System.HIDE_IME_SPACE_ENABLE , 0, UserHandle.USER_CURRENT) != 0;
     }
 
     public DisplayLayout(DisplayLayout dl) {
@@ -221,7 +228,14 @@ public class DisplayLayout {
         if (mHasStatusBar) {
             convertNonDecorInsetsToStableInsets(res, mStableInsets, mCutout, mHasStatusBar);
         }
-        mNavBarFrameHeight = getNavigationBarFrameHeight(res, mWidth > mHeight);
+
+        int mode = res.getInteger(
+            com.android.internal.R.integer.config_navBarInteractionMode);
+        if (mIsHideIMESpaceEnabled && (mode == NAV_BAR_MODE_GESTURAL)) {
+            mNavBarFrameHeight = getNavigationBarFrameHeightHidden(res, mWidth > mHeight);
+        } else {
+            mNavBarFrameHeight = getNavigationBarFrameHeight(res, mWidth > mHeight);
+        }
     }
 
     /**
@@ -554,6 +568,12 @@ public class DisplayLayout {
         }
     }
 
+    public static int getNavigationBarFrameHeightHidden(Resources res, boolean landscape) {
+        return res.getDimensionPixelSize(landscape
+                ? R.dimen.navigation_bar_frame_height_landscape_hide_ime
+                : R.dimen.navigation_bar_frame_height_hide_ime);
+    }
+    
     /** @see com.android.server.wm.DisplayPolicy#getNavigationBarFrameHeight */
     public static int getNavigationBarFrameHeight(Resources res, boolean landscape) {
         return res.getDimensionPixelSize(landscape
