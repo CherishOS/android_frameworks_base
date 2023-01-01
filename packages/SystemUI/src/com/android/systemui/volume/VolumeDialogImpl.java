@@ -39,6 +39,8 @@ import static com.android.internal.jank.InteractionJankMonitor.Configuration.Bui
 import static com.android.systemui.volume.Events.DISMISS_REASON_POSTURE_CHANGED;
 import static com.android.systemui.volume.Events.DISMISS_REASON_SETTINGS_CLICKED;
 
+import static com.android.systemui.people.PeopleSpaceUtils.convertDrawableToBitmap;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
@@ -60,6 +62,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.ContentObserver;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.PixelFormat;
@@ -125,6 +128,7 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.graphics.drawable.BackgroundBlurDrawable;
 import com.android.internal.jank.InteractionJankMonitor;
 import com.android.internal.view.RotationPolicy;
+import com.android.settingslib.drawable.CircleFramedDrawable;
 import com.android.settingslib.Utils;
 import com.android.settingslib.media.flags.Flags;
 import com.android.systemui.Dependency;
@@ -203,6 +207,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     private int mDialogCornerRadius;
     private int mRingerDrawerItemSize;
     private int mRingerRowsPadding;
+    private int mTargetTapSize;
     private boolean mShowVibrate;
     private int mRingerCount;
     private final boolean mShowLowMediaVolumeIcon;
@@ -875,6 +880,8 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                 R.dimen.volume_ringer_drawer_item_size);
         mRingerRowsPadding = mContext.getResources().getDimensionPixelSize(
                 R.dimen.volume_dialog_ringer_rows_padding);
+	mTargetTapSize = mContext.getResources().getDimensionPixelSize(
+                R.dimen.volume_dialog_tap_target_size);
         mShowVibrate = mController.hasVibrator();
 
         // Normal, mute, and possibly vibrate.
@@ -1513,7 +1520,13 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         } catch (Exception e) {
             // nothing to do
         }
-        return icon;
+        
+        Bitmap bitmapIcon = convertDrawableToBitmap(icon);
+        
+        Drawable drawableAppIcon = new CircleFramedDrawable(bitmapIcon,
+                (int) mContext.getResources().getDimension(R.dimen.volume_app_icon_max_size));
+
+        return drawableAppIcon;
     }
 
     public void initAppVolumeH() {
@@ -1533,8 +1546,23 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                     getApplicationIcon(mAppVolumeActivePackageName) : null;
             if (icon != null) {
                 mAppVolumeIcon.setImageTintList(null);
-                mAppVolumeIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 mAppVolumeIcon.setImageDrawable(icon);
+                mAppVolumeIcon.getLayoutParams().height = mTargetTapSize;
+                mAppVolumeIcon.getLayoutParams().width = mTargetTapSize;
+                mAppVolumeIcon.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                mAppVolumeIcon.setPadding(
+                        mAppVolumeView.getPaddingLeft(),
+                        mAppVolumeView.getPaddingTop(),
+                        mAppVolumeView.getPaddingRight(),
+                        mRingerRowsPadding);
+            	mAppVolumeIcon.setOutlineProvider(new ViewOutlineProvider() {
+                    @Override
+                    public void getOutline(View view, Outline outline) {
+                    	outline.setRoundRect(
+                            	0, 0, view.getWidth(), view.getHeight(), mDialogCornerRadius);
+                    }
+            	});
+            	mAppVolumeIcon.setClipToOutline(true);
             }
         }
     }
