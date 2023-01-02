@@ -221,45 +221,43 @@ public class PixelPropsUtils {
                     propsToChange.putAll(propsToChangePixel5);
                 }
             }
-
-            if (Arrays.asList(packagesToChangeROG1).contains(packageName)) {
-                propsToChange.putAll(propsToChangeROG1);
-            } else if (Arrays.asList(packagesToChangeXP5).contains(packageName)) {
-                propsToChange.putAll(propsToChangeXP5);
-            } else if (Arrays.asList(packagesToChangeOP8P).contains(packageName)) {
-                propsToChange.putAll(propsToChangeOP8P);
-            } else if (Arrays.asList(packagesToChangeMI11).contains(packageName)) {
-                propsToChange.putAll(propsToChangeMI11);
-            }
-
-            if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
-            for (Map.Entry<String, Object> prop : propsToChange.entrySet()) {
-                String key = prop.getKey();
-                Object value = prop.getValue();
-                if (propsToKeep.containsKey(packageName) && propsToKeep.get(packageName).contains(key)) {
-                    if (DEBUG) Log.d(TAG, "Not defining " + key + " prop for: " + packageName);
-                    continue;
-                }
-                if (DEBUG) Log.d(TAG, "Defining " + key + " prop for: " + packageName);
-                setPropValue(key, value);
-            }
-            if (packageName.equals("com.google.android.gms")) {
-                final String processName = Application.getProcessName();
-                if (processName.equals("com.google.android.gms.unstable")) {
-                    sIsGms = true;
-                    setPropValue("FINGERPRINT", "google/marlin/marlin:7.1.2/NJH47F/4146041:user/release-keys");
-                    setPropValue("PRODUCT", "marlin");
-                    setPropValue("DEVICE", "marlin");
-                    setPropValue("MODEL", "Pixel XL");
-                    setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N_MR1);
-                }
-                return;
-            }
-            // Set proper indexing fingerprint
-            if (packageName.equals("com.google.android.settings.intelligence")) {
-                setPropValue("FINGERPRINT", Build.VERSION.INCREMENTAL);
-            }
+        } else if (Arrays.asList(packagesToChangeROG1).contains(packageName)) {
+            propsToChange.putAll(propsToChangeROG1);
+        } else if (Arrays.asList(packagesToChangeXP5).contains(packageName)) {
+            propsToChange.putAll(propsToChangeXP5);
+        } else if (Arrays.asList(packagesToChangeOP8P).contains(packageName)) {
+            propsToChange.putAll(propsToChangeOP8P);
+        } else if (Arrays.asList(packagesToChangeMI11).contains(packageName)) {
+            propsToChange.putAll(propsToChangeMI11);
         }
+
+        if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
+        for (Map.Entry<String, Object> prop : propsToChange.entrySet()) {
+            String key = prop.getKey();
+            Object value = prop.getValue();
+            if (propsToKeep.containsKey(packageName) && propsToKeep.get(packageName).contains(key)) {
+                if (DEBUG) Log.d(TAG, "Not defining " + key + " prop for: " + packageName);
+                continue;
+            }
+            if (DEBUG) Log.d(TAG, "Defining " + key + " prop for: " + packageName);
+            setPropValue(key, value);
+        }
+        if (packageName.equals("com.google.android.gms")) {
+            final String processName = Application.getProcessName();
+            if (processName.equals("com.google.android.gms.unstable")) {
+                sIsGms = true;
+                setPropValue("FINGERPRINT", "google/marlin/marlin:7.1.2/NJH47F/4146041:user/release-keys");
+                setPropValue("PRODUCT", "marlin");
+                setPropValue("DEVICE", "marlin");
+                setPropValue("MODEL", "Pixel XL");
+                setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N_MR1);
+            }
+            return;
+        }
+        // Set proper indexing fingerprint
+        if (packageName.equals("com.google.android.settings.intelligence")) {
+            setPropValue("FINGERPRINT", Build.VERSION.INCREMENTAL);
+        }            
     }
 
     private static void setPropValue(String key, Object value) {
