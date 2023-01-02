@@ -224,17 +224,11 @@ public class PixelPropsUtils {
 
             if (Arrays.asList(packagesToChangeROG1).contains(packageName)) {
                 propsToChange.putAll(propsToChangeROG1);
-            }
-
-            if (Arrays.asList(packagesToChangeXP5).contains(packageName)) {
+            } else if (Arrays.asList(packagesToChangeXP5).contains(packageName)) {
                 propsToChange.putAll(propsToChangeXP5);
-            }
-
-            if (Arrays.asList(packagesToChangeOP8P).contains(packageName)) {
+            } else if (Arrays.asList(packagesToChangeOP8P).contains(packageName)) {
                 propsToChange.putAll(propsToChangeOP8P);
-            }
-
-            if (Arrays.asList(packagesToChangeMI11).contains(packageName)) {
+            } else if (Arrays.asList(packagesToChangeMI11).contains(packageName)) {
                 propsToChange.putAll(propsToChangeMI11);
             }
 
