@@ -199,6 +199,18 @@ public class PixelPropsUtils {
         if (isGoogleCameraPackage(packageName)) {
             return;
         }
+        if (packageName.equals("com.google.android.gms")) {
+            final String processName = Application.getProcessName();
+            if (processName.equals("com.google.android.gms.unstable")) {
+                sIsGms = true;
+                setPropValue("FINGERPRINT", "google/marlin/marlin:7.1.2/NJH47F/4146041:user/release-keys");
+                setPropValue("PRODUCT", "marlin");
+                setPropValue("DEVICE", "marlin");
+                setPropValue("MODEL", "Pixel XL");
+                setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N_MR1);
+            }
+            return;
+        }
         if (packageName.startsWith("com.google.")
                 || packageName.startsWith(SAMSUNG)
                 || Arrays.asList(extraPackagesToChange).contains(packageName)) {
@@ -242,22 +254,11 @@ public class PixelPropsUtils {
             if (DEBUG) Log.d(TAG, "Defining " + key + " prop for: " + packageName);
             setPropValue(key, value);
         }
-        if (packageName.equals("com.google.android.gms")) {
-            final String processName = Application.getProcessName();
-            if (processName.equals("com.google.android.gms.unstable")) {
-                sIsGms = true;
-                setPropValue("FINGERPRINT", "google/marlin/marlin:7.1.2/NJH47F/4146041:user/release-keys");
-                setPropValue("PRODUCT", "marlin");
-                setPropValue("DEVICE", "marlin");
-                setPropValue("MODEL", "Pixel XL");
-                setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N_MR1);
-            }
-            return;
-        }
         // Set proper indexing fingerprint
         if (packageName.equals("com.google.android.settings.intelligence")) {
             setPropValue("FINGERPRINT", Build.VERSION.INCREMENTAL);
-        }            
+            return;
+        }
     }
 
     private static void setPropValue(String key, Object value) {
