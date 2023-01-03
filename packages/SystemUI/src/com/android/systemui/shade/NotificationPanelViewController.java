@@ -87,7 +87,6 @@ import android.transition.TransitionManager;
 import android.util.IndentingPrintWriter;
 import android.util.Log;
 import android.util.MathUtils;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -243,7 +242,6 @@ import com.android.systemui.util.ListenerSet;
 import com.android.systemui.util.Utils;
 import com.android.systemui.util.time.SystemClock;
 import com.android.wm.shell.animation.FlingAnimationUtils;
-
 import com.android.internal.util.cherish.CherishUtils;
 import com.android.systemui.cherish.AmbientText;
 import com.android.systemui.cherish.AmbientCustomImage;
@@ -406,10 +404,6 @@ public final class NotificationPanelViewController extends PanelViewController {
     private int mQsTrackingPointer;
     private VelocityTracker mQsVelocityTracker;
     private boolean mQsTracking;
-
-    private GestureDetector mDoubleTapToSleepGesture;
-    private boolean mIsLockscreenDoubleTapEnabled;
-    private int mStatusBarHeaderHeight;
 
     /**
      * If set, the ongoing touch gesture might both trigger the expansion in {@link
@@ -968,16 +962,6 @@ public final class NotificationPanelViewController extends PanelViewController {
         mQsFrameTranslateController = qsFrameTranslateController;
         updateUserSwitcherFlags();
         mKeyguardBottomAreaViewModel = keyguardBottomAreaViewModel;
-
-        mDoubleTapToSleepGesture = new GestureDetector(mView.getContext(),
-                new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onDoubleTap(MotionEvent e) {
-                CherishUtils.switchScreenOff(mView.getContext());
-                return true;
-            }
-        });
-
         onFinishInflate();
         keyguardUnlockAnimationController.addKeyguardUnlockAnimationListener(
                 new KeyguardUnlockAnimationController.KeyguardUnlockAnimationListener() {
@@ -1052,6 +1036,13 @@ public final class NotificationPanelViewController extends PanelViewController {
                 keyguardUserSwitcherView = (KeyguardUserSwitcherView) stub.inflate();
             }
         }
+
+        mKeyguardStatusBarViewController =
+                mKeyguardStatusBarViewComponentFactory.build(
+                                mKeyguardStatusBar,
+                                mNotificationPanelViewStateProvider)
+                        .getKeyguardStatusBarViewController();
+        mKeyguardStatusBarViewController.init();
 
         mNotificationContainerParent = mView.findViewById(R.id.notification_container_parent);
         updateViewControllers(
@@ -1146,8 +1137,6 @@ public final class NotificationPanelViewController extends PanelViewController {
         mUdfpsMaxYBurnInOffset = mResources.getDimensionPixelSize(R.dimen.udfps_burn_in_offset_y);
         mSplitShadeScrimTransitionDistance = mResources.getDimensionPixelSize(
                 R.dimen.split_shade_scrim_transition_distance);
-        mStatusBarHeaderHeight = mResources.getDimensionPixelSize(
-                R.dimen.status_bar_height);
     }
 
     private void updateViewControllers(KeyguardStatusView keyguardStatusView,
@@ -1158,13 +1147,6 @@ public final class NotificationPanelViewController extends PanelViewController {
                 mKeyguardStatusViewComponentFactory.build(keyguardStatusView);
         mKeyguardStatusViewController = statusViewComponent.getKeyguardStatusViewController();
         mKeyguardStatusViewController.init();
-
-        mKeyguardStatusBarViewController =
-                mKeyguardStatusBarViewComponentFactory.build(
-                        mKeyguardStatusBar,
-                        mNotificationPanelViewStateProvider)
-                        .getKeyguardStatusBarViewController();
-        mKeyguardStatusBarViewController.init();
 
         if (mKeyguardUserSwitcherController != null) {
             // Try to close the switcher so that callbacks are triggered if necessary.
@@ -1292,15 +1274,6 @@ public final class NotificationPanelViewController extends PanelViewController {
         keyguardStatusView = (KeyguardStatusView) mLayoutInflater.inflate(
                 R.layout.keyguard_status_view, mNotificationContainerParent, false);
         mNotificationContainerParent.addView(keyguardStatusView, statusIndex);
-
-        // Re-inflate the keyguard status bar.
-        statusIndex = mView.indexOfChild(mKeyguardStatusBar);
-        mView.removeView(mKeyguardStatusBar);
-        mKeyguardStatusBar = (KeyguardStatusBarView) mLayoutInflater.inflate(
-                R.layout.keyguard_status_bar, mView, false);
-        mView.addView(mKeyguardStatusBar, statusIndex);
-        mKeyguardStatusBar.setVisibility(isOnKeyguard() ? View.VISIBLE : View.INVISIBLE);
-
         // When it's reinflated, this is centered by default. If it shouldn't be, this will update
         // below when resources are updated.
         mStatusViewCentered = true;
@@ -4456,14 +4429,6 @@ public final class NotificationPanelViewController extends PanelViewController {
         updateMaxDisplayedNotifications(true);
     }
 
-    public void setLockscreenDoubleTapToSleep(boolean isDoubleTapEnabled) {
-        mIsLockscreenDoubleTapEnabled = isDoubleTapEnabled;
-    }
-
-    public void setSbDoubleTapToSleep(boolean isDoubleTapEnabled) {
-        mIsSbDoubleTapEnabled = isDoubleTapEnabled;
-    }
-
     public void setAlpha(float alpha) {
         mView.setAlpha(alpha);
     }
@@ -4594,14 +4559,6 @@ public final class NotificationPanelViewController extends PanelViewController {
                 if (mLastEventSynthesizedDown && event.getAction() == MotionEvent.ACTION_UP) {
                     expand(true /* animate */);
                 }
-
-                if ((mIsLockscreenDoubleTapEnabled && !mPulsing && !mDozing
-                        && mBarState == StatusBarState.KEYGUARD) ||
-                        (!mQsExpanded && mIsSbDoubleTapEnabled
-                        && event.getY() < mStatusBarHeaderHeight)) {
-                    mDoubleTapToSleepGesture.onTouchEvent(event);
-                }
-
                 initDownStates(event);
 
                 // If pulse is expanding already, let's give it the touch. There are situations
