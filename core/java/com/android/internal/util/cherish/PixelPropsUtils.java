@@ -122,13 +122,11 @@ public class PixelPropsUtils {
     };
 
     private static final String[] packagesToKeep = {
-            "com.google.android.dialer",
             "com.google.android.euicc",
             "com.google.ar.core",
             "com.google.android.youtube",
             "com.google.android.apps.youtube.kids",
             "com.google.android.apps.youtube.music",
-            "com.google.android.apps.recorder",
             "com.google.android.apps.wearables.maestro.companion",
             "com.google.android.apps.subscriptions.red",
             "com.google.android.apps.tachyon",
