@@ -43,21 +43,8 @@ public class PixelPropsUtils {
     private static final Map<String, Object> propsToChangePixelXL;
     private static final Map<String, ArrayList<String>> propsToKeep;
 
-    private static final String[] packagesToChangePixel7Pro = {
-            "com.google.android.apps.googleassistant",
-            "com.google.android.apps.nbu.files",
-            "com.google.android.apps.podcasts",
-            "com.google.android.apps.privacy.wildlife",
-            "com.google.android.apps.tachyon",
-            "com.google.android.apps.wallpaper",
-            "com.google.android.contacts",
-            "com.google.android.deskclock",
-            "com.google.android.inputmethod.latin"
-    };
-
     private static final String[] packagesToChangePixelXL = {
-            "com.google.android.apps.photos",
-            "com.google.android.inputmethod.latin"
+            "com.google.android.apps.photos"
     };
 
     private static final String[] extraPackagesToChange = {
@@ -256,12 +243,10 @@ public class PixelPropsUtils {
                 sIsFinsky = true;
                 return;
             } else if (!isPixelDevice) {
-                if ((Arrays.asList(packagesToChangePixel7Pro).contains(packageName))) {
-                    propsToChange.putAll(propsToChangePixel7Pro);
-                } else if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
+                if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
                     propsToChange.putAll(propsToChangePixelXL);
                 } else {
-                    propsToChange.putAll(propsToChangePixel5);
+                    propsToChange.putAll(propsToChangePixel7Pro);
                 }
             }
         } else if (Arrays.asList(packagesToChangeROG1).contains(packageName)) {
