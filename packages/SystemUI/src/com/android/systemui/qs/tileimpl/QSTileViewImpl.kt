@@ -111,8 +111,8 @@ open class QSTileViewImpl @JvmOverloads constructor(
     private val colorInactive = Utils.getColorAttrDefaultColor(context, R.attr.offStateColor)
     private val colorUnavailable = Utils.applyAlpha(UNAVAILABLE_ALPHA, colorInactive)
 
-    private val colorLabelActive =
-            Utils.getColorAttrDefaultColor(context, com.android.internal.R.attr.textColorPrimaryInverse)
+    private val colorLabelActive = Utils.getColorAttrDefaultColor(context,
+            com.android.internal.R.attr.textColorPrimaryInverse)
     private val colorLabelInactive =
             Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary)
     private val colorLabelUnavailable =
@@ -676,11 +676,12 @@ open class QSTileViewImpl @JvmOverloads constructor(
             }
         }
     }
+
     private fun getLabelColorForState(state: Int, disabledByPolicy: Boolean = false): Int {
         return when {
             state == Tile.STATE_UNAVAILABLE || disabledByPolicy -> colorLabelUnavailable
             state == Tile.STATE_ACTIVE -> 
-                if(qsPanelStyle == 1 || qsPanelStyle ==2)
+                if(qsPanelStyle == 1 || qsPanelStyle == 2)
                     colorActive
                 else if(qsPanelStyle == 3) 
                     colorLabelActiveRandom

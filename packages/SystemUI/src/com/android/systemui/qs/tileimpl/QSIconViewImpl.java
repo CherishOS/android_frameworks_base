@@ -243,7 +243,7 @@ public class QSIconViewImpl extends QSIconView {
      * Color to tint the tile icon based on state
      */
     private static int getIconColorForState(Context context, QSTile.State state) {
-		int qsPanelStyle = System.getIntForUser(context.getContentResolver(),
+        int qsPanelStyle = System.getIntForUser(context.getContentResolver(),
                      System.QS_PANEL_STYLE, 0, UserHandle.USER_CURRENT);
 
         Random mRandomColor = new Random();
@@ -251,23 +251,26 @@ public class QSIconViewImpl extends QSIconView {
         (mRandomColor.nextInt(256) / 2f + 0.5),
          mRandomColor.nextInt(256),
          mRandomColor.nextInt(256));
+
         if (state.disabledByPolicy || state.state == Tile.STATE_UNAVAILABLE) {
             return Utils.getColorAttrDefaultColor(
                     context, com.android.internal.R.attr.textColorTertiary);
         } else if (state.state == Tile.STATE_INACTIVE) {
             return Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary);
         } else if (state.state == Tile.STATE_ACTIVE) {
-			if(qsPanelStyle == 1 || qsPanelStyle == 2)
-                return Utils.getColorAttrDefaultColor(context,
+             if (qsPanelStyle == 1 || qsPanelStyle == 2) {
+               return Utils.getColorAttrDefaultColor(context,
                         android.R.attr.colorAccent);
-                else if (qsPanelStyle == 3)
-                return mRandomTint;
-                else
-            return Utils.getColorAttrDefaultColor(context,
+             } else if (qsPanelStyle == 3) {
+               return mRandomTint;
+             } else {
+              return Utils.getColorAttrDefaultColor(context,
                     com.android.internal.R.attr.textColorPrimaryInverse);
+             }
         } else {
             Log.e("QSIconView", "Invalid state " + state);
             return 0;
+
         }
     }
 
