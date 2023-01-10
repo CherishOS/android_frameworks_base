@@ -5739,7 +5739,30 @@ public final class Settings {
          * @hide
          */
         public static final String NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD = "network_traffic_autohide_threshold";
-	
+		
+		/**
+         * @hide
+         */
+        public static final String USE_OLD_MOBILETYPE = "use_old_mobiletype";
+		
+		/**
+         * Whether to display roaming indicator for roaming signal connection
+         * @hide
+         */
+        public static final String ROAMING_INDICATOR_ICON = "roaming_indicator_icon";
+
+        /**
+         * Whether to display 4G icon instead LTE
+         * @hide
+         */
+        public static final String SHOW_FOURG_ICON = "show_fourg_icon";
+		
+		/**
+         * Whether to display cross sign for a data disabled connection
+         * @hide
+         */
+        public static final String DATA_DISABLED_ICON = "data_disabled_icon";
+
         /**
          * Whether to enable statusbar brightness control
          * @hide
@@ -6545,48 +6568,6 @@ public final class Settings {
         public static final String LESS_BORING_HEADS_UP = "less_boring_heads_up";
 
         /**
-         * Whether to display VoLTE icon when VoLTE present
-         * @hide
-         */
-        public static final String VOLTE_ICON_STYLE = "volte_icon_style";
-
-        /**
-         * VoWiFi icon style
-         * @hide
-         */
-        public static final String VOWIFI_ICON_STYLE = "vowifi_icon_style";
-
-        /**
-         * Whether VoWiFi icon should override VoLTE icon
-         * @hide
-         */
-        public static final String VOLTE_VOWIFI_OVERRIDE = "volte_vowifi_override";
-
-        /**
-         * Whether to display roaming indicator for roaming signal connection
-         * @hide
-         */
-        public static final String ROAMING_INDICATOR_ICON = "roaming_indicator_icon";
-
-        /**
-         * Whether to display 4G icon instead LTE
-         * @hide
-         */
-        public static final String SHOW_FOURG_ICON = "show_fourg_icon";
-
-        /**
-         * Whether to display cross sign for a data disabled connection
-         * @hide
-         */
-        public static final String DATA_DISABLED_ICON = "data_disabled_icon";
-
-        /**
-         * Bring back old style mobile data indicators.
-         * @hide
-         */
-        public static final String USE_OLD_MOBILETYPE = "use_old_mobiletype";
-
-        /**
          * Whether to show data usage in qs footer
          * @hide
          */
@@ -6623,6 +6604,7 @@ public final class Settings {
         public static final String NOTIFICATION_MATERIAL_DISMISS = "notification_material_dismiss";
 
         /**
+<<<<<<< HEAD
          * @hide
          */
         public static final String NOTIFICATION_MATERIAL_DISMISS_STYLE = "notification_material_dismiss_style";
@@ -6657,6 +6639,8 @@ public final class Settings {
         };
 
         /**
+         * These are all public system settings
+         *
          * @hide
          */
         @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.R, trackingBug = 170729553)
@@ -12195,11 +12179,6 @@ public final class Settings {
          * @hide
          */
         public static final String PULSE_VERTICAL_MIRROR = "pulse_vertical_mirror";
-
-        /**
-         * @hide
-         */
-        public static final String ENABLE_COMBINED_SIGNAL_ICONS = "enable_combined_signal_icons";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to

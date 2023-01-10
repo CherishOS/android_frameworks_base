@@ -232,7 +232,6 @@ public class MobileMappings {
                     res.getBoolean(com.android.internal.R.bool.config_alwaysUseCdmaRssi);
             config.hspaDataDistinguishable =
                     res.getBoolean(R.bool.config_hspa_data_distinguishable);
-
             config.show4gForLte = Settings.System.getIntForUser(context.getContentResolver(),
                      Settings.System.SHOW_FOURG_ICON, 0,
                      UserHandle.USER_CURRENT) == 1;
