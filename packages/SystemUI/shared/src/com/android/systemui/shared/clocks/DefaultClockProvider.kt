@@ -22,6 +22,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import com.android.internal.annotations.VisibleForTesting
+import com.android.internal.util.cherish.CherishUtils
 import com.android.systemui.dagger.qualifiers.Main
 import com.android.systemui.plugins.Clock
 import com.android.systemui.plugins.ClockAnimations
@@ -143,6 +144,10 @@ class DefaultClock(
                 TypedValue.COMPLEX_UNIT_PX,
                 resources.getDimensionPixelSize(R.dimen.large_clock_text_size).toFloat()
             )
+            if (currentClockNeedsMoreSpace()) {
+                smallClock.setLineSpacingScale(0.9f)
+                largeClock.setLineSpacingScale(0.9f)
+            }
             recomputePadding()
         }
 
@@ -165,6 +170,8 @@ class DefaultClock(
             val nf = NumberFormat.getInstance(locale)
             if (nf.format(FORMAT_NUMBER.toLong()) == burmeseNumerals) {
                 clocks.forEach { it.setLineSpacingScale(burmeseLineSpacing) }
+            } else if (currentClockNeedsMoreSpace()) {
+                clocks.forEach { it.setLineSpacingScale(0.9f) }
             } else {
                 clocks.forEach { it.setLineSpacingScale(defaultLineSpacing) }
             }
@@ -242,6 +249,16 @@ class DefaultClock(
         val lp = largeClock.getLayoutParams() as FrameLayout.LayoutParams
         lp.topMargin = (-0.5f * largeClock.bottom).toInt()
         largeClock.setLayoutParams(lp)
+    }
+
+    private fun currentClockNeedsMoreSpace(): Boolean {
+        var lockClockThemes = arrayOf("aclonica", "bariol", "comfortaa", "coolstory", "nokiapure", "redressed")
+        for (item in lockClockThemes) {
+            if (CherishUtils.isThemeEnabled("com.android.theme.lockscreen_clock_font." + item)) {
+                return true
+            }
+        }
+        return false
     }
 
     override fun dump(pw: PrintWriter) = clocks.forEach { it.dump(pw) }
