@@ -392,8 +392,6 @@ public final class NotificationPanelViewController extends PanelViewController {
     private final ScreenOffAnimationController mScreenOffAnimationController;
     private final UnlockedScreenOffAnimationController mUnlockedScreenOffAnimationController;
 
-    private final EdgeLightViewController mEdgeLightViewController;
-
     private int mQsTrackingPointer;
     private VelocityTracker mQsVelocityTracker;
     private boolean mQsTracking;
@@ -821,8 +819,7 @@ public final class NotificationPanelViewController extends PanelViewController {
             SystemClock systemClock,
             CameraGestureHelper cameraGestureHelper,
             KeyguardBottomAreaViewModel keyguardBottomAreaViewModel,
-            KeyguardBottomAreaInteractor keyguardBottomAreaInteractor,
-            EdgeLightViewController edgeLightViewController) {
+            KeyguardBottomAreaInteractor keyguardBottomAreaInteractor) {
         super(view,
                 falsingManager,
                 dozeLog,
@@ -923,7 +920,6 @@ public final class NotificationPanelViewController extends PanelViewController {
         mUnlockedScreenOffAnimationController = unlockedScreenOffAnimationController;
         mRemoteInputManager = remoteInputManager;
         mLastDownEvents = new NPVCDownEventState.Buffer(MAX_DOWN_EVENT_BUFFER_SIZE);
-        mEdgeLightViewController = edgeLightViewController;
         mAppExceptions = mResources.getStringArray(R.array.app_exceptions);
 
         int currentMode = navigationModeController.addListener(
@@ -1041,7 +1037,7 @@ public final class NotificationPanelViewController extends PanelViewController {
                 mView.findViewById(R.id.keyguard_status_view),
                 userAvatarContainer,
                 keyguardUserSwitcherView);
-        mEdgeLightViewController.setEdgeLightView(mView.findViewById(R.id.edge_light_container));
+
         NotificationStackScrollLayout stackScrollLayout = mView.findViewById(
                 R.id.notification_stack_scroller);
         mNotificationStackScrollLayoutController.attach(stackScrollLayout);

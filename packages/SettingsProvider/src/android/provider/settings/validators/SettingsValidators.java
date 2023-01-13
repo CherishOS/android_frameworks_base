@@ -116,13 +116,6 @@ public class SettingsValidators {
         }
     };
 
-    public static final Validator NON_EMPTY_HEX_COLOR_VALIDATOR = new Validator() {
-        @Override
-        public boolean validate(@Nullable String value) {
-            return value == null || Pattern.matches("^[#][0-9A-F]{6}|[0-9A-F]{8}", value);
-        }
-    };
-
     public static final Validator URI_VALIDATOR = new Validator() {
         @Override
         public boolean validate(@Nullable String value) {

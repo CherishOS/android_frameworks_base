@@ -6405,45 +6405,6 @@ public final class Settings {
         public static final String HIDE_IME_SPACE_ENABLE = "hide_ime_space_enable";
 
         /**
-         * Whether edge light is enabled.
-         * Default 0
-         * @hide
-         */
-        public static final String EDGE_LIGHT_ENABLED = "edge_light_enabled";
-
-        /**
-         * Whether to show edge light for all pulse events and not just for notifications.
-         * Default 0
-         * @hide
-         */
-        public static final String EDGE_LIGHT_ALWAYS_TRIGGER_ON_PULSE = "edge_light_always_trigger_on_pulse";
-
-        /**
-         * Whether to repeat edge light animation until pulse timeout.
-         * Default 0
-         * @hide
-         */
-        public static final String EDGE_LIGHT_REPEAT_ANIMATION = "edge_light_repeat_animation";
-
-        /**
-         * Color mode of edge light.
-         * 0: Accent
-         * 1: Notification
-         * 2: Wallpaper
-         * 3: Custom
-         * Default 0
-         * @hide
-         */
-        public static final String EDGE_LIGHT_COLOR_MODE = "edge_light_color_mode";
-
-        /**
-         * Custom color (hex value) for edge light.
-         * Default #FFFFFF
-         * @hide
-         */
-        public static final String EDGE_LIGHT_CUSTOM_COLOR = "edge_light_custom_color";
-
-        /**
          * Force show navigation bar setting.
          * @hide
          */
