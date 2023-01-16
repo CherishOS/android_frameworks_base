@@ -221,9 +221,6 @@ public class PixelPropsUtils {
             if (processName.equals("com.google.android.gms.unstable")) {
                 sIsGms = true;
                 setPropValue("FINGERPRINT", "google/walleye/walleye:8.1.0/OPM1.171019.011/4448085:user/release-keys");
-                setPropValue("PRODUCT", "walleye");
-                setPropValue("DEVICE", "walleye");
-                setPropValue("MODEL", "Pixel 2");
                 setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N_MR1);
             }
             return;
