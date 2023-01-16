@@ -220,10 +220,10 @@ public class PixelPropsUtils {
             final String processName = Application.getProcessName();
             if (processName.equals("com.google.android.gms.unstable")) {
                 sIsGms = true;
-                setPropValue("FINGERPRINT", "google/marlin/marlin:7.1.2/NJH47F/4146041:user/release-keys");
-                setPropValue("PRODUCT", "marlin");
-                setPropValue("DEVICE", "marlin");
-                setPropValue("MODEL", "Pixel XL");
+                setPropValue("FINGERPRINT", "google/walleye/walleye:8.1.0/OPM1.171019.011/4448085:user/release-keys");
+                setPropValue("PRODUCT", "walleye");
+                setPropValue("DEVICE", "walleye");
+                setPropValue("MODEL", "Pixel 2");
                 setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N_MR1);
             }
             return;
