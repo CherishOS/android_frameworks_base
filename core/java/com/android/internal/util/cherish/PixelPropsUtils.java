@@ -112,6 +112,7 @@ public class PixelPropsUtils {
     private static final String[] packagesToChangeMI11T = {
             "com.ea.gp.apexlegendsmobilefps",
             "com.mobile.legends",
+            "com.supercell.clashofclans",
             "com.tencent.tmgp.sgame"
     };
 
