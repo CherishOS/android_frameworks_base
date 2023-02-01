@@ -27162,6 +27162,10 @@ package android.media.tv {
     field public static final int SIGNAL_STRENGTH_STRONG = 3; // 0x3
     field public static final int SIGNAL_STRENGTH_WEAK = 2; // 0x2
     field public static final long TIME_SHIFT_INVALID_TIME = -9223372036854775808L; // 0x8000000000000000L
+    field public static final int TIME_SHIFT_MODE_AUTO = 4; // 0x4
+    field public static final int TIME_SHIFT_MODE_LOCAL = 2; // 0x2
+    field public static final int TIME_SHIFT_MODE_NETWORK = 3; // 0x3
+    field public static final int TIME_SHIFT_MODE_OFF = 1; // 0x1
     field public static final int TIME_SHIFT_STATUS_AVAILABLE = 3; // 0x3
     field public static final int TIME_SHIFT_STATUS_UNAVAILABLE = 2; // 0x2
     field public static final int TIME_SHIFT_STATUS_UNKNOWN = 0; // 0x0
@@ -27246,11 +27250,14 @@ package android.media.tv {
     method public void notifyAitInfoUpdated(@NonNull android.media.tv.AitInfo);
     method public void notifyAudioPresentationChanged(@NonNull java.util.List<android.media.AudioPresentation>);
     method public void notifyAudioPresentationSelected(int, int);
+    method public void notifyAvailableSpeeds(@NonNull float[]);
     method public void notifyBroadcastInfoResponse(@NonNull android.media.tv.BroadcastInfoResponse);
     method public void notifyChannelRetuned(android.net.Uri);
     method public void notifyContentAllowed();
     method public void notifyContentBlocked(@NonNull android.media.tv.TvContentRating);
+    method public void notifyCueingMessageAvailability(boolean);
     method public void notifySignalStrength(int);
+    method public void notifyTimeShiftMode(int);
     method public void notifyTimeShiftStatusChanged(int);
     method public void notifyTrackSelected(int, String);
     method public void notifyTracksChanged(java.util.List<android.media.tv.TvTrackInfo>);
@@ -27285,6 +27292,7 @@ package android.media.tv {
     method public void onTimeShiftPlay(android.net.Uri);
     method public void onTimeShiftResume();
     method public void onTimeShiftSeekTo(long);
+    method public void onTimeShiftSetMode(int);
     method public void onTimeShiftSetPlaybackParams(android.media.PlaybackParams);
     method public boolean onTouchEvent(android.view.MotionEvent);
     method public boolean onTrackballEvent(android.view.MotionEvent);
@@ -27424,6 +27432,7 @@ package android.media.tv {
     method public void timeShiftPlay(String, android.net.Uri);
     method public void timeShiftResume();
     method public void timeShiftSeekTo(long);
+    method public void timeShiftSetMode(int);
     method public void timeShiftSetPlaybackParams(@NonNull android.media.PlaybackParams);
     method public void tune(@NonNull String, android.net.Uri);
     method public void tune(String, android.net.Uri, android.os.Bundle);
@@ -27444,12 +27453,15 @@ package android.media.tv {
     method public void onAitInfoUpdated(@NonNull String, @NonNull android.media.tv.AitInfo);
     method public void onAudioPresentationSelected(@NonNull String, int, int);
     method public void onAudioPresentationsChanged(@NonNull String, @NonNull java.util.List<android.media.AudioPresentation>);
+    method public void onAvailableSpeeds(@NonNull String, @NonNull float[]);
     method public void onChannelRetuned(String, android.net.Uri);
     method public void onConnectionFailed(String);
     method public void onContentAllowed(String);
     method public void onContentBlocked(String, android.media.tv.TvContentRating);
+    method public void onCueingMessageAvailability(@NonNull String, boolean);
     method public void onDisconnected(String);
     method public void onSignalStrengthUpdated(@NonNull String, int);
+    method public void onTimeShiftMode(@NonNull String, int);
     method public void onTimeShiftStatusChanged(String, int);
     method public void onTrackSelected(String, int, String);
     method public void onTracksChanged(String, java.util.List<android.media.tv.TvTrackInfo>);
@@ -27531,7 +27543,11 @@ package android.media.tv.interactive {
     field public static final String COMMAND_PARAMETER_KEY_CHANGE_CHANNEL_QUIETLY = "command_change_channel_quietly";
     field public static final String COMMAND_PARAMETER_KEY_CHANNEL_URI = "command_channel_uri";
     field public static final String COMMAND_PARAMETER_KEY_INPUT_ID = "command_input_id";
+    field public static final String COMMAND_PARAMETER_KEY_PLAYBACK_PARAMS = "command_playback_params";
+    field public static final String COMMAND_PARAMETER_KEY_PROGRAM_URI = "command_program_uri";
     field public static final String COMMAND_PARAMETER_KEY_STOP_MODE = "command_stop_mode";
+    field public static final String COMMAND_PARAMETER_KEY_TIME_POSITION = "command_time_position";
+    field public static final String COMMAND_PARAMETER_KEY_TIME_SHIFT_MODE = "command_time_shift_mode";
     field public static final String COMMAND_PARAMETER_KEY_TRACK_ID = "command_track_id";
     field public static final String COMMAND_PARAMETER_KEY_TRACK_TYPE = "command_track_type";
     field public static final String COMMAND_PARAMETER_KEY_VOLUME = "command_volume";
@@ -27545,6 +27561,12 @@ package android.media.tv.interactive {
     field public static final String PLAYBACK_COMMAND_TYPE_TUNE_PREV = "tune_previous";
     field public static final String SERVICE_INTERFACE = "android.media.tv.interactive.TvInteractiveAppService";
     field public static final String SERVICE_META_DATA = "android.media.tv.interactive.app";
+    field public static final String TIME_SHIFT_COMMAND_TYPE_PAUSE = "pause";
+    field public static final String TIME_SHIFT_COMMAND_TYPE_PLAY = "play";
+    field public static final String TIME_SHIFT_COMMAND_TYPE_RESUME = "resume";
+    field public static final String TIME_SHIFT_COMMAND_TYPE_SEEK_TO = "seek_to";
+    field public static final String TIME_SHIFT_COMMAND_TYPE_SET_MODE = "set_mode";
+    field public static final String TIME_SHIFT_COMMAND_TYPE_SET_PLAYBACK_PARAMS = "set_playback_params";
   }
 
   public abstract static class TvInteractiveAppService.Session implements android.view.KeyEvent.Callback {
@@ -27557,6 +27579,7 @@ package android.media.tv.interactive {
     method @CallSuper public final void notifyTeletextAppStateChanged(int);
     method public void onAdBufferConsumed(@NonNull android.media.tv.AdBuffer);
     method public void onAdResponse(@NonNull android.media.tv.AdResponse);
+    method public void onAvailableSpeeds(@NonNull float[]);
     method public void onBroadcastInfoResponse(@NonNull android.media.tv.BroadcastInfoResponse);
     method public void onContentAllowed();
     method public void onContentBlocked(@NonNull android.media.tv.TvContentRating);
@@ -27586,6 +27609,11 @@ package android.media.tv.interactive {
     method public void onStopInteractiveApp();
     method public void onStreamVolume(float);
     method public void onSurfaceChanged(int, int, int);
+    method public void onTimeShiftCurrentPositionChanged(@NonNull String, long);
+    method public void onTimeShiftMode(int);
+    method public void onTimeShiftPlaybackParams(@NonNull android.media.PlaybackParams);
+    method public void onTimeShiftStartPositionChanged(@NonNull String, long);
+    method public void onTimeShiftStatusChanged(@NonNull String, int);
     method public boolean onTouchEvent(@NonNull android.view.MotionEvent);
     method public void onTrackInfoList(@NonNull java.util.List<android.media.tv.TvTrackInfo>);
     method public void onTrackSelected(int, @NonNull String);
@@ -27599,6 +27627,7 @@ package android.media.tv.interactive {
     method public void onVideoUnavailable(int);
     method @CallSuper public void removeBroadcastInfo(int);
     method @CallSuper public void requestAd(@NonNull android.media.tv.AdRequest);
+    method @CallSuper public void requestAvailableSpeeds();
     method @CallSuper public void requestBroadcastInfo(@NonNull android.media.tv.BroadcastInfoRequest);
     method @CallSuper public void requestCurrentChannelLcn();
     method @CallSuper public void requestCurrentChannelUri();
@@ -27608,10 +27637,12 @@ package android.media.tv.interactive {
     method @CallSuper public void requestStartRecording(@Nullable android.net.Uri);
     method @CallSuper public void requestStopRecording(@NonNull String);
     method @CallSuper public void requestStreamVolume();
+    method @CallSuper public void requestTimeShiftMode();
     method @CallSuper public void requestTrackInfoList();
     method @CallSuper public void requestTvRecordingInfo(@NonNull String);
     method @CallSuper public void requestTvRecordingInfoList(@NonNull int);
     method @CallSuper public void sendPlaybackCommandRequest(@NonNull String, @Nullable android.os.Bundle);
+    method @CallSuper public void sendTimeShiftCommandRequest(@NonNull String, @Nullable android.os.Bundle);
     method @CallSuper public void setMediaViewEnabled(boolean);
     method @CallSuper public void setTvRecordingInfo(@NonNull String, @NonNull android.media.tv.TvRecordingInfo);
     method @CallSuper public void setVideoBounds(@NonNull android.graphics.Rect);
@@ -27643,6 +27674,10 @@ package android.media.tv.interactive {
     method public void notifyError(@NonNull String, @NonNull android.os.Bundle);
     method public void notifyRecordingStarted(@NonNull String);
     method public void notifyRecordingStopped(@NonNull String);
+    method public void notifyTimeShiftCurrentPositionChanged(@NonNull String, long);
+    method public void notifyTimeShiftPlaybackParams(@NonNull android.media.PlaybackParams);
+    method public void notifyTimeShiftStartPositionChanged(@NonNull String, long);
+    method public void notifyTimeShiftStatusChanged(@NonNull String, int);
     method public void notifyTvMessage(@NonNull String, @NonNull android.os.Bundle);
     method public void onAttachedToWindow();
     method public void onDetachedFromWindow();
@@ -27653,12 +27688,14 @@ package android.media.tv.interactive {
     method public void prepareInteractiveApp(@NonNull String, int);
     method public void reset();
     method public void resetInteractiveApp();
+    method public void sendAvailableSpeeds(@NonNull float[]);
     method public void sendCurrentChannelLcn(int);
     method public void sendCurrentChannelUri(@Nullable android.net.Uri);
     method public void sendCurrentTvInputId(@Nullable String);
     method public void sendCurrentVideoBounds(@NonNull android.graphics.Rect);
     method public void sendSigningResult(@NonNull String, @NonNull byte[]);
     method public void sendStreamVolume(float);
+    method public void sendTimeShiftMode(int);
     method public void sendTrackInfoList(@Nullable java.util.List<android.media.tv.TvTrackInfo>);
     method public void sendTvRecordingInfo(@Nullable android.media.tv.TvRecordingInfo);
     method public void sendTvRecordingInfoList(@NonNull java.util.List<android.media.tv.TvRecordingInfo>);
@@ -27684,6 +27721,7 @@ package android.media.tv.interactive {
     ctor public TvInteractiveAppView.TvInteractiveAppCallback();
     method public void onBiInteractiveAppCreated(@NonNull String, @NonNull android.net.Uri, @Nullable String);
     method public void onPlaybackCommandRequest(@NonNull String, @NonNull String, @NonNull android.os.Bundle);
+    method public void onRequestAvailableSpeeds(@NonNull String);
     method public void onRequestCurrentChannelLcn(@NonNull String);
     method public void onRequestCurrentChannelUri(@NonNull String);
     method public void onRequestCurrentTvInputId(@NonNull String);
@@ -27692,6 +27730,7 @@ package android.media.tv.interactive {
     method public void onRequestStartRecording(@NonNull String, @Nullable android.net.Uri);
     method public void onRequestStopRecording(@NonNull String, @NonNull String);
     method public void onRequestStreamVolume(@NonNull String);
+    method public void onRequestTimeShiftMode(@NonNull String);
     method public void onRequestTrackInfoList(@NonNull String);
     method public void onRequestTvRecordingInfo(@NonNull String, @NonNull String);
     method public void onRequestTvRecordingInfoList(@NonNull String, @NonNull int);
@@ -27699,6 +27738,7 @@ package android.media.tv.interactive {
     method public void onSetVideoBounds(@NonNull String, @NonNull android.graphics.Rect);
     method public void onStateChanged(@NonNull String, int, int);
     method public void onTeletextAppStateChanged(@NonNull String, int);
+    method public void onTimeShiftCommandRequest(@NonNull String, @NonNull String, @NonNull android.os.Bundle);
   }
 
 }
