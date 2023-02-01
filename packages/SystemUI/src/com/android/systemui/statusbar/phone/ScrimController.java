@@ -342,7 +342,6 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
             states[i].init(mScrimInFront, mScrimBehind, mDozeParameters, mDockManager);
             states[i].setScrimBehindAlphaKeyguard(mScrimBehindAlphaKeyguard);
             states[i].setDefaultScrimAlpha(mDefaultScrimAlpha);
-            states[i].setQSClipScrimAlpha(mCustomScrimAlpha);
         }
 
         mScrimBehind.setDefaultFocusHighlightEnabled(false);
@@ -762,10 +761,6 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
 
     public void setCustomScrimAlpha(int value) {
         mCustomScrimAlpha = (float) value / 100f;
-        final ScrimState[] states = ScrimState.values();
-        for (int i = 0; i < states.length; i++) {
-            states[i].setQSClipScrimAlpha(mCustomScrimAlpha);
-        }
         applyState();
     }
 
