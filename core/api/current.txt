@@ -26536,8 +26536,16 @@ package android.media.tv {
     method public int getTableName();
     method public int getVersion();
     field @NonNull public static final android.os.Parcelable.Creator<android.media.tv.TableRequest> CREATOR;
+    field public static final int TABLE_NAME_BAT = 4; // 0x4
+    field public static final int TABLE_NAME_CAT = 2; // 0x2
+    field public static final int TABLE_NAME_EIT = 6; // 0x6
+    field public static final int TABLE_NAME_NIT = 3; // 0x3
     field public static final int TABLE_NAME_PAT = 0; // 0x0
     field public static final int TABLE_NAME_PMT = 1; // 0x1
+    field public static final int TABLE_NAME_SDT = 5; // 0x5
+    field public static final int TABLE_NAME_SIT = 9; // 0x9
+    field public static final int TABLE_NAME_TDT = 7; // 0x7
+    field public static final int TABLE_NAME_TOT = 8; // 0x8
   }
 
   public final class TableResponse extends android.media.tv.BroadcastInfoResponse implements android.os.Parcelable {
@@ -27450,9 +27458,12 @@ package android.media.tv.interactive {
     field public static final String COMMAND_PARAMETER_KEY_CHANGE_CHANNEL_QUIETLY = "command_change_channel_quietly";
     field public static final String COMMAND_PARAMETER_KEY_CHANNEL_URI = "command_channel_uri";
     field public static final String COMMAND_PARAMETER_KEY_INPUT_ID = "command_input_id";
+    field public static final String COMMAND_PARAMETER_KEY_STOP_MODE = "command_stop_mode";
     field public static final String COMMAND_PARAMETER_KEY_TRACK_ID = "command_track_id";
     field public static final String COMMAND_PARAMETER_KEY_TRACK_TYPE = "command_track_type";
     field public static final String COMMAND_PARAMETER_KEY_VOLUME = "command_volume";
+    field public static final int COMMAND_PARAMETER_VALUE_STOP_MODE_BLANK = 1; // 0x1
+    field public static final int COMMAND_PARAMETER_VALUE_STOP_MODE_FREEZE = 2; // 0x2
     field public static final String PLAYBACK_COMMAND_TYPE_SELECT_TRACK = "select_track";
     field public static final String PLAYBACK_COMMAND_TYPE_SET_STREAM_VOLUME = "set_stream_volume";
     field public static final String PLAYBACK_COMMAND_TYPE_STOP = "stop";
@@ -27481,6 +27492,7 @@ package android.media.tv.interactive {
     method public void onCurrentChannelLcn(int);
     method public void onCurrentChannelUri(@Nullable android.net.Uri);
     method public void onCurrentTvInputId(@Nullable String);
+    method public void onCurrentVideoBounds(@NonNull android.graphics.Rect);
     method public void onDestroyBiInteractiveAppRequest(@NonNull String);
     method public void onError(@NonNull String, @NonNull android.os.Bundle);
     method public boolean onGenericMotionEvent(@NonNull android.view.MotionEvent);
@@ -27518,6 +27530,7 @@ package android.media.tv.interactive {
     method @CallSuper public void requestCurrentChannelLcn();
     method @CallSuper public void requestCurrentChannelUri();
     method @CallSuper public void requestCurrentTvInputId();
+    method @CallSuper public void requestCurrentVideoBounds();
     method @CallSuper public void requestSigning(@NonNull String, @NonNull String, @NonNull String, @NonNull byte[]);
     method @CallSuper public void requestStartRecording(@Nullable android.net.Uri);
     method @CallSuper public void requestStopRecording(@NonNull String);
@@ -27570,6 +27583,7 @@ package android.media.tv.interactive {
     method public void sendCurrentChannelLcn(int);
     method public void sendCurrentChannelUri(@Nullable android.net.Uri);
     method public void sendCurrentTvInputId(@Nullable String);
+    method public void sendCurrentVideoBounds(@NonNull android.graphics.Rect);
     method public void sendSigningResult(@NonNull String, @NonNull byte[]);
     method public void sendStreamVolume(float);
     method public void sendTrackInfoList(@Nullable java.util.List<android.media.tv.TvTrackInfo>);
@@ -27600,6 +27614,7 @@ package android.media.tv.interactive {
     method public void onRequestCurrentChannelLcn(@NonNull String);
     method public void onRequestCurrentChannelUri(@NonNull String);
     method public void onRequestCurrentTvInputId(@NonNull String);
+    method public void onRequestCurrentVideoBounds(@NonNull String);
     method public void onRequestSigning(@NonNull String, @NonNull String, @NonNull String, @NonNull String, @NonNull byte[]);
     method public void onRequestStartRecording(@NonNull String, @Nullable android.net.Uri);
     method public void onRequestStopRecording(@NonNull String, @NonNull String);
