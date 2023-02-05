@@ -132,6 +132,9 @@ open class QSTileViewImpl @JvmOverloads constructor(
     // QS Style 3
     private var randomColor: Random = Random()
     
+    // QS Style 8
+    private val colorActiveSurround = resources.getColor(R.color.qs_white_bg)
+    
     @SuppressLint("NewApi")
     private var randomTint: Int = Color.rgb(
         (randomColor.nextInt(256) / 2f + 0.5).toFloat(),
@@ -666,6 +669,8 @@ open class QSTileViewImpl @JvmOverloads constructor(
                     colorActive
                 else if(qsPanelStyle == 3) 
                     colorLabelActiveRandom
+                else if(qsPanelStyle == 4 || qsPanelStyle == 6 || qsPanelStyle == 8 || qsPanelStyle == 9)   
+                    colorActiveSurround
                 else colorLabelActive
             state == Tile.STATE_INACTIVE -> colorLabelInactive
             else -> {
@@ -683,6 +688,8 @@ open class QSTileViewImpl @JvmOverloads constructor(
                     colorActive
                 else if(qsPanelStyle == 3) 
                     colorSecondaryLabelActiveRandom
+                else if(qsPanelStyle == 4 || qsPanelStyle == 6 || qsPanelStyle == 8 || qsPanelStyle == 9)   
+                    colorActiveSurround
                 else colorSecondaryLabelActive
             state == Tile.STATE_INACTIVE -> colorSecondaryLabelInactive
             else -> {
