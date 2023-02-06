@@ -41778,6 +41778,15 @@ package android.telecom {
     method public void startCallStreaming(@NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.telecom.CallException>);
   }
 
+  public interface CallControlCallback {
+    method public void onAnswer(int, @NonNull java.util.function.Consumer<java.lang.Boolean>);
+    method public void onCallStreamingStarted(@NonNull java.util.function.Consumer<java.lang.Boolean>);
+    method public void onDisconnect(@NonNull java.util.function.Consumer<java.lang.Boolean>);
+    method public void onReject(@NonNull java.util.function.Consumer<java.lang.Boolean>);
+    method public void onSetActive(@NonNull java.util.function.Consumer<java.lang.Boolean>);
+    method public void onSetInactive(@NonNull java.util.function.Consumer<java.lang.Boolean>);
+  }
+
   public final class CallEndpoint implements android.os.Parcelable {
     ctor public CallEndpoint(@NonNull CharSequence, int, @NonNull android.os.ParcelUuid);
     method public int describeContents();
@@ -41807,16 +41816,10 @@ package android.telecom {
   }
 
   public interface CallEventCallback {
-    method public void onAnswer(int, @NonNull java.util.function.Consumer<java.lang.Boolean>);
     method public void onAvailableCallEndpointsChanged(@NonNull java.util.List<android.telecom.CallEndpoint>);
     method public void onCallEndpointChanged(@NonNull android.telecom.CallEndpoint);
     method public void onCallStreamingFailed(int);
-    method public void onCallStreamingStarted(@NonNull java.util.function.Consumer<java.lang.Boolean>);
-    method public void onDisconnect(@NonNull java.util.function.Consumer<java.lang.Boolean>);
     method public void onMuteStateChanged(boolean);
-    method public void onReject(@NonNull java.util.function.Consumer<java.lang.Boolean>);
-    method public void onSetActive(@NonNull java.util.function.Consumer<java.lang.Boolean>);
-    method public void onSetInactive(@NonNull java.util.function.Consumer<java.lang.Boolean>);
   }
 
   public final class CallException extends java.lang.RuntimeException implements android.os.Parcelable {
@@ -42581,7 +42584,7 @@ package android.telecom {
     method public void acceptHandover(android.net.Uri, int, android.telecom.PhoneAccountHandle);
     method @Deprecated @RequiresPermission(anyOf={android.Manifest.permission.ANSWER_PHONE_CALLS, android.Manifest.permission.MODIFY_PHONE_STATE}) public void acceptRingingCall();
     method @Deprecated @RequiresPermission(anyOf={android.Manifest.permission.ANSWER_PHONE_CALLS, android.Manifest.permission.MODIFY_PHONE_STATE}) public void acceptRingingCall(int);
-    method @RequiresPermission(android.Manifest.permission.MANAGE_OWN_CALLS) public void addCall(@NonNull android.telecom.CallAttributes, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.telecom.CallControl,android.telecom.CallException>, @NonNull android.telecom.CallEventCallback);
+    method @RequiresPermission(android.Manifest.permission.MANAGE_OWN_CALLS) public void addCall(@NonNull android.telecom.CallAttributes, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.telecom.CallControl,android.telecom.CallException>, @NonNull android.telecom.CallControlCallback, @NonNull android.telecom.CallEventCallback);
     method public void addNewIncomingCall(android.telecom.PhoneAccountHandle, android.os.Bundle);
     method public void addNewIncomingConference(@NonNull android.telecom.PhoneAccountHandle, @NonNull android.os.Bundle);
     method @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public void cancelMissedCallsNotification();
