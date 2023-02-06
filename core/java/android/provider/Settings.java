@@ -12200,6 +12200,13 @@ public final class Settings {
          * @hide
          */
         public static final String ENABLE_COMBINED_SIGNAL_ICONS = "enable_combined_signal_icons";
+		
+        /**
+         * @hide
+         * Whether to turn on black theme
+         * @hide
+         */
+        public static final String SYSTEM_BLACK_THEME = "system_black_theme";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
