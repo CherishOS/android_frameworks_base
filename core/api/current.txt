@@ -1989,17 +1989,17 @@ package android {
     field public static final int system_primary_container_light;
     field public static final int system_primary_dark;
     field public static final int system_primary_fixed_dark;
+    field public static final int system_primary_fixed_darker_dark;
     field public static final int system_primary_fixed_darker_light;
     field public static final int system_primary_fixed_light;
-    field public static final int system_primary_fixeder_dark;
     field public static final int system_primary_light;
     field public static final int system_secondary_container_dark;
     field public static final int system_secondary_container_light;
     field public static final int system_secondary_dark;
     field public static final int system_secondary_fixed_dark;
+    field public static final int system_secondary_fixed_darker_dark;
     field public static final int system_secondary_fixed_darker_light;
     field public static final int system_secondary_fixed_light;
-    field public static final int system_secondary_fixeder_dark;
     field public static final int system_secondary_light;
     field public static final int system_surface_bright_dark;
     field public static final int system_surface_bright_light;
@@ -2023,9 +2023,9 @@ package android {
     field public static final int system_tertiary_container_light;
     field public static final int system_tertiary_dark;
     field public static final int system_tertiary_fixed_dark;
+    field public static final int system_tertiary_fixed_darker_dark;
     field public static final int system_tertiary_fixed_darker_light;
     field public static final int system_tertiary_fixed_light;
-    field public static final int system_tertiary_fixeder_dark;
     field public static final int system_tertiary_light;
     field public static final int system_text_hint_inverse_dark;
     field public static final int system_text_hint_inverse_light;
@@ -5153,6 +5153,8 @@ package android.app {
     field public static final int REASON_INITIALIZATION_FAILURE = 7; // 0x7
     field public static final int REASON_LOW_MEMORY = 3; // 0x3
     field public static final int REASON_OTHER = 13; // 0xd
+    field public static final int REASON_PACKAGE_STATE_CHANGE = 15; // 0xf
+    field public static final int REASON_PACKAGE_UPDATED = 16; // 0x10
     field public static final int REASON_PERMISSION_CHANGE = 8; // 0x8
     field public static final int REASON_SIGNALED = 2; // 0x2
     field public static final int REASON_UNKNOWN = 0; // 0x0
@@ -7279,6 +7281,7 @@ package android.app {
     method public android.view.accessibility.AccessibilityEvent executeAndWaitForEvent(Runnable, android.app.UiAutomation.AccessibilityEventFilter, long) throws java.util.concurrent.TimeoutException;
     method public android.os.ParcelFileDescriptor executeShellCommand(String);
     method @NonNull public android.os.ParcelFileDescriptor[] executeShellCommandRw(@NonNull String);
+    method @NonNull public android.os.ParcelFileDescriptor[] executeShellCommandRwe(@NonNull String);
     method public android.view.accessibility.AccessibilityNodeInfo findFocus(int);
     method public android.view.accessibility.AccessibilityNodeInfo getRootInActiveWindow();
     method public android.accessibilityservice.AccessibilityServiceInfo getServiceInfo();
@@ -10876,7 +10879,7 @@ package android.content {
     field public static final String EXTRA_CHANGED_PACKAGE_LIST = "android.intent.extra.changed_package_list";
     field public static final String EXTRA_CHANGED_UID_LIST = "android.intent.extra.changed_uid_list";
     field public static final String EXTRA_CHOOSER_CUSTOM_ACTIONS = "android.intent.extra.CHOOSER_CUSTOM_ACTIONS";
-    field public static final String EXTRA_CHOOSER_PAYLOAD_RESELECTION_ACTION = "android.intent.extra.CHOOSER_PAYLOAD_RESELECTION_ACTION";
+    field public static final String EXTRA_CHOOSER_MODIFY_SHARE_ACTION = "android.intent.extra.CHOOSER_MODIFY_SHARE_ACTION";
     field public static final String EXTRA_CHOOSER_REFINEMENT_INTENT_SENDER = "android.intent.extra.CHOOSER_REFINEMENT_INTENT_SENDER";
     field public static final String EXTRA_CHOOSER_TARGETS = "android.intent.extra.CHOOSER_TARGETS";
     field public static final String EXTRA_CHOSEN_COMPONENT = "android.intent.extra.CHOSEN_COMPONENT";
@@ -12629,7 +12632,8 @@ package android.content.pm {
     field public static final int FLAG_PERMISSION_WHITELIST_SYSTEM = 1; // 0x1
     field public static final int FLAG_PERMISSION_WHITELIST_UPGRADE = 4; // 0x4
     field public static final int GET_ACTIVITIES = 1; // 0x1
-    field public static final int GET_ATTRIBUTIONS = -2147483648; // 0x80000000
+    field @Deprecated public static final int GET_ATTRIBUTIONS = -2147483648; // 0x80000000
+    field public static final long GET_ATTRIBUTIONS_LONG = 2147483648L; // 0x80000000L
     field public static final int GET_CONFIGURATIONS = 16384; // 0x4000
     field @Deprecated public static final int GET_DISABLED_COMPONENTS = 512; // 0x200
     field @Deprecated public static final int GET_DISABLED_UNTIL_USED_COMPONENTS = 32768; // 0x8000
@@ -12670,6 +12674,7 @@ package android.content.pm {
     field public static final int PERMISSION_DENIED = -1; // 0xffffffff
     field public static final int PERMISSION_GRANTED = 0; // 0x0
     field public static final String PROPERTY_MEDIA_CAPABILITIES = "android.media.PROPERTY_MEDIA_CAPABILITIES";
+    field public static final String PROPERTY_SELF_CERTIFIED_NETWORK_CAPABILITIES = "android.net.PROPERTY_SELF_CERTIFIED_NETWORK_CAPABILITIES";
     field public static final String PROPERTY_SPECIAL_USE_FGS_SUBTYPE = "android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE";
     field public static final int SIGNATURE_FIRST_NOT_SIGNED = -1; // 0xffffffff
     field public static final int SIGNATURE_MATCH = 0; // 0x0
@@ -13465,7 +13470,9 @@ package android.credentials {
   }
 
   public final class CreateCredentialRequest implements android.os.Parcelable {
+    ctor public CreateCredentialRequest(@NonNull String, @NonNull android.os.Bundle, @NonNull android.os.Bundle, boolean, boolean);
     ctor public CreateCredentialRequest(@NonNull String, @NonNull android.os.Bundle, @NonNull android.os.Bundle, boolean);
+    method public boolean alwaysSendAppInfoToProvider();
     method public int describeContents();
     method @NonNull public android.os.Bundle getCandidateQueryData();
     method @NonNull public android.os.Bundle getCredentialData();
@@ -13507,6 +13514,7 @@ package android.credentials {
     method public void clearCredentialState(@NonNull android.credentials.ClearCredentialStateRequest, @Nullable android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.credentials.ClearCredentialStateException>);
     method public void createCredential(@NonNull android.credentials.CreateCredentialRequest, @NonNull android.app.Activity, @Nullable android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.credentials.CreateCredentialResponse,android.credentials.CreateCredentialException>);
     method public void getCredential(@NonNull android.credentials.GetCredentialRequest, @NonNull android.app.Activity, @Nullable android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.credentials.GetCredentialResponse,android.credentials.GetCredentialException>);
+    method public boolean isEnabledCredentialProviderService(@NonNull android.content.ComponentName);
     method public void registerCredentialDescription(@NonNull android.credentials.RegisterCredentialDescriptionRequest);
     method public void unregisterCredentialDescription(@NonNull android.credentials.UnregisterCredentialDescriptionRequest);
   }
@@ -13536,6 +13544,7 @@ package android.credentials {
   }
 
   public final class GetCredentialRequest implements android.os.Parcelable {
+    method public boolean alwaysSendAppInfoToProvider();
     method public int describeContents();
     method @NonNull public java.util.List<android.credentials.CredentialOption> getCredentialOptions();
     method @NonNull public android.os.Bundle getData();
@@ -13547,6 +13556,7 @@ package android.credentials {
     ctor public GetCredentialRequest.Builder(@NonNull android.os.Bundle);
     method @NonNull public android.credentials.GetCredentialRequest.Builder addCredentialOption(@NonNull android.credentials.CredentialOption);
     method @NonNull public android.credentials.GetCredentialRequest build();
+    method @NonNull public android.credentials.GetCredentialRequest.Builder setAlwaysSendAppInfoToProvider(boolean);
     method @NonNull public android.credentials.GetCredentialRequest.Builder setCredentialOptions(@NonNull java.util.List<android.credentials.CredentialOption>);
   }
 
@@ -24658,11 +24668,15 @@ package android.media {
     field public static final int SELECTION_BEHAVIOR_GO_TO_APP = 2; // 0x2
     field public static final int SELECTION_BEHAVIOR_NONE = 0; // 0x0
     field public static final int SELECTION_BEHAVIOR_TRANSFER = 1; // 0x1
-    field public static final int SUBTEXT_AD_ROUTING_DISALLOWED = 3; // 0x3
+    field public static final int SUBTEXT_AD_ROUTING_DISALLOWED = 4; // 0x4
     field public static final int SUBTEXT_CUSTOM = 10000; // 0x2710
-    field public static final int SUBTEXT_DOWNLOADED_CONTENT_ROUTING_DISALLOWED = 2; // 0x2
+    field public static final int SUBTEXT_DEVICE_LOW_POWER = 5; // 0x5
+    field public static final int SUBTEXT_DOWNLOADED_CONTENT_ROUTING_DISALLOWED = 3; // 0x3
+    field public static final int SUBTEXT_ERROR_UNKNOWN = 1; // 0x1
     field public static final int SUBTEXT_NONE = 0; // 0x0
-    field public static final int SUBTEXT_SUBSCRIPTION_REQUIRED = 1; // 0x1
+    field public static final int SUBTEXT_SUBSCRIPTION_REQUIRED = 2; // 0x2
+    field public static final int SUBTEXT_TRACK_UNSUPPORTED = 7; // 0x7
+    field public static final int SUBTEXT_UNAUTHORIZED = 6; // 0x6
   }
 
   public static final class RouteListingPreference.Item.Builder {
@@ -27070,6 +27084,8 @@ package android.media.tv {
     field public static final int TIME_SHIFT_STATUS_UNAVAILABLE = 2; // 0x2
     field public static final int TIME_SHIFT_STATUS_UNKNOWN = 0; // 0x0
     field public static final int TIME_SHIFT_STATUS_UNSUPPORTED = 1; // 0x1
+    field public static final String TV_MESSAGE_TYPE_CLOSED_CAPTION = "CC";
+    field public static final String TV_MESSAGE_TYPE_WATERMARK = "Watermark";
     field public static final int VIDEO_UNAVAILABLE_REASON_AUDIO_ONLY = 4; // 0x4
     field public static final int VIDEO_UNAVAILABLE_REASON_BUFFERING = 3; // 0x3
     field public static final int VIDEO_UNAVAILABLE_REASON_CAS_BLACKOUT = 16; // 0x10
@@ -27157,6 +27173,7 @@ package android.media.tv {
     method public void notifyTrackSelected(int, String);
     method public void notifyTracksChanged(java.util.List<android.media.tv.TvTrackInfo>);
     method public void notifyTuned(@NonNull android.net.Uri);
+    method public void notifyTvMessage(@NonNull String, @NonNull android.os.Bundle);
     method public void notifyVideoAvailable();
     method public void notifyVideoUnavailable(int);
     method public void onAdBuffer(@NonNull android.media.tv.AdBuffer);
@@ -27178,6 +27195,7 @@ package android.media.tv {
     method public void onSetInteractiveAppNotificationEnabled(boolean);
     method public abstract void onSetStreamVolume(@FloatRange(from=0.0, to=1.0) float);
     method public abstract boolean onSetSurface(@Nullable android.view.Surface);
+    method public void onSetTvMessageEnabled(@NonNull String, boolean);
     method public void onSurfaceChanged(int, int, int);
     method public long onTimeShiftGetCurrentPosition();
     method public long onTimeShiftGetStartPosition();
@@ -27317,6 +27335,7 @@ package android.media.tv {
     method public void setOnUnhandledInputEventListener(android.media.tv.TvView.OnUnhandledInputEventListener);
     method public void setStreamVolume(@FloatRange(from=0.0, to=1.0) float);
     method public void setTimeShiftPositionCallback(@Nullable android.media.tv.TvView.TimeShiftPositionCallback);
+    method public void setTvMessageEnabled(@NonNull String, boolean);
     method public void setZOrderMediaOverlay(boolean);
     method public void setZOrderOnTop(boolean);
     method public void timeShiftPause();
@@ -27353,6 +27372,7 @@ package android.media.tv {
     method public void onTrackSelected(String, int, String);
     method public void onTracksChanged(String, java.util.List<android.media.tv.TvTrackInfo>);
     method public void onTuned(@NonNull String, @NonNull android.net.Uri);
+    method public void onTvMessage(@NonNull String, @NonNull String, @NonNull android.os.Bundle);
     method public void onVideoAvailable(String);
     method public void onVideoSizeChanged(String, int, int);
     method public void onVideoUnavailable(String, int);
@@ -27486,6 +27506,7 @@ package android.media.tv.interactive {
     method public boolean onTrackballEvent(@NonNull android.view.MotionEvent);
     method public void onTracksChanged(@NonNull java.util.List<android.media.tv.TvTrackInfo>);
     method public void onTuned(@NonNull android.net.Uri);
+    method public void onTvMessage(@NonNull String, @NonNull android.os.Bundle);
     method public void onTvRecordingInfo(@Nullable android.media.tv.TvRecordingInfo);
     method public void onTvRecordingInfoList(@NonNull java.util.List<android.media.tv.TvRecordingInfo>);
     method public void onVideoAvailable();
@@ -27535,6 +27556,7 @@ package android.media.tv.interactive {
     method public void notifyError(@NonNull String, @NonNull android.os.Bundle);
     method public void notifyRecordingStarted(@NonNull String);
     method public void notifyRecordingStopped(@NonNull String);
+    method public void notifyTvMessage(@NonNull String, @NonNull android.os.Bundle);
     method public void onAttachedToWindow();
     method public void onDetachedFromWindow();
     method public void onLayout(boolean, int, int, int, int);
@@ -32191,7 +32213,6 @@ package android.os {
     method public void onEarlyReportFinished();
     method public void onError(int);
     method public void onFinished();
-    method public void onFinished(@NonNull String);
     method public void onProgress(@FloatRange(from=0.0f, to=100.0f) float);
     field public static final int BUGREPORT_ERROR_ANOTHER_REPORT_IN_PROGRESS = 5; // 0x5
     field public static final int BUGREPORT_ERROR_INVALID_INPUT = 1; // 0x1
@@ -40208,9 +40229,10 @@ package android.service.credentials {
   }
 
   public class BeginCreateCredentialRequest implements android.os.Parcelable {
-    ctor public BeginCreateCredentialRequest(@NonNull android.service.credentials.CallingAppInfo, @NonNull String, @NonNull android.os.Bundle);
+    ctor public BeginCreateCredentialRequest(@NonNull String, @NonNull android.os.Bundle, @Nullable android.service.credentials.CallingAppInfo);
+    ctor public BeginCreateCredentialRequest(@NonNull String, @NonNull android.os.Bundle);
     method public int describeContents();
-    method @NonNull public android.service.credentials.CallingAppInfo getCallingAppInfo();
+    method @Nullable public android.service.credentials.CallingAppInfo getCallingAppInfo();
     method @NonNull public android.os.Bundle getData();
     method @NonNull public String getType();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
@@ -40245,26 +40267,39 @@ package android.service.credentials {
   public final class BeginGetCredentialRequest implements android.os.Parcelable {
     method public int describeContents();
     method @NonNull public java.util.List<android.service.credentials.BeginGetCredentialOption> getBeginGetCredentialOptions();
-    method @NonNull public android.service.credentials.CallingAppInfo getCallingAppInfo();
+    method @Nullable public android.service.credentials.CallingAppInfo getCallingAppInfo();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.service.credentials.BeginGetCredentialRequest> CREATOR;
   }
 
   public static final class BeginGetCredentialRequest.Builder {
-    ctor public BeginGetCredentialRequest.Builder(@NonNull android.service.credentials.CallingAppInfo);
+    ctor public BeginGetCredentialRequest.Builder();
     method @NonNull public android.service.credentials.BeginGetCredentialRequest.Builder addBeginGetCredentialOption(@NonNull android.service.credentials.BeginGetCredentialOption);
     method @NonNull public android.service.credentials.BeginGetCredentialRequest build();
     method @NonNull public android.service.credentials.BeginGetCredentialRequest.Builder setBeginGetCredentialOptions(@NonNull java.util.List<android.service.credentials.BeginGetCredentialOption>);
+    method @NonNull public android.service.credentials.BeginGetCredentialRequest.Builder setCallingAppInfo(@Nullable android.service.credentials.CallingAppInfo);
   }
 
   public final class BeginGetCredentialResponse implements android.os.Parcelable {
-    method @NonNull public static android.service.credentials.BeginGetCredentialResponse createWithAuthentication(@NonNull android.service.credentials.Action);
-    method @NonNull public static android.service.credentials.BeginGetCredentialResponse createWithResponseContent(@NonNull android.service.credentials.CredentialsResponseContent);
     method public int describeContents();
-    method @Nullable public android.service.credentials.Action getAuthenticationAction();
-    method @Nullable public android.service.credentials.CredentialsResponseContent getCredentialsResponseContent();
+    method @NonNull public java.util.List<android.service.credentials.Action> getActions();
+    method @NonNull public java.util.List<android.service.credentials.Action> getAuthenticationActions();
+    method @NonNull public java.util.List<android.service.credentials.CredentialEntry> getCredentialEntries();
+    method @Nullable public android.service.credentials.CredentialEntry getRemoteCredentialEntry();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.service.credentials.BeginGetCredentialResponse> CREATOR;
+  }
+
+  public static final class BeginGetCredentialResponse.Builder {
+    ctor public BeginGetCredentialResponse.Builder();
+    method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder addAction(@NonNull android.service.credentials.Action);
+    method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder addAuthenticationAction(@NonNull android.service.credentials.Action);
+    method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder addCredentialEntry(@NonNull android.service.credentials.CredentialEntry);
+    method @NonNull public android.service.credentials.BeginGetCredentialResponse build();
+    method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder setActions(@NonNull java.util.List<android.service.credentials.Action>);
+    method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder setAuthenticationActions(@NonNull java.util.List<android.service.credentials.Action>);
+    method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder setCredentialEntries(@NonNull java.util.List<android.service.credentials.CredentialEntry>);
+    method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder setRemoteCredentialEntry(@Nullable android.service.credentials.CredentialEntry);
   }
 
   public final class CallingAppInfo implements android.os.Parcelable {
@@ -40320,33 +40355,14 @@ package android.service.credentials {
     method public abstract void onClearCredentialState(@NonNull android.service.credentials.ClearCredentialStateRequest, @NonNull android.os.CancellationSignal, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.credentials.ClearCredentialStateException>);
     field public static final String CAPABILITY_META_DATA_KEY = "android.credentials.capabilities";
     field public static final String EXTRA_BEGIN_GET_CREDENTIAL_REQUEST = "android.service.credentials.extra.BEGIN_GET_CREDENTIAL_REQUEST";
+    field public static final String EXTRA_BEGIN_GET_CREDENTIAL_RESPONSE = "android.service.credentials.extra.BEGIN_GET_CREDENTIAL_RESPONSE";
     field public static final String EXTRA_CREATE_CREDENTIAL_EXCEPTION = "android.service.credentials.extra.CREATE_CREDENTIAL_EXCEPTION";
     field public static final String EXTRA_CREATE_CREDENTIAL_REQUEST = "android.service.credentials.extra.CREATE_CREDENTIAL_REQUEST";
     field public static final String EXTRA_CREATE_CREDENTIAL_RESPONSE = "android.service.credentials.extra.CREATE_CREDENTIAL_RESPONSE";
-    field public static final String EXTRA_CREDENTIALS_RESPONSE_CONTENT = "android.service.credentials.extra.CREDENTIALS_RESPONSE_CONTENT";
     field public static final String EXTRA_GET_CREDENTIAL_EXCEPTION = "android.service.credentials.extra.GET_CREDENTIAL_EXCEPTION";
     field public static final String EXTRA_GET_CREDENTIAL_REQUEST = "android.service.credentials.extra.GET_CREDENTIAL_REQUEST";
     field public static final String EXTRA_GET_CREDENTIAL_RESPONSE = "android.service.credentials.extra.GET_CREDENTIAL_RESPONSE";
     field public static final String SERVICE_INTERFACE = "android.service.credentials.CredentialProviderService";
-  }
-
-  public final class CredentialsResponseContent implements android.os.Parcelable {
-    method public int describeContents();
-    method @NonNull public java.util.List<android.service.credentials.Action> getActions();
-    method @NonNull public java.util.List<android.service.credentials.CredentialEntry> getCredentialEntries();
-    method @Nullable public android.service.credentials.CredentialEntry getRemoteCredentialEntry();
-    method public void writeToParcel(@NonNull android.os.Parcel, int);
-    field @NonNull public static final android.os.Parcelable.Creator<android.service.credentials.CredentialsResponseContent> CREATOR;
-  }
-
-  public static final class CredentialsResponseContent.Builder {
-    ctor public CredentialsResponseContent.Builder();
-    method @NonNull public android.service.credentials.CredentialsResponseContent.Builder addAction(@NonNull android.service.credentials.Action);
-    method @NonNull public android.service.credentials.CredentialsResponseContent.Builder addCredentialEntry(@NonNull android.service.credentials.CredentialEntry);
-    method @NonNull public android.service.credentials.CredentialsResponseContent build();
-    method @NonNull public android.service.credentials.CredentialsResponseContent.Builder setActions(@NonNull java.util.List<android.service.credentials.Action>);
-    method @NonNull public android.service.credentials.CredentialsResponseContent.Builder setCredentialEntries(@NonNull java.util.List<android.service.credentials.CredentialEntry>);
-    method @NonNull public android.service.credentials.CredentialsResponseContent.Builder setRemoteCredentialEntry(@Nullable android.service.credentials.CredentialEntry);
   }
 
   public final class GetCredentialRequest implements android.os.Parcelable {
@@ -40777,12 +40793,12 @@ package android.service.quickaccesswallet {
     method @Nullable public CharSequence getCardLabel();
     method @NonNull public int getCardType();
     method @NonNull public CharSequence getContentDescription();
+    method @Nullable public android.graphics.drawable.Icon getNonPaymentCardSecondaryImage();
     method @NonNull public android.app.PendingIntent getPendingIntent();
-    method @Nullable public android.graphics.drawable.Icon getValuableCardSecondaryImage();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field public static final int CARD_TYPE_NON_PAYMENT = 2; // 0x2
     field public static final int CARD_TYPE_PAYMENT = 1; // 0x1
     field public static final int CARD_TYPE_UNKNOWN = 0; // 0x0
-    field public static final int CARD_TYPE_VALUABLE = 2; // 0x2
     field @NonNull public static final android.os.Parcelable.Creator<android.service.quickaccesswallet.WalletCard> CREATOR;
   }
 
@@ -40792,7 +40808,7 @@ package android.service.quickaccesswallet {
     method @NonNull public android.service.quickaccesswallet.WalletCard build();
     method @NonNull public android.service.quickaccesswallet.WalletCard.Builder setCardIcon(@Nullable android.graphics.drawable.Icon);
     method @NonNull public android.service.quickaccesswallet.WalletCard.Builder setCardLabel(@Nullable CharSequence);
-    method @NonNull public android.service.quickaccesswallet.WalletCard.Builder setValuableCardSecondaryImage(@Nullable android.graphics.drawable.Icon);
+    method @NonNull public android.service.quickaccesswallet.WalletCard.Builder setNonPaymentCardSecondaryImage(@Nullable android.graphics.drawable.Icon);
   }
 
   public final class WalletServiceEvent implements android.os.Parcelable {
