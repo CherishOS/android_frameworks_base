@@ -7783,7 +7783,8 @@ package android.app.admin {
     method public void addPersistentPreferredActivity(@NonNull android.content.ComponentName, android.content.IntentFilter, @NonNull android.content.ComponentName);
     method public void addUserRestriction(@NonNull android.content.ComponentName, String);
     method public void addUserRestrictionGlobally(@NonNull String);
-    method public boolean bindDeviceAdminServiceAsUser(@NonNull android.content.ComponentName, android.content.Intent, @NonNull android.content.ServiceConnection, int, @NonNull android.os.UserHandle);
+    method public boolean bindDeviceAdminServiceAsUser(@NonNull android.content.ComponentName, @NonNull android.content.Intent, @NonNull android.content.ServiceConnection, int, @NonNull android.os.UserHandle);
+    method public boolean bindDeviceAdminServiceAsUser(@NonNull android.content.ComponentName, @NonNull android.content.Intent, @NonNull android.content.ServiceConnection, @NonNull android.content.Context.BindServiceFlags, @NonNull android.os.UserHandle);
     method public boolean canAdminGrantSensorsPermissions();
     method public boolean canUsbDataSignalingBeDisabled();
     method public void clearApplicationUserData(@NonNull android.content.ComponentName, @NonNull String, @NonNull java.util.concurrent.Executor, @NonNull android.app.admin.DevicePolicyManager.OnClearApplicationUserDataListener);
@@ -10211,9 +10212,13 @@ package android.content {
   public abstract class Context {
     ctor public Context();
     method public boolean bindIsolatedService(@NonNull @RequiresPermission android.content.Intent, int, @NonNull String, @NonNull java.util.concurrent.Executor, @NonNull android.content.ServiceConnection);
-    method public abstract boolean bindService(@RequiresPermission android.content.Intent, @NonNull android.content.ServiceConnection, int);
+    method public boolean bindIsolatedService(@NonNull @RequiresPermission android.content.Intent, @NonNull android.content.Context.BindServiceFlags, @NonNull String, @NonNull java.util.concurrent.Executor, @NonNull android.content.ServiceConnection);
+    method public abstract boolean bindService(@NonNull @RequiresPermission android.content.Intent, @NonNull android.content.ServiceConnection, int);
+    method public boolean bindService(@NonNull @RequiresPermission android.content.Intent, @NonNull android.content.ServiceConnection, @NonNull android.content.Context.BindServiceFlags);
     method public boolean bindService(@NonNull @RequiresPermission android.content.Intent, int, @NonNull java.util.concurrent.Executor, @NonNull android.content.ServiceConnection);
+    method public boolean bindService(@NonNull @RequiresPermission android.content.Intent, @NonNull android.content.Context.BindServiceFlags, @NonNull java.util.concurrent.Executor, @NonNull android.content.ServiceConnection);
     method @RequiresPermission(anyOf={"android.permission.INTERACT_ACROSS_USERS", "android.permission.INTERACT_ACROSS_USERS_FULL", android.Manifest.permission.INTERACT_ACROSS_PROFILES}, conditional=true) public boolean bindServiceAsUser(@NonNull @RequiresPermission android.content.Intent, @NonNull android.content.ServiceConnection, int, @NonNull android.os.UserHandle);
+    method @RequiresPermission(anyOf={"android.permission.INTERACT_ACROSS_USERS", "android.permission.INTERACT_ACROSS_USERS_FULL", android.Manifest.permission.INTERACT_ACROSS_PROFILES}, conditional=true) public boolean bindServiceAsUser(@NonNull @RequiresPermission android.content.Intent, @NonNull android.content.ServiceConnection, @NonNull android.content.Context.BindServiceFlags, @NonNull android.os.UserHandle);
     method @CheckResult(suggest="#enforceCallingOrSelfPermission(String,String)") public abstract int checkCallingOrSelfPermission(@NonNull String);
     method @CheckResult(suggest="#enforceCallingOrSelfUriPermission(Uri,int,String)") public abstract int checkCallingOrSelfUriPermission(android.net.Uri, int);
     method @NonNull public int[] checkCallingOrSelfUriPermissions(@NonNull java.util.List<android.net.Uri>, int);
@@ -10374,6 +10379,7 @@ package android.content {
     field public static final int BIND_AUTO_CREATE = 1; // 0x1
     field public static final int BIND_DEBUG_UNBIND = 2; // 0x2
     field public static final int BIND_EXTERNAL_SERVICE = -2147483648; // 0x80000000
+    field public static final long BIND_EXTERNAL_SERVICE_LONG = -9223372036854775808L; // 0x8000000000000000L
     field public static final int BIND_IMPORTANT = 64; // 0x40
     field public static final int BIND_INCLUDE_CAPABILITIES = 4096; // 0x1000
     field public static final int BIND_NOT_FOREGROUND = 4; // 0x4
@@ -10476,6 +10482,11 @@ package android.content {
     field public static final String WIFI_RTT_RANGING_SERVICE = "wifirtt";
     field public static final String WIFI_SERVICE = "wifi";
     field @UiContext public static final String WINDOW_SERVICE = "window";
+  }
+
+  public static final class Context.BindServiceFlags {
+    method public long getValue();
+    method @NonNull public static android.content.Context.BindServiceFlags of(long);
   }
 
   public final class ContextParams {
