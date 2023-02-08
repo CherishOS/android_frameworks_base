@@ -41386,6 +41386,7 @@ package android.speech {
     method public void onEndOfSpeech();
     method public void onError(int);
     method public void onEvent(int, android.os.Bundle);
+    method public default void onLanguageDetection(@NonNull android.os.Bundle);
     method public void onPartialResults(android.os.Bundle);
     method public void onReadyForSpeech(android.os.Bundle);
     method public void onResults(android.os.Bundle);
@@ -41443,6 +41444,7 @@ package android.speech {
     method public void error(int) throws android.os.RemoteException;
     method @NonNull public android.content.AttributionSource getCallingAttributionSource();
     method public int getCallingUid();
+    method public void languageDetection(@NonNull android.os.Bundle);
     method public void partialResults(android.os.Bundle) throws android.os.RemoteException;
     method public void readyForSpeech(android.os.Bundle) throws android.os.RemoteException;
     method public void results(android.os.Bundle) throws android.os.RemoteException;
@@ -41500,10 +41502,14 @@ package android.speech {
     field public static final String EXTRA_CONFIDENCE_SCORES = "android.speech.extra.CONFIDENCE_SCORES";
     field public static final String EXTRA_ENABLE_BIASING_DEVICE_CONTEXT = "android.speech.extra.ENABLE_BIASING_DEVICE_CONTEXT";
     field public static final String EXTRA_ENABLE_FORMATTING = "android.speech.extra.ENABLE_FORMATTING";
+    field public static final String EXTRA_ENABLE_LANGUAGE_DETECTION = "android.speech.extra.ENABLE_LANGUAGE_DETECTION";
+    field public static final String EXTRA_ENABLE_LANGUAGE_SWITCH = "android.speech.extra.ENABLE_LANGUAGE_SWITCH";
     field public static final String EXTRA_HIDE_PARTIAL_TRAILING_PUNCTUATION = "android.speech.extra.HIDE_PARTIAL_TRAILING_PUNCTUATION";
     field public static final String EXTRA_LANGUAGE = "android.speech.extra.LANGUAGE";
+    field public static final String EXTRA_LANGUAGE_DETECTION_ALLOWED_LANGUAGES = "android.speech.extra.LANGUAGE_DETECTION_ALLOWED_LANGUAGES";
     field public static final String EXTRA_LANGUAGE_MODEL = "android.speech.extra.LANGUAGE_MODEL";
     field public static final String EXTRA_LANGUAGE_PREFERENCE = "android.speech.extra.LANGUAGE_PREFERENCE";
+    field public static final String EXTRA_LANGUAGE_SWITCH_ALLOWED_LANGUAGES = "android.speech.extra.LANGUAGE_SWITCH_ALLOWED_LANGUAGES";
     field public static final String EXTRA_MASK_OFFENSIVE_WORDS = "android.speech.extra.MASK_OFFENSIVE_WORDS";
     field public static final String EXTRA_MAX_RESULTS = "android.speech.extra.MAX_RESULTS";
     field public static final String EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE = "android.speech.extra.ONLY_RETURN_LANGUAGE_PREFERENCE";
@@ -41527,6 +41533,9 @@ package android.speech {
     field public static final String FORMATTING_OPTIMIZE_QUALITY = "quality";
     field public static final String LANGUAGE_MODEL_FREE_FORM = "free_form";
     field public static final String LANGUAGE_MODEL_WEB_SEARCH = "web_search";
+    field public static final String LANGUAGE_SWITCH_BALANCED = "balanced";
+    field public static final String LANGUAGE_SWITCH_HIGH_PRECISION = "high_precision";
+    field public static final String LANGUAGE_SWITCH_QUICK_RESPONSE = "quick_response";
     field public static final int RESULT_AUDIO_ERROR = 5; // 0x5
     field public static final int RESULT_CLIENT_ERROR = 2; // 0x2
     field public static final int RESULT_NETWORK_ERROR = 4; // 0x4
@@ -41560,6 +41569,7 @@ package android.speech {
     method @MainThread public void stopListening();
     method public void triggerModelDownload(@NonNull android.content.Intent);
     field public static final String CONFIDENCE_SCORES = "confidence_scores";
+    field public static final String DETECTED_LANGUAGE = "detected_language";
     field public static final int ERROR_AUDIO = 3; // 0x3
     field public static final int ERROR_CANNOT_CHECK_SUPPORT = 14; // 0xe
     field public static final int ERROR_CANNOT_LISTEN_TO_DOWNLOAD_EVENTS = 15; // 0xf
@@ -41575,9 +41585,20 @@ package android.speech {
     field public static final int ERROR_SERVER_DISCONNECTED = 11; // 0xb
     field public static final int ERROR_SPEECH_TIMEOUT = 6; // 0x6
     field public static final int ERROR_TOO_MANY_REQUESTS = 10; // 0xa
+    field public static final String LANGUAGE_DETECTION_CONFIDENCE_LEVEL = "language_detection_confidence_level";
+    field public static final int LANGUAGE_DETECTION_CONFIDENCE_LEVEL_CONFIDENT = 2; // 0x2
+    field public static final int LANGUAGE_DETECTION_CONFIDENCE_LEVEL_HIGHLY_CONFIDENT = 3; // 0x3
+    field public static final int LANGUAGE_DETECTION_CONFIDENCE_LEVEL_NOT_CONFIDENT = 1; // 0x1
+    field public static final int LANGUAGE_DETECTION_CONFIDENCE_LEVEL_UNKNOWN = 0; // 0x0
+    field public static final String LANGUAGE_SWITCH_RESULT = "language_switch_result";
+    field public static final int LANGUAGE_SWITCH_RESULT_FAILED = 2; // 0x2
+    field public static final int LANGUAGE_SWITCH_RESULT_NOT_ATTEMPTED = 0; // 0x0
+    field public static final int LANGUAGE_SWITCH_RESULT_SKIPPED_NO_MODEL = 3; // 0x3
+    field public static final int LANGUAGE_SWITCH_RESULT_SUCCEEDED = 1; // 0x1
     field public static final String RECOGNITION_PARTS = "recognition_parts";
     field public static final String RESULTS_ALTERNATIVES = "results_alternatives";
     field public static final String RESULTS_RECOGNITION = "results_recognition";
+    field public static final String TOP_LOCALE_ALTERNATIVES = "top_locale_alternatives";
   }
 
 }
