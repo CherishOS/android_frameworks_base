@@ -40,6 +40,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class PixelPropsUtils {
 
@@ -54,6 +56,9 @@ public class PixelPropsUtils {
 
     private static final String TAG = PixelPropsUtils.class.getSimpleName();
     private static final boolean DEBUG = false;
+
+    private static final String[] sCertifiedProps =
+            Resources.getSystem().getStringArray(R.array.config_certifiedBuildProperties);
 
     private static final Boolean sEnablePixelProps =
             Resources.getSystem().getBoolean(R.bool.config_enablePixelProps);
@@ -161,6 +166,24 @@ public class PixelPropsUtils {
         propsToChangeMeizu.put("MODEL", "meizu 16th Plus");
     }
 
+    private static String getBuildID(String fingerprint) {
+        Pattern pattern = Pattern.compile("([A-Za-z0-9]+\\.\\d+\\.\\d+\\.\\w+)");
+        Matcher matcher = pattern.matcher(fingerprint);
+
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return "";
+    }
+
+    private static String getDeviceName(String fingerprint) {
+        String[] parts = fingerprint.split("/");
+        if (parts.length >= 2) {
+            return parts[1];
+        }
+        return "";
+    }
+
     private static boolean isGoogleCameraPackage(String packageName){
         return packageName.startsWith("com.google.android.GoogleCamera") ||
             Arrays.asList(customGoogleCameraPackages).contains(packageName);
@@ -190,12 +213,17 @@ public class PixelPropsUtils {
     }
 
     private static void spoofBuildGms() {
-        // Alter build parameters to Nokia 8 for avoiding hardware attestation enforcement
-        setPropValue("DEVICE", "NB1");
-        setPropValue("FINGERPRINT", "Nokia/TA-1004_00WW/NB1:8.1.0/OPR1.170623.026/00WW_4_88B:user/release-keys");
-        setPropValue("MODEL", "Nokia 8");
-        setPropValue("PRODUCT", "NB1");
-        setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.O_MR1);
+        if (sCertifiedProps == null || sCertifiedProps.length == 0) return;
+        // Alter build parameters to avoid hardware attestation enforcement
+        setPropValue("BRAND", sCertifiedProps[0]);
+        setPropValue("MANUFACTURER", sCertifiedProps[1]);
+        setPropValue("ID", sCertifiedProps[2].isEmpty() ? getBuildID(sCertifiedProps[6]) : sCertifiedProps[2]);
+        setPropValue("DEVICE", sCertifiedProps[3].isEmpty() ? getDeviceName(sCertifiedProps[6]) : sCertifiedProps[3]);
+        setPropValue("PRODUCT", sCertifiedProps[4].isEmpty() ? getDeviceName(sCertifiedProps[6]) : sCertifiedProps[4]);
+        setPropValue("MODEL", sCertifiedProps[5]);
+        setPropValue("FINGERPRINT", sCertifiedProps[6]);
+        setPropValue("TYPE", sCertifiedProps[7].isEmpty() ? "user" : sCertifiedProps[7]);
+        setPropValue("TAGS", sCertifiedProps[8].isEmpty() ? "release-keys" : sCertifiedProps[8]);
     }
 
     public static void setProps(Context context) {
