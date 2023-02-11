@@ -210,7 +210,7 @@ package android {
     field public static final String REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE = "android.permission.REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE";
     field public static final String REQUEST_PASSWORD_COMPLEXITY = "android.permission.REQUEST_PASSWORD_COMPLEXITY";
     field @Deprecated public static final String RESTART_PACKAGES = "android.permission.RESTART_PACKAGES";
-    field public static final String RUN_LONG_JOBS = "android.permission.RUN_LONG_JOBS";
+    field public static final String RUN_USER_INITIATED_JOBS = "android.permission.RUN_USER_INITIATED_JOBS";
     field public static final String SCHEDULE_EXACT_ALARM = "android.permission.SCHEDULE_EXACT_ALARM";
     field public static final String SEND_RESPOND_VIA_MESSAGE = "android.permission.SEND_RESPOND_VIA_MESSAGE";
     field public static final String SEND_SMS = "android.permission.SEND_SMS";
@@ -8696,7 +8696,7 @@ package android.app.job {
     method public android.app.job.JobInfo.Builder setTransientExtras(@NonNull android.os.Bundle);
     method public android.app.job.JobInfo.Builder setTriggerContentMaxDelay(long);
     method public android.app.job.JobInfo.Builder setTriggerContentUpdateDelay(long);
-    method @NonNull @RequiresPermission(android.Manifest.permission.RUN_LONG_JOBS) public android.app.job.JobInfo.Builder setUserInitiated(boolean);
+    method @NonNull @RequiresPermission(android.Manifest.permission.RUN_USER_INITIATED_JOBS) public android.app.job.JobInfo.Builder setUserInitiated(boolean);
   }
 
   public static final class JobInfo.TriggerContentUri implements android.os.Parcelable {
@@ -8748,7 +8748,7 @@ package android.app.job {
 
   public abstract class JobScheduler {
     ctor public JobScheduler();
-    method public boolean canRunLongJobs();
+    method public boolean canRunUserInitiatedJobs();
     method public abstract void cancel(int);
     method public abstract void cancelAll();
     method public void cancelInAllNamespaces();
@@ -14912,7 +14912,9 @@ package android.graphics {
   public class BitmapShader extends android.graphics.Shader {
     ctor public BitmapShader(@NonNull android.graphics.Bitmap, @NonNull android.graphics.Shader.TileMode, @NonNull android.graphics.Shader.TileMode);
     method public int getFilterMode();
+    method public int getMaxAnisotropy();
     method public void setFilterMode(int);
+    method public void setMaxAnisotropy(@IntRange(from=1) int);
     field public static final int FILTER_MODE_DEFAULT = 0; // 0x0
     field public static final int FILTER_MODE_LINEAR = 2; // 0x2
     field public static final int FILTER_MODE_NEAREST = 1; // 0x1
@@ -26559,7 +26561,11 @@ package android.media.tv {
 
   public final class TableResponse extends android.media.tv.BroadcastInfoResponse implements android.os.Parcelable {
     ctor public TableResponse(int, int, int, @Nullable android.net.Uri, int, int);
+    ctor public TableResponse(int, int, int, @NonNull byte[], int, int);
+    ctor public TableResponse(int, int, int, @NonNull android.os.SharedMemory, int, int);
     method public int getSize();
+    method @Nullable public byte[] getTableByteArray();
+    method @Nullable public android.os.SharedMemory getTableSharedMemory();
     method @Nullable public android.net.Uri getTableUri();
     method public int getVersion();
     field @NonNull public static final android.os.Parcelable.Creator<android.media.tv.TableResponse> CREATOR;
@@ -26567,7 +26573,9 @@ package android.media.tv {
 
   public final class TimelineRequest extends android.media.tv.BroadcastInfoRequest implements android.os.Parcelable {
     ctor public TimelineRequest(int, int, int);
+    ctor public TimelineRequest(int, int, int, @NonNull String);
     method public int getIntervalMillis();
+    method @Nullable public String getSelector();
     field @NonNull public static final android.os.Parcelable.Creator<android.media.tv.TimelineRequest> CREATOR;
   }
 
@@ -54790,6 +54798,7 @@ package android.view.contentcapture {
     method public final void notifyViewDisappeared(@NonNull android.view.autofill.AutofillId);
     method public final void notifyViewInsetsChanged(@NonNull android.graphics.Insets);
     method public final void notifyViewTextChanged(@NonNull android.view.autofill.AutofillId, @Nullable CharSequence);
+    method public final void notifyViewsAppeared(@NonNull java.util.List<android.view.ViewStructure>);
     method public final void notifyViewsDisappeared(@NonNull android.view.autofill.AutofillId, @NonNull long[]);
     method public final void setContentCaptureContext(@Nullable android.view.contentcapture.ContentCaptureContext);
   }
