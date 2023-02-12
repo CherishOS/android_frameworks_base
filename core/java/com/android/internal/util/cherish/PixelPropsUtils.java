@@ -217,9 +217,13 @@ public class PixelPropsUtils {
         if (isGoogleCameraPackage(packageName)) {
             return;
         }
-        if (packageName.equals("com.google.android.gms")) {
+        if (packageName.equals("com.google.android.gms")
+            || packageName.toLowerCase().contains("androidx.test")
+            || packageName.toLowerCase().equals("com.google.android.apps.restore")) {
             final String processName = Application.getProcessName();
-            if (processName.equals("com.google.android.gms.unstable")) {
+            if (processName.toLowerCase().contains("unstable")
+                || processName.toLowerCase().contains("pixelmigrate")
+                || processName.toLowerCase().contains("instrumentation")) {
                 sIsGms = true;
                 setPropValue("FINGERPRINT", "google/walleye/walleye:8.1.0/OPM1.171019.011/4448085:user/release-keys");
                 setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N_MR1);
