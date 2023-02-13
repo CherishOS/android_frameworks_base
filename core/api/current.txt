@@ -41298,6 +41298,31 @@ package android.speech {
     method public default void onSegmentResults(@NonNull android.os.Bundle);
   }
 
+  public final class RecognitionPart implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getConfidenceLevel();
+    method @Nullable public String getFormattedText();
+    method @NonNull public String getRawText();
+    method public long getTimestampMillis();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field public static final int CONFIDENCE_LEVEL_HIGH = 5; // 0x5
+    field public static final int CONFIDENCE_LEVEL_LOW = 1; // 0x1
+    field public static final int CONFIDENCE_LEVEL_LOW_MEDIUM = 2; // 0x2
+    field public static final int CONFIDENCE_LEVEL_MEDIUM = 3; // 0x3
+    field public static final int CONFIDENCE_LEVEL_MEDIUM_HIGH = 4; // 0x4
+    field public static final int CONFIDENCE_LEVEL_UNKNOWN = 0; // 0x0
+    field @NonNull public static final android.os.Parcelable.Creator<android.speech.RecognitionPart> CREATOR;
+  }
+
+  public static final class RecognitionPart.Builder {
+    ctor public RecognitionPart.Builder(@NonNull String);
+    method @NonNull public android.speech.RecognitionPart build();
+    method @NonNull public android.speech.RecognitionPart.Builder setConfidenceLevel(int);
+    method @NonNull public android.speech.RecognitionPart.Builder setFormattedText(@NonNull String);
+    method @NonNull public android.speech.RecognitionPart.Builder setRawText(@NonNull String);
+    method @NonNull public android.speech.RecognitionPart.Builder setTimestampMillis(long);
+  }
+
   public abstract class RecognitionService extends android.app.Service {
     ctor public RecognitionService();
     method public int getMaxConcurrentSessionsCount();
@@ -41387,6 +41412,8 @@ package android.speech {
     field public static final String EXTRA_PARTIAL_RESULTS = "android.speech.extra.PARTIAL_RESULTS";
     field public static final String EXTRA_PREFER_OFFLINE = "android.speech.extra.PREFER_OFFLINE";
     field public static final String EXTRA_PROMPT = "android.speech.extra.PROMPT";
+    field public static final String EXTRA_REQUEST_WORD_CONFIDENCE = "android.speech.extra.REQUEST_WORD_CONFIDENCE";
+    field public static final String EXTRA_REQUEST_WORD_TIMING = "android.speech.extra.REQUEST_WORD_TIMING";
     field public static final String EXTRA_RESULTS = "android.speech.extra.RESULTS";
     field public static final String EXTRA_RESULTS_PENDINGINTENT = "android.speech.extra.RESULTS_PENDINGINTENT";
     field public static final String EXTRA_RESULTS_PENDINGINTENT_BUNDLE = "android.speech.extra.RESULTS_PENDINGINTENT_BUNDLE";
@@ -41446,6 +41473,7 @@ package android.speech {
     field public static final int ERROR_SERVER_DISCONNECTED = 11; // 0xb
     field public static final int ERROR_SPEECH_TIMEOUT = 6; // 0x6
     field public static final int ERROR_TOO_MANY_REQUESTS = 10; // 0xa
+    field public static final String RECOGNITION_PARTS = "recognition_parts";
     field public static final String RESULTS_ALTERNATIVES = "results_alternatives";
     field public static final String RESULTS_RECOGNITION = "results_recognition";
   }
