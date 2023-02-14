@@ -16,16 +16,15 @@
 
 package android.app.admin;
 
-import static android.app.admin.PolicyUpdatesReceiver.EXTRA_INTENT_FILTER;
+import static android.app.admin.PolicyUpdatesReceiver.EXTRA_ACCOUNT_TYPE;
 import static android.app.admin.PolicyUpdatesReceiver.EXTRA_POLICY_BUNDLE_KEY;
+import static android.app.admin.PolicyUpdatesReceiver.EXTRA_POLICY_KEY;
 
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.annotation.SystemApi;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.android.modules.utils.TypedXmlPullParser;
 import com.android.modules.utils.TypedXmlSerializer;
@@ -36,42 +35,44 @@ import java.io.IOException;
 import java.util.Objects;
 
 /**
- * Class used to identify a policy that relates to a certain {@link IntentFilter}
- * (e.g. {@link DevicePolicyManager#addPersistentPreferredActivity}).
+ * Class used to identify a policy that relates to a certain account type
+ * (e.g. {@link DevicePolicyManager#setAccountManagementDisabled}).
  *
  * @hide
  */
 @SystemApi
-public final class IntentFilterPolicyKey extends PolicyKey {
-    private final IntentFilter mFilter;
+public final class AccountTypePolicyKey extends PolicyKey {
+    private static final String ATTR_ACCOUNT_TYPE = "account-type";
+
+    private final String mAccountType;
 
     /**
      * @hide
      */
-    public IntentFilterPolicyKey(@NonNull String identifier, @NonNull IntentFilter filter) {
-        super(identifier);
-        mFilter = Objects.requireNonNull(filter);
+    public AccountTypePolicyKey(@NonNull String key, @NonNull String accountType) {
+        super(key);
+        mAccountType = Objects.requireNonNull((accountType));
     }
 
-    /**
-     * @hide
-     */
-    public IntentFilterPolicyKey(@NonNull String identifier) {
-        super(identifier);
-        mFilter = null;
-    }
-
-    private IntentFilterPolicyKey(Parcel source) {
+    private AccountTypePolicyKey(Parcel source) {
         super(source.readString());
-        mFilter = source.readTypedObject(IntentFilter.CREATOR);
+        mAccountType = source.readString();
     }
 
     /**
-     * Returns the {@link IntentFilter} this policy relates to.
+     * @hide
+     */
+    public AccountTypePolicyKey(String key) {
+        super(key);
+        mAccountType = null;
+    }
+
+    /**
+     * Returns the account type this policy relates to.
      */
     @NonNull
-    public IntentFilter getIntentFilter() {
-        return mFilter;
+    public String getAccountType() {
+        return mAccountType;
     }
 
     /**
@@ -80,19 +81,19 @@ public final class IntentFilterPolicyKey extends PolicyKey {
     @Override
     public void saveToXml(TypedXmlSerializer serializer) throws IOException {
         serializer.attribute(/* namespace= */ null, ATTR_POLICY_IDENTIFIER, getIdentifier());
-        mFilter.writeToXml(serializer);
+        serializer.attribute(/* namespace= */ null, ATTR_ACCOUNT_TYPE, mAccountType);
     }
 
     /**
      * @hide
      */
     @Override
-    public IntentFilterPolicyKey readFromXml(TypedXmlPullParser parser)
+    public AccountTypePolicyKey readFromXml(TypedXmlPullParser parser)
             throws XmlPullParserException, IOException {
-        String identifier = parser.getAttributeValue(/* namespace= */ null, ATTR_POLICY_IDENTIFIER);
-        IntentFilter filter = new IntentFilter();
-        filter.readFromXml(parser);
-        return new IntentFilterPolicyKey(identifier, filter);
+        String policyKey = parser.getAttributeValue(/* namespace= */ null,
+                ATTR_POLICY_IDENTIFIER);
+        String accountType = parser.getAttributeValue(/* namespace= */ null, ATTR_ACCOUNT_TYPE);
+        return new AccountTypePolicyKey(policyKey, accountType);
     }
 
     /**
@@ -100,9 +101,9 @@ public final class IntentFilterPolicyKey extends PolicyKey {
      */
     @Override
     public void writeToBundle(Bundle bundle) {
-        super.writeToBundle(bundle);
+        bundle.putString(EXTRA_POLICY_KEY, getIdentifier());
         Bundle extraPolicyParams = new Bundle();
-        extraPolicyParams.putParcelable(EXTRA_INTENT_FILTER, mFilter);
+        extraPolicyParams.putString(EXTRA_ACCOUNT_TYPE, mAccountType);
         bundle.putBundle(EXTRA_POLICY_BUNDLE_KEY, extraPolicyParams);
     }
 
@@ -110,19 +111,20 @@ public final class IntentFilterPolicyKey extends PolicyKey {
     public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        IntentFilterPolicyKey other = (IntentFilterPolicyKey) o;
+        AccountTypePolicyKey other = (AccountTypePolicyKey) o;
         return Objects.equals(getIdentifier(), other.getIdentifier())
-                && IntentFilter.filterEquals(mFilter, other.mFilter);
+                && Objects.equals(mAccountType, other.mAccountType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getIdentifier());
+        return Objects.hash(getIdentifier(), mAccountType);
     }
 
     @Override
     public String toString() {
-        return "IntentFilterPolicyKey{mKey= " + getIdentifier() + "; mFilter= " + mFilter + "}";
+        return "AccountTypePolicyKey{mPolicyKey= " + getIdentifier()
+                + "; mAccountType= " + mAccountType + "}";
     }
 
     @Override
@@ -133,20 +135,20 @@ public final class IntentFilterPolicyKey extends PolicyKey {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(getIdentifier());
-        dest.writeTypedObject(mFilter, flags);
+        dest.writeString(mAccountType);
     }
 
     @NonNull
-    public static final Parcelable.Creator<IntentFilterPolicyKey> CREATOR =
-            new Parcelable.Creator<IntentFilterPolicyKey>() {
+    public static final Creator<AccountTypePolicyKey> CREATOR =
+            new Creator<AccountTypePolicyKey>() {
                 @Override
-                public IntentFilterPolicyKey createFromParcel(Parcel source) {
-                    return new IntentFilterPolicyKey(source);
+                public AccountTypePolicyKey createFromParcel(Parcel source) {
+                    return new AccountTypePolicyKey(source);
                 }
 
                 @Override
-                public IntentFilterPolicyKey[] newArray(int size) {
-                    return new IntentFilterPolicyKey[size];
+                public AccountTypePolicyKey[] newArray(int size) {
+                    return new AccountTypePolicyKey[size];
                 }
             };
 }
