@@ -27387,6 +27387,7 @@ package android.media.tv {
     method public void resumeRecording();
     method public void resumeRecording(@NonNull android.os.Bundle);
     method public void sendAppPrivateCommand(@NonNull String, android.os.Bundle);
+    method public void setTvInteractiveAppView(@Nullable android.media.tv.interactive.TvInteractiveAppView, @Nullable String);
     method public void startRecording(@Nullable android.net.Uri);
     method public void startRecording(@Nullable android.net.Uri, @NonNull android.os.Bundle);
     method public void stopRecording();
@@ -27675,8 +27676,13 @@ package android.media.tv.interactive {
     method public boolean onKeyMultiple(int, int, @NonNull android.view.KeyEvent);
     method public boolean onKeyUp(int, @NonNull android.view.KeyEvent);
     method public void onMediaViewSizeChanged(@Px int, @Px int);
-    method public void onRecordingStarted(@NonNull String);
+    method public void onRecordingConnectionFailed(@NonNull String, @NonNull String);
+    method public void onRecordingDisconnected(@NonNull String, @NonNull String);
+    method public void onRecordingError(@NonNull String, int);
+    method public void onRecordingScheduled(@NonNull String, @Nullable String);
+    method public void onRecordingStarted(@NonNull String, @Nullable String);
     method public void onRecordingStopped(@NonNull String);
+    method public void onRecordingTuned(@NonNull String, @NonNull android.net.Uri);
     method public abstract void onRelease();
     method public void onResetInteractiveApp();
     method public abstract boolean onSetSurface(@Nullable android.view.Surface);
@@ -27711,8 +27717,10 @@ package android.media.tv.interactive {
     method @CallSuper public void requestCurrentChannelUri();
     method @CallSuper public void requestCurrentTvInputId();
     method @CallSuper public void requestCurrentVideoBounds();
+    method @CallSuper public void requestScheduleRecording(@NonNull String, @NonNull String, @NonNull android.net.Uri, @NonNull android.net.Uri, @NonNull android.os.Bundle);
+    method @CallSuper public void requestScheduleRecording(@NonNull String, @NonNull String, @NonNull android.net.Uri, long, long, int, @NonNull android.os.Bundle);
     method @CallSuper public void requestSigning(@NonNull String, @NonNull String, @NonNull String, @NonNull byte[]);
-    method @CallSuper public void requestStartRecording(@Nullable android.net.Uri);
+    method @CallSuper public void requestStartRecording(@NonNull String, @Nullable android.net.Uri);
     method @CallSuper public void requestStopRecording(@NonNull String);
     method @CallSuper public void requestStreamVolume();
     method @CallSuper public void requestTimeShiftMode();
@@ -27753,7 +27761,8 @@ package android.media.tv.interactive {
     method public boolean dispatchUnhandledInputEvent(@NonNull android.view.InputEvent);
     method @Nullable public android.media.tv.interactive.TvInteractiveAppView.OnUnhandledInputEventListener getOnUnhandledInputEventListener();
     method public void notifyError(@NonNull String, @NonNull android.os.Bundle);
-    method public void notifyRecordingStarted(@NonNull String);
+    method public void notifyRecordingScheduled(@NonNull String, @Nullable String);
+    method public void notifyRecordingStarted(@NonNull String, @Nullable String);
     method public void notifyRecordingStopped(@NonNull String);
     method public void notifyTimeShiftCurrentPositionChanged(@NonNull String, long);
     method public void notifyTimeShiftPlaybackParams(@NonNull android.media.PlaybackParams);
@@ -27807,8 +27816,10 @@ package android.media.tv.interactive {
     method public void onRequestCurrentChannelUri(@NonNull String);
     method public void onRequestCurrentTvInputId(@NonNull String);
     method public void onRequestCurrentVideoBounds(@NonNull String);
+    method public void onRequestScheduleRecording(@NonNull String, @NonNull String, @NonNull String, @NonNull android.net.Uri, @NonNull android.net.Uri, @NonNull android.os.Bundle);
+    method public void onRequestScheduleRecording(@NonNull String, @NonNull String, @NonNull String, @NonNull android.net.Uri, long, long, int, @NonNull android.os.Bundle);
     method public void onRequestSigning(@NonNull String, @NonNull String, @NonNull String, @NonNull String, @NonNull byte[]);
-    method public void onRequestStartRecording(@NonNull String, @Nullable android.net.Uri);
+    method public void onRequestStartRecording(@NonNull String, @NonNull String, @Nullable android.net.Uri);
     method public void onRequestStopRecording(@NonNull String, @NonNull String);
     method public void onRequestStreamVolume(@NonNull String);
     method public void onRequestTimeShiftMode(@NonNull String);
