@@ -4319,6 +4319,7 @@ package android.app {
   @UiContext public class Activity extends android.view.ContextThemeWrapper implements android.content.ComponentCallbacks2 android.view.KeyEvent.Callback android.view.LayoutInflater.Factory2 android.view.View.OnCreateContextMenuListener android.view.Window.Callback {
     ctor public Activity();
     method public void addContentView(android.view.View, android.view.ViewGroup.LayoutParams);
+    method public void clearOverrideActivityTransition(int);
     method public void closeContextMenu();
     method public void closeOptionsMenu();
     method public android.app.PendingIntent createPendingResult(int, @NonNull android.content.Intent, int);
@@ -4487,6 +4488,8 @@ package android.app {
     method @Nullable public android.view.ActionMode onWindowStartingActionMode(android.view.ActionMode.Callback, int);
     method public void openContextMenu(android.view.View);
     method public void openOptionsMenu();
+    method public void overrideActivityTransition(int, @AnimRes int, @AnimRes int);
+    method public void overrideActivityTransition(int, @AnimRes int, @AnimRes int, @ColorInt int);
     method public void overridePendingTransition(int, int);
     method public void overridePendingTransition(int, int, int);
     method public void postponeEnterTransition();
@@ -4588,6 +4591,8 @@ package android.app {
     field protected static final int[] FOCUSED_STATE_SET;
     field public static final int FULLSCREEN_MODE_REQUEST_ENTER = 1; // 0x1
     field public static final int FULLSCREEN_MODE_REQUEST_EXIT = 0; // 0x0
+    field public static final int OVERRIDE_TRANSITION_CLOSE = 1; // 0x1
+    field public static final int OVERRIDE_TRANSITION_OPEN = 0; // 0x0
     field public static final int RESULT_CANCELED = 0; // 0x0
     field public static final int RESULT_FIRST_USER = 1; // 0x1
     field public static final int RESULT_OK = -1; // 0xffffffff
@@ -4614,6 +4619,7 @@ package android.app {
     method public java.util.List<android.app.ActivityManager.AppTask> getAppTasks();
     method public android.content.pm.ConfigurationInfo getDeviceConfigurationInfo();
     method @NonNull public java.util.List<android.app.ApplicationExitInfo> getHistoricalProcessExitReasons(@Nullable String, @IntRange(from=0) int, @IntRange(from=0) int);
+    method @NonNull public java.util.List<android.app.ApplicationStartInfo> getHistoricalProcessStartReasons(@IntRange(from=0) int);
     method public int getLargeMemoryClass();
     method public int getLauncherLargeIconDensity();
     method public int getLauncherLargeIconSize();
@@ -4639,7 +4645,9 @@ package android.app {
     method @RequiresPermission(android.Manifest.permission.KILL_BACKGROUND_PROCESSES) public void killBackgroundProcesses(String);
     method @RequiresPermission(android.Manifest.permission.REORDER_TASKS) public void moveTaskToFront(int, int);
     method @RequiresPermission(android.Manifest.permission.REORDER_TASKS) public void moveTaskToFront(int, int, android.os.Bundle);
+    method public void removeApplicationStartInfoCompleteListener();
     method @Deprecated public void restartPackage(String);
+    method public void setApplicationStartInfoCompleteListener(@NonNull java.util.concurrent.Executor, @NonNull android.app.ActivityManager.ApplicationStartInfoCompleteListener);
     method public void setProcessStateSummary(@Nullable byte[]);
     method public static void setVrThread(int);
     method public void setWatchHeapLimit(long);
@@ -4660,6 +4668,10 @@ package android.app {
     method public void moveToFront();
     method public void setExcludeFromRecents(boolean);
     method public void startActivity(android.content.Context, android.content.Intent, android.os.Bundle);
+  }
+
+  public static interface ActivityManager.ApplicationStartInfoCompleteListener {
+    method public void onApplicationStartInfoComplete(@NonNull android.app.ApplicationStartInfo);
   }
 
   public static class ActivityManager.MemoryInfo implements android.os.Parcelable {
@@ -5219,6 +5231,52 @@ package android.app {
     field public static final int REASON_UNKNOWN = 0; // 0x0
     field public static final int REASON_USER_REQUESTED = 10; // 0xa
     field public static final int REASON_USER_STOPPED = 11; // 0xb
+  }
+
+  public final class ApplicationStartInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getDefiningUid();
+    method @Nullable public android.content.Intent getIntent();
+    method public int getLaunchMode();
+    method public int getPackageUid();
+    method public int getPid();
+    method @NonNull public String getProcessName();
+    method public int getRealUid();
+    method public int getReason();
+    method public int getStartType();
+    method public int getStartupState();
+    method @NonNull public java.util.Map<java.lang.Integer,java.lang.Long> getStartupTimestamps();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.app.ApplicationStartInfo> CREATOR;
+    field public static final int LAUNCH_MODE_SINGLE_INSTANCE = 2; // 0x2
+    field public static final int LAUNCH_MODE_SINGLE_INSTANCE_PER_TASK = 4; // 0x4
+    field public static final int LAUNCH_MODE_SINGLE_TASK = 3; // 0x3
+    field public static final int LAUNCH_MODE_SINGLE_TOP = 1; // 0x1
+    field public static final int LAUNCH_MODE_STANDARD = 0; // 0x0
+    field public static final int STARTUP_STATE_ERROR = 1; // 0x1
+    field public static final int STARTUP_STATE_FIRST_FRAME_DRAWN = 2; // 0x2
+    field public static final int STARTUP_STATE_STARTED = 0; // 0x0
+    field public static final int START_REASON_ALARM = 0; // 0x0
+    field public static final int START_REASON_BACKUP = 1; // 0x1
+    field public static final int START_REASON_BOOT_COMPLETE = 2; // 0x2
+    field public static final int START_REASON_BROADCAST = 3; // 0x3
+    field public static final int START_REASON_CONTENT_PROVIDER = 4; // 0x4
+    field public static final int START_REASON_JOB = 5; // 0x5
+    field public static final int START_REASON_LAUNCHER = 6; // 0x6
+    field public static final int START_REASON_OTHER = 7; // 0x7
+    field public static final int START_REASON_PUSH = 8; // 0x8
+    field public static final int START_REASON_RESUMED_ACTIVITY = 9; // 0x9
+    field public static final int START_REASON_SERVICE = 10; // 0xa
+    field public static final int START_REASON_START_ACTIVITY = 11; // 0xb
+    field public static final int START_TIMESTAMP_APPLICATION_ONCREATE = 2; // 0x2
+    field public static final int START_TIMESTAMP_BIND_APPLICATION = 3; // 0x3
+    field public static final int START_TIMESTAMP_FIRST_FRAME = 4; // 0x4
+    field public static final int START_TIMESTAMP_FULLY_DRAWN = 5; // 0x5
+    field public static final int START_TIMESTAMP_JAVA_CLASSLOADING_COMPLETE = 1; // 0x1
+    field public static final int START_TIMESTAMP_LAUNCH = 0; // 0x0
+    field public static final int START_TYPE_COLD = 0; // 0x0
+    field public static final int START_TYPE_HOT = 2; // 0x2
+    field public static final int START_TYPE_WARM = 1; // 0x1
   }
 
   public final class AsyncNotedAppOp implements android.os.Parcelable {
@@ -7697,6 +7755,26 @@ package android.app.admin {
     method public final android.os.IBinder onBind(android.content.Intent);
   }
 
+  public final class DevicePolicyIdentifiers {
+    method @NonNull public static String getIdentifierForUserRestriction(@NonNull String);
+    field public static final String ACCOUNT_MANAGEMENT_DISABLED_POLICY = "accountManagementDisabled";
+    field public static final String APPLICATION_HIDDEN_POLICY = "applicationHidden";
+    field public static final String APPLICATION_RESTRICTIONS_POLICY = "applicationRestrictions";
+    field public static final String AUTO_TIMEZONE_POLICY = "autoTimezone";
+    field public static final String AUTO_TIME_POLICY = "autoTime";
+    field public static final String BACKUP_SERVICE_POLICY = "backupService";
+    field public static final String CAMERA_DISABLED_POLICY = "cameraDisabled";
+    field public static final String KEYGUARD_DISABLED_FEATURES_POLICY = "keyguardDisabledFeatures";
+    field public static final String LOCK_TASK_POLICY = "lockTask";
+    field public static final String PACKAGES_SUSPENDED_POLICY = "packagesSuspended";
+    field public static final String PACKAGE_UNINSTALL_BLOCKED_POLICY = "packageUninstallBlocked";
+    field public static final String PERMISSION_GRANT_POLICY = "permissionGrant";
+    field public static final String PERSISTENT_PREFERRED_ACTIVITY_POLICY = "persistentPreferredActivity";
+    field public static final String RESET_PASSWORD_TOKEN_POLICY = "resetPasswordToken";
+    field public static final String STATUS_BAR_DISABLED_POLICY = "statusBarDisabled";
+    field public static final String USER_CONTROL_DISABLED_PACKAGES_POLICY = "userControlDisabledPackages";
+  }
+
   public class DevicePolicyManager {
     method public void acknowledgeDeviceCompliant();
     method public void addCrossProfileIntentFilter(@NonNull android.content.ComponentName, android.content.IntentFilter, int);
@@ -7704,6 +7782,7 @@ package android.app.admin {
     method public int addOverrideApn(@NonNull android.content.ComponentName, @NonNull android.telephony.data.ApnSetting);
     method public void addPersistentPreferredActivity(@NonNull android.content.ComponentName, android.content.IntentFilter, @NonNull android.content.ComponentName);
     method public void addUserRestriction(@NonNull android.content.ComponentName, String);
+    method public void addUserRestrictionGlobally(@NonNull String);
     method public boolean bindDeviceAdminServiceAsUser(@NonNull android.content.ComponentName, android.content.Intent, @NonNull android.content.ServiceConnection, int, @NonNull android.os.UserHandle);
     method public boolean canAdminGrantSensorsPermissions();
     method public boolean canUsbDataSignalingBeDisabled();
@@ -7806,6 +7885,7 @@ package android.app.admin {
     method @Nullable public java.util.List<android.os.PersistableBundle> getTrustAgentConfiguration(@Nullable android.content.ComponentName, @NonNull android.content.ComponentName);
     method @NonNull public java.util.List<java.lang.String> getUserControlDisabledPackages(@NonNull android.content.ComponentName);
     method @NonNull public android.os.Bundle getUserRestrictions(@NonNull android.content.ComponentName);
+    method @NonNull public android.os.Bundle getUserRestrictionsGlobally();
     method @Nullable public String getWifiMacAddress(@NonNull android.content.ComponentName);
     method @Nullable public android.app.admin.WifiSsidPolicy getWifiSsidPolicy();
     method public boolean grantKeyPairToApp(@Nullable android.content.ComponentName, @NonNull String, @NonNull String);
@@ -7848,6 +7928,7 @@ package android.app.admin {
     method public boolean isResetPasswordTokenActive(android.content.ComponentName);
     method public boolean isSafeOperation(int);
     method public boolean isSecurityLoggingEnabled(@Nullable android.content.ComponentName);
+    method public boolean isStatusBarDisabled();
     method public boolean isUninstallBlocked(@Nullable android.content.ComponentName, String);
     method public boolean isUniqueDeviceAttestationSupported();
     method public boolean isUsbDataSignalingEnabled();
@@ -7882,7 +7963,7 @@ package android.app.admin {
     method @RequiresPermission(value=android.Manifest.permission.SET_TIME_ZONE, conditional=true) public void setAutoTimeZoneEnabled(@NonNull android.content.ComponentName, boolean);
     method public void setBackupServiceEnabled(@NonNull android.content.ComponentName, boolean);
     method public void setBluetoothContactSharingDisabled(@NonNull android.content.ComponentName, boolean);
-    method public void setCameraDisabled(@NonNull android.content.ComponentName, boolean);
+    method @RequiresPermission(value=android.Manifest.permission.MANAGE_DEVICE_POLICY_CAMERA, conditional=true) public void setCameraDisabled(@Nullable android.content.ComponentName, boolean);
     method @Deprecated public void setCertInstallerPackage(@NonNull android.content.ComponentName, @Nullable String) throws java.lang.SecurityException;
     method public void setCommonCriteriaModeEnabled(@NonNull android.content.ComponentName, boolean);
     method public void setConfiguredNetworksLockdownState(@NonNull android.content.ComponentName, boolean);
@@ -8088,6 +8169,7 @@ package android.app.admin {
     field @Deprecated public static final int KEYGUARD_DISABLE_REMOTE_INPUT = 64; // 0x40
     field public static final int KEYGUARD_DISABLE_SECURE_CAMERA = 2; // 0x2
     field public static final int KEYGUARD_DISABLE_SECURE_NOTIFICATIONS = 4; // 0x4
+    field public static final int KEYGUARD_DISABLE_SHORTCUTS_ALL = 512; // 0x200
     field public static final int KEYGUARD_DISABLE_TRUST_AGENTS = 16; // 0x10
     field public static final int KEYGUARD_DISABLE_UNREDACTED_NOTIFICATIONS = 8; // 0x8
     field public static final int KEYGUARD_DISABLE_WIDGETS_ALL = 1; // 0x1
@@ -8249,6 +8331,8 @@ package android.app.admin {
     ctor public PolicyUpdateResult(int);
     method public int getResultCode();
     field public static final int RESULT_FAILURE_CONFLICTING_ADMIN_POLICY = 1; // 0x1
+    field public static final int RESULT_FAILURE_HARDWARE_LIMITATION = 4; // 0x4
+    field public static final int RESULT_FAILURE_STORAGE_LIMIT_REACHED = 3; // 0x3
     field public static final int RESULT_FAILURE_UNKNOWN = -1; // 0xffffffff
     field public static final int RESULT_POLICY_CLEARED = 2; // 0x2
     field public static final int RESULT_SUCCESS = 0; // 0x0
@@ -8261,6 +8345,7 @@ package android.app.admin {
     method public final void onReceive(android.content.Context, android.content.Intent);
     field public static final String ACTION_DEVICE_POLICY_CHANGED = "android.app.admin.action.DEVICE_POLICY_CHANGED";
     field public static final String ACTION_DEVICE_POLICY_SET_RESULT = "android.app.admin.action.DEVICE_POLICY_SET_RESULT";
+    field public static final String EXTRA_ACCOUNT_TYPE = "android.app.admin.extra.ACCOUNT_TYPE";
     field public static final String EXTRA_INTENT_FILTER = "android.app.admin.extra.INTENT_FILTER";
     field public static final String EXTRA_PACKAGE_NAME = "android.app.admin.extra.PACKAGE_NAME";
     field public static final String EXTRA_PERMISSION_NAME = "android.app.admin.extra.PERMISSION_NAME";
@@ -9461,10 +9546,10 @@ package android.companion {
     method @Nullable public android.content.IntentSender buildAssociationCancellationIntent();
     method @Nullable public android.content.IntentSender buildPermissionTransferUserConsentIntent(int) throws android.companion.DeviceNotAssociatedException;
     method @RequiresPermission(android.Manifest.permission.DELIVER_COMPANION_MESSAGES) public void detachSystemDataTransport(int) throws android.companion.DeviceNotAssociatedException;
-    method public void disableSystemDataSync(int, int);
+    method public void disableSystemDataSyncForTypes(int, int);
     method @Deprecated public void disassociate(@NonNull String);
     method public void disassociate(int);
-    method public void enableSystemDataSync(int, int);
+    method public void enableSystemDataSyncForTypes(int, int);
     method @Deprecated @NonNull public java.util.List<java.lang.String> getAssociations();
     method @NonNull public java.util.List<android.companion.AssociationInfo> getMyAssociations();
     method @Deprecated public boolean hasNotificationAccess(android.content.ComponentName);
@@ -13530,7 +13615,6 @@ package android.credentials {
 
   public final class CreateCredentialRequest implements android.os.Parcelable {
     ctor public CreateCredentialRequest(@NonNull String, @NonNull android.os.Bundle, @NonNull android.os.Bundle, boolean, boolean);
-    ctor public CreateCredentialRequest(@NonNull String, @NonNull android.os.Bundle, @NonNull android.os.Bundle, boolean);
     method public boolean alwaysSendAppInfoToProvider();
     method public int describeContents();
     method @NonNull public android.os.Bundle getCandidateQueryData();
@@ -14850,6 +14934,7 @@ package android.graphics {
     method @Nullable public android.graphics.ColorSpace getColorSpace();
     method @NonNull public android.graphics.Bitmap.Config getConfig();
     method public int getDensity();
+    method @Nullable public android.graphics.Gainmap getGainmap();
     method public int getGenerationId();
     method @NonNull public android.hardware.HardwareBuffer getHardwareBuffer();
     method public int getHeight();
@@ -14865,6 +14950,7 @@ package android.graphics {
     method public int getScaledWidth(int);
     method public int getWidth();
     method public boolean hasAlpha();
+    method public boolean hasGainmap();
     method public boolean hasMipMap();
     method public boolean isMutable();
     method public boolean isPremultiplied();
@@ -14876,6 +14962,7 @@ package android.graphics {
     method public void setColorSpace(@NonNull android.graphics.ColorSpace);
     method public void setConfig(@NonNull android.graphics.Bitmap.Config);
     method public void setDensity(int);
+    method public void setGainmap(@Nullable android.graphics.Gainmap);
     method public void setHasAlpha(boolean);
     method public void setHasMipMap(boolean);
     method public void setHeight(int);
@@ -15409,6 +15496,26 @@ package android.graphics {
 
   public class EmbossMaskFilter extends android.graphics.MaskFilter {
     ctor @Deprecated public EmbossMaskFilter(float[], float, float, float);
+  }
+
+  public final class Gainmap {
+    ctor public Gainmap(@NonNull android.graphics.Bitmap);
+    method @NonNull public float getDisplayRatioForFullHdr();
+    method @NonNull public float[] getEpsilonHdr();
+    method @NonNull public float[] getEpsilonSdr();
+    method @NonNull public android.graphics.Bitmap getGainmapContents();
+    method @NonNull public float[] getGamma();
+    method @NonNull public float getMinDisplayRatioForHdrTransition();
+    method @NonNull public float[] getRatioMax();
+    method @NonNull public float[] getRatioMin();
+    method @NonNull public void setDisplayRatioForFullHdr(float);
+    method @NonNull public void setEpsilonHdr(float, float, float);
+    method @NonNull public void setEpsilonSdr(float, float, float);
+    method public void setGainmapContents(@NonNull android.graphics.Bitmap);
+    method @NonNull public void setGamma(float, float, float);
+    method @NonNull public void setMinDisplayRatioForHdrTransition(@FloatRange(from=1.0f) float);
+    method @NonNull public void setRatioMax(float, float, float);
+    method @NonNull public void setRatioMin(float, float, float);
   }
 
   public class HardwareBufferRenderer implements java.lang.AutoCloseable {
@@ -22420,6 +22527,7 @@ package android.media {
     field @Deprecated public static final int BUFFER_FLAG_SYNC_FRAME = 1; // 0x1
     field public static final int CONFIGURE_FLAG_ENCODE = 1; // 0x1
     field public static final int CONFIGURE_FLAG_USE_BLOCK_MODEL = 2; // 0x2
+    field public static final int CONFIGURE_FLAG_USE_CRYPTO_ASYNC = 4; // 0x4
     field public static final int CRYPTO_MODE_AES_CBC = 2; // 0x2
     field public static final int CRYPTO_MODE_AES_CTR = 1; // 0x1
     field public static final int CRYPTO_MODE_UNENCRYPTED = 0; // 0x0
@@ -22449,6 +22557,7 @@ package android.media {
 
   public abstract static class MediaCodec.Callback {
     ctor public MediaCodec.Callback();
+    method public void onCryptoError(@NonNull android.media.MediaCodec, @NonNull android.media.MediaCodec.CryptoException);
     method public abstract void onError(@NonNull android.media.MediaCodec, @NonNull android.media.MediaCodec.CodecException);
     method public abstract void onInputBufferAvailable(@NonNull android.media.MediaCodec, int);
     method public abstract void onOutputBufferAvailable(@NonNull android.media.MediaCodec, int, @NonNull android.media.MediaCodec.BufferInfo);
@@ -22466,6 +22575,7 @@ package android.media {
 
   public static final class MediaCodec.CryptoException extends java.lang.RuntimeException implements android.media.MediaDrmThrowable {
     ctor public MediaCodec.CryptoException(int, @Nullable String);
+    method @Nullable public android.media.MediaCodec.CryptoInfo getCryptoInfo();
     method public int getErrorCode();
     field @Deprecated public static final int ERROR_FRAME_TOO_LARGE = 8; // 0x8
     field @Deprecated public static final int ERROR_INSUFFICIENT_OUTPUT_PROTECTION = 4; // 0x4
@@ -27162,6 +27272,10 @@ package android.media.tv {
     field public static final int SIGNAL_STRENGTH_STRONG = 3; // 0x3
     field public static final int SIGNAL_STRENGTH_WEAK = 2; // 0x2
     field public static final long TIME_SHIFT_INVALID_TIME = -9223372036854775808L; // 0x8000000000000000L
+    field public static final int TIME_SHIFT_MODE_AUTO = 4; // 0x4
+    field public static final int TIME_SHIFT_MODE_LOCAL = 2; // 0x2
+    field public static final int TIME_SHIFT_MODE_NETWORK = 3; // 0x3
+    field public static final int TIME_SHIFT_MODE_OFF = 1; // 0x1
     field public static final int TIME_SHIFT_STATUS_AVAILABLE = 3; // 0x3
     field public static final int TIME_SHIFT_STATUS_UNAVAILABLE = 2; // 0x2
     field public static final int TIME_SHIFT_STATUS_UNKNOWN = 0; // 0x0
@@ -27246,11 +27360,14 @@ package android.media.tv {
     method public void notifyAitInfoUpdated(@NonNull android.media.tv.AitInfo);
     method public void notifyAudioPresentationChanged(@NonNull java.util.List<android.media.AudioPresentation>);
     method public void notifyAudioPresentationSelected(int, int);
+    method public void notifyAvailableSpeeds(@NonNull float[]);
     method public void notifyBroadcastInfoResponse(@NonNull android.media.tv.BroadcastInfoResponse);
     method public void notifyChannelRetuned(android.net.Uri);
     method public void notifyContentAllowed();
     method public void notifyContentBlocked(@NonNull android.media.tv.TvContentRating);
+    method public void notifyCueingMessageAvailability(boolean);
     method public void notifySignalStrength(int);
+    method public void notifyTimeShiftMode(int);
     method public void notifyTimeShiftStatusChanged(int);
     method public void notifyTrackSelected(int, String);
     method public void notifyTracksChanged(java.util.List<android.media.tv.TvTrackInfo>);
@@ -27285,6 +27402,7 @@ package android.media.tv {
     method public void onTimeShiftPlay(android.net.Uri);
     method public void onTimeShiftResume();
     method public void onTimeShiftSeekTo(long);
+    method public void onTimeShiftSetMode(int);
     method public void onTimeShiftSetPlaybackParams(android.media.PlaybackParams);
     method public boolean onTouchEvent(android.view.MotionEvent);
     method public boolean onTrackballEvent(android.view.MotionEvent);
@@ -27302,6 +27420,7 @@ package android.media.tv {
     method public void resumeRecording();
     method public void resumeRecording(@NonNull android.os.Bundle);
     method public void sendAppPrivateCommand(@NonNull String, android.os.Bundle);
+    method public void setTvInteractiveAppView(@Nullable android.media.tv.interactive.TvInteractiveAppView, @Nullable String);
     method public void startRecording(@Nullable android.net.Uri);
     method public void startRecording(@Nullable android.net.Uri, @NonNull android.os.Bundle);
     method public void stopRecording();
@@ -27424,6 +27543,7 @@ package android.media.tv {
     method public void timeShiftPlay(String, android.net.Uri);
     method public void timeShiftResume();
     method public void timeShiftSeekTo(long);
+    method public void timeShiftSetMode(int);
     method public void timeShiftSetPlaybackParams(@NonNull android.media.PlaybackParams);
     method public void tune(@NonNull String, android.net.Uri);
     method public void tune(String, android.net.Uri, android.os.Bundle);
@@ -27444,12 +27564,15 @@ package android.media.tv {
     method public void onAitInfoUpdated(@NonNull String, @NonNull android.media.tv.AitInfo);
     method public void onAudioPresentationSelected(@NonNull String, int, int);
     method public void onAudioPresentationsChanged(@NonNull String, @NonNull java.util.List<android.media.AudioPresentation>);
+    method public void onAvailableSpeeds(@NonNull String, @NonNull float[]);
     method public void onChannelRetuned(String, android.net.Uri);
     method public void onConnectionFailed(String);
     method public void onContentAllowed(String);
     method public void onContentBlocked(String, android.media.tv.TvContentRating);
+    method public void onCueingMessageAvailability(@NonNull String, boolean);
     method public void onDisconnected(String);
     method public void onSignalStrengthUpdated(@NonNull String, int);
+    method public void onTimeShiftMode(@NonNull String, int);
     method public void onTimeShiftStatusChanged(String, int);
     method public void onTrackSelected(String, int, String);
     method public void onTracksChanged(String, java.util.List<android.media.tv.TvTrackInfo>);
@@ -27474,6 +27597,7 @@ package android.media.tv.interactive {
   }
 
   public final class TvInteractiveAppManager {
+    method @NonNull public java.util.List<android.media.tv.interactive.AppLinkInfo> getAppLinkInfoList();
     method @NonNull public java.util.List<android.media.tv.interactive.TvInteractiveAppServiceInfo> getTvInteractiveAppServiceList();
     method public void registerAppLinkInfo(@NonNull String, @NonNull android.media.tv.interactive.AppLinkInfo);
     method public void registerCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.tv.interactive.TvInteractiveAppManager.TvInteractiveAppCallback);
@@ -27531,7 +27655,11 @@ package android.media.tv.interactive {
     field public static final String COMMAND_PARAMETER_KEY_CHANGE_CHANNEL_QUIETLY = "command_change_channel_quietly";
     field public static final String COMMAND_PARAMETER_KEY_CHANNEL_URI = "command_channel_uri";
     field public static final String COMMAND_PARAMETER_KEY_INPUT_ID = "command_input_id";
+    field public static final String COMMAND_PARAMETER_KEY_PLAYBACK_PARAMS = "command_playback_params";
+    field public static final String COMMAND_PARAMETER_KEY_PROGRAM_URI = "command_program_uri";
     field public static final String COMMAND_PARAMETER_KEY_STOP_MODE = "command_stop_mode";
+    field public static final String COMMAND_PARAMETER_KEY_TIME_POSITION = "command_time_position";
+    field public static final String COMMAND_PARAMETER_KEY_TIME_SHIFT_MODE = "command_time_shift_mode";
     field public static final String COMMAND_PARAMETER_KEY_TRACK_ID = "command_track_id";
     field public static final String COMMAND_PARAMETER_KEY_TRACK_TYPE = "command_track_type";
     field public static final String COMMAND_PARAMETER_KEY_VOLUME = "command_volume";
@@ -27545,6 +27673,12 @@ package android.media.tv.interactive {
     field public static final String PLAYBACK_COMMAND_TYPE_TUNE_PREV = "tune_previous";
     field public static final String SERVICE_INTERFACE = "android.media.tv.interactive.TvInteractiveAppService";
     field public static final String SERVICE_META_DATA = "android.media.tv.interactive.app";
+    field public static final String TIME_SHIFT_COMMAND_TYPE_PAUSE = "pause";
+    field public static final String TIME_SHIFT_COMMAND_TYPE_PLAY = "play";
+    field public static final String TIME_SHIFT_COMMAND_TYPE_RESUME = "resume";
+    field public static final String TIME_SHIFT_COMMAND_TYPE_SEEK_TO = "seek_to";
+    field public static final String TIME_SHIFT_COMMAND_TYPE_SET_MODE = "set_mode";
+    field public static final String TIME_SHIFT_COMMAND_TYPE_SET_PLAYBACK_PARAMS = "set_playback_params";
   }
 
   public abstract static class TvInteractiveAppService.Session implements android.view.KeyEvent.Callback {
@@ -27557,6 +27691,7 @@ package android.media.tv.interactive {
     method @CallSuper public final void notifyTeletextAppStateChanged(int);
     method public void onAdBufferConsumed(@NonNull android.media.tv.AdBuffer);
     method public void onAdResponse(@NonNull android.media.tv.AdResponse);
+    method public void onAvailableSpeeds(@NonNull float[]);
     method public void onBroadcastInfoResponse(@NonNull android.media.tv.BroadcastInfoResponse);
     method public void onContentAllowed();
     method public void onContentBlocked(@NonNull android.media.tv.TvContentRating);
@@ -27574,8 +27709,13 @@ package android.media.tv.interactive {
     method public boolean onKeyMultiple(int, int, @NonNull android.view.KeyEvent);
     method public boolean onKeyUp(int, @NonNull android.view.KeyEvent);
     method public void onMediaViewSizeChanged(@Px int, @Px int);
-    method public void onRecordingStarted(@NonNull String);
+    method public void onRecordingConnectionFailed(@NonNull String, @NonNull String);
+    method public void onRecordingDisconnected(@NonNull String, @NonNull String);
+    method public void onRecordingError(@NonNull String, int);
+    method public void onRecordingScheduled(@NonNull String, @Nullable String);
+    method public void onRecordingStarted(@NonNull String, @Nullable String);
     method public void onRecordingStopped(@NonNull String);
+    method public void onRecordingTuned(@NonNull String, @NonNull android.net.Uri);
     method public abstract void onRelease();
     method public void onResetInteractiveApp();
     method public abstract boolean onSetSurface(@Nullable android.view.Surface);
@@ -27586,6 +27726,11 @@ package android.media.tv.interactive {
     method public void onStopInteractiveApp();
     method public void onStreamVolume(float);
     method public void onSurfaceChanged(int, int, int);
+    method public void onTimeShiftCurrentPositionChanged(@NonNull String, long);
+    method public void onTimeShiftMode(int);
+    method public void onTimeShiftPlaybackParams(@NonNull android.media.PlaybackParams);
+    method public void onTimeShiftStartPositionChanged(@NonNull String, long);
+    method public void onTimeShiftStatusChanged(@NonNull String, int);
     method public boolean onTouchEvent(@NonNull android.view.MotionEvent);
     method public void onTrackInfoList(@NonNull java.util.List<android.media.tv.TvTrackInfo>);
     method public void onTrackSelected(int, @NonNull String);
@@ -27599,19 +27744,24 @@ package android.media.tv.interactive {
     method public void onVideoUnavailable(int);
     method @CallSuper public void removeBroadcastInfo(int);
     method @CallSuper public void requestAd(@NonNull android.media.tv.AdRequest);
+    method @CallSuper public void requestAvailableSpeeds();
     method @CallSuper public void requestBroadcastInfo(@NonNull android.media.tv.BroadcastInfoRequest);
     method @CallSuper public void requestCurrentChannelLcn();
     method @CallSuper public void requestCurrentChannelUri();
     method @CallSuper public void requestCurrentTvInputId();
     method @CallSuper public void requestCurrentVideoBounds();
+    method @CallSuper public void requestScheduleRecording(@NonNull String, @NonNull String, @NonNull android.net.Uri, @NonNull android.net.Uri, @NonNull android.os.Bundle);
+    method @CallSuper public void requestScheduleRecording(@NonNull String, @NonNull String, @NonNull android.net.Uri, long, long, int, @NonNull android.os.Bundle);
     method @CallSuper public void requestSigning(@NonNull String, @NonNull String, @NonNull String, @NonNull byte[]);
-    method @CallSuper public void requestStartRecording(@Nullable android.net.Uri);
+    method @CallSuper public void requestStartRecording(@NonNull String, @Nullable android.net.Uri);
     method @CallSuper public void requestStopRecording(@NonNull String);
     method @CallSuper public void requestStreamVolume();
+    method @CallSuper public void requestTimeShiftMode();
     method @CallSuper public void requestTrackInfoList();
     method @CallSuper public void requestTvRecordingInfo(@NonNull String);
     method @CallSuper public void requestTvRecordingInfoList(@NonNull int);
     method @CallSuper public void sendPlaybackCommandRequest(@NonNull String, @Nullable android.os.Bundle);
+    method @CallSuper public void sendTimeShiftCommandRequest(@NonNull String, @Nullable android.os.Bundle);
     method @CallSuper public void setMediaViewEnabled(boolean);
     method @CallSuper public void setTvRecordingInfo(@NonNull String, @NonNull android.media.tv.TvRecordingInfo);
     method @CallSuper public void setVideoBounds(@NonNull android.graphics.Rect);
@@ -27620,6 +27770,7 @@ package android.media.tv.interactive {
   public final class TvInteractiveAppServiceInfo implements android.os.Parcelable {
     ctor public TvInteractiveAppServiceInfo(@NonNull android.content.Context, @NonNull android.content.ComponentName);
     method public int describeContents();
+    method @NonNull public java.util.List<java.lang.String> getCustomSupportedTypes();
     method @NonNull public String getId();
     method @Nullable public android.content.pm.ServiceInfo getServiceInfo();
     method @NonNull public int getSupportedTypes();
@@ -27628,6 +27779,8 @@ package android.media.tv.interactive {
     field public static final int INTERACTIVE_APP_TYPE_ATSC = 2; // 0x2
     field public static final int INTERACTIVE_APP_TYPE_GINGA = 4; // 0x4
     field public static final int INTERACTIVE_APP_TYPE_HBBTV = 1; // 0x1
+    field public static final int INTERACTIVE_APP_TYPE_OTHER = -2147483648; // 0x80000000
+    field public static final int INTERACTIVE_APP_TYPE_TARGETED_AD = 8; // 0x8
   }
 
   public class TvInteractiveAppView extends android.view.ViewGroup {
@@ -27641,8 +27794,13 @@ package android.media.tv.interactive {
     method public boolean dispatchUnhandledInputEvent(@NonNull android.view.InputEvent);
     method @Nullable public android.media.tv.interactive.TvInteractiveAppView.OnUnhandledInputEventListener getOnUnhandledInputEventListener();
     method public void notifyError(@NonNull String, @NonNull android.os.Bundle);
-    method public void notifyRecordingStarted(@NonNull String);
+    method public void notifyRecordingScheduled(@NonNull String, @Nullable String);
+    method public void notifyRecordingStarted(@NonNull String, @Nullable String);
     method public void notifyRecordingStopped(@NonNull String);
+    method public void notifyTimeShiftCurrentPositionChanged(@NonNull String, long);
+    method public void notifyTimeShiftPlaybackParams(@NonNull android.media.PlaybackParams);
+    method public void notifyTimeShiftStartPositionChanged(@NonNull String, long);
+    method public void notifyTimeShiftStatusChanged(@NonNull String, int);
     method public void notifyTvMessage(@NonNull String, @NonNull android.os.Bundle);
     method public void onAttachedToWindow();
     method public void onDetachedFromWindow();
@@ -27653,12 +27811,14 @@ package android.media.tv.interactive {
     method public void prepareInteractiveApp(@NonNull String, int);
     method public void reset();
     method public void resetInteractiveApp();
+    method public void sendAvailableSpeeds(@NonNull float[]);
     method public void sendCurrentChannelLcn(int);
     method public void sendCurrentChannelUri(@Nullable android.net.Uri);
     method public void sendCurrentTvInputId(@Nullable String);
     method public void sendCurrentVideoBounds(@NonNull android.graphics.Rect);
     method public void sendSigningResult(@NonNull String, @NonNull byte[]);
     method public void sendStreamVolume(float);
+    method public void sendTimeShiftMode(int);
     method public void sendTrackInfoList(@Nullable java.util.List<android.media.tv.TvTrackInfo>);
     method public void sendTvRecordingInfo(@Nullable android.media.tv.TvRecordingInfo);
     method public void sendTvRecordingInfoList(@NonNull java.util.List<android.media.tv.TvRecordingInfo>);
@@ -27684,14 +27844,18 @@ package android.media.tv.interactive {
     ctor public TvInteractiveAppView.TvInteractiveAppCallback();
     method public void onBiInteractiveAppCreated(@NonNull String, @NonNull android.net.Uri, @Nullable String);
     method public void onPlaybackCommandRequest(@NonNull String, @NonNull String, @NonNull android.os.Bundle);
+    method public void onRequestAvailableSpeeds(@NonNull String);
     method public void onRequestCurrentChannelLcn(@NonNull String);
     method public void onRequestCurrentChannelUri(@NonNull String);
     method public void onRequestCurrentTvInputId(@NonNull String);
     method public void onRequestCurrentVideoBounds(@NonNull String);
+    method public void onRequestScheduleRecording(@NonNull String, @NonNull String, @NonNull String, @NonNull android.net.Uri, @NonNull android.net.Uri, @NonNull android.os.Bundle);
+    method public void onRequestScheduleRecording(@NonNull String, @NonNull String, @NonNull String, @NonNull android.net.Uri, long, long, int, @NonNull android.os.Bundle);
     method public void onRequestSigning(@NonNull String, @NonNull String, @NonNull String, @NonNull String, @NonNull byte[]);
-    method public void onRequestStartRecording(@NonNull String, @Nullable android.net.Uri);
+    method public void onRequestStartRecording(@NonNull String, @NonNull String, @Nullable android.net.Uri);
     method public void onRequestStopRecording(@NonNull String, @NonNull String);
     method public void onRequestStreamVolume(@NonNull String);
+    method public void onRequestTimeShiftMode(@NonNull String);
     method public void onRequestTrackInfoList(@NonNull String);
     method public void onRequestTvRecordingInfo(@NonNull String, @NonNull String);
     method public void onRequestTvRecordingInfoList(@NonNull String, @NonNull int);
@@ -27699,6 +27863,7 @@ package android.media.tv.interactive {
     method public void onSetVideoBounds(@NonNull String, @NonNull android.graphics.Rect);
     method public void onStateChanged(@NonNull String, int, int);
     method public void onTeletextAppStateChanged(@NonNull String, int);
+    method public void onTimeShiftCommandRequest(@NonNull String, @NonNull String, @NonNull android.os.Bundle);
   }
 
 }
@@ -33297,6 +33462,7 @@ package android.os {
     field public static final String ACTION_DEVICE_IDLE_MODE_CHANGED = "android.os.action.DEVICE_IDLE_MODE_CHANGED";
     field public static final String ACTION_DEVICE_LIGHT_IDLE_MODE_CHANGED = "android.os.action.LIGHT_DEVICE_IDLE_MODE_CHANGED";
     field public static final String ACTION_LOW_POWER_STANDBY_ENABLED_CHANGED = "android.os.action.LOW_POWER_STANDBY_ENABLED_CHANGED";
+    field public static final String ACTION_LOW_POWER_STANDBY_POLICY_CHANGED = "android.os.action.LOW_POWER_STANDBY_POLICY_CHANGED";
     field public static final String ACTION_POWER_SAVE_MODE_CHANGED = "android.os.action.POWER_SAVE_MODE_CHANGED";
     field @Deprecated public static final int FULL_WAKE_LOCK = 26; // 0x1a
     field public static final int LOCATION_MODE_ALL_DISABLED_WHEN_SCREEN_OFF = 2; // 0x2
@@ -41258,15 +41424,42 @@ package android.speech {
     method public default void onSegmentResults(@NonNull android.os.Bundle);
   }
 
+  public final class RecognitionPart implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getConfidenceLevel();
+    method @Nullable public String getFormattedText();
+    method @NonNull public String getRawText();
+    method public long getTimestampMillis();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field public static final int CONFIDENCE_LEVEL_HIGH = 5; // 0x5
+    field public static final int CONFIDENCE_LEVEL_LOW = 1; // 0x1
+    field public static final int CONFIDENCE_LEVEL_LOW_MEDIUM = 2; // 0x2
+    field public static final int CONFIDENCE_LEVEL_MEDIUM = 3; // 0x3
+    field public static final int CONFIDENCE_LEVEL_MEDIUM_HIGH = 4; // 0x4
+    field public static final int CONFIDENCE_LEVEL_UNKNOWN = 0; // 0x0
+    field @NonNull public static final android.os.Parcelable.Creator<android.speech.RecognitionPart> CREATOR;
+  }
+
+  public static final class RecognitionPart.Builder {
+    ctor public RecognitionPart.Builder(@NonNull String);
+    method @NonNull public android.speech.RecognitionPart build();
+    method @NonNull public android.speech.RecognitionPart.Builder setConfidenceLevel(int);
+    method @NonNull public android.speech.RecognitionPart.Builder setFormattedText(@NonNull String);
+    method @NonNull public android.speech.RecognitionPart.Builder setRawText(@NonNull String);
+    method @NonNull public android.speech.RecognitionPart.Builder setTimestampMillis(long);
+  }
+
   public abstract class RecognitionService extends android.app.Service {
     ctor public RecognitionService();
     method public int getMaxConcurrentSessionsCount();
     method public final android.os.IBinder onBind(android.content.Intent);
     method protected abstract void onCancel(android.speech.RecognitionService.Callback);
     method public void onCheckRecognitionSupport(@NonNull android.content.Intent, @NonNull android.speech.RecognitionService.SupportCallback);
+    method public void onCheckRecognitionSupport(@NonNull android.content.Intent, @NonNull android.content.AttributionSource, @NonNull android.speech.RecognitionService.SupportCallback);
     method protected abstract void onStartListening(android.content.Intent, android.speech.RecognitionService.Callback);
     method protected abstract void onStopListening(android.speech.RecognitionService.Callback);
     method public void onTriggerModelDownload(@NonNull android.content.Intent);
+    method public void onTriggerModelDownload(@NonNull android.content.Intent, @NonNull android.content.AttributionSource);
     field public static final String SERVICE_INTERFACE = "android.speech.RecognitionService";
     field public static final String SERVICE_META_DATA = "android.speech";
   }
@@ -41347,6 +41540,8 @@ package android.speech {
     field public static final String EXTRA_PARTIAL_RESULTS = "android.speech.extra.PARTIAL_RESULTS";
     field public static final String EXTRA_PREFER_OFFLINE = "android.speech.extra.PREFER_OFFLINE";
     field public static final String EXTRA_PROMPT = "android.speech.extra.PROMPT";
+    field public static final String EXTRA_REQUEST_WORD_CONFIDENCE = "android.speech.extra.REQUEST_WORD_CONFIDENCE";
+    field public static final String EXTRA_REQUEST_WORD_TIMING = "android.speech.extra.REQUEST_WORD_TIMING";
     field public static final String EXTRA_RESULTS = "android.speech.extra.RESULTS";
     field public static final String EXTRA_RESULTS_PENDINGINTENT = "android.speech.extra.RESULTS_PENDINGINTENT";
     field public static final String EXTRA_RESULTS_PENDINGINTENT_BUNDLE = "android.speech.extra.RESULTS_PENDINGINTENT_BUNDLE";
@@ -41406,6 +41601,7 @@ package android.speech {
     field public static final int ERROR_SERVER_DISCONNECTED = 11; // 0xb
     field public static final int ERROR_SPEECH_TIMEOUT = 6; // 0x6
     field public static final int ERROR_TOO_MANY_REQUESTS = 10; // 0xa
+    field public static final String RECOGNITION_PARTS = "recognition_parts";
     field public static final String RESULTS_ALTERNATIVES = "results_alternatives";
     field public static final String RESULTS_RECOGNITION = "results_recognition";
   }
@@ -41931,18 +42127,6 @@ package android.telecom {
     method @NonNull public android.telecom.CallScreeningService.CallResponse.Builder setSilenceCall(boolean);
     method public android.telecom.CallScreeningService.CallResponse.Builder setSkipCallLog(boolean);
     method public android.telecom.CallScreeningService.CallResponse.Builder setSkipNotification(boolean);
-  }
-
-  public abstract class CallStreamingService extends android.app.Service {
-    ctor public CallStreamingService();
-    method @Nullable public android.os.IBinder onBind(@NonNull android.content.Intent);
-    method public void onCallStreamingStarted(@NonNull android.telecom.StreamingCall);
-    method public void onCallStreamingStateChanged(int);
-    method public void onCallStreamingStopped();
-    field public static final String SERVICE_INTERFACE = "android.telecom.CallStreamingService";
-    field public static final int STREAMING_FAILED_ALREADY_STREAMING = 1; // 0x1
-    field public static final int STREAMING_FAILED_NO_SENDER = 2; // 0x2
-    field public static final int STREAMING_FAILED_SENDER_BINDING_ERROR = 3; // 0x3
   }
 
   public abstract class Conference extends android.telecom.Conferenceable {
@@ -42615,22 +42799,6 @@ package android.telecom {
     method public CharSequence getLabel();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.telecom.StatusHints> CREATOR;
-  }
-
-  public final class StreamingCall implements android.os.Parcelable {
-    ctor public StreamingCall(@NonNull android.content.ComponentName, @NonNull String, @NonNull android.net.Uri, @NonNull android.os.Bundle);
-    method public int describeContents();
-    method @NonNull public android.net.Uri getAddress();
-    method @NonNull public android.content.ComponentName getComponentName();
-    method @NonNull public String getDisplayName();
-    method @NonNull public android.os.Bundle getExtras();
-    method public int getState();
-    method public void requestStreamingState(int);
-    method public void writeToParcel(@NonNull android.os.Parcel, int);
-    field @NonNull public static final android.os.Parcelable.Creator<android.telecom.StreamingCall> CREATOR;
-    field public static final int STATE_DISCONNECTED = 3; // 0x3
-    field public static final int STATE_HOLDING = 2; // 0x2
-    field public static final int STATE_STREAMING = 1; // 0x1
   }
 
   public class TelecomManager {
@@ -49919,6 +50087,7 @@ package android.view {
     method public int getDisplayId();
     method public int getFlags();
     method public android.view.Display.HdrCapabilities getHdrCapabilities();
+    method public float getHdrSdrRatio();
     method @Deprecated public int getHeight();
     method @Deprecated public void getMetrics(android.util.DisplayMetrics);
     method public android.view.Display.Mode getMode();
@@ -49940,9 +50109,12 @@ package android.view {
     method @Deprecated public float[] getSupportedRefreshRates();
     method @Deprecated public int getWidth();
     method public boolean isHdr();
+    method public boolean isHdrSdrRatioAvailable();
     method public boolean isMinimalPostProcessingSupported();
     method public boolean isValid();
     method public boolean isWideColorGamut();
+    method public void registerHdrSdrRatioChangedListener(@NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.view.Display>);
+    method public void unregisterHdrSdrRatioChangedListener(@NonNull java.util.function.Consumer<android.view.Display>);
     field public static final int DEFAULT_DISPLAY = 0; // 0x0
     field public static final int FLAG_PRESENTATION = 8; // 0x8
     field public static final int FLAG_PRIVATE = 4; // 0x4
@@ -51471,6 +51643,7 @@ package android.view {
     method @NonNull public android.view.SurfaceControl.Transaction setCrop(@NonNull android.view.SurfaceControl, @Nullable android.graphics.Rect);
     method @NonNull public android.view.SurfaceControl.Transaction setDamageRegion(@NonNull android.view.SurfaceControl, @Nullable android.graphics.Region);
     method @NonNull public android.view.SurfaceControl.Transaction setDataSpace(@NonNull android.view.SurfaceControl, int);
+    method @NonNull public android.view.SurfaceControl.Transaction setExtendedRangeBrightness(@NonNull android.view.SurfaceControl, float, float);
     method @NonNull public android.view.SurfaceControl.Transaction setFrameRate(@NonNull android.view.SurfaceControl, @FloatRange(from=0.0) float, int);
     method @NonNull public android.view.SurfaceControl.Transaction setFrameRate(@NonNull android.view.SurfaceControl, @FloatRange(from=0.0) float, int, int);
     method @Deprecated @NonNull public android.view.SurfaceControl.Transaction setGeometry(@NonNull android.view.SurfaceControl, @Nullable android.graphics.Rect, @Nullable android.graphics.Rect, int);
@@ -51555,6 +51728,7 @@ package android.view {
     ctor public SurfaceView(android.content.Context, android.util.AttributeSet);
     ctor public SurfaceView(android.content.Context, android.util.AttributeSet, int);
     ctor public SurfaceView(android.content.Context, android.util.AttributeSet, int, int);
+    method public void applyTransactionToFrame(@NonNull android.view.SurfaceControl.Transaction);
     method public android.view.SurfaceHolder getHolder();
     method @Nullable public android.os.IBinder getHostToken();
     method public android.view.SurfaceControl getSurfaceControl();
@@ -53624,12 +53798,14 @@ package android.view {
     method public int getFitInsetsTypes();
     method public final CharSequence getTitle();
     method public boolean isFitInsetsIgnoringVisibility();
+    method public boolean isHdrConversionEnabled();
     method public static boolean mayUseInputMethod(int);
     method public void setBlurBehindRadius(@IntRange(from=0) int);
     method public void setColorMode(int);
     method public void setFitInsetsIgnoringVisibility(boolean);
     method public void setFitInsetsSides(int);
     method public void setFitInsetsTypes(int);
+    method public void setHdrConversionEnabled(boolean);
     method public final void setTitle(CharSequence);
     method public void setWallpaperTouchEventsEnabled(boolean);
     method public void writeToParcel(android.os.Parcel, int);
@@ -53640,6 +53816,7 @@ package android.view {
     field public static final float BRIGHTNESS_OVERRIDE_OFF = 0.0f;
     field @NonNull public static final android.os.Parcelable.Creator<android.view.WindowManager.LayoutParams> CREATOR;
     field public static final int DIM_AMOUNT_CHANGED = 32; // 0x20
+    field public static final int DISPLAY_FLAG_DISABLE_HDR_CONVERSION = 1; // 0x1
     field public static final int FIRST_APPLICATION_WINDOW = 1; // 0x1
     field public static final int FIRST_SUB_WINDOW = 1000; // 0x3e8
     field public static final int FIRST_SYSTEM_WINDOW = 2000; // 0x7d0
