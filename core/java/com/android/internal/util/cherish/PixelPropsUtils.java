@@ -223,6 +223,8 @@ public class PixelPropsUtils {
                 sIsGms = true;
                 setPropValue("FINGERPRINT", "google/walleye/walleye:8.1.0/OPM1.171019.011/4448085:user/release-keys");
                 setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N_MR1);
+            } else if (processName.toLowerCase().contains("persistent")) {
+                propsToChange.putAll(propsToChangePixel6Pro);
             }
             return;
         }
