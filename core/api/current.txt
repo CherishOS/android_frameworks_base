@@ -1857,6 +1857,7 @@ package android {
     field public static final int windowMinWidthMajor = 16843606; // 0x1010356
     field public static final int windowMinWidthMinor = 16843607; // 0x1010357
     field public static final int windowNoDisplay = 16843294; // 0x101021e
+    field public static final int windowNoMoveAnimation;
     field public static final int windowNoTitle = 16842838; // 0x1010056
     field @Deprecated public static final int windowOverscan = 16843727; // 0x10103cf
     field public static final int windowReenterTransition = 16843951; // 0x10104af
@@ -4510,6 +4511,7 @@ package android.app {
     method @NonNull public final <T extends android.view.View> T requireViewById(@IdRes int);
     method public final void runOnUiThread(Runnable);
     method public void setActionBar(@Nullable android.widget.Toolbar);
+    method public void setAllowCrossUidActivitySwitchFromBelow(boolean);
     method public void setContentTransitionManager(android.transition.TransitionManager);
     method public void setContentView(@LayoutRes int);
     method public void setContentView(android.view.View);
@@ -7731,7 +7733,8 @@ package android.app.admin {
     method @RequiresPermission(value=android.Manifest.permission.MANAGE_DEVICE_POLICY_LOCK_TASK, conditional=true) public void addPersistentPreferredActivity(@Nullable android.content.ComponentName, android.content.IntentFilter, @NonNull android.content.ComponentName);
     method public void addUserRestriction(@NonNull android.content.ComponentName, String);
     method public void addUserRestrictionGlobally(@NonNull String);
-    method public boolean bindDeviceAdminServiceAsUser(@NonNull android.content.ComponentName, android.content.Intent, @NonNull android.content.ServiceConnection, int, @NonNull android.os.UserHandle);
+    method public boolean bindDeviceAdminServiceAsUser(@NonNull android.content.ComponentName, @NonNull android.content.Intent, @NonNull android.content.ServiceConnection, int, @NonNull android.os.UserHandle);
+    method public boolean bindDeviceAdminServiceAsUser(@NonNull android.content.ComponentName, @NonNull android.content.Intent, @NonNull android.content.ServiceConnection, @NonNull android.content.Context.BindServiceFlags, @NonNull android.os.UserHandle);
     method public boolean canAdminGrantSensorsPermissions();
     method public boolean canUsbDataSignalingBeDisabled();
     method public void clearApplicationUserData(@NonNull android.content.ComponentName, @NonNull String, @NonNull java.util.concurrent.Executor, @NonNull android.app.admin.DevicePolicyManager.OnClearApplicationUserDataListener);
@@ -10160,9 +10163,13 @@ package android.content {
   public abstract class Context {
     ctor public Context();
     method public boolean bindIsolatedService(@NonNull @RequiresPermission android.content.Intent, int, @NonNull String, @NonNull java.util.concurrent.Executor, @NonNull android.content.ServiceConnection);
-    method public abstract boolean bindService(@RequiresPermission android.content.Intent, @NonNull android.content.ServiceConnection, int);
+    method public boolean bindIsolatedService(@NonNull @RequiresPermission android.content.Intent, @NonNull android.content.Context.BindServiceFlags, @NonNull String, @NonNull java.util.concurrent.Executor, @NonNull android.content.ServiceConnection);
+    method public abstract boolean bindService(@NonNull @RequiresPermission android.content.Intent, @NonNull android.content.ServiceConnection, int);
+    method public boolean bindService(@NonNull @RequiresPermission android.content.Intent, @NonNull android.content.ServiceConnection, @NonNull android.content.Context.BindServiceFlags);
     method public boolean bindService(@NonNull @RequiresPermission android.content.Intent, int, @NonNull java.util.concurrent.Executor, @NonNull android.content.ServiceConnection);
+    method public boolean bindService(@NonNull @RequiresPermission android.content.Intent, @NonNull android.content.Context.BindServiceFlags, @NonNull java.util.concurrent.Executor, @NonNull android.content.ServiceConnection);
     method @RequiresPermission(anyOf={"android.permission.INTERACT_ACROSS_USERS", "android.permission.INTERACT_ACROSS_USERS_FULL", android.Manifest.permission.INTERACT_ACROSS_PROFILES}, conditional=true) public boolean bindServiceAsUser(@NonNull @RequiresPermission android.content.Intent, @NonNull android.content.ServiceConnection, int, @NonNull android.os.UserHandle);
+    method @RequiresPermission(anyOf={"android.permission.INTERACT_ACROSS_USERS", "android.permission.INTERACT_ACROSS_USERS_FULL", android.Manifest.permission.INTERACT_ACROSS_PROFILES}, conditional=true) public boolean bindServiceAsUser(@NonNull @RequiresPermission android.content.Intent, @NonNull android.content.ServiceConnection, @NonNull android.content.Context.BindServiceFlags, @NonNull android.os.UserHandle);
     method @CheckResult(suggest="#enforceCallingOrSelfPermission(String,String)") public abstract int checkCallingOrSelfPermission(@NonNull String);
     method @CheckResult(suggest="#enforceCallingOrSelfUriPermission(Uri,int,String)") public abstract int checkCallingOrSelfUriPermission(android.net.Uri, int);
     method @NonNull public int[] checkCallingOrSelfUriPermissions(@NonNull java.util.List<android.net.Uri>, int);
@@ -10322,6 +10329,7 @@ package android.content {
     field public static final int BIND_AUTO_CREATE = 1; // 0x1
     field public static final int BIND_DEBUG_UNBIND = 2; // 0x2
     field public static final int BIND_EXTERNAL_SERVICE = -2147483648; // 0x80000000
+    field public static final long BIND_EXTERNAL_SERVICE_LONG = -9223372036854775808L; // 0x8000000000000000L
     field public static final int BIND_IMPORTANT = 64; // 0x40
     field public static final int BIND_INCLUDE_CAPABILITIES = 4096; // 0x1000
     field public static final int BIND_NOT_FOREGROUND = 4; // 0x4
@@ -10424,6 +10432,11 @@ package android.content {
     field public static final String WIFI_RTT_RANGING_SERVICE = "wifirtt";
     field public static final String WIFI_SERVICE = "wifi";
     field @UiContext public static final String WINDOW_SERVICE = "window";
+  }
+
+  public static final class Context.BindServiceFlags {
+    method public long getValue();
+    method @NonNull public static android.content.Context.BindServiceFlags of(long);
   }
 
   public final class ContextParams {
@@ -22758,6 +22771,16 @@ package android.media {
     field public static final int AACObjectSSR = 3; // 0x3
     field public static final int AACObjectScalable = 6; // 0x6
     field public static final int AACObjectXHE = 42; // 0x2a
+    field public static final int AC4Level0 = 1; // 0x1
+    field public static final int AC4Level1 = 2; // 0x2
+    field public static final int AC4Level2 = 4; // 0x4
+    field public static final int AC4Level3 = 8; // 0x8
+    field public static final int AC4Level4 = 16; // 0x10
+    field public static final int AC4Profile00 = 257; // 0x101
+    field public static final int AC4Profile10 = 513; // 0x201
+    field public static final int AC4Profile11 = 514; // 0x202
+    field public static final int AC4Profile21 = 1026; // 0x402
+    field public static final int AC4Profile22 = 1028; // 0x404
     field public static final int AV1Level2 = 1; // 0x1
     field public static final int AV1Level21 = 2; // 0x2
     field public static final int AV1Level22 = 4; // 0x4
@@ -24404,7 +24427,7 @@ package android.media {
     method public void registerTransferCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaRouter2.TransferCallback);
     method public void setOnGetControllerHintsListener(@Nullable android.media.MediaRouter2.OnGetControllerHintsListener);
     method public void setRouteListingPreference(@Nullable android.media.RouteListingPreference);
-    method public void showSystemOutputSwitcher();
+    method public boolean showSystemOutputSwitcher();
     method public void stop();
     method public void transferTo(@NonNull android.media.MediaRoute2Info);
     method public void unregisterControllerCallback(@NonNull android.media.MediaRouter2.ControllerCallback);
@@ -28097,6 +28120,8 @@ package android.net {
     method @Nullable public java.security.cert.X509Certificate getUserCert();
     method @NonNull public String getUserIdentity();
     method @Nullable public String getUsername();
+    method public boolean isAutomaticIpVersionSelectionEnabled();
+    method public boolean isAutomaticNattKeepaliveTimerEnabled();
     method public boolean isBypassable();
     method public boolean isMetered();
   }
@@ -28109,6 +28134,8 @@ package android.net {
     method @NonNull public android.net.Ikev2VpnProfile.Builder setAuthDigitalSignature(@NonNull java.security.cert.X509Certificate, @NonNull java.security.PrivateKey, @Nullable java.security.cert.X509Certificate);
     method @NonNull public android.net.Ikev2VpnProfile.Builder setAuthPsk(@NonNull byte[]);
     method @NonNull public android.net.Ikev2VpnProfile.Builder setAuthUsernamePassword(@NonNull String, @NonNull String, @Nullable java.security.cert.X509Certificate);
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setAutomaticIpVersionSelectionEnabled(boolean);
+    method @NonNull public android.net.Ikev2VpnProfile.Builder setAutomaticNattKeepaliveTimerEnabled(boolean);
     method @NonNull public android.net.Ikev2VpnProfile.Builder setBypassable(boolean);
     method @NonNull public android.net.Ikev2VpnProfile.Builder setLocalRoutesExcluded(boolean);
     method @NonNull public android.net.Ikev2VpnProfile.Builder setMaxMtu(int);
@@ -28820,6 +28847,7 @@ package android.net.vcn {
     method @NonNull public int[] getExposedCapabilities();
     method @NonNull public String getGatewayConnectionName();
     method @IntRange(from=0x500) public int getMaxMtu();
+    method public int getMinUdpPort4500NatTimeoutSeconds();
     method @NonNull public long[] getRetryIntervalsMillis();
     method @NonNull public java.util.List<android.net.vcn.VcnUnderlyingNetworkTemplate> getVcnUnderlyingNetworkPriorities();
     method public boolean hasGatewayOption(int);
@@ -28834,6 +28862,7 @@ package android.net.vcn {
     method @NonNull public android.net.vcn.VcnGatewayConnectionConfig.Builder removeExposedCapability(int);
     method @NonNull public android.net.vcn.VcnGatewayConnectionConfig.Builder removeGatewayOption(int);
     method @NonNull public android.net.vcn.VcnGatewayConnectionConfig.Builder setMaxMtu(@IntRange(from=0x500) int);
+    method @NonNull public android.net.vcn.VcnGatewayConnectionConfig.Builder setMinUdpPort4500NatTimeoutSeconds(@IntRange(from=0x78) int);
     method @NonNull public android.net.vcn.VcnGatewayConnectionConfig.Builder setRetryIntervalsMillis(@NonNull long[]);
     method @NonNull public android.net.vcn.VcnGatewayConnectionConfig.Builder setVcnUnderlyingNetworkPriorities(@NonNull java.util.List<android.net.vcn.VcnUnderlyingNetworkTemplate>);
   }
@@ -33437,6 +33466,7 @@ package android.os {
     field public static final int LOCATION_MODE_GPS_DISABLED_WHEN_SCREEN_OFF = 1; // 0x1
     field public static final int LOCATION_MODE_NO_CHANGE = 0; // 0x0
     field public static final int LOCATION_MODE_THROTTLE_REQUESTS_WHEN_SCREEN_OFF = 4; // 0x4
+    field public static final int LOW_POWER_STANDBY_ALLOWED_REASON_ONGOING_CALL = 4; // 0x4
     field public static final int LOW_POWER_STANDBY_ALLOWED_REASON_TEMP_POWER_SAVE_ALLOWLIST = 2; // 0x2
     field public static final int LOW_POWER_STANDBY_ALLOWED_REASON_VOICE_INTERACTION = 1; // 0x1
     field public static final String LOW_POWER_STANDBY_FEATURE_WAKE_ON_LAN = "com.android.lowpowerstandby.WAKE_ON_LAN";
@@ -40779,6 +40809,7 @@ package android.service.notification {
     method public final void requestInterruptionFilter(int);
     method public final void requestListenerHints(int);
     method public static void requestRebind(android.content.ComponentName);
+    method public static void requestUnbind(@NonNull android.content.ComponentName);
     method public final void requestUnbind();
     method public final void setNotificationsShown(String[]);
     method public final void snoozeNotification(String, long);
@@ -40796,6 +40827,7 @@ package android.service.notification {
     field public static final int INTERRUPTION_FILTER_NONE = 3; // 0x3
     field public static final int INTERRUPTION_FILTER_PRIORITY = 2; // 0x2
     field public static final int INTERRUPTION_FILTER_UNKNOWN = 0; // 0x0
+    field public static final String META_DATA_DEFAULT_AUTOBIND = "android.service.notification.default_autobind_listenerservice";
     field public static final String META_DATA_DEFAULT_FILTER_TYPES = "android.service.notification.default_filter_types";
     field public static final String META_DATA_DISABLED_FILTER_TYPES = "android.service.notification.disabled_filter_types";
     field public static final int NOTIFICATION_CHANNEL_OR_GROUP_ADDED = 1; // 0x1
@@ -43204,6 +43236,8 @@ package android.telephony {
     field public static final String KEY_5G_NR_SSRSRQ_THRESHOLDS_INT_ARRAY = "5g_nr_ssrsrq_thresholds_int_array";
     field public static final String KEY_5G_NR_SSSINR_THRESHOLDS_INT_ARRAY = "5g_nr_sssinr_thresholds_int_array";
     field public static final String KEY_ADDITIONAL_CALL_SETTING_BOOL = "additional_call_setting_bool";
+    field public static final String KEY_ADDITIONAL_SETTINGS_CALLER_ID_VISIBILITY_BOOL = "additional_settings_caller_id_visibility_bool";
+    field public static final String KEY_ADDITIONAL_SETTINGS_CALL_WAITING_VISIBILITY_BOOL = "additional_settings_call_waiting_visibility_bool";
     field public static final String KEY_ALLOW_ADDING_APNS_BOOL = "allow_adding_apns_bool";
     field public static final String KEY_ALLOW_ADD_CALL_DURING_VIDEO_CALL_BOOL = "allow_add_call_during_video_call";
     field public static final String KEY_ALLOW_EMERGENCY_NUMBERS_IN_CALL_LOG_BOOL = "allow_emergency_numbers_in_call_log_bool";
@@ -44849,9 +44883,9 @@ package android.telephony {
     field public static final int BAND_UNKNOWN = 0; // 0x0
     field public static final int CELL_BANDWIDTH_UNKNOWN = 0; // 0x0
     field public static final int CHANNEL_NUMBER_UNKNOWN = 2147483647; // 0x7fffffff
-    field public static final int CONNECTION_PRIMARY_SERVING = 1; // 0x1
-    field public static final int CONNECTION_SECONDARY_SERVING = 2; // 0x2
-    field public static final int CONNECTION_UNKNOWN = -1; // 0xffffffff
+    field @Deprecated public static final int CONNECTION_PRIMARY_SERVING = 1; // 0x1
+    field @Deprecated public static final int CONNECTION_SECONDARY_SERVING = 2; // 0x2
+    field @Deprecated public static final int CONNECTION_UNKNOWN = -1; // 0xffffffff
     field @NonNull public static final android.os.Parcelable.Creator<android.telephony.PhysicalChannelConfig> CREATOR;
     field public static final int FREQUENCY_UNKNOWN = -1; // 0xffffffff
     field public static final int PHYSICAL_CELL_ID_MAXIMUM_VALUE = 1007; // 0x3ef
@@ -53791,6 +53825,7 @@ package android.view {
     ctor public WindowManager.LayoutParams(int, int, int, int, int, int, int);
     ctor public WindowManager.LayoutParams(android.os.Parcel);
     method public boolean areWallpaperTouchEventsEnabled();
+    method public boolean canPlayMoveAnimation();
     method public final int copyFrom(android.view.WindowManager.LayoutParams);
     method public String debug(String);
     method public int describeContents();
@@ -53803,6 +53838,7 @@ package android.view {
     method public boolean isHdrConversionEnabled();
     method public static boolean mayUseInputMethod(int);
     method public void setBlurBehindRadius(@IntRange(from=0) int);
+    method public void setCanPlayMoveAnimation(boolean);
     method public void setColorMode(int);
     method public void setFitInsetsIgnoringVisibility(boolean);
     method public void setFitInsetsSides(int);
