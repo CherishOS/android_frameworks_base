@@ -28,10 +28,12 @@ import android.content.Context;
 import android.content.ContentResolver;
 import android.os.UserHandle;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.graphics.PorterDuff;
 import android.graphics.RenderEffect;
 import android.graphics.Shader;
 import android.media.MediaMetadata;
@@ -50,6 +52,7 @@ import android.view.View;
 import android.widget.ImageView;
 import com.android.internal.util.cherish.ImageHelper;
 import com.android.systemui.Dependency;
+import com.android.internal.graphics.ColorUtils;
 import com.android.systemui.Dumpable;
 import com.android.systemui.R;
 import com.android.systemui.animation.Interpolators;
@@ -107,6 +110,8 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
             "system:" + Settings.System.LOCKSCREEN_ALBUMART_FILTER;
     private static final String LS_MEDIA_FILTER_BLUR_RADIUS =
             "system:" + Settings.System.LS_MEDIA_FILTER_BLUR_RADIUS;
+    private static final String LS_MEDIA_ARTWORK_FADE_PERCENT =
+            "system:" + Settings.System.LS_MEDIA_ARTWORK_FADE_PERCENT;
 
     private static final String NOWPLAYING_SERVICE = "com.google.android.as";
     
@@ -161,6 +166,7 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
     private boolean mShouldBlur;
     private int mAlbumArtFilter;
     private float mLSBlurRadius;
+    private int mFadeLevel;
 
     private final MediaController.Callback mMediaListener = new MediaController.Callback() {
         @Override
@@ -230,7 +236,8 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, LOCKSCREEN_MEDIA_METADATA);
         tunerService.addTunable(this, LOCKSCREEN_ALBUMART_FILTER);
-        mTunerService.addTunable(this, LS_MEDIA_FILTER_BLUR_RADIUS);
+        tunerService.addTunable(this, LS_MEDIA_FILTER_BLUR_RADIUS);
+        tunerService.addTunable(this, LS_MEDIA_ARTWORK_FADE_PERCENT);
     }
 
     @Override
@@ -250,6 +257,11 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
             case LS_MEDIA_FILTER_BLUR_RADIUS:
                 mLSBlurRadius =
                         (float) TunerService.parseInteger(newValue, 125);
+                dispatchUpdateMediaMetaData(false /* changed */, true /* allowAnimation */);
+                break;
+            case LS_MEDIA_ARTWORK_FADE_PERCENT:
+                mFadeLevel =
+                        TunerService.parseInteger(newValue, 30);
                 dispatchUpdateMediaMetaData(false /* changed */, true /* allowAnimation */);
                 break;
             default:
@@ -713,6 +725,8 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
 		if (mShouldBlur) {
                     mBackdropBack.setRenderEffect(RenderEffect.createBlurEffect(mLSBlurRadius,mLSBlurRadius,Shader.TileMode.MIRROR));
                 }
+                final int fadeFilter = ColorUtils.blendARGB(Color.TRANSPARENT, Color.BLACK, mFadeLevel / 100f);
+                mBackdropBack.setColorFilter(fadeFilter, PorterDuff.Mode.SRC_ATOP);
 
                 if (mBackdropFront.getVisibility() == View.VISIBLE) {
                     if (DEBUG_MEDIA) {
