@@ -56,6 +56,7 @@ public class GenerateRkpKey {
     private static final int NOTIFY_EMPTY = 0;
     private static final int NOTIFY_KEY_GENERATED = 1;
     private static final int TIMEOUT_MS = 1000;
+    private static final int DELAY_MS = 100;
 
     private IGenerateRkpKeyService mBinder;
     private Context mContext;
@@ -102,7 +103,14 @@ public class GenerateRkpKey {
 
     @Status
     private int bindAndSendCommand(int command, int securityLevel) throws RemoteException {
+        mCountDownLatch = new CountDownLatch(1);
         Intent intent = new Intent(IGenerateRkpKeyService.class.getName());
+        try {
+            //Add 100ms delay to allow GenerateKeyService to come up
+            mCountDownLatch.await(DELAY_MS, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            Log.e(TAG, "Interrupted: ", e);
+        }
         ComponentName comp = intent.resolveSystemService(mContext.getPackageManager(), 0);
         int returnCode = IGenerateRkpKeyService.Status.OK;
         if (comp == null) {
@@ -110,7 +118,6 @@ public class GenerateRkpKey {
             return returnCode;
         }
         intent.setComponent(comp);
-        mCountDownLatch = new CountDownLatch(1);
         Executor executor = Executors.newCachedThreadPool();
         if (!mContext.bindService(intent, Context.BIND_AUTO_CREATE, executor, mConnection)) {
             throw new RemoteException("Failed to bind to GenerateRkpKeyService");
