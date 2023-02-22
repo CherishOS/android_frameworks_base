@@ -50379,12 +50379,6 @@ package android.view {
     field public static final int VERTICAL_GRAVITY_MASK = 112; // 0x70
   }
 
-  public class HandwritingDelegateConfiguration {
-    ctor public HandwritingDelegateConfiguration(@IdRes int, @NonNull Runnable);
-    method public int getDelegatorViewId();
-    method @NonNull public Runnable getInitiationCallback();
-  }
-
   public class HapticFeedbackConstants {
     field public static final int CLOCK_TICK = 4; // 0x4
     field public static final int CONFIRM = 16; // 0x10
@@ -51982,6 +51976,8 @@ package android.view {
     method @Nullable public CharSequence getAccessibilityPaneTitle();
     method @IdRes public int getAccessibilityTraversalAfter();
     method @IdRes public int getAccessibilityTraversalBefore();
+    method @NonNull public String getAllowedHandwritingDelegatePackageName();
+    method @NonNull public String getAllowedHandwritingDelegatorPackageName();
     method public float getAlpha();
     method public android.view.animation.Animation getAnimation();
     method @Nullable public android.graphics.Matrix getAnimationMatrix();
@@ -52037,7 +52033,7 @@ package android.view {
     method public float getHandwritingBoundsOffsetLeft();
     method public float getHandwritingBoundsOffsetRight();
     method public float getHandwritingBoundsOffsetTop();
-    method @Nullable public android.view.HandwritingDelegateConfiguration getHandwritingDelegateConfiguration();
+    method @Nullable public Runnable getHandwritingDelegatorCallback();
     method public final boolean getHasOverlappingRendering();
     method public final int getHeight();
     method public void getHitRect(android.graphics.Rect);
@@ -52193,6 +52189,7 @@ package android.view {
     method public boolean isFocused();
     method public final boolean isFocusedByDefault();
     method public boolean isForceDarkAllowed();
+    method public boolean isHandwritingDelegate();
     method public boolean isHapticFeedbackEnabled();
     method public boolean isHardwareAccelerated();
     method public boolean isHorizontalFadingEdgeEnabled();
@@ -52363,6 +52360,8 @@ package android.view {
     method public void setAccessibilityTraversalBefore(@IdRes int);
     method public void setActivated(boolean);
     method public void setAllowClickWhenDisabled(boolean);
+    method public void setAllowedHandwritingDelegatePackage(@NonNull String);
+    method public void setAllowedHandwritingDelegatorPackage(@NonNull String);
     method public void setAlpha(@FloatRange(from=0.0, to=1.0) float);
     method public void setAnimation(android.view.animation.Animation);
     method public void setAnimationMatrix(@Nullable android.graphics.Matrix);
@@ -52405,7 +52404,7 @@ package android.view {
     method public void setForegroundTintList(@Nullable android.content.res.ColorStateList);
     method public void setForegroundTintMode(@Nullable android.graphics.PorterDuff.Mode);
     method public void setHandwritingBoundsOffsets(float, float, float, float);
-    method public void setHandwritingDelegateConfiguration(@Nullable android.view.HandwritingDelegateConfiguration);
+    method public void setHandwritingDelegatorCallback(@Nullable Runnable);
     method public void setHapticFeedbackEnabled(boolean);
     method public void setHasTransientState(boolean);
     method public void setHorizontalFadingEdgeEnabled(boolean);
@@ -52418,6 +52417,7 @@ package android.view {
     method public void setImportantForAutofill(int);
     method public void setImportantForContentCapture(int);
     method public void setIsCredential(boolean);
+    method public void setIsHandwritingDelegate(boolean);
     method public void setKeepScreenOn(boolean);
     method public void setKeyboardNavigationCluster(boolean);
     method public void setLabelFor(@IdRes int);
