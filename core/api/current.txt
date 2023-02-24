@@ -13577,15 +13577,24 @@ package android.credentials {
   }
 
   public final class CreateCredentialRequest implements android.os.Parcelable {
-    ctor public CreateCredentialRequest(@NonNull String, @NonNull android.os.Bundle, @NonNull android.os.Bundle, boolean, boolean);
     method public boolean alwaysSendAppInfoToProvider();
     method public int describeContents();
     method @NonNull public android.os.Bundle getCandidateQueryData();
     method @NonNull public android.os.Bundle getCredentialData();
+    method @Nullable public String getOrigin();
     method @NonNull public String getType();
     method public boolean isSystemProviderRequired();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.credentials.CreateCredentialRequest> CREATOR;
+  }
+
+  public static final class CreateCredentialRequest.Builder {
+    ctor public CreateCredentialRequest.Builder(@NonNull android.os.Bundle, @NonNull android.os.Bundle);
+    method @NonNull public android.credentials.CreateCredentialRequest build();
+    method @NonNull public android.credentials.CreateCredentialRequest.Builder setAlwaysSendAppInfoToProvider(boolean);
+    method @NonNull public android.credentials.CreateCredentialRequest.Builder setIsSystemProviderRequired(boolean);
+    method @NonNull @RequiresPermission(android.Manifest.permission.CREDENTIAL_MANAGER_SET_ORIGIN) public android.credentials.CreateCredentialRequest.Builder setOrigin(@NonNull String);
+    method @NonNull public android.credentials.CreateCredentialRequest.Builder setType(@NonNull String);
   }
 
   public final class CreateCredentialResponse implements android.os.Parcelable {
@@ -13619,9 +13628,7 @@ package android.credentials {
   public final class CredentialManager {
     method public void clearCredentialState(@NonNull android.credentials.ClearCredentialStateRequest, @Nullable android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.credentials.ClearCredentialStateException>);
     method public void createCredential(@NonNull android.credentials.CreateCredentialRequest, @NonNull android.app.Activity, @Nullable android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.credentials.CreateCredentialResponse,android.credentials.CreateCredentialException>);
-    method @RequiresPermission(android.Manifest.permission.CREDENTIAL_MANAGER_SET_ORIGIN) public void createCredentialWithOrigin(@NonNull android.credentials.CreateCredentialRequest, @Nullable String, @NonNull android.app.Activity, @Nullable android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.credentials.CreateCredentialResponse,android.credentials.CreateCredentialException>);
     method public void getCredential(@NonNull android.credentials.GetCredentialRequest, @NonNull android.app.Activity, @Nullable android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.credentials.GetCredentialResponse,android.credentials.GetCredentialException>);
-    method @RequiresPermission(android.Manifest.permission.CREDENTIAL_MANAGER_SET_ORIGIN) public void getCredentialWithOrigin(@NonNull android.credentials.GetCredentialRequest, @Nullable String, @NonNull android.app.Activity, @Nullable android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.credentials.GetCredentialResponse,android.credentials.GetCredentialException>);
     method public boolean isEnabledCredentialProviderService(@NonNull android.content.ComponentName);
     method public void registerCredentialDescription(@NonNull android.credentials.RegisterCredentialDescriptionRequest);
     method public void unregisterCredentialDescription(@NonNull android.credentials.UnregisterCredentialDescriptionRequest);
@@ -13656,6 +13663,7 @@ package android.credentials {
     method public int describeContents();
     method @NonNull public java.util.List<android.credentials.CredentialOption> getCredentialOptions();
     method @NonNull public android.os.Bundle getData();
+    method @Nullable public String getOrigin();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.credentials.GetCredentialRequest> CREATOR;
   }
@@ -13666,6 +13674,7 @@ package android.credentials {
     method @NonNull public android.credentials.GetCredentialRequest build();
     method @NonNull public android.credentials.GetCredentialRequest.Builder setAlwaysSendAppInfoToProvider(boolean);
     method @NonNull public android.credentials.GetCredentialRequest.Builder setCredentialOptions(@NonNull java.util.List<android.credentials.CredentialOption>);
+    method @NonNull @RequiresPermission(android.Manifest.permission.CREDENTIAL_MANAGER_SET_ORIGIN) public android.credentials.GetCredentialRequest.Builder setOrigin(@NonNull String);
   }
 
   public final class GetCredentialResponse implements android.os.Parcelable {
@@ -40563,7 +40572,9 @@ package android.service.credentials {
 
   public final class CallingAppInfo implements android.os.Parcelable {
     ctor public CallingAppInfo(@NonNull String, @NonNull android.content.pm.SigningInfo);
+    ctor public CallingAppInfo(@NonNull String, @NonNull android.content.pm.SigningInfo, @Nullable String);
     method public int describeContents();
+    method @Nullable public String getOrigin();
     method @NonNull public String getPackageName();
     method @NonNull public android.content.pm.SigningInfo getSigningInfo();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
