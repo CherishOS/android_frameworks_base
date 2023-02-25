@@ -301,9 +301,7 @@ class Optimizer {
 };
 
 bool ParseConfig(const std::string& content, IAaptContext* context, OptimizeOptions* options) {
-  size_t line_no = 0;
   for (StringPiece line : util::Tokenize(content, '\n')) {
-    line_no++;
     line = util::TrimWhitespace(line);
     if (line.empty()) {
       continue;
