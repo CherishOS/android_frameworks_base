@@ -19527,9 +19527,9 @@ package android.hardware.display {
 
   public final class DisplayManager {
     method public android.hardware.display.VirtualDisplay createVirtualDisplay(@NonNull String, @IntRange(from=1) int, @IntRange(from=1) int, @IntRange(from=1) int, @Nullable android.view.Surface, int);
-    method @Nullable public android.hardware.display.VirtualDisplay createVirtualDisplay(@NonNull String, @IntRange(from=1) int, @IntRange(from=1) int, @IntRange(from=1) int, float, @Nullable android.view.Surface, int);
     method public android.hardware.display.VirtualDisplay createVirtualDisplay(@NonNull String, @IntRange(from=1) int, @IntRange(from=1) int, @IntRange(from=1) int, @Nullable android.view.Surface, int, @Nullable android.hardware.display.VirtualDisplay.Callback, @Nullable android.os.Handler);
-    method @Nullable public android.hardware.display.VirtualDisplay createVirtualDisplay(@NonNull String, @IntRange(from=1) int, @IntRange(from=1) int, @IntRange(from=1) int, float, @Nullable android.view.Surface, int, @Nullable android.os.Handler, @Nullable android.hardware.display.VirtualDisplay.Callback);
+    method @Nullable public android.hardware.display.VirtualDisplay createVirtualDisplay(@NonNull android.hardware.display.VirtualDisplayConfig);
+    method @Nullable public android.hardware.display.VirtualDisplay createVirtualDisplay(@NonNull android.hardware.display.VirtualDisplayConfig, @Nullable android.os.Handler, @Nullable android.hardware.display.VirtualDisplay.Callback);
     method public android.view.Display getDisplay(int);
     method public android.view.Display[] getDisplays();
     method public android.view.Display[] getDisplays(String);
@@ -19582,6 +19582,30 @@ package android.hardware.display {
     method public void onPaused();
     method public void onResumed();
     method public void onStopped();
+  }
+
+  public final class VirtualDisplayConfig implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getDensityDpi();
+    method @NonNull public java.util.List<java.lang.String> getDisplayCategories();
+    method public int getFlags();
+    method public int getHeight();
+    method @NonNull public String getName();
+    method public float getRequestedRefreshRate();
+    method @Nullable public android.view.Surface getSurface();
+    method public int getWidth();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.hardware.display.VirtualDisplayConfig> CREATOR;
+  }
+
+  public static final class VirtualDisplayConfig.Builder {
+    ctor public VirtualDisplayConfig.Builder(@NonNull String, @IntRange(from=1) int, @IntRange(from=1) int, @IntRange(from=1) int);
+    method @NonNull public android.hardware.display.VirtualDisplayConfig.Builder addDisplayCategory(@NonNull String);
+    method @NonNull public android.hardware.display.VirtualDisplayConfig build();
+    method @NonNull public android.hardware.display.VirtualDisplayConfig.Builder setDisplayCategories(@NonNull java.util.List<java.lang.String>);
+    method @NonNull public android.hardware.display.VirtualDisplayConfig.Builder setFlags(int);
+    method @NonNull public android.hardware.display.VirtualDisplayConfig.Builder setRequestedRefreshRate(@FloatRange(from=0.0f) float);
+    method @NonNull public android.hardware.display.VirtualDisplayConfig.Builder setSurface(@Nullable android.view.Surface);
   }
 
 }
