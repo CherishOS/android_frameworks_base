@@ -275,6 +275,8 @@ public class CachedBluetoothDevice implements Comparable<CachedBluetoothDevice> 
 
     @VisibleForTesting
     void setProfileConnectedStatus(int profileId, boolean isFailed) {
+        Log.d(TAG, "Connect to profile : " + profileId + " isFailed=" + isFailed);
+
         switch (profileId) {
             case BluetoothProfile.A2DP:
                 mIsA2dpProfileConnectedFail = isFailed;
@@ -1209,6 +1211,12 @@ public class CachedBluetoothDevice implements Comparable<CachedBluetoothDevice> 
     }
 
     private boolean isProfileConnectedFail() {
+        Log.d(TAG, "mIsA2dpProfileConnectedFail = "+ mIsA2dpProfileConnectedFail);
+        Log.d(TAG, "mIsHearingAidProfileConnectedFail = "+ mIsHearingAidProfileConnectedFail);
+        Log.d(TAG, "mIsLeAudioProfileConnectedFail = "+ mIsLeAudioProfileConnectedFail);
+        Log.d(TAG, "mIsHeadsetProfileConnectedFail = "+ mIsHeadsetProfileConnectedFail);
+        Log.d(TAG, "isConnectedSapDevice() = "+ isConnectedSapDevice());
+
         return mIsA2dpProfileConnectedFail || mIsHearingAidProfileConnectedFail
                 || (!isConnectedSapDevice() && mIsHeadsetProfileConnectedFail)
                 || mIsLeAudioProfileConnectedFail;
