@@ -13594,12 +13594,11 @@ package android.credentials {
   }
 
   public static final class CreateCredentialRequest.Builder {
-    ctor public CreateCredentialRequest.Builder(@NonNull android.os.Bundle, @NonNull android.os.Bundle);
+    ctor public CreateCredentialRequest.Builder(@NonNull String, @NonNull android.os.Bundle, @NonNull android.os.Bundle);
     method @NonNull public android.credentials.CreateCredentialRequest build();
     method @NonNull public android.credentials.CreateCredentialRequest.Builder setAlwaysSendAppInfoToProvider(boolean);
     method @NonNull public android.credentials.CreateCredentialRequest.Builder setIsSystemProviderRequired(boolean);
     method @NonNull @RequiresPermission(android.Manifest.permission.CREDENTIAL_MANAGER_SET_ORIGIN) public android.credentials.CreateCredentialRequest.Builder setOrigin(@NonNull String);
-    method @NonNull public android.credentials.CreateCredentialRequest.Builder setType(@NonNull String);
   }
 
   public final class CreateCredentialResponse implements android.os.Parcelable {
@@ -20389,7 +20388,7 @@ package android.location {
   public final class GnssCapabilities implements android.os.Parcelable {
     method public int describeContents();
     method @NonNull public java.util.List<android.location.GnssSignalType> getGnssSignalTypes();
-    method public boolean hasAccumulatedDeltaRange();
+    method public int hasAccumulatedDeltaRange();
     method public boolean hasAntennaInfo();
     method public boolean hasGeofencing();
     method @Deprecated public boolean hasGnssAntennaInfo();
@@ -20415,8 +20414,10 @@ package android.location {
     method public boolean hasSatellitePvt();
     method public boolean hasScheduling();
     method public boolean hasSingleShotFix();
-    method public boolean isAccumulatedDeltaRangeCapabilityKnown();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field public static final int CAPABILITY_SUPPORTED = 1; // 0x1
+    field public static final int CAPABILITY_UNKNOWN = 0; // 0x0
+    field public static final int CAPABILITY_UNSUPPORTED = 2; // 0x2
     field @NonNull public static final android.os.Parcelable.Creator<android.location.GnssCapabilities> CREATOR;
   }
 
@@ -20424,9 +20425,8 @@ package android.location {
     ctor public GnssCapabilities.Builder();
     ctor public GnssCapabilities.Builder(@NonNull android.location.GnssCapabilities);
     method @NonNull public android.location.GnssCapabilities build();
-    method @NonNull public android.location.GnssCapabilities.Builder clearIsAccumulatedDeltaRangeCapabilityKnown();
     method @NonNull public android.location.GnssCapabilities.Builder setGnssSignalTypes(@NonNull java.util.List<android.location.GnssSignalType>);
-    method @NonNull public android.location.GnssCapabilities.Builder setHasAccumulatedDeltaRange(boolean);
+    method @NonNull public android.location.GnssCapabilities.Builder setHasAccumulatedDeltaRange(int);
     method @NonNull public android.location.GnssCapabilities.Builder setHasAntennaInfo(boolean);
     method @NonNull public android.location.GnssCapabilities.Builder setHasGeofencing(boolean);
     method @NonNull public android.location.GnssCapabilities.Builder setHasLowPowerMode(boolean);
@@ -40539,7 +40539,7 @@ package android.service.credentials {
     ctor public BeginCreateCredentialResponse();
     method public int describeContents();
     method @NonNull public java.util.List<android.service.credentials.CreateEntry> getCreateEntries();
-    method @Nullable public android.service.credentials.CreateEntry getRemoteCreateEntry();
+    method @Nullable public android.service.credentials.RemoteEntry getRemoteCreateEntry();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.service.credentials.BeginCreateCredentialResponse> CREATOR;
   }
@@ -40549,7 +40549,7 @@ package android.service.credentials {
     method @NonNull public android.service.credentials.BeginCreateCredentialResponse.Builder addCreateEntry(@NonNull android.service.credentials.CreateEntry);
     method @NonNull public android.service.credentials.BeginCreateCredentialResponse build();
     method @NonNull public android.service.credentials.BeginCreateCredentialResponse.Builder setCreateEntries(@NonNull java.util.List<android.service.credentials.CreateEntry>);
-    method @NonNull public android.service.credentials.BeginCreateCredentialResponse.Builder setRemoteCreateEntry(@Nullable android.service.credentials.CreateEntry);
+    method @NonNull public android.service.credentials.BeginCreateCredentialResponse.Builder setRemoteCreateEntry(@Nullable android.service.credentials.RemoteEntry);
   }
 
   public class BeginGetCredentialOption implements android.os.Parcelable {
@@ -40584,7 +40584,7 @@ package android.service.credentials {
     method @NonNull public java.util.List<android.service.credentials.Action> getActions();
     method @NonNull public java.util.List<android.service.credentials.Action> getAuthenticationActions();
     method @NonNull public java.util.List<android.service.credentials.CredentialEntry> getCredentialEntries();
-    method @Nullable public android.service.credentials.CredentialEntry getRemoteCredentialEntry();
+    method @Nullable public android.service.credentials.RemoteEntry getRemoteCredentialEntry();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.service.credentials.BeginGetCredentialResponse> CREATOR;
   }
@@ -40598,7 +40598,7 @@ package android.service.credentials {
     method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder setActions(@NonNull java.util.List<android.service.credentials.Action>);
     method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder setAuthenticationActions(@NonNull java.util.List<android.service.credentials.Action>);
     method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder setCredentialEntries(@NonNull java.util.List<android.service.credentials.CredentialEntry>);
-    method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder setRemoteCredentialEntry(@Nullable android.service.credentials.CredentialEntry);
+    method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder setRemoteCredentialEntry(@Nullable android.service.credentials.RemoteEntry);
   }
 
   public final class CallingAppInfo implements android.os.Parcelable {
@@ -40668,12 +40668,20 @@ package android.service.credentials {
   }
 
   public final class GetCredentialRequest implements android.os.Parcelable {
-    ctor public GetCredentialRequest(@NonNull android.service.credentials.CallingAppInfo, @NonNull android.credentials.CredentialOption);
+    ctor public GetCredentialRequest(@NonNull android.service.credentials.CallingAppInfo, @NonNull java.util.List<android.credentials.CredentialOption>);
     method public int describeContents();
     method @NonNull public android.service.credentials.CallingAppInfo getCallingAppInfo();
-    method @NonNull public android.credentials.CredentialOption getCredentialOption();
+    method @NonNull public java.util.List<android.credentials.CredentialOption> getCredentialOptions();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.service.credentials.GetCredentialRequest> CREATOR;
+  }
+
+  public class RemoteEntry implements android.os.Parcelable {
+    ctor public RemoteEntry(@NonNull android.app.slice.Slice);
+    method public int describeContents();
+    method @NonNull public android.app.slice.Slice getSlice();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.credentials.RemoteEntry> CREATOR;
   }
 
 }
@@ -51435,7 +51443,7 @@ package android.view {
   public final class MotionPredictor {
     ctor public MotionPredictor(@NonNull android.content.Context);
     method public boolean isPredictionAvailable(int, int);
-    method @NonNull public java.util.List<android.view.MotionEvent> predict(long);
+    method @Nullable public android.view.MotionEvent predict(long);
     method public void record(@NonNull android.view.MotionEvent);
   }
 
