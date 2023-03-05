@@ -1750,9 +1750,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mGlobalActions = new GlobalActions(mContext, mWindowManagerFuncs);
         }
         mGlobalActions.showDialog(keyguardShowing, isDeviceProvisioned());
-        // since it took two seconds of long press to bring this up,
-        // poke the wake lock so they have some time to see the dialog.
-        mPowerManager.userActivity(SystemClock.uptimeMillis(), false);
+        if (mPowerManager != null) {
+            // since it took two seconds of long press to bring this up,
+            // poke the wake lock so they have some time to see the dialog.
+            mPowerManager.userActivity(SystemClock.uptimeMillis(), false);
+            if (!mPowerManager.isInteractive()) {
+                // the system expects the device to be awake after poking
+                // but due to some reason the wake lock failed to trigger screen wake up
+                wakeUpFromPowerKey(SystemClock.uptimeMillis());
+            }
+        }
     }
 
     private void cancelGlobalActionsAction() {
