@@ -10333,7 +10333,7 @@ package android.content {
     field public static final int BIND_AUTO_CREATE = 1; // 0x1
     field public static final int BIND_DEBUG_UNBIND = 2; // 0x2
     field public static final int BIND_EXTERNAL_SERVICE = -2147483648; // 0x80000000
-    field public static final long BIND_EXTERNAL_SERVICE_LONG = -9223372036854775808L; // 0x8000000000000000L
+    field public static final long BIND_EXTERNAL_SERVICE_LONG = 4611686018427387904L; // 0x4000000000000000L
     field public static final int BIND_IMPORTANT = 64; // 0x40
     field public static final int BIND_INCLUDE_CAPABILITIES = 4096; // 0x1000
     field public static final int BIND_NOT_FOREGROUND = 4; // 0x4
@@ -10441,7 +10441,6 @@ package android.content {
   }
 
   public static final class Context.BindServiceFlags {
-    method public long getValue();
     method @NonNull public static android.content.Context.BindServiceFlags of(long);
   }
 
@@ -15485,14 +15484,14 @@ package android.graphics {
     method @NonNull public float getMinDisplayRatioForHdrTransition();
     method @NonNull public float[] getRatioMax();
     method @NonNull public float[] getRatioMin();
-    method @NonNull public void setDisplayRatioForFullHdr(float);
-    method @NonNull public void setEpsilonHdr(float, float, float);
-    method @NonNull public void setEpsilonSdr(float, float, float);
+    method public void setDisplayRatioForFullHdr(@FloatRange(from=1.0f) float);
+    method public void setEpsilonHdr(float, float, float);
+    method public void setEpsilonSdr(float, float, float);
     method public void setGainmapContents(@NonNull android.graphics.Bitmap);
-    method @NonNull public void setGamma(float, float, float);
-    method @NonNull public void setMinDisplayRatioForHdrTransition(@FloatRange(from=1.0f) float);
-    method @NonNull public void setRatioMax(float, float, float);
-    method @NonNull public void setRatioMin(float, float, float);
+    method public void setGamma(float, float, float);
+    method public void setMinDisplayRatioForHdrTransition(@FloatRange(from=1.0f) float);
+    method public void setRatioMax(float, float, float);
+    method public void setRatioMin(float, float, float);
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.graphics.Gainmap> CREATOR;
   }
@@ -27309,6 +27308,7 @@ package android.media.tv {
     field public static final int TIME_SHIFT_STATUS_UNAVAILABLE = 2; // 0x2
     field public static final int TIME_SHIFT_STATUS_UNKNOWN = 0; // 0x0
     field public static final int TIME_SHIFT_STATUS_UNSUPPORTED = 1; // 0x1
+    field public static final String TV_MESSAGE_KEY_STREAM_ID = "android.media.tv.TvInputManager.stream_id";
     field public static final String TV_MESSAGE_TYPE_CLOSED_CAPTION = "CC";
     field public static final String TV_MESSAGE_TYPE_WATERMARK = "Watermark";
     field public static final int VIDEO_UNAVAILABLE_REASON_AUDIO_ONLY = 4; // 0x4
@@ -27437,6 +27437,7 @@ package android.media.tv {
     method public boolean onTrackballEvent(android.view.MotionEvent);
     method public abstract boolean onTune(android.net.Uri);
     method public boolean onTune(android.net.Uri, android.os.Bundle);
+    method public void onTvMessage(@NonNull String, @NonNull android.os.Bundle);
     method public void onUnblockContent(android.media.tv.TvContentRating);
     method public void setOverlayViewEnabled(boolean);
   }
@@ -36890,6 +36891,7 @@ package android.provider {
     method public String[] getDocumentStreamTypes(String, String);
     method public String getDocumentType(String) throws java.io.FileNotFoundException;
     method public final String getType(android.net.Uri);
+    method @Nullable public final String getTypeAnonymous(@NonNull android.net.Uri);
     method public final android.net.Uri insert(android.net.Uri, android.content.ContentValues);
     method public boolean isChildDocument(String, String);
     method public String moveDocument(String, String, String) throws java.io.FileNotFoundException;
@@ -39766,6 +39768,7 @@ package android.service.autofill {
     method @NonNull public android.service.autofill.Dataset.Builder setAuthentication(@Nullable android.content.IntentSender);
     method @NonNull public android.service.autofill.Dataset.Builder setField(@NonNull android.view.autofill.AutofillId, @Nullable android.service.autofill.Field);
     method @NonNull public android.service.autofill.Dataset.Builder setField(@NonNull String, @NonNull android.service.autofill.Field);
+    method @NonNull public android.service.autofill.Dataset.Builder setFieldForAllHints(@NonNull android.service.autofill.Field);
     method @NonNull public android.service.autofill.Dataset.Builder setId(@Nullable String);
     method @Deprecated @NonNull public android.service.autofill.Dataset.Builder setInlinePresentation(@NonNull android.service.autofill.InlinePresentation);
     method @Deprecated @NonNull public android.service.autofill.Dataset.Builder setInlinePresentation(@NonNull android.service.autofill.InlinePresentation, @NonNull android.service.autofill.InlinePresentation);
@@ -40549,7 +40552,7 @@ package android.service.credentials {
     method @NonNull public android.service.credentials.BeginCreateCredentialResponse.Builder addCreateEntry(@NonNull android.service.credentials.CreateEntry);
     method @NonNull public android.service.credentials.BeginCreateCredentialResponse build();
     method @NonNull public android.service.credentials.BeginCreateCredentialResponse.Builder setCreateEntries(@NonNull java.util.List<android.service.credentials.CreateEntry>);
-    method @NonNull public android.service.credentials.BeginCreateCredentialResponse.Builder setRemoteCreateEntry(@Nullable android.service.credentials.RemoteEntry);
+    method @NonNull @RequiresPermission("android.permission.PROVIDE_REMOTE_CREDENTIALS") public android.service.credentials.BeginCreateCredentialResponse.Builder setRemoteCreateEntry(@Nullable android.service.credentials.RemoteEntry);
   }
 
   public class BeginGetCredentialOption implements android.os.Parcelable {
@@ -40598,7 +40601,7 @@ package android.service.credentials {
     method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder setActions(@NonNull java.util.List<android.service.credentials.Action>);
     method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder setAuthenticationActions(@NonNull java.util.List<android.service.credentials.Action>);
     method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder setCredentialEntries(@NonNull java.util.List<android.service.credentials.CredentialEntry>);
-    method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder setRemoteCredentialEntry(@Nullable android.service.credentials.RemoteEntry);
+    method @NonNull @RequiresPermission("android.permission.PROVIDE_REMOTE_CREDENTIALS") public android.service.credentials.BeginGetCredentialResponse.Builder setRemoteCredentialEntry(@Nullable android.service.credentials.RemoteEntry);
   }
 
   public final class CallingAppInfo implements android.os.Parcelable {
@@ -40640,9 +40643,11 @@ package android.service.credentials {
   }
 
   public class CredentialEntry implements android.os.Parcelable {
+    ctor public CredentialEntry(@NonNull String, @NonNull String, @NonNull android.app.slice.Slice);
     ctor public CredentialEntry(@NonNull android.service.credentials.BeginGetCredentialOption, @NonNull android.app.slice.Slice);
+    ctor public CredentialEntry(@NonNull String, @NonNull android.app.slice.Slice);
     method public int describeContents();
-    method @NonNull public android.service.credentials.BeginGetCredentialOption getBeginGetCredentialOption();
+    method @NonNull public String getBeginGetCredentialOptionId();
     method @NonNull public android.app.slice.Slice getSlice();
     method @NonNull public String getType();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
