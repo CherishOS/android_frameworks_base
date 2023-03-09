@@ -5279,10 +5279,28 @@ package android.app {
   }
 
   public class BroadcastOptions {
-    ctor public BroadcastOptions();
+    method public void clearDeferralPolicy();
+    method public void clearDeliveryGroupMatchingFilter();
+    method public void clearDeliveryGroupMatchingKey();
+    method public void clearDeliveryGroupPolicy();
+    method @NonNull public static android.app.BroadcastOptions fromBundle(@NonNull android.os.Bundle);
+    method public int getDeferralPolicy();
+    method @Nullable public android.content.IntentFilter getDeliveryGroupMatchingFilter();
+    method @Nullable public String getDeliveryGroupMatchingKey();
+    method public int getDeliveryGroupPolicy();
     method public boolean isShareIdentityEnabled();
+    method @NonNull public static android.app.BroadcastOptions makeBasic();
+    method @NonNull public android.app.BroadcastOptions setDeferralPolicy(int);
+    method @NonNull public android.app.BroadcastOptions setDeliveryGroupMatchingFilter(@NonNull android.content.IntentFilter);
+    method @NonNull public android.app.BroadcastOptions setDeliveryGroupMatchingKey(@NonNull String, @NonNull String);
+    method @NonNull public android.app.BroadcastOptions setDeliveryGroupPolicy(int);
     method @NonNull public android.app.BroadcastOptions setShareIdentityEnabled(boolean);
     method @NonNull public android.os.Bundle toBundle();
+    field public static final int DEFERRAL_POLICY_DEFAULT = 0; // 0x0
+    field public static final int DEFERRAL_POLICY_NONE = 1; // 0x1
+    field public static final int DEFERRAL_POLICY_UNTIL_ACTIVE = 2; // 0x2
+    field public static final int DELIVERY_GROUP_POLICY_ALL = 0; // 0x0
+    field public static final int DELIVERY_GROUP_POLICY_MOST_RECENT = 1; // 0x1
   }
 
   public class DatePickerDialog extends android.app.AlertDialog implements android.widget.DatePicker.OnDateChangedListener android.content.DialogInterface.OnClickListener {
@@ -7398,12 +7416,15 @@ package android.app {
   }
 
   public class UiModeManager {
+    method public void addContrastChangeListener(@NonNull java.util.concurrent.Executor, @NonNull android.app.UiModeManager.ContrastChangeListener);
     method public void disableCarMode(int);
     method public void enableCarMode(int);
+    method @FloatRange(from=-1.0F, to=1.0f) public float getContrast();
     method public int getCurrentModeType();
     method @NonNull public java.time.LocalTime getCustomNightModeEnd();
     method @NonNull public java.time.LocalTime getCustomNightModeStart();
     method public int getNightMode();
+    method public void removeContrastChangeListener(@NonNull android.app.UiModeManager.ContrastChangeListener);
     method public void setApplicationNightMode(int);
     method public void setCustomNightModeEnd(@NonNull java.time.LocalTime);
     method public void setCustomNightModeStart(@NonNull java.time.LocalTime);
@@ -7419,6 +7440,10 @@ package android.app {
     field public static final int MODE_NIGHT_CUSTOM = 3; // 0x3
     field public static final int MODE_NIGHT_NO = 1; // 0x1
     field public static final int MODE_NIGHT_YES = 2; // 0x2
+  }
+
+  public static interface UiModeManager.ContrastChangeListener {
+    method public void onContrastChanged(@FloatRange(from=-1.0F, to=1.0f) float);
   }
 
   public final class VoiceInteractor {
@@ -11157,6 +11182,7 @@ package android.content {
     method public final String getDataScheme(int);
     method public final android.os.PatternMatcher getDataSchemeSpecificPart(int);
     method public final String getDataType(int);
+    method @NonNull public final android.os.PersistableBundle getExtras();
     method public final int getPriority();
     method public final boolean hasAction(String);
     method public final boolean hasCategory(String);
@@ -11175,6 +11201,7 @@ package android.content {
     method public void readFromXml(org.xmlpull.v1.XmlPullParser) throws java.io.IOException, org.xmlpull.v1.XmlPullParserException;
     method public final java.util.Iterator<android.os.PatternMatcher> schemeSpecificPartsIterator();
     method public final java.util.Iterator<java.lang.String> schemesIterator();
+    method public final void setExtras(@NonNull android.os.PersistableBundle);
     method public final void setPriority(int);
     method public final java.util.Iterator<java.lang.String> typesIterator();
     method public final void writeToParcel(android.os.Parcel, int);
@@ -12731,6 +12758,7 @@ package android.content.pm {
     field public static final String FEATURE_VULKAN_HARDWARE_COMPUTE = "android.hardware.vulkan.compute";
     field public static final String FEATURE_VULKAN_HARDWARE_LEVEL = "android.hardware.vulkan.level";
     field public static final String FEATURE_VULKAN_HARDWARE_VERSION = "android.hardware.vulkan.version";
+    field public static final String FEATURE_WALLET_LOCATION_BASED_SUGGESTIONS = "android.software.wallet_location_based_suggestions";
     field public static final String FEATURE_WATCH = "android.hardware.type.watch";
     field public static final String FEATURE_WEBVIEW = "android.software.webview";
     field public static final String FEATURE_WIFI = "android.hardware.wifi";
@@ -26275,9 +26303,9 @@ package android.media.projection {
 
   public final class MediaProjection {
     method public android.hardware.display.VirtualDisplay createVirtualDisplay(@NonNull String, int, int, int, int, @Nullable android.view.Surface, @Nullable android.hardware.display.VirtualDisplay.Callback, @Nullable android.os.Handler);
-    method public void registerCallback(android.media.projection.MediaProjection.Callback, android.os.Handler);
+    method public void registerCallback(@NonNull android.media.projection.MediaProjection.Callback, @Nullable android.os.Handler);
     method public void stop();
-    method public void unregisterCallback(android.media.projection.MediaProjection.Callback);
+    method public void unregisterCallback(@NonNull android.media.projection.MediaProjection.Callback);
   }
 
   public abstract static class MediaProjection.Callback {
@@ -41108,6 +41136,7 @@ package android.service.quickaccesswallet {
     method @NonNull public String getCardId();
     method @NonNull public android.graphics.drawable.Icon getCardImage();
     method @Nullable public CharSequence getCardLabel();
+    method @NonNull public java.util.List<android.location.Location> getCardLocations();
     method @NonNull public int getCardType();
     method @NonNull public CharSequence getContentDescription();
     method @Nullable public android.graphics.drawable.Icon getNonPaymentCardSecondaryImage();
@@ -41125,6 +41154,7 @@ package android.service.quickaccesswallet {
     method @NonNull public android.service.quickaccesswallet.WalletCard build();
     method @NonNull public android.service.quickaccesswallet.WalletCard.Builder setCardIcon(@Nullable android.graphics.drawable.Icon);
     method @NonNull public android.service.quickaccesswallet.WalletCard.Builder setCardLabel(@Nullable CharSequence);
+    method @NonNull public android.service.quickaccesswallet.WalletCard.Builder setCardLocations(@NonNull java.util.List<android.location.Location>);
     method @NonNull public android.service.quickaccesswallet.WalletCard.Builder setNonPaymentCardSecondaryImage(@Nullable android.graphics.drawable.Icon);
   }
 
@@ -54159,14 +54189,12 @@ package android.view.accessibility {
     method public void addAudioDescriptionRequestedChangeListener(@NonNull java.util.concurrent.Executor, @NonNull android.view.accessibility.AccessibilityManager.AudioDescriptionRequestedChangeListener);
     method public boolean addTouchExplorationStateChangeListener(@NonNull android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener);
     method public void addTouchExplorationStateChangeListener(@NonNull android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener, @Nullable android.os.Handler);
-    method public void addUiContrastChangeListener(@NonNull java.util.concurrent.Executor, @NonNull android.view.accessibility.AccessibilityManager.UiContrastChangeListener);
     method @ColorInt public int getAccessibilityFocusColor();
     method public int getAccessibilityFocusStrokeWidth();
     method @Deprecated public java.util.List<android.content.pm.ServiceInfo> getAccessibilityServiceList();
     method public java.util.List<android.accessibilityservice.AccessibilityServiceInfo> getEnabledAccessibilityServiceList(int);
     method public java.util.List<android.accessibilityservice.AccessibilityServiceInfo> getInstalledAccessibilityServiceList();
     method public int getRecommendedTimeoutMillis(int, int);
-    method @FloatRange(from=-1.0F, to=1.0f) public float getUiContrast();
     method public void interrupt();
     method public static boolean isAccessibilityButtonSupported();
     method public boolean isAudioDescriptionRequested();
@@ -54178,7 +54206,6 @@ package android.view.accessibility {
     method public boolean removeAccessibilityStateChangeListener(@NonNull android.view.accessibility.AccessibilityManager.AccessibilityStateChangeListener);
     method public boolean removeAudioDescriptionRequestedChangeListener(@NonNull android.view.accessibility.AccessibilityManager.AudioDescriptionRequestedChangeListener);
     method public boolean removeTouchExplorationStateChangeListener(@NonNull android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener);
-    method public void removeUiContrastChangeListener(@NonNull android.view.accessibility.AccessibilityManager.UiContrastChangeListener);
     method public void sendAccessibilityEvent(android.view.accessibility.AccessibilityEvent);
     field public static final int FLAG_CONTENT_CONTROLS = 4; // 0x4
     field public static final int FLAG_CONTENT_ICONS = 1; // 0x1
@@ -54199,10 +54226,6 @@ package android.view.accessibility {
 
   public static interface AccessibilityManager.TouchExplorationStateChangeListener {
     method public void onTouchExplorationStateChanged(boolean);
-  }
-
-  public static interface AccessibilityManager.UiContrastChangeListener {
-    method public void onUiContrastChanged(@FloatRange(from=-1.0F, to=1.0f) float);
   }
 
   public class AccessibilityNodeInfo implements android.os.Parcelable {
