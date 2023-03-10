@@ -26782,15 +26782,21 @@ package android.media.tv {
   }
 
   public final class TableResponse extends android.media.tv.BroadcastInfoResponse implements android.os.Parcelable {
-    ctor public TableResponse(int, int, int, @Nullable android.net.Uri, int, int);
-    ctor public TableResponse(int, int, int, @NonNull byte[], int, int);
-    ctor public TableResponse(int, int, int, @NonNull android.os.SharedMemory, int, int);
+    ctor @Deprecated public TableResponse(int, int, int, @Nullable android.net.Uri, int, int);
     method public int getSize();
     method @Nullable public byte[] getTableByteArray();
     method @Nullable public android.os.SharedMemory getTableSharedMemory();
     method @Nullable public android.net.Uri getTableUri();
     method public int getVersion();
     field @NonNull public static final android.os.Parcelable.Creator<android.media.tv.TableResponse> CREATOR;
+  }
+
+  public static final class TableResponse.Builder {
+    ctor public TableResponse.Builder(int, int, int, int, int);
+    method @NonNull public android.media.tv.TableResponse build();
+    method @NonNull public android.media.tv.TableResponse.Builder setTableByteArray(@NonNull byte[]);
+    method @NonNull public android.media.tv.TableResponse.Builder setTableSharedMemory(@NonNull android.os.SharedMemory);
+    method @NonNull public android.media.tv.TableResponse.Builder setTableUri(@NonNull android.net.Uri);
   }
 
   public final class TimelineRequest extends android.media.tv.BroadcastInfoRequest implements android.os.Parcelable {
@@ -27337,8 +27343,9 @@ package android.media.tv {
     field public static final int TIME_SHIFT_STATUS_UNKNOWN = 0; // 0x0
     field public static final int TIME_SHIFT_STATUS_UNSUPPORTED = 1; // 0x1
     field public static final String TV_MESSAGE_KEY_STREAM_ID = "android.media.tv.TvInputManager.stream_id";
-    field public static final String TV_MESSAGE_TYPE_CLOSED_CAPTION = "CC";
-    field public static final String TV_MESSAGE_TYPE_WATERMARK = "Watermark";
+    field public static final int TV_MESSAGE_TYPE_CLOSED_CAPTION = 2; // 0x2
+    field public static final int TV_MESSAGE_TYPE_OTHER = 1000; // 0x3e8
+    field public static final int TV_MESSAGE_TYPE_WATERMARK = 1; // 0x1
     field public static final int VIDEO_UNAVAILABLE_REASON_AUDIO_ONLY = 4; // 0x4
     field public static final int VIDEO_UNAVAILABLE_REASON_BUFFERING = 3; // 0x3
     field public static final int VIDEO_UNAVAILABLE_REASON_CAS_BLACKOUT = 16; // 0x10
@@ -27429,10 +27436,10 @@ package android.media.tv {
     method public void notifyTrackSelected(int, String);
     method public void notifyTracksChanged(java.util.List<android.media.tv.TvTrackInfo>);
     method public void notifyTuned(@NonNull android.net.Uri);
-    method public void notifyTvMessage(@NonNull String, @NonNull android.os.Bundle);
+    method public void notifyTvMessage(int, @NonNull android.os.Bundle);
     method public void notifyVideoAvailable();
     method public void notifyVideoUnavailable(int);
-    method public void onAdBuffer(@NonNull android.media.tv.AdBuffer);
+    method public void onAdBufferReady(@NonNull android.media.tv.AdBuffer);
     method public void onAppPrivateCommand(@NonNull String, android.os.Bundle);
     method public android.view.View onCreateOverlayView();
     method public boolean onGenericMotionEvent(android.view.MotionEvent);
@@ -27451,7 +27458,7 @@ package android.media.tv {
     method public void onSetInteractiveAppNotificationEnabled(boolean);
     method public abstract void onSetStreamVolume(@FloatRange(from=0.0, to=1.0) float);
     method public abstract boolean onSetSurface(@Nullable android.view.Surface);
-    method public void onSetTvMessageEnabled(@NonNull String, boolean);
+    method public void onSetTvMessageEnabled(int, boolean);
     method public void onSurfaceChanged(int, int, int);
     method public long onTimeShiftGetCurrentPosition();
     method public long onTimeShiftGetStartPosition();
@@ -27501,17 +27508,17 @@ package android.media.tv {
     method @NonNull public android.net.Uri getChannelUri();
     method @NonNull public java.util.List<android.media.tv.TvContentRating> getContentRatings();
     method @NonNull public String getDescription();
-    method @NonNull public long getEndPaddingMillis();
+    method public long getEndPaddingMillis();
     method @NonNull public String getName();
     method @Nullable public android.net.Uri getProgramUri();
-    method @IntRange(from=0xffffffff) @NonNull public long getRecordingDurationMillis();
+    method @IntRange(from=0xffffffff) public long getRecordingDurationMillis();
     method @NonNull public String getRecordingId();
-    method @IntRange(from=0xffffffff) @NonNull public long getRecordingStartTimeMillis();
+    method @IntRange(from=0xffffffff) public long getRecordingStartTimeMillis();
     method @Nullable public android.net.Uri getRecordingUri();
-    method @NonNull public int getRepeatDays();
-    method @IntRange(from=0) @NonNull public long getScheduledDurationMillis();
-    method @IntRange(from=0) @NonNull public long getScheduledStartTimeMillis();
-    method @NonNull public long getStartPaddingMillis();
+    method public int getRepeatDays();
+    method @IntRange(from=0) public long getScheduledDurationMillis();
+    method @IntRange(from=0) public long getScheduledStartTimeMillis();
+    method public long getStartPaddingMillis();
     method public void setDescription(@NonNull String);
     method public void setName(@NonNull String);
     method public void writeToParcel(@NonNull android.os.Parcel, int);
@@ -27594,7 +27601,7 @@ package android.media.tv {
     method public void setOnUnhandledInputEventListener(android.media.tv.TvView.OnUnhandledInputEventListener);
     method public void setStreamVolume(@FloatRange(from=0.0, to=1.0) float);
     method public void setTimeShiftPositionCallback(@Nullable android.media.tv.TvView.TimeShiftPositionCallback);
-    method public void setTvMessageEnabled(@NonNull String, boolean);
+    method public void setTvMessageEnabled(int, boolean);
     method public void setZOrderMediaOverlay(boolean);
     method public void setZOrderOnTop(boolean);
     method public void timeShiftPause();
@@ -27635,7 +27642,7 @@ package android.media.tv {
     method public void onTrackSelected(String, int, String);
     method public void onTracksChanged(String, java.util.List<android.media.tv.TvTrackInfo>);
     method public void onTuned(@NonNull String, @NonNull android.net.Uri);
-    method public void onTvMessage(@NonNull String, @NonNull String, @NonNull android.os.Bundle);
+    method public void onTvMessage(@NonNull String, int, @NonNull android.os.Bundle);
     method public void onVideoAvailable(String);
     method public void onVideoSizeChanged(String, int, int);
     method public void onVideoUnavailable(String, int);
@@ -27743,7 +27750,7 @@ package android.media.tv.interactive {
     ctor public TvInteractiveAppService.Session(@NonNull android.content.Context);
     method public boolean isMediaViewEnabled();
     method @CallSuper public void layoutSurface(int, int, int, int);
-    method @CallSuper public void notifyAdBuffer(@NonNull android.media.tv.AdBuffer);
+    method @CallSuper public void notifyAdBufferReady(@NonNull android.media.tv.AdBuffer);
     method @CallSuper public final void notifyBiInteractiveAppCreated(@NonNull android.net.Uri, @Nullable String);
     method @CallSuper public void notifySessionStateChanged(int, int);
     method @CallSuper public final void notifyTeletextAppStateChanged(int);
@@ -27795,7 +27802,7 @@ package android.media.tv.interactive {
     method public boolean onTrackballEvent(@NonNull android.view.MotionEvent);
     method public void onTracksChanged(@NonNull java.util.List<android.media.tv.TvTrackInfo>);
     method public void onTuned(@NonNull android.net.Uri);
-    method public void onTvMessage(@NonNull String, @NonNull android.os.Bundle);
+    method public void onTvMessage(int, @NonNull android.os.Bundle);
     method public void onTvRecordingInfo(@Nullable android.media.tv.TvRecordingInfo);
     method public void onTvRecordingInfoList(@NonNull java.util.List<android.media.tv.TvRecordingInfo>);
     method public void onVideoAvailable();
@@ -27817,7 +27824,7 @@ package android.media.tv.interactive {
     method @CallSuper public void requestTimeShiftMode();
     method @CallSuper public void requestTrackInfoList();
     method @CallSuper public void requestTvRecordingInfo(@NonNull String);
-    method @CallSuper public void requestTvRecordingInfoList(@NonNull int);
+    method @CallSuper public void requestTvRecordingInfoList(int);
     method @CallSuper public void sendPlaybackCommandRequest(@NonNull String, @Nullable android.os.Bundle);
     method @CallSuper public void sendTimeShiftCommandRequest(@NonNull String, @Nullable android.os.Bundle);
     method @CallSuper public void setMediaViewEnabled(boolean);
@@ -27859,7 +27866,7 @@ package android.media.tv.interactive {
     method public void notifyTimeShiftPlaybackParams(@NonNull android.media.PlaybackParams);
     method public void notifyTimeShiftStartPositionChanged(@NonNull String, long);
     method public void notifyTimeShiftStatusChanged(@NonNull String, int);
-    method public void notifyTvMessage(@NonNull String, @NonNull android.os.Bundle);
+    method public void notifyTvMessage(@NonNull int, @NonNull android.os.Bundle);
     method public void onAttachedToWindow();
     method public void onDetachedFromWindow();
     method public void onLayout(boolean, int, int, int, int);
@@ -27916,7 +27923,7 @@ package android.media.tv.interactive {
     method public void onRequestTimeShiftMode(@NonNull String);
     method public void onRequestTrackInfoList(@NonNull String);
     method public void onRequestTvRecordingInfo(@NonNull String, @NonNull String);
-    method public void onRequestTvRecordingInfoList(@NonNull String, @NonNull int);
+    method public void onRequestTvRecordingInfoList(@NonNull String, int);
     method public void onSetTvRecordingInfo(@NonNull String, @NonNull String, @NonNull android.media.tv.TvRecordingInfo);
     method public void onSetVideoBounds(@NonNull String, @NonNull android.graphics.Rect);
     method public void onStateChanged(@NonNull String, int, int);
