@@ -212,7 +212,7 @@ class ConfigurationController {
             final int size = callbacks.size();
             for (int i = 0; i < size; i++) {
                 ComponentCallbacks2 cb = callbacks.get(i);
-                if (!equivalent) {
+                if (!equivalent && cb != null && config != null) {
                     performConfigurationChanged(cb, config);
                 }
             }
@@ -263,6 +263,9 @@ class ConfigurationController {
      * original LocaleList.
      */
     void updateLocaleListFromAppContext(@NonNull Context context) {
+        if (context == null || mResourcesManager == null) {
+            return;
+        }
         final Locale bestLocale = context.getResources().getConfiguration().getLocales().get(0);
         final LocaleList newLocaleList = mResourcesManager.getConfiguration().getLocales();
         final int newLocaleListSize = newLocaleList.size();
