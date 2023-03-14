@@ -14,45 +14,28 @@
  * limitations under the License.
  */
 
-package com.android.server.wm.flicker.launch
+package com.android.server.wm.flicker.ime
 
-import android.platform.test.annotations.FlakyTest
-import android.tools.common.NavBar
-import android.tools.device.flicker.annotation.FlickerServiceCompatible
+import android.tools.common.Rotation
 import android.tools.device.flicker.junit.FlickerParametersRunnerFactory
 import android.tools.device.flicker.legacy.FlickerTest
 import android.tools.device.flicker.legacy.FlickerTestFactory
 import org.junit.FixMethodOrder
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.junit.runners.Parameterized
 
-/** Some assertions will fail because of b/264415996 */
-@FlickerServiceCompatible
 @RunWith(Parameterized::class)
 @Parameterized.UseParametersRunnerFactory(FlickerParametersRunnerFactory::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-class OpenAppColdFromIconCfArm(flicker: FlickerTest) : OpenAppColdFromIcon(flicker) {
-    @Test
-    @FlakyTest
-    override fun visibleLayersShownMoreThanOneConsecutiveEntry() {
-        super.visibleLayersShownMoreThanOneConsecutiveEntry()
-    }
-
+class CloseImeOnDismissPopupDialogTestCfArm(flicker: FlickerTest) :
+    CloseImeOnDismissPopupDialogTest(flicker) {
     companion object {
-        /**
-         * Creates the test configurations.
-         *
-         * See [FlickerTestFactory.nonRotationTests] for configuring screen orientation and
-         * navigation modes.
-         */
         @Parameterized.Parameters(name = "{0}")
         @JvmStatic
         fun getParams(): Collection<FlickerTest> {
-            // TAPL fails on landscape mode b/240916028
             return FlickerTestFactory.nonRotationTests(
-                supportedNavigationModes = listOf(NavBar.MODE_3BUTTON)
+                supportedRotations = listOf(Rotation.ROTATION_0)
             )
         }
     }
