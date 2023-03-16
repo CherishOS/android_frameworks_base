@@ -99,7 +99,7 @@ import kotlin.Pair;
  * for antialiasing and emulation purposes.
  */
 @SysUISingleton
-public class ScreenDecorations implements CoreStartable, Tunable , Dumpable {
+public class ScreenDecorations extends CoreStartable implements Tunable , Dumpable {
     private static final boolean DEBUG = false;
     private static final String TAG = "ScreenDecorations";
 
@@ -123,7 +123,7 @@ public class ScreenDecorations implements CoreStartable, Tunable , Dumpable {
     private DisplayManager mDisplayManager;
     @VisibleForTesting
     protected boolean mIsRegistered;
-    private final Context mContext;
+    private final BroadcastDispatcher mBroadcastDispatcher;
     private final Executor mMainExecutor;
     private final TunerService mTunerService;
     private final SecureSettings mSecureSettings;
@@ -306,7 +306,7 @@ public class ScreenDecorations implements CoreStartable, Tunable , Dumpable {
             ThreadFactory threadFactory,
             PrivacyDotDecorProviderFactory dotFactory,
             FaceScanningProviderFactory faceScanningFactory) {
-        mContext = context;
+        super(context);
         mMainExecutor = mainExecutor;
         mSecureSettings = secureSettings;
         mTunerService = tunerService;
@@ -952,7 +952,7 @@ public class ScreenDecorations implements CoreStartable, Tunable , Dumpable {
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    protected void onConfigurationChanged(Configuration newConfig) {
         if (DEBUG_DISABLE_SCREEN_DECORATIONS) {
             Log.i(TAG, "ScreenDecorations is disabled");
             return;

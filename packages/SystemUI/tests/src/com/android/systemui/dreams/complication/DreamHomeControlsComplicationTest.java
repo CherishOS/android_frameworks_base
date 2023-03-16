@@ -125,7 +125,7 @@ public class DreamHomeControlsComplicationTest extends SysuiTestCase {
     @Test
     public void complicationAvailability_serviceNotAvailable_noFavorites_doNotAddComplication() {
         final DreamHomeControlsComplication.Registrant registrant =
-                new DreamHomeControlsComplication.Registrant(mComplication,
+                new DreamHomeControlsComplication.Registrant(mContext, mComplication,
                         mDreamOverlayStateController, mControlsComponent);
         registrant.start();
 
@@ -138,7 +138,7 @@ public class DreamHomeControlsComplicationTest extends SysuiTestCase {
     @Test
     public void complicationAvailability_serviceAvailable_noFavorites_doNotAddComplication() {
         final DreamHomeControlsComplication.Registrant registrant =
-                new DreamHomeControlsComplication.Registrant(mComplication,
+                new DreamHomeControlsComplication.Registrant(mContext, mComplication,
                         mDreamOverlayStateController, mControlsComponent);
         registrant.start();
 
@@ -164,7 +164,7 @@ public class DreamHomeControlsComplicationTest extends SysuiTestCase {
     @Test
     public void complicationAvailability_serviceNotAvailable_haveFavorites_doNotAddComplication() {
         final DreamHomeControlsComplication.Registrant registrant =
-                new DreamHomeControlsComplication.Registrant(mComplication,
+                new DreamHomeControlsComplication.Registrant(mContext, mComplication,
                         mDreamOverlayStateController, mControlsComponent);
         registrant.start();
 
@@ -177,7 +177,7 @@ public class DreamHomeControlsComplicationTest extends SysuiTestCase {
     @Test
     public void complicationAvailability_serviceAvailable_haveFavorites_addComplication() {
         final DreamHomeControlsComplication.Registrant registrant =
-                new DreamHomeControlsComplication.Registrant(mComplication,
+                new DreamHomeControlsComplication.Registrant(mContext, mComplication,
                         mDreamOverlayStateController, mControlsComponent);
         registrant.start();
 

@@ -336,7 +336,6 @@ public class CentralSurfacesImpl extends CoreStartable implements
         ONLY_CORE_APPS = onlyCoreApps;
     }
 
-    private final Context mContext;
     private final LockscreenShadeTransitionController mLockscreenShadeTransitionController;
     private CentralSurfacesCommandQueueCallbacks mCommandQueueCallbacks;
     private float mTransitionToFullShadeProgress = 0f;
@@ -813,7 +812,7 @@ public class CentralSurfacesImpl extends CoreStartable implements
             IDreamManager dreamManager,
             Lazy<CameraLauncher> cameraLauncherLazy,
             Lazy<LightRevealScrimViewModel> lightRevealScrimViewModelLazy) {
-        mContext = context;
+        super(context);
         mNotificationsController = notificationsController;
         mFragmentService = fragmentService;
         mLightBarController = lightBarController;
@@ -3602,7 +3601,7 @@ public class CentralSurfacesImpl extends CoreStartable implements
     public void setBouncerShowingOverDream(boolean bouncerShowingOverDream) {
         mBouncerShowingOverDream = bouncerShowingOverDream;
     }
-
+  
     /**
      * Propagate the bouncer state to status bar components.
      *

@@ -18,13 +18,13 @@ package com.android.systemui.statusbar.tv.notifications;
 
 import android.annotation.Nullable;
 import android.app.Notification;
+import android.content.Context;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 import android.util.SparseArray;
 
 import com.android.systemui.CoreStartable;
-import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.statusbar.NotificationListener;
 
 import javax.inject.Inject;
@@ -32,8 +32,7 @@ import javax.inject.Inject;
 /**
  * Keeps track of the notifications on TV.
  */
-@SysUISingleton
-public class TvNotificationHandler implements CoreStartable,
+public class TvNotificationHandler extends CoreStartable implements
         NotificationListener.NotificationHandler {
     private static final String TAG = "TvNotificationHandler";
     private final NotificationListener mNotificationListener;
@@ -42,7 +41,8 @@ public class TvNotificationHandler implements CoreStartable,
     private Listener mUpdateListener;
 
     @Inject
-    public TvNotificationHandler(NotificationListener notificationListener) {
+    public TvNotificationHandler(Context context, NotificationListener notificationListener) {
+        super(context);
         mNotificationListener = notificationListener;
     }
 

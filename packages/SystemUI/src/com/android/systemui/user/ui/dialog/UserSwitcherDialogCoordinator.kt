@@ -54,7 +54,7 @@ constructor(
     private val userDetailAdapterProvider: Provider<UserDetailView.Adapter>,
     private val eventLogger: Lazy<UiEventLogger>,
     private val activityStarter: Lazy<ActivityStarter>,
-) : CoreStartable {
+) : CoreStartable(context) {
 
     private var currentDialog: Dialog? = null
 

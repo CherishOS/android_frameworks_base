@@ -21,12 +21,12 @@ import javax.inject.Inject
 
 @SysUISingleton
 class ChooserSelector @Inject constructor(
-        private val context: Context,
+        context: Context,
         private val userTracker: UserTracker,
         private val featureFlags: FeatureFlags,
         @Application private val coroutineScope: CoroutineScope,
         @Background private val bgDispatcher: CoroutineDispatcher,
-) : CoreStartable {
+) : CoreStartable(context) {
 
     private val chooserComponent = ComponentName.unflattenFromString(
             context.resources.getString(R.string.config_chooserActivity))

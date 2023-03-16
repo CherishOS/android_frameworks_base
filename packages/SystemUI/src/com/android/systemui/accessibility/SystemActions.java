@@ -70,7 +70,7 @@ import dagger.Lazy;
  * Class to register system actions with accessibility framework.
  */
 @SysUISingleton
-public class SystemActions implements CoreStartable {
+public class SystemActions extends CoreStartable {
     private static final String TAG = "SystemActions";
 
     /**
@@ -178,7 +178,6 @@ public class SystemActions implements CoreStartable {
     private static final String PERMISSION_SELF = "com.android.systemui.permission.SELF";
 
     private final SystemActionsBroadcastReceiver mReceiver;
-    private final Context mContext;
     private final Optional<Recents> mRecentsOptional;
     private Locale mLocale;
     private final AccessibilityManager mA11yManager;
@@ -194,7 +193,7 @@ public class SystemActions implements CoreStartable {
             ShadeController shadeController,
             Lazy<Optional<CentralSurfaces>> centralSurfacesOptionalLazy,
             Optional<Recents> recentsOptional) {
-        mContext = context;
+        super(context);
         mShadeController = shadeController;
         mRecentsOptional = recentsOptional;
         mReceiver = new SystemActionsBroadcastReceiver();
@@ -224,6 +223,7 @@ public class SystemActions implements CoreStartable {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
         final Locale locale = mContext.getResources().getConfiguration().getLocales().get(0);
         if (!locale.equals(mLocale)) {
             mLocale = locale;

@@ -61,7 +61,7 @@ public class SmartSpaceComplication implements Complication {
      * {@link CoreStartable} responsbile for registering {@link SmartSpaceComplication} with
      * SystemUI.
      */
-    public static class Registrant implements CoreStartable {
+    public static class Registrant extends CoreStartable {
         private final DreamSmartspaceController mSmartSpaceController;
         private final DreamOverlayStateController mDreamOverlayStateController;
         private final SmartSpaceComplication mComplication;
@@ -78,10 +78,11 @@ public class SmartSpaceComplication implements Complication {
          * Default constructor for {@link SmartSpaceComplication}.
          */
         @Inject
-        public Registrant(
+        public Registrant(Context context,
                 DreamOverlayStateController dreamOverlayStateController,
                 SmartSpaceComplication smartSpaceComplication,
                 DreamSmartspaceController smartSpaceController) {
+            super(context);
             mDreamOverlayStateController = dreamOverlayStateController;
             mComplication = smartSpaceComplication;
             mSmartSpaceController = smartSpaceController;

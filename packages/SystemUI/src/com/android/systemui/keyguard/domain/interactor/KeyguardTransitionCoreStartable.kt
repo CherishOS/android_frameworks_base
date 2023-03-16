@@ -27,7 +27,7 @@ class KeyguardTransitionCoreStartable
 constructor(
     private val interactors: Set<TransitionInteractor>,
     private val auditLogger: KeyguardTransitionAuditLogger,
-) : CoreStartable {
+) : CoreStartable(context) {
 
     override fun start() {
         // By listing the interactors in a when, the compiler will help enforce all classes

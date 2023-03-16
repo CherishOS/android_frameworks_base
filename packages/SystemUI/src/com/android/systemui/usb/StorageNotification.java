@@ -21,6 +21,7 @@ import android.app.Notification;
 import android.app.Notification.Action;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -56,12 +57,11 @@ import javax.inject.Inject;
 
 /** */
 @SysUISingleton
-public class StorageNotification implements CoreStartable {
+public class StorageNotification extends CoreStartable {
     private static final String TAG = "StorageNotification";
 
     private static final String ACTION_SNOOZE_VOLUME = "com.android.systemui.action.SNOOZE_VOLUME";
     private static final String ACTION_FINISH_WIZARD = "com.android.systemui.action.FINISH_WIZARD";
-    private final Context mContext;
     private final BroadcastDispatcher mBroadcastDispatcher;
 
     // TODO: delay some notifications to avoid bumpy fast operations
@@ -76,7 +76,7 @@ public class StorageNotification implements CoreStartable {
             NotificationManager notificationManager,
             StorageManager storageManager
     ) {
-        mContext = context;
+        super(context);
         mBroadcastDispatcher = broadcastDispatcher;
         mNotificationManager = notificationManager;
         mStorageManager = storageManager;

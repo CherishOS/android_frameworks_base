@@ -48,8 +48,8 @@ import javax.inject.Provider;
  * ClipboardListener brings up a clipboard overlay when something is copied to the clipboard.
  */
 @SysUISingleton
-public class ClipboardListener implements
-        CoreStartable, ClipboardManager.OnPrimaryClipChangedListener {
+public class ClipboardListener extends CoreStartable
+        implements ClipboardManager.OnPrimaryClipChangedListener {
     private static final String TAG = "ClipboardListener";
 
     @VisibleForTesting
@@ -58,7 +58,6 @@ public class ClipboardListener implements
     static final String EXTRA_SUPPRESS_OVERLAY =
             "com.android.systemui.SUPPRESS_CLIPBOARD_OVERLAY";
 
-    private final Context mContext;
     private final DeviceConfigProxy mDeviceConfig;
     private final Provider<ClipboardOverlayController> mOverlayProvider;
     private final ClipboardOverlayControllerLegacyFactory mOverlayFactory;
@@ -77,7 +76,7 @@ public class ClipboardListener implements
             ClipboardManager clipboardManager,
             UiEventLogger uiEventLogger,
             FeatureFlags featureFlags) {
-        mContext = context;
+        super(context);
         mDeviceConfig = deviceConfigProxy;
         mOverlayProvider = clipboardOverlayControllerProvider;
         mOverlayFactory = overlayFactory;

@@ -63,7 +63,7 @@ import javax.inject.Inject;
 import dagger.Lazy;
 
 @SysUISingleton
-public class PowerUI implements CoreStartable, CommandQueue.Callbacks {
+public class PowerUI extends CoreStartable implements CommandQueue.Callbacks {
 
     static final String TAG = "PowerUI";
     static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
@@ -109,7 +109,6 @@ public class PowerUI implements CoreStartable, CommandQueue.Callbacks {
 
     private IThermalEventListener mSkinThermalEventListener;
     private IThermalEventListener mUsbThermalEventListener;
-    private final Context mContext;
     private final BroadcastDispatcher mBroadcastDispatcher;
     private final CommandQueue mCommandQueue;
     private final Lazy<Optional<CentralSurfaces>> mCentralSurfacesOptionalLazy;
@@ -141,7 +140,7 @@ public class PowerUI implements CoreStartable, CommandQueue.Callbacks {
             WakefulnessLifecycle wakefulnessLifecycle,
             PowerManager powerManager,
             UserTracker userTracker) {
-        mContext = context;
+        super(context);
         mBroadcastDispatcher = broadcastDispatcher;
         mCommandQueue = commandQueue;
         mCentralSurfacesOptionalLazy = centralSurfacesOptionalLazy;
@@ -202,7 +201,7 @@ public class PowerUI implements CoreStartable, CommandQueue.Callbacks {
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    protected void onConfigurationChanged(Configuration newConfig) {
         final int mask = ActivityInfo.CONFIG_MCC | ActivityInfo.CONFIG_MNC;
 
         // Safe to modify mLastConfiguration here as it's only updated by the main thread (here).

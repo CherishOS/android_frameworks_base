@@ -84,6 +84,7 @@ public class SessionTrackerTest extends SysuiTestCase {
         MockitoAnnotations.initMocks(this);
 
         mSessionTracker = new SessionTracker(
+                mContext,
                 mStatusBarService,
                 mAuthController,
                 mKeyguardUpdateMonitor,

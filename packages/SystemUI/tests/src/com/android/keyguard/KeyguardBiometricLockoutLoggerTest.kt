@@ -17,6 +17,7 @@
 package com.android.keyguard
 
 import android.hardware.biometrics.BiometricSourceType
+import org.mockito.Mockito.verify
 import android.testing.AndroidTestingRunner
 import androidx.test.filters.SmallTest
 import com.android.internal.logging.InstanceId
@@ -29,10 +30,9 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentCaptor
-import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Captor
+import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mock
-import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoMoreInteractions
 import org.mockito.Mockito.`when` as whenever
 import org.mockito.MockitoAnnotations
@@ -63,6 +63,7 @@ class KeyguardBiometricLockoutLoggerTest : SysuiTestCase() {
         whenever(keyguardUpdateMonitor.strongAuthTracker).thenReturn(strongAuthTracker)
         whenever(sessionTracker.getSessionId(anyInt())).thenReturn(sessionId)
         keyguardBiometricLockoutLogger = KeyguardBiometricLockoutLogger(
+                mContext,
                 uiEventLogger,
                 keyguardUpdateMonitor,
                 sessionTracker)

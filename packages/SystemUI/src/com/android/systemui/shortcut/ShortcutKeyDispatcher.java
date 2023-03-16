@@ -32,10 +32,10 @@ import javax.inject.Inject;
  * Dispatches shortcut to System UI components
  */
 @SysUISingleton
-public class ShortcutKeyDispatcher implements CoreStartable, ShortcutKeyServiceProxy.Callbacks {
+public class ShortcutKeyDispatcher extends CoreStartable
+        implements ShortcutKeyServiceProxy.Callbacks {
 
     private static final String TAG = "ShortcutKeyDispatcher";
-    private final Context mContext;
 
     private ShortcutKeyServiceProxy mShortcutKeyServiceProxy = new ShortcutKeyServiceProxy(this);
     private IWindowManager mWindowManagerService = WindowManagerGlobal.getWindowManagerService();
@@ -50,7 +50,7 @@ public class ShortcutKeyDispatcher implements CoreStartable, ShortcutKeyServiceP
 
     @Inject
     public ShortcutKeyDispatcher(Context context) {
-        mContext = context;
+        super(context);
     }
 
     /**

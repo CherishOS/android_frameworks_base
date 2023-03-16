@@ -19,6 +19,8 @@ package com.android.systemui.flags
 import android.content.Intent
 import com.android.systemui.CoreStartable
 import com.android.systemui.broadcast.BroadcastSender
+import android.content.Context
+import com.android.systemui.dagger.qualifiers.Application
 import com.android.systemui.dump.DumpManager
 import com.android.systemui.statusbar.commandline.CommandRegistry
 import dagger.Binds
@@ -30,12 +32,13 @@ import javax.inject.Inject
 class FeatureFlagsDebugStartable
 @Inject
 constructor(
+    @Application context: Context,
     dumpManager: DumpManager,
     private val commandRegistry: CommandRegistry,
     private val flagCommand: FlagCommand,
     private val featureFlags: FeatureFlagsDebug,
     private val broadcastSender: BroadcastSender
-) : CoreStartable {
+) : CoreStartable(context) {
 
     init {
         dumpManager.registerCriticalDumpable(FeatureFlagsDebug.TAG) { pw, args ->

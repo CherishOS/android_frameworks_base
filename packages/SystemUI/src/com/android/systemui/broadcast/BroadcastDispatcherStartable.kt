@@ -16,12 +16,14 @@
 
 package com.android.systemui.broadcast
 
+import android.content.Context
 import com.android.systemui.CoreStartable
 import javax.inject.Inject
 
 class BroadcastDispatcherStartable @Inject constructor(
+    context: Context,
     val broadcastDispatcher: BroadcastDispatcher
-) : CoreStartable {
+) : CoreStartable(context) {
 
     override fun start() {
         broadcastDispatcher.initialize()

@@ -32,8 +32,7 @@ import java.util.Arrays;
 import javax.inject.Inject;
 
 // NOT Singleton. Started per-user.
-/** */
-public class NotificationChannels implements CoreStartable {
+public class NotificationChannels extends CoreStartable {
     public static String ALERTS      = "ALR";
     public static String SCREENSHOTS_HEADSUP = "SCN_HEADSUP";
     // Deprecated. Please use or create a more specific channel that users will better understand
@@ -46,11 +45,9 @@ public class NotificationChannels implements CoreStartable {
     public static String INSTANT     = "INS";
     public static String SETUP       = "STP";
 
-    private final Context mContext;
-
     @Inject
     public NotificationChannels(Context context) {
-        mContext = context;
+        super(context);
     }
 
     public static void createAll(Context context) {

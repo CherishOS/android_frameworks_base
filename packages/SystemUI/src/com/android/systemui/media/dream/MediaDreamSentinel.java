@@ -18,6 +18,7 @@ package com.android.systemui.media.dream;
 
 import static com.android.systemui.flags.Flags.DREAM_MEDIA_COMPLICATION;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -37,7 +38,7 @@ import javax.inject.Inject;
  * {@link MediaDreamSentinel} is responsible for tracking media state and registering/unregistering
  * the media complication as appropriate
  */
-public class MediaDreamSentinel implements CoreStartable {
+public class MediaDreamSentinel extends CoreStartable {
     private static final String TAG = "MediaDreamSentinel";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
@@ -112,10 +113,11 @@ public class MediaDreamSentinel implements CoreStartable {
     private final FeatureFlags mFeatureFlags;
 
     @Inject
-    public MediaDreamSentinel(MediaDataManager mediaDataManager,
+    public MediaDreamSentinel(Context context, MediaDataManager mediaDataManager,
             DreamOverlayStateController dreamOverlayStateController,
             DreamMediaEntryComplication mediaEntryComplication,
             FeatureFlags featureFlags) {
+        super(context);
         mMediaDataManager = mediaDataManager;
         mDreamOverlayStateController = dreamOverlayStateController;
         mMediaEntryComplication = mediaEntryComplication;

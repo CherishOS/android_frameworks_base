@@ -27,6 +27,7 @@ import android.bluetooth.le.ScanSettings;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.hardware.input.InputManager;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -65,7 +66,7 @@ import javax.inject.Provider;
 
 /** */
 @SysUISingleton
-public class KeyboardUI implements CoreStartable, InputManager.OnTabletModeChangedListener {
+public class KeyboardUI extends CoreStartable implements InputManager.OnTabletModeChangedListener {
     private static final String TAG = "KeyboardUI";
     private static final boolean DEBUG = false;
 
@@ -126,16 +127,21 @@ public class KeyboardUI implements CoreStartable, InputManager.OnTabletModeChang
 
     @Inject
     public KeyboardUI(Context context, Provider<LocalBluetoothManager> bluetoothManagerProvider) {
-        mContext = context;
+        super(context);
         this.mBluetoothManagerProvider = bluetoothManagerProvider;
     }
 
     @Override
     public void start() {
+        mContext = super.mContext;
         HandlerThread thread = new HandlerThread("Keyboard", Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
         mHandler = new KeyboardHandler(thread.getLooper());
         mHandler.sendEmptyMessage(MSG_INIT);
+    }
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
     }
 
     @Override
@@ -150,7 +156,7 @@ public class KeyboardUI implements CoreStartable, InputManager.OnTabletModeChang
     }
 
     @Override
-    public void onBootCompleted() {
+    protected void onBootCompleted() {
         mHandler.sendEmptyMessage(MSG_ON_BOOT_COMPLETED);
     }
 

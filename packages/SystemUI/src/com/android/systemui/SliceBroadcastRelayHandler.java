@@ -38,17 +38,16 @@ import javax.inject.Inject;
  * @see SliceBroadcastRelay
  */
 @SysUISingleton
-public class SliceBroadcastRelayHandler implements CoreStartable {
+public class SliceBroadcastRelayHandler extends CoreStartable {
     private static final String TAG = "SliceBroadcastRelay";
     private static final boolean DEBUG = false;
 
     private final ArrayMap<Uri, BroadcastRelay> mRelays = new ArrayMap<>();
-    private final Context mContext;
     private final BroadcastDispatcher mBroadcastDispatcher;
 
     @Inject
     public SliceBroadcastRelayHandler(Context context, BroadcastDispatcher broadcastDispatcher) {
-        mContext = context;
+        super(context);
         mBroadcastDispatcher = broadcastDispatcher;
     }
 

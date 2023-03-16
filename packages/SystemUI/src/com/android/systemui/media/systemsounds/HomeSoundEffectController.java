@@ -40,7 +40,7 @@ import javax.inject.Inject;
  * documented at {@link #handleTaskStackChanged} apply.
  */
 @SysUISingleton
-public class HomeSoundEffectController implements CoreStartable {
+public class HomeSoundEffectController extends CoreStartable {
 
     private static final String TAG = "HomeSoundEffectController";
     private final AudioManager mAudioManager;
@@ -65,6 +65,7 @@ public class HomeSoundEffectController implements CoreStartable {
             TaskStackChangeListeners taskStackChangeListeners,
             ActivityManagerWrapper activityManagerWrapper,
             PackageManager packageManager) {
+        super(context);
         mAudioManager = audioManager;
         mTaskStackChangeListeners = taskStackChangeListeners;
         mActivityManagerWrapper = activityManagerWrapper;

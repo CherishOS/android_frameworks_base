@@ -229,7 +229,7 @@ public class ScreenDecorationsTest extends SysuiTestCase {
             }
 
             @Override
-            public void onConfigurationChanged(Configuration newConfig) {
+            protected void onConfigurationChanged(Configuration newConfig) {
                 super.onConfigurationChanged(newConfig);
                 mExecutor.runAllReady();
             }

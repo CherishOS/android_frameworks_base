@@ -24,6 +24,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.app.smartspace.SmartspaceTarget;
+import android.content.Context;
 import android.testing.AndroidTestingRunner;
 import android.view.View;
 
@@ -47,6 +48,8 @@ import java.util.Collections;
 @SmallTest
 @RunWith(AndroidTestingRunner.class)
 public class SmartSpaceComplicationTest extends SysuiTestCase {
+    @Mock
+    private Context mContext;
 
     @Mock
     private DreamSmartspaceController mSmartspaceController;
@@ -77,6 +80,7 @@ public class SmartSpaceComplicationTest extends SysuiTestCase {
 
     private SmartSpaceComplication.Registrant getRegistrant() {
         return new SmartSpaceComplication.Registrant(
+                mContext,
                 mDreamOverlayStateController,
                 mComplication,
                 mSmartspaceController);

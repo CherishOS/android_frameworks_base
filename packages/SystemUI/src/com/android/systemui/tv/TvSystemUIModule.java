@@ -206,9 +206,9 @@ public abstract class TvSystemUIModule {
 
     @Provides
     @SysUISingleton
-    static TvNotificationHandler provideTvNotificationHandler(
+    static TvNotificationHandler provideTvNotificationHandler(Context context,
             NotificationListener notificationListener) {
-        return new TvNotificationHandler(notificationListener);
+        return new TvNotificationHandler(context, notificationListener);
     }
 
     /**

@@ -78,7 +78,8 @@ abstract class TemporaryViewDisplayController<T : TemporaryViewInfo, U : Tempora
     @LayoutRes private val viewLayoutRes: Int,
     private val wakeLockBuilder: WakeLock.Builder,
     private val systemClock: SystemClock,
-) : CoreStartable, Dumpable {
+) : CoreStartable(context), Dumpable {
+
     /**
      * Window layout params that will be used as a starting point for the [windowLayoutParams] of
      * all subclasses.

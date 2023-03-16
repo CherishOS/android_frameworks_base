@@ -46,7 +46,7 @@ import javax.inject.Inject;
  * system that are used for testing the latency.
  */
 @SysUISingleton
-public class LatencyTester implements CoreStartable {
+public class LatencyTester extends CoreStartable {
     private static final boolean DEFAULT_ENABLED = Build.IS_ENG;
     private static final String
             ACTION_FINGERPRINT_WAKE =
@@ -62,11 +62,13 @@ public class LatencyTester implements CoreStartable {
 
     @Inject
     public LatencyTester(
+            Context context,
             BiometricUnlockController biometricUnlockController,
             BroadcastDispatcher broadcastDispatcher,
             DeviceConfigProxy deviceConfigProxy,
             @Main DelayableExecutor mainExecutor
     ) {
+        super(context);
         mBiometricUnlockController = biometricUnlockController;
         mBroadcastDispatcher = broadcastDispatcher;
         mDeviceConfigProxy = deviceConfigProxy;

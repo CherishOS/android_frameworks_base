@@ -16,6 +16,7 @@
 
 package com.android.systemui.dreams.complication;
 
+import android.content.Context;
 import android.database.ContentObserver;
 import android.os.UserHandle;
 import android.provider.Settings;
@@ -36,7 +37,7 @@ import javax.inject.Inject;
  * user, and pushes updates to {@link DreamOverlayStateController}.
  */
 @SysUISingleton
-public class ComplicationTypesUpdater implements CoreStartable {
+public class ComplicationTypesUpdater extends CoreStartable {
     private final DreamBackend mDreamBackend;
     private final Executor mExecutor;
     private final SecureSettings mSecureSettings;
@@ -44,11 +45,13 @@ public class ComplicationTypesUpdater implements CoreStartable {
     private final DreamOverlayStateController mDreamOverlayStateController;
 
     @Inject
-    ComplicationTypesUpdater(
+    ComplicationTypesUpdater(Context context,
             DreamBackend dreamBackend,
             @Main Executor executor,
             SecureSettings secureSettings,
             DreamOverlayStateController dreamOverlayStateController) {
+        super(context);
+
         mDreamBackend = dreamBackend;
         mExecutor = executor;
         mSecureSettings = secureSettings;

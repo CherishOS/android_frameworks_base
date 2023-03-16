@@ -48,6 +48,8 @@ import com.android.systemui.dump.DumpManager;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.util.NotificationChannels;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -310,10 +312,14 @@ public class SystemUIApplication extends Application implements
                     Trace.TRACE_TAG_APP, clsName + ".newInstance()");
         }
         try {
-            startable = (CoreStartable) Class.forName(clsName).newInstance();
+            Constructor<?> constructor = Class.forName(clsName).getConstructor(
+                    Context.class);
+            startable = (CoreStartable) constructor.newInstance(this);
         } catch (ClassNotFoundException
+                | NoSuchMethodException
                 | IllegalAccessException
-                | InstantiationException ex) {
+                | InstantiationException
+                | InvocationTargetException ex) {
             throw new RuntimeException(ex);
         } finally {
             Trace.endSection();

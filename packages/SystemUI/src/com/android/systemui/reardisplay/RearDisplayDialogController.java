@@ -54,7 +54,7 @@ import javax.inject.Inject;
  */
 @SuppressLint("VisibleForTests") // TODO(b/260264542) Migrate away from DeviceStateManagerGlobal
 @SysUISingleton
-public class RearDisplayDialogController implements CoreStartable, CommandQueue.Callbacks {
+public class RearDisplayDialogController extends CoreStartable implements CommandQueue.Callbacks {
 
     private int[] mFoldedStates;
     private boolean mStartedFolded;
@@ -75,7 +75,7 @@ public class RearDisplayDialogController implements CoreStartable, CommandQueue.
     @Inject
     public RearDisplayDialogController(Context context, CommandQueue commandQueue,
             @Main Executor executor) {
-        mContext = context;
+        super(context);
         mCommandQueue = commandQueue;
         mExecutor = executor;
     }

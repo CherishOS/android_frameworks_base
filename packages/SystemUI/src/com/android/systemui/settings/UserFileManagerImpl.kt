@@ -44,11 +44,11 @@ class UserFileManagerImpl
 @Inject
 constructor(
     // Context of system process and system user.
-    private val context: Context,
+    val context: Context,
     val userManager: UserManager,
     val broadcastDispatcher: BroadcastDispatcher,
     @Background val backgroundExecutor: DelayableExecutor
-) : UserFileManager, CoreStartable {
+) : UserFileManager, CoreStartable(context) {
     companion object {
         private const val FILES = "files"
         const val SHARED_PREFS = "shared_prefs"

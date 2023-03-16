@@ -71,7 +71,7 @@ public class ComplicationTypesUpdaterTest extends SysuiTestCase {
         MockitoAnnotations.initMocks(this);
         when(mDreamBackend.getEnabledComplications()).thenReturn(new HashSet<>());
 
-        mController = new ComplicationTypesUpdater(mDreamBackend, mExecutor,
+        mController = new ComplicationTypesUpdater(mContext, mDreamBackend, mExecutor,
                 mSecureSettings, mDreamOverlayStateController);
     }
 

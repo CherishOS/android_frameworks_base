@@ -70,6 +70,7 @@ private interface KeyguardNotificationVisibilityProviderImplModule {
 
 @SysUISingleton
 private class KeyguardNotificationVisibilityProviderImpl @Inject constructor(
+    context: Context,
     @Main private val handler: Handler,
     private val keyguardStateController: KeyguardStateController,
     private val lockscreenUserManager: NotificationLockscreenUserManager,
@@ -79,7 +80,7 @@ private class KeyguardNotificationVisibilityProviderImpl @Inject constructor(
     private val userTracker: UserTracker,
     private val secureSettings: SecureSettings,
     private val globalSettings: GlobalSettings
-) : CoreStartable, KeyguardNotificationVisibilityProvider {
+) : CoreStartable(context), KeyguardNotificationVisibilityProvider {
     private val showSilentNotifsUri =
             secureSettings.getUriFor(Settings.Secure.LOCK_SCREEN_SHOW_SILENT_NOTIFICATIONS)
     private val onStateChangedListeners = ListenerSet<Consumer<String>>()

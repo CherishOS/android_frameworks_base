@@ -51,10 +51,9 @@ import javax.inject.Inject;
  * {@link android.Manifest.permission#READ_EXTERNAL_STORAGE}.
  */
 @SysUISingleton
-public class RingtonePlayer implements CoreStartable {
+public class RingtonePlayer extends CoreStartable {
     private static final String TAG = "RingtonePlayer";
     private static final boolean LOGD = false;
-    private final Context mContext;
 
     // TODO: support Uri switching under same IBinder
 
@@ -65,7 +64,7 @@ public class RingtonePlayer implements CoreStartable {
 
     @Inject
     public RingtonePlayer(Context context) {
-        mContext = context;
+        super(context);
     }
 
     @Override

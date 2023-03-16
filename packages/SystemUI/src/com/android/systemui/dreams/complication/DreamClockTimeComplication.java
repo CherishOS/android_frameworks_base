@@ -19,6 +19,7 @@ package com.android.systemui.dreams.complication;
 import static com.android.systemui.dreams.complication.dagger.DreamClockTimeComplicationModule.DREAM_CLOCK_TIME_COMPLICATION_VIEW;
 import static com.android.systemui.dreams.complication.dagger.RegisteredComplicationsModule.DREAM_CLOCK_TIME_COMPLICATION_LAYOUT_PARAMS;
 
+import android.content.Context;
 import android.view.View;
 
 import com.android.systemui.CoreStartable;
@@ -60,7 +61,7 @@ public class DreamClockTimeComplication implements Complication {
      * {@link CoreStartable} responsible for registering {@link DreamClockTimeComplication} with
      * SystemUI.
      */
-    public static class Registrant implements CoreStartable {
+    public static class Registrant extends CoreStartable {
         private final DreamOverlayStateController mDreamOverlayStateController;
         private final DreamClockTimeComplication mComplication;
 
@@ -68,9 +69,10 @@ public class DreamClockTimeComplication implements Complication {
          * Default constructor to register {@link DreamClockTimeComplication}.
          */
         @Inject
-        public Registrant(
+        public Registrant(Context context,
                 DreamOverlayStateController dreamOverlayStateController,
                 DreamClockTimeComplication dreamClockTimeComplication) {
+            super(context);
             mDreamOverlayStateController = dreamOverlayStateController;
             mComplication = dreamClockTimeComplication;
         }

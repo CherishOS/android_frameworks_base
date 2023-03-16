@@ -17,6 +17,7 @@
 package com.android.keyguard
 
 import android.app.StatusBarManager.SESSION_KEYGUARD
+import android.content.Context
 import android.hardware.biometrics.BiometricSourceType
 import com.android.internal.annotations.VisibleForTesting
 import com.android.internal.logging.UiEvent
@@ -40,10 +41,11 @@ import javax.inject.Inject
  */
 @SysUISingleton
 class KeyguardBiometricLockoutLogger @Inject constructor(
+    context: Context?,
     private val uiEventLogger: UiEventLogger,
     private val keyguardUpdateMonitor: KeyguardUpdateMonitor,
     private val sessionTracker: SessionTracker
-) : CoreStartable {
+) : CoreStartable(context) {
     private var fingerprintLockedOut = false
     private var faceLockedOut = false
     private var encryptedOrLockdown = false
