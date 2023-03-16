@@ -224,6 +224,7 @@ package android {
     field @Deprecated public static final String PERSISTENT_ACTIVITY = "android.permission.PERSISTENT_ACTIVITY";
     field public static final String POST_NOTIFICATIONS = "android.permission.POST_NOTIFICATIONS";
     field @Deprecated public static final String PROCESS_OUTGOING_CALLS = "android.permission.PROCESS_OUTGOING_CALLS";
+    field public static final String PROVIDE_REMOTE_CREDENTIALS = "android.permission.PROVIDE_REMOTE_CREDENTIALS";
     field public static final String QUERY_ALL_PACKAGES = "android.permission.QUERY_ALL_PACKAGES";
     field public static final String READ_ASSISTANT_APP_SEARCH_DATA = "android.permission.READ_ASSISTANT_APP_SEARCH_DATA";
     field public static final String READ_BASIC_PHONE_STATE = "android.permission.READ_BASIC_PHONE_STATE";
@@ -11403,7 +11404,7 @@ package android.content {
   public class RestrictionsManager {
     method public static android.os.Bundle convertRestrictionsToBundle(java.util.List<android.content.RestrictionEntry>);
     method public android.content.Intent createLocalApprovalIntent();
-    method @Deprecated public android.os.Bundle getApplicationRestrictions();
+    method public android.os.Bundle getApplicationRestrictions();
     method @NonNull @WorkerThread public java.util.List<android.os.Bundle> getApplicationRestrictionsPerAdmin();
     method public java.util.List<android.content.RestrictionEntry> getManifestRestrictions(String);
     method public boolean hasRestrictionsProvider();
@@ -33866,7 +33867,7 @@ package android.os {
 
   public class UserManager {
     method public static android.content.Intent createUserCreationIntent(@Nullable String, @Nullable String, @Nullable String, @Nullable android.os.PersistableBundle);
-    method @Deprecated @WorkerThread public android.os.Bundle getApplicationRestrictions(String);
+    method @WorkerThread public android.os.Bundle getApplicationRestrictions(String);
     method public long getSerialNumberForUser(android.os.UserHandle);
     method @RequiresPermission(anyOf={"android.permission.MANAGE_USERS", "android.permission.CREATE_USERS"}) public int getUserCount();
     method public long getUserCreationTime(android.os.UserHandle);
@@ -40593,7 +40594,7 @@ package android.service.credentials {
     method @NonNull public android.service.credentials.BeginCreateCredentialResponse.Builder addCreateEntry(@NonNull android.service.credentials.CreateEntry);
     method @NonNull public android.service.credentials.BeginCreateCredentialResponse build();
     method @NonNull public android.service.credentials.BeginCreateCredentialResponse.Builder setCreateEntries(@NonNull java.util.List<android.service.credentials.CreateEntry>);
-    method @NonNull @RequiresPermission("android.permission.PROVIDE_REMOTE_CREDENTIALS") public android.service.credentials.BeginCreateCredentialResponse.Builder setRemoteCreateEntry(@Nullable android.service.credentials.RemoteEntry);
+    method @NonNull @RequiresPermission(android.Manifest.permission.PROVIDE_REMOTE_CREDENTIALS) public android.service.credentials.BeginCreateCredentialResponse.Builder setRemoteCreateEntry(@Nullable android.service.credentials.RemoteEntry);
   }
 
   public class BeginGetCredentialOption implements android.os.Parcelable {
@@ -40642,7 +40643,7 @@ package android.service.credentials {
     method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder setActions(@NonNull java.util.List<android.service.credentials.Action>);
     method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder setAuthenticationActions(@NonNull java.util.List<android.service.credentials.Action>);
     method @NonNull public android.service.credentials.BeginGetCredentialResponse.Builder setCredentialEntries(@NonNull java.util.List<android.service.credentials.CredentialEntry>);
-    method @NonNull @RequiresPermission("android.permission.PROVIDE_REMOTE_CREDENTIALS") public android.service.credentials.BeginGetCredentialResponse.Builder setRemoteCredentialEntry(@Nullable android.service.credentials.RemoteEntry);
+    method @NonNull @RequiresPermission(android.Manifest.permission.PROVIDE_REMOTE_CREDENTIALS) public android.service.credentials.BeginGetCredentialResponse.Builder setRemoteCredentialEntry(@Nullable android.service.credentials.RemoteEntry);
   }
 
   public final class CallingAppInfo implements android.os.Parcelable {
