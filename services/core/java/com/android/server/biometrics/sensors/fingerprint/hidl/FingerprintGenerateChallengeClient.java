@@ -54,7 +54,10 @@ public class FingerprintGenerateChallengeClient
         try {
             final long challenge = getFreshDaemon().preEnroll();
             try {
-                getListener().onChallengeGenerated(getSensorId(), getTargetUserId(), challenge);
+                ClientMonitorCallbackConverter listener = getListener();
+                if (listener != null) {
+                    listener.onChallengeGenerated(getSensorId(), getTargetUserId(), challenge);
+                }
                 mCallback.onClientFinished(this, true /* success */);
             } catch (RemoteException e) {
                 Slog.e(TAG, "Remote exception", e);
