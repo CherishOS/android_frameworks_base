@@ -4893,13 +4893,6 @@ public class NotificationManagerService extends SystemService {
         }
 
         @Override
-        public int getHintsFromListenerNoToken() {
-            synchronized (mNotificationLock) {
-                return mListenerHints;
-            }
-        }
-
-        @Override
         public void requestInterruptionFilterFromListener(INotificationListener token,
                 int interruptionFilter) throws RemoteException {
             final long identity = Binder.clearCallingIdentity();
