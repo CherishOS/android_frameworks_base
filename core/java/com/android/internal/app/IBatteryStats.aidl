@@ -189,7 +189,4 @@ interface IBatteryStats {
     void resetBattery(boolean forceUpdate);
     /** Exposed as a test API. */
     void suspendBatteryInput();
-
-    /** @hide **/
-    void resetStatistics();
 }
