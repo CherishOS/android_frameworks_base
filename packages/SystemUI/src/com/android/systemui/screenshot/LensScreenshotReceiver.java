@@ -14,76 +14,82 @@
  * limitations under the License.
  */
 
-package com.android.systemui.screenshot;
+ package com.android.systemui.screenshot;
 
-import static com.android.systemui.screenshot.ScreenshotController.ACTION_TYPE_LENS;
-import static com.android.systemui.screenshot.ScreenshotController.EXTRA_ID;
-import static com.android.systemui.screenshot.ScreenshotController.EXTRA_SMART_ACTIONS_ENABLED;
-import static com.android.systemui.screenshot.ScreenshotController.SCREENSHOT_URI_ID;
-
-import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.widget.Toast;
-
-import com.android.systemui.dagger.qualifiers.Background;
-import com.android.internal.util.cherish.CherishUtils;
-
-import java.util.concurrent.Executor;
-
-import javax.inject.Inject;
-
-public class LensScreenshotReceiver extends BroadcastReceiver {
-
-    private final ScreenshotSmartActions mScreenshotSmartActions;
-    private final Executor mBackgroundExecutor;
-    private final String ARPackageName = "com.google.ar.lens";
-
-    @Inject
-    public LensScreenshotReceiver(ScreenshotSmartActions screenshotSmartActions,
-            @Background Executor backgroundExecutor) {
-        mScreenshotSmartActions = screenshotSmartActions;
-        mBackgroundExecutor = backgroundExecutor;
-    }
-
-    private boolean doesGoogleLensExist(Context context) {
-        return CherishUtils.isPackageInstalled(context, ARPackageName);
-    }
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        if (!intent.hasExtra(SCREENSHOT_URI_ID)) {
-            return;
-        }
-
-        final Uri uri = Uri.parse(intent.getStringExtra(SCREENSHOT_URI_ID));
-        mBackgroundExecutor.execute(() -> {
-            // action to execute goes here
-            ContentResolver resolver = context.getContentResolver();
-            if (!doesGoogleLensExist(context)) {
-                Toast.makeText(context, "Google Lens is not installed", Toast.LENGTH_SHORT).show();
-                // Launch an intent to the Play Store to install Google Lens
-                String playURL = "https://play.google.com/store/apps/details?id=" + ARPackageName;
-                Intent playAR = new Intent(Intent.ACTION_VIEW);
-                playAR.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                playAR.setData(Uri.parse(playURL));
-                context.startActivity(playAR);
-                return;
-            }
-            Intent share = new Intent(Intent.ACTION_SEND);
-            share.setType("image/*");
-            share.putExtra(Intent.EXTRA_STREAM, uri);
-            share.setPackage(ARPackageName);
-            share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            context.startActivity(share);
-        });
-
-        if (intent.getBooleanExtra(EXTRA_SMART_ACTIONS_ENABLED, false)) {
-            mScreenshotSmartActions.notifyScreenshotAction(
-                    intent.getStringExtra(EXTRA_ID), ACTION_TYPE_LENS, false, null);
-        }
-    }
-}
+ import static com.android.systemui.screenshot.ScreenshotController.ACTION_TYPE_LENS;
+ import static com.android.systemui.screenshot.ScreenshotController.EXTRA_ID;
+ import static com.android.systemui.screenshot.ScreenshotController.EXTRA_SMART_ACTIONS_ENABLED;
+ import static com.android.systemui.screenshot.ScreenshotController.SCREENSHOT_URI_ID;
+ 
+ import android.content.BroadcastReceiver;
+ import android.content.ClipData;
+ import android.content.ClipDescription;
+ import android.content.ComponentName;
+ import android.content.Context;
+ import android.content.Intent;
+ import android.net.Uri;
+ import android.widget.Toast;
+ 
+ import com.android.internal.util.cherish.CherishUtils;
+ 
+ import com.android.systemui.R;
+ import com.android.systemui.dagger.qualifiers.Background;
+ 
+ import java.util.concurrent.Executor;
+ 
+ import javax.inject.Inject;
+ 
+ public class LensScreenshotReceiver extends BroadcastReceiver {
+ 
+     private static final String GSA_PACKAGE = "com.google.android.googlequicksearchbox";
+     private static final String LENS_ACTIVITY = "com.google.android.apps.lens.MainActivity";
+     private static final String LENS_SHARE_ACTIVITY = "com.google.android.apps.search.lens.LensShareEntryPointActivity";
+     private static final String LENS_URI = "google://lens";
+ 
+     private final ScreenshotSmartActions mScreenshotSmartActions;
+     private final Executor mBackgroundExecutor;
+ 
+     @Inject
+     public LensScreenshotReceiver(ScreenshotSmartActions screenshotSmartActions,
+             @Background Executor backgroundExecutor) {
+         mScreenshotSmartActions = screenshotSmartActions;
+         mBackgroundExecutor = backgroundExecutor;
+     }
+ 
+     private boolean doesGoogleEnabled(Context context) {
+         return CherishUtils.isPackageInstalled(context, GSA_PACKAGE, false /* ignoreState */);
+     }
+ 
+     @Override
+     public void onReceive(Context context, Intent intent) {
+         if (!intent.hasExtra(SCREENSHOT_URI_ID)) {
+             return;
+         }
+ 
+         final Uri uri = Uri.parse(intent.getStringExtra(SCREENSHOT_URI_ID));
+         mBackgroundExecutor.execute(() -> {
+             // action to execute goes here
+             if (!doesGoogleEnabled(context)) {
+                 Toast.makeText(context, R.string.lens_unavailable, Toast.LENGTH_SHORT).show();
+                 return;
+             }
+             ClipData clipdata = new ClipData(new ClipDescription("content",
+                     new String[]{"image/png"}),
+                     new ClipData.Item(uri));
+             Intent share = new Intent();
+             share.setAction(Intent.ACTION_SEND)
+                     .setComponent(new ComponentName(GSA_PACKAGE, LENS_SHARE_ACTIVITY))
+                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                     .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                     .setType("image/png")
+                     .putExtra(Intent.EXTRA_STREAM, uri)
+                     .setClipData(clipdata);
+             context.startActivity(share);
+         });
+ 
+         if (intent.getBooleanExtra(EXTRA_SMART_ACTIONS_ENABLED, false)) {
+             mScreenshotSmartActions.notifyScreenshotAction(
+                     intent.getStringExtra(EXTRA_ID), ACTION_TYPE_LENS, false, null);
+         }
+     }
+ }
