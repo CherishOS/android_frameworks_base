@@ -12700,13 +12700,15 @@ public class DevicePolicyManagerService extends BaseIDevicePolicyManager {
                     getUserData(callingUserId).mCurrentInputMethodSet = true;
                     saveSettingsLocked(callingUserId);
                 }
-                mInjector.settingsSecurePutStringForUser(setting, value, callingUserId);
-                // Notify the user if it's the location mode setting that's been set, to any value
-                // other than 'off'.
-                if (setting.equals(Settings.Secure.LOCATION_MODE)
-                        && (Integer.parseInt(value) != 0)) {
-                    showLocationSettingsEnabledNotification(UserHandle.of(callingUserId));
-                }
+                mBackgroundHandler.post(()->{
+                    mInjector.settingsSecurePutStringForUser(setting, value, callingUserId);
+                    // Notify the user if it's the location mode setting that's been set, to any value
+                    // other than 'off'.
+                    if (setting.equals(Settings.Secure.LOCATION_MODE)
+                            && (Integer.parseInt(value) != 0)) {
+                        showLocationSettingsEnabledNotification(UserHandle.of(callingUserId));
+                    }
+                });
             });
         }
         DevicePolicyEventLogger
