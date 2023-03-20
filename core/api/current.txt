@@ -83,6 +83,7 @@ package android {
     field public static final String CLEAR_APP_CACHE = "android.permission.CLEAR_APP_CACHE";
     field public static final String CONFIGURE_WIFI_DISPLAY = "android.permission.CONFIGURE_WIFI_DISPLAY";
     field public static final String CONTROL_LOCATION_UPDATES = "android.permission.CONTROL_LOCATION_UPDATES";
+    field public static final String CREDENTIAL_MANAGER_SET_ALLOWED_PROVIDERS = "android.permission.CREDENTIAL_MANAGER_SET_ALLOWED_PROVIDERS";
     field public static final String CREDENTIAL_MANAGER_SET_ORIGIN = "android.permission.CREDENTIAL_MANAGER_SET_ORIGIN";
     field public static final String DELETE_CACHE_FILES = "android.permission.DELETE_CACHE_FILES";
     field public static final String DELETE_PACKAGES = "android.permission.DELETE_PACKAGES";
@@ -13674,8 +13675,9 @@ package android.credentials {
   }
 
   public final class CredentialOption implements android.os.Parcelable {
-    ctor public CredentialOption(@NonNull String, @NonNull android.os.Bundle, @NonNull android.os.Bundle, boolean);
+    ctor @Deprecated public CredentialOption(@NonNull String, @NonNull android.os.Bundle, @NonNull android.os.Bundle, boolean);
     method public int describeContents();
+    method @NonNull public java.util.Set<android.content.ComponentName> getAllowedProviders();
     method @NonNull public android.os.Bundle getCandidateQueryData();
     method @NonNull public android.os.Bundle getCredentialRetrievalData();
     method @NonNull public String getType();
@@ -13683,6 +13685,14 @@ package android.credentials {
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.credentials.CredentialOption> CREATOR;
     field public static final String FLATTENED_REQUEST = "android.credentials.GetCredentialOption.FLATTENED_REQUEST_STRING";
+  }
+
+  public static final class CredentialOption.Builder {
+    ctor public CredentialOption.Builder(@NonNull String, @NonNull android.os.Bundle, @NonNull android.os.Bundle);
+    method @NonNull public android.credentials.CredentialOption.Builder addAllowedProvider(@NonNull android.content.ComponentName);
+    method @NonNull public android.credentials.CredentialOption build();
+    method @NonNull public android.credentials.CredentialOption.Builder setAllowedProviders(@NonNull java.util.Set<android.content.ComponentName>);
+    method @NonNull public android.credentials.CredentialOption.Builder setIsSystemProviderRequired(boolean);
   }
 
   public class GetCredentialException extends java.lang.Exception {
