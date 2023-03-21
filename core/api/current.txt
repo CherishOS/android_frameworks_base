@@ -83,6 +83,7 @@ package android {
     field public static final String CLEAR_APP_CACHE = "android.permission.CLEAR_APP_CACHE";
     field public static final String CONFIGURE_WIFI_DISPLAY = "android.permission.CONFIGURE_WIFI_DISPLAY";
     field public static final String CONTROL_LOCATION_UPDATES = "android.permission.CONTROL_LOCATION_UPDATES";
+    field public static final String CREDENTIAL_MANAGER_SET_ALLOWED_PROVIDERS = "android.permission.CREDENTIAL_MANAGER_SET_ALLOWED_PROVIDERS";
     field public static final String CREDENTIAL_MANAGER_SET_ORIGIN = "android.permission.CREDENTIAL_MANAGER_SET_ORIGIN";
     field public static final String DELETE_CACHE_FILES = "android.permission.DELETE_CACHE_FILES";
     field public static final String DELETE_PACKAGES = "android.permission.DELETE_PACKAGES";
@@ -556,6 +557,7 @@ package android {
     field public static final int canTakeScreenshot = 16844303; // 0x101060f
     field public static final int candidatesTextStyleSpans = 16843312; // 0x1010230
     field public static final int cantSaveState = 16844142; // 0x101056e
+    field public static final int capability;
     field @Deprecated public static final int capitalize = 16843113; // 0x1010169
     field public static final int category = 16843752; // 0x10103e8
     field public static final int centerBright = 16842956; // 0x10100cc
@@ -1448,6 +1450,7 @@ package android {
     field public static final int sessionService = 16843837; // 0x101043d
     field public static final int settingsActivity = 16843301; // 0x1010225
     field public static final int settingsSliceUri = 16844179; // 0x1010593
+    field public static final int settingsSubtitle;
     field public static final int setupActivity = 16843766; // 0x10103f6
     field public static final int shadowColor = 16843105; // 0x1010161
     field public static final int shadowDx = 16843106; // 0x1010162
@@ -13672,8 +13675,9 @@ package android.credentials {
   }
 
   public final class CredentialOption implements android.os.Parcelable {
-    ctor public CredentialOption(@NonNull String, @NonNull android.os.Bundle, @NonNull android.os.Bundle, boolean);
+    ctor @Deprecated public CredentialOption(@NonNull String, @NonNull android.os.Bundle, @NonNull android.os.Bundle, boolean);
     method public int describeContents();
+    method @NonNull public java.util.Set<android.content.ComponentName> getAllowedProviders();
     method @NonNull public android.os.Bundle getCandidateQueryData();
     method @NonNull public android.os.Bundle getCredentialRetrievalData();
     method @NonNull public String getType();
@@ -13681,6 +13685,14 @@ package android.credentials {
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.credentials.CredentialOption> CREATOR;
     field public static final String FLATTENED_REQUEST = "android.credentials.GetCredentialOption.FLATTENED_REQUEST_STRING";
+  }
+
+  public static final class CredentialOption.Builder {
+    ctor public CredentialOption.Builder(@NonNull String, @NonNull android.os.Bundle, @NonNull android.os.Bundle);
+    method @NonNull public android.credentials.CredentialOption.Builder addAllowedProvider(@NonNull android.content.ComponentName);
+    method @NonNull public android.credentials.CredentialOption build();
+    method @NonNull public android.credentials.CredentialOption.Builder setAllowedProviders(@NonNull java.util.Set<android.content.ComponentName>);
+    method @NonNull public android.credentials.CredentialOption.Builder setIsSystemProviderRequired(boolean);
   }
 
   public class GetCredentialException extends java.lang.Exception {
@@ -40707,7 +40719,7 @@ package android.service.credentials {
     method public abstract void onBeginGetCredential(@NonNull android.service.credentials.BeginGetCredentialRequest, @NonNull android.os.CancellationSignal, @NonNull android.os.OutcomeReceiver<android.service.credentials.BeginGetCredentialResponse,android.credentials.GetCredentialException>);
     method @NonNull public final android.os.IBinder onBind(@NonNull android.content.Intent);
     method public abstract void onClearCredentialState(@NonNull android.service.credentials.ClearCredentialStateRequest, @NonNull android.os.CancellationSignal, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.credentials.ClearCredentialStateException>);
-    field public static final String CAPABILITY_META_DATA_KEY = "android.credentials.capabilities";
+    field @Deprecated public static final String CAPABILITY_META_DATA_KEY = "android.credentials.capabilities";
     field public static final String EXTRA_BEGIN_GET_CREDENTIAL_REQUEST = "android.service.credentials.extra.BEGIN_GET_CREDENTIAL_REQUEST";
     field public static final String EXTRA_BEGIN_GET_CREDENTIAL_RESPONSE = "android.service.credentials.extra.BEGIN_GET_CREDENTIAL_RESPONSE";
     field public static final String EXTRA_CREATE_CREDENTIAL_EXCEPTION = "android.service.credentials.extra.CREATE_CREDENTIAL_EXCEPTION";
@@ -40717,6 +40729,7 @@ package android.service.credentials {
     field public static final String EXTRA_GET_CREDENTIAL_REQUEST = "android.service.credentials.extra.GET_CREDENTIAL_REQUEST";
     field public static final String EXTRA_GET_CREDENTIAL_RESPONSE = "android.service.credentials.extra.GET_CREDENTIAL_RESPONSE";
     field public static final String SERVICE_INTERFACE = "android.service.credentials.CredentialProviderService";
+    field public static final String SERVICE_META_DATA = "android.credentials.provider";
   }
 
   public final class GetCredentialRequest implements android.os.Parcelable {
