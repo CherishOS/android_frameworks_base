@@ -6091,6 +6091,14 @@ public final class Settings {
         /** @hide */
         public static final String STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION = "status_bar_clock_auto_hide_sduration";
 
+        /**        
+         * Statusbar clock background
+         * 0 - hide accented chip
+         * 1 - show accented chip (default)
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_CHIP ="statusbar_clock_chip";
+
         /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
@@ -6233,6 +6241,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(INCREASING_RING_START_VOLUME);
             PRIVATE_SETTINGS.add(INCREASING_RING_RAMP_UP_TIME);
             PRIVATE_SETTINGS.add(INCALL_FEEDBACK_VIBRATE);
+            PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_CHIP);
         }
 
         /**
