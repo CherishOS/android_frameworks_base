@@ -217,6 +217,7 @@ public class PixelPropsUtils {
         if (isGoogleCameraPackage(packageName)) {
             return;
         }
+        Map<String, Object> propsToChange = new HashMap<>();
         if (packageName.equals("com.google.android.gms")
             || packageName.toLowerCase().contains("androidx.test")
             || packageName.toLowerCase().equals("com.google.android.apps.restore")) {
@@ -237,8 +238,6 @@ public class PixelPropsUtils {
         if (packageName.startsWith("com.google.")
                 || packageName.startsWith(SAMSUNG)
                 || Arrays.asList(extraPackagesToChange).contains(packageName)) {
-
-            Map<String, Object> propsToChange = new HashMap<>();
 
             boolean isPixelDevice = Arrays.asList(pixelCodenames).contains(SystemProperties.get(DEVICE));
 
