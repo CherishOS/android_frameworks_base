@@ -83,6 +83,7 @@ package android {
     field public static final String CLEAR_APP_CACHE = "android.permission.CLEAR_APP_CACHE";
     field public static final String CONFIGURE_WIFI_DISPLAY = "android.permission.CONFIGURE_WIFI_DISPLAY";
     field public static final String CONTROL_LOCATION_UPDATES = "android.permission.CONTROL_LOCATION_UPDATES";
+    field public static final String CREDENTIAL_MANAGER_QUERY_CANDIDATE_CREDENTIALS = "android.permission.CREDENTIAL_MANAGER_QUERY_CANDIDATE_CREDENTIALS";
     field public static final String CREDENTIAL_MANAGER_SET_ALLOWED_PROVIDERS = "android.permission.CREDENTIAL_MANAGER_SET_ALLOWED_PROVIDERS";
     field public static final String CREDENTIAL_MANAGER_SET_ORIGIN = "android.permission.CREDENTIAL_MANAGER_SET_ORIGIN";
     field public static final String DELETE_CACHE_FILES = "android.permission.DELETE_CACHE_FILES";
@@ -13667,7 +13668,9 @@ package android.credentials {
     method public void clearCredentialState(@NonNull android.credentials.ClearCredentialStateRequest, @Nullable android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.credentials.ClearCredentialStateException>);
     method public void createCredential(@NonNull android.credentials.CreateCredentialRequest, @NonNull android.app.Activity, @Nullable android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.credentials.CreateCredentialResponse,android.credentials.CreateCredentialException>);
     method public void getCredential(@NonNull android.credentials.GetCredentialRequest, @NonNull android.app.Activity, @Nullable android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.credentials.GetCredentialResponse,android.credentials.GetCredentialException>);
+    method public void getCredential(@NonNull android.credentials.PrepareGetCredentialResponse.PendingGetCredentialHandle, @NonNull android.app.Activity, @Nullable android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.credentials.GetCredentialResponse,android.credentials.GetCredentialException>);
     method public boolean isEnabledCredentialProviderService(@NonNull android.content.ComponentName);
+    method public void prepareGetCredential(@NonNull android.credentials.GetCredentialRequest, @Nullable android.os.CancellationSignal, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.credentials.PrepareGetCredentialResponse,android.credentials.GetCredentialException>);
     method public void registerCredentialDescription(@NonNull android.credentials.RegisterCredentialDescriptionRequest);
     method public void unregisterCredentialDescription(@NonNull android.credentials.UnregisterCredentialDescriptionRequest);
   }
@@ -13730,6 +13733,16 @@ package android.credentials {
     method @NonNull public android.credentials.Credential getCredential();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.credentials.GetCredentialResponse> CREATOR;
+  }
+
+  public final class PrepareGetCredentialResponse {
+    method @NonNull public android.credentials.PrepareGetCredentialResponse.PendingGetCredentialHandle getPendingGetCredentialHandle();
+    method @RequiresPermission(android.Manifest.permission.CREDENTIAL_MANAGER_QUERY_CANDIDATE_CREDENTIALS) public boolean hasAuthenticationResults();
+    method @RequiresPermission(android.Manifest.permission.CREDENTIAL_MANAGER_QUERY_CANDIDATE_CREDENTIALS) public boolean hasCredentialResults(@NonNull String);
+    method @RequiresPermission(android.Manifest.permission.CREDENTIAL_MANAGER_QUERY_CANDIDATE_CREDENTIALS) public boolean hasRemoteResults();
+  }
+
+  public static final class PrepareGetCredentialResponse.PendingGetCredentialHandle {
   }
 
   public final class RegisterCredentialDescriptionRequest implements android.os.Parcelable {
