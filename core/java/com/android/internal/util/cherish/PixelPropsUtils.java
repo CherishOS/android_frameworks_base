@@ -45,7 +45,6 @@ public class PixelPropsUtils {
     private static final Map<String, ArrayList<String>> propsToKeep;
 
     private static final String[] packagesToChangePixelXL = {
-            "com.google.android.apps.photos"
     };
 
     private static final String[] extraPackagesToChange = {
