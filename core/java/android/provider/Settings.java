@@ -5694,12 +5694,6 @@ public final class Settings {
          * @hide
          */
         public static final String HEADSET_CONNECT_PLAYER = "headset_connect_player";
-		
-		/**
-         * Whether to enable fingerprint wake-and-unlock.
-         * @hide
-         */
-        public static final String FINGERPRINT_WAKE_UNLOCK = "fingerprint_wake_unlock";
 
         /**
          * Whether to scramble a pin unlock layout
