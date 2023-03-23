@@ -81,8 +81,8 @@ import android.app.admin.DevicePolicyManager;
 import android.app.trust.TrustManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.IPackageManager;
@@ -390,8 +390,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
     private boolean mLogoutEnabled;
     private boolean mIsFaceEnrolled;
     private int mActiveMobileDataSubscription = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
-
-    private boolean mFingerprintWakeAndUnlock;
 
     /**
      * Short delay before restarting fingerprint authentication after a successful try. This should
@@ -2135,8 +2133,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
                 .collect(Collectors.toSet());
         mFaceWakeUpTriggersConfig = faceWakeUpTriggersConfig;
 
-        updateFingerprintSettings();
-
         mHandler = new Handler(mainLooper) {
             @Override
             public void handleMessage(Message msg) {
@@ -2408,8 +2404,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
                 }
             }
         }
-        mSettingsObserver = new SettingsObserver(mHandler);
-        mSettingsObserver.observe();
     }
 
     private void updateFaceEnrolled(int userId) {
@@ -2756,18 +2750,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
         final int user = getCurrentUser();
         final boolean userDoesNotHaveTrust = !getUserHasTrust(user);
         final boolean shouldListenForFingerprintAssistant = shouldListenForFingerprintAssistant();
-        final boolean shouldListenKeyguardState;
-        if (!mFingerprintWakeAndUnlock) {
-            shouldListenKeyguardState =
-                (isKeyguardVisible()
-                        || mPrimaryBouncerIsOrWillBeShowing
-                        || shouldListenForFingerprintAssistant
-                        || (mKeyguardOccluded && mIsDreaming))
-                        && mDeviceInteractive && !mGoingToSleep && !mKeyguardGoingAway
-                        || (mKeyguardOccluded && userDoesNotHaveTrust
-                            && (mOccludingAppRequestingFp || isUdfps));
-        } else {
-            shouldListenKeyguardState =
+        final boolean shouldListenKeyguardState =
                 isKeyguardVisible()
                         || !mDeviceInteractive
                         || (mPrimaryBouncerIsOrWillBeShowing && !mKeyguardGoingAway)
@@ -2776,7 +2759,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
                         || (mKeyguardOccluded && mIsDreaming)
                         || (mKeyguardOccluded && userDoesNotHaveTrust
                             && (mOccludingAppRequestingFp || isUdfps));
-        }
 
         // Only listen if this KeyguardUpdateMonitor belongs to the primary user. There is an
         // instance of KeyguardUpdateMonitor for each user but KeyguardUpdateMonitor is user-aware.
@@ -3952,53 +3934,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
         }
     }
 
-    class SettingsObserver extends ContentObserver {
-        private ContentResolver mContentResolver;
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            mContentResolver = mContext.getContentResolver();
-            mContentResolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.FINGERPRINT_WAKE_UNLOCK), false, this,
-                    UserHandle.USER_ALL);
-            updateSettings();
-        }
-
-        void unobserve() {
-            if (mContentResolver != null) {
-                mContentResolver.unregisterContentObserver(this);
-            }
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            updateSettings();
-        }
-    }
-
-    private void updateSettings() {
-        ContentResolver resolver = mContext.getContentResolver();
-        updateFingerprintSettings();
-    }
-
-    private void updateFingerprintSettings() {
-        boolean defFingerprintSettings = mContext.getResources().getBoolean(
-                com.android.systemui.R.bool.config_fingerprintWakeAndUnlock);
-        if (defFingerprintSettings) {
-            mFingerprintWakeAndUnlock = Settings.System.getIntForUser(
-                    mContext.getContentResolver(), Settings.System.FINGERPRINT_WAKE_UNLOCK,
-                    1, UserHandle.USER_CURRENT) == 1;
-        } else {
-            mFingerprintWakeAndUnlock = defFingerprintSettings;
-            // if its false, the device meant to be used like that, disable toggle with 2.
-            Settings.System.putIntForUser(mContext.getContentResolver(),
-                    Settings.System.FINGERPRINT_WAKE_UNLOCK,
-                    2, UserHandle.USER_CURRENT);
-        }
-    }
-
     protected int getBiometricLockoutDelay() {
         return BIOMETRIC_LOCKOUT_RESET_DELAY_MS;
     }
@@ -4063,10 +3998,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
         if (mSfpsRequireScreenOnToAuthPrefObserver != null) {
             mContext.getContentResolver().unregisterContentObserver(
                     mSfpsRequireScreenOnToAuthPrefObserver);
-        }
-
-        if (mSettingsObserver != null) {
-            mSettingsObserver.unobserve();
         }
 
         try {
