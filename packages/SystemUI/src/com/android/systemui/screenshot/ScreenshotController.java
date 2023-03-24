@@ -478,7 +478,7 @@ public class ScreenshotController {
          * connection and break the next screenshot.
          */
         mCurrentRequestCallback = null;
-        dismissScreenshot(true);
+        dismissScreenshot(SCREENSHOT_INTERACTION_TIMEOUT);
         mFullScreenshotRunnable.setArgs(topComponent, finisher, requestCallback);
         // Wait 50ms to make sure we are on new frame.
         mScreenshotHandler.postDelayed(mFullScreenshotRunnable, 50);
@@ -635,7 +635,7 @@ public class ScreenshotController {
 
             @Override
             public void onTouchOutside() {
-                dismissScreenshot(false);
+                dismissScreenshot(SCREENSHOT_DISMISSED_OTHER);
             }
         }, mActionExecutor, mFlags);
         mScreenshotView.setDefaultTimeoutMillis(mScreenshotHandler.getDefaultTimeoutMillis());
