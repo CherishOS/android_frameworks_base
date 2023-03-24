@@ -603,7 +603,7 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
 
     private float getLSBlurRadius() {
         mCurrentLSBlurRadius = Settings.System.getFloatForUser(mContext.getContentResolver(),
-                Settings.System.LS_MEDIA_FILTER_BLUR_RADIUS, 1f, UserHandle.USER_CURRENT);
+                Settings.System.LS_MEDIA_FILTER_BLUR_RADIUS, 25f, UserHandle.USER_CURRENT);
         return mCurrentLSBlurRadius;
     }
 
@@ -628,12 +628,14 @@ public class NotificationMediaManager implements Dumpable, TunerService.Tunable 
                         mContext.getResources().getColor(R.color.accent_device_default_light)));
                     break;
                 case 3:
+                    mLSBlurRadius = getLSBlurRadius();
                     artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(),
-                        ImageHelper.getBlurredImage(mContext, bmp, 7.0f));
+                        ImageHelper.getBlurredImage(mContext, bmp, mLSBlurRadius));
                     break;
                 case 4:
+                    mLSBlurRadius = getLSBlurRadius();
                     artworkDrawable = new BitmapDrawable(mBackdropBack.getResources(),
-                        ImageHelper.getGrayscaleBlurredImage(mContext, bmp, 7.0f));
+                        ImageHelper.getGrayscaleBlurredImage(mContext, bmp, mLSBlurRadius));
                     break;
             }
         }
