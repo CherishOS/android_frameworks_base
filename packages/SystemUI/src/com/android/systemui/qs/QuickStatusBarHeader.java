@@ -176,7 +176,6 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         mDatePrivacySeparator = findViewById(R.id.space);
         // Tint for the battery icons are handled in setupHost()
         mBatteryRemainingIcon = findViewById(R.id.batteryRemainingIcon);
-        mBatteryRemainingIcon.mQS = true;
 
         mBatteryIcon = findViewById(R.id.batteryIcon);
 
