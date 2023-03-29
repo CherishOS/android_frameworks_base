@@ -4507,7 +4507,6 @@ package android.app {
     method @NonNull public final <T extends android.view.View> T requireViewById(@IdRes int);
     method public final void runOnUiThread(Runnable);
     method public void setActionBar(@Nullable android.widget.Toolbar);
-    method public void setAllowCrossUidActivitySwitchFromBelow(boolean);
     method public void setContentTransitionManager(android.transition.TransitionManager);
     method public void setContentView(@LayoutRes int);
     method public void setContentView(android.view.View);
@@ -13645,10 +13644,10 @@ package android.credentials {
   }
 
   public final class CredentialDescription implements android.os.Parcelable {
-    ctor public CredentialDescription(@NonNull String, @NonNull String, @NonNull java.util.List<android.service.credentials.CredentialEntry>);
+    ctor public CredentialDescription(@NonNull String, @NonNull java.util.Set<java.lang.String>, @NonNull java.util.List<android.service.credentials.CredentialEntry>);
     method public int describeContents();
     method @NonNull public java.util.List<android.service.credentials.CredentialEntry> getCredentialEntries();
-    method @NonNull public String getFlattenedRequestString();
+    method @NonNull public java.util.Set<java.lang.String> getSupportedElementKeys();
     method @NonNull public String getType();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.credentials.CredentialDescription> CREATOR;
@@ -13675,7 +13674,7 @@ package android.credentials {
     method public boolean isSystemProviderRequired();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.credentials.CredentialOption> CREATOR;
-    field public static final String FLATTENED_REQUEST = "android.credentials.GetCredentialOption.FLATTENED_REQUEST_STRING";
+    field public static final String SUPPORTED_ELEMENT_KEYS = "android.credentials.GetCredentialOption.SUPPORTED_ELEMENT_KEYS";
   }
 
   public static final class CredentialOption.Builder {
@@ -19894,8 +19893,8 @@ package android.hardware.usb {
     method public int bulkTransfer(android.hardware.usb.UsbEndpoint, byte[], int, int, int);
     method public boolean claimInterface(android.hardware.usb.UsbInterface, boolean);
     method public void close();
-    method public int controlTransfer(int, int, int, int, byte[], int, int);
-    method public int controlTransfer(int, int, int, int, byte[], int, int, int);
+    method public int controlTransfer(int, int, int, int, @Nullable byte[], int, int);
+    method public int controlTransfer(int, int, int, int, @Nullable byte[], int, int, int);
     method public int getFileDescriptor();
     method public byte[] getRawDescriptors();
     method public String getSerial();
@@ -43414,6 +43413,8 @@ package android.telephony {
     field public static final String KEY_CARRIER_NR_AVAILABILITIES_INT_ARRAY = "carrier_nr_availabilities_int_array";
     field public static final String KEY_CARRIER_PROVISIONS_WIFI_MERGED_NETWORKS_BOOL = "carrier_provisions_wifi_merged_networks_bool";
     field public static final String KEY_CARRIER_RCS_PROVISIONING_REQUIRED_BOOL = "carrier_rcs_provisioning_required_bool";
+    field public static final String KEY_CARRIER_SERVICE_NAME_STRING_ARRAY = "carrier_service_name_array";
+    field public static final String KEY_CARRIER_SERVICE_NUMBER_STRING_ARRAY = "carrier_service_number_array";
     field public static final String KEY_CARRIER_SETTINGS_ACTIVITY_COMPONENT_NAME_STRING = "carrier_settings_activity_component_name_string";
     field public static final String KEY_CARRIER_SETTINGS_ENABLE_BOOL = "carrier_settings_enable_bool";
     field public static final String KEY_CARRIER_SUPPORTS_OPP_DATA_AUTO_PROVISIONING_BOOL = "carrier_supports_opp_data_auto_provisioning_bool";
