@@ -4418,6 +4418,21 @@ public class AudioService extends IAudioService.Stub
 
             index = rescaleIndex(index * 10, streamType, streamTypeAlias);
 
+            flags &= ~AudioManager.FLAG_FIXED_VOLUME;
+            if (streamTypeAlias == AudioSystem.STREAM_MUSIC && isFixedVolumeDevice(device)) {
+                flags |= AudioManager.FLAG_FIXED_VOLUME;
+
+                // volume is either 0 or max allowed for fixed volume devices
+                if (index != 0) {
+                    if (mSafeMediaVolumeState == SAFE_MEDIA_VOLUME_ACTIVE &&
+                            mSafeMediaVolumeDevices.contains(device)) {
+                        index = safeMediaVolumeIndex(device);
+                    } else {
+                        index = streamState.getMaxIndex();
+                    }
+                }
+            }
+
             if (streamTypeAlias == AudioSystem.STREAM_MUSIC
                     && AudioSystem.DEVICE_OUT_ALL_A2DP_SET.contains(device)
                     && (flags & AudioManager.FLAG_BLUETOOTH_ABS_VOLUME) == 0) {
@@ -4449,21 +4464,6 @@ public class AudioService extends IAudioService.Stub
                 Log.i(TAG, "setStreamVolume postSetHearingAidVolumeIndex index=" + index
                         + " stream=" + streamType);
                 mDeviceBroker.postSetHearingAidVolumeIndex(index, streamType);
-            }
-
-            flags &= ~AudioManager.FLAG_FIXED_VOLUME;
-            if (streamTypeAlias == AudioSystem.STREAM_MUSIC && isFixedVolumeDevice(device)) {
-                flags |= AudioManager.FLAG_FIXED_VOLUME;
-
-                // volume is either 0 or max allowed for fixed volume devices
-                if (index != 0) {
-                    if (mSafeMediaVolumeState == SAFE_MEDIA_VOLUME_ACTIVE &&
-                            mSafeMediaVolumeDevices.contains(device)) {
-                        index = safeMediaVolumeIndex(device);
-                    } else {
-                        index = streamState.getMaxIndex();
-                    }
-                }
             }
 
             if (!checkSafeMediaVolume(streamTypeAlias, index, device)) {
@@ -8806,6 +8806,17 @@ public class AudioService extends IAudioService.Stub
             int index = update.getVolumeIndex();
             if (!checkSafeMediaVolume(update.mStreamType, index, update.mDevice)) {
                 index = safeMediaVolumeIndex(update.mDevice);
+                if (isA2dpAbsoluteVolumeDevice(update.mDevice) || AudioSystem.isLeAudioDeviceType(update.mDevice)){
+                    if (AudioSystem.isLeAudioDeviceType(update.mDevice)){
+                        Log.d(TAG, "onSetVolumeIndexOnDevice: postSetLeAudioVolumeIndex index="+index);
+                        mDeviceBroker.postSetLeAudioVolumeIndex(index, mStreamStates[update.mStreamType].getMaxIndex(), update.mStreamType);
+                    }else{
+                        Log.d(TAG, "onSetVolumeIndexOnDevice: postSetAvrcpAbsoluteVolumeIndex index="+index);
+                        mDeviceBroker.postSetAvrcpAbsoluteVolumeIndex(index / 10);
+                    }
+                    streamState.mVolumeChanged.putExtra(AudioManager.EXTRA_VOLUME_STREAM_VALUE, index);
+                    sendBroadcastToAll(streamState.mVolumeChanged);
+                }
             }
             streamState.setIndex(index, update.mDevice, update.mCaller,
                     // trusted as index is always validated before message is posted
