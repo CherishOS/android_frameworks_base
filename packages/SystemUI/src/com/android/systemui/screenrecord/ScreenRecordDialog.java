@@ -68,6 +68,7 @@ public class ScreenRecordDialog extends SystemUIDialog {
     private static final long DELAY_MS = 3000;
     private static final long INTERVAL_MS = 1000;
     private static final String PREFS = "screenrecord_";
+    private static final String PREF_SHOWN = "shown";
     private static final String PREF_TAPS = "show_taps";
     private static final String PREF_DOT = "show_dot";
     private static final String PREF_LOW = "use_low_quality";
@@ -233,6 +234,7 @@ public class ScreenRecordDialog extends SystemUIDialog {
         Prefs.putInt(userContext, PREFS + PREF_HEVC, mHEVCSwitch.isChecked() ? 1 : 0);
         Prefs.putInt(userContext, PREFS + PREF_AUDIO, mAudioSwitch.isChecked() ? 1 : 0);
         Prefs.putInt(userContext, PREFS + PREF_AUDIO_SOURCE, mOptions.getSelectedItemPosition());
+        Prefs.putInt(userContext, PREFS + PREF_SHOWN, 1);
     }
 
     private void loadPrefs() {
@@ -244,5 +246,40 @@ public class ScreenRecordDialog extends SystemUIDialog {
         mHEVCSwitch.setChecked(Prefs.getInt(userContext, PREFS + PREF_HEVC, 1) == 1);
         mAudioSwitch.setChecked(Prefs.getInt(userContext, PREFS + PREF_AUDIO, 0) == 1);
         mOptions.setSelection(Prefs.getInt(userContext, PREFS + PREF_AUDIO_SOURCE, 0));
+    }
+
+    public static boolean wasShown(Context context) {
+        // if shown pref is set to 1, or anything else is diff than the default (for migration)
+        return (Prefs.getInt(context, PREFS + PREF_SHOWN, 0) != 0 || 
+                Prefs.getInt(context, PREFS + PREF_TAPS, 0) != 0 ||
+                Prefs.getInt(context, PREFS + PREF_DOT, 0) != 0 ||
+                Prefs.getInt(context, PREFS + PREF_LOW, 0) != 0 ||
+                Prefs.getInt(context, PREFS + PREF_LONGER, 0) != 0 ||
+                Prefs.getInt(context, PREFS + PREF_HEVC, 1) != 1 ||
+                Prefs.getInt(context, PREFS + PREF_AUDIO, 0) != 0 ||
+                Prefs.getInt(context, PREFS + PREF_AUDIO_SOURCE, 0) != 0);
+    }
+
+    public static void startByPrefs(Context context, RecordingController controller) {
+        boolean showTaps = Prefs.getInt(context, PREFS + PREF_TAPS, 0) == 1;
+        boolean showStopDot = Prefs.getInt(context, PREFS + PREF_DOT, 0) == 1;
+        boolean lowQuality = Prefs.getInt(context, PREFS + PREF_LOW, 0) == 1;
+        boolean longerDuration = Prefs.getInt(context, PREFS + PREF_LONGER, 0) == 1;
+        boolean hevc = Prefs.getInt(context, PREFS + PREF_HEVC, 1) == 1;
+        ScreenRecordingAudioSource audioMode = Prefs.getInt(context, PREFS + PREF_AUDIO, 0) == 1
+                ? (ScreenRecordingAudioSource) MODES.get(Prefs.getInt(context, PREFS + PREF_AUDIO_SOURCE, 0))
+                : NONE;
+        PendingIntent startIntent = PendingIntent.getForegroundService(context,
+                RecordingService.REQUEST_CODE,
+                RecordingService.getStartIntent(
+                        context, Activity.RESULT_OK,
+                        audioMode.ordinal(), showTaps, null,
+                        showStopDot, lowQuality, longerDuration, hevc),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent stopIntent = PendingIntent.getService(context,
+                RecordingService.REQUEST_CODE,
+                RecordingService.getStopIntent(context),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        controller.startCountdown(DELAY_MS, INTERVAL_MS, startIntent, stopIntent);
     }
 }
