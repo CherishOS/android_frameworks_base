@@ -855,7 +855,13 @@ public class DecorView extends FrameLayout implements RootViewSurfaceTaker, Wind
         final MenuHelper helper;
         final boolean isPopup = !Float.isNaN(x) && !Float.isNaN(y);
         if (isPopup) {
-            helper = mWindow.mContextMenu.showPopup(getContext(), originalView, x, y);
+            final Context context;
+            if (originalView != null && originalView.getContext() != null) {
+                context = originalView.getContext();
+            } else {
+                context = getContext();
+            }
+            helper = mWindow.mContextMenu.showPopup(context, originalView, x, y);
         } else {
             helper = mWindow.mContextMenu.showDialog(originalView, originalView.getWindowToken());
         }
