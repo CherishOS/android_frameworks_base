@@ -6255,30 +6255,6 @@ public final class Settings {
         public static final String STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION = "status_bar_clock_auto_hide_sduration";
 
         /**
-         * Whether to display QS clock
-         * @hide
-         */
-        public static final String SHOW_QS_CLOCK = "show_qs_clock";
-
-        /**
-         * Whether to display QS date
-         * @hide
-         */
-        public static final String SHOW_QS_DATE = "show_qs_date";
-
-        /**
-         * Clock font size
-         * @hide
-         */
-        public static final String STATUS_BAR_CLOCK_SIZE = "status_bar_clock_size";
-
-        /**
-         * Clock font size QS
-         * @hide
-         */
-        public static final String QS_HEADER_CLOCK_SIZE = "qs_header_clock_size";
-
-        /**
          * @hide
          */
         public static final String QS_TRANSPARENCY = "qs_transparency";
