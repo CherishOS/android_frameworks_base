@@ -82,7 +82,6 @@ public class Clock extends TextView implements
     private static final String VISIBLE_BY_USER = "visible_by_user";
     private static final String SHOW_SECONDS = "show_seconds";
     private static final String VISIBILITY = "visibility";
-    private static final String QSHEADER = "qsheader";
 
     private final UserTracker mUserTracker;
     
@@ -106,13 +105,6 @@ public class Clock extends TextView implements
             "system:" + Settings.System.STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION;
     public static final String STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION =
             "system:" + Settings.System.STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION;
-    public static final String STATUS_BAR_CLOCK_SIZE =
-            "system:" + Settings.System.STATUS_BAR_CLOCK_SIZE;
-    public static final String QS_HEADER_CLOCK_SIZE =
-            "system:" + Settings.System.QS_HEADER_CLOCK_SIZE;
-
-    private int mClockSize;
-    private int mClockSizeQsHeader;
 
     private final CommandQueue mCommandQueue;
     private int mCurrentUserId;
@@ -160,7 +152,6 @@ public class Clock extends TextView implements
     private String mClockDateFormat = null;
     private boolean mClockAutoHide;
     private int mHideDuration = HIDE_DURATION, mShowDuration = SHOW_DURATION;
-    private boolean mQsHeader;
 
     private boolean mIsStatusBar;
 
@@ -216,7 +207,6 @@ public class Clock extends TextView implements
         bundle.putBoolean(VISIBLE_BY_USER, mClockVisibleByUser);
         bundle.putBoolean(SHOW_SECONDS, mShowSeconds);
         bundle.putInt(VISIBILITY, getVisibility());
-        bundle.putBoolean(QSHEADER, mQsHeader);
 
         return bundle;
     }
@@ -240,7 +230,6 @@ public class Clock extends TextView implements
         if (bundle.containsKey(VISIBILITY)) {
             super.setVisibility(bundle.getInt(VISIBILITY));
         }
-        mQsHeader = bundle.getBoolean(QSHEADER, false);
     }
 
     @Override
@@ -273,9 +262,7 @@ public class Clock extends TextView implements
                     STATUS_BAR_CLOCK_DATE_FORMAT,
                     STATUS_BAR_CLOCK_AUTO_HIDE,
                     STATUS_BAR_CLOCK_AUTO_HIDE_HDURATION,
-                    STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION,
-                    STATUS_BAR_CLOCK_SIZE,
-                    QS_HEADER_CLOCK_SIZE);
+                    STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION);
             mCommandQueue.addCallback(this);
             if (mShowDark) {
                 Dependency.get(DarkIconDispatcher.class).addDarkReceiver(this);
@@ -291,7 +278,6 @@ public class Clock extends TextView implements
 
         // Make sure we update to the current time
         updateShowSeconds();
-        updateClockSize();
         updateClock();
         updateClockVisibility();
     }
@@ -387,10 +373,6 @@ public class Clock extends TextView implements
         super.setVisibility(visibility);
     }
 
-    public void setQsHeader() {
-        mQsHeader = true;
-    }
-
     public void setClockVisibleByUser(boolean visible) {
         mClockVisibleByUser = visible;
         updateClockVisibility();
@@ -414,7 +396,7 @@ public class Clock extends TextView implements
             // Do nothing
         }
         setVisibility(visibility);
-        if (!mQsHeader && mClockAutoHide && visible && mScreenOn) {
+        if (mClockAutoHide && visible && mScreenOn) {
             autoHideHandler.postDelayed(()->autoHideClock(), mShowDuration * 1000);
         }
     }
@@ -508,16 +490,6 @@ public class Clock extends TextView implements
             case STATUS_BAR_CLOCK_AUTO_HIDE_SDURATION:
                 mShowDuration =
                         TunerService.parseInteger(newValue, SHOW_DURATION);
-                break;
-            case STATUS_BAR_CLOCK_SIZE:
-                mClockSize =
-                        TunerService.parseInteger(newValue, 14);
-                updateClockSize();
-                break;
-            case QS_HEADER_CLOCK_SIZE:
-                mClockSizeQsHeader =
-                        TunerService.parseInteger(newValue, 14);
-                updateClockSize();
                 break;
             default:
                 break;
@@ -654,7 +626,7 @@ public class Clock extends TextView implements
         String timeResult = mClockFormat.format(mCalendar.getTime());
         String dateResult = "";
 
-        if (!mQsHeader && mClockDateDisplay != CLOCK_DATE_DISPLAY_GONE) {
+        if (mClockDateDisplay != CLOCK_DATE_DISPLAY_GONE) {
             Date now = new Date();
 
             if (mClockDateFormat == null || mClockDateFormat.isEmpty()) {
@@ -797,12 +769,5 @@ public class Clock extends TextView implements
             updateShowClock();
         }
     };
-
-    public void updateClockSize() {
-        if (mQsHeader) {
-            setTextSize(mClockSizeQsHeader);
-        } else {
-            setTextSize(mClockSize);
-        }
-    }
 }
+
