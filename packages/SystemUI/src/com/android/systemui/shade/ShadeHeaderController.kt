@@ -322,6 +322,8 @@ constructor(
             )
         }
 
+        clock.setQsHeader()
+
         dumpManager.registerDumpable(this)
         configurationController.addCallback(configurationControllerListener)
         demoModeController.addCallback(demoModeReceiver)
