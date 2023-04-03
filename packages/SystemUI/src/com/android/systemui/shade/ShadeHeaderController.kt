@@ -285,6 +285,8 @@ constructor(
             qsCarrierGroupControllerBuilder.setQSCarrierGroup(qsCarrierGroup).build()
 
         privacyIconsController.onParentVisible()
+
+        clock.setQsHeader()
     }
 
     override fun onViewAttached() {
