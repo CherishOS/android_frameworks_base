@@ -206,7 +206,8 @@ public class KeyguardIndicationController {
     private int mBatteryLevel;
     private boolean mBatteryPresent = true;
     private long mChargingTimeRemaining;
-    private int mBatteryCurrentDivider;
+    private boolean mBatteryChargingCurrentNeedsThreshold = false;
+    private boolean mThresholdUpdated = false;
     private String mBiometricErrorMessageToShowOnScreenOn;
     private final Set<Integer> mCoExFaceAcquisitionMsgIdsToShow;
     private final FaceHelpMessageDeferral mFaceAcquiredMessageDeferral;
@@ -331,7 +332,6 @@ public class KeyguardIndicationController {
         mFeatureFlags = flags;
         mIndicationHelper = indicationHelper;
         mKeyguardInteractor = keyguardInteractor;
-        mBatteryCurrentDivider = 1000;
 
         mFaceAcquiredMessageDeferral = faceHelpMessageDeferral;
         mCoExFaceAcquisitionMsgIdsToShow = new HashSet<>();
@@ -1091,28 +1091,33 @@ public class KeyguardIndicationController {
         String batteryInfo = "";
         int current = 0;
         double voltage = 0;
-        boolean showbatteryInfo = Settings.System.getIntForUser(mContext.getContentResolver(),
+        boolean showBatteryInfo = Settings.System.getIntForUser(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_BATTERY_INFO, 1, UserHandle.USER_CURRENT) == 1;
-        if (showbatteryInfo) {
-            if (mChargingCurrent > 0) {
-                current = (mChargingCurrent / mBatteryCurrentDivider);
-                batteryInfo = batteryInfo + current + "mA";
-            }
-            if (mChargingVoltage > 0 && mChargingCurrent > 0) {
-                voltage = mChargingVoltage / 1000 / 1000;
-                batteryInfo = (batteryInfo == "" ? "" : batteryInfo + " · ") +
-                        String.format("%.1f" , ((double) current / 1000) * voltage) + "W";
-            }
-            if (mChargingVoltage > 0) {
-                batteryInfo = (batteryInfo == "" ? "" : batteryInfo + " · ") +
-                        String.format("%.1f" , voltage) + "V";
-            }
-            if (mTemperature > 0) {
-                batteryInfo = (batteryInfo == "" ? "" : batteryInfo + " · ") +
-                        mTemperature / 10 + "°C";
-            }
-            if (batteryInfo != "") {
-                batteryInfo = "\n" + batteryInfo;
+        // if the threshold is not updated and the current is overflowing, skip appending battery info and update the threshold 
+        if (showBatteryInfo && String.valueOf(mChargingCurrent).length() >= 6 && !mBatteryChargingCurrentNeedsThreshold) {
+            updateCurrentThreshold();
+        } else {
+            if (showBatteryInfo) {
+                if (mChargingCurrent > 0) {
+                    current = mBatteryChargingCurrentNeedsThreshold ? mChargingCurrent / 1000 : mChargingCurrent;
+                    batteryInfo = batteryInfo + current + "mA";
+                }
+                if (mChargingVoltage > 0 && mChargingCurrent > 0) {
+                    voltage = mChargingVoltage / 1000 / 1000;
+                    batteryInfo = (batteryInfo.isEmpty() ? "" : batteryInfo + " • ") +
+                            String.format("%.1f", ((double) current / 1000) * voltage) + "W";
+                }
+                if (mChargingVoltage > 0) {
+                    batteryInfo = (batteryInfo.isEmpty() ? "" : batteryInfo + " • ") +
+                            String.format("%.1f", voltage) + "V";
+                }
+                if (mTemperature > 0) {
+                    batteryInfo = (batteryInfo.isEmpty() ? "" : batteryInfo + " • ") +
+                            mTemperature / 10 + "°C";
+                }
+                if (!batteryInfo.isEmpty()) {
+                    batteryInfo = "\n" + batteryInfo;
+                }
             }
         }
 
@@ -1126,6 +1131,13 @@ public class KeyguardIndicationController {
         } else {
             String chargingText =  mContext.getResources().getString(chargingId, percentage);
             return chargingText + batteryInfo;
+        }
+    }
+
+    private void updateCurrentThreshold() {
+        if (mChargingCurrent > 0 && String.valueOf(mChargingCurrent).length() >= 6 && !mThresholdUpdated) {
+            mBatteryChargingCurrentNeedsThreshold = true;
+            mThresholdUpdated = true;
         }
     }
 
