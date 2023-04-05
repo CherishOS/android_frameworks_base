@@ -175,6 +175,7 @@ import android.view.Display;
 import android.view.HapticFeedbackConstants;
 import android.view.IDisplayFoldListener;
 import android.view.InputDevice;
+import android.view.InputFilter;
 import android.view.KeyCharacterMap;
 import android.view.KeyCharacterMap.FallbackAction;
 import android.view.KeyEvent;
@@ -702,6 +703,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
     };
+
+    private InputFilter mInputFilter;
 
     private static final int MSG_DISPATCH_MEDIA_KEY_WITH_WAKE_LOCK = 3;
     private static final int MSG_DISPATCH_MEDIA_KEY_REPEAT_WITH_WAKE_LOCK = 4;
@@ -2380,6 +2383,20 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         initKeyCombinationRules();
         initSingleKeyGestureRules();
         mSideFpsEventHandler = new SideFpsEventHandler(mContext, mHandler, mPowerManager);
+
+        final String deviceInputFilterLibs = res.getString(R.string.config_deviceInputFilterLibs);
+        final String deviceInputFilterClasses = res.getString(R.string.config_deviceInputFilterClasses);
+
+        try {
+            PathClassLoader loader = new PathClassLoader(deviceInputFilterLibs, getClass().getClassLoader());
+            Class<?> klass = loader.loadClass(deviceInputFilterClasses);
+            Constructor<?> constructor = klass.getConstructor(Context.class);
+            mInputFilter = (InputFilter) constructor.newInstance(mContext);
+        } catch (Exception e) {
+            Slog.w(TAG, "Could not instantiate device input filter "
+                    + deviceInputFilterLibs + " from class "
+                    + deviceInputFilterClasses, e);
+        }
     }
 
     private void initKeyCombinationRules() {
@@ -5662,6 +5679,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         mAutofillManagerInternal = LocalServices.getService(AutofillManagerInternal.class);
         mGestureLauncherService = LocalServices.getService(GestureLauncherService.class);
+
+        if (mInputFilter != null) {
+            mWindowManagerInternal.setInputFilter(mInputFilter);
+        }
     }
 
     /** {@inheritDoc} */
