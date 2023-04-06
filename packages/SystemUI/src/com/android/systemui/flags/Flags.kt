@@ -488,10 +488,9 @@ object Flags {
     @Keep
     @JvmField
     val WM_ENABLE_PARTIAL_SCREEN_SHARING =
-        unreleasedFlag(
+        releasedFlag(
             name = "record_task_content",
-            namespace = DeviceConfig.NAMESPACE_WINDOW_MANAGER,
-            teamfood = true
+            namespace = DeviceConfig.NAMESPACE_WINDOW_MANAGER
         )
 
     // TODO(b/254512674): Tracking Bug
