@@ -6128,12 +6128,6 @@ public final class Settings {
         public static final String GESTURE_NAVBAR_RADIUS = "gesture_navbar_radius";
 
         /**
-         * Whether to show IME space
-         * @hide
-         */
-        public static final String HIDE_IME_SPACE_ENABLE = "hide_ime_space_enable";
-
-        /**
          * Whether to play haptic feedback when touching udfps icon
          * @hide
          */
