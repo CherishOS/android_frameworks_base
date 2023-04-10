@@ -246,7 +246,7 @@ public class QSFooterView extends FrameLayout {
             mSpace.setVisibility(View.GONE);
             setUsageText();
         } else {
-            mUsageText.setVisibility(View.INVISIBLE);
+            mUsageText.setVisibility(View.GONE);
             mSpace.setVisibility(View.VISIBLE);
         }
     }
