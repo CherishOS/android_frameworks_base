@@ -21,6 +21,7 @@ import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.util.Log;
 import android.view.Gravity;
@@ -268,7 +269,7 @@ public class DemoStatusIcons extends StatusIconContainer implements DemoMode, Da
     public void addMobileView(MobileIconState state, Context mobileContext) {
         Log.d(TAG, "addMobileView: ");
         StatusBarMobileView view = StatusBarMobileView
-                .fromContext(mobileContext, state.slot);
+                .fromContext(mobileContext, state.slot, SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", true));
 
         view.applyMobileState(state);
         view.setStaticDrawableColor(mColor);

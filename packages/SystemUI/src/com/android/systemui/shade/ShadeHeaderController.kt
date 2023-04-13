@@ -70,7 +70,7 @@ import javax.inject.Named
 
 import com.android.systemui.flags.FeatureFlags
 import com.android.systemui.flags.Flags
-
+import android.os.SystemProperties
 /**
  * Controller for QS header.
  *
@@ -274,7 +274,7 @@ constructor(
             Utils.getColorAttrDefaultColor(header.context, android.R.attr.textColorPrimary)
         )
 
-        if (featureFlags.isEnabled(Flags.COMBINED_STATUS_BAR_SIGNAL_ICONS)) {
+        if (SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", true)) {
             carrierIconSlots =
                 listOf(header.context.getString(com.android.internal.R.string.status_bar_no_calling))
         } else {

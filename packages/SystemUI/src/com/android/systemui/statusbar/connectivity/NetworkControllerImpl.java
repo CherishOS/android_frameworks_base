@@ -46,6 +46,7 @@ import android.os.Handler;
 import android.os.HandlerExecutor;
 import android.os.Looper;
 import android.os.UserHandle;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellSignalStrength;
@@ -493,7 +494,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
         };
 
         mDemoModeController.addCallback(this);
-        mProviderModelBehavior = mFeatureFlags.isEnabled(Flags.COMBINED_STATUS_BAR_SIGNAL_ICONS);
+        mProviderModelBehavior = SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", true);
 
         mSettingsObserver.observe();
         mSettingsObserver.update();
