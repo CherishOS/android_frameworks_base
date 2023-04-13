@@ -17,6 +17,7 @@
 package com.android.systemui.qs;
 
 import android.os.Bundle;
+import android.os.SystemProperties;
 
 import com.android.systemui.R;
 import com.android.systemui.battery.BatteryMeterViewController;
@@ -128,7 +129,7 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
 
         List<String> rssiIgnoredSlots;
 
-        if (mFeatureFlags.isEnabled(Flags.COMBINED_STATUS_BAR_SIGNAL_ICONS)) {
+        if (SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", true)) {
             rssiIgnoredSlots = List.of(
                     getResources().getString(com.android.internal.R.string.status_bar_no_calling),
                     getResources().getString(com.android.internal.R.string.status_bar_call_strength)

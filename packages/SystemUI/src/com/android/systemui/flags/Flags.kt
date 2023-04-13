@@ -246,7 +246,7 @@ object Flags {
         unreleasedFlag(508, "qs_secondary_data_sub_info", teamfood = true)
 
     // 600- status bar
-    val COMBINED_STATUS_BAR_SIGNAL_ICONS = unreleasedFlag(601, "combined_status_bar_signal_icons")
+    val COMBINED_STATUS_BAR_SIGNAL_ICONS = sysPropBooleanFlag(601, "persist.sys.flags.combined_signal_icons", default = true)
 
     // TODO(b/256614753): Tracking Bug
     val NEW_STATUS_BAR_MOBILE_ICONS = unreleasedFlag(606, "new_status_bar_mobile_icons")
