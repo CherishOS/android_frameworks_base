@@ -398,7 +398,7 @@ public class StatusBarSignalPolicy implements SignalCallback,
     @Override
     public void setConnectivityStatus(boolean noDefaultNetwork, boolean noValidatedNetwork,
             boolean noNetworksAvailable) {
-        if (!SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", true)) {
+        if (!SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", false)) {
             return;
         }
         if (DEBUG) {

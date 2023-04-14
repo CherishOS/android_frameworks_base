@@ -129,7 +129,7 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
 
         List<String> rssiIgnoredSlots;
 
-        if (SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", true)) {
+        if (SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", false)) {
             rssiIgnoredSlots = List.of(
                     getResources().getString(com.android.internal.R.string.status_bar_no_calling),
                     getResources().getString(com.android.internal.R.string.status_bar_call_strength)
