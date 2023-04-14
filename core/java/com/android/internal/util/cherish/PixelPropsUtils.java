@@ -75,7 +75,8 @@ public class PixelPropsUtils {
     private static final Map<String, Object> propsToChangeROG3;
     private static final String[] packagesToChangeROG3 = {
             "com.pearlabyss.blackdesertm",
-            "com.pearlabyss.blackdesertm.gl"
+            "com.pearlabyss.blackdesertm.gl",
+            "com.gameloft.android.ANMP.GloftA9HM"
     };
 
     private static final Map<String, Object> propsToChangeXP5;
