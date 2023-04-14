@@ -269,7 +269,7 @@ public class DemoStatusIcons extends StatusIconContainer implements DemoMode, Da
     public void addMobileView(MobileIconState state, Context mobileContext) {
         Log.d(TAG, "addMobileView: ");
         StatusBarMobileView view = StatusBarMobileView
-                .fromContext(mobileContext, state.slot, SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", true));
+                .fromContext(mobileContext, state.slot, SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", false));
 
         view.applyMobileState(state);
         view.setStaticDrawableColor(mColor);

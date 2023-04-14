@@ -638,7 +638,7 @@ public interface StatusBarIconController {
         private StatusBarMobileView onCreateStatusBarMobileView(int subId, String slot) {
             Context mobileContext = mMobileContextProvider.getMobileContextForSub(subId, mContext);
             StatusBarMobileView view = StatusBarMobileView
-                    .fromContext(mobileContext, slot, SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", true));
+                    .fromContext(mobileContext, slot, SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", false));
             return view;
         }
 

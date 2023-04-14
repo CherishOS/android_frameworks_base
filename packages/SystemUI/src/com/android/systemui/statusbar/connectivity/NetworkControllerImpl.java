@@ -494,7 +494,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
         };
 
         mDemoModeController.addCallback(this);
-        mProviderModelBehavior = SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", true);
+        mProviderModelBehavior = SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", false);
 
         mSettingsObserver.observe();
         mSettingsObserver.update();

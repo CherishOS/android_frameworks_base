@@ -274,7 +274,7 @@ constructor(
             Utils.getColorAttrDefaultColor(header.context, android.R.attr.textColorPrimary)
         )
 
-        if (SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", true)) {
+        if (SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", false)) {
             carrierIconSlots =
                 listOf(header.context.getString(com.android.internal.R.string.status_bar_no_calling))
         } else {

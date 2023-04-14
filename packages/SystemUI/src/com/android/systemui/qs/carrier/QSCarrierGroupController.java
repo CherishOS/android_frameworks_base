@@ -223,7 +223,7 @@ public class QSCarrierGroupController {
             CarrierConfigTracker carrierConfigTracker, FeatureFlags featureFlags,
             SlotIndexResolver slotIndexResolver) {
 
-        mProviderModel = SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", true);
+        mProviderModel = SystemProperties.getBoolean("persist.sys.flags.combined_signal_icons", false);
         mActivityStarter = activityStarter;
         mBgHandler = bgHandler;
         mNetworkController = networkController;
