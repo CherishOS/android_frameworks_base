@@ -94,6 +94,7 @@ public class PixelPropsUtils {
 
     private static final Map<String, Object> propsToChangeOP8P;
     private static final String[] packagesToChangeOP8P = {
+            "com.mobile.legends",
             "com.netease.lztgglobal",
             "com.tencent.ig",
             "com.pubg.imobile",
@@ -117,7 +118,6 @@ public class PixelPropsUtils {
     private static final Map<String, Object> propsToChangeMI11T;
     private static final String[] packagesToChangeMI11T = {
             "com.ea.gp.apexlegendsmobilefps",
-            "com.mobile.legends",
             "com.supercell.clashofclans",
             "com.tencent.tmgp.sgame"
     };
