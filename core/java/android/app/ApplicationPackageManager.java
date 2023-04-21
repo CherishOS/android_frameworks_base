@@ -839,7 +839,9 @@ public class ApplicationPackageManager extends PackageManager {
             "com.google.android.feature.GOOGLE_EXPERIENCE",
             "com.google.lens.feature.IMAGE_INTEGRATION",    
             "com.google.lens.feature.CAMERA_INTEGRATION",
-            "com.google.photos.trust_debug_certs"
+            "com.google.photos.trust_debug_certs",
+            "com.google.android.feature.AER_OPTIMIZED",
+            "com.google.android.feature.NEXT_GENERATION_ASSISTANT"
     };
 
     private static final String[] featuresNexus = {
