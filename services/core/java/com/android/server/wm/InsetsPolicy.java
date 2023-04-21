@@ -79,7 +79,6 @@ import com.android.server.DisplayThread;
 import com.android.server.statusbar.StatusBarManagerInternal;
 
 import java.util.Map;
-
 /**
  * Policy that implements who gets control over the windows generating insets.
  */
@@ -403,9 +402,10 @@ class InsetsPolicy {
                 state.removeSource(ITYPE_CAPTION_BAR);
             }
         }
-        Map<Integer, WindowContainerInsetsSourceProvider> providers = mStateController
+        ArrayMap<Integer, WindowContainerInsetsSourceProvider> providers = mStateController
                 .getSourceProviders();
-        for (final WindowContainerInsetsSourceProvider otherProvider: providers.values()) {
+        for (int i = providers.size() - 1; i >= 0; i--) {
+            WindowContainerInsetsSourceProvider otherProvider = providers.valueAt(i);
             if (otherProvider.overridesFrame(windowType)) {
                 if (!stateCopied) {
                     state = new InsetsState(state);
