@@ -268,10 +268,12 @@ public class PixelPropsUtils {
             if (packageName.equals("com.android.vending")) {
                 sIsFinsky = true;
                 return;
-            } else if (!isPixelDevice) {
+            } else {
                 if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
+                    if (isPixelDevice) return;
                     propsToChange.putAll(propsToChangePixelXL);
                 } else if (Arrays.asList(packagesToChangePixel2).contains(packageName)) {
+                    if (isPixelDevice) return;
                     propsToChange.putAll(propsToChangePixel2);
                 } else {
                     propsToChange.putAll(propsToChangePixel7Pro);
