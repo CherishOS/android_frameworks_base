@@ -310,7 +310,8 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
     private static final String DOUBLE_TAP_SLEEP_GESTURE = "system:" + Settings.System.DOUBLE_TAP_SLEEP_GESTURE;
      private static final String DOUBLE_TAP_SLEEP_LOCKSCREEN =
              "system:" + Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN;
-
+    private static final String QS_UI_STYLE =
+            "system:" + Settings.System.QS_UI_STYLE;
     private static final Rect M_DUMMY_DIRTY_RECT = new Rect(0, 0, 1, 1);
     private static final Rect EMPTY_RECT = new Rect();
     /**
@@ -715,6 +716,8 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
      * For PanelView fling perflock call
      */
     private BoostFramework mPerf = null;
+
+    private boolean mIsA11Style;
 
     private final Runnable mFlingCollapseRunnable = () -> fling(0, false /* expand */,
             mNextCollapseSpeedUpFactor, false /* expandBecauseOfFalsing */);
@@ -4972,6 +4975,7 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
             mTunerService.addTunable(this, RETICKER_COLORED);
             mTunerService.addTunable(this, DOUBLE_TAP_SLEEP_GESTURE);
             mTunerService.addTunable(this, DOUBLE_TAP_SLEEP_LOCKSCREEN);
+            mTunerService.addTunable(this, QS_UI_STYLE);
             // Theme might have changed between inflating this view and attaching it to the
             // window, so
             // force a call to onThemeChanged
@@ -5006,6 +5010,9 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
                     break;
                 case DOUBLE_TAP_SLEEP_LOCKSCREEN:
                     mIsLockscreenDoubleTapEnabled = TunerService.parseIntegerSwitch(newValue, true);
+                    break;
+                case QS_UI_STYLE:
+                    mIsA11Style = TunerService.parseInteger(newValue, 0) == 1;
                     break;
                 default:
                     break;
