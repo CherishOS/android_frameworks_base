@@ -6687,6 +6687,11 @@ public final class Settings {
         public static final String TRANSISTENT_TASK_MODE = "transistent_task_mode";
 
         /**
+         * @hide
+         */
+        public static final String PREVENT_POINTER_ACCELERATION = "prevent_pointer_acceleration";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
@@ -6839,6 +6844,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_CHIP);
             PRIVATE_SETTINGS.add(NAVIGATION_BAR_IME_SPACE);
             PRIVATE_SETTINGS.add(TRANSISTENT_TASK_MODE);
+            PRIVATE_SETTINGS.add(PREVENT_POINTER_ACCELERATION);
         }
 
         /**
