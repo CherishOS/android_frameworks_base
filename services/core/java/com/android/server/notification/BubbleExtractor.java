@@ -90,8 +90,7 @@ public class BubbleExtractor implements NotificationSignalExtractor {
         NotificationChannel recordChannel = record.getChannel();
         if (!userEnabledBubbles
                 || appPreference == BUBBLE_PREFERENCE_NONE
-                || !notifCanPresentAsBubble
-                || record.getSbn().getIsContentSecure()) {
+                || !notifCanPresentAsBubble) {
             record.setAllowBubble(false);
             if (!notifCanPresentAsBubble) {
                 // clear out bubble metadata since it can't be used
@@ -145,9 +144,10 @@ public class BubbleExtractor implements NotificationSignalExtractor {
      */
     @VisibleForTesting
     boolean canPresentAsBubble(NotificationRecord r) {
-        if (!mSupportsBubble || r.isBubbleUpSuppressedByAppLock()) {
+        if (!mSupportsBubble) {
             return false;
         }
+
         Notification notification = r.getNotification();
         Notification.BubbleMetadata metadata = notification.getBubbleMetadata();
         String pkg = r.getSbn().getPackageName();

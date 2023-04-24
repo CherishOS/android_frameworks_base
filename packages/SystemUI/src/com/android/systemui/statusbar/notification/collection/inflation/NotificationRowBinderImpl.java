@@ -218,7 +218,7 @@ public class NotificationRowBinderImpl implements NotificationRowBinder {
         params.setUseIncreasedCollapsedHeight(useIncreasedCollapsedHeight);
         params.setUseLowPriority(isLowPriority);
 
-        if (mNotificationLockscreenUserManager.needsRedaction(entry) || entry.getSbn().getIsContentSecure()) {
+        if (mNotificationLockscreenUserManager.needsRedaction(entry)) {
             params.requireContentViews(FLAG_CONTENT_VIEW_PUBLIC);
         } else {
             params.markContentViewsFreeable(FLAG_CONTENT_VIEW_PUBLIC);
