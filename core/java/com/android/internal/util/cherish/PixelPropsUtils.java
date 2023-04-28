@@ -120,8 +120,8 @@ public class PixelPropsUtils {
             "com.epicgames.portal"
     };
 
-    private static final Map<String, Object> propsToChangeOP9R;
-    private static final String[] packagesToChangeOP9R = {
+    private static final Map<String, Object> propsToChangeOP9P;
+    private static final String[] packagesToChangeOP9P = {
             "com.epicgames.fortnite",
             "com.epicgames.portal"
     };
@@ -223,9 +223,9 @@ public class PixelPropsUtils {
         propsToChangeOP8P = new HashMap<>();
         propsToChangeOP8P.put("MODEL", "IN2020");
         propsToChangeOP8P.put("MANUFACTURER", "OnePlus");
-        propsToChangeOP9R = new HashMap<>();
-        propsToChangeOP9R.put("MODEL", "LE2101");
-        propsToChangeOP9R.put("MANUFACTURER", "OnePlus");
+        propsToChangeOP9P = new HashMap<>();
+        propsToChangeOP9P.put("MODEL", "LE2123");
+        propsToChangeOP9P.put("MANUFACTURER", "OnePlus");
         propsToChangeMI11T = new HashMap<>();
         propsToChangeMI11T.put("MODEL", "21081111RG");
         propsToChangeMI11T.put("MANUFACTURER", "Xiaomi");
@@ -307,8 +307,8 @@ public class PixelPropsUtils {
             propsToChange.putAll(propsToChangeOP8P);
         } else if (Arrays.asList(packagesToChangeMI11T).contains(packageName)) {
             propsToChange.putAll(propsToChangeMI11T);
-        } else if (Arrays.asList(packagesToChangeOP9R).contains(packageName)) {
-            propsToChange.putAll(propsToChangeOP9R);
+        } else if (Arrays.asList(packagesToChangeOP9P).contains(packageName)) {
+            propsToChange.putAll(propsToChangeOP9P);
         } else if (Arrays.asList(packagesToChangeF4).contains(packageName)) {
             propsToChange.putAll(propsToChangeF4);
         }
