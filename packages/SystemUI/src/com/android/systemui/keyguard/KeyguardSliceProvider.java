@@ -46,7 +46,7 @@ import androidx.slice.SliceProvider;
 import androidx.slice.builders.ListBuilder;
 import androidx.slice.builders.ListBuilder.RowBuilder;
 import androidx.slice.builders.SliceAction;
-import androidx.slice.widget.SliceViewUtil;;
+import androidx.slice.widget.SliceViewUtil;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.util.cherish.OmniJawsClient;
@@ -163,6 +163,7 @@ public class KeyguardSliceProvider extends SliceProvider implements
     private SettingsObserver mSettingsObserver;
     private boolean mShowWeatherSlice;
     private boolean mShowWeatherSliceLocation;
+    private boolean mShowWeatherStyle;
 
     /**
      * Receiver responsible for time ticking and updating the date format.
@@ -214,6 +215,9 @@ public class KeyguardSliceProvider extends SliceProvider implements
             mContentResolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_WEATHER_LOCATION), false, this,
                     UserHandle.USER_ALL);
+            mContentResolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_WEATHER_STYLE), false, this,
+                    UserHandle.USER_ALL);
             updateShowWeatherSlice();
         }
 
@@ -228,6 +232,9 @@ public class KeyguardSliceProvider extends SliceProvider implements
             mShowWeatherSliceLocation = Settings.System.getIntForUser(mContentResolver,
                     Settings.System.LOCKSCREEN_WEATHER_LOCATION,
                     0, UserHandle.USER_CURRENT) != 0;
+            mShowWeatherStyle = Settings.System.getIntForUser(mContentResolver,
+                    Settings.System.LOCKSCREEN_WEATHER_STYLE,
+                    0, UserHandle.USER_CURRENT) == 0;
         }
 
         @Override
@@ -331,7 +338,8 @@ public class KeyguardSliceProvider extends SliceProvider implements
     }
 
     protected void addWeatherLocked(ListBuilder builder) {
-        if (!mShowWeatherSlice || !mWeatherClient.isOmniJawsEnabled() || mWeatherData == null) {
+        if (!mShowWeatherSlice || !mShowWeatherStyle
+                || !mWeatherClient.isOmniJawsEnabled() || mWeatherData == null) {
             return;
         }
         IconCompat weatherIcon = SliceViewUtil.createIconFromDrawable(mWeatherClient.getWeatherConditionImage(mWeatherData.conditionCode));
