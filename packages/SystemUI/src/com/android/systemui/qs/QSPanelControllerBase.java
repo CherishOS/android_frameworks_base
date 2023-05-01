@@ -235,10 +235,12 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
 
         mMediaHost.removeVisibilityChangeListener(mMediaHostVisibilityListener);
 
-        for (TileRecord record : mRecords) {
-            record.tile.removeCallbacks();
+	if (areThereTiles()) {
+            for (TileRecord record : mRecords) {
+                record.tile.removeCallbacks();
+            }
+            mRecords.clear();
         }
-        mRecords.clear();
         mDumpManager.unregisterDumpable(mView.getDumpableTag());
     }
 
@@ -272,6 +274,7 @@ public abstract class QSPanelControllerBase<T extends QSPanel> extends ViewContr
 
     /** */
     public void refreshAllTiles() {
+    	if (!areThereTiles()) return;
         for (QSPanelControllerBase.TileRecord r : mRecords) {
             if (!r.tile.isListening()) {
                 // Only refresh tiles that were not already in the listening state. Tiles that are
