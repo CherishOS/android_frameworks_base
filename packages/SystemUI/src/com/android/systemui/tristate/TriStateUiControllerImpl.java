@@ -569,7 +569,7 @@ public class TriStateUiControllerImpl implements TriStateUiController,
                     }
                     if (mDialogView != null && bg != 0) {
                         mDialogView.setBackgroundDrawable(res.getDrawable(bg));
-                        mBackgroundColor = getAttrColor(android.R.attr.colorPrimary);
+                        mBackgroundColor = getAttrColor(R.attr.offStateColor);
                         mDialogView.setBackgroundTintList(ColorStateList.valueOf(mBackgroundColor));
                     }
                     mDialogPosition = positionY2;
