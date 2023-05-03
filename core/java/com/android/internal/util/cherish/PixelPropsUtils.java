@@ -123,7 +123,8 @@ public class PixelPropsUtils {
     private static final Map<String, Object> propsToChangeOP9P;
     private static final String[] packagesToChangeOP9P = {
             "com.epicgames.fortnite",
-            "com.epicgames.portal"
+            "com.epicgames.portal",
+            "com.tencent.lolm"
     };
 
     private static final Map<String, Object> propsToChangeMI11T;
