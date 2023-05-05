@@ -88,10 +88,10 @@ public class FontResourcesParser {
         public static final int ITALIC = 1;
 
         private final @NonNull String mFileName;
-        private int mWeight;
-        private int mItalic;
-        private int mTtcIndex;
-        private String mVariationSettings;
+        private final int mWeight;
+        private final int mItalic;
+        private final int mTtcIndex;
+        private final String mVariationSettings;
         private int mResourceId;
 
         public FontFileResourceEntry(@NonNull String fileName, int weight, int italic,

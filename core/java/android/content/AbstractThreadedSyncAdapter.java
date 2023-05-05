@@ -123,7 +123,7 @@ public abstract class AbstractThreadedSyncAdapter {
     private final Object mSyncThreadLock = new Object();
 
     private final boolean mAutoInitialize;
-    private boolean mAllowParallelSyncs;
+    private final boolean mAllowParallelSyncs;
 
     /**
      * Creates an {@link AbstractThreadedSyncAdapter}.

@@ -281,5 +281,5 @@ public class UriMatcher
     @UnsupportedAppUsage
     private final String mText;
     @UnsupportedAppUsage
-    private ArrayList<UriMatcher> mChildren;
+    private final ArrayList<UriMatcher> mChildren;
 }

@@ -132,8 +132,8 @@ public final class AssetManager implements AutoCloseable {
      * @hide
      */
     public static class Builder {
-        private ArrayList<ApkAssets> mUserApkAssets = new ArrayList<>();
-        private ArrayList<ResourcesLoader> mLoaders = new ArrayList<>();
+        private final ArrayList<ApkAssets> mUserApkAssets = new ArrayList<>();
+        private final ArrayList<ResourcesLoader> mLoaders = new ArrayList<>();
 
         public Builder addApkAssets(ApkAssets apkAssets) {
             mUserApkAssets.add(apkAssets);
@@ -1279,7 +1279,7 @@ public final class AssetManager implements AutoCloseable {
     underlying Asset. */
     public final class AssetInputStream extends InputStream {
         private long mAssetNativePtr;
-        private long mLength;
+        private final long mLength;
         private long mMarkPos;
 
         /**

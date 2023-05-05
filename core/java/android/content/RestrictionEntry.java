@@ -107,7 +107,7 @@ public class RestrictionEntry implements Parcelable {
     private int mType;
 
     /** The unique key that identifies the restriction. */
-    private String mKey;
+    private final String mKey;
 
     /** The user-visible title of the restriction. */
     private String mTitle;

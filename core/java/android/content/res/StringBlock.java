@@ -470,7 +470,7 @@ public final class StringBlock implements Closeable {
      * will make the text unreadable.
      */
     private static class Height implements LineHeightSpan.WithDensity {
-        private int mSize;
+        private final int mSize;
         private static float sProportion = 0;
 
         public Height(int size) {

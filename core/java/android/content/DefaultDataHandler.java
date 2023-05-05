@@ -80,7 +80,7 @@ public class DefaultDataHandler implements ContentInsertHandler {
     private final static String SELECT = "select";
     private final static String ARG = "arg";   
    
-    private Stack<Uri> mUris = new Stack<Uri>();
+    private final Stack<Uri> mUris = new Stack<Uri>();
     private ContentValues mValues;
     private ContentResolver mContentResolver;   
     

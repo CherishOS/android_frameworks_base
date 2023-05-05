@@ -128,7 +128,7 @@ public class SearchRecentSuggestionsProvider extends ContentProvider {
      */
     private static class DatabaseHelper extends SQLiteOpenHelper {
         
-        private int mNewVersion;
+        private final int mNewVersion;
         
         public DatabaseHelper(Context context, int newVersion) {
             super(context, sDatabaseName, null, newVersion);

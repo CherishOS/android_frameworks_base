@@ -138,7 +138,7 @@ public abstract class ContentProvider implements ContentInterface, ComponentCall
     private boolean mExported;
     private boolean mNoPerms;
     private boolean mSingleUser;
-    private SparseBooleanArray mUsersRedirectedToOwner = new SparseBooleanArray();
+    private final SparseBooleanArray mUsersRedirectedToOwner = new SparseBooleanArray();
 
     private ThreadLocal<AttributionSource> mCallingAttributionSource;
 
@@ -150,7 +150,7 @@ public abstract class ContentProvider implements ContentInterface, ComponentCall
         return MediaStore.AUTHORITY.equals(authority);
     }
 
-    private Transport mTransport = new Transport();
+    private final Transport mTransport = new Transport();
 
     /**
      * Construct a ContentProvider instance.  Content providers must be

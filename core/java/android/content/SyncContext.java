@@ -22,7 +22,7 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 
 public class SyncContext {
-    private ISyncContext mSyncContext;
+    private final ISyncContext mSyncContext;
     private long mLastHeartbeatSendTime;
 
     private static final long HEARTBEAT_SEND_INTERVAL_IN_MS = 1000;

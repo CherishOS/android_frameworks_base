@@ -34,8 +34,8 @@ import java.util.Observable;
  */
 public class ContentQueryMap extends Observable {
     private volatile Cursor mCursor;
-    private String[] mColumnNames;
-    private int mKeyColumn;
+    private final String[] mColumnNames;
+    private final int mKeyColumn;
 
     private Handler mHandlerForUpdateNotifications = null;
     private boolean mKeepUpdated = false;

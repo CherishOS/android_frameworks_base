@@ -54,7 +54,7 @@ public class RuleSet {
     /** Builder class for RuleSetUpdateRequest. */
     public static class Builder {
         private String mVersion;
-        private List<Rule> mRules;
+        private final List<Rule> mRules;
 
         public Builder() {
             mRules = new ArrayList<>();

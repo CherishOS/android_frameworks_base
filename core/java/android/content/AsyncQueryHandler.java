@@ -43,7 +43,7 @@ public abstract class AsyncQueryHandler extends Handler {
 
     private static Looper sLooper = null;
 
-    private Handler mWorkerThreadHandler;
+    private final Handler mWorkerThreadHandler;
 
     protected static final class WorkerArgs {
         public Uri uri;

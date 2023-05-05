@@ -49,7 +49,7 @@ public class SyncAdaptersCache extends RegisteredServicesCache<SyncAdapterType> 
     private static final MySerializer sSerializer = new MySerializer();
 
     @GuardedBy("mServicesLock")
-    private SparseArray<ArrayMap<String,String[]>> mAuthorityToSyncAdapters
+    private final SparseArray<ArrayMap<String, String[]>> mAuthorityToSyncAdapters
             = new SparseArray<>();
 
     @UnsupportedAppUsage

@@ -64,7 +64,8 @@ public class ResourcesLoader {
     private ResourcesProvider[] mProviders;
 
     @GuardedBy("mLock")
-    private ArrayMap<WeakReference<Object>, UpdateCallbacks> mChangeCallbacks = new ArrayMap<>();
+    private final ArrayMap<WeakReference<Object>, UpdateCallbacks> mChangeCallbacks =
+            new ArrayMap<>();
 
     /** @hide */
     public interface UpdateCallbacks {
