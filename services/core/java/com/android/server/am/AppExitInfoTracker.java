@@ -354,6 +354,9 @@ public final class AppExitInfoTracker {
 
     /** Calls when zygote sends us SIGCHLD */
     void handleZygoteSigChld(int pid, int uid, int status) {
+        // perform killProcessQuiet first before terminating the process group,
+        // this is similar to how PhantomProcessRecord terminates forked processes
+        Process.killProcessQuiet(pid);
         // If an app forks a child process, and the parent process exits normally before the child
         // process exit, the binder node of parent process will not die until the child process
         // exits, resulting in some processes can not receive binderDied of parent process, e.g.,
