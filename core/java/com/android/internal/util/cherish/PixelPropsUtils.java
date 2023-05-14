@@ -157,6 +157,7 @@ public class PixelPropsUtils {
 
     // Codenames for currently supported Pixels by Google
     private static final String[] pixelCodenames = {
+            "lynx",
             "cheetah",
             "panther",
             "bluejay",
@@ -165,9 +166,7 @@ public class PixelPropsUtils {
             "barbet",
             "redfin",
             "bramble",
-            "sunfish",
-            "coral",
-            "flame"
+            "sunfish"
     };
 
     private static volatile boolean sIsGms = false;
