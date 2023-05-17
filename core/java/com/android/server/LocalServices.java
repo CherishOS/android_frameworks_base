@@ -18,7 +18,8 @@ package com.android.server;
 
 import com.android.internal.annotations.VisibleForTesting;
 
-import android.util.ArrayMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * This class is used in a similar way as ServiceManager, except the services registered here
@@ -32,8 +33,8 @@ import android.util.ArrayMap;
 public final class LocalServices {
     private LocalServices() {}
 
-    private static final ArrayMap<Class<?>, Object> sLocalServiceObjects =
-            new ArrayMap<Class<?>, Object>();
+    private static final ConcurrentMap<Class<?>, Object> sLocalServiceObjects =
+            new ConcurrentHashMap<>();
 
     /**
      * Returns a local service instance that implements the specified interface.
@@ -43,20 +44,15 @@ public final class LocalServices {
      */
     @SuppressWarnings("unchecked")
     public static <T> T getService(Class<T> type) {
-        synchronized (sLocalServiceObjects) {
-            return (T) sLocalServiceObjects.get(type);
-        }
+        return (T) sLocalServiceObjects.get(type);
     }
 
     /**
      * Adds a service instance of the specified interface to the global registry of local services.
      */
     public static <T> void addService(Class<T> type, T service) {
-        synchronized (sLocalServiceObjects) {
-            if (sLocalServiceObjects.containsKey(type)) {
-                throw new IllegalStateException("Overriding service registration");
-            }
-            sLocalServiceObjects.put(type, service);
+        if (sLocalServiceObjects.putIfAbsent(type, service) != null) {
+            throw new IllegalStateException("Overriding service registration");
         }
     }
 
@@ -65,8 +61,6 @@ public final class LocalServices {
      */
     @VisibleForTesting
     public static <T> void removeServiceForTest(Class<T> type) {
-        synchronized (sLocalServiceObjects) {
-            sLocalServiceObjects.remove(type);
-        }
+        sLocalServiceObjects.remove(type);
     }
 }
