@@ -55,7 +55,6 @@ public class ConnectivityModuleConnector {
     private static final String PREFS_FILE = "ConnectivityModuleConnector.xml";
     private static final String PREF_KEY_LAST_CRASH_TIME = "lastcrash_time";
     private static final String CONFIG_MIN_CRASH_INTERVAL_MS = "min_crash_interval";
-    private static final String CONFIG_MIN_UPTIME_BEFORE_CRASH_MS = "min_uptime_before_crash";
     private static final String CONFIG_ALWAYS_RATELIMIT_NETWORKSTACK_CRASH =
             "always_ratelimit_networkstack_crash";
 
@@ -64,11 +63,6 @@ public class ConnectivityModuleConnector {
     // (like calling emergency services) we should not bootloop the device.
     // This is the default value: the actual value can be adjusted via device config.
     private static final long DEFAULT_MIN_CRASH_INTERVAL_MS = 6 * DateUtils.HOUR_IN_MILLIS;
-
-    // Even if the network stack is lost, do not crash the system server if it was less than
-    // this much after boot. This avoids bootlooping the device, and crashes should address very
-    // infrequent failures, not failures on boot.
-    private static final long DEFAULT_MIN_UPTIME_BEFORE_CRASH_MS = 30 * DateUtils.MINUTE_IN_MILLIS;
 
     private static ConnectivityModuleConnector sInstance;
 
@@ -304,31 +298,26 @@ public class ConnectivityModuleConnector {
         final long now = System.currentTimeMillis();
         final long minCrashIntervalMs = DeviceConfig.getLong(DeviceConfig.NAMESPACE_CONNECTIVITY,
                 CONFIG_MIN_CRASH_INTERVAL_MS, DEFAULT_MIN_CRASH_INTERVAL_MS);
-        final long minUptimeBeforeCrash = DeviceConfig.getLong(DeviceConfig.NAMESPACE_CONNECTIVITY,
-                CONFIG_MIN_UPTIME_BEFORE_CRASH_MS, DEFAULT_MIN_UPTIME_BEFORE_CRASH_MS);
         final boolean alwaysRatelimit = DeviceConfig.getBoolean(DeviceConfig.NAMESPACE_CONNECTIVITY,
                 CONFIG_ALWAYS_RATELIMIT_NETWORKSTACK_CRASH, false);
 
         final SharedPreferences prefs = getSharedPreferences();
         final long lastCrashTime = tryGetLastCrashTime(prefs);
 
-        // Only crash if there was enough time since boot, and (if known) enough time passed since
-        // the last crash.
+        // Only crash if (if known) enough time passed since the last crash.
         // time and lastCrashTime may be unreliable if devices have incorrect clock time, but they
         // are only used to limit the number of crashes compared to only using the time since boot,
         // which would also be OK behavior by itself.
-        // - If lastCrashTime is incorrectly more than the current time, only look at uptime
-        // - If it is much less than current time, only look at uptime
+        // - If lastCrashTime is incorrectly more than the current time, ignore it
         // - If current time is during the next few hours after last crash time, don't crash.
         //   Considering that this only matters if last boot was some time ago, it's likely that
         //   time will be set correctly. Otherwise, not crashing is not a big problem anyway. Being
         //   in this last state would also not last for long since the window is only a few hours.
         final boolean alwaysCrash = Build.IS_DEBUGGABLE && !alwaysRatelimit;
-        final boolean justBooted = uptime < minUptimeBeforeCrash;
         final boolean haveLastCrashTime = (lastCrashTime != 0) && (lastCrashTime < now);
         final boolean haveKnownRecentCrash =
                 haveLastCrashTime && (now < lastCrashTime + minCrashIntervalMs);
-        if (alwaysCrash || (!justBooted && !haveKnownRecentCrash)) {
+        if (alwaysCrash || !haveKnownRecentCrash) {
             // The system is not bound to its network stack (for example due to a crash in the
             // network stack process): better crash rather than stay in a bad state where all
             // networking is broken.
