@@ -56,6 +56,11 @@ public class PixelPropsUtils {
             "com.snapchat.android"
     };
 
+    private static final String[] packagesToChangePixel5 = {
+            "com.google.android.as",
+            "com.google.android.apps.nexuslauncher"
+    };
+
     private static final String[] extraPackagesToChange = {
             "com.android.chrome",
             "com.android.vending",
@@ -274,6 +279,9 @@ public class PixelPropsUtils {
             } else if (Arrays.asList(packagesToChangePixel2).contains(packageName)) {
                 if (isPixelDevice) return;
                 propsToChange.putAll(propsToChangePixel2);
+            } else if (Arrays.asList(packagesToChangePixel5).contains(packageName)) {
+                if (isPixelDevice) return;
+                propsToChange.putAll(propsToChangePixel5);
             } else {
                 propsToChange.putAll(propsToChangePixel7Pro);
             }
