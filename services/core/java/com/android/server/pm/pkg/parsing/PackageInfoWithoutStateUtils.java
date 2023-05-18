@@ -828,64 +828,61 @@ public class PackageInfoWithoutStateUtils {
      */
     public static int appInfoFlags(ParsingPackageRead pkg) {
         // @formatter:off
-        return flag(pkg.isExternalStorage(), ApplicationInfo.FLAG_EXTERNAL_STORAGE)
-                | flag(pkg.isBaseHardwareAccelerated(), ApplicationInfo.FLAG_HARDWARE_ACCELERATED)
-                | flag(pkg.isAllowBackup(), ApplicationInfo.FLAG_ALLOW_BACKUP)
-                | flag(pkg.isKillAfterRestore(), ApplicationInfo.FLAG_KILL_AFTER_RESTORE)
-                | flag(pkg.isRestoreAnyVersion(), ApplicationInfo.FLAG_RESTORE_ANY_VERSION)
-                | flag(pkg.isFullBackupOnly(), ApplicationInfo.FLAG_FULL_BACKUP_ONLY)
-                | flag(pkg.isPersistent(), ApplicationInfo.FLAG_PERSISTENT)
-                | flag(pkg.isDebuggable(), ApplicationInfo.FLAG_DEBUGGABLE)
-                | flag(pkg.isVmSafeMode(), ApplicationInfo.FLAG_VM_SAFE_MODE)
-                | flag(pkg.isHasCode(), ApplicationInfo.FLAG_HAS_CODE)
-                | flag(pkg.isAllowTaskReparenting(), ApplicationInfo.FLAG_ALLOW_TASK_REPARENTING)
-                | flag(pkg.isAllowClearUserData(), ApplicationInfo.FLAG_ALLOW_CLEAR_USER_DATA)
-                | flag(pkg.isLargeHeap(), ApplicationInfo.FLAG_LARGE_HEAP)
-                | flag(pkg.isUsesCleartextTraffic(), ApplicationInfo.FLAG_USES_CLEARTEXT_TRAFFIC)
-                | flag(pkg.isSupportsRtl(), ApplicationInfo.FLAG_SUPPORTS_RTL)
-                | flag(pkg.isTestOnly(), ApplicationInfo.FLAG_TEST_ONLY)
-                | flag(pkg.isMultiArch(), ApplicationInfo.FLAG_MULTIARCH)
-                | flag(pkg.isExtractNativeLibs(), ApplicationInfo.FLAG_EXTRACT_NATIVE_LIBS)
-                | flag(pkg.isGame(), ApplicationInfo.FLAG_IS_GAME)
-                | flag(pkg.isSupportsSmallScreens(), ApplicationInfo.FLAG_SUPPORTS_SMALL_SCREENS)
-                | flag(pkg.isSupportsNormalScreens(), ApplicationInfo.FLAG_SUPPORTS_NORMAL_SCREENS)
-                | flag(pkg.isSupportsLargeScreens(), ApplicationInfo.FLAG_SUPPORTS_LARGE_SCREENS)
-                | flag(pkg.isSupportsExtraLargeScreens(), ApplicationInfo.FLAG_SUPPORTS_XLARGE_SCREENS)
-                | flag(pkg.isResizeable(), ApplicationInfo.FLAG_RESIZEABLE_FOR_SCREENS)
-                | flag(pkg.isAnyDensity(), ApplicationInfo.FLAG_SUPPORTS_SCREEN_DENSITIES);
+        return (pkg.isExternalStorage() ? ApplicationInfo.FLAG_EXTERNAL_STORAGE : 0)
+                | (pkg.isBaseHardwareAccelerated() ? ApplicationInfo.FLAG_HARDWARE_ACCELERATED : 0)
+                | (pkg.isAllowBackup() ? ApplicationInfo.FLAG_ALLOW_BACKUP : 0)
+                | (pkg.isKillAfterRestore() ? ApplicationInfo.FLAG_KILL_AFTER_RESTORE : 0)
+                | (pkg.isRestoreAnyVersion() ? ApplicationInfo.FLAG_RESTORE_ANY_VERSION : 0)
+                | (pkg.isFullBackupOnly() ? ApplicationInfo.FLAG_FULL_BACKUP_ONLY : 0)
+                | (pkg.isPersistent() ? ApplicationInfo.FLAG_PERSISTENT : 0)
+                | (pkg.isDebuggable() ? ApplicationInfo.FLAG_DEBUGGABLE : 0)
+                | (pkg.isVmSafeMode() ? ApplicationInfo.FLAG_VM_SAFE_MODE : 0)
+                | (pkg.isHasCode() ? ApplicationInfo.FLAG_HAS_CODE : 0)
+                | (pkg.isAllowTaskReparenting() ? ApplicationInfo.FLAG_ALLOW_TASK_REPARENTING : 0)
+                | (pkg.isAllowClearUserData() ? ApplicationInfo.FLAG_ALLOW_CLEAR_USER_DATA : 0)
+                | (pkg.isLargeHeap() ? ApplicationInfo.FLAG_LARGE_HEAP : 0)
+                | (pkg.isUsesCleartextTraffic() ? ApplicationInfo.FLAG_USES_CLEARTEXT_TRAFFIC : 0)
+                | (pkg.isSupportsRtl() ? ApplicationInfo.FLAG_SUPPORTS_RTL : 0)
+                | (pkg.isTestOnly() ? ApplicationInfo.FLAG_TEST_ONLY : 0)
+                | (pkg.isMultiArch() ? ApplicationInfo.FLAG_MULTIARCH : 0)
+                | (pkg.isExtractNativeLibs() ? ApplicationInfo.FLAG_EXTRACT_NATIVE_LIBS : 0)
+                | (pkg.isGame() ? ApplicationInfo.FLAG_IS_GAME : 0)
+                | (pkg.isSupportsSmallScreens() ? ApplicationInfo.FLAG_SUPPORTS_SMALL_SCREENS : 0)
+                | (pkg.isSupportsNormalScreens() ? ApplicationInfo.FLAG_SUPPORTS_NORMAL_SCREENS : 0)
+                | (pkg.isSupportsLargeScreens() ? ApplicationInfo.FLAG_SUPPORTS_LARGE_SCREENS : 0)
+                | (pkg.isSupportsExtraLargeScreens() ? ApplicationInfo.FLAG_SUPPORTS_XLARGE_SCREENS : 0)
+                | (pkg.isResizeable() ? ApplicationInfo.FLAG_RESIZEABLE_FOR_SCREENS : 0)
+                | (pkg.isAnyDensity() ? ApplicationInfo.FLAG_SUPPORTS_SCREEN_DENSITIES : 0);
         // @formatter:on
     }
 
     /** @see ApplicationInfo#privateFlags */
     public static int appInfoPrivateFlags(ParsingPackageRead pkg) {
         // @formatter:off
-        int privateFlags = flag(pkg.isStaticSharedLibrary(), ApplicationInfo.PRIVATE_FLAG_STATIC_SHARED_LIBRARY)
-                | flag(pkg.isOverlay(), ApplicationInfo.PRIVATE_FLAG_IS_RESOURCE_OVERLAY)
-                | flag(pkg.isIsolatedSplitLoading(), ApplicationInfo.PRIVATE_FLAG_ISOLATED_SPLIT_LOADING)
-                | flag(pkg.isHasDomainUrls(), ApplicationInfo.PRIVATE_FLAG_HAS_DOMAIN_URLS)
-                | flag(pkg.isProfileableByShell(), ApplicationInfo.PRIVATE_FLAG_PROFILEABLE_BY_SHELL)
-                | flag(pkg.isBackupInForeground(), ApplicationInfo.PRIVATE_FLAG_BACKUP_IN_FOREGROUND)
-                | flag(pkg.isUseEmbeddedDex(), ApplicationInfo.PRIVATE_FLAG_USE_EMBEDDED_DEX)
-                | flag(pkg.isDefaultToDeviceProtectedStorage(), ApplicationInfo.PRIVATE_FLAG_DEFAULT_TO_DEVICE_PROTECTED_STORAGE)
-                | flag(pkg.isDirectBootAware(), ApplicationInfo.PRIVATE_FLAG_DIRECT_BOOT_AWARE)
-                | flag(pkg.isPartiallyDirectBootAware(), ApplicationInfo.PRIVATE_FLAG_PARTIALLY_DIRECT_BOOT_AWARE)
-                | flag(pkg.isAllowClearUserDataOnFailedRestore(), ApplicationInfo.PRIVATE_FLAG_ALLOW_CLEAR_USER_DATA_ON_FAILED_RESTORE)
-                | flag(pkg.isAllowAudioPlaybackCapture(), ApplicationInfo.PRIVATE_FLAG_ALLOW_AUDIO_PLAYBACK_CAPTURE)
-                | flag(pkg.isRequestLegacyExternalStorage(), ApplicationInfo.PRIVATE_FLAG_REQUEST_LEGACY_EXTERNAL_STORAGE)
-                | flag(pkg.isUsesNonSdkApi(), ApplicationInfo.PRIVATE_FLAG_USES_NON_SDK_API)
-                | flag(pkg.isHasFragileUserData(), ApplicationInfo.PRIVATE_FLAG_HAS_FRAGILE_USER_DATA)
-                | flag(pkg.isCantSaveState(), ApplicationInfo.PRIVATE_FLAG_CANT_SAVE_STATE)
-                | flag(pkg.isResizeableActivityViaSdkVersion(), ApplicationInfo.PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION)
-                | flag(pkg.isAllowNativeHeapPointerTagging(), ApplicationInfo.PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING);
+        int privateFlags = 0;
+        privateFlags |= pkg.isStaticSharedLibrary() ? ApplicationInfo.PRIVATE_FLAG_STATIC_SHARED_LIBRARY : 0;
+        privateFlags |= pkg.isOverlay() ? ApplicationInfo.PRIVATE_FLAG_IS_RESOURCE_OVERLAY : 0;
+        privateFlags |= pkg.isIsolatedSplitLoading() ? ApplicationInfo.PRIVATE_FLAG_ISOLATED_SPLIT_LOADING : 0;
+        privateFlags |= pkg.isHasDomainUrls() ? ApplicationInfo.PRIVATE_FLAG_HAS_DOMAIN_URLS : 0;
+        privateFlags |= pkg.isProfileableByShell() ? ApplicationInfo.PRIVATE_FLAG_PROFILEABLE_BY_SHELL : 0;
+        privateFlags |= pkg.isBackupInForeground() ? ApplicationInfo.PRIVATE_FLAG_BACKUP_IN_FOREGROUND : 0;
+        privateFlags |= pkg.isUseEmbeddedDex() ? ApplicationInfo.PRIVATE_FLAG_USE_EMBEDDED_DEX : 0;
+        privateFlags |= pkg.isDefaultToDeviceProtectedStorage() ? ApplicationInfo.PRIVATE_FLAG_DEFAULT_TO_DEVICE_PROTECTED_STORAGE : 0;
+        privateFlags |= pkg.isDirectBootAware() ? ApplicationInfo.PRIVATE_FLAG_DIRECT_BOOT_AWARE : 0;
+        privateFlags |= pkg.isPartiallyDirectBootAware() ? ApplicationInfo.PRIVATE_FLAG_PARTIALLY_DIRECT_BOOT_AWARE : 0;
+        privateFlags |= pkg.isAllowClearUserDataOnFailedRestore() ? ApplicationInfo.PRIVATE_FLAG_ALLOW_CLEAR_USER_DATA_ON_FAILED_RESTORE : 0;
+        privateFlags |= pkg.isAllowAudioPlaybackCapture() ? ApplicationInfo.PRIVATE_FLAG_ALLOW_AUDIO_PLAYBACK_CAPTURE : 0;
+        privateFlags |= pkg.isRequestLegacyExternalStorage() ? ApplicationInfo.PRIVATE_FLAG_REQUEST_LEGACY_EXTERNAL_STORAGE : 0;
+        privateFlags |= pkg.isUsesNonSdkApi() ? ApplicationInfo.PRIVATE_FLAG_USES_NON_SDK_API : 0;
+        privateFlags |= pkg.isHasFragileUserData() ? ApplicationInfo.PRIVATE_FLAG_HAS_FRAGILE_USER_DATA : 0;
+        privateFlags |= pkg.isCantSaveState() ? ApplicationInfo.PRIVATE_FLAG_CANT_SAVE_STATE : 0;
+        privateFlags |= pkg.isResizeableActivityViaSdkVersion() ? ApplicationInfo.PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION : 0;
+        privateFlags |= pkg.isAllowNativeHeapPointerTagging() ? ApplicationInfo.PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING : 0;
         // @formatter:on
 
         Boolean resizeableActivity = pkg.getResizeableActivity();
         if (resizeableActivity != null) {
-            if (resizeableActivity) {
-                privateFlags |= ApplicationInfo.PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE;
-            } else {
-                privateFlags |= ApplicationInfo.PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_UNRESIZEABLE;
-            }
+            privateFlags |= resizeableActivity ? ApplicationInfo.PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE : ApplicationInfo.PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_UNRESIZEABLE;
         }
 
         return privateFlags;
@@ -894,15 +891,13 @@ public class PackageInfoWithoutStateUtils {
     /** @see ApplicationInfo#privateFlagsExt */
     public static int appInfoPrivateFlagsExt(ParsingPackageRead pkg) {
         // @formatter:off
-        int privateFlagsExt =
-                flag(pkg.isProfileable(), ApplicationInfo.PRIVATE_FLAG_EXT_PROFILEABLE)
-                | flag(pkg.hasRequestForegroundServiceExemption(),
-                        ApplicationInfo.PRIVATE_FLAG_EXT_REQUEST_FOREGROUND_SERVICE_EXEMPTION)
-                | flag(pkg.areAttributionsUserVisible(),
-                        ApplicationInfo.PRIVATE_FLAG_EXT_ATTRIBUTIONS_ARE_USER_VISIBLE)
-                | flag(pkg.isOnBackInvokedCallbackEnabled(),
-                        ApplicationInfo.PRIVATE_FLAG_EXT_ENABLE_ON_BACK_INVOKED_CALLBACK);
+        int privateFlagsExt = 0;
+        privateFlagsExt |= pkg.isProfileable() ? ApplicationInfo.PRIVATE_FLAG_EXT_PROFILEABLE : 0;
+        privateFlagsExt |= pkg.hasRequestForegroundServiceExemption() ? ApplicationInfo.PRIVATE_FLAG_EXT_REQUEST_FOREGROUND_SERVICE_EXEMPTION : 0;
+        privateFlagsExt |= pkg.areAttributionsUserVisible() ? ApplicationInfo.PRIVATE_FLAG_EXT_ATTRIBUTIONS_ARE_USER_VISIBLE : 0;
+        privateFlagsExt |= pkg.isOnBackInvokedCallbackEnabled() ? ApplicationInfo.PRIVATE_FLAG_EXT_ENABLE_ON_BACK_INVOKED_CALLBACK : 0;
         // @formatter:on
+
         return privateFlagsExt;
     }
 
