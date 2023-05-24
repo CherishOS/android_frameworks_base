@@ -260,5 +260,6 @@ public class SecureSettings {
         Settings.Secure.EVEN_DIMMER_MIN_NITS,
         Settings.Secure.TETHERING_ALLOW_VPN_UPSTREAMS,
         Settings.Secure.DOZE_ON_CHARGE,
+        Settings.Secure.DOZE_SINGLE_TAP_GESTURE_AMBIENT
     };
 }
