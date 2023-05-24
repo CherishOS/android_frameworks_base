@@ -123,6 +123,13 @@ public class AmbientDisplayConfiguration {
     }
 
     /** @hide */
+    public boolean singleTapGestureAmbient(int user) {
+        return boolSetting(Settings.Secure.DOZE_SINGLE_TAP_GESTURE_AMBIENT, user,
+                doubleTapSensorAvailable() ? 1 : 0)
+                && pulseOnNotificationEnabled(user);
+    }
+
+    /** @hide */
     public boolean tapSensorAvailable() {
         for (String tapType : tapSensorTypeMapping()) {
             if (!TextUtils.isEmpty(tapType)) {
