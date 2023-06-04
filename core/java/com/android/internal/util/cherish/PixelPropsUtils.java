@@ -128,7 +128,8 @@ public class PixelPropsUtils {
     private static final String[] packagesToChangeMI11T = {
             "com.ea.gp.apexlegendsmobilefps",
             "com.supercell.clashofclans",
-            "com.tencent.tmgp.sgame"
+            "com.tencent.tmgp.sgame",
+            "com.vng.mlbbvn"
     };
 
     private static final Map<String, Object> propsToChangeF4;
