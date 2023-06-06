@@ -94,8 +94,7 @@ public class PixelPropsUtils {
 
     private static final Map<String, Object> propsToChangeK30U;
     private static final String[] packagesToChangeK30U = {
-            "com.pubg.imobile",
-            "com.tencent.tmgp.sgame"
+            "com.pubg.imobile"
     };
 
     private static final Map<String, Object> propsToChangeXP5;
@@ -132,6 +131,12 @@ public class PixelPropsUtils {
             "com.ea.gp.apexlegendsmobilefps",
             "com.supercell.clashofclans",
             "com.vng.mlbbvn"
+    };
+
+    private static final Map<String, Object> propsToChangeMI13P;
+    private static final String[] packagesToChangeMI13P = {
+            "com.levelinfinite.sgameGlobal",
+            "com.tencent.tmgp.sgame"
     };
 
     private static final Map<String, Object> propsToChangeF4;
@@ -230,6 +235,10 @@ public class PixelPropsUtils {
         propsToChangeMI11T = new HashMap<>();
         propsToChangeMI11T.put("MODEL", "21081111RG");
         propsToChangeMI11T.put("MANUFACTURER", "Xiaomi");
+        propsToChangeMI13P = new HashMap<>();
+        propsToChangeMI13P.put("BRAND", "Xiaomi");
+        propsToChangeMI13P.put("MANUFACTURER", "Xiaomi");
+        propsToChangeMI13P.put("MODEL", "2210132C");
         propsToChangeF4 = new HashMap<>();
         propsToChangeF4.put("MODEL", "22021211RG");
         propsToChangeF4.put("MANUFACTURER", "Xiaomi");
@@ -308,6 +317,8 @@ public class PixelPropsUtils {
             propsToChange.putAll(propsToChangeOP8P);
         } else if (Arrays.asList(packagesToChangeMI11T).contains(packageName)) {
             propsToChange.putAll(propsToChangeMI11T);
+        } else if (Arrays.asList(packagesToChangeMI13P).contains(packageName)) {
+            propsToChange.putAll(propsToChangeMI13P);
         } else if (Arrays.asList(packagesToChangeOP9P).contains(packageName)) {
             propsToChange.putAll(propsToChangeOP9P);
         } else if (Arrays.asList(packagesToChangeF4).contains(packageName)) {
