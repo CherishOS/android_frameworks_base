@@ -68,6 +68,7 @@ public class PixelPropsUtils {
             "com.google.android.gms",
             "com.google.android.googlequicksearchbox",
             "com.google.android.inputmethod.latin",
+            "com.google.android.as",
             "com.google.android.wallpaper.effects",
             "com.google.android.apps.emojiwallpaper",
     };
