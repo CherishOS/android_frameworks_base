@@ -20,6 +20,7 @@ import com.android.systemui.qs.tileimpl.QSTileImpl
 import com.android.systemui.qs.tiles.AmbientDisplayTile
 import com.android.systemui.qs.tiles.CaffeineTile
 import com.android.systemui.qs.tiles.DataSwitchTile
+import com.android.systemui.qs.tiles.CellularTile
 import com.android.systemui.qs.tiles.HeadsUpTile
 import com.android.systemui.qs.tiles.PowerShareTile
 import com.android.systemui.qs.tiles.RebootTile
@@ -29,6 +30,7 @@ import com.android.systemui.qs.tiles.SyncTile
 import com.android.systemui.qs.tiles.UsbTetherTile
 import com.android.systemui.qs.tiles.VolumeTile
 import com.android.systemui.qs.tiles.VpnTile
+import com.android.systemui.qs.tiles.WifiTile
 
 import dagger.Binds
 import dagger.Module
@@ -54,6 +56,12 @@ interface CherishModule {
     @IntoMap
     @StringKey(DataSwitchTile.TILE_SPEC)
     fun bindDataSwitchTile(dataSwitchTile: DataSwitchTile): QSTileImpl<*>
+
+    /** Inject CellularTile into tileMap in QSModule */
+    @Binds
+    @IntoMap
+    @StringKey(CellularTile.TILE_SPEC)
+    fun bindCellularTile(cellularTile: CellularTile): QSTileImpl<*>
 
     /** Inject HeadsUpTile into tileMap in QSModule */
     @Binds
@@ -108,4 +116,10 @@ interface CherishModule {
     @IntoMap
     @StringKey(VolumeTile.TILE_SPEC)
     fun bindVolumeTile(volumeTile: VolumeTile): QSTileImpl<*>
+
+    /** Inject WifiTile into tileMap in QSModule */
+    @Binds
+    @IntoMap
+    @StringKey(WifiTile.TILE_SPEC)
+    fun bindWifiTile(wifiTile: WifiTile): QSTileImpl<*>
 }
