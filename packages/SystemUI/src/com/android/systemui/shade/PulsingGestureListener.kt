@@ -55,7 +55,7 @@ class PulsingGestureListener @Inject constructor(
         private val centralSurfaces: CentralSurfaces,
         private val ambientDisplayConfiguration: AmbientDisplayConfiguration,
         private val statusBarStateController: StatusBarStateController,
-        private val shadeLogger: ShadeLogger
+        private val shadeLogger: ShadeLogger,
         userTracker: UserTracker,
         private val powerManager: PowerManager,
         tunerService: TunerService,
@@ -137,7 +137,8 @@ class PulsingGestureListener @Inject constructor(
                 centralSurfaces.wakeUpIfDozing(
                         SystemClock.uptimeMillis(),
                         notificationShadeWindowView,
-                        "PULSING_DOUBLE_TAP")
+                        "PULSING_DOUBLE_TAP",
+                        PowerManager.WAKE_REASON_TAP)
                 return true
             } else if (!statusBarStateController.isDozing &&
                 doubleTapToSleepEnabled &&
