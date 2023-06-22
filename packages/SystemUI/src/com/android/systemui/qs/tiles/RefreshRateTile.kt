@@ -286,9 +286,9 @@ class RefreshRateTile @Inject constructor(
     }
 
     companion object {
-        private const val TAG = "RefreshRateTile"
+        public const val TILE_SPEC = "RefreshRateTile"
         private val DEBUG: Boolean
-            get() = Log.isLoggable(TAG, Log.DEBUG)
+            get() = Log.isLoggable(TILE_SPEC, Log.DEBUG)
 
         private const val INVALID_REFRESH_RATE = -1f
         private const val NO_CONFIG = 0f
@@ -304,7 +304,7 @@ class RefreshRateTile @Inject constructor(
         )
         
         private fun logD(msg: String) {
-            if (DEBUG) Log.d(TAG, msg)
+            if (DEBUG) Log.d(TILE_SPEC, msg)
         }
     }
 }
