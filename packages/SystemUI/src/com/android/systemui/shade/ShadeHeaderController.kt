@@ -25,10 +25,14 @@ import android.content.res.ColorStateList
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
+import android.content.ContentUris
+import android.icu.util.Calendar
+import android.net.Uri
 import android.os.Bundle
 import android.os.Trace
 import android.os.Trace.TRACE_TAG_APP
 import android.provider.AlarmClock
+import android.provider.CalendarContract
 import android.util.Pair
 import android.view.DisplayCutout
 import android.view.View
@@ -295,6 +299,15 @@ constructor(
         clock.setOnClickListener {
             activityStarter.postStartActivityDismissingKeyguard(
                 Intent(AlarmClock.ACTION_SHOW_ALARMS), 0
+            )
+        }
+
+        date.setOnClickListener {
+            var builder : Uri.Builder = CalendarContract.CONTENT_URI.buildUpon()
+            builder.appendPath("time")
+            ContentUris.appendId(builder, Calendar.getInstance().getTimeInMillis())
+            activityStarter.postStartActivityDismissingKeyguard(
+                Intent(Intent.ACTION_VIEW).setData(builder.build()), 0
             )
         }
 
