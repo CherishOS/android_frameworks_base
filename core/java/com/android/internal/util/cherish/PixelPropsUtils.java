@@ -47,8 +47,8 @@ public class PixelPropsUtils {
     private static final Map<String, Object> propsToChangePixelXL;
     private static final Map<String, Object> propsToChangeOP8P;
     private static final Map<String, Object> propsToChangeOP9R;
-    private static final Map<String, Object> propsToChange11T;
-    private static final Map<String, Object> propsToChangeF4;
+    private static final Map<String, Object> propsToChangeMI11T;
+    private static final Map<String, Object> propsToChangeF5;
     private static final Map<String, ArrayList<String>> propsToKeep;
 
     private static final String[] packagesToChangePixelTablet = {
@@ -160,21 +160,21 @@ public class PixelPropsUtils {
     };
 
     // Packages to Spoof as Mi 11T
-    private static final String[] packagesToChange11T = {
+    private static final String[] packagesToChangeMI11T = {
             "com.ea.gp.apexlegendsmobilefps",
             "com.levelinfinite.hotta.gp",
             "com.supercell.clashofclans",
             "com.vng.mlbbvn"
     };
-
-    // Packages to Spoof as POCO F4
-    private static final String[] packagesToChangeF4 = {
+    // Packages to Spoof as POCO F5
+    private static final String[] packagesToChangeF5 = {
             "com.dts.freefiremax",
             "com.dts.freefireth"
     };
 
     // Codenames for currently supported Pixels by Google
     private static final String[] pixelCodenames = {
+            "tangorpro",
             "lynx",
             "cheetah",
             "panther",
@@ -245,12 +245,12 @@ public class PixelPropsUtils {
         propsToChangeOP9R = new HashMap<>();
         propsToChangeOP9R.put("MODEL", "LE2101");
         propsToChangeOP9R.put("MANUFACTURER", "OnePlus");
-        propsToChange11T = new HashMap<>();
-        propsToChange11T.put("MODEL", "21081111RG");
-        propsToChange11T.put("MANUFACTURER", "Xiaomi");
-        propsToChangeF4 = new HashMap<>();
-        propsToChangeF4.put("MODEL", "22021211RG");
-        propsToChangeF4.put("MANUFACTURER", "Xiaomi");
+        propsToChangeMI11T = new HashMap<>();
+        propsToChangeMI11T.put("MODEL", "21081111RG");
+        propsToChangeMI11T.put("MANUFACTURER", "Xiaomi");
+        propsToChangeF5 = new HashMap<>();
+        propsToChangeF5.put("MODEL", "23049PCD8G");
+        propsToChangeF5.put("MANUFACTURER", "Xiaomi");
         propsToChangeK30U = new HashMap<>();
         propsToChangeK30U.put("MODEL", "M2006J10C");
         propsToChangeK30U.put("MANUFACTURER", "Xiaomi");
@@ -360,16 +360,16 @@ public class PixelPropsUtils {
                     Object value = prop.getValue();
                     setPropValue(key, value);
                 }
-            } else if (Arrays.asList(packagesToChange11T).contains(packageName)) {
+            } else if (Arrays.asList(packagesToChangeMI11T).contains(packageName)) {
                 if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
-                for (Map.Entry<String, Object> prop : propsToChange11T.entrySet()) {
+                for (Map.Entry<String, Object> prop : propsToChangeMI11T.entrySet()) {
                     String key = prop.getKey();
                     Object value = prop.getValue();
                     setPropValue(key, value);
                 }
-            } else if (Arrays.asList(packagesToChangeF4).contains(packageName)) {
+            } else if (Arrays.asList(packagesToChangeF5).contains(packageName)) {
                 if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
-                for (Map.Entry<String, Object> prop : propsToChangeF4.entrySet()) {
+                for (Map.Entry<String, Object> prop : propsToChangeF5.entrySet()) {
                     String key = prop.getKey();
                     Object value = prop.getValue();
                     setPropValue(key, value);
