@@ -82,6 +82,7 @@ import com.android.systemui.statusbar.policy.DeviceProvisionedController;
 import com.android.systemui.statusbar.policy.DeviceProvisionedController.DeviceProvisionedListener;
 import com.android.systemui.util.kotlin.JavaAdapter;
 import com.android.systemui.util.settings.SecureSettings;
+import com.android.systemui.util.settings.SystemSettings;
 
 import com.google.ux.material.libmonet.dynamiccolor.MaterialDynamicColors;
 import com.google.ux.material.libmonet.hct.Hct;
@@ -129,6 +130,7 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
     private final BroadcastDispatcher mBroadcastDispatcher;
     private final Executor mBgExecutor;
     private final SecureSettings mSecureSettings;
+    private final SystemSettings mSystemSettings;
     private final Executor mMainExecutor;
     private final Handler mBgHandler;
     private final Context mContext;
@@ -414,7 +416,8 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
             WakefulnessLifecycle wakefulnessLifecycle,
             JavaAdapter javaAdapter,
             KeyguardTransitionInteractor keyguardTransitionInteractor,
-            UiModeManager uiModeManager) {
+            UiModeManager uiModeManager,
+            SystemSettings systemSettings) {
         mContext = context;
         mIsMonetEnabled = featureFlags.isEnabled(Flags.MONET);
         mIsFidelityEnabled = featureFlags.isEnabled(Flags.COLOR_FIDELITY);
@@ -426,6 +429,7 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
         mBgHandler = bgHandler;
         mThemeManager = themeOverlayApplier;
         mSecureSettings = secureSettings;
+        mSystemSettings = systemSettings;
         mWallpaperManager = wallpaperManager;
         mUserTracker = userTracker;
         mResources = resources;
@@ -480,29 +484,47 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
             return;
         }
 
-            mSystemSettings.registerContentObserverForUser(
-                    Settings.System.getUriFor(Settings.System.VOLTE_ICON_STYLE),
-                    false,
-                    new ContentObserver(mBgHandler) {
-                        @Override
-                        public void onChange(boolean selfChange, Collection<Uri> collection, int flags,
-                                int userId) {
-                            reevaluateSystemTheme(true /* forceReload */);
+        mSystemSettings.registerContentObserverForUser(
+                Settings.System.getUriFor(Settings.System.VOLTE_ICON_STYLE),
+                false,
+                new ContentObserver(mBgHandler) {
+                    @Override
+                    public void onChange(boolean selfChange, Collection<Uri> collection, int flags,
+                            int userId) {
+                        if (DEBUG) Log.d(TAG, "Overlay changed for user: " + userId);
+                        if (mUserTracker.getUserId() != userId) {
+                            return;
                         }
-                    },
-                    UserHandle.USER_ALL);
+                        if (!mDeviceProvisionedController.isUserSetup(userId)) {
+                            Log.i(TAG, "Theme application deferred when setting changed.");
+                            mDeferredThemeEvaluation = true;
+                            return;
+                        }
+                        reevaluateSystemTheme(true /* forceReload */);
+                    }
+                },
+                UserHandle.USER_ALL);
     
             mSystemSettings.registerContentObserverForUser(
                     Settings.System.getUriFor(Settings.System.VOWIFI_ICON_STYLE),
                     false,
-                    new ContentObserver(mBgHandler) {
-                        @Override
-                        public void onChange(boolean selfChange, Collection<Uri> collection, int flags,
-                                int userId) {
-                            reevaluateSystemTheme(true /* forceReload */);
+                new ContentObserver(mBgHandler) {
+                    @Override
+                    public void onChange(boolean selfChange, Collection<Uri> collection, int flags,
+                            int userId) {
+                        if (DEBUG) Log.d(TAG, "Overlay changed for user: " + userId);
+                        if (mUserTracker.getUserId() != userId) {
+                            return;
                         }
-                    },
-                    UserHandle.USER_ALL);
+                        if (!mDeviceProvisionedController.isUserSetup(userId)) {
+                            Log.i(TAG, "Theme application deferred when setting changed.");
+                            mDeferredThemeEvaluation = true;
+                            return;
+                        }
+                        reevaluateSystemTheme(true /* forceReload */);
+                    }
+                },
+                UserHandle.USER_ALL);
 
         mUserTracker.addCallback(mUserTrackerCallback, mMainExecutor);
 
