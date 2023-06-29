@@ -17653,9 +17653,13 @@ package android.graphics.pdf {
 package android.graphics.text {
 
   public final class LineBreakConfig {
+    method @FlaggedApi(FLAG_NO_BREAK_NO_HYPHENATION_SPAN) public int getHyphenation();
     method public int getLineBreakStyle();
     method public int getLineBreakWordStyle();
     method @NonNull public android.graphics.text.LineBreakConfig merge(@NonNull android.graphics.text.LineBreakConfig);
+    field @FlaggedApi(FLAG_NO_BREAK_NO_HYPHENATION_SPAN) public static final int HYPHENATION_DISABLED = 0; // 0x0
+    field @FlaggedApi(FLAG_NO_BREAK_NO_HYPHENATION_SPAN) public static final int HYPHENATION_ENABLED = 1; // 0x1
+    field @FlaggedApi(FLAG_NO_BREAK_NO_HYPHENATION_SPAN) public static final int HYPHENATION_UNSPECIFIED = -1; // 0xffffffff
     field public static final int LINE_BREAK_STYLE_LOOSE = 1; // 0x1
     field public static final int LINE_BREAK_STYLE_NONE = 0; // 0x0
     field public static final int LINE_BREAK_STYLE_NORMAL = 2; // 0x2
@@ -17670,6 +17674,7 @@ package android.graphics.text {
     ctor public LineBreakConfig.Builder();
     method @NonNull public android.graphics.text.LineBreakConfig build();
     method @NonNull public android.graphics.text.LineBreakConfig.Builder merge(@NonNull android.graphics.text.LineBreakConfig);
+    method @FlaggedApi(FLAG_NO_BREAK_NO_HYPHENATION_SPAN) @NonNull public android.graphics.text.LineBreakConfig.Builder setHyphenation(int);
     method @NonNull public android.graphics.text.LineBreakConfig.Builder setLineBreakStyle(int);
     method @NonNull public android.graphics.text.LineBreakConfig.Builder setLineBreakWordStyle(int);
   }
@@ -47875,9 +47880,13 @@ package android.text.style {
     method public void writeToParcel(@NonNull android.os.Parcel, int);
   }
 
-  public class LineBreakConfigSpan {
+  @FlaggedApi(FLAG_NO_BREAK_NO_HYPHENATION_SPAN) public class LineBreakConfigSpan {
     ctor public LineBreakConfigSpan(@NonNull android.graphics.text.LineBreakConfig);
     method @NonNull public android.graphics.text.LineBreakConfig getLineBreakConfig();
+  }
+
+  @FlaggedApi(FLAG_NO_BREAK_NO_HYPHENATION_SPAN) public static final class LineBreakConfigSpan.NoHyphenationSpan extends android.text.style.LineBreakConfigSpan {
+    ctor @FlaggedApi(FLAG_NO_BREAK_NO_HYPHENATION_SPAN) public LineBreakConfigSpan.NoHyphenationSpan();
   }
 
   public interface LineHeightSpan extends android.text.style.ParagraphStyle android.text.style.WrapTogetherSpan {
