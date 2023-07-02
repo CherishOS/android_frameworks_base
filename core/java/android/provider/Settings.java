@@ -12610,12 +12610,6 @@ public final class Settings {
         public static final String PULSE_VERTICAL_MIRROR = "pulse_vertical_mirror";
 
         /**
-         * Whether to show daily data usage in the QS footer.
-         * @hide
-         */
-        public static final String QS_SHOW_DATA_USAGE = "qs_show_data_usage";
-
-        /**
          * Face Unlock Method
          * @hide
          */

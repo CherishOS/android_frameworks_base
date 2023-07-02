@@ -16,56 +16,41 @@
 
 package com.android.systemui.qs;
 
-import static android.provider.Settings.Global.MULTI_SIM_DATA_CALL_SUBSCRIPTION;
-import static android.provider.Settings.Secure.QS_SHOW_DATA_USAGE;
-import static android.provider.Settings.Secure.QS_TILES;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.ContentObserver;
+import android.net.ConnectivityManager;
+import android.net.NetworkScoreManager;
 import android.net.wifi.WifiManager;
-import android.os.Handler;
-import android.telephony.SubscriptionManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.internal.jank.InteractionJankMonitor;
-
 import com.android.systemui.R;
-import com.android.systemui.animation.ActivityLaunchAnimator;
-import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.plugins.FalsingManager;
 import com.android.systemui.qs.dagger.QSScope;
 import com.android.systemui.settings.UserTracker;
 import com.android.systemui.statusbar.connectivity.NetworkController;
 import com.android.systemui.statusbar.connectivity.SignalCallback;
-import com.android.systemui.statusbar.connectivity.WifiStatusTrackerFactory;
-import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.ViewController;
-import com.android.systemui.util.settings.GlobalSettings;
 
 import com.android.settingslib.wifi.WifiStatusTracker;
 
-import java.util.Arrays;
 import javax.inject.Inject;
 
 /**
  * Controller for {@link QSFooterView}.
  */
 @QSScope
-public class QSFooterViewController extends ViewController<QSFooterView>
-        implements QSFooter, TunerService.Tunable {
+public class QSFooterViewController extends ViewController<QSFooterView> implements QSFooter {
 
     private final UserTracker mUserTracker;
     private final QSPanelController mQsPanelController;
-    private final TextView mUsageText;
     private final PageIndicator mPageIndicator;
     private final View mEditButton;
     private final FalsingManager mFalsingManager;
@@ -73,11 +58,6 @@ public class QSFooterViewController extends ViewController<QSFooterView>
     private final WifiStatusTracker mWifiTracker;
     private final NetworkController mNetworkController;
     private final Context mContext;
-    private final TunerService mTunerService;
-    private final GlobalSettings mGlobalSettings;
-    private final SubscriptionManager mSubManager;
-
-    private static final String INTERNET_TILE = "internet";
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -91,14 +71,7 @@ public class QSFooterViewController extends ViewController<QSFooterView>
         @Override
         public void setNoSims(boolean show, boolean simDetected) {
             mView.setNoSims(show);
-        }
-    };
-
-    private final ContentObserver mDataSwitchObserver = new ContentObserver(new Handler()) {
-        @Override
-        public void onChange(boolean selfChange) {
-            onDefaultDataSimChanged();
-        }
+         }
     };
 
     @Inject
@@ -108,10 +81,7 @@ public class QSFooterViewController extends ViewController<QSFooterView>
             ActivityStarter activityStarter,
             QSPanelController qsPanelController,
             NetworkController networkController,
-            WifiStatusTrackerFactory trackerFactory,
-            Context context,
-            TunerService tunerService,
-            GlobalSettings globalSettings) {
+            Context context) {
         super(view);
         mUserTracker = userTracker;
         mQsPanelController = qsPanelController;
@@ -119,13 +89,12 @@ public class QSFooterViewController extends ViewController<QSFooterView>
         mActivityStarter = activityStarter;
         mNetworkController = networkController;
         mContext = context;
-        mTunerService = tunerService;
-        mGlobalSettings = globalSettings;
-        mSubManager = context.getSystemService(SubscriptionManager.class);
-        mWifiTracker = trackerFactory.createTracker(this::onWifiStatusUpdated, null);
-        mUsageText = mView.findViewById(R.id.build);
         mPageIndicator = mView.findViewById(R.id.footer_page_indicator);
         mEditButton = mView.findViewById(android.R.id.edit);
+        mWifiTracker = new WifiStatusTracker(context, context.getSystemService(WifiManager.class),
+                context.getSystemService(NetworkScoreManager.class),
+                context.getSystemService(ConnectivityManager.class),
+                        this::onWifiStatusUpdated);
     }
 
     @Override
@@ -137,16 +106,6 @@ public class QSFooterViewController extends ViewController<QSFooterView>
             mActivityStarter
                     .postQSRunnableDismissingKeyguard(() -> mQsPanelController.showEdit(view));
         });
-        mUsageText.setOnClickListener(view -> {
-            ActivityLaunchAnimator.Controller animationController =
-                mUsageText != null ? ActivityLaunchAnimator.Controller.fromView(
-                        mUsageText,
-                        InteractionJankMonitor.CUJ_SHADE_APP_LAUNCH_FROM_SETTINGS_BUTTON) : null;
-            Intent intent = new Intent();
-            intent.setClassName("com.android.settings",
-                    "com.android.settings.Settings$DataUsageSummaryActivity");
-            mActivityStarter.startActivity(intent, true /* dismissShade */, animationController);
-        });
         mQsPanelController.setFooterPageIndicator(mPageIndicator);
         final IntentFilter filter = new IntentFilter();
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
@@ -155,39 +114,14 @@ public class QSFooterViewController extends ViewController<QSFooterView>
         mContext.registerReceiver(mReceiver, filter);
         mWifiTracker.fetchInitialState();
         mWifiTracker.setListening(true);
-        mNetworkController.addCallback(mSignalCallback);
-        mTunerService.addTunable(this, QS_TILES, QS_SHOW_DATA_USAGE);
-        mGlobalSettings.registerContentObserver(MULTI_SIM_DATA_CALL_SUBSCRIPTION,
-                mDataSwitchObserver);
-
-        // set initial values
         onWifiStatusUpdated();
-        onDefaultDataSimChanged();
+        mNetworkController.addCallback(mSignalCallback);
     }
 
     @Override
     protected void onViewDetached() {
         mContext.unregisterReceiver(mReceiver);
         mNetworkController.removeCallback(mSignalCallback);
-        mTunerService.removeTunable(this);
-        mGlobalSettings.unregisterContentObserver(mDataSwitchObserver);
-    }
-
-    @Override
-    public void onTuningChanged(String key, String newValue) {
-        if (key.equals(QS_TILES)) {
-            if (TextUtils.isEmpty(newValue)) {
-                newValue = mContext.getString(R.string.quick_settings_tiles_default);
-            }
-            int rows = mContext.getResources().getInteger(R.integer.quick_settings_max_rows);
-            int cols = mContext.getResources().getInteger(R.integer.quick_settings_num_columns);
-            // Don't show the suffix if we have internet tile in the first page.
-            mView.setShowSuffix(!Arrays.stream(newValue.split(","))
-                                       .limit(rows * cols)
-                                       .anyMatch(INTERNET_TILE::equals));
-         } else if (key.equals(QS_SHOW_DATA_USAGE)) {
-            mView.setHideDataUsage(!TunerService.parseIntegerSwitch(newValue, true));
-         }
     }
 
     @Override
@@ -219,10 +153,5 @@ public class QSFooterViewController extends ViewController<QSFooterView>
     private void onWifiStatusUpdated() {
         mView.setIsWifiConnected(mWifiTracker.connected);
         mView.setWifiSsid(mWifiTracker.ssid);
-    }
-
-    private void onDefaultDataSimChanged() {
-        int subId = mSubManager.getDefaultDataSubscriptionId();
-        mView.setCurrentDataSubId(subId);
     }
 }
