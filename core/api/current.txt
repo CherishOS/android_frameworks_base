@@ -14271,6 +14271,7 @@ package android.database.sqlite {
     method public android.database.sqlite.SQLiteStatement compileStatement(String) throws android.database.SQLException;
     method @NonNull public static android.database.sqlite.SQLiteDatabase create(@Nullable android.database.sqlite.SQLiteDatabase.CursorFactory);
     method @NonNull public static android.database.sqlite.SQLiteDatabase createInMemory(@NonNull android.database.sqlite.SQLiteDatabase.OpenParams);
+    method @NonNull public android.database.sqlite.SQLiteRawStatement createRawStatement(@NonNull String);
     method public int delete(String, String, String[]);
     method public static boolean deleteDatabase(@NonNull java.io.File);
     method public void disableWriteAheadLogging();
@@ -14281,6 +14282,7 @@ package android.database.sqlite {
     method public void execSQL(String, Object[]) throws android.database.SQLException;
     method public static String findEditTable(String);
     method public java.util.List<android.util.Pair<java.lang.String,java.lang.String>> getAttachedDbs();
+    method public long getLastInsertRowId();
     method public long getMaximumSize();
     method public long getPageSize();
     method public String getPath();
@@ -14504,6 +14506,39 @@ package android.database.sqlite {
     method public void setStrictGrammar(boolean);
     method public void setTables(@Nullable String);
     method public int update(@NonNull android.database.sqlite.SQLiteDatabase, @NonNull android.content.ContentValues, @Nullable String, @Nullable String[]);
+  }
+
+  public final class SQLiteRawStatement implements java.io.Closeable {
+    method public void bindBlob(int, @NonNull byte[]) throws android.database.sqlite.SQLiteException;
+    method public void bindBlob(int, @NonNull byte[], int, int) throws android.database.sqlite.SQLiteException;
+    method public void bindDouble(int, double) throws android.database.sqlite.SQLiteException;
+    method public void bindInt(int, int) throws android.database.sqlite.SQLiteException;
+    method public void bindLong(int, long) throws android.database.sqlite.SQLiteException;
+    method public void bindNull(int) throws android.database.sqlite.SQLiteException;
+    method public void bindText(int, @NonNull String) throws android.database.sqlite.SQLiteException;
+    method public void clearBindings();
+    method public void close();
+    method @Nullable public byte[] getColumnBlob(int) throws android.database.sqlite.SQLiteException;
+    method public double getColumnDouble(int) throws android.database.sqlite.SQLiteException;
+    method public int getColumnInt(int) throws android.database.sqlite.SQLiteException;
+    method public int getColumnLength(int) throws android.database.sqlite.SQLiteException;
+    method public long getColumnLong(int) throws android.database.sqlite.SQLiteException;
+    method @NonNull public String getColumnName(int) throws android.database.sqlite.SQLiteException;
+    method @NonNull public String getColumnText(int) throws android.database.sqlite.SQLiteException;
+    method public int getColumnType(int) throws android.database.sqlite.SQLiteException;
+    method public int getParameterCount();
+    method public int getParameterIndex(@NonNull String);
+    method @Nullable public String getParameterName(int);
+    method public int getResultColumnCount();
+    method public boolean isOpen();
+    method public int readColumnBlob(int, @NonNull byte[], int, int, int) throws android.database.sqlite.SQLiteException;
+    method public void reset();
+    method public boolean step() throws android.database.sqlite.SQLiteException;
+    field public static final int SQLITE_DATA_TYPE_BLOB = 4; // 0x4
+    field public static final int SQLITE_DATA_TYPE_FLOAT = 2; // 0x2
+    field public static final int SQLITE_DATA_TYPE_INTEGER = 1; // 0x1
+    field public static final int SQLITE_DATA_TYPE_NULL = 5; // 0x5
+    field public static final int SQLITE_DATA_TYPE_TEXT = 3; // 0x3
   }
 
   public class SQLiteReadOnlyDatabaseException extends android.database.sqlite.SQLiteException {
