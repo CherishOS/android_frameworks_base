@@ -1495,9 +1495,11 @@ public final class ProcessList {
      * {@hide}
      */
     public static void startPsiMonitoringAfterBoot() {
-        ByteBuffer buf = ByteBuffer.allocate(4);
-        buf.putInt(LMK_START_PSI_MONITORING);
-        writeLmkd(buf, null);
+        if (SystemProperties.getBoolean("ro.lmk.delay_psi_monitors_until_boot", false)) {
+            ByteBuffer buf = ByteBuffer.allocate(4);
+            buf.putInt(LMK_START_PSI_MONITORING);
+            writeLmkd(buf, null);
+        }
     }
 
     private static boolean writeLmkd(ByteBuffer buf, ByteBuffer repl) {
