@@ -59,10 +59,17 @@ public class PixelPropsUtils {
 
     // Packages to Spoof as Pixel 2
     private static final String[] packagesToChangePixel2 = {
-            "com.snapchat.android"
+            "com.snapchat.android",
     };
 
     private static final String[] packagesToChangePixel6Pro = {
+            "com.google.android.apps.emojiwallpaper",
+            "com.google.android.apps.googleassistant",
+            "com.google.android.as",
+            "com.google.android.googlequicksearchbox",
+            "com.google.android.inputmethod.latin",
+            "com.google.android.wallpaper.effects",
+            "com.google.pixel.livewallpaper",
     };
 
     private static final String[] packagesToChangePixel7Pro = {
@@ -75,8 +82,11 @@ public class PixelPropsUtils {
             "com.disney.disneyplus",
             "com.netflix.mediaclient",
             "in.startv.hotstar",
-            "com.google.android.wallpaper.effects",
-            "com.google.android.apps.emojiwallpaper",
+            "com.google.android.apps.customization.pixel",
+            "com.google.android.apps.privacy.wildlife",
+            "com.google.android.apps.subscriptions.red",
+            "com.google.android.apps.wallpaper.pixel",
+            "com.google.android.apps.wallpaper",
     };
 
     private static final String[] extraPackagesToChange = {
@@ -86,71 +96,7 @@ public class PixelPropsUtils {
     private static final String[] customGoogleCameraPackages = {
             "com.google.android.MTCL83",
             "com.google.android.UltraCVM",
-            "com.google.android.apps.cameralite"
-    };
-
-    private static final Map<String, Object> propsToChangeROG6;
-    private static final String[] packagesToChangeROG6 = {
-            "com.activision.callofduty.shooter",
-            "com.madfingergames.legends",
-            "com.mobile.legends",
-            "com.pearlabyss.blackdesertm",
-            "com.pearlabyss.blackdesertm.gl",
-            "com.ea.gp.fifamobile",
-            "com.gameloft.android.ANMP.GloftA9HM"
-    };
-
-    private static final Map<String, Object> propsToChangeK30U;
-    private static final String[] packagesToChangeK30U = {
-            "com.pubg.imobile"
-    };
-
-    private static final Map<String, Object> propsToChangeXP5;
-    private static final String[] packagesToChangeXP5 = {
-            "com.tencent.tmgp.kr.codm",
-            "com.garena.game.codm",
-            "com.vng.codmvn"
-    };
-
-    private static final Map<String, Object> propsToChangeOP8P;
-    private static final String[] packagesToChangeOP8P = {
-            "com.netease.lztgglobal",
-            "com.tencent.ig",
-            "com.pubg.krmobile",
-            "com.vng.pubgmobile",
-            "com.rekoo.pubgm",
-            "com.tencent.tmgp.pubgmhd",
-            "com.riotgames.league.wildrift",
-            "com.riotgames.league.wildrifttw",
-            "com.riotgames.league.wildriftvn",
-            "com.netease.lztgglobal",
-            "com.epicgames.portal"
-    };
-
-    private static final Map<String, Object> propsToChangeOP9P;
-    private static final String[] packagesToChangeOP9P = {
-            "com.epicgames.fortnite",
-            "com.epicgames.portal",
-            "com.tencent.lolm"
-    };
-
-    private static final Map<String, Object> propsToChangeMI11T;
-    private static final String[] packagesToChangeMI11T = {
-            "com.ea.gp.apexlegendsmobilefps",
-            "com.supercell.clashofclans",
-            "com.vng.mlbbvn"
-    };
-
-    private static final Map<String, Object> propsToChangeMI13P;
-    private static final String[] packagesToChangeMI13P = {
-            "com.levelinfinite.sgameGlobal",
-            "com.tencent.tmgp.sgame"
-    };
-
-    private static final Map<String, Object> propsToChangeF4;
-    private static final String[] packagesToChangeF4 = {
-            "com.dts.freefiremax",
-            "com.dts.freefireth"
+            "com.google.android.apps.cameralite",
     };
 
     private static final String[] packagesToKeep = {
@@ -163,7 +109,7 @@ public class PixelPropsUtils {
             "com.google.android.apps.subscriptions.red",
             "com.google.android.apps.tachyon",
             "com.google.android.apps.tycho",
-            "it.ingdirect.app"
+            "it.ingdirect.app",
     };
 
     // Codenames for currently supported Pixels by Google
@@ -179,7 +125,7 @@ public class PixelPropsUtils {
             "barbet",
             "redfin",
             "bramble",
-            "sunfish"
+            "sunfish",
     };
 
     private static final String sNetflixModel =
@@ -232,33 +178,6 @@ public class PixelPropsUtils {
         propsToChangePixelXL.put("PRODUCT", "marlin");
         propsToChangePixelXL.put("MODEL", "Pixel XL");
         propsToChangePixelXL.put("FINGERPRINT", "google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys");
-        propsToChangeROG6 = new HashMap<>();
-        propsToChangeROG6.put("BRAND", "asus");
-        propsToChangeROG6.put("MANUFACTURER", "asus");
-        propsToChangeROG6.put("DEVICE", "AI2201");
-        propsToChangeROG6.put("MODEL", "ASUS_AI2201");
-        propsToChangeXP5 = new HashMap<>();
-        propsToChangeXP5.put("MODEL", "SO-52A");
-        propsToChangeXP5.put("MANUFACTURER", "Sony");
-        propsToChangeOP8P = new HashMap<>();
-        propsToChangeOP8P.put("MODEL", "IN2020");
-        propsToChangeOP8P.put("MANUFACTURER", "OnePlus");
-        propsToChangeOP9P = new HashMap<>();
-        propsToChangeOP9P.put("MODEL", "LE2123");
-        propsToChangeOP9P.put("MANUFACTURER", "OnePlus");
-        propsToChangeMI11T = new HashMap<>();
-        propsToChangeMI11T.put("MODEL", "21081111RG");
-        propsToChangeMI11T.put("MANUFACTURER", "Xiaomi");
-        propsToChangeMI13P = new HashMap<>();
-        propsToChangeMI13P.put("BRAND", "Xiaomi");
-        propsToChangeMI13P.put("MANUFACTURER", "Xiaomi");
-        propsToChangeMI13P.put("MODEL", "2210132C");
-        propsToChangeF4 = new HashMap<>();
-        propsToChangeF4.put("MODEL", "22021211RG");
-        propsToChangeF4.put("MANUFACTURER", "Xiaomi");
-        propsToChangeK30U = new HashMap<>();
-        propsToChangeK30U.put("MODEL", "M2006J10C");
-        propsToChangeK30U.put("MANUFACTURER", "Xiaomi");
     }
 
     private static boolean isGoogleCameraPackage(String packageName){
@@ -281,7 +200,7 @@ public class PixelPropsUtils {
         Map<String, Object> propsToChange = new HashMap<>();
         if (packageName.equals("com.google.android.gms")
             || packageName.toLowerCase().contains("androidx.test")
-            || packageName.toLowerCase().equals("com.google.android.apps.restore")) {
+            || packageName.equalsIgnoreCase("com.google.android.apps.restore")) {
             final String processName = Application.getProcessName();
             if (processName.toLowerCase().contains("unstable")
                 || processName.toLowerCase().contains("pixelmigrate")
@@ -343,24 +262,7 @@ public class PixelPropsUtils {
             } else {
                 propsToChange.putAll(propsToChangePixel5a);
             }
-        } else if (Arrays.asList(packagesToChangeK30U).contains(packageName)) {
-            propsToChange.putAll(propsToChangeK30U);
-        } else if (Arrays.asList(packagesToChangeROG6).contains(packageName)) {
-            propsToChange.putAll(propsToChangeROG6);
-        } else if (Arrays.asList(packagesToChangeXP5).contains(packageName)) {
-            propsToChange.putAll(propsToChangeXP5);
-        } else if (Arrays.asList(packagesToChangeOP8P).contains(packageName)) {
-            propsToChange.putAll(propsToChangeOP8P);
-        } else if (Arrays.asList(packagesToChangeMI11T).contains(packageName)) {
-            propsToChange.putAll(propsToChangeMI11T);
-        } else if (Arrays.asList(packagesToChangeMI13P).contains(packageName)) {
-            propsToChange.putAll(propsToChangeMI13P);
-        } else if (Arrays.asList(packagesToChangeOP9P).contains(packageName)) {
-            propsToChange.putAll(propsToChangeOP9P);
-        } else if (Arrays.asList(packagesToChangeF4).contains(packageName)) {
-            propsToChange.putAll(propsToChangeF4);
         }
-
         if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
         for (Map.Entry<String, Object> prop : propsToChange.entrySet()) {
             String key = prop.getKey();
