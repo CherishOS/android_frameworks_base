@@ -1396,6 +1396,9 @@ final class DisplayPowerController2 implements AutomaticBrightnessController.Cal
         // request changes.
         final boolean wasShortTermModelActive =
                 mAutomaticBrightnessStrategy.isShortTermModelActive();
+        // Save hasAppliedAutoBrightness state before applying the current request changes.
+        final boolean oldAppliedAutoBrightness =
+                mAutomaticBrightnessStrategy.hasAppliedAutoBrightness();
         mAutomaticBrightnessStrategy.setAutoBrightnessState(state,
                 mDisplayBrightnessController.isAllowAutoBrightnessWhileDozingConfig(),
                 mBrightnessReasonTemp.getReason(), mPowerRequest.policy,
@@ -1430,8 +1433,7 @@ final class DisplayPowerController2 implements AutomaticBrightnessController.Cal
                             .getRawAutomaticScreenBrightness();
                     brightnessState = clampScreenBrightness(brightnessState);
                     // slowly adapt to auto-brightness
-                    // TODO(b/253226419): slowChange should be decided by strategy.updateBrightness
-                    slowChange = mAutomaticBrightnessStrategy.hasAppliedAutoBrightness()
+                    slowChange = oldAppliedAutoBrightness
                             && !mAutomaticBrightnessStrategy.getAutoBrightnessAdjustmentChanged();
                     brightnessAdjustmentFlags =
                             mAutomaticBrightnessStrategy.getAutoBrightnessAdjustmentReasonsFlags();
