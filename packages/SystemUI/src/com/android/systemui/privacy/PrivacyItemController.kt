@@ -225,7 +225,6 @@ class PrivacyItemController @Inject constructor(
     interface Callback : PrivacyConfig.Callback {
         fun onPrivacyItemsChanged(privacyItems: List<PrivacyItem>)
 
-        @JvmDefault
         fun onFlagAllChanged(flag: Boolean) {}
     }
 
