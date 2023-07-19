@@ -4023,6 +4023,10 @@ public class Activity extends ContextThemeWrapper
         // Inform activity task manager that the activity received a back press.
         // This call allows ActivityTaskManager to intercept or move the task
         // to the back when needed.
+        if (!isTaskRoot()) {
+            finishAfterTransition();
+            return;
+        }
         ActivityClient.getInstance().onBackPressed(mToken,
                 new RequestFinishCallback(new WeakReference<>(this)));
 
