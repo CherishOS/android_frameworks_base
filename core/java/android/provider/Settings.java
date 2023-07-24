@@ -6806,6 +6806,12 @@ public final class Settings {
                 "lockscreen_quick_unlock_control";
 
         /**
+         * QS Header
+         * @hide
+         */
+        public static final String QS_HEADER_IMAGE = "qs_header_image";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
