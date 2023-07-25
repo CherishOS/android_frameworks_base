@@ -4616,7 +4616,9 @@ package android.app {
 
   public class ActivityManager {
     method public int addAppTask(@NonNull android.app.Activity, @NonNull android.content.Intent, @Nullable android.app.ActivityManager.TaskDescription, @NonNull android.graphics.Bitmap);
+    method public void addStartInfoTimestamp(@IntRange(from=android.app.ApplicationStartInfo.START_TIMESTAMP_RESERVED_RANGE_DEVELOPER_START, to=android.app.ApplicationStartInfo.START_TIMESTAMP_RESERVED_RANGE_DEVELOPER) int, long);
     method public void appNotResponding(@NonNull String);
+    method public void clearApplicationStartInfoCompletionListener();
     method public boolean clearApplicationUserData();
     method public void clearWatchHeapLimit();
     method @RequiresPermission(android.Manifest.permission.DUMP) public void dumpPackageState(java.io.FileDescriptor, String);
@@ -4624,6 +4626,7 @@ package android.app {
     method public java.util.List<android.app.ActivityManager.AppTask> getAppTasks();
     method public android.content.pm.ConfigurationInfo getDeviceConfigurationInfo();
     method @NonNull public java.util.List<android.app.ApplicationExitInfo> getHistoricalProcessExitReasons(@Nullable String, @IntRange(from=0) int, @IntRange(from=0) int);
+    method @NonNull public java.util.List<android.app.ApplicationStartInfo> getHistoricalProcessStartReasons(@IntRange(from=0) int);
     method public int getLargeMemoryClass();
     method public int getLauncherLargeIconDensity();
     method public int getLauncherLargeIconSize();
@@ -4650,6 +4653,7 @@ package android.app {
     method @RequiresPermission(android.Manifest.permission.REORDER_TASKS) public void moveTaskToFront(int, int);
     method @RequiresPermission(android.Manifest.permission.REORDER_TASKS) public void moveTaskToFront(int, int, android.os.Bundle);
     method @Deprecated public void restartPackage(String);
+    method public void setApplicationStartInfoCompletionListener(@NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.app.ApplicationStartInfo>);
     method public void setProcessStateSummary(@Nullable byte[]);
     method public static void setVrThread(int);
     method public void setWatchHeapLimit(long);
@@ -5228,6 +5232,57 @@ package android.app {
     field public static final int REASON_UNKNOWN = 0; // 0x0
     field public static final int REASON_USER_REQUESTED = 10; // 0xa
     field public static final int REASON_USER_STOPPED = 11; // 0xb
+  }
+
+  public final class ApplicationStartInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getDefiningUid();
+    method @Nullable public android.content.Intent getIntent();
+    method public int getLaunchMode();
+    method public int getPackageUid();
+    method public int getPid();
+    method @NonNull public String getProcessName();
+    method public int getRealUid();
+    method public int getReason();
+    method public int getStartType();
+    method public int getStartupState();
+    method @NonNull public java.util.Map<java.lang.Integer,java.lang.Long> getStartupTimestamps();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.app.ApplicationStartInfo> CREATOR;
+    field public static final int LAUNCH_MODE_SINGLE_INSTANCE = 2; // 0x2
+    field public static final int LAUNCH_MODE_SINGLE_INSTANCE_PER_TASK = 4; // 0x4
+    field public static final int LAUNCH_MODE_SINGLE_TASK = 3; // 0x3
+    field public static final int LAUNCH_MODE_SINGLE_TOP = 1; // 0x1
+    field public static final int LAUNCH_MODE_STANDARD = 0; // 0x0
+    field public static final int STARTUP_STATE_ERROR = 1; // 0x1
+    field public static final int STARTUP_STATE_FIRST_FRAME_DRAWN = 2; // 0x2
+    field public static final int STARTUP_STATE_STARTED = 0; // 0x0
+    field public static final int START_REASON_ALARM = 0; // 0x0
+    field public static final int START_REASON_BACKUP = 1; // 0x1
+    field public static final int START_REASON_BOOT_COMPLETE = 2; // 0x2
+    field public static final int START_REASON_BROADCAST = 3; // 0x3
+    field public static final int START_REASON_CONTENT_PROVIDER = 4; // 0x4
+    field public static final int START_REASON_JOB = 5; // 0x5
+    field public static final int START_REASON_LAUNCHER = 6; // 0x6
+    field public static final int START_REASON_LAUNCHER_RECENTS = 7; // 0x7
+    field public static final int START_REASON_OTHER = 8; // 0x8
+    field public static final int START_REASON_PUSH = 9; // 0x9
+    field public static final int START_REASON_SERVICE = 10; // 0xa
+    field public static final int START_REASON_START_ACTIVITY = 11; // 0xb
+    field public static final int START_TIMESTAMP_APPLICATION_ONCREATE = 2; // 0x2
+    field public static final int START_TIMESTAMP_BIND_APPLICATION = 3; // 0x3
+    field public static final int START_TIMESTAMP_FIRST_FRAME = 4; // 0x4
+    field public static final int START_TIMESTAMP_FORK = 1; // 0x1
+    field public static final int START_TIMESTAMP_FULLY_DRAWN = 5; // 0x5
+    field public static final int START_TIMESTAMP_INITIAL_RENDERTHREAD_FRAME = 6; // 0x6
+    field public static final int START_TIMESTAMP_LAUNCH = 0; // 0x0
+    field public static final int START_TIMESTAMP_RESERVED_RANGE_DEVELOPER = 30; // 0x1e
+    field public static final int START_TIMESTAMP_RESERVED_RANGE_DEVELOPER_START = 21; // 0x15
+    field public static final int START_TIMESTAMP_RESERVED_RANGE_SYSTEM = 20; // 0x14
+    field public static final int START_TIMESTAMP_SURFACEFLINGER_COMPOSITION_COMPLETE = 7; // 0x7
+    field public static final int START_TYPE_COLD = 0; // 0x0
+    field public static final int START_TYPE_HOT = 2; // 0x2
+    field public static final int START_TYPE_WARM = 1; // 0x1
   }
 
   public final class AsyncNotedAppOp implements android.os.Parcelable {
