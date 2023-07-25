@@ -55,6 +55,7 @@ public class PixelPropsUtils {
     private static final Map<String, ArrayList<String>> propsToKeep;
 
     private static final String[] packagesToChangePixelXL = {
+            "com.google.android.apps.photos",
     };
 
     // Packages to Spoof as Pixel 2
