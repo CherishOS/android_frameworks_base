@@ -50,6 +50,7 @@ public class PixelPropsUtils {
     private static final Map<String, Object> propsToChangePixel2;
     private static final Map<String, Object> propsToChangePixel6Pro;
     private static final Map<String, Object> propsToChangePixel7Pro;
+    private static final Map<String, Object> propsToChangePixelFold;
     private static final Map<String, Object> propsToChangePixel5a;
     private static final Map<String, Object> propsToChangePixelXL;
     private static final Map<String, ArrayList<String>> propsToKeep;
@@ -65,10 +66,6 @@ public class PixelPropsUtils {
 
     private static final String[] packagesToChangePixel6Pro = {
             "com.google.android.apps.emojiwallpaper",
-            "com.google.android.apps.googleassistant",
-            "com.google.android.as",
-            "com.google.android.googlequicksearchbox",
-            "com.google.android.inputmethod.latin",
             "com.google.android.wallpaper.effects",
             "com.google.pixel.livewallpaper",
     };
@@ -83,15 +80,27 @@ public class PixelPropsUtils {
             "com.disney.disneyplus",
             "com.netflix.mediaclient",
             "in.startv.hotstar",
+            "com.google.android.apps.wallpaper.pixel",
+            "com.google.android.apps.wallpaper",
             "com.google.android.apps.customization.pixel",
             "com.google.android.apps.privacy.wildlife",
             "com.google.android.apps.subscriptions.red",
-            "com.google.android.apps.wallpaper.pixel",
-            "com.google.android.apps.wallpaper",
+    };
+
+    private static final String[] packagesToChangePixelFold = {
+            "com.android.vending",
+            "com.google.android.apps.googleassistant",
+            "com.google.android.apps.miphone.aiai.AiaiApplication",
+            "com.google.android.apps.turbo",
+            "com.google.android.as.oss",
+            "com.google.android.as",
+            "com.google.android.ext.services",
+            "com.google.android.googlequicksearchbox",
+            "com.google.android.inputmethod.latin",
+            "com.google.android.setupwizard",
     };
 
     private static final String[] extraPackagesToChange = {
-            "com.android.vending",
     };
 
     private static final String[] customGoogleCameraPackages = {
@@ -158,6 +167,13 @@ public class PixelPropsUtils {
         propsToChangePixel7Pro.put("PRODUCT", "cheetah");
         propsToChangePixel7Pro.put("MODEL", "Pixel 7 Pro");
         propsToChangePixel7Pro.put("FINGERPRINT", "google/cheetah/cheetah:13/TQ3A.230705.001.A1/10217028:user/release-keys");
+        propsToChangePixelFold = new HashMap<>();
+        propsToChangePixelFold.put("BRAND", "google");
+        propsToChangePixelFold.put("MANUFACTURER", "Google");
+        propsToChangePixelFold.put("DEVICE", "felix");
+        propsToChangePixelFold.put("PRODUCT", "felix");
+        propsToChangePixelFold.put("MODEL", "Pixel Fold");
+        propsToChangePixelFold.put("FINGERPRINT", "google/felix/felix:13/TQ3C.230705.001.C2/10334521:user/release-keys");
         propsToChangePixel5a = new HashMap<>();
         propsToChangePixel5a.put("BRAND", "google");
         propsToChangePixel5a.put("MANUFACTURER", "Google");
@@ -241,6 +257,7 @@ public class PixelPropsUtils {
                 || Arrays.asList(packagesToChangePixel2).contains(packageName)
                 || Arrays.asList(packagesToChangePixel6Pro).contains(packageName)
                 || Arrays.asList(packagesToChangePixel7Pro).contains(packageName)
+                || Arrays.asList(packagesToChangePixelFold).contains(packageName)
                 || Arrays.asList(extraPackagesToChange).contains(packageName)) {
 
             boolean isPixelDevice = Arrays.asList(pixelCodenames).contains(SystemProperties.get(DEVICE));
@@ -260,6 +277,9 @@ public class PixelPropsUtils {
             } else if (Arrays.asList(packagesToChangePixel7Pro).contains(packageName)) {
                 if (isPixelDevice) return;
                 propsToChange.putAll(propsToChangePixel7Pro);
+            } else if (Arrays.asList(packagesToChangePixelFold).contains(packageName)) {
+                if (isPixelDevice) return;
+                propsToChange.putAll(propsToChangePixelFold);
             } else {
                 propsToChange.putAll(propsToChangePixel5a);
             }
