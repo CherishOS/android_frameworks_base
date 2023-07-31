@@ -213,6 +213,9 @@ public class KeyguardSliceProvider extends SliceProvider implements
                     Settings.System.LOCKSCREEN_WEATHER_ENABLED), false, this,
                     UserHandle.USER_ALL);
             mContentResolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_WEATHER_CONDITION), false, this,
+                    UserHandle.USER_ALL);
+            mContentResolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_WEATHER_LOCATION), false, this,
                     UserHandle.USER_ALL);
             mContentResolver.registerContentObserver(Settings.System.getUriFor(

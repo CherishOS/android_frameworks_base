@@ -6766,6 +6766,11 @@ public final class Settings {
         /**
          * @hide
          */
+        public static final String LOCKSCREEN_WEATHER_CONDITION = "lockscreen_weather_condition";
+        
+        /**
+         * @hide
+         */
         public static final String OMNIJAWS_WEATHER_ICON_PACK = "omnijaws_weather_icon_pack";
         
         /**
