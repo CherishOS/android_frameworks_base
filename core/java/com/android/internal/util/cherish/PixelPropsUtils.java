@@ -49,7 +49,13 @@ public class PixelPropsUtils {
     private static final Map<String, Object> propsToChangeOP9R;
     private static final Map<String, Object> propsToChangeMI11T;
     private static final Map<String, Object> propsToChangeF5;
+    private static final Map<String, Object> propsToChangeS23;
     private static final Map<String, ArrayList<String>> propsToKeep;
+
+    private static final String[] packagesToChangeS23 = {
+        "com.google.android.youtube",
+        "com.google.android.apps.youtube.music",
+};
 
     private static final String[] packagesToChangePixelTablet = {
             "com.google.android.googlequicksearchbox",
@@ -102,9 +108,7 @@ public class PixelPropsUtils {
             "com.google.android.dialer",
             "com.google.android.euicc",
             "com.google.ar.core",
-            "com.google.android.youtube",
             "com.google.android.apps.youtube.kids",
-            "com.google.android.apps.youtube.music",
             "com.google.android.apps.pixelmigrate",
             "com.google.android.apps.recorder",
             "com.google.android.apps.restore",
@@ -260,6 +264,12 @@ public class PixelPropsUtils {
         propsToChangeMi13pCN = new HashMap<>();
         propsToChangeMi13pCN.put("MODEL", "2210132C");
         propsToChangeMi13pCN.put("MANUFACTURER", "Xiaomi");
+        propsToChangeS23 = new HashMap<>();
+        propsToChangeS23.put("BRAND", "samsung");
+        propsToChangeS23.put("MANUFACTURER", "samsung");
+        propsToChangeS23.put("DEVICE", "dm1q");
+        propsToChangeS23.put("MODEL", "SM-S911B");
+        propsToChangeS23.put("FINGERPRINT", "samsung/dm1qxxx/dm1q:13/TP1A.220624.014/S911BXXS3AWF7:user/release-keys");
     }
 
     public static void setProps(String packageName) {
@@ -302,6 +312,8 @@ public class PixelPropsUtils {
                     propsToChange.putAll(propsToChangePixel7Pro);
                 } else if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
                     propsToChange.putAll(propsToChangePixelXL);
+                } else if (Arrays.asList(packagesToChangeS23).contains(packageName)) {
+                    propsToChange.putAll(propsToChangeS23);
                 } else {
                     propsToChange.putAll(propsToChangePixel5);
                 }
