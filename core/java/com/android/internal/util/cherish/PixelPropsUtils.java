@@ -238,6 +238,7 @@ public class PixelPropsUtils {
         }
         if (packageName.startsWith("com.google.")
                 || packageName.startsWith(SAMSUNG)
+                || Arrays.asList(packagesToChangePixelXL).contains(packageName)
                 || Arrays.asList(packagesToChangePixel2).contains(packageName)
                 || Arrays.asList(packagesToChangePixel6Pro).contains(packageName)
                 || Arrays.asList(packagesToChangePixel7Pro).contains(packageName)
