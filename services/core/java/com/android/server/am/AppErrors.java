@@ -1148,10 +1148,10 @@ class AppErrors {
 
             // Dismiss any ANR dialogs currently visible
             if (errState.getDialogController().hasAnrDialogs()) {
-                errState.setNotResponding(false);
-                errState.setNotRespondingReport(null);
                 errState.getDialogController().clearAnrDialogs();
             }
+            errState.setNotResponding(false);
+            errState.setNotRespondingReport(null);
             proc.mErrorState.setAnrData(null);
         }
     }

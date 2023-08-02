@@ -556,6 +556,11 @@ class ProcessErrorStateRecord {
             }
 
             synchronized (mProcLock) {
+                if (!isNotResponding()) {
+                    setNotRespondingReport(null);
+                    mDialogController.clearAnrDialogs();
+                    return;
+                }
                 // Set the app's notResponding state, and look up the errorReportReceiver
                 makeAppNotRespondingLSP(activityShortComponentName,
                         annotation != null ? "ANR " + annotation : "ANR", info.toString());
