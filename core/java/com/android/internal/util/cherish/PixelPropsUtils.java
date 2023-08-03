@@ -47,25 +47,11 @@ public class PixelPropsUtils {
     private static final String SAMSUNG = "com.samsung.";
 
     private static final Map<String, Object> propsToChangeGeneric;
-    private static final Map<String, Object> propsToChangePixel2;
-    private static final Map<String, Object> propsToChangePixel6Pro;
     private static final Map<String, Object> propsToChangePixel7Pro;
     private static final Map<String, Object> propsToChangePixelFold;
     private static final Map<String, Object> propsToChangePixel5a;
     private static final Map<String, Object> propsToChangePixelXL;
     private static final Map<String, ArrayList<String>> propsToKeep;
-
-    private static final String[] packagesToChangePixelXL = {
-            "com.google.android.apps.photos",
-    };
-
-    // Packages to Spoof as Pixel 2
-    private static final String[] packagesToChangePixel2 = {
-            "com.snapchat.android",
-    };
-
-    private static final String[] packagesToChangePixel6Pro = {
-    };
 
     private static final String[] packagesToChangePixel7Pro = {
             "com.android.chrome",
@@ -88,14 +74,9 @@ public class PixelPropsUtils {
     };
 
     private static final String[] packagesToChangePixelFold = {
-            "com.android.vending",
-            "com.google.android.apps.googleassistant",
             "com.google.android.apps.miphone.aiai.AiaiApplication",
             "com.google.android.apps.turbo",
-            "com.google.android.as.oss",
-            "com.google.android.as",
             "com.google.android.ext.services",
-            "com.google.android.googlequicksearchbox",
             "com.google.android.inputmethod.latin",
             "com.google.android.setupwizard",
     };
@@ -120,6 +101,7 @@ public class PixelPropsUtils {
             "com.google.android.apps.subscriptions.red",
             "com.google.android.apps.tachyon",
             "com.google.android.apps.tycho",
+            "com.google.android.apps.restore",
             "it.ingdirect.app",
     };
 
@@ -154,24 +136,6 @@ public class PixelPropsUtils {
         propsToChangeGeneric = new HashMap<>();
         propsToChangeGeneric.put("TYPE", "user");
         propsToChangeGeneric.put("TAGS", "release-keys");
-        propsToChangePixel6Pro = new HashMap<>();
-        propsToChangePixel6Pro.put("BRAND", "google");
-        propsToChangePixel6Pro.put("MANUFACTURER", "Google");
-        propsToChangePixel6Pro.put("DEVICE", "raven");
-        propsToChangePixel6Pro.put("PRODUCT", "raven");
-        propsToChangePixel6Pro.put("HARDWARE", "raven");
-        propsToChangePixel6Pro.put("MODEL", "Pixel 6 Pro");
-        propsToChangePixel6Pro.put("ID", "TQ3A.230705.001.A1");
-        propsToChangePixel6Pro.put("FINGERPRINT", "google/raven/raven:13/TQ3A.230705.001.A1/10217028:user/release-keys");
-        propsToChangePixel7Pro = new HashMap<>();
-        propsToChangePixel7Pro.put("BRAND", "google");
-        propsToChangePixel7Pro.put("MANUFACTURER", "Google");
-        propsToChangePixel7Pro.put("DEVICE", "cheetah");
-        propsToChangePixel7Pro.put("PRODUCT", "cheetah");
-        propsToChangePixel7Pro.put("HARDWARE", "cheetah");
-        propsToChangePixel7Pro.put("MODEL", "Pixel 7 Pro");
-        propsToChangePixel7Pro.put("ID", "TQ3A.230705.001.A1");
-        propsToChangePixel7Pro.put("FINGERPRINT", "google/cheetah/cheetah:13/TQ3A.230705.001.A1/10217028:user/release-keys");
         propsToChangePixelFold = new HashMap<>();
         propsToChangePixelFold.put("BRAND", "google");
         propsToChangePixelFold.put("MANUFACTURER", "Google");
@@ -181,6 +145,15 @@ public class PixelPropsUtils {
         propsToChangePixelFold.put("MODEL", "Pixel Fold");
         propsToChangePixelFold.put("ID", "TQ3C.230705.001.C2");
         propsToChangePixelFold.put("FINGERPRINT", "google/felix/felix:13/TQ3C.230705.001.C2/10334521:user/release-keys");
+        propsToChangePixel7Pro = new HashMap<>();
+        propsToChangePixel7Pro.put("BRAND", "google");
+        propsToChangePixel7Pro.put("MANUFACTURER", "Google");
+        propsToChangePixel7Pro.put("DEVICE", "cheetah");
+        propsToChangePixel7Pro.put("PRODUCT", "cheetah");
+        propsToChangePixel7Pro.put("HARDWARE", "cheetah");
+        propsToChangePixel7Pro.put("MODEL", "Pixel 7 Pro");
+        propsToChangePixel7Pro.put("ID", "TQ3A.230705.001.A1");
+        propsToChangePixel7Pro.put("FINGERPRINT", "google/cheetah/cheetah:13/TQ3A.230705.001.A1/10217028:user/release-keys");
         propsToChangePixel5a = new HashMap<>();
         propsToChangePixel5a.put("BRAND", "google");
         propsToChangePixel5a.put("MANUFACTURER", "Google");
@@ -190,13 +163,6 @@ public class PixelPropsUtils {
         propsToChangePixel5a.put("MODEL", "Pixel 5a");
         propsToChangePixel5a.put("ID", "TQ3A.230705.001");
         propsToChangePixel5a.put("FINGERPRINT", "google/barbet/barbet:13/TQ3A.230705.001/10216780:user/release-keys");
-        propsToChangePixel2 = new HashMap<>();
-        propsToChangePixel2.put("BRAND", "google");
-        propsToChangePixel2.put("MANUFACTURER", "Google");
-        propsToChangePixel2.put("DEVICE", "walleye");
-        propsToChangePixel2.put("PRODUCT", "walleye");
-        propsToChangePixel2.put("MODEL", "Pixel 2");
-        propsToChangePixel2.put("FINGERPRINT", "google/walleye/walleye:8.1.0/OPM1.171019.011/4448085:user/release-keys");
         propsToChangePixelXL = new HashMap<>();
         propsToChangePixelXL.put("BRAND", "google");
         propsToChangePixelXL.put("MANUFACTURER", "Google");
@@ -211,35 +177,26 @@ public class PixelPropsUtils {
             Arrays.asList(customGoogleCameraPackages).contains(packageName);
     }
 
-    public static void setProps(String packageName) {
-        propsToChangeGeneric.forEach((k, v) -> setPropValue(k, v));
-        if (packageName == null || packageName.isEmpty()) {
-            return;
+    public static boolean setPropsForGms(String packageName) {
+        if (packageName.equals("com.android.vending")) {
+            sIsFinsky = true;
         }
-        if (Arrays.asList(packagesToKeep).contains(packageName)) {
-            return;
-        }
-        if (isGoogleCameraPackage(packageName)) {
-            return;
-        }
-        Map<String, Object> propsToChange = new HashMap<>();
         if (packageName.equals("com.google.android.gms")
-            || packageName.toLowerCase().contains("androidx.test")
-            || packageName.equalsIgnoreCase("com.google.android.apps.restore")) {
+                || packageName.toLowerCase().contains("androidx.test")
+                || packageName.equalsIgnoreCase("com.google.android.apps.restore")) {
             final String processName = Application.getProcessName();
             if (processName.toLowerCase().contains("unstable")
-                || processName.toLowerCase().contains("pixelmigrate")
-                || processName.toLowerCase().contains("instrumentation")) {
+                    || processName.toLowerCase().contains("pixelmigrate")
+                    || processName.toLowerCase().contains("instrumentation")) {
                 sIsGms = true;
-
                 final boolean was = isGmsAddAccountActivityOnTop();
                 final TaskStackListener taskStackListener = new TaskStackListener() {
                     @Override
                     public void onTaskStackChanged() {
                         final boolean is = isGmsAddAccountActivityOnTop();
                         if (is ^ was) {
-                            if (DEBUG) Log.d(TAG, "GmsAddAccountActivityOnTop is:" + is + " was:" + was +
-                                    ", killing myself!"); // process will restart automatically later
+                            if (DEBUG) Log.d(TAG, "GmsAddAccountActivityOnTop is:" + is + " was:" + was + ", killing myself!");
+                            // process will restart automatically later
                             Process.killProcess(Process.myPid());
                         }
                     }
@@ -249,44 +206,48 @@ public class PixelPropsUtils {
                 } catch (Exception e) {
                     Log.e(TAG, "Failed to register task stack listener!", e);
                 }
-                if (was) return;
-
+                if (was) return true;
+                // Alter build parameters to pixel 2 for avoiding hardware attestation enforcement
+                setPropValue("DEVICE", "walleye");
                 setPropValue("FINGERPRINT", "google/walleye/walleye:8.1.0/OPM1.171019.011/4448085:user/release-keys");
-                setPropValue("MODEL", "walleye");
+                setPropValue("MODEL", "Pixel 2");
                 setPropValue("PRODUCT", "walleye");
-                setPropValue("DEVICE", "Pixel 2");
                 setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.O);
-                return;
+                return true;
             }
         }
+        return false;
+    }
+
+    public static void setProps(String packageName) {
+        propsToChangeGeneric.forEach((k, v) -> setPropValue(k, v));
+        if (packageName == null || packageName.isEmpty()) {
+            return;
+        }
+        if (setPropsForGms(packageName)) {
+            return;
+        }
+        if (Arrays.asList(packagesToKeep).contains(packageName)) {
+            return;
+        }
+        if (isGoogleCameraPackage(packageName)) {
+            return;
+        }
+        Map<String, Object> propsToChange = new HashMap<>();
         if (packageName.startsWith("com.google.")
                 || packageName.startsWith(SAMSUNG)
-                || Arrays.asList(packagesToChangePixelXL).contains(packageName)
-                || Arrays.asList(packagesToChangePixel2).contains(packageName)
-                || Arrays.asList(packagesToChangePixel6Pro).contains(packageName)
                 || Arrays.asList(packagesToChangePixel7Pro).contains(packageName)
                 || Arrays.asList(packagesToChangePixelFold).contains(packageName)
                 || Arrays.asList(extraPackagesToChange).contains(packageName)) {
 
             boolean isPixelDevice = Arrays.asList(pixelCodenames).contains(SystemProperties.get(DEVICE));
-
-            if (packageName.equals("com.android.vending")) {
-                sIsFinsky = true;
-            }
-            if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
-                if (isPixelDevice) return;
+            if (packageName.equals("com.google.android.apps.photos")) {
                 propsToChange.putAll(propsToChangePixelXL);
-            } else if (Arrays.asList(packagesToChangePixel2).contains(packageName)) {
-                if (isPixelDevice) return;
-                propsToChange.putAll(propsToChangePixel2);
-            } else if (Arrays.asList(packagesToChangePixel6Pro).contains(packageName)) {
-                if (isPixelDevice) return;
-                propsToChange.putAll(propsToChangePixel6Pro);
+            } else if (isPixelDevice) {
+                return;
             } else if (Arrays.asList(packagesToChangePixel7Pro).contains(packageName)) {
-                if (isPixelDevice) return;
                 propsToChange.putAll(propsToChangePixel7Pro);
             } else if (Arrays.asList(packagesToChangePixelFold).contains(packageName)) {
-                if (isPixelDevice) return;
                 propsToChange.putAll(propsToChangePixelFold);
             } else {
                 propsToChange.putAll(propsToChangePixel5a);
