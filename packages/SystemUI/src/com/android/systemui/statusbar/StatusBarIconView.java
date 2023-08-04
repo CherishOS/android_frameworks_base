@@ -527,10 +527,12 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
 
     @Override
     protected void onDraw(Canvas canvas) {
+        int paddingTop = getResources().getDimensionPixelSize(R.dimen.status_bar_padding_top);
+        float centerY = (getHeight() / 2) - paddingTop;
         if (mIconAppearAmount > 0.0f) {
             canvas.save();
             canvas.scale(mIconScale * mIconAppearAmount, mIconScale * mIconAppearAmount,
-                    getWidth() / 2, getHeight() / 2);
+                    getWidth() / 2, centerY);
             super.onDraw(canvas);
             canvas.restore();
         }
@@ -550,7 +552,7 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
                 radius = NotificationUtils.interpolate(mDotRadius, getWidth() / 4, fadeOutAmount);
             }
             mDotPaint.setAlpha((int) (alpha * 255));
-            canvas.drawCircle(mStatusBarIconSize / 2, getHeight() / 2, radius, mDotPaint);
+            canvas.drawCircle(mStatusBarIconSize / 2, centerY, radius, mDotPaint);
         }
     }
 
@@ -574,8 +576,9 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
         }
         mNumberText = str;
 
+        int paddingTop = getResources().getDimensionPixelSize(R.dimen.status_bar_padding_top);
         final int w = getWidth();
-        final int h = getHeight();
+        final int h = getHeight() - paddingTop;
         final Rect r = new Rect();
         mNumberPain.getTextBounds(str, 0, str.length(), r);
         final int tw = r.right - r.left;
@@ -1000,7 +1003,8 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
         } else {
             setPivotX((1 - mIconScale) / 2.0f * getWidth());
         }
-        setPivotY((getHeight() - mIconScale * getWidth()) / 2.0f);
+        int paddingTop = getResources().getDimensionPixelSize(R.dimen.status_bar_padding_top);
+        setPivotY((getHeight() - paddingTop - mIconScale * getWidth()) / 2.0f);
     }
 
     public void executeOnLayout(Runnable runnable) {
