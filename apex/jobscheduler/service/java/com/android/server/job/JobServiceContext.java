@@ -1046,7 +1046,7 @@ public final class JobServiceContext implements ServiceConnection {
             mWakeLock.release();
         }
         final int workType = mRunningJobWorkType;
-        mContext.unbindService(JobServiceContext.this);
+        mContext.unbindService(this);
         mWakeLock = null;
         mRunningJob = null;
         mRunningJobWorkType = WORK_TYPE_NONE;
