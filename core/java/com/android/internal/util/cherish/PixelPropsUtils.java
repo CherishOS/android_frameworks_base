@@ -65,9 +65,6 @@ public class PixelPropsUtils {
     };
 
     private static final String[] packagesToChangePixel6Pro = {
-            "com.google.android.apps.emojiwallpaper",
-            "com.google.android.wallpaper.effects",
-            "com.google.pixel.livewallpaper",
     };
 
     private static final String[] packagesToChangePixel7Pro = {
@@ -80,6 +77,9 @@ public class PixelPropsUtils {
             "com.disney.disneyplus",
             "com.netflix.mediaclient",
             "in.startv.hotstar",
+            "com.google.android.apps.emojiwallpaper",
+            "com.google.android.wallpaper.effects",
+            "com.google.pixel.livewallpaper",
             "com.google.android.apps.wallpaper.pixel",
             "com.google.android.apps.wallpaper",
             "com.google.android.apps.customization.pixel",
