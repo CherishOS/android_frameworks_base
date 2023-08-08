@@ -33,6 +33,7 @@ import android.media.MediaMetadata;
 import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Trace;
 import android.os.UserHandle;
 import android.provider.Settings;
@@ -68,6 +69,8 @@ import com.android.systemui.util.wakelock.WakeLock;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -118,6 +121,8 @@ public class KeyguardSliceProvider extends SliceProvider implements
     private final Date mCurrentTime = new Date();
     private final Handler mHandler;
     private final Handler mMediaHandler;
+    private final Handler mWeatherHandler;
+    private final Executor mExecutor;
     private final AlarmManager.OnAlarmListener mUpdateNextAlarm = this::updateNextAlarm;
     @Inject
     public DozeParameters mDozeParameters;
@@ -254,6 +259,8 @@ public class KeyguardSliceProvider extends SliceProvider implements
     public KeyguardSliceProvider() {
         mHandler = new Handler();
         mMediaHandler = new Handler();
+        mWeatherHandler = new Handler(Looper.getMainLooper());
+        mExecutor = Executors.newSingleThreadExecutor();
         mSliceUri = Uri.parse(KEYGUARD_SLICE_URI);
         mHeaderUri = Uri.parse(KEYGUARD_HEADER_URI);
         mDateUri = Uri.parse(KEYGUARD_DATE_URI);
@@ -672,9 +679,11 @@ public class KeyguardSliceProvider extends SliceProvider implements
 
     private void queryAndUpdateWeather() {
         if (mWeatherClient != null) {
-            mWeatherClient.queryWeather();
-            mWeatherData = mWeatherClient.getWeatherInfo();
-            notifyChange();
+            mExecutor.execute(() -> {
+                mWeatherClient.queryWeather();
+                mWeatherData = mWeatherClient.getWeatherInfo();
+                mWeatherHandler.post(() -> notifyChange());
+            });
         }
     }
 }
