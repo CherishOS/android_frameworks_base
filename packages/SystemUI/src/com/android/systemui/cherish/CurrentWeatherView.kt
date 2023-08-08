@@ -48,8 +48,7 @@ class CurrentWeatherView @JvmOverloads constructor(context: Context, attrs: Attr
     private var mSettingsObserver: SettingsObserver? = null
     private val executor: Executor = Executors.newSingleThreadExecutor()
 
-    private var mShowWeatherCondition = false
-    private var mShowWeatherLocation = false
+    private var mWeatherStyle = 0
 
     fun enableUpdates() {
         mWeatherClient?.let {
@@ -97,7 +96,7 @@ class CurrentWeatherView @JvmOverloads constructor(context: Context, attrs: Attr
             try {
                 mWeatherClient?.let { client ->
                     if (!client.isOmniJawsEnabled()) {
-                        return
+                        return@execute
                     }
                     client.queryWeather()
                     mWeatherInfo = client.weatherInfo
@@ -134,12 +133,38 @@ class CurrentWeatherView @JvmOverloads constructor(context: Context, attrs: Attr
                             tempC = temperature.toInt()
                             tempF = (temperature * 9.0 / 5.0 + 32).toInt()
                         }
-
-                        val weatherTemp = "%d%s \u2022 Today %d° / %d°".format(
-                            if (units == "°F") tempF else tempC, 
-                            units, tempC, tempF
-                        ) + if (mShowWeatherLocation) " \u2022 " + info.city else "" +
-                                if (mShowWeatherCondition) " \u2022 " + formattedCondition else ""
+                        
+                        val weatherTemp = when (mWeatherStyle) {
+                            1 -> "%d%s".format(
+                                if (units == "°F") tempF else tempC,
+                                units
+                            )
+                            2 -> "%d%s \u2022 Today %d° / %d°".format(
+                                if (units == "°F") tempF else tempC,
+                                units, tempC, tempF
+                            )
+                            3 -> "%d%s \u2022 %s".format(
+                                if (units == "°F") tempF else tempC,
+                                units, info.city
+                            )
+                            4 -> "%d%s \u2022 %s".format(
+                                if (units == "°F") tempF else tempC,
+                                units, formattedCondition
+                            )
+                            5 -> "%d%s \u2022 Today %d° / %d° \u2022 %s".format(
+                                if (units == "°F") tempF else tempC,
+                                units, tempC, tempF, info.city
+                            )
+                            6 -> "%d%s \u2022 Today %d° / %d° \u2022 %s".format(
+                                if (units == "°F") tempF else tempC,
+                                units, tempC, tempF, formattedCondition
+                            )
+                            7 -> "%d%s \u2022 %s \u2022 %s".format(
+                                if (units == "°F") tempF else tempC,
+                                units, info.city, formattedCondition
+                            )
+                            else -> ""
+                        }
 
                         mRightText?.text = weatherTemp
                     }
@@ -154,10 +179,7 @@ class CurrentWeatherView @JvmOverloads constructor(context: Context, attrs: Attr
 
         fun observe() {
             context.contentResolver.registerContentObserver(Settings.System.getUriFor(
-                Settings.System.LOCKSCREEN_WEATHER_LOCATION), false, this,
-                UserHandle.USER_ALL)
-            context.contentResolver.registerContentObserver(Settings.System.getUriFor(
-                Settings.System.LOCKSCREEN_WEATHER_CONDITION), false, this,
+                Settings.System.LOCKSCREEN_WEATHER_STYLE), false, this,
                 UserHandle.USER_ALL)
             updateWeatherSettings()
         }
@@ -167,12 +189,9 @@ class CurrentWeatherView @JvmOverloads constructor(context: Context, attrs: Attr
         }
 
         fun updateWeatherSettings() {
-            mShowWeatherLocation = Settings.System.getIntForUser(context.contentResolver,
-                Settings.System.LOCKSCREEN_WEATHER_LOCATION,
-                0, UserHandle.USER_CURRENT) != 0
-            mShowWeatherCondition = Settings.System.getIntForUser(context.contentResolver,
-                Settings.System.LOCKSCREEN_WEATHER_CONDITION,
-                1, UserHandle.USER_CURRENT) != 0
+            mWeatherStyle = Settings.System.getIntForUser(context.contentResolver,
+                Settings.System.LOCKSCREEN_WEATHER_STYLE,
+                0, UserHandle.USER_CURRENT)
         }
 
         override fun onChange(selfChange: Boolean) {

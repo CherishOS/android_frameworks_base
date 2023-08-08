@@ -109,7 +109,7 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
 
     private CurrentWeatherView mCurrentWeatherView;
     private boolean mShowWeather;
-    private boolean mPixelStyle;
+    private int mWeatherStyle;
 
     private boolean mOnlyClock = false;
     private final Executor mUiExecutor;
@@ -289,8 +289,8 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
                 updateWeatherView();
                 break;
             case LOCKSCREEN_WEATHER_STYLE:
-                mPixelStyle =
-                        TunerService.parseIntegerSwitch(newValue, false);
+                mWeatherStyle =
+                        TunerService.parseInteger(newValue, 0);
                 updateWeatherView();
                 break;
             default:
@@ -301,7 +301,7 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
     public void updateWeatherView() {
         mUiExecutor.execute(() -> {
             if (mCurrentWeatherView != null) {
-                if (mShowWeather && mPixelStyle && !mOnlyClock) {
+                if (mShowWeather && mWeatherStyle > 0 && !mOnlyClock) {
                     mCurrentWeatherView.enableUpdates();
                     mCurrentWeatherView.setVisibility(View.VISIBLE);
                 } else {
