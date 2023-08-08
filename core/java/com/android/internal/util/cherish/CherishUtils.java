@@ -27,8 +27,14 @@ import android.app.ActivityOptions;
 import android.app.ActivityThread;
 import android.app.AlertDialog;
 import android.app.IActivityManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.bluetooth.BluetoothAdapter;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.content.om.IOverlayManager;
 import android.content.om.OverlayInfo;
@@ -37,12 +43,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
-import android.os.PowerManager;
-import android.app.AlertDialog;
-import android.app.IActivityManager;
-import android.app.ActivityManager;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
+import android.database.ContentObserver;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.camera2.CameraAccessException;
@@ -50,13 +51,18 @@ import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.hardware.input.InputManager;
 import android.hardware.fingerprint.FingerprintManager;
+import android.hardware.SensorPrivacyManager;
+import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
@@ -64,6 +70,7 @@ import android.os.UserHandle;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -77,11 +84,13 @@ import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.IWindowManager;
 import android.view.WindowManagerGlobal;
+import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 import com.android.internal.R;
 import com.android.internal.statusbar.IStatusBarService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -586,6 +595,39 @@ public class CherishUtils {
             }
         }
         return packageNames;
+    }
+
+    public static void restartApp(String appName, Context context) {
+        new RestartAppTask(appName, context).execute();
+    }
+
+    private static class RestartAppTask extends AsyncTask<Void, Void, Void> {
+        private Context mContext;
+        private String mApp;
+
+        public RestartAppTask(String appName, Context context) {
+            super();
+            mContext = context;
+            mApp = appName;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                ActivityManager am =
+                        (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+                IActivityManager ams = ActivityManager.getService();
+                for (ActivityManager.RunningAppProcessInfo app: am.getRunningAppProcesses()) {
+                    if (mApp.equals(app.processName)) {
+                        ams.killApplicationProcess(app.processName, app.uid);
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 
     public static void restartSystemUi(Context context) {
