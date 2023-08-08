@@ -74,11 +74,6 @@ public class PixelPropsUtils {
     };
 
     private static final String[] packagesToChangePixelFold = {
-            "com.google.android.apps.miphone.aiai.AiaiApplication",
-            "com.google.android.apps.turbo",
-            "com.google.android.ext.services",
-            "com.google.android.inputmethod.latin",
-            "com.google.android.setupwizard",
     };
 
     private static final String[] extraPackagesToChange = {
