@@ -143,8 +143,8 @@ public class PixelPropsUtils {
         propsToChangePixelFold.put("PRODUCT", "felix");
         propsToChangePixelFold.put("HARDWARE", "felix");
         propsToChangePixelFold.put("MODEL", "Pixel Fold");
-        propsToChangePixelFold.put("ID", "TQ3C.230705.001.C2");
-        propsToChangePixelFold.put("FINGERPRINT", "google/felix/felix:13/TQ3C.230705.001.C2/10334521:user/release-keys");
+        propsToChangePixelFold.put("ID", "TQ3C.230805.001.B2");
+        propsToChangePixelFold.put("FINGERPRINT", "google/felix/felix:13/TQ3C.230805.001.B2/10453839:user/release-keys");
         propsToChangePixel7Pro = new HashMap<>();
         propsToChangePixel7Pro.put("BRAND", "google");
         propsToChangePixel7Pro.put("MANUFACTURER", "Google");
@@ -152,8 +152,8 @@ public class PixelPropsUtils {
         propsToChangePixel7Pro.put("PRODUCT", "cheetah");
         propsToChangePixel7Pro.put("HARDWARE", "cheetah");
         propsToChangePixel7Pro.put("MODEL", "Pixel 7 Pro");
-        propsToChangePixel7Pro.put("ID", "TQ3A.230705.001.A1");
-        propsToChangePixel7Pro.put("FINGERPRINT", "google/cheetah/cheetah:13/TQ3A.230705.001.A1/10217028:user/release-keys");
+        propsToChangePixel7Pro.put("ID", "TQ3A.230805.001");
+        propsToChangePixel7Pro.put("FINGERPRINT", "google/cheetah/cheetah:13/TQ3A.230805.001/10316531:user/release-keys");
         propsToChangePixel5a = new HashMap<>();
         propsToChangePixel5a.put("BRAND", "google");
         propsToChangePixel5a.put("MANUFACTURER", "Google");
@@ -161,8 +161,8 @@ public class PixelPropsUtils {
         propsToChangePixel5a.put("PRODUCT", "barbet");
         propsToChangePixel5a.put("HARDWARE", "barbet");
         propsToChangePixel5a.put("MODEL", "Pixel 5a");
-        propsToChangePixel5a.put("ID", "TQ3A.230705.001");
-        propsToChangePixel5a.put("FINGERPRINT", "google/barbet/barbet:13/TQ3A.230705.001/10216780:user/release-keys");
+        propsToChangePixel5a.put("ID", "TQ3A.230805.001.A2");
+        propsToChangePixel5a.put("FINGERPRINT", "google/barbet/barbet:13/TQ3A.230805.001.A2/10385117:user/release-keys");
         propsToChangePixelXL = new HashMap<>();
         propsToChangePixelXL.put("BRAND", "google");
         propsToChangePixelXL.put("MANUFACTURER", "Google");
