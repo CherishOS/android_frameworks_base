@@ -334,6 +334,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
     // Battery status
     @VisibleForTesting
     BatteryStatus mBatteryStatus;
+    private static final long CHARGING_UPDATE_THRESHOLD_MS = 2000;
+    private long lastChargeUpdateTime = 0;
 
     private StrongAuthTracker mStrongAuthTracker;
 
@@ -3457,7 +3459,9 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener, Dumpab
         final boolean batteryUpdateInteresting = isBatteryUpdateInteresting(mBatteryStatus, status);
         mLogger.logHandleBatteryUpdate(batteryUpdateInteresting);
         mBatteryStatus = status;
-        if (batteryUpdateInteresting) {
+        long currentTime = System.currentTimeMillis();
+        if (batteryUpdateInteresting && currentTime - lastChargeUpdateTime >= CHARGING_UPDATE_THRESHOLD_MS) {
+            lastChargeUpdateTime = currentTime;
             for (int i = 0; i < mCallbacks.size(); i++) {
                 KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
                 if (cb != null) {
