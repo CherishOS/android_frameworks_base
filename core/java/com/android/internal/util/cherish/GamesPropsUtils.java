@@ -16,6 +16,7 @@
 
 package com.android.internal.util.cherish;
 
+import android.app.Application;
 import android.os.Build;
 import android.util.Log;
 
@@ -104,7 +105,9 @@ public class GamesPropsUtils {
         return map;
     }
 
-    public static void setProps(String packageName) {
+    public static void setProps(Application app) {
+        final String packageName = app.getPackageName();
+
         if (packageName == null || packageName.isEmpty()) {
             return;
         }
