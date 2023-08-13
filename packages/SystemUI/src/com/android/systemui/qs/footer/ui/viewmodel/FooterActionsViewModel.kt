@@ -183,8 +183,8 @@ class FooterActionsViewModel(
 
     /** Called when the expansion of the Quick Settings changed. */
     fun onQuickSettingsExpansionChanged(expansion: Float, isInSplitShade: Boolean, customAlpha: Float) {
-        if (isInSplitShade) {
-            // In split shade, we want to fade in the background only at the very end (see
+        if (isInSplitShade && customAlpha == 1f) {
+            // In split shade, we want to fade in the background only at the very end and if the split shade is not translucent (see
             // b/240563302).
             val delay = 0.99f
             _alpha.value = expansion
