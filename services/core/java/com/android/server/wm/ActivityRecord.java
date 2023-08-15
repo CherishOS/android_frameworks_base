@@ -2582,6 +2582,9 @@ public final class ActivityRecord extends WindowToken implements WindowManagerSe
             // Obsoleted snapshot.
             return false;
         }
+        if (getTask() == null || getTask().getTopFullscreenActivity() == null) {
+            return false;
+        }
         final int rotation = mDisplayContent.rotationForActivityInDifferentOrientation(this);
         final int currentRotation = task.getWindowConfiguration().getRotation();
         final int targetRotation = rotation != ROTATION_UNDEFINED
