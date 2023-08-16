@@ -124,6 +124,8 @@ public class PixelPropsUtils {
     private static final ArrayList<String> packagesToKeep = 
         new ArrayList<String> (
             Arrays.asList(
+                "com.google.android.as",
+                "com.google.android.apps.motionsense.bridge",
                 "com.google.android.euicc",
                 "com.google.ar.core",
                 "com.google.android.youtube",
@@ -134,6 +136,7 @@ public class PixelPropsUtils {
                 "com.google.android.apps.tachyon",
                 "com.google.android.apps.tycho",
                 "com.google.android.apps.restore",
+                "com.google.oslo",
                 "it.ingdirect.app"
         ));
 
