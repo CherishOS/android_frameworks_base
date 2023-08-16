@@ -183,7 +183,8 @@ public class ModuleInfoProvider {
      */
     List<ModuleInfo> getInstalledModules(@PackageManager.InstalledModulesFlags int flags) {
         if (!mMetadataLoaded) {
-            throw new IllegalStateException("Call to getInstalledModules before metadata loaded");
+            Slog.w(TAG, "Call to getInstalledModules before metadata loaded");
+            return Collections.emptyList();
         }
 
         if ((flags & PackageManager.MATCH_ALL) != 0) {
@@ -211,7 +212,8 @@ public class ModuleInfoProvider {
 
     ModuleInfo getModuleInfo(String name, @PackageManager.ModuleInfoFlags int flags) {
         if (!mMetadataLoaded) {
-            throw new IllegalStateException("Call to getModuleInfo before metadata loaded");
+            Slog.w(TAG, "Call to getModuleInfo before metadata loaded");
+            return null;
         }
         if ((flags & PackageManager.MODULE_APEX_NAME) != 0) {
             for (ModuleInfo moduleInfo : mModuleInfo.values()) {
@@ -226,8 +228,10 @@ public class ModuleInfoProvider {
 
     String getPackageName() {
         if (!mMetadataLoaded) {
-            throw new IllegalStateException("Call to getVersion before metadata loaded");
+            Slog.w(TAG, "Call to getVersion before metadata loaded");
+            return null;
         }
         return mPackageName;
     }
 }
+
