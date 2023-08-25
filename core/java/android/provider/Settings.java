@@ -6409,6 +6409,7 @@ public final class Settings {
          * Whether to show IME space
          * @hide
          */
+        @Readable
         public static final String HIDE_IME_SPACE_ENABLE = "hide_ime_space_enable";
 
         /**
