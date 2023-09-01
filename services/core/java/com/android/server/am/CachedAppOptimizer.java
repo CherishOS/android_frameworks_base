@@ -919,19 +919,8 @@ public final class CachedAppOptimizer {
      */
     @GuardedBy("mPhenotypeFlagLock")
     private void updateUseFreezer() {
-        final String configOverride = Settings.Global.getString(mAm.mContext.getContentResolver(),
-                Settings.Global.CACHED_APPS_FREEZER_ENABLED);
-
-        if ("disabled".equals(configOverride)) {
-            mUseFreezer = false;
-        } else if ("enabled".equals(configOverride)
-                || DeviceConfig.getBoolean(DeviceConfig.NAMESPACE_ACTIVITY_MANAGER_NATIVE_BOOT,
-                    KEY_USE_FREEZER, DEFAULT_USE_FREEZER)) {
-            mUseFreezer = isFreezerSupported();
-            updateFreezerDebounceTimeout();
-        } else {
-            mUseFreezer = false;
-        }
+        mUseFreezer = isFreezerSupported();
+        updateFreezerDebounceTimeout();
 
         final boolean useFreezer = mUseFreezer;
         // enableFreezer() would need the global ActivityManagerService lock, post it.
