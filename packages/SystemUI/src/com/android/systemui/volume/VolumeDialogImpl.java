@@ -1386,24 +1386,47 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
     private Drawable getApplicationIcon(String packageName) {
         PackageManager pm = mContext.getPackageManager();
-        Drawable icon = null;
+        Drawable icon;
         try {
             icon = pm.getApplicationIcon(packageName);
         } catch (Exception e) {
-            // nothing to do
+            return null;
         }
-        
         Bitmap bitmapIcon = convertDrawableToBitmap(icon);
-        
-        Drawable drawableAppIcon = new CircleFramedDrawable(bitmapIcon,
-                (int) mContext.getResources().getDimension(R.dimen.volume_app_icon_max_size));
+        if (bitmapIcon == null) return null;
+        int maxSize = (int) mContext.getResources().getDimension(R.dimen.volume_app_icon_max_size);
+        return new CircleFramedDrawable(bitmapIcon, maxSize);
+    }
 
-        return drawableAppIcon;
+    private void setupAppVolumeIcon() {
+        Drawable icon = getApplicationIcon(mAppVolumeActivePackageName);
+        if (icon == null) return;
+        mAppVolumeIcon.setImageTintList(null);
+        mAppVolumeIcon.setImageDrawable(icon);
+        mAppVolumeIcon.getLayoutParams().height = mTargetTapSize;
+        mAppVolumeIcon.getLayoutParams().width = mTargetTapSize;
+        mAppVolumeIcon.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        mAppVolumeIcon.setPadding(
+                mAppVolumeView.getPaddingLeft(),
+                mAppVolumeView.getPaddingTop(),
+                mAppVolumeView.getPaddingRight(),
+                mRingerRowsPadding
+        );
+        mAppVolumeIcon.setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                outline.setRoundRect(
+                        0, 0, view.getWidth(), view.getHeight(), mDialogCornerRadius
+                );
+            }
+        });
+        mAppVolumeIcon.setClipToOutline(true);
     }
 
     public void initAppVolumeH() {
+        int visibility = shouldShowAppVolume() ? VISIBLE : GONE;
         if (mAppVolumeView != null) {
-            mAppVolumeView.setVisibility(shouldShowAppVolume() ? VISIBLE : GONE);
+            mAppVolumeView.setVisibility(visibility);
         }
         if (mAppVolumeIcon != null) {
             mAppVolumeIcon.setOnClickListener(v -> {
@@ -1411,30 +1434,18 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                 Intent intent = new Intent(Settings.Panel.ACTION_APP_VOLUME);
                 dismissH(DISMISS_REASON_SETTINGS_CLICKED);
                 Dependency.get(MediaOutputDialogFactory.class).dismiss();
-                Dependency.get(ActivityStarter.class).startActivity(intent,
-                        true /* dismissShade */);
+                Dependency.get(ActivityStarter.class).startActivity(intent, true /* dismissShade */);
             });
-            Drawable icon = mAppVolumeActivePackageName != null ?
-                    getApplicationIcon(mAppVolumeActivePackageName) : null;
-            if (icon != null) {
-                mAppVolumeIcon.setImageTintList(null);
-                mAppVolumeIcon.setImageDrawable(icon);
-                mAppVolumeIcon.getLayoutParams().height = mTargetTapSize;
-                mAppVolumeIcon.getLayoutParams().width = mTargetTapSize;
-                mAppVolumeIcon.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                mAppVolumeIcon.setPadding(
-                        mAppVolumeView.getPaddingLeft(),
-                        mAppVolumeView.getPaddingTop(),
-                        mAppVolumeView.getPaddingRight(),
-                        mRingerRowsPadding);
-            	mAppVolumeIcon.setOutlineProvider(new ViewOutlineProvider() {
-                    @Override
-                    public void getOutline(View view, Outline outline) {
-                    	outline.setRoundRect(
-                            	0, 0, view.getWidth(), view.getHeight(), mDialogCornerRadius);
-                    }
-            	});
-            	mAppVolumeIcon.setClipToOutline(true);
+            mAppVolumeIcon.setOnLongClickListener(v -> {
+                PackageManager packageManager = mContext.getPackageManager();
+                try {
+                    Intent launchIntent = packageManager.getLaunchIntentForPackage(mAppVolumeActivePackageName);
+                    mContext.startActivity(launchIntent);
+                } catch (Exception ignored) {}
+                return true;
+            });
+            if (mAppVolumeActivePackageName != null) {
+                setupAppVolumeIcon();
             }
         }
     }
