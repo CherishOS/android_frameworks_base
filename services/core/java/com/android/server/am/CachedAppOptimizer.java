@@ -1147,6 +1147,12 @@ public final class CachedAppOptimizer {
 
     @GuardedBy({"mAm", "mProcLock"})
     void freezeAppAsyncLSP(ProcessRecord app) {
+        if (app.mState.hasForegroundActivities() || app.mState.hasOverlayUi()) {
+            // if the process has foreground activities, do not freeze it,
+            // freezing the process can result to hiccups especially when resuming 
+            // heavy processes 
+            return;
+        }
         final ProcessCachedOptimizerRecord opt = app.mOptRecord;
         if (opt.isPendingFreeze()) {
             // Skip redundant DO_FREEZE message
