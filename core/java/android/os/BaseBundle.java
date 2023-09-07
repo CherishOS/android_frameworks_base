@@ -1329,10 +1329,13 @@ public class BaseBundle {
         if (o == null) {
             return defaultValue;
         }
-        try {
+        
+        if (o instanceof Float) {
             return (Float) o;
-        } catch (ClassCastException e) {
-            typeWarning(key, o, "Float", defaultValue, e);
+        } else if (o instanceof Integer) {
+            return ((Integer) o).floatValue();
+        } else {
+            typeWarning(key, o, "Float", defaultValue, null);
             return defaultValue;
         }
     }
