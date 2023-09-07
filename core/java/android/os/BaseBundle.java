@@ -1252,16 +1252,19 @@ public class BaseBundle {
      * @param defaultValue Value to return if key does not exist
      * @return an int value
      */
-   public int getInt(String key, int defaultValue) {
+    public int getInt(String key, int defaultValue) {
         unparcel();
         Object o = mMap.get(key);
         if (o == null) {
             return defaultValue;
         }
-        try {
+        
+        if (o instanceof Integer) {
             return (Integer) o;
-        } catch (ClassCastException e) {
-            typeWarning(key, o, "Integer", defaultValue, e);
+        } else if (o instanceof Boolean) {
+            return (Boolean) o ? 1 : 0;
+        } else {
+            typeWarning(key, o, "Integer", defaultValue, null);
             return defaultValue;
         }
     }
