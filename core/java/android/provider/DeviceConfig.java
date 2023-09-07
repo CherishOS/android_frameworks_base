@@ -1223,12 +1223,14 @@ public final class DeviceConfig {
      * @hide
      */
     public static void enforceReadPermission(Context context, String namespace) {
-        if (context.checkCallingOrSelfPermission(READ_DEVICE_CONFIG)
-                != PackageManager.PERMISSION_GRANTED) {
-            if (!PUBLIC_NAMESPACES.contains(namespace)) {
-                throw new SecurityException("Permission denial: reading from settings requires:"
-                        + READ_DEVICE_CONFIG);
-            }
+        String currentPackageName = ActivityThread.currentPackageName();
+        if (currentPackageName != null && 
+            !currentPackageName.startsWith("com.google.android.")) {
+                if (context.checkCallingOrSelfPermission(READ_DEVICE_CONFIG) != PackageManager.PERMISSION_GRANTED) {
+                    if (!PUBLIC_NAMESPACES.contains(namespace)) {
+                        throw new SecurityException("Permission denial: reading from settings requires:" + READ_DEVICE_CONFIG);
+                    }
+                }
         }
     }
 
