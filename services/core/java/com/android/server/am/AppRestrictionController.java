@@ -1615,8 +1615,10 @@ public final class AppRestrictionController {
 
     private void initSystemModuleNames() {
         final PackageManager pm = mInjector.getPackageManager();
-        final List<ModuleInfo> moduleInfos = pm.getInstalledModules(0 /* flags */);
-        if (moduleInfos == null) {
+        List<ModuleInfo> moduleInfos;
+        try {
+            moduleInfos = pm.getInstalledModules(0 /* flags */);
+        } catch (Exception e) {
             return;
         }
         synchronized (mLock) {
