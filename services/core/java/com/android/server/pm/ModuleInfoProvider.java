@@ -94,8 +94,7 @@ public class ModuleInfoProvider {
 
     /** Called by the {@code PackageManager} when it has completed its boot sequence */
     public void systemReady() {
-        mPackageName = mContext.getResources().getString(
-                R.string.config_defaultModuleMetadataProvider);
+        mPackageName = "com.android.modulemetadata";
         if (TextUtils.isEmpty(mPackageName)) {
             Slog.w(TAG, "No configured module metadata provider.");
             return;
