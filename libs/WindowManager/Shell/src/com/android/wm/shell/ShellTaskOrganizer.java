@@ -564,6 +564,10 @@ public class ShellTaskOrganizer extends TaskOrganizer implements
 
             final int taskId = taskInfo.taskId;
             final TaskAppearedInfo appearedInfo = mTasks.get(taskId);
+            if (appearedInfo == null) {
+                Log.e(TAG, "TaskAppearedInfo not found!");
+                return;
+            }
             final TaskListener listener = getTaskListener(appearedInfo.getTaskInfo());
             mTasks.remove(taskId);
             if (listener != null) {
