@@ -8324,7 +8324,11 @@ public final class ActivityRecord extends WindowToken implements WindowManagerSe
 
     private void clearSizeCompatModeAttributes() {
         mInSizeCompatModeForBounds = false;
+        final float lastSizeCompatScale = mSizeCompatScale;
         mSizeCompatScale = 1f;
+        if (mSizeCompatScale != lastSizeCompatScale) {
+            forAllWindows(WindowState::updateGlobalScale, false /* traverseTopToBottom */);
+        }
         mSizeCompatBounds = null;
         mCompatDisplayInsets = null;
         mLetterboxUiController.clearInheritedCompatDisplayInsets();
@@ -8332,11 +8336,7 @@ public final class ActivityRecord extends WindowToken implements WindowManagerSe
 
     @VisibleForTesting
     void clearSizeCompatMode() {
-        final float lastSizeCompatScale = mSizeCompatScale;
         clearSizeCompatModeAttributes();
-        if (mSizeCompatScale != lastSizeCompatScale) {
-            forAllWindows(WindowState::updateGlobalScale, false /* traverseTopToBottom */);
-        }
         // Clear config override in #updateCompatDisplayInsets().
         final int activityType = getActivityType();
         final Configuration overrideConfig = getRequestedOverrideConfiguration();
