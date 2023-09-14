@@ -2661,18 +2661,18 @@ class PackageManagerShellCommand extends ShellCommand {
         }
 
         ArraySet<String> privAppPermissions = null;
-        if (isVendorApp(pkg)) {
+        if (isApexApp(pkg)) {
+            final String apexName = ApexManager.getInstance().getApexModuleNameForPackageName(
+                    getApexPackageNameContainingPackage(pkg));
+            privAppPermissions = SystemConfig.getInstance()
+                    .getApexPrivAppPermissions(apexName, pkg);
+        } else if (isVendorApp(pkg)) {
             privAppPermissions = SystemConfig.getInstance().getVendorPrivAppPermissions(pkg);
         } else if (isProductApp(pkg)) {
             privAppPermissions = SystemConfig.getInstance().getProductPrivAppPermissions(pkg);
         } else if (isSystemExtApp(pkg)) {
             privAppPermissions = SystemConfig.getInstance()
                     .getSystemExtPrivAppPermissions(pkg);
-        } else if (isApexApp(pkg)) {
-            final String apexName = ApexManager.getInstance().getApexModuleNameForPackageName(
-                    getApexPackageNameContainingPackage(pkg));
-            privAppPermissions = SystemConfig.getInstance()
-                    .getApexPrivAppPermissions(apexName, pkg);
         } else {
             privAppPermissions = SystemConfig.getInstance().getPrivAppPermissions(pkg);
         }
@@ -2690,18 +2690,18 @@ class PackageManagerShellCommand extends ShellCommand {
         }
 
         ArraySet<String> privAppPermissions = null;
-        if (isVendorApp(pkg)) {
+        if (isApexApp(pkg)) {
+            final String apexName = ApexManager.getInstance().getApexModuleNameForPackageName(
+                    getApexPackageNameContainingPackage(pkg));
+            privAppPermissions = SystemConfig.getInstance()
+                    .getApexPrivAppDenyPermissions(apexName, pkg);
+        } else if (isVendorApp(pkg)) {
             privAppPermissions = SystemConfig.getInstance().getVendorPrivAppDenyPermissions(pkg);
         } else if (isProductApp(pkg)) {
             privAppPermissions = SystemConfig.getInstance().getProductPrivAppDenyPermissions(pkg);
         } else if (isSystemExtApp(pkg)) {
             privAppPermissions = SystemConfig.getInstance()
                     .getSystemExtPrivAppDenyPermissions(pkg);
-        } else if (isApexApp(pkg)) {
-            final String apexName = ApexManager.getInstance().getApexModuleNameForPackageName(
-                    getApexPackageNameContainingPackage(pkg));
-            privAppPermissions = SystemConfig.getInstance()
-                    .getApexPrivAppDenyPermissions(apexName, pkg);
         } else {
             privAppPermissions = SystemConfig.getInstance().getPrivAppDenyPermissions(pkg);
         }
