@@ -137,7 +137,7 @@ public class KeyguardSimPinViewController
     protected void verifyPasswordAndUnlock() {
         String entry = mPasswordEntry.getText();
 
-        if (entry.length() < 4) {
+        if ((entry.length() < 4) || (entry.length() > 8)) {
             // otherwise, display a message to the user, and don't submit.
             mMessageAreaController.setMessage(
                     com.android.systemui.R.string.kg_invalid_sim_pin_hint);
