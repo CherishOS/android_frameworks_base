@@ -17563,7 +17563,7 @@ package android.graphics.fonts {
     ctor public FontFamily.Builder(@NonNull android.graphics.fonts.Font);
     method @NonNull public android.graphics.fonts.FontFamily.Builder addFont(@NonNull android.graphics.fonts.Font);
     method @NonNull public android.graphics.fonts.FontFamily build();
-    method @Nullable public android.graphics.fonts.FontFamily buildVariableFamily();
+    method @FlaggedApi("com.android.text.flags.deprecate_fonts_xml") @Nullable public android.graphics.fonts.FontFamily buildVariableFamily();
   }
 
   public final class FontStyle {
@@ -17656,7 +17656,7 @@ package android.graphics.text {
     method @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public int getHyphenation();
     method public int getLineBreakStyle();
     method public int getLineBreakWordStyle();
-    method @NonNull public android.graphics.text.LineBreakConfig merge(@NonNull android.graphics.text.LineBreakConfig);
+    method @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") @NonNull public android.graphics.text.LineBreakConfig merge(@NonNull android.graphics.text.LineBreakConfig);
     field @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public static final int HYPHENATION_DISABLED = 0; // 0x0
     field @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public static final int HYPHENATION_ENABLED = 1; // 0x1
     field @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public static final int HYPHENATION_UNSPECIFIED = -1; // 0xffffffff
@@ -17664,16 +17664,16 @@ package android.graphics.text {
     field public static final int LINE_BREAK_STYLE_NONE = 0; // 0x0
     field public static final int LINE_BREAK_STYLE_NORMAL = 2; // 0x2
     field public static final int LINE_BREAK_STYLE_STRICT = 3; // 0x3
-    field public static final int LINE_BREAK_STYLE_UNSPECIFIED = -1; // 0xffffffff
+    field @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public static final int LINE_BREAK_STYLE_UNSPECIFIED = -1; // 0xffffffff
     field public static final int LINE_BREAK_WORD_STYLE_NONE = 0; // 0x0
     field public static final int LINE_BREAK_WORD_STYLE_PHRASE = 1; // 0x1
-    field public static final int LINE_BREAK_WORD_STYLE_UNSPECIFIED = -1; // 0xffffffff
+    field @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public static final int LINE_BREAK_WORD_STYLE_UNSPECIFIED = -1; // 0xffffffff
   }
 
   public static final class LineBreakConfig.Builder {
     ctor public LineBreakConfig.Builder();
     method @NonNull public android.graphics.text.LineBreakConfig build();
-    method @NonNull public android.graphics.text.LineBreakConfig.Builder merge(@NonNull android.graphics.text.LineBreakConfig);
+    method @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") @NonNull public android.graphics.text.LineBreakConfig.Builder merge(@NonNull android.graphics.text.LineBreakConfig);
     method @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") @NonNull public android.graphics.text.LineBreakConfig.Builder setHyphenation(int);
     method @NonNull public android.graphics.text.LineBreakConfig.Builder setLineBreakStyle(int);
     method @NonNull public android.graphics.text.LineBreakConfig.Builder setLineBreakWordStyle(int);
@@ -17698,7 +17698,7 @@ package android.graphics.text {
     method @NonNull public android.graphics.text.LineBreaker.Builder setHyphenationFrequency(int);
     method @NonNull public android.graphics.text.LineBreaker.Builder setIndents(@Nullable int[]);
     method @NonNull public android.graphics.text.LineBreaker.Builder setJustificationMode(int);
-    method @NonNull public android.graphics.text.LineBreaker.Builder setUseBoundsForWidth(boolean);
+    method @FlaggedApi("com.android.text.flags.use_bounds_for_width") @NonNull public android.graphics.text.LineBreaker.Builder setUseBoundsForWidth(boolean);
   }
 
   public static class LineBreaker.ParagraphConstraints {
@@ -17750,18 +17750,18 @@ package android.graphics.text {
     method public float getAdvance();
     method public float getAscent();
     method public float getDescent();
-    method public boolean getFakeBold(@IntRange(from=0) int);
-    method public boolean getFakeItalic(@IntRange(from=0) int);
+    method @FlaggedApi("com.android.text.flags.deprecate_fonts_xml") public boolean getFakeBold(@IntRange(from=0) int);
+    method @FlaggedApi("com.android.text.flags.deprecate_fonts_xml") public boolean getFakeItalic(@IntRange(from=0) int);
     method @NonNull public android.graphics.fonts.Font getFont(@IntRange(from=0) int);
     method @IntRange(from=0) public int getGlyphId(@IntRange(from=0) int);
     method public float getGlyphX(@IntRange(from=0) int);
     method public float getGlyphY(@IntRange(from=0) int);
-    method public float getItalicOverride(@IntRange(from=0) int);
+    method @FlaggedApi("com.android.text.flags.deprecate_fonts_xml") public float getItalicOverride(@IntRange(from=0) int);
     method public float getOffsetX();
     method public float getOffsetY();
-    method public float getWeightOverride(@IntRange(from=0) int);
+    method @FlaggedApi("com.android.text.flags.deprecate_fonts_xml") public float getWeightOverride(@IntRange(from=0) int);
     method @IntRange(from=0) public int glyphCount();
-    field public static final float NO_OVERRIDE = 1.4E-45f;
+    field @FlaggedApi("com.android.text.flags.deprecate_fonts_xml") public static final float NO_OVERRIDE = 1.4E-45f;
   }
 
   public class TextRunShaper {
@@ -47891,8 +47891,8 @@ package android.text.style {
   }
 
   @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public class LineBreakConfigSpan {
-    ctor public LineBreakConfigSpan(@NonNull android.graphics.text.LineBreakConfig);
-    method @NonNull public android.graphics.text.LineBreakConfig getLineBreakConfig();
+    ctor @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public LineBreakConfigSpan(@NonNull android.graphics.text.LineBreakConfig);
+    method @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") @NonNull public android.graphics.text.LineBreakConfig getLineBreakConfig();
   }
 
   @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public static final class LineBreakConfigSpan.NoHyphenationSpan extends android.text.style.LineBreakConfigSpan {
