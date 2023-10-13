@@ -33094,6 +33094,22 @@ package android.os {
     method public void onStateChanged(boolean);
   }
 
+  @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public final class PowerMonitor implements android.os.Parcelable {
+    method @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public int describeContents();
+    method @FlaggedApi("com.android.server.power.optimization.power_monitor_api") @NonNull public String getName();
+    method @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public int getType();
+    method @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @FlaggedApi("com.android.server.power.optimization.power_monitor_api") @NonNull public static final android.os.Parcelable.Creator<android.os.PowerMonitor> CREATOR;
+    field @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public static final int POWER_MONITOR_TYPE_CONSUMER = 0; // 0x0
+    field @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public static final int POWER_MONITOR_TYPE_MEASUREMENT = 1; // 0x1
+  }
+
+  @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public final class PowerMonitorReadings {
+    method @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public long getConsumedEnergy(@NonNull android.os.PowerMonitor);
+    method @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public long getTimestamp(@NonNull android.os.PowerMonitor);
+    field @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public static final int ENERGY_UNAVAILABLE = -1; // 0xffffffff
+  }
+
   public class Process {
     ctor public Process();
     method public static final long getElapsedCpuTime();
@@ -33656,6 +33672,8 @@ package android.os.health {
   }
 
   public class SystemHealthManager {
+    method @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public void getPowerMonitorReadings(@NonNull java.util.List<android.os.PowerMonitor>, @Nullable android.os.Handler, @NonNull java.util.function.Consumer<android.os.PowerMonitorReadings>, @NonNull java.util.function.Consumer<java.lang.RuntimeException>);
+    method @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public void getSupportedPowerMonitors(@Nullable android.os.Handler, @NonNull java.util.function.Consumer<java.util.List<android.os.PowerMonitor>>);
     method public android.os.health.HealthStats takeMyUidSnapshot();
     method public android.os.health.HealthStats takeUidSnapshot(int);
     method public android.os.health.HealthStats[] takeUidSnapshots(int[]);
