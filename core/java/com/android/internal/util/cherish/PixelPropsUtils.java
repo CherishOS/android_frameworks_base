@@ -144,6 +144,8 @@ public class PixelPropsUtils {
     private static final ArrayList<String> pixelCodenames = 
         new ArrayList<String> (
             Arrays.asList(
+                "husky",
+                "shiba",
                 "felix",
                 "tangorpro",
                 "lynx",
@@ -154,8 +156,7 @@ public class PixelPropsUtils {
                 "raven",
                 "barbet",
                 "redfin",
-                "bramble",
-                "sunfish"
+                "bramble"
         ));
 
     private static final String sNetflixModel =
