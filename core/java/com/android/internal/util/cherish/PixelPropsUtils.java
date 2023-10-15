@@ -59,7 +59,7 @@ public class PixelPropsUtils {
             createGoogleSpoofProps("felix", "Pixel Fold",
                     "google/felix/felix:14/UP1A.231005.007.A1/10762838:user/release-keys");
 
-    private static final Map<String, Object> propsToChangePixel7Pro =
+    private static final Map<String, Object> propsToChangeRecentPixel =
             createGoogleSpoofProps("husky", "Pixel 8 Pro",
                     "google/husky/husky:14/UD1A.230803.041/10808477:user/release-keys");
 
@@ -81,7 +81,7 @@ public class PixelPropsUtils {
         propsToChangeGeneric.put("TAGS", "release-keys");
     }
 
-    private static final ArrayList<String> packagesToChangePixel7Pro = 
+    private static final ArrayList<String> packagesToChangeRecentPixel = 
         new ArrayList<String> (
             Arrays.asList(
                 "com.android.chrome",
@@ -258,7 +258,7 @@ public class PixelPropsUtils {
         if (setPropsForGms(procName)) {
             return;
         }
-        if (packagesToChangePixel7Pro.contains(processName)
+        if (packagesToChangeRecentPixel.contains(processName)
             || packagesToChangePixelFold.contains(processName)
             || extraPackagesToChange.contains(processName)
             || packagesToKeep.contains(processName)) {
@@ -278,12 +278,12 @@ public class PixelPropsUtils {
             return;
         } else if (procName.startsWith("com.google.")
                 || procName.startsWith(SAMSUNG)
-                || packagesToChangePixel7Pro.contains(procName)
+                || packagesToChangeRecentPixel.contains(procName)
                 || packagesToChangePixelFold.contains(procName)
                 || extraPackagesToChange.contains(procName)) {
 
-            if (packagesToChangePixel7Pro.contains(procName)) {
-                propsToChange = propsToChangePixel7Pro;
+            if (packagesToChangeRecentPixel.contains(procName)) {
+                propsToChange = propsToChangeRecentPixel;
             } else if (packagesToChangePixelFold.contains(procName)) {
                 propsToChange = propsToChangePixelFold;
             } else {
