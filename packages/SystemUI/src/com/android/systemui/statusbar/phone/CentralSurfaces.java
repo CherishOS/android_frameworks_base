@@ -22,6 +22,7 @@ import android.annotation.Nullable;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.app.PendingIntent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -47,6 +48,7 @@ import com.android.systemui.navigationbar.NavigationBarView;
 import com.android.systemui.plugins.ActivityStarter.OnDismissAction;
 import com.android.systemui.plugins.statusbar.NotificationSwipeActionHelper;
 import com.android.systemui.qs.QSPanelController;
+import com.android.systemui.shade.NotificationPanelViewController;
 import com.android.systemui.shade.NotificationShadeWindowView;
 import com.android.systemui.shade.NotificationShadeWindowViewController;
 import com.android.systemui.shade.ShadeViewController;
@@ -480,4 +482,10 @@ public interface CentralSurfaces extends Dumpable, LifecycleOwner {
             ExpandableNotificationRow associatedView);
 
     GameSpaceManager getGameSpaceManager();
+
+    void startActivity(Intent intent, boolean dismiss);
+
+    void startPendingIntentDismissingKeyguard(PendingIntent intent);
+
+    NotificationPanelViewController getNotificationPanelViewController();
 }
