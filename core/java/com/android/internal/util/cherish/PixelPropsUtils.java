@@ -100,7 +100,8 @@ public class PixelPropsUtils {
                 "com.google.android.apps.wallpaper",
                 "com.google.android.apps.customization.pixel",
                 "com.google.android.apps.privacy.wildlife",
-                "com.google.android.apps.subscriptions.red"
+                "com.google.android.apps.subscriptions.red",
+                "com.google.android.apps.photos"
         ));
 
     private static final ArrayList<String> packagesToChangePixelFold = 
@@ -272,9 +273,7 @@ public class PixelPropsUtils {
         }
         Map<String, Object> propsToChange = new HashMap<>();
         boolean isPixelDevice = pixelCodenames.contains(SystemProperties.get(DEVICE));
-        if (procName.equals("com.google.android.apps.photos")) {
-            propsToChange = propsToChangePixelXL;
-        } else if (isPixelDevice) {
+        if (isPixelDevice) {
             return;
         } else if (procName.startsWith("com.google.")
                 || procName.startsWith(SAMSUNG)
@@ -288,6 +287,11 @@ public class PixelPropsUtils {
                 propsToChange = propsToChangePixelFold;
             } else {
                 propsToChange = propsToChangePixel5a;
+            }
+            if (procName.equals("com.google.android.apps.photos")) {
+                if (SystemProperties.getBoolean("persist.sys.pixelprops.gphotos", true)) {
+                    propsToChange = propsToChangePixelXL;
+                }
             }
         }
         if (propsToChange == null || propsToChange.isEmpty()) return;
