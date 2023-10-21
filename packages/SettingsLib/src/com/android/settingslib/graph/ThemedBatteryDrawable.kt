@@ -30,6 +30,8 @@ import android.graphics.drawable.Drawable
 import android.util.PathParser
 import android.util.TypedValue
 
+import androidx.core.content.ContextCompat
+
 import com.android.settingslib.R
 import com.android.settingslib.Utils
 
@@ -78,10 +80,11 @@ open class ThemedBatteryDrawable(private val context: Context, frameColor: Int) 
     // Colors can be configured based on battery level (see res/values/arrays.xml)
     private var colorLevels: IntArray
 
-    private var fillColor: Int = Color.MAGENTA
-    private var backgroundColor: Int = Color.MAGENTA
+    private val textColorPrimary: Int = ContextCompat.getColor(context, R.color.settingslib_text_color_primary)
+    private var fillColor: Int = textColorPrimary
+    private var backgroundColor: Int = textColorPrimary
     // updated whenever level changes
-    private var levelColor: Int = Color.MAGENTA
+    private var levelColor: Int = textColorPrimary
 
     // Dual tone implies that battery level is a clipped overlay over top of the whole shape
     private var dualTone = false
