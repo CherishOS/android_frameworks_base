@@ -50137,13 +50137,6 @@ package android.view {
     field public static final int VIRTUAL_KEY_RELEASE = 8; // 0x8
   }
 
-  @FlaggedApi("android.view.flags.scroll_feedback_api") public class HapticScrollFeedbackProvider implements android.view.ScrollFeedbackProvider {
-    ctor public HapticScrollFeedbackProvider(@NonNull android.view.View);
-    method public void onScrollLimit(int, int, int, boolean);
-    method public void onScrollProgress(int, int, int, int);
-    method public void onSnapToItem(int, int, int);
-  }
-
   public class InflateException extends java.lang.RuntimeException {
     ctor public InflateException();
     ctor public InflateException(String, Throwable);
@@ -51310,9 +51303,10 @@ package android.view {
   }
 
   @FlaggedApi("android.view.flags.scroll_feedback_api") public interface ScrollFeedbackProvider {
-    method public void onScrollLimit(int, int, int, boolean);
-    method public void onScrollProgress(int, int, int, int);
-    method public void onSnapToItem(int, int, int);
+    method @FlaggedApi("android.view.flags.scroll_feedback_api") @NonNull public static android.view.ScrollFeedbackProvider createProvider(@NonNull android.view.View);
+    method @FlaggedApi("android.view.flags.scroll_feedback_api") public void onScrollLimit(int, int, int, boolean);
+    method @FlaggedApi("android.view.flags.scroll_feedback_api") public void onScrollProgress(int, int, int, int);
+    method @FlaggedApi("android.view.flags.scroll_feedback_api") public void onSnapToItem(int, int, int);
   }
 
   public class SearchEvent {
@@ -52594,7 +52588,6 @@ package android.view {
     method @Deprecated public static int getEdgeSlop();
     method @Deprecated public static int getFadingEdgeLength();
     method @Deprecated public static long getGlobalActionKeyTimeout();
-    method @FlaggedApi("android.view.flags.scroll_feedback_api") public int getHapticScrollFeedbackTickInterval(int, int, int);
     method public static int getJumpTapTimeout();
     method public static int getKeyRepeatDelay();
     method public static int getKeyRepeatTimeout();
@@ -52634,7 +52627,6 @@ package android.view {
     method @Deprecated public static int getWindowTouchSlop();
     method public static long getZoomControlsTimeout();
     method public boolean hasPermanentMenuKey();
-    method @FlaggedApi("android.view.flags.scroll_feedback_api") public boolean isHapticScrollFeedbackEnabled(int, int, int);
     method public boolean shouldShowMenuShortcutsWhenKeyboardPresent();
   }
 
