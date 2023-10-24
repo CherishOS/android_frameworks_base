@@ -48,7 +48,6 @@ import java.util.regex.Matcher;
 public class PixelPropsUtils {
 
     private static final String TAG = PixelPropsUtils.class.getSimpleName();
-    private static final String DEVICE = "org.pixelexperience.device";
     private static final boolean DEBUG = false;
 
     private static final Boolean sEnablePixelProps =
@@ -142,25 +141,6 @@ public class PixelPropsUtils {
                 "com.google.android.apps.restore",
                 "com.google.oslo",
                 "it.ingdirect.app"
-        ));
-
-    // Codenames for currently supported Pixels by Google
-    private static final ArrayList<String> pixelCodenames = 
-        new ArrayList<String> (
-            Arrays.asList(
-                "husky",
-                "shiba",
-                "felix",
-                "tangorpro",
-                "lynx",
-                "cheetah",
-                "panther",
-                "bluejay",
-                "oriole",
-                "raven",
-                "barbet",
-                "redfin",
-                "bramble"
         ));
 
     private static final String sNetflixModel =
@@ -280,10 +260,7 @@ public class PixelPropsUtils {
             return;
         }
         Map<String, Object> propsToChange = new HashMap<>();
-        boolean isPixelDevice = pixelCodenames.contains(SystemProperties.get(DEVICE));
-        if (isPixelDevice) {
-            return;
-        } else if (procName.startsWith("com.google.")
+        if (procName.startsWith("com.google.")
                 || procName.startsWith(SAMSUNG)
                 || packagesToChangeRecentPixel.contains(procName)
                 || packagesToChangePixelFold.contains(procName)
