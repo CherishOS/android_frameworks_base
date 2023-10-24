@@ -1463,6 +1463,10 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
             mNotificationStackScrollLayoutController.setKeyguardBottomPaddingForDebug(-1f);
         }
     }
+    
+    public void updateMaxDisplayedNotificationsWrapper(boolean recompute) {
+        updateMaxDisplayedNotifications(recompute);
+    }
 
     private boolean shouldAvoidChangingNotificationsCount() {
         return mHintAnimationRunning || mUnlockedScreenOffAnimationController.isAnimationPlaying();
@@ -3072,6 +3076,14 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
         mNotificationStackScrollLayoutController.setPulsing(pulsing, animatePulse);
 
         updateKeyguardStatusViewAlignment(/* animate= */ true);
+    }
+
+    public void setAmbientIndicationBottomPadding(int bottomPadding) {
+        mAmbientIndicationBottomPadding = bottomPadding;
+    }
+
+    public int getAmbientIndicationBottomPadding() {
+        return mAmbientIndicationBottomPadding;
     }
 
     @Override
