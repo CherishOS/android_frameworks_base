@@ -17708,11 +17708,14 @@ package android.graphics.pdf {
 
 package android.graphics.text {
 
-  public final class LineBreakConfig {
+  public final class LineBreakConfig implements android.os.Parcelable {
+    method @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public int describeContents();
     method @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public int getHyphenation();
     method public int getLineBreakStyle();
     method public int getLineBreakWordStyle();
     method @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") @NonNull public android.graphics.text.LineBreakConfig merge(@NonNull android.graphics.text.LineBreakConfig);
+    method @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") @NonNull public static final android.os.Parcelable.Creator<android.graphics.text.LineBreakConfig> CREATOR;
     field @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public static final int HYPHENATION_DISABLED = 0; // 0x0
     field @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public static final int HYPHENATION_ENABLED = 1; // 0x1
     field @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public static final int HYPHENATION_UNSPECIFIED = -1; // 0xffffffff
@@ -48011,17 +48014,15 @@ package android.text.style {
     method public void writeToParcel(@NonNull android.os.Parcel, int);
   }
 
-  @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public class LineBreakConfigSpan {
+  @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public final class LineBreakConfigSpan implements android.text.ParcelableSpan {
     ctor @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public LineBreakConfigSpan(@NonNull android.graphics.text.LineBreakConfig);
+    method @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") @NonNull public static android.text.style.LineBreakConfigSpan createNoBreakSpan();
+    method @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") @NonNull public static android.text.style.LineBreakConfigSpan createNoHyphenationSpan();
+    method public int describeContents();
     method @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") @NonNull public android.graphics.text.LineBreakConfig getLineBreakConfig();
-  }
-
-  @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public static final class LineBreakConfigSpan.NoBreakSpan extends android.text.style.LineBreakConfigSpan {
-    ctor @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public LineBreakConfigSpan.NoBreakSpan();
-  }
-
-  @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public static final class LineBreakConfigSpan.NoHyphenationSpan extends android.text.style.LineBreakConfigSpan {
-    ctor @FlaggedApi("com.android.text.flags.no_break_no_hyphenation_span") public LineBreakConfigSpan.NoHyphenationSpan();
+    method public int getSpanTypeId();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.text.style.LineBreakConfigSpan> CREATOR;
   }
 
   public interface LineHeightSpan extends android.text.style.ParagraphStyle android.text.style.WrapTogetherSpan {
