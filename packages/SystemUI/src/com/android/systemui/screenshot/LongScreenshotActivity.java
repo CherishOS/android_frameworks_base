@@ -349,9 +349,10 @@ public class LongScreenshotActivity extends Activity {
                     null,
                     mScreenshotUserHandle, false);
         } else {
+            Uri baseUri = ContentProvider.getUriWithoutUserId(uri);
             String editorPackage = getString(R.string.config_screenshotEditor);
             Intent intent = new Intent(Intent.ACTION_EDIT);
-            intent.setDataAndType(uri, "image/png");
+            intent.setDataAndType(baseUri, "image/png");
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
                     | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             Bundle options = null;
