@@ -19,6 +19,7 @@ package com.android.systemui.screenshot;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.ComponentName;
+import android.content.ContentProvider;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.HardwareRenderer;
@@ -341,9 +342,10 @@ public class LongScreenshotActivity extends Activity {
                     null,
                     mScreenshotUserHandle.getIdentifier(), false);
         } else {
+            Uri baseUri = ContentProvider.getUriWithoutUserId(uri);
             String editorPackage = getString(R.string.config_screenshotEditor);
             Intent intent = new Intent(Intent.ACTION_EDIT);
-            intent.setDataAndType(uri, "image/png");
+            intent.setDataAndType(baseUri, "image/png");
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
                     | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             Bundle options = null;
