@@ -601,29 +601,39 @@ open class ClockRegistry(
 
     fun createCurrentClock(): ClockController {
         val clockId = currentClockId
+
         if (isEnabled && clockId.isNotEmpty()) {
-            val clock = createClock(clockId)
-            if (clock != null) {
-                logBuffer.tryLog(
-                    TAG,
-                    LogLevel.INFO,
-                    { str1 = clockId },
-                    { "Rendering clock $str1" }
-                )
-                return clock
-            } else if (availableClocks.containsKey(clockId)) {
-                logBuffer.tryLog(
-                    TAG,
-                    LogLevel.WARNING,
-                    { str1 = clockId },
-                    { "Clock $str1 not loaded; using default" }
-                )
-            } else {
+            try {
+                val clock = createClock(clockId)
+                if (clock != null) {
+                    logBuffer.tryLog(
+                        TAG,
+                        LogLevel.INFO,
+                        { str1 = clockId },
+                        { "Rendering clock $str1" }
+                    )
+                    return clock
+                } else if (availableClocks.containsKey(clockId)) {
+                    logBuffer.tryLog(
+                        TAG,
+                        LogLevel.WARNING,
+                        { str1 = clockId },
+                        { "Clock $str1 not loaded; using default" }
+                    )
+                } else {
+                    logBuffer.tryLog(
+                        TAG,
+                        LogLevel.ERROR,
+                        { str1 = clockId },
+                        { "Clock $str1 not found; using default" }
+                    )
+                }
+            } catch (e: Exception) {
                 logBuffer.tryLog(
                     TAG,
                     LogLevel.ERROR,
                     { str1 = clockId },
-                    { "Clock $str1 not found; using default" }
+                    { "Error creating clock $str1: ${e.message}" }
                 )
             }
         }
