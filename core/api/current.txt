@@ -5315,11 +5315,15 @@ package android.app {
     method public android.net.Uri getConditionId();
     method @Nullable public android.content.ComponentName getConfigurationActivity();
     method public long getCreationTime();
+    method @FlaggedApi("android.app.modes_api") @DrawableRes public int getIconResId();
     method public int getInterruptionFilter();
     method public String getName();
     method public android.content.ComponentName getOwner();
+    method @FlaggedApi("android.app.modes_api") @Nullable public String getTriggerDescription();
+    method @FlaggedApi("android.app.modes_api") public int getType();
     method public android.service.notification.ZenPolicy getZenPolicy();
     method public boolean isEnabled();
+    method @FlaggedApi("android.app.modes_api") public boolean isManualInvocationAllowed();
     method public void setConditionId(android.net.Uri);
     method public void setConfigurationActivity(@Nullable android.content.ComponentName);
     method public void setEnabled(boolean);
@@ -5328,6 +5332,32 @@ package android.app {
     method public void setZenPolicy(android.service.notification.ZenPolicy);
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.app.AutomaticZenRule> CREATOR;
+    field @FlaggedApi("android.app.modes_api") public static final int TYPE_BEDTIME = 3; // 0x3
+    field @FlaggedApi("android.app.modes_api") public static final int TYPE_DRIVING = 4; // 0x4
+    field @FlaggedApi("android.app.modes_api") public static final int TYPE_IMMERSIVE = 5; // 0x5
+    field @FlaggedApi("android.app.modes_api") public static final int TYPE_MANAGED = 7; // 0x7
+    field @FlaggedApi("android.app.modes_api") public static final int TYPE_OTHER = 0; // 0x0
+    field @FlaggedApi("android.app.modes_api") public static final int TYPE_SCHEDULE_CALENDAR = 2; // 0x2
+    field @FlaggedApi("android.app.modes_api") public static final int TYPE_SCHEDULE_TIME = 1; // 0x1
+    field @FlaggedApi("android.app.modes_api") public static final int TYPE_THEATER = 6; // 0x6
+    field @FlaggedApi("android.app.modes_api") public static final int TYPE_UNKNOWN = -1; // 0xffffffff
+  }
+
+  @FlaggedApi("android.app.modes_api") public static final class AutomaticZenRule.Builder {
+    ctor public AutomaticZenRule.Builder(@NonNull android.app.AutomaticZenRule);
+    ctor public AutomaticZenRule.Builder(@NonNull String, @NonNull android.net.Uri);
+    method @NonNull public android.app.AutomaticZenRule build();
+    method @NonNull public android.app.AutomaticZenRule.Builder setConditionId(@NonNull android.net.Uri);
+    method @NonNull public android.app.AutomaticZenRule.Builder setConfigurationActivity(@Nullable android.content.ComponentName);
+    method @NonNull public android.app.AutomaticZenRule.Builder setEnabled(boolean);
+    method @NonNull public android.app.AutomaticZenRule.Builder setIconResId(@DrawableRes int);
+    method @NonNull public android.app.AutomaticZenRule.Builder setInterruptionFilter(int);
+    method @NonNull public android.app.AutomaticZenRule.Builder setManualInvocationAllowed(boolean);
+    method @NonNull public android.app.AutomaticZenRule.Builder setName(@NonNull String);
+    method @NonNull public android.app.AutomaticZenRule.Builder setOwner(@Nullable android.content.ComponentName);
+    method @NonNull public android.app.AutomaticZenRule.Builder setTriggerDescription(@Nullable String);
+    method @NonNull public android.app.AutomaticZenRule.Builder setType(int);
+    method @NonNull public android.app.AutomaticZenRule.Builder setZenPolicy(@Nullable android.service.notification.ZenPolicy);
   }
 
   public final class BackgroundServiceStartNotAllowedException extends android.app.ServiceStartNotAllowedException implements android.os.Parcelable {
