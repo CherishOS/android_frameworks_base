@@ -9321,6 +9321,21 @@ package android.app.usage {
     field public static final int USER_INTERACTION = 7; // 0x7
   }
 
+  @FlaggedApi("android.app.usage.filter_based_event_query_api") public final class UsageEventsQuery implements android.os.Parcelable {
+    method public int describeContents();
+    method public long getBeginTimeMillis();
+    method public long getEndTimeMillis();
+    method @NonNull public java.util.Set<java.lang.Integer> getEventTypes();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.app.usage.UsageEventsQuery> CREATOR;
+  }
+
+  public static final class UsageEventsQuery.Builder {
+    ctor public UsageEventsQuery.Builder(long, long);
+    method @NonNull public android.app.usage.UsageEventsQuery.Builder addEventTypes(@NonNull int...);
+    method @NonNull public android.app.usage.UsageEventsQuery build();
+  }
+
   public final class UsageStats implements android.os.Parcelable {
     ctor public UsageStats(android.app.usage.UsageStats);
     method public void add(android.app.usage.UsageStats);
@@ -9345,6 +9360,7 @@ package android.app.usage {
     method public java.util.List<android.app.usage.ConfigurationStats> queryConfigurations(int, long, long);
     method public java.util.List<android.app.usage.EventStats> queryEventStats(int, long, long);
     method public android.app.usage.UsageEvents queryEvents(long, long);
+    method @FlaggedApi("android.app.usage.filter_based_event_query_api") @NonNull @RequiresPermission(android.Manifest.permission.PACKAGE_USAGE_STATS) public android.app.usage.UsageEvents queryEvents(@NonNull android.app.usage.UsageEventsQuery);
     method public android.app.usage.UsageEvents queryEventsForSelf(long, long);
     method public java.util.List<android.app.usage.UsageStats> queryUsageStats(int, long, long);
     field public static final int INTERVAL_BEST = 4; // 0x4
