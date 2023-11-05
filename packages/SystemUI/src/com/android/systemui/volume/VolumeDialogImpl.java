@@ -600,7 +600,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                     mRingerAndDrawerContainerBackground = ringerAndDrawerBg.getDrawable(0);
 
                     updateBackgroundForDrawerClosedAmount();
-                    setTopContainerBackgroundDrawable();
+                    //setTopContainerBackgroundDrawable();
                 }
             });
         }
@@ -1669,6 +1669,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                     addAccessibilityDescription(mRingerIcon, RINGER_MODE_VIBRATE,
                             mContext.getString(R.string.volume_ringer_hint_mute));
                     mRingerIcon.setTag(Events.ICON_STATE_VIBRATE);
+                    pinNotifAndRingerToMin();
                     break;
                 case AudioManager.RINGER_MODE_SILENT:
                     mRingerIcon.setImageResource(mVolumeRingerMuteIconDrawableId);
@@ -1676,6 +1677,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                     mRingerIcon.setTag(Events.ICON_STATE_MUTE);
                     addAccessibilityDescription(mRingerIcon, RINGER_MODE_SILENT,
                             mContext.getString(R.string.volume_ringer_hint_unmute));
+                    pinNotifAndRingerToMin();
                     break;
                 case AudioManager.RINGER_MODE_NORMAL:
                 default:
@@ -1686,6 +1688,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                         addAccessibilityDescription(mRingerIcon, RINGER_MODE_NORMAL,
                                 mContext.getString(R.string.volume_ringer_hint_unmute));
                         mRingerIcon.setTag(Events.ICON_STATE_MUTE);
+                        pinNotifAndRingerToMin();
                     } else {
                         mRingerIcon.setImageResource(mVolumeRingerIconDrawableId);
                         mSelectedRingerIcon.setImageResource(mVolumeRingerIconDrawableId);
@@ -1697,9 +1700,43 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                                     mContext.getString(R.string.volume_ringer_hint_mute));
                         }
                         mRingerIcon.setTag(Events.ICON_STATE_UNMUTE);
+                        final VolumeRow ringer = findRow(STREAM_RING);
+                        final VolumeRow notif = findRow(STREAM_NOTIFICATION);
+                        if (ringer != null) {
+                            Util.setText(ringer.header, Utils.formatPercentage(ss.level, ss.levelMax));
+                        }
+                        if (notif != null) {
+                            Util.setText(notif.header, Utils.formatPercentage(notif.ss.level, notif.ss.levelMax));
+                        }
                     }
                     break;
             }
+        }
+    }
+
+    private void pinNotifAndRingerToMin() {
+        final VolumeRow ringer = findRow(STREAM_RING);
+        final VolumeRow notif = findRow(STREAM_NOTIFICATION);
+
+        if (ringer != null && ringer.ss.muted) {
+            final int ringerLevel = ringer.ss.levelMin * 100;
+            if (ringer.slider.getProgress() != ringerLevel) {
+                ringer.slider.setProgress(ringerLevel, true);
+            } else {
+                ringer.slider.setProgress(ringerLevel);
+            }
+            Util.setText(ringer.header, Utils.formatPercentage(ringer.ss.levelMin,
+                    ringer.ss.levelMax));
+        }
+        if (notif != null && notif.ss.muted) {
+            final int notifLevel = notif.ss.levelMin * 100;
+            if (notif.slider.getProgress() != notifLevel) {
+                notif.slider.setProgress(notifLevel, true);
+            } else {
+                notif.slider.setProgress(notifLevel);
+            }
+            Util.setText(notif.header, Utils.formatPercentage(notif.ss.levelMin,
+                    notif.ss.levelMax));
         }
     }
 
@@ -1852,9 +1889,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         }
 
         // update header text
-        Util.setText(row.header, getStreamLabelH(ss));
         row.slider.setContentDescription(row.header.getText());
-        mConfigurableTexts.add(row.header, ss.name);
 
         // update icon
         final boolean iconEnabled = (mAutomute || ss.muteSupported) && !zenMuted;
@@ -1959,16 +1994,17 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         }
         final ColorStateList colorTint = useActiveColoring
                 ? Utils.getColorAccent(mContext)
-                : Utils.getColorAttr(mContext, com.android.internal.R.attr.colorAccentSecondary);
+                : Utils.getColorAttr(mContext, com.android.internal.R.attr.colorAccentPrimary);
         final int alpha = useActiveColoring
                 ? Color.alpha(colorTint.getDefaultColor())
-                : getAlphaAttr(android.R.attr.secondaryContentAlpha);
+                : getAlphaAttr(android.R.attr.disabledAlpha);
 
-        final ColorStateList bgTint = Utils.getColorAttr(
-                mContext, android.R.attr.colorBackgroundFloating);
-
-        final ColorStateList inverseTextTint = Utils.getColorAttr(
-                mContext, com.android.internal.R.attr.textColorOnAccent);
+        final ColorStateList bgTint = useActiveColoring
+                ? Utils.getColorAttr(mContext, android.R.attr.colorBackgroundFloating)
+                : Utils.getColorAttr(mContext, com.android.internal.R.attr.colorAccentSecondary);
+                
+        final ColorStateList colorAccent = Utils.getColorAttr(
+                mContext, com.android.internal.R.attr.colorAccent);
 
         row.sliderProgressSolid.setTintList(colorTint);
         if (row.sliderProgressIcon != null) {
@@ -1976,7 +2012,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         }
 
         if (row.icon != null) {
-            row.icon.setImageTintList(inverseTextTint);
+            row.icon.setImageTintList(colorAccent);
             row.icon.setImageAlpha(alpha);
         }
 
@@ -2038,6 +2074,9 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                 row.slider.setProgress(newProgress, true);
             }
         }
+        // update header text
+        Util.setText(row.header, Utils.formatPercentage((enable && !row.ss.muted)
+                        ? vlevel : 0, row.ss.levelMax));
     }
 
     private void recheckH(VolumeRow row) {
@@ -2426,6 +2465,17 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                 }
             }
             final int userLevel = getImpliedLevel(seekBar, progress);
+            
+            if ((mRow.stream == STREAM_RING || mRow.stream == STREAM_NOTIFICATION)) {
+                if (mRow.ss.level > mRow.ss.levelMin && userLevel == 0) {
+                    seekBar.setProgress((mRow.ss.levelMin + 1) * 100);
+                    Util.setText(mRow.header,
+                            Utils.formatPercentage(mRow.ss.levelMin + 1, mRow.ss.levelMax));
+                    return;
+                }
+            }
+
+            Util.setText(mRow.header, Utils.formatPercentage(userLevel, mRow.ss.levelMax));
             if (mRow.ss.level != userLevel || mRow.ss.muted && userLevel > 0) {
                 mRow.userAttempt = SystemClock.uptimeMillis();
                 if (mRow.requestedLevel != userLevel) {
