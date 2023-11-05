@@ -25,6 +25,7 @@ import com.android.systemui.qs.tiles.PowerShareTile
 import com.android.systemui.qs.tiles.SoundTile
 import com.android.systemui.qs.tiles.SyncTile
 import com.android.systemui.qs.tiles.UsbTetherTile
+import com.android.systemui.qs.tiles.VolumeTile
 import com.android.systemui.qs.tiles.WifiTile
 import dagger.Binds
 import dagger.Module
@@ -81,10 +82,16 @@ interface QSModuleCherish {
     @IntoMap
     @StringKey(UsbTetherTile.TILE_SPEC)
     fun bindUsbTetherTile(usbTetherTile: UsbTetherTile): QSTileImpl<*>
+    
+    /** Inject VolumeTile into tileMap in QSModule */
+    @Binds  
+    @IntoMap
+    @StringKey(VolumeTile.TILE_SPEC)
+    fun bindVolumeTile(volumeTile: VolumeTile): QSTileImpl<*>
+}
 
     /** Inject WifiTile into tileMap in QSModule */
     @Binds
     @IntoMap
     @StringKey(WifiTile.TILE_SPEC)
     fun bindWifiTile(wifiTile: WifiTile): QSTileImpl<*>
-}
