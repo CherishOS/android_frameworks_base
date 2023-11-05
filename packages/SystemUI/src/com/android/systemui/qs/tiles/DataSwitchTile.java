@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2022 crDroidAndroid Project
+ * Copyright (C) 2020-2023 crDroidAndroid Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,9 +46,10 @@ import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.plugins.FalsingManager;
 import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
-import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.QsEventLogger;
+import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.logging.QSLogger;
+import com.android.systemui.qs.pipeline.domain.interactor.PanelInteractor;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.qs.tileimpl.QSTileImpl.ResourceIcon;
 
@@ -72,6 +73,7 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
     private final MyCallStateListener mPhoneStateListener;
     private final SubscriptionManager mSubscriptionManager;
     private final TelephonyManager mTelephonyManager;
+    private final PanelInteractor mPanelInteractor;
 
     class MyCallStateListener extends PhoneStateListener {
         MyCallStateListener() {
@@ -93,13 +95,15 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
             MetricsLogger metricsLogger,
             StatusBarStateController statusBarStateController,
             ActivityStarter activityStarter,
-            QSLogger qsLogger
+            QSLogger qsLogger,
+            PanelInteractor panelInteractor
     ) {
         super(host, uiEventLogger, backgroundLooper, mainHandler, falsingManager, metricsLogger,
                 statusBarStateController, activityStarter, qsLogger);
         mSubscriptionManager = SubscriptionManager.from(host.getContext());
         mTelephonyManager = TelephonyManager.from(host.getContext());
         mPhoneStateListener = new MyCallStateListener();
+        mPanelInteractor = panelInteractor;
     }
 
     @Override
@@ -120,7 +124,7 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
             if (!mRegistered) {
                 IntentFilter filter = new IntentFilter();
                 filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
-                mContext.registerReceiver(mSimReceiver, filter);
+                mContext.registerReceiver(mSimReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
                 mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
                 mRegistered = true;
             }
@@ -164,12 +168,13 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
                 toggleMobileDataEnabled();
                 refreshState();
             });
+            mPanelInteractor.collapsePanels();
         }
     }
 
     @Override
     public Intent getLongClickIntent() {
-        return new Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS);
+        return new Intent(Settings.Panel.ACTION_MOBILE_DATA);
     }
 
     @Override
@@ -181,7 +186,8 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
     protected void handleUpdateState(BooleanState state, Object arg) {
         boolean activeSIMZero;
         if (arg == null) {
-            int defaultPhoneId = mSubscriptionManager.getDefaultDataPhoneId();
+            int defaultPhoneId = mSubscriptionManager.getPhoneId(
+                        mSubscriptionManager.getDefaultDataSubscriptionId());
             Log.d(TAG, "default data phone id=" + defaultPhoneId);
             activeSIMZero = defaultPhoneId == 0;
         } else {
@@ -192,22 +198,26 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
             case 0:
                 state.icon = ResourceIcon.get(R.drawable.ic_qs_data_switch_0);
                 state.value = false;
+                state.secondaryLabel = mContext.getString(R.string.tile_unavailable);
                 break;
             case 1:
                 state.icon = ResourceIcon.get(activeSIMZero
                         ? R.drawable.ic_qs_data_switch_1
                         : R.drawable.ic_qs_data_switch_2);
                 state.value = false;
+                state.secondaryLabel = mContext.getString(R.string.tile_unavailable);
                 break;
             case 2:
                 state.icon = ResourceIcon.get(activeSIMZero
                         ? R.drawable.ic_qs_data_switch_1
                         : R.drawable.ic_qs_data_switch_2);
                 state.value = true;
+                state.secondaryLabel = getActiveSlotName();
                 break;
             default:
                 state.icon = ResourceIcon.get(R.drawable.ic_qs_data_switch_1);
                 state.value = false;
+                state.secondaryLabel = mContext.getString(R.string.tile_unavailable);
                 break;
         }
         if (mSimCount < 2) {
@@ -219,25 +229,7 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
             state.state = state.value ? 2 : 1;
         }
 
-        state.label = mContext.getString(R.string.qs_data_switch_label) +
-                      " " + getOppositeSlotCarrierName();
-    }
-
-    private String getOppositeSlotCarrierName() {
-        CharSequence result = "";
-        // Get opposite slot 2 ^ 3 = 1, 1 ^ 3 = 2
-        int subId = mSubscriptionManager.getDefaultDataSubscriptionId() ^ 3;
-        List<SubscriptionInfo> subInfoList =
-                mSubscriptionManager.getActiveSubscriptionInfoList(true);
-        if (subInfoList != null) {
-            for (SubscriptionInfo subInfo : subInfoList) {
-                if (subId == subInfo.getSubscriptionId()) {
-                    result = subInfo.getDisplayName();
-                    break;
-                }
-            }
-        }
-        return result.toString();
+        state.label = mContext.getString(R.string.qs_data_switch_label);
     }
 
     @Override
@@ -250,25 +242,42 @@ public class DataSwitchTile extends QSTileImpl<BooleanState> {
      * subscription
      */
     private void toggleMobileDataEnabled() {
-        // Get opposite slot 2 ^ 3 = 1, 1 ^ 3 = 2
-        int subId = SubscriptionManager.getDefaultDataSubscriptionId() ^ 3;
-        final TelephonyManager telephonyManager =
-                mTelephonyManager.createForSubscriptionId(subId);
-        telephonyManager.setDataEnabled(true);
-        mSubscriptionManager.setDefaultDataSubId(subId);
-        Log.d(TAG, "Enabled subID: " + subId);
-
+        TelephonyManager telephonyManager;
+        boolean dataEnabled = false;
+        boolean foundActive = false;
         List<SubscriptionInfo> subInfoList =
                 mSubscriptionManager.getActiveSubscriptionInfoList(true);
         if (subInfoList != null) {
             for (SubscriptionInfo subInfo : subInfoList) {
-                // We never disable mobile data for opportunistic subscriptions.
-                if (subInfo.getSubscriptionId() != subId && !subInfo.isOpportunistic()) {
-                    mTelephonyManager.createForSubscriptionId(
-                            subInfo.getSubscriptionId()).setDataEnabled(false);
-                    Log.d(TAG, "Disabled subID: " + subInfo.getSubscriptionId());
+                telephonyManager =
+                    mTelephonyManager.createForSubscriptionId(subInfo.getSubscriptionId());
+                dataEnabled = telephonyManager.getDataEnabled();
+                if (!subInfo.isOpportunistic() || !dataEnabled) {
+                    telephonyManager.setDataEnabled(!dataEnabled && !foundActive);
+                    // Indicate we found sim with active data, disable data on remaining sim.
+                    if (!foundActive) foundActive = !dataEnabled;
+                }
+                Log.d(TAG, "Changed subID " + subInfo.getSubscriptionId() + " to "
+                    + !dataEnabled);
+            }
+        }
+    }
+
+    private String getActiveSlotName() {
+        TelephonyManager telephonyManager;
+        String mInitialState = mContext.getString(R.string.tile_unavailable);
+        List<SubscriptionInfo> subInfoList =
+                mSubscriptionManager.getActiveSubscriptionInfoList(true);
+        if (subInfoList != null) {
+            for (SubscriptionInfo subInfo : subInfoList) {
+                telephonyManager =
+                        mTelephonyManager.createForSubscriptionId(subInfo.getSubscriptionId());
+                if (telephonyManager.getDataEnabled()) {
+                    // Active SIM found
+                    return subInfo.getDisplayName().toString();
                 }
             }
         }
+        return mInitialState;
     }
 }
