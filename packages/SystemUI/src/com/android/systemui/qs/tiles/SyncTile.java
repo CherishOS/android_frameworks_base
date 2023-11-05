@@ -16,30 +16,30 @@
 
 package com.android.systemui.qs.tiles;
 
+import static com.android.internal.logging.MetricsLogger.VIEW_UNKNOWN;
+
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SyncStatusObserver;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.View;
 import android.service.quicksettings.Tile;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 
 import com.android.internal.logging.MetricsLogger;
-
 import com.android.systemui.R;
-import com.android.systemui.qs.QSHost;
-import com.android.systemui.plugins.qs.QSTile.BooleanState;
-import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.plugins.FalsingManager;
+import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
+import com.android.systemui.qs.QSHost;
+import com.android.systemui.qs.QsEventLogger;
 import com.android.systemui.qs.logging.QSLogger;
-
-import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.systemui.qs.tileimpl.QSTileImpl;
 
 import javax.inject.Inject;
 
@@ -48,12 +48,15 @@ public class SyncTile extends QSTileImpl<BooleanState> {
 
     public static final String TILE_SPEC = "sync";
 
+    private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_sync);
+
     private Object mSyncObserverHandle = null;
     private boolean mListening;
 
     @Inject
     public SyncTile(
             QSHost host,
+            QsEventLogger uiEventLogger,
             @Background Looper backgroundLooper,
             @Main Handler mainHandler,
             FalsingManager falsingManager,
@@ -62,7 +65,7 @@ public class SyncTile extends QSTileImpl<BooleanState> {
             ActivityStarter activityStarter,
             QSLogger qsLogger
     ) {
-        super(host, backgroundLooper, mainHandler, falsingManager, metricsLogger,
+        super(host, uiEventLogger, backgroundLooper, mainHandler, falsingManager, metricsLogger,
                 statusBarStateController, activityStarter, qsLogger);
     }
 
@@ -85,30 +88,29 @@ public class SyncTile extends QSTileImpl<BooleanState> {
     }
 
     @Override
+    protected void handleUpdateState(BooleanState state, Object arg) {
+        state.value = ContentResolver.getMasterSyncAutomatically();
+        state.label = mContext.getString(R.string.quick_settings_sync_label);
+        state.icon = mIcon;
+        if (state.value) {
+            state.contentDescription =  mContext.getString(
+                    R.string.accessibility_quick_settings_sync_on);
+            state.state = Tile.STATE_ACTIVE;
+        } else {
+            state.contentDescription =  mContext.getString(
+                    R.string.accessibility_quick_settings_sync_off);
+            state.state = Tile.STATE_INACTIVE;
+        }
+    }
+
+    @Override
     public CharSequence getTileLabel() {
         return mContext.getString(R.string.quick_settings_sync_label);
     }
 
     @Override
     public int getMetricsCategory() {
-        return MetricsEvent.CHERISH_SETTINGS;
-    }
-
-    @Override
-    protected void handleUpdateState(BooleanState state, Object arg) {
-        state.value = ContentResolver.getMasterSyncAutomatically();
-        state.label = mContext.getString(R.string.quick_settings_sync_label);
-        if (state.value) {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_sync_on);
-            state.contentDescription =  mContext.getString(
-                    R.string.accessibility_quick_settings_sync_on);
-            state.state = Tile.STATE_ACTIVE;
-        } else {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_sync_off);
-            state.contentDescription =  mContext.getString(
-                    R.string.accessibility_quick_settings_sync_off);
-            state.state = Tile.STATE_INACTIVE;
-        }
+        return VIEW_UNKNOWN;
     }
 
     @Override

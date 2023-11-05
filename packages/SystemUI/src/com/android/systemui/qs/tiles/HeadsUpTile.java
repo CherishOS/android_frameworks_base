@@ -16,7 +16,8 @@
 
 package com.android.systemui.qs.tiles;
 
-import android.content.ComponentName;
+import static com.android.internal.logging.MetricsLogger.VIEW_UNKNOWN;
+
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,7 +29,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import com.android.internal.logging.MetricsLogger;
-
 import com.android.systemui.R;
 import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.dagger.qualifiers.Main;
@@ -37,13 +37,12 @@ import com.android.systemui.plugins.FalsingManager;
 import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
 import com.android.systemui.qs.QSHost;
+import com.android.systemui.qs.QsEventLogger;
 import com.android.systemui.qs.SettingObserver;
 import com.android.systemui.qs.logging.QSLogger;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.settings.UserTracker;
 import com.android.systemui.util.settings.GlobalSettings;
-
-import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 
 import javax.inject.Inject;
 
@@ -54,11 +53,15 @@ public class HeadsUpTile extends QSTileImpl<BooleanState> {
 
     private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_heads_up);
 
+    private static final Intent NOTIFICATION_SETTINGS =
+            new Intent("android.settings.NOTIFICATION_SETTINGS");
+
     private final SettingObserver mSetting;
 
     @Inject
     public HeadsUpTile(
             QSHost host,
+            QsEventLogger uiEventLogger,
             @Background Looper backgroundLooper,
             @Main Handler mainHandler,
             FalsingManager falsingManager,
@@ -69,11 +72,11 @@ public class HeadsUpTile extends QSTileImpl<BooleanState> {
             GlobalSettings globalSettings,
             UserTracker userTracker
     ) {
-        super(host, backgroundLooper, mainHandler, falsingManager, metricsLogger,
+        super(host, uiEventLogger, backgroundLooper, mainHandler, falsingManager, metricsLogger,
                 statusBarStateController, activityStarter, qsLogger);
 
-        mSetting = new SettingObserver(globalSettings, mHandler, Global.HEADS_UP_NOTIFICATIONS_ENABLED,
-                userTracker.getUserId()) {
+        mSetting = new SettingObserver(globalSettings, mHandler,
+                Global.HEADS_UP_NOTIFICATIONS_ENABLED, userTracker.getUserId()) {
             @Override
             protected void handleValueChanged(int value, boolean observedChange) {
                 handleRefreshState(value);
@@ -94,13 +97,7 @@ public class HeadsUpTile extends QSTileImpl<BooleanState> {
 
     @Override
     public Intent getLongClickIntent() {
-        return new Intent().setComponent(new ComponentName(
-            "com.android.settings", "com.android.settings.Settings$HeadsUpSettingsActivity"));
-    }
-
-    @Override
-    public CharSequence getTileLabel() {
-        return mContext.getString(R.string.quick_settings_heads_up_label);
+        return NOTIFICATION_SETTINGS;
     }
 
     private void setEnabled(boolean enabled) {
@@ -111,32 +108,30 @@ public class HeadsUpTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-
-        if (state.slash == null) {
-            state.slash = new SlashState();
-        }
-        state.icon = mIcon;
-
-        final int value = arg instanceof Integer ? (Integer)arg : mSetting.getValue();
+        final int value = arg instanceof Integer ? (Integer) arg : mSetting.getValue();
         final boolean headsUp = value != 0;
         state.value = headsUp;
         state.label = mContext.getString(R.string.quick_settings_heads_up_label);
+        state.icon = mIcon;
         if (headsUp) {
             state.contentDescription =  mContext.getString(
                     R.string.accessibility_quick_settings_heads_up_on);
-            state.slash.isSlashed = false;
             state.state = Tile.STATE_ACTIVE;
         } else {
             state.contentDescription =  mContext.getString(
                     R.string.accessibility_quick_settings_heads_up_off);
-            state.slash.isSlashed = true;
             state.state = Tile.STATE_INACTIVE;
         }
     }
 
     @Override
+    public CharSequence getTileLabel() {
+        return mContext.getString(R.string.quick_settings_heads_up_label);
+    }
+
+    @Override
     public int getMetricsCategory() {
-        return MetricsEvent.CHERISH_SETTINGS;
+        return VIEW_UNKNOWN;
     }
 
     @Override
