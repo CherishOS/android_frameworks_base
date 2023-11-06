@@ -1038,6 +1038,7 @@ public class QuickSettingsController implements Dumpable {
         mShadeHeaderController.setShadeExpandedFraction(shadeExpandedFraction);
         mShadeHeaderController.setQsExpandedFraction(qsExpansionFraction);
         mShadeHeaderController.setQsVisible(mVisible);
+        mPanelViewControllerLazy.get().reTickerViewVisibility();
 
         // Update the light bar
         mLightBarController.setQsExpanded(mFullyExpanded);
