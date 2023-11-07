@@ -5950,6 +5950,11 @@ public final class Settings {
          * @hide
          */
         public static final String NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD = "network_traffic_autohide_threshold";
+		
+		/**
+         * @hide
+         */
+        public static final String USE_OLD_MOBILETYPE = "use_old_mobiletype";
 
         /**
          * Whether StatusBar icons should use app icon
