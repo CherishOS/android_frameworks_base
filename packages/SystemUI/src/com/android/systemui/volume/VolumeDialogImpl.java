@@ -308,7 +308,6 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     private CsdWarningDialog mCsdDialog;
     private boolean mHovering = false;
     private final boolean mShowActiveStreamOnly;
-    private boolean mConfigChanged = false;
     private boolean mIsAnimatingDismiss = false;
     private boolean mHasSeenODICaptionsTooltip;
     private ViewStub mODICaptionsTooltipViewStub;
@@ -324,8 +323,6 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     private BackgroundBlurDrawable mDialogRowsViewBackground;
     private final InteractionJankMonitor mInteractionJankMonitor;
 
-    private int mWindowGravity;
-
     // Variable to track the default row with which the panel is initially shown
     private VolumeRow mDefaultRow = null;
 
@@ -334,13 +331,14 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
     // Number of animating rows
     private int mAnimatingRows = 0;
+    
+    private CustomDialog.DialogState mDialogState;
 
     @VisibleForTesting
     final int mVolumeRingerIconDrawableId = R.drawable.ic_speaker_on;
     @VisibleForTesting
     final int mVolumeRingerMuteIconDrawableId = R.drawable.ic_speaker_mute;
 
-    private int mOriginalGravity;
     private final DevicePostureController.Callback mDevicePostureControllerCallback;
     private final DevicePostureController mDevicePostureController;
     private @DevicePostureController.DevicePostureInt int mDevicePosture;
@@ -450,36 +448,33 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
      * Adjust the dialog location on the screen in order to avoid drawing on the hinge.
      */
     private void adjustPositionOnScreen() {
-        final boolean isPortrait = mOrientation == Configuration.ORIENTATION_PORTRAIT;
-        final boolean isHalfOpen =
-                mDevicePosture == DevicePostureController.DEVICE_POSTURE_HALF_OPENED;
-        final boolean isTabletop = isPortrait && isHalfOpen;
-        mOriginalGravity = mContext.getResources().getInteger(R.integer.volume_dialog_gravity);
-        if (!mShowActiveStreamOnly) {
-            // Clear the pre-defined gravity for left or right,
-            // this is handled by mVolumePanelOnLeft
-            mOriginalGravity &= ~(Gravity.LEFT | Gravity.RIGHT);
-            mOriginalGravity |= mVolumePanelOnLeft ? Gravity.LEFT : Gravity.RIGHT;
-        }
-        int gravity = isTabletop ? (mOriginalGravity | Gravity.TOP) : mOriginalGravity;
-        mWindowGravity = Gravity.getAbsoluteGravity(gravity,
-                mContext.getResources().getConfiguration().getLayoutDirection());
+        if (mWindow == null) return;
+        WindowManager.LayoutParams lp = mWindow.getAttributes();
+        if (lp == null) return;
+        lp.gravity = getWindowGravity(lp);
     }
 
-    @VisibleForTesting int getWindowGravity() {
-        return mWindowGravity;
+    @VisibleForTesting
+    int getWindowGravity(WindowManager.LayoutParams lp) {
+        if (lp == null) return 0;
+        final boolean isPortrait = mOrientation == Configuration.ORIENTATION_PORTRAIT;
+        final boolean isHalfOpen = mDevicePosture == DevicePostureController.DEVICE_POSTURE_HALF_OPENED;
+        final boolean isTabletop = isPortrait && isHalfOpen;
+        lp.gravity &= ~(Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK | Gravity.VERTICAL_GRAVITY_MASK);
+        int panelGravity = mVolumePanelOnLeft ? Gravity.LEFT : Gravity.RIGHT;
+        int windowGravity = isTabletop ? (Gravity.TOP | panelGravity) : panelGravity;
+        lp.gravity |= windowGravity;
+        return lp.gravity;
     }
 
     @Override
     public void onUiModeChanged() {
-        if (mDialog != null) {
-            mDialog.dismiss();
-        }
+        dismissDialog();
         mContext.getTheme().applyStyle(mContext.getThemeResId(), true);
-        mConfigChanged = true;
     }
 
     public void init(int windowType, Callback callback) {
+        dismissDialog();
         initDialog(mActivityManager.getLockTaskModeState());
 
         mController.addCallback(mControllerCallbackH, mHandler);
@@ -605,8 +600,8 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
     private void initDialog(int lockTaskModeState) {
         Log.d(TAG, "initDialog: called!");
+        dismissDialog();
         if (mDialog != null) {
-            mDialog.dismiss();
             mDialog = null;
         }
         if (mConfigurableTexts != null) {
@@ -621,6 +616,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         mShowing = false;
         mExpanded = false;
         mWindow = mDialog.getWindow();
+        if (mWindow == null) return;
         mWindow.requestFeature(Window.FEATURE_NO_TITLE);
         mWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         mWindow.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND
@@ -637,7 +633,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         lp.format = PixelFormat.TRANSLUCENT;
         lp.setTitle(VolumeDialogImpl.class.getSimpleName());
         lp.windowAnimations = -1;
-        lp.gravity = mWindowGravity;
+        lp.gravity = getWindowGravity(lp);
 
         mWindow.setAttributes(lp);
         mWindow.setLayout(WRAP_CONTENT, WRAP_CONTENT);
@@ -645,7 +641,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         mDialogView = mDialog.findViewById(R.id.volume_dialog);
         mDialogView.setAlpha(0);
         mDialogView.setLayoutDirection(
-                mVolumePanelOnLeft ? LAYOUT_DIRECTION_LTR : LAYOUT_DIRECTION_RTL);
+                isWindowGravityLeft() ? LAYOUT_DIRECTION_LTR : LAYOUT_DIRECTION_RTL);
         mDialog.setCanceledOnTouchOutside(true);
         mDialog.setOnShowListener(dialog -> {
             mDialogView.getViewTreeObserver().addOnComputeInternalInsetsListener(this);
@@ -865,7 +861,10 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     }
 
     private boolean isWindowGravityLeft() {
-        return (mWindowGravity & Gravity.LEFT) == Gravity.LEFT;
+        if (mWindow == null) return false;
+        WindowManager.LayoutParams lp = mWindow.getAttributes();
+        if (lp == null) return false;
+        return (getWindowGravity(lp) & Gravity.LEFT) == Gravity.LEFT || mVolumePanelOnLeft;
     }
 
     private void initDimens() {
@@ -877,7 +876,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                 R.dimen.volume_ringer_drawer_item_size);
         mRingerRowsPadding = mContext.getResources().getDimensionPixelSize(
                 R.dimen.volume_dialog_ringer_rows_padding);
-	mTargetTapSize = mContext.getResources().getDimensionPixelSize(
+        mTargetTapSize = mContext.getResources().getDimensionPixelSize(
                 R.dimen.volume_dialog_tap_target_size);
         mShowVibrate = mController.hasVibrator();
 
@@ -1018,6 +1017,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     @SuppressLint("InflateParams")
     private void initRow(final VolumeRow row, final int stream, int iconRes, int iconMuteRes,
             boolean important, boolean defaultStream) {
+        if (mDialog == null) return;
         row.stream = stream;
         row.iconRes = iconRes;
         row.iconMuteRes = iconMuteRes;
@@ -1848,10 +1848,9 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         mHandler.removeMessages(H.DISMISS);
         rescheduleTimeoutH();
 
-        if (mConfigChanged) {
+        if (isVolumeDialogNullDismissed()) {
             initDialog(lockTaskModeState); // resets mShowing to false
             mConfigurableTexts.update();
-            mConfigChanged = false;
         }
 
         if (mDefaultRow == null) {
@@ -1931,11 +1930,11 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         mHandler.removeMessages(H.DISMISS);
         mHandler.removeMessages(H.SHOW);
 
-        boolean showingStateInconsistent = !mShowing && mDialog != null && mDialog.isShowing();
+        boolean showingStateInconsistent = !mShowing && isVolumeDialogShowing();
         // If incorrectly assuming dialog is not showing, continue and make the state consistent.
         if (showingStateInconsistent) {
             Log.d(TAG, "dismissH: volume dialog possible in inconsistent state:"
-                    + "mShowing=" + mShowing + ", mDialog==null?" + (mDialog == null));
+                    + "mShowing=" + mShowing + ", mDialog was already dismissed?" + (isVolumeDialogNullDismissed()));
         }
         if (mIsAnimatingDismiss && !showingStateInconsistent) {
             Log.d(TAG, "dismissH: skipping dismiss because isAnimatingDismiss is true"
@@ -1956,23 +1955,20 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                 .alpha(0)
                 .setDuration(mDialogHideAnimationDurationMs)
                 .setInterpolator(new SystemUIInterpolators.LogAccelerateInterpolator())
+                .setListener( new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        dismissDialog();
+                    }
+                })
+                .setListener( new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        dismissDialog();
+                    }
+                    })
                 .withEndAction(() -> mHandler.postDelayed(() -> {
-                    if (mController != null && !mVolumePanelFactory.isShowing()) {
-                        mController.notifyVisible(false);
-                    }
-                    if (mDialog != null) {
-                        mDialog.dismiss();
-                    }
-                    tryToRemoveCaptionsTooltip();
-                    mExpanded = false;
-                    if (mExpandRows != null) {
-                        mExpandRows.setExpanded(mExpanded);
-                    }
-                    mAnimatingRows = 0;
-                    mDefaultRow = null;
-                    mIsAnimatingDismiss = false;
-
-                    hideRingerDrawer();
+                    dismissDialog();
                 }, 50));
         if (!shouldSlideInVolumeTray()) {
             animator.translationX(
@@ -1990,6 +1986,27 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             }
         }
         Trace.endSection();
+    }
+    
+    private void dismissDialog() {
+        if (!isVolumeDialogShowing()) return;
+        mDialogView.animate().cancel();
+        if (mController != null) {
+            mController.notifyVisible(false);
+        }
+        mDialog.dismiss();
+        tryToRemoveCaptionsTooltip();
+        mExpanded = false;
+        if (mExpandRows != null) {
+            mExpandRows.setExpanded(mExpanded);
+        }
+        mAnimatingRows = 0;
+        mDefaultRow = null;
+        mIsAnimatingDismiss = false;
+        hideRingerDrawer();
+        if (mShowing) {
+            mShowing = false;
+        }
     }
 
     private boolean showActiveStreamOnly() {
@@ -2855,11 +2872,17 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
     @Override
     public void onConfigChanged(Configuration config) {
-        if (mDialog != null) {
-            mDialog.dismiss();
-        }
+        dismissDialog();
         mOrientation = config.orientation;
-        mConfigChanged = true;
+    }
+    
+    private boolean isVolumeDialogShowing() {
+        return mDialog != null && mDialog.isShowing() || mShowing
+            || mDialogState == CustomDialog.DialogState.SHOWING;
+    }
+    
+    private boolean isVolumeDialogNullDismissed() {
+        return mDialog == null || !isVolumeDialogShowing();
     }
 
     private final VolumeDialogController.Callbacks mControllerCallbackH
@@ -2890,10 +2913,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
         @Override
         public void onConfigurationChanged() {
-            if (mDialog != null) {
-                mDialog.dismiss();
-            }
-            mConfigChanged = true;
+            dismissDialog();
         }
 
         @Override
@@ -2986,8 +3006,27 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     }
 
     private final class CustomDialog extends Dialog implements DialogInterface {
+
+        public enum DialogState {
+            SHOWING,
+            DISMISSED
+        }
+        
+        public interface DialogStateListener {
+            void onStateChanged(DialogState newState);
+        }
+        
+        private DialogStateListener stateListener;
+
         public CustomDialog(Context context) {
             super(context, R.style.volume_dialog_theme);
+            setupDialogStateListener();
+        }
+
+        private void setupDialogStateListener() {
+            stateListener = newState -> {
+                mDialogState = newState;
+            };
         }
 
         /**
@@ -3011,6 +3050,22 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         protected void onStop() {
             super.onStop();
             mHandler.sendEmptyMessage(H.RECHECK_ALL);
+        }
+
+        @Override
+        public void show() {
+            super.show();
+            if (stateListener != null) {
+                stateListener.onStateChanged(DialogState.SHOWING);
+            }
+        }
+
+        @Override
+        public void dismiss() {
+            super.dismiss();
+            if (stateListener != null) {
+                stateListener.onStateChanged(DialogState.DISMISSED);
+            }
         }
 
         /**
