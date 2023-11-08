@@ -58,19 +58,19 @@ public class PixelPropsUtils {
     private static final Map<String, Object> propsToChangeGeneric;
 
     private static final Map<String, Object> propsToChangePixelFold =
-            createGoogleSpoofProps("felix", "Pixel Fold",
+            createGoogleSpoofProps("Pixel Fold",
                     "google/felix/felix:14/UP1A.231105.003/11010452:user/release-keys");
 
     private static final Map<String, Object> propsToChangeRecentPixel =
-            createGoogleSpoofProps("husky", "Pixel 8 Pro",
+            createGoogleSpoofProps("Pixel 8 Pro",
                     "google/husky/husky:14/UD1A.231105.004/11010374:user/release-keys");
 
     private static final Map<String, Object> propsToChangePixel5a =
-            createGoogleSpoofProps("barbet", "Pixel 5a",
+            createGoogleSpoofProps("Pixel 5a",
                     "google/barbet/barbet:14/UP1A.231105.001/10817346:user/release-keys");
 
     private static final Map<String, Object> propsToChangePixelXL =
-            createGoogleSpoofProps("marlin", "Pixel XL",
+            createGoogleSpoofProps("Pixel XL",
                     "google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys");
 
     private static final Map<String, ArrayList<String>> propsToKeep;
@@ -162,13 +162,21 @@ public class PixelPropsUtils {
         return "";
     }
 
-    private static Map<String, Object> createGoogleSpoofProps(String device, String model, String fingerprint) {
+    private static String getDeviceName(String fingerprint) {
+        String[] parts = fingerprint.split("/");
+        if (parts.length >= 3) {
+            return parts[2];
+        }
+        return "";
+    }
+
+    private static Map<String, Object> createGoogleSpoofProps(String model, String fingerprint) {
         Map<String, Object> props = new HashMap<>();
         props.put("BRAND", "google");
         props.put("MANUFACTURER", "Google");
         props.put("ID", getBuildID(fingerprint));
-        props.put("DEVICE", device);
-        props.put("PRODUCT", device);
+        props.put("DEVICE", getDeviceName(fingerprint));
+        props.put("PRODUCT", getDeviceName(fingerprint));
         props.put("MODEL", model);
         props.put("FINGERPRINT", fingerprint);
         props.put("TYPE", "user");
