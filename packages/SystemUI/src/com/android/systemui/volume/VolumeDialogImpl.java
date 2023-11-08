@@ -2409,6 +2409,8 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         if (row.icon != null) {
             row.icon.setImageTintList(colorAccent);
             row.icon.setImageAlpha(alpha);
+            row.header.setTextColor(colorTint);
+            row.header.setAlpha(alpha);
         }
 
         if (row.number != null) {
