@@ -4464,6 +4464,7 @@ package android.app {
     method public boolean onPreparePanel(int, @Nullable android.view.View, @NonNull android.view.Menu);
     method public void onProvideAssistContent(android.app.assist.AssistContent);
     method public void onProvideAssistData(android.os.Bundle);
+    method public void onProvideKeyboardShortcuts(java.util.List<android.view.KeyboardShortcutGroup>, android.view.Menu, int);
     method public android.net.Uri onProvideReferrer();
     method public void onRequestPermissionsResult(int, @NonNull String[], @NonNull int[]);
     method @FlaggedApi("android.permission.flags.device_aware_permission_apis") public void onRequestPermissionsResult(int, @NonNull String[], @NonNull int[], int);
@@ -13973,6 +13974,7 @@ package android.database {
     method public String getColumnName(int);
     method public android.os.Bundle getExtras();
     method public android.net.Uri getNotificationUri();
+    method public java.util.List<android.net.Uri> getNotificationUris();
     method public final int getPosition();
     method public int getType(int);
     method @Deprecated protected Object getUpdatedField(int);
@@ -13998,6 +14000,7 @@ package android.database {
     method public android.os.Bundle respond(android.os.Bundle);
     method public void setExtras(android.os.Bundle);
     method public void setNotificationUri(android.content.ContentResolver, android.net.Uri);
+    method public void setNotificationUris(@NonNull android.content.ContentResolver, @NonNull java.util.List<android.net.Uri>);
     method public void unregisterContentObserver(android.database.ContentObserver);
     method public void unregisterDataSetObserver(android.database.DataSetObserver);
     field @Deprecated protected boolean mClosed;
@@ -14129,6 +14132,7 @@ package android.database {
     method public boolean hasNext();
     method public java.util.Iterator<android.database.CursorJoiner.Result> iterator();
     method public android.database.CursorJoiner.Result next();
+    method public void remove();
   }
 
   public enum CursorJoiner.Result {
@@ -14196,6 +14200,7 @@ package android.database {
     method public int getInt(int);
     method public long getLong(int);
     method public android.net.Uri getNotificationUri();
+    method public java.util.List<android.net.Uri> getNotificationUris();
     method public int getPosition();
     method public short getShort(int);
     method public String getString(int);
@@ -14220,6 +14225,7 @@ package android.database {
     method public android.os.Bundle respond(android.os.Bundle);
     method public void setExtras(android.os.Bundle);
     method public void setNotificationUri(android.content.ContentResolver, android.net.Uri);
+    method public void setNotificationUris(android.content.ContentResolver, java.util.List<android.net.Uri>);
     method public void unregisterContentObserver(android.database.ContentObserver);
     method public void unregisterDataSetObserver(android.database.DataSetObserver);
   }
@@ -22213,6 +22219,9 @@ package android.media {
     ctor public MediaCodec.CryptoException(int, @Nullable String);
     method @Nullable public android.media.MediaCodec.CryptoInfo getCryptoInfo();
     method public int getErrorCode();
+    method public int getErrorContext();
+    method public int getOemError();
+    method public int getVendorError();
     field @Deprecated public static final int ERROR_FRAME_TOO_LARGE = 8; // 0x8
     field @Deprecated public static final int ERROR_INSUFFICIENT_OUTPUT_PROTECTION = 4; // 0x4
     field @Deprecated public static final int ERROR_INSUFFICIENT_SECURITY = 7; // 0x7
@@ -22725,6 +22734,9 @@ package android.media {
 
   public final class MediaCryptoException extends java.lang.Exception implements android.media.MediaDrmThrowable {
     ctor public MediaCryptoException(@Nullable String);
+    method public int getErrorContext();
+    method public int getOemError();
+    method public int getVendorError();
   }
 
   public abstract class MediaDataSource implements java.io.Closeable {
@@ -22949,6 +22961,9 @@ package android.media {
   public static final class MediaDrm.MediaDrmStateException extends java.lang.IllegalStateException implements android.media.MediaDrmThrowable {
     method @NonNull public String getDiagnosticInfo();
     method public int getErrorCode();
+    method public int getErrorContext();
+    method public int getOemError();
+    method public int getVendorError();
     method public boolean isTransient();
   }
 
@@ -23022,6 +23037,9 @@ package android.media {
   public static final class MediaDrm.SessionException extends java.lang.RuntimeException implements android.media.MediaDrmThrowable {
     ctor public MediaDrm.SessionException(int, @Nullable String);
     method @Deprecated public int getErrorCode();
+    method public int getErrorContext();
+    method public int getOemError();
+    method public int getVendorError();
     method public boolean isTransient();
     field @Deprecated public static final int ERROR_RESOURCE_CONTENTION = 1; // 0x1
     field @Deprecated public static final int ERROR_UNKNOWN = 0; // 0x0
@@ -23029,6 +23047,9 @@ package android.media {
 
   public class MediaDrmException extends java.lang.Exception implements android.media.MediaDrmThrowable {
     ctor public MediaDrmException(String);
+    method public int getErrorContext();
+    method public int getOemError();
+    method public int getVendorError();
   }
 
   public class MediaDrmResetException extends java.lang.IllegalStateException implements android.media.MediaDrmThrowable {
@@ -31918,6 +31939,7 @@ package android.opengl {
     method public void surfaceCreated(android.view.SurfaceHolder);
     method public void surfaceDestroyed(android.view.SurfaceHolder);
     method @Deprecated public void surfaceRedrawNeeded(android.view.SurfaceHolder);
+    method public void surfaceRedrawNeededAsync(android.view.SurfaceHolder, Runnable);
     field public static final int DEBUG_CHECK_GL_ERROR = 1; // 0x1
     field public static final int DEBUG_LOG_GL_CALLS = 2; // 0x2
     field public static final int RENDERMODE_CONTINUOUSLY = 1; // 0x1
@@ -47459,6 +47481,7 @@ package android.text {
     method public boolean hasNext();
     method public java.util.Iterator<java.lang.String> iterator();
     method public String next();
+    method public void remove();
     method public void setString(String);
   }
 
@@ -48924,6 +48947,7 @@ package android.util {
     method public void ensureCapacity(int);
     method public java.util.Set<java.util.Map.Entry<K,V>> entrySet();
     method public boolean equals(@Nullable Object);
+    method public void forEach(java.util.function.BiConsumer<? super K,? super V>);
     method public V get(Object);
     method public int hashCode();
     method public int indexOfKey(Object);
@@ -48937,6 +48961,7 @@ package android.util {
     method public V remove(Object);
     method public boolean removeAll(java.util.Collection<?>);
     method public V removeAt(int);
+    method public void replaceAll(java.util.function.BiFunction<? super K,? super V,? extends V>);
     method public boolean retainAll(java.util.Collection<?>);
     method public V setValueAt(int, V);
     method public int size();
@@ -48967,6 +48992,7 @@ package android.util {
     method public boolean removeAll(android.util.ArraySet<? extends E>);
     method public boolean removeAll(java.util.Collection<?>);
     method public E removeAt(int);
+    method public boolean removeIf(java.util.function.Predicate<? super E>);
     method public boolean retainAll(java.util.Collection<?>);
     method public int size();
     method public Object[] toArray();
@@ -52834,6 +52860,7 @@ package android.view {
     method protected void dispatchThawSelfOnly(android.util.SparseArray<android.os.Parcelable>);
     method protected boolean drawChild(@NonNull android.graphics.Canvas, android.view.View, long);
     method public void endViewTransition(android.view.View);
+    method @Nullable public android.window.OnBackInvokedDispatcher findOnBackInvokedDispatcherForChild(@NonNull android.view.View, @NonNull android.view.View);
     method public android.view.View focusSearch(android.view.View, int);
     method public void focusableViewAvailable(android.view.View);
     method protected android.view.ViewGroup.LayoutParams generateDefaultLayoutParams();
@@ -52875,6 +52902,7 @@ package android.view {
     method public void notifySubtreeAccessibilityStateChanged(android.view.View, android.view.View, int);
     method public final void offsetDescendantRectToMyCoords(android.view.View, android.graphics.Rect);
     method public final void offsetRectIntoDescendantCoords(android.view.View, android.graphics.Rect);
+    method @CallSuper public void onDescendantInvalidated(@NonNull android.view.View, @NonNull android.view.View);
     method public boolean onInterceptHoverEvent(android.view.MotionEvent);
     method public boolean onInterceptTouchEvent(android.view.MotionEvent);
     method protected abstract void onLayout(boolean, int, int, int, int);
@@ -55058,12 +55086,14 @@ package android.view.inputmethod {
     method @Nullable public android.view.inputmethod.ExtractedText getExtractedText(android.view.inputmethod.ExtractedTextRequest, int);
     method @Nullable public android.os.Handler getHandler();
     method @Nullable public CharSequence getSelectedText(int);
+    method @Nullable public android.view.inputmethod.SurroundingText getSurroundingText(@IntRange(from=0) int, @IntRange(from=0) int, int);
     method @Nullable public CharSequence getTextAfterCursor(@IntRange(from=0) int, int);
     method @Nullable public CharSequence getTextBeforeCursor(@IntRange(from=0) int, int);
     method public boolean performContextMenuAction(int);
     method public boolean performEditorAction(int);
     method public boolean performPrivateCommand(String, android.os.Bundle);
     method public static final void removeComposingSpans(@NonNull android.text.Spannable);
+    method public boolean replaceText(@IntRange(from=0) int, @IntRange(from=0) int, @NonNull CharSequence, int, @Nullable android.view.inputmethod.TextAttribute);
     method public boolean reportFullscreenMode(boolean);
     method public boolean requestCursorUpdates(int);
     method public boolean sendKeyEvent(android.view.KeyEvent);
@@ -55071,6 +55101,7 @@ package android.view.inputmethod {
     method public static void setComposingSpans(@NonNull android.text.Spannable);
     method public boolean setComposingText(CharSequence, int);
     method public boolean setSelection(int, int);
+    method @Nullable public android.view.inputmethod.TextSnapshot takeSnapshot();
   }
 
   public final class CompletionInfo implements android.os.Parcelable {
@@ -55407,6 +55438,7 @@ package android.view.inputmethod {
     method public boolean commitContent(android.view.inputmethod.InputContentInfo, int, android.os.Bundle);
     method public boolean commitCorrection(android.view.inputmethod.CorrectionInfo);
     method public boolean commitText(CharSequence, int);
+    method public boolean commitText(@NonNull CharSequence, int, @Nullable android.view.inputmethod.TextAttribute);
     method public boolean deleteSurroundingText(int, int);
     method public boolean deleteSurroundingTextInCodePoints(int, int);
     method public boolean endBatchEdit();
@@ -55415,18 +55447,29 @@ package android.view.inputmethod {
     method public android.view.inputmethod.ExtractedText getExtractedText(android.view.inputmethod.ExtractedTextRequest, int);
     method public android.os.Handler getHandler();
     method public CharSequence getSelectedText(int);
+    method @Nullable public android.view.inputmethod.SurroundingText getSurroundingText(int, int, int);
     method @Nullable public CharSequence getTextAfterCursor(@IntRange(from=0) int, int);
     method @Nullable public CharSequence getTextBeforeCursor(@IntRange(from=0) int, int);
     method public boolean performContextMenuAction(int);
     method public boolean performEditorAction(int);
+    method public void performHandwritingGesture(@NonNull android.view.inputmethod.HandwritingGesture, @Nullable java.util.concurrent.Executor, @Nullable java.util.function.IntConsumer);
     method public boolean performPrivateCommand(String, android.os.Bundle);
+    method public boolean performSpellCheck();
+    method public boolean previewHandwritingGesture(@NonNull android.view.inputmethod.PreviewableHandwritingGesture, @Nullable android.os.CancellationSignal);
+    method public boolean replaceText(@IntRange(from=0) int, @IntRange(from=0) int, @NonNull CharSequence, int, @Nullable android.view.inputmethod.TextAttribute);
     method public boolean reportFullscreenMode(boolean);
     method public boolean requestCursorUpdates(int);
+    method public boolean requestCursorUpdates(int, int);
+    method public void requestTextBoundsInfo(@NonNull android.graphics.RectF, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.view.inputmethod.TextBoundsInfoResult>);
     method public boolean sendKeyEvent(android.view.KeyEvent);
     method public boolean setComposingRegion(int, int);
+    method public boolean setComposingRegion(int, int, @Nullable android.view.inputmethod.TextAttribute);
     method public boolean setComposingText(CharSequence, int);
+    method public boolean setComposingText(@NonNull CharSequence, int, @Nullable android.view.inputmethod.TextAttribute);
+    method public boolean setImeConsumesInput(boolean);
     method public boolean setSelection(int, int);
     method public void setTarget(android.view.inputmethod.InputConnection);
+    method @Nullable public android.view.inputmethod.TextSnapshot takeSnapshot();
   }
 
   public final class InputContentInfo implements android.os.Parcelable {
@@ -57993,6 +58036,7 @@ package android.widget {
   public abstract class BaseAdapter implements android.widget.ListAdapter android.widget.SpinnerAdapter {
     ctor public BaseAdapter();
     method public boolean areAllItemsEnabled();
+    method public CharSequence[] getAutofillOptions();
     method public android.view.View getDropDownView(int, android.view.View, android.view.ViewGroup);
     method public int getItemViewType(int);
     method public int getViewTypeCount();
