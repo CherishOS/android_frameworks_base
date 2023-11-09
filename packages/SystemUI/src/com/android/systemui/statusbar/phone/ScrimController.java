@@ -171,7 +171,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
     /**
      * Default alpha value for most scrims.
      */
-    protected static final float KEYGUARD_SCRIM_ALPHA = 0.2f;
+    protected static final float KEYGUARD_SCRIM_ALPHA = 0.0f;
     /**
      * Scrim opacity when the phone is about to wake-up.
      */
