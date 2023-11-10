@@ -454,11 +454,16 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         final boolean isHalfOpen =
                 mDevicePosture == DevicePostureController.DEVICE_POSTURE_HALF_OPENED;
         final boolean isTabletop = isPortrait && isHalfOpen;
-        WindowManager.LayoutParams lp =  mWindow.getAttributes();
+        mOriginalGravity = mContext.getResources().getInteger(R.integer.volume_dialog_gravity);
+        if (!mShowActiveStreamOnly) {
+            // Clear the pre-defined gravity for left or right,
+            // this is handled by mVolumePanelOnLeft
+            mOriginalGravity &= ~(Gravity.LEFT | Gravity.RIGHT);
+            mOriginalGravity |= mVolumePanelOnLeft ? Gravity.LEFT : Gravity.RIGHT;
+        }
         int gravity = isTabletop ? (mOriginalGravity | Gravity.TOP) : mOriginalGravity;
         mWindowGravity = Gravity.getAbsoluteGravity(gravity,
                 mContext.getResources().getConfiguration().getLayoutDirection());
-        lp.gravity = mWindowGravity;
     }
 
     @VisibleForTesting int getWindowGravity() {
@@ -609,6 +614,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         }
         mDialog = new CustomDialog(mContext);
         initDimens();
+        adjustPositionOnScreen();
 
         mConfigurableTexts = new ConfigurableTexts(mContext);
         mHovering = false;
@@ -631,15 +637,6 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         lp.format = PixelFormat.TRANSLUCENT;
         lp.setTitle(VolumeDialogImpl.class.getSimpleName());
         lp.windowAnimations = -1;
-
-        mOriginalGravity = mContext.getResources().getInteger(R.integer.volume_dialog_gravity);
-        if (!mShowActiveStreamOnly) {
-            // Clear the pre-defined gravity for left or right, this is handled by mVolumePanelOnLeft
-            mOriginalGravity &= ~(Gravity.LEFT | Gravity.RIGHT);
-            mOriginalGravity |= mVolumePanelOnLeft ? Gravity.LEFT : Gravity.RIGHT;
-        }
-        mWindowGravity = Gravity.getAbsoluteGravity(mOriginalGravity,
-                mContext.getResources().getConfiguration().getLayoutDirection());
         lp.gravity = mWindowGravity;
 
         mWindow.setAttributes(lp);
@@ -3008,7 +3005,6 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         protected void onStart() {
             super.setCanceledOnTouchOutside(true);
             super.onStart();
-            adjustPositionOnScreen();
         }
 
         @Override
