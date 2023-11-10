@@ -5315,21 +5315,23 @@ package android.app {
     method public android.net.Uri getConditionId();
     method @Nullable public android.content.ComponentName getConfigurationActivity();
     method public long getCreationTime();
+    method @FlaggedApi("android.app.modes_api") @Nullable public android.service.notification.ZenDeviceEffects getDeviceEffects();
     method @FlaggedApi("android.app.modes_api") @DrawableRes public int getIconResId();
     method public int getInterruptionFilter();
     method public String getName();
     method public android.content.ComponentName getOwner();
     method @FlaggedApi("android.app.modes_api") @Nullable public String getTriggerDescription();
     method @FlaggedApi("android.app.modes_api") public int getType();
-    method public android.service.notification.ZenPolicy getZenPolicy();
+    method @Nullable public android.service.notification.ZenPolicy getZenPolicy();
     method public boolean isEnabled();
     method @FlaggedApi("android.app.modes_api") public boolean isManualInvocationAllowed();
     method public void setConditionId(android.net.Uri);
     method public void setConfigurationActivity(@Nullable android.content.ComponentName);
+    method @FlaggedApi("android.app.modes_api") public void setDeviceEffects(@Nullable android.service.notification.ZenDeviceEffects);
     method public void setEnabled(boolean);
     method public void setInterruptionFilter(int);
     method public void setName(String);
-    method public void setZenPolicy(android.service.notification.ZenPolicy);
+    method public void setZenPolicy(@Nullable android.service.notification.ZenPolicy);
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.app.AutomaticZenRule> CREATOR;
     field @FlaggedApi("android.app.modes_api") public static final int TYPE_BEDTIME = 3; // 0x3
@@ -5349,6 +5351,7 @@ package android.app {
     method @NonNull public android.app.AutomaticZenRule build();
     method @NonNull public android.app.AutomaticZenRule.Builder setConditionId(@NonNull android.net.Uri);
     method @NonNull public android.app.AutomaticZenRule.Builder setConfigurationActivity(@Nullable android.content.ComponentName);
+    method @NonNull public android.app.AutomaticZenRule.Builder setDeviceEffects(@Nullable android.service.notification.ZenDeviceEffects);
     method @NonNull public android.app.AutomaticZenRule.Builder setEnabled(boolean);
     method @NonNull public android.app.AutomaticZenRule.Builder setIconResId(@DrawableRes int);
     method @NonNull public android.app.AutomaticZenRule.Builder setInterruptionFilter(int);
@@ -40671,6 +40674,26 @@ package android.service.notification {
     method public void setOverrideGroupKey(String);
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.service.notification.StatusBarNotification> CREATOR;
+  }
+
+  @FlaggedApi("android.app.modes_api") public final class ZenDeviceEffects implements android.os.Parcelable {
+    method public int describeContents();
+    method public boolean shouldDimWallpaper();
+    method public boolean shouldDisplayGrayscale();
+    method public boolean shouldSuppressAmbientDisplay();
+    method public boolean shouldUseNightMode();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.notification.ZenDeviceEffects> CREATOR;
+  }
+
+  @FlaggedApi("android.app.modes_api") public static final class ZenDeviceEffects.Builder {
+    ctor public ZenDeviceEffects.Builder();
+    ctor public ZenDeviceEffects.Builder(@NonNull android.service.notification.ZenDeviceEffects);
+    method @NonNull public android.service.notification.ZenDeviceEffects build();
+    method @NonNull public android.service.notification.ZenDeviceEffects.Builder setShouldDimWallpaper(boolean);
+    method @NonNull public android.service.notification.ZenDeviceEffects.Builder setShouldDisplayGrayscale(boolean);
+    method @NonNull public android.service.notification.ZenDeviceEffects.Builder setShouldSuppressAmbientDisplay(boolean);
+    method @NonNull public android.service.notification.ZenDeviceEffects.Builder setShouldUseNightMode(boolean);
   }
 
   public final class ZenPolicy implements android.os.Parcelable {
