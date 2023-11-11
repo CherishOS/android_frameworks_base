@@ -471,6 +471,11 @@ public class KeyguardViewMediator implements CoreStartable, Dumpable,
     private final int mDreamOpenAnimationDuration;
 
     /**
+     * Whether unlock and wake should be sequenced.
+     */
+    private final boolean mOrderUnlockAndWake;
+
+    /**
      * The animation used for hiding keyguard. This is used to fetch the animation timings if
      * WindowManager is not providing us with them.
      */
@@ -1438,6 +1443,9 @@ public class KeyguardViewMediator implements CoreStartable, Dumpable,
 
         mMainDispatcher = mainDispatcher;
         mDreamingToLockscreenTransitionViewModel = dreamingToLockscreenTransitionViewModel;
+
+        mOrderUnlockAndWake = context.getResources().getBoolean(
+                com.android.internal.R.bool.config_orderUnlockAndWake);
     }
 
     public void userActivity() {
@@ -2785,6 +2793,10 @@ public class KeyguardViewMediator implements CoreStartable, Dumpable,
 
     private void setUnlockAndWakeFromDream(boolean updatedValue,
             @WakeAndUnlockUpdateReason int reason) {
+        if (!mOrderUnlockAndWake) {
+            return;
+        }
+
         if (updatedValue == mUnlockingAndWakingFromDream) {
             return;
         }
@@ -2866,6 +2878,13 @@ public class KeyguardViewMediator implements CoreStartable, Dumpable,
                             mHideAnimation.getDuration(), null /* apps */, null /* wallpapers */,
                             null /* nonApps */, null /* finishedCallback */);
                 });
+            }
+
+            // It's possible that the device was unlocked (via BOUNCER or Fingerprint) while
+            // dreaming. It's time to wake up.
+            if (mDreamOverlayShowing && !mOrderUnlockAndWake) {
+                mPM.wakeUp(SystemClock.uptimeMillis(), PowerManager.WAKE_REASON_GESTURE,
+                        "com.android.systemui:UNLOCK_DREAMING");
             }
         }
         Trace.endSection();
