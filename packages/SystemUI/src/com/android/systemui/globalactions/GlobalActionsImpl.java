@@ -158,9 +158,7 @@ public class GlobalActionsImpl implements GlobalActions, CommandQueue.Callbacks 
         if (reason != null && reason.startsWith(PowerManager.REBOOT_RECOVERY_UPDATE)) {
             return R.string.reboot_to_update_reboot;
         } else if (reason != null && reason.equals(PowerManager.REBOOT_RECOVERY)) {
-            return com.android.internal.R.string.reboot_to_recovery_message;
-        } else if (reason != null && reason.equals(PowerManager.REBOOT_BOOTLOADER)) {
-            return com.android.internal.R.string.reboot_to_bootloader_message;
+            return R.string.reboot_to_reset_message;
         } else if (isReboot) {
             return R.string.reboot_to_reset_message;
         } else {
@@ -172,6 +170,8 @@ public class GlobalActionsImpl implements GlobalActions, CommandQueue.Callbacks 
     private String getReasonMessage(@Nullable String reason) {
         if (reason != null && reason.startsWith(PowerManager.REBOOT_RECOVERY_UPDATE)) {
             return mContext.getString(R.string.reboot_to_update_title);
+        } else if (reason != null && reason.equals(PowerManager.REBOOT_RECOVERY)) {
+            return mContext.getString(R.string.reboot_to_reset_title);
         } else {
             return null;
         }
