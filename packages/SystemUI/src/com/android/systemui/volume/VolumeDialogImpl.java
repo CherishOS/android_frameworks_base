@@ -1292,9 +1292,10 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     }
 
     private boolean isMediaControllerAvailable() {
+        boolean showMediaController = Settings.System.getInt(mContext.getContentResolver(), Settings.System.VOLUME_MEDIA_OUTPUT_TOGGLE, 0) != 0;
         final MediaController mediaController = getActiveLocalMediaController();
         return mediaController != null &&
-                !TextUtils.isEmpty(mediaController.getPackageName());
+                !TextUtils.isEmpty(mediaController.getPackageName()) && showMediaController;
     }
 
     private void initSettingsH(int lockTaskModeState) {

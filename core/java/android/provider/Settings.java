@@ -6293,6 +6293,11 @@ public final class Settings {
          */
         public static final String USE_OLD_MOBILETYPE = "use_old_mobiletype";
 
+	    /**
+         * @hide
+         */
+        public static final String VOLUME_MEDIA_OUTPUT_TOGGLE = "volume_media_output_toggle";
+
         /**
          * Whether StatusBar icons should use app icon
          * @hide
