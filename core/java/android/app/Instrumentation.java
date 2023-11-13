@@ -19,6 +19,7 @@ package android.app;
 import android.annotation.IntDef;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.app.Instrumentation.ActivityResult;
 import android.compat.annotation.UnsupportedAppUsage;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -66,6 +67,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
+
+import com.android.internal.util.cherish.AttestationHooks;
+import com.android.internal.util.cherish.GamesPropsUtils;
+import com.android.internal.util.cherish.PixelPropsUtils;
 
 /**
  * Base class for implementing application instrumentation code.  When running
@@ -1280,6 +1285,9 @@ public class Instrumentation {
             ClassNotFoundException {
         Application app = getFactory(context.getPackageName())
                 .instantiateApplication(cl, className);
+        AttestationHooks.setProps(context);
+        GamesPropsUtils.setProps(context);
+        PixelPropsUtils.setProps(context);
         app.attach(context);
         return app;
     }
@@ -1297,6 +1305,9 @@ public class Instrumentation {
             throws InstantiationException, IllegalAccessException, 
             ClassNotFoundException {
         Application app = (Application)clazz.newInstance();
+        AttestationHooks.setProps(context);
+        GamesPropsUtils.setProps(context);
+        PixelPropsUtils.setProps(context);
         app.attach(context);
         return app;
     }
