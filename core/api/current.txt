@@ -33150,6 +33150,7 @@ package android.os {
   public static class PerformanceHintManager.Session implements java.io.Closeable {
     method public void close();
     method public void reportActualWorkDuration(long);
+    method @FlaggedApi("android.os.adpf_gpu_report_actual_work_duration") public void reportActualWorkDuration(@NonNull android.os.WorkDuration);
     method @FlaggedApi("android.os.adpf_prefer_power_efficiency") public void setPreferPowerEfficiency(boolean);
     method public void setThreads(@NonNull int[]);
     method public void updateTargetWorkDuration(long);
@@ -33491,6 +33492,7 @@ package android.os {
     method public static boolean setCurrentTimeMillis(long);
     method public static void sleep(long);
     method public static long uptimeMillis();
+    method @FlaggedApi("android.os.adpf_gpu_report_actual_work_duration") public static long uptimeNanos();
   }
 
   public class TestLooperManager {
@@ -33754,6 +33756,22 @@ package android.os {
     method @NonNull public abstract int[] getVibratorIds();
     method @RequiresPermission(android.Manifest.permission.VIBRATE) public final void vibrate(@NonNull android.os.CombinedVibration);
     method @RequiresPermission(android.Manifest.permission.VIBRATE) public final void vibrate(@NonNull android.os.CombinedVibration, @Nullable android.os.VibrationAttributes);
+  }
+
+  @FlaggedApi("android.os.adpf_gpu_report_actual_work_duration") public final class WorkDuration implements android.os.Parcelable {
+    ctor public WorkDuration();
+    ctor public WorkDuration(long, long, long, long);
+    method public int describeContents();
+    method public long getActualCpuDurationNanos();
+    method public long getActualGpuDurationNanos();
+    method public long getActualTotalDurationNanos();
+    method public long getWorkPeriodStartTimestampNanos();
+    method public void setActualCpuDurationNanos(long);
+    method public void setActualGpuDurationNanos(long);
+    method public void setActualTotalDurationNanos(long);
+    method public void setWorkPeriodStartTimestampNanos(long);
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.os.WorkDuration> CREATOR;
   }
 
   public class WorkSource implements android.os.Parcelable {
