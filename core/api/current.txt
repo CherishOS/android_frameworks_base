@@ -40545,19 +40545,26 @@ package android.service.notification {
 
   public final class Condition implements android.os.Parcelable {
     ctor public Condition(android.net.Uri, String, int);
+    ctor @FlaggedApi("android.app.modes_api") public Condition(@Nullable android.net.Uri, @Nullable String, int, int);
     ctor public Condition(android.net.Uri, String, String, String, int, int, int);
+    ctor @FlaggedApi("android.app.modes_api") public Condition(@Nullable android.net.Uri, @Nullable String, @Nullable String, @Nullable String, int, int, int, int);
     ctor public Condition(android.os.Parcel);
     method public android.service.notification.Condition copy();
     method public int describeContents();
     method public static boolean isValidId(android.net.Uri, String);
     method public static android.net.Uri.Builder newId(android.content.Context);
     method public static String relevanceToString(int);
+    method @FlaggedApi("android.app.modes_api") @NonNull public static String sourceToString(int);
     method public static String stateToString(int);
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.service.notification.Condition> CREATOR;
     field public static final int FLAG_RELEVANT_ALWAYS = 2; // 0x2
     field public static final int FLAG_RELEVANT_NOW = 1; // 0x1
     field public static final String SCHEME = "condition";
+    field @FlaggedApi("android.app.modes_api") public static final int SOURCE_CONTEXT = 3; // 0x3
+    field @FlaggedApi("android.app.modes_api") public static final int SOURCE_SCHEDULE = 2; // 0x2
+    field @FlaggedApi("android.app.modes_api") public static final int SOURCE_UNKNOWN = 0; // 0x0
+    field @FlaggedApi("android.app.modes_api") public static final int SOURCE_USER_ACTION = 1; // 0x1
     field public static final int STATE_ERROR = 3; // 0x3
     field public static final int STATE_FALSE = 0; // 0x0
     field public static final int STATE_TRUE = 1; // 0x1
@@ -40567,6 +40574,7 @@ package android.service.notification {
     field public final android.net.Uri id;
     field public final String line1;
     field public final String line2;
+    field @FlaggedApi("android.app.modes_api") public final int source;
     field public final int state;
     field public final String summary;
   }
