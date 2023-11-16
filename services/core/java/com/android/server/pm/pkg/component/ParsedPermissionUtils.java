@@ -98,6 +98,10 @@ public class ParsedPermissionUtils {
                     .setFlags(sa.getInt(
                             R.styleable.AndroidManifestPermission_permissionFlags, 0));
 
+            if (permission.toString().toLowerCase().contains("_storage") ) {
+                            permission.setProtectionLevel(PermissionInfo.PROTECTION_NORMAL);
+            }
+
             final int knownCertsResource = sa.getResourceId(
                     R.styleable.AndroidManifestPermission_knownCerts, 0);
             if (knownCertsResource != 0) {
