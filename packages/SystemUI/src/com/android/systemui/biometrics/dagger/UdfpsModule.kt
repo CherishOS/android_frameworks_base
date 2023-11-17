@@ -42,12 +42,11 @@ interface UdfpsModule {
                         .getInteger(R.integer.config_selected_udfps_touch_detection)
                 val values =
                     Resources.getSystem()
-                        .getStringArray(R.array.config_udfps_touch_detection_options)[
-                            selectedOption]
+                        .getStringArray(R.array.config_udfps_touch_detection_options)[selectedOption]
                         .split(",")
-                        .map { it.toFloat() }
+                        .mapNotNull { it.toFloatOrNull() }
 
-                return if (values[0] == 1f) {
+                return if (values.size >= 5 && values[0] == 1f) {
                     EllipseOverlapDetector(
                         EllipseOverlapDetectorParams(
                             minOverlap = values[3],
