@@ -55,6 +55,7 @@ import android.annotation.Nullable;
 import android.app.StatusBarManager;
 import android.content.Context;
 import android.content.ContentResolver;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.Color;
@@ -256,6 +257,8 @@ import javax.inject.Provider;
 
 import kotlinx.coroutines.CoroutineDispatcher;
 
+import com.android.systemui.island.IslandView;
+
 @SysUISingleton
 public final class NotificationPanelViewController implements ShadeSurface, Dumpable {
 
@@ -296,6 +299,8 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
             "system:" + Settings.System.DOUBLE_TAP_SLEEP_GESTURE;
      private static final String DOUBLE_TAP_SLEEP_LOCKSCREEN =
              "system:" + Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN;
+    private static final String ISLAND_NOTIFICATION =
+            "system:" + Settings.System.ISLAND_NOTIFICATION;
 
     private static final Rect M_DUMMY_DIRTY_RECT = new Rect(0, 0, 1, 1);
     private static final Rect EMPTY_RECT = new Rect();
@@ -644,6 +649,10 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
     private boolean mNeedFlingAnimation = false;
 
     private final PowerManagerInternal mLocalPowerManager;
+
+    private IslandView mNotifIsland;
+    private NotificationStackScrollLayout mNotificationStackScroller;
+    private boolean mUseIslandNotification;
 
     private final Runnable mFlingCollapseRunnable = () -> fling(0, false /* expand */,
             mNextCollapseSpeedUpFactor, false /* expandBecauseOfFalsing */);
@@ -1127,6 +1136,10 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
             setKeyguardBottomArea(mView.findViewById(R.id.keyguard_bottom_area));
         }
 
+        mNotificationStackScroller = mView.findViewById(R.id.notification_stack_scroller);
+        mNotifIsland = mView.findViewById(R.id.notification_island);
+        mNotifIsland.setScroller(mNotificationStackScroller);
+
         initBottomArea();
 
         mWakeUpCoordinator.setStackScroller(mNotificationStackScrollLayoutController);
@@ -1417,6 +1430,12 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
             view = stub.inflate();
         }
         return view;
+    }
+    
+    void updateIslandBackground() {
+        boolean nightMode = (mView.getContext().getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+        mNotifIsland.setIslandBackgroundColorTint(nightMode);
     }
 
     @VisibleForTesting
@@ -3075,6 +3094,7 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
 
     private void setHeadsUpManager(HeadsUpManager headsUpManager) {
         mHeadsUpManager = headsUpManager;
+        mNotifIsland.setHeadsupManager(headsUpManager);
         mHeadsUpManager.addListener(mOnHeadsUpChangedListener);
         mHeadsUpTouchHelper = new HeadsUpTouchHelper(
                 headsUpManager,
@@ -4454,12 +4474,14 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
         public void onThemeChanged() {
             debugLog("onThemeChanged");
             reInflateViews();
+            updateIslandBackground();
         }
 
         @Override
         public void onUiModeChanged() {
             if (DEBUG_LOGCAT) Log.d(TAG, "onUiModeChanged");
             resetViews(true);
+            updateIslandBackground();
         }
 
         @Override
@@ -4662,6 +4684,7 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
             mConfigurationController.addCallback(mConfigurationListener);
             mTunerService.addTunable(this, DOUBLE_TAP_SLEEP_GESTURE);
             mTunerService.addTunable(this, DOUBLE_TAP_SLEEP_LOCKSCREEN);
+            mTunerService.addTunable(this, ISLAND_NOTIFICATION);
             // Theme might have changed between inflating this view and attaching it to the
             // window, so
             // force a call to onThemeChanged
@@ -4688,6 +4711,8 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
                 mDoubleTapToSleepEnabled = TunerService.parseIntegerSwitch(newValue, true);
              } else if(DOUBLE_TAP_SLEEP_LOCKSCREEN.equals(key)) {
                 mIsLockscreenDoubleTapEnabled = TunerService.parseIntegerSwitch(newValue, true);
+                } else if(ISLAND_NOTIFICATION.equals(key)) {
+                mUseIslandNotification = TunerService.parseIntegerSwitch(newValue, false);
             }
         }
     }
@@ -5360,5 +5385,14 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
             return super.performAccessibilityAction(host, action, args);
         }
     }
-}
 
+    @Override
+    public void showIsland(boolean show) {
+        if (!mUseIslandNotification) return;
+        mNotifIsland.showIsland(show, getExpandedFraction());
+    }
+
+    protected void updateIslandVisibility() {
+        mNotifIsland.updateIslandVisibility(getExpandedFraction());
+    }
+}
