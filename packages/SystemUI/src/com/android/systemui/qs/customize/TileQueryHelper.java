@@ -65,6 +65,7 @@ public class TileQueryHelper {
     private final Context mContext;
     private final UserTracker mUserTracker;
     private TileStateListener mListener;
+    private String allQsTiles;
 
     private boolean mFinished;
 
@@ -89,6 +90,7 @@ public class TileQueryHelper {
         mTiles.clear();
         mSpecs.clear();
         mFinished = false;
+        allQsTiles = mContext.getString(R.string.quick_settings_tiles_stock) + "," + mContext.getString(R.string.quick_settings_extra_tiles);
         // Enqueue jobs to fetch every system tile and then ever package tile.
         addCurrentAndStockTiles(host);
     }
@@ -98,7 +100,6 @@ public class TileQueryHelper {
     }
 
     private void addCurrentAndStockTiles(QSHost host) {
-        String stock = mContext.getString(R.string.quick_settings_tiles_stock);
         String current = Settings.Secure.getString(mContext.getContentResolver(),
                 Settings.Secure.QS_TILES);
         final ArrayList<String> possibleTiles = new ArrayList<>();
@@ -108,7 +109,7 @@ public class TileQueryHelper {
         } else {
             current = "";
         }
-        String[] stockSplit =  stock.split(",");
+        String[] stockSplit =  allQsTiles.split(",");
         for (String spec : stockSplit) {
             if (!current.contains(spec)) {
                 possibleTiles.add(spec);
@@ -211,14 +212,13 @@ public class TileQueryHelper {
             PackageManager pm = mContext.getPackageManager();
             List<ResolveInfo> services = pm.queryIntentServicesAsUser(
                     new Intent(TileService.ACTION_QS_TILE), 0, mUserTracker.getUserId());
-            String stockTiles = mContext.getString(R.string.quick_settings_tiles_stock);
 
             for (ResolveInfo info : services) {
                 String packageName = info.serviceInfo.packageName;
                 ComponentName componentName = new ComponentName(packageName, info.serviceInfo.name);
 
                 // Don't include apps that are a part of the default tile set.
-                if (stockTiles.contains(componentName.flattenToString())) {
+                if (allQsTiles.contains(componentName.flattenToString())) {
                     continue;
                 }
 
