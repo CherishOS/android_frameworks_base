@@ -69,6 +69,7 @@ import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.Surface;
 
+import java.lang.ref.WeakReference;
 import com.android.internal.R;
 import com.android.internal.statusbar.IStatusBarService;
 
@@ -447,5 +448,62 @@ public class CherishUtils {
             }
             return null;
         }
+    }
+
+    public static void showRestartDialog(Context context, int title, int message, Runnable action) {
+        new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(R.string.ok, (dialog, id) -> {
+                    Handler handler = new Handler();
+                    handler.postDelayed(action, 1250);
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    public static void restartProcess(Context context, String processName) {
+        new RestartTask(context, processName).execute();
+    }
+
+    private static class RestartTask extends AsyncTask<Void, Void, Void> {
+        private final WeakReference<Context> mContext;
+        private final String mProcessName;
+
+        public RestartTask(Context context, String processName) {
+            mContext = new WeakReference<>(context);
+            mProcessName = processName;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                ActivityManager am = (ActivityManager) mContext.get().getSystemService(Context.ACTIVITY_SERVICE);
+                if (am != null) {
+                    IActivityManager ams = ActivityManager.getService();
+                    for (ActivityManager.RunningAppProcessInfo app : am.getRunningAppProcesses()) {
+                        if (app.processName.contains(mProcessName)) {
+                            ams.killApplicationProcess(app.processName, app.uid);
+                            break;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    public static void showSettingsRestartDialog(Context context) {
+        showRestartDialog(context, R.string.settings_restart_title, R.string.settings_restart_message, () -> restartProcess(context, "com.android.settings"));
+    }
+
+    public static void showSystemRestartDialog(Context context) {
+        showRestartDialog(context, R.string.systemui_restart_title, R.string.systemui_restart_message, () -> restartProcess(context, "com.android.systemui"));
+    }
+
+    public static void showLauncherRestartDialog(Context context) {
+        showRestartDialog(context, R.string.launcher_restart_title, R.string.launcher_restart_message, () -> restartProcess(context, "com.android.launcher3"));
     }
 }
