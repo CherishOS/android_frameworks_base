@@ -5881,12 +5881,6 @@ public final class Settings {
         public static final String STATUS_BAR_CLOCK_AUTO_HIDE = "status_bar_clock_auto_hide";
 
         /**
-         * Switch for lockscreen media metadata
-         * @hide
-         */
-        public static final String LOCKSCREEN_MEDIA_METADATA = "lockscreen_media_metadata";
-
-        /**
          * boolean value. toggles using arrow key locations on nav bar
          * as left and right dpad keys
          * @hide
@@ -6683,12 +6677,6 @@ public final class Settings {
          */
         @Readable
         public static final String GAMESPACE_SUPPRESS_FULLSCREEN_INTENT = "gamespace_suppress_fullscreen_intent";
-
-        /**
-         * Switch between filters for lockscreen album art
-         * @hide
-         */
-        public static final String LOCKSCREEN_ALBUMART_FILTER = "lockscreen_albumart_filter";
 
         /**
          * Force full screen for devices with cutout
