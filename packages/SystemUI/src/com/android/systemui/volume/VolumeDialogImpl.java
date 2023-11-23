@@ -155,9 +155,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import javax.security.auth.callback.Callback;
-import com.android.internal.util.cherish.ThemeUtils;
-
 /**
  * Visual presentation of the volume dialog.
  *
@@ -168,15 +165,12 @@ import com.android.internal.util.cherish.ThemeUtils;
 public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         ConfigurationController.ConfigurationListener,
         ViewTreeObserver.OnComputeInternalInsetsListener {
-
     private static final String TAG = Util.logTag(VolumeDialogImpl.class);
 
     private static final String VOLUME_PANEL_ON_LEFT =
             Settings.Secure.VOLUME_PANEL_ON_LEFT;
     public static final String VOLUME_DIALOG_TIMEOUT =
             "system:" + Settings.System.VOLUME_DIALOG_TIMEOUT;
-    public static final String CUSTOM_VOLUME_STYLES =
-            "system:" + "custom_volume_styles";
 
     private static final long USER_ATTEMPT_GRACE_PERIOD = 1000;
     private static final int UPDATE_ANIMATION_DURATION = 80;
@@ -350,9 +344,8 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     private int mOrientation;
     private final Lazy<SecureSettings> mSecureSettings;
     private int mDialogTimeoutMillis = DIALOG_TIMEOUT_MILLIS;
-
-    private int customVolumeStyles = 0;
-    private ThemeUtils mThemeUtils;
+    
+    private VolumeUtils mVolumeUtils;
 
     private int mTimeOutDesired, mTimeOut;
 
@@ -423,8 +416,6 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             mTunerService.addTunable(mTunable, VOLUME_PANEL_ON_LEFT);
         }
         mTunerService.addTunable(mTunable, VOLUME_DIALOG_TIMEOUT);
-        mTunerService.addTunable(mTunable, CUSTOM_VOLUME_STYLES);
-        mThemeUtils = new ThemeUtils(mContext);
 
         ContentObserver volumeTimeoutObserver = new ContentObserver(null) {
             @Override
@@ -449,6 +440,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         } else {
             mDevicePostureControllerCallback = null;
         }
+        mVolumeUtils = new VolumeUtils(mContext, mController.getAudioManager());
     }
 
     /**
@@ -887,40 +879,20 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     private final TunerService.Tunable mTunable = new TunerService.Tunable() {
         @Override
         public void onTuningChanged(String key, String newValue) {
-            switch (key) {
-                case VOLUME_PANEL_ON_LEFT:
-                    final boolean volumePanelOnLeft = TunerService.parseIntegerSwitch(newValue, false);
-                    if (mVolumePanelOnLeft != volumePanelOnLeft) {
-                        mVolumePanelOnLeft = volumePanelOnLeft;
-                        mHandler.post(mControllerCallbackH::onConfigurationChanged);
-                    }
-                    break;
-                case VOLUME_DIALOG_TIMEOUT:
-                    mTimeOutDesired = TunerService.parseInteger(newValue, 3);
-                    mTimeOut = mTimeOutDesired * 1000;
-                    break;
-               case CUSTOM_VOLUME_STYLES:
-                    final int selectedVolStyle = TunerService.parseInteger(newValue, 2);
-                    if (customVolumeStyles != selectedVolStyle) {
-                        customVolumeStyles = selectedVolStyle;
-                        mHandler.post(() -> {
-                    if (customVolumeStyles > 2 || customVolumeStyles == 0) {
-                        setVolumeStyle("com.android.system.volume.style"+ customVolumeStyles, "android.theme.customization.volume_panel");
-                    } else {
-                        setVolumeStyle("com.android.systemui", "android.theme.customization.volume_panel");
-                            }
-                       });
-                    }
-                    break;
-                default:
-                    break;
-             }
+            if (VOLUME_PANEL_ON_LEFT.equals(key)) {
+                final boolean volumePanelOnLeft = TunerService.parseIntegerSwitch(newValue, false);
+                if (mVolumePanelOnLeft != volumePanelOnLeft) {
+                    mVolumePanelOnLeft = volumePanelOnLeft;
+                    mHandler.post(() -> {
+                        mControllerCallbackH.onConfigurationChanged();
+                    });
+                }
+            } else if (VOLUME_DIALOG_TIMEOUT.equals(key)) {
+                mTimeOutDesired = TunerService.parseInteger(newValue, 3);
+                mTimeOut = mTimeOutDesired * 1000;
+            }
         }
     };
-
-    private void setVolumeStyle(String pkgName, String category) {
-        mThemeUtils.setOverlayEnabled(category, pkgName, "com.android.systemui");
-    }
 
     protected ViewGroup getDialogView() {
         return mDialogView;
@@ -1042,13 +1014,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         row.iconMuteRes = iconMuteRes;
         row.important = important;
         row.defaultStream = defaultStream;
-        if (customVolumeStyles == 1) {
-           row.view = mDialog.getLayoutInflater().inflate(R.layout.volume_dialog_row_rui, null);
-        } else if (customVolumeStyles == 2) {
-           row.view = mDialog.getLayoutInflater().inflate(R.layout.volume_dialog_row, null);
-        } else {
-            row.view = mDialog.getLayoutInflater().inflate(R.layout.volume_dialog_row_aosp, null);
-        }
+        row.view = mVolumeUtils.getRowView(mDialog.getLayoutInflater());
         row.view.setId(row.stream);
         row.view.setTag(row);
         row.header = row.view.findViewById(R.id.volume_row_header);
@@ -1062,20 +1028,8 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
         row.anim = null;
 
-        int[] drawables = {
-            R.drawable.volume_row_seekbar_aosp,
-            R.drawable.volume_row_seekbar_rui,
-            R.drawable.volume_row_seekbar,
-            R.drawable.volume_row_seekbar_double_layer,
-            R.drawable.volume_row_seekbar_gradient,
-            R.drawable.volume_row_seekbar_neumorph,
-            R.drawable.volume_row_seekbar_neumorph_outline,
-            R.drawable.volume_row_seekbar_outline,
-            R.drawable.volume_row_seekbar_shaded_layer
-        };
-
-        final LayerDrawable seekbarDrawable = 
-                (LayerDrawable) mContext.getDrawable(drawables[customVolumeStyles]);
+        final LayerDrawable seekbarDrawable =
+                (LayerDrawable) mContext.getDrawable(mVolumeUtils.getRowDrawable());
 
         final LayerDrawable seekbarProgressDrawable = (LayerDrawable)
                 ((RoundedCornerProgressDrawable) seekbarDrawable.findDrawableByLayerId(
@@ -2251,6 +2205,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                     addAccessibilityDescription(mRingerIcon, RINGER_MODE_VIBRATE,
                             mContext.getString(R.string.volume_ringer_hint_mute));
                     mRingerIcon.setTag(Events.ICON_STATE_VIBRATE);
+                    pinNotifAndRingerToMin();
                     break;
                 case AudioManager.RINGER_MODE_SILENT:
                     mRingerIcon.setImageResource(mVolumeRingerMuteIconDrawableId);
@@ -2258,6 +2213,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                     mRingerIcon.setTag(Events.ICON_STATE_MUTE);
                     addAccessibilityDescription(mRingerIcon, RINGER_MODE_SILENT,
                             mContext.getString(R.string.volume_ringer_hint_unmute));
+                    pinNotifAndRingerToMin();
                     break;
                 case AudioManager.RINGER_MODE_NORMAL:
                 default:
@@ -2268,6 +2224,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                         addAccessibilityDescription(mRingerIcon, RINGER_MODE_NORMAL,
                                 mContext.getString(R.string.volume_ringer_hint_unmute));
                         mRingerIcon.setTag(Events.ICON_STATE_MUTE);
+                        pinNotifAndRingerToMin();
                     } else {
                         mRingerIcon.setImageResource(mVolumeRingerIconDrawableId);
                         mSelectedRingerIcon.setImageResource(mVolumeRingerIconDrawableId);
@@ -2279,9 +2236,43 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                                     mContext.getString(R.string.volume_ringer_hint_mute));
                         }
                         mRingerIcon.setTag(Events.ICON_STATE_UNMUTE);
+                        final VolumeRow ringer = findRow(STREAM_RING);
+                        final VolumeRow notif = findRow(STREAM_NOTIFICATION);
+                        if (ringer != null) {
+                            Util.setText(ringer.header, Utils.formatPercentage(ss.level, ss.levelMax));
+                        }
+                        if (notif != null) {
+                            Util.setText(notif.header, Utils.formatPercentage(notif.ss.level, notif.ss.levelMax));
+                        }
                     }
                     break;
             }
+        }
+    }
+    
+    private void pinNotifAndRingerToMin() {
+        final VolumeRow ringer = findRow(STREAM_RING);
+        final VolumeRow notif = findRow(STREAM_NOTIFICATION);
+
+        if (ringer != null && ringer.ss.muted) {
+            final int ringerLevel = ringer.ss.levelMin * 100;
+            if (ringer.slider.getProgress() != ringerLevel) {
+                ringer.slider.setProgress(ringerLevel, true);
+            } else {
+                ringer.slider.setProgress(ringerLevel);
+            }
+            Util.setText(ringer.header, Utils.formatPercentage(ringer.ss.levelMin,
+                    ringer.ss.levelMax));
+        }
+        if (notif != null && notif.ss.muted) {
+            final int notifLevel = notif.ss.levelMin * 100;
+            if (notif.slider.getProgress() != notifLevel) {
+                notif.slider.setProgress(notifLevel, true);
+            } else {
+                notif.slider.setProgress(notifLevel);
+            }
+            Util.setText(notif.header, Utils.formatPercentage(notif.ss.levelMin,
+                    notif.ss.levelMax));
         }
     }
 
@@ -2420,9 +2411,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         }
 
         // update header text
-        Util.setText(row.header, getStreamLabelH(ss));
         row.slider.setContentDescription(row.header.getText());
-        mConfigurableTexts.add(row.header, ss.name);
 
         // update icon
         final boolean iconEnabled = (mAutomute || ss.muteSupported) && !zenMuted;
@@ -2608,6 +2597,9 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                 row.slider.setProgress(newProgress, true);
             }
         }
+        // update header text
+        Util.setText(row.header, Utils.formatPercentage((enable && !row.ss.muted)
+                        ? vlevel : 0, row.ss.levelMax));
     }
 
     private void recheckH(VolumeRow row) {
@@ -3027,6 +3019,18 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                 }
             }
             final int userLevel = getImpliedLevel(seekBar, progress);
+
+            if ((mRow.stream == STREAM_RING || mRow.stream == STREAM_NOTIFICATION)) {
+                if (mRow.ss.level > mRow.ss.levelMin && userLevel == 0) {
+                    seekBar.setProgress((mRow.ss.levelMin + 1) * 100);
+                    Util.setText(mRow.header,
+                            Utils.formatPercentage(mRow.ss.levelMin + 1, mRow.ss.levelMax));
+                    return;
+                }
+            }
+
+            Util.setText(mRow.header, Utils.formatPercentage(userLevel, mRow.ss.levelMax));
+
             if (mRow.ss.level != userLevel || mRow.ss.muted && userLevel > 0) {
                 mRow.userAttempt = SystemClock.uptimeMillis();
                 if (mRow.requestedLevel != userLevel) {
@@ -3037,8 +3041,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                             userLevel);
                 }
             }
-            VolumeUtils volumeUtils = new VolumeUtils(mContext, mController.getAudioManager());
-            volumeUtils.playSoundForStreamType(mRow.stream);
+            mVolumeUtils.playSoundForStreamType(mRow.stream);
         }
 
         @Override
