@@ -192,12 +192,12 @@ public class PixelPropsUtils {
     }
 
     private static void spoofBuildGms() {
-        // Alter build parameters to Nexus 5X for avoiding hardware attestation enforcement
-        setPropValue("DEVICE", "bullhead");
-        setPropValue("FINGERPRINT", "google/bullhead/bullhead:8.0.0/OPR6.170623.013/4283548:user/release-keys");
-        setPropValue("MODEL", "Nexus 5X");
-        setPropValue("PRODUCT", "bullhead");
-        setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N);
+        // Alter build parameters to Nokia 8 for avoiding hardware attestation enforcement
+        setPropValue("DEVICE", "NB1");
+        setPropValue("FINGERPRINT", "Nokia/TA-1004_00WW/NB1:8.1.0/OPR1.170623.026/00WW_4_88B:user/release-keys");
+        setPropValue("MODEL", "Nokia 8");
+        setPropValue("PRODUCT", "NB1");
+        setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.O_MR1);
     }
 
     public static void setProps(Context context) {
