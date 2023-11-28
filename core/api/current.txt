@@ -273,6 +273,7 @@ package android {
     field public static final String REQUEST_IGNORE_BATTERY_OPTIMIZATIONS = "android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS";
     field public static final String REQUEST_INSTALL_PACKAGES = "android.permission.REQUEST_INSTALL_PACKAGES";
     field public static final String REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE = "android.permission.REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE";
+    field @FlaggedApi("android.companion.flags.device_presence") public static final String REQUEST_OBSERVE_DEVICE_UUID_PRESENCE = "android.permission.REQUEST_OBSERVE_DEVICE_UUID_PRESENCE";
     field public static final String REQUEST_PASSWORD_COMPLEXITY = "android.permission.REQUEST_PASSWORD_COMPLEXITY";
     field @Deprecated public static final String RESTART_PACKAGES = "android.permission.RESTART_PACKAGES";
     field public static final String RUN_USER_INITIATED_JOBS = "android.permission.RUN_USER_INITIATED_JOBS";
@@ -9694,8 +9695,10 @@ package android.companion {
     method public void requestNotificationAccess(android.content.ComponentName);
     method @FlaggedApi("android.companion.association_tag") public void setAssociationTag(int, @NonNull String);
     method @RequiresPermission(android.Manifest.permission.REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE) public void startObservingDevicePresence(@NonNull String) throws android.companion.DeviceNotAssociatedException;
+    method @FlaggedApi("android.companion.device_presence") @RequiresPermission(android.Manifest.permission.REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE) public void startObservingDevicePresence(@NonNull android.companion.ObservingDevicePresenceRequest);
     method public void startSystemDataTransfer(int, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.companion.CompanionException>) throws android.companion.DeviceNotAssociatedException;
     method @RequiresPermission(android.Manifest.permission.REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE) public void stopObservingDevicePresence(@NonNull String) throws android.companion.DeviceNotAssociatedException;
+    method @FlaggedApi("android.companion.device_presence") @RequiresPermission(android.Manifest.permission.REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE) public void stopObservingDevicePresence(@NonNull android.companion.ObservingDevicePresenceRequest);
     field public static final String EXTRA_ASSOCIATION = "android.companion.extra.ASSOCIATION";
     field @Deprecated public static final String EXTRA_DEVICE = "android.companion.extra.DEVICE";
     field public static final int FLAG_CALL_METADATA = 1; // 0x1
@@ -9723,13 +9726,7 @@ package android.companion {
     method @MainThread public void onDeviceAppeared(@NonNull android.companion.AssociationInfo);
     method @Deprecated @MainThread public void onDeviceDisappeared(@NonNull String);
     method @MainThread public void onDeviceDisappeared(@NonNull android.companion.AssociationInfo);
-    method @FlaggedApi("android.companion.device_presence") @MainThread public void onDeviceEvent(@NonNull android.companion.AssociationInfo, int);
-    field @FlaggedApi("android.companion.device_presence") public static final int DEVICE_EVENT_BLE_APPEARED = 0; // 0x0
-    field @FlaggedApi("android.companion.device_presence") public static final int DEVICE_EVENT_BLE_DISAPPEARED = 1; // 0x1
-    field @FlaggedApi("android.companion.device_presence") public static final int DEVICE_EVENT_BT_CONNECTED = 2; // 0x2
-    field @FlaggedApi("android.companion.device_presence") public static final int DEVICE_EVENT_BT_DISCONNECTED = 3; // 0x3
-    field @FlaggedApi("android.companion.device_presence") public static final int DEVICE_EVENT_SELF_MANAGED_APPEARED = 4; // 0x4
-    field @FlaggedApi("android.companion.device_presence") public static final int DEVICE_EVENT_SELF_MANAGED_DISAPPEARED = 5; // 0x5
+    method @FlaggedApi("android.companion.device_presence") @MainThread public void onDevicePresenceEvent(@NonNull android.companion.DevicePresenceEvent);
     field public static final String SERVICE_INTERFACE = "android.companion.CompanionDeviceService";
   }
 
@@ -9740,6 +9737,38 @@ package android.companion {
   }
 
   public class DeviceNotAssociatedException extends java.lang.RuntimeException {
+  }
+
+  @FlaggedApi("android.companion.device_presence") public final class DevicePresenceEvent implements android.os.Parcelable {
+    ctor public DevicePresenceEvent(int, int, @Nullable android.os.ParcelUuid);
+    method public int describeContents();
+    method public int getAssociationId();
+    method public int getEvent();
+    method @Nullable public android.os.ParcelUuid getUuid();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.companion.DevicePresenceEvent> CREATOR;
+    field public static final int EVENT_BLE_APPEARED = 0; // 0x0
+    field public static final int EVENT_BLE_DISAPPEARED = 1; // 0x1
+    field public static final int EVENT_BT_CONNECTED = 2; // 0x2
+    field public static final int EVENT_BT_DISCONNECTED = 3; // 0x3
+    field public static final int EVENT_SELF_MANAGED_APPEARED = 4; // 0x4
+    field public static final int EVENT_SELF_MANAGED_DISAPPEARED = 5; // 0x5
+    field public static final int NO_ASSOCIATION = -1; // 0xffffffff
+  }
+
+  @FlaggedApi("android.companion.device_presence") public final class ObservingDevicePresenceRequest implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getAssociationId();
+    method @Nullable public android.os.ParcelUuid getUuid();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.companion.ObservingDevicePresenceRequest> CREATOR;
+  }
+
+  public static final class ObservingDevicePresenceRequest.Builder {
+    ctor public ObservingDevicePresenceRequest.Builder();
+    method @NonNull public android.companion.ObservingDevicePresenceRequest build();
+    method @NonNull public android.companion.ObservingDevicePresenceRequest.Builder setAssociationId(int);
+    method @NonNull @RequiresPermission(android.Manifest.permission.REQUEST_OBSERVE_DEVICE_UUID_PRESENCE) public android.companion.ObservingDevicePresenceRequest.Builder setUuid(@NonNull android.os.ParcelUuid);
   }
 
   public final class WifiDeviceFilter implements android.companion.DeviceFilter<android.net.wifi.ScanResult> {
