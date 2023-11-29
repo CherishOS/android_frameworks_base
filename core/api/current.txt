@@ -11103,6 +11103,7 @@ package android.content {
     field public static final String ACTION_UID_REMOVED = "android.intent.action.UID_REMOVED";
     field @Deprecated public static final String ACTION_UMS_CONNECTED = "android.intent.action.UMS_CONNECTED";
     field @Deprecated public static final String ACTION_UMS_DISCONNECTED = "android.intent.action.UMS_DISCONNECTED";
+    field @FlaggedApi("android.content.pm.archiving") public static final String ACTION_UNARCHIVE_PACKAGE = "android.intent.action.UNARCHIVE_PACKAGE";
     field @Deprecated public static final String ACTION_UNINSTALL_PACKAGE = "android.intent.action.UNINSTALL_PACKAGE";
     field public static final String ACTION_USER_BACKGROUND = "android.intent.action.USER_BACKGROUND";
     field public static final String ACTION_USER_FOREGROUND = "android.intent.action.USER_FOREGROUND";
@@ -12368,6 +12369,7 @@ package android.content.pm {
   public class PackageInfo implements android.os.Parcelable {
     ctor public PackageInfo();
     method public int describeContents();
+    method @FlaggedApi("android.content.pm.archiving") public long getArchiveTimeMillis();
     method public long getLongVersionCode();
     method public void setLongVersionCode(long);
     method public void writeToParcel(android.os.Parcel, int);
@@ -12424,6 +12426,9 @@ package android.content.pm {
     method @NonNull public android.content.pm.PackageInstaller.Session openSession(int) throws java.io.IOException;
     method public void registerSessionCallback(@NonNull android.content.pm.PackageInstaller.SessionCallback);
     method public void registerSessionCallback(@NonNull android.content.pm.PackageInstaller.SessionCallback, @NonNull android.os.Handler);
+    method @FlaggedApi("android.content.pm.archiving") @RequiresPermission(anyOf={android.Manifest.permission.INSTALL_PACKAGES, android.Manifest.permission.REQUEST_INSTALL_PACKAGES}) public void reportUnarchivalStatus(int, int, long, @Nullable android.app.PendingIntent) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @FlaggedApi("android.content.pm.archiving") @RequiresPermission(anyOf={android.Manifest.permission.DELETE_PACKAGES, android.Manifest.permission.REQUEST_DELETE_PACKAGES}) public void requestArchive(@NonNull String, @NonNull android.content.IntentSender) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @FlaggedApi("android.content.pm.archiving") @RequiresPermission(anyOf={android.Manifest.permission.INSTALL_PACKAGES, android.Manifest.permission.REQUEST_INSTALL_PACKAGES}) public void requestUnarchive(@NonNull String, @NonNull android.content.IntentSender) throws java.io.IOException, android.content.pm.PackageManager.NameNotFoundException;
     method @RequiresPermission(anyOf={android.Manifest.permission.DELETE_PACKAGES, android.Manifest.permission.REQUEST_DELETE_PACKAGES}) public void uninstall(@NonNull String, @NonNull android.content.IntentSender);
     method @RequiresPermission(anyOf={android.Manifest.permission.DELETE_PACKAGES, android.Manifest.permission.REQUEST_DELETE_PACKAGES}) public void uninstall(@NonNull android.content.pm.VersionedPackage, @NonNull android.content.IntentSender);
     method @RequiresPermission(anyOf={android.Manifest.permission.DELETE_PACKAGES, android.Manifest.permission.REQUEST_DELETE_PACKAGES}) public void uninstall(@NonNull android.content.pm.VersionedPackage, int, @NonNull android.content.IntentSender);
@@ -12445,6 +12450,10 @@ package android.content.pm {
     field public static final String EXTRA_STATUS = "android.content.pm.extra.STATUS";
     field public static final String EXTRA_STATUS_MESSAGE = "android.content.pm.extra.STATUS_MESSAGE";
     field public static final String EXTRA_STORAGE_PATH = "android.content.pm.extra.STORAGE_PATH";
+    field @FlaggedApi("android.content.pm.archiving") public static final String EXTRA_UNARCHIVE_ALL_USERS = "android.content.pm.extra.UNARCHIVE_ALL_USERS";
+    field @FlaggedApi("android.content.pm.archiving") public static final String EXTRA_UNARCHIVE_ID = "android.content.pm.extra.UNARCHIVE_ID";
+    field @FlaggedApi("android.content.pm.archiving") public static final String EXTRA_UNARCHIVE_PACKAGE_NAME = "android.content.pm.extra.UNARCHIVE_PACKAGE_NAME";
+    field @FlaggedApi("android.content.pm.archiving") public static final String EXTRA_UNARCHIVE_STATUS = "android.content.pm.extra.UNARCHIVE_STATUS";
     field public static final int PACKAGE_SOURCE_DOWNLOADED_FILE = 4; // 0x4
     field public static final int PACKAGE_SOURCE_LOCAL_FILE = 3; // 0x3
     field public static final int PACKAGE_SOURCE_OTHER = 1; // 0x1
@@ -12460,6 +12469,13 @@ package android.content.pm {
     field public static final int STATUS_FAILURE_TIMEOUT = 8; // 0x8
     field public static final int STATUS_PENDING_USER_ACTION = -1; // 0xffffffff
     field public static final int STATUS_SUCCESS = 0; // 0x0
+    field @FlaggedApi("android.content.pm.archiving") public static final int UNARCHIVAL_ERROR_INSTALLER_DISABLED = 4; // 0x4
+    field @FlaggedApi("android.content.pm.archiving") public static final int UNARCHIVAL_ERROR_INSTALLER_UNINSTALLED = 5; // 0x5
+    field @FlaggedApi("android.content.pm.archiving") public static final int UNARCHIVAL_ERROR_INSUFFICIENT_STORAGE = 2; // 0x2
+    field @FlaggedApi("android.content.pm.archiving") public static final int UNARCHIVAL_ERROR_NO_CONNECTIVITY = 3; // 0x3
+    field @FlaggedApi("android.content.pm.archiving") public static final int UNARCHIVAL_ERROR_USER_ACTION_NEEDED = 1; // 0x1
+    field @FlaggedApi("android.content.pm.archiving") public static final int UNARCHIVAL_GENERIC_ERROR = 100; // 0x64
+    field @FlaggedApi("android.content.pm.archiving") public static final int UNARCHIVAL_OK = 0; // 0x0
   }
 
   public static final class PackageInstaller.InstallConstraints implements android.os.Parcelable {
@@ -12623,6 +12639,7 @@ package android.content.pm {
     method @RequiresPermission(android.Manifest.permission.ENFORCE_UPDATE_OWNERSHIP) public void setRequestUpdateOwnership(boolean);
     method public void setRequireUserAction(int);
     method public void setSize(long);
+    method @FlaggedApi("android.content.pm.archiving") public void setUnarchiveId(int);
     method public void setWhitelistedRestrictedPermissions(@Nullable java.util.Set<java.lang.String>);
     method public void writeToParcel(android.os.Parcel, int);
     field public static final android.os.Parcelable.Creator<android.content.pm.PackageInstaller.SessionParams> CREATOR;
@@ -12652,6 +12669,7 @@ package android.content.pm {
     method public void writeToParcel(android.os.Parcel, int);
     field public int banner;
     field public int icon;
+    field @FlaggedApi("android.content.pm.archiving") public boolean isArchived;
     field public int labelRes;
     field public int logo;
     field public android.os.Bundle metaData;
@@ -12774,6 +12792,7 @@ package android.content.pm {
     method public boolean hasSigningCertificate(int, @NonNull byte[], int);
     method public abstract boolean hasSystemFeature(@NonNull String);
     method public abstract boolean hasSystemFeature(@NonNull String, int);
+    method @FlaggedApi("android.content.pm.archiving") public boolean isAppArchivable(@NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
     method @RequiresPermission(value="android.permission.WHITELIST_AUTO_REVOKE_PERMISSIONS", conditional=true) public boolean isAutoRevokeWhitelisted(@NonNull String);
     method public boolean isAutoRevokeWhitelisted();
     method public boolean isDefaultApplicationIcon(@NonNull android.graphics.drawable.Drawable);
@@ -13015,6 +13034,7 @@ package android.content.pm {
     field public static final int INSTALL_SCENARIO_FAST = 1; // 0x1
     field public static final int MATCH_ALL = 131072; // 0x20000
     field public static final int MATCH_APEX = 1073741824; // 0x40000000
+    field @FlaggedApi("android.content.pm.archiving") public static final long MATCH_ARCHIVED_PACKAGES = 4294967296L; // 0x100000000L
     field public static final int MATCH_DEFAULT_ONLY = 65536; // 0x10000
     field public static final int MATCH_DIRECT_BOOT_AUTO = 268435456; // 0x10000000
     field public static final int MATCH_DIRECT_BOOT_AWARE = 524288; // 0x80000
