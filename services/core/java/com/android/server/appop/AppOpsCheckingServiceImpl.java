@@ -226,20 +226,15 @@ public class AppOpsCheckingServiceImpl implements AppOpsCheckingServiceInterface
                     mUidModes.put(uid, opModes);
                     opModes.put(op, mode);
                     scheduleWriteLocked();
-                } else {
-                    return false;
                 }
             } else {
-                if (opModes.indexOfKey(op) >= 0) {
-                    if (opModes.get(op) == mode) {
-                        return false;
-                    }
-                } else if (mode == defaultMode) {
+                if (opModes.indexOfKey(op) >= 0 && opModes.get(op) == mode) {
                     return false;
                 }
                 if (mode == defaultMode) {
                     opModes.delete(op);
                     if (opModes.size() <= 0) {
+                        opModes = null;
                         mUidModes.delete(uid);
                     }
                 } else {
