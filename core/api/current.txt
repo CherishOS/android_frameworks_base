@@ -43277,6 +43277,7 @@ package android.telephony {
     field public static final String KEY_CDMA_NONROAMING_NETWORKS_STRING_ARRAY = "cdma_nonroaming_networks_string_array";
     field public static final String KEY_CDMA_ROAMING_MODE_INT = "cdma_roaming_mode_int";
     field public static final String KEY_CDMA_ROAMING_NETWORKS_STRING_ARRAY = "cdma_roaming_networks_string_array";
+    field @FlaggedApi("com.android.internal.telephony.flags.data_only_cellular_service") public static final String KEY_CELLULAR_SERVICE_CAPABILITIES_INT_ARRAY = "cellular_service_capabilities_int_array";
     field public static final String KEY_CELLULAR_USAGE_SETTING_INT = "cellular_usage_setting_int";
     field public static final String KEY_CHECK_PRICING_WITH_CARRIER_FOR_DATA_ROAMING_BOOL = "check_pricing_with_carrier_data_roaming_bool";
     field public static final String KEY_CI_ACTION_ON_SYS_UPDATE_BOOL = "ci_action_on_sys_update_bool";
@@ -45271,6 +45272,7 @@ package android.telephony {
     method @Nullable public String getMncString();
     method @Deprecated public String getNumber();
     method public int getPortIndex();
+    method @FlaggedApi("com.android.internal.telephony.flags.data_only_cellular_service") @NonNull public java.util.Set<java.lang.Integer> getServiceCapabilities();
     method public int getSimSlotIndex();
     method public int getSubscriptionId();
     method public int getSubscriptionType();
@@ -45352,6 +45354,9 @@ package android.telephony {
     field public static final int PHONE_NUMBER_SOURCE_CARRIER = 2; // 0x2
     field public static final int PHONE_NUMBER_SOURCE_IMS = 3; // 0x3
     field public static final int PHONE_NUMBER_SOURCE_UICC = 1; // 0x1
+    field @FlaggedApi("com.android.internal.telephony.flags.data_only_cellular_service") public static final int SERVICE_CAPABILITY_DATA = 3; // 0x3
+    field @FlaggedApi("com.android.internal.telephony.flags.data_only_cellular_service") public static final int SERVICE_CAPABILITY_SMS = 2; // 0x2
+    field @FlaggedApi("com.android.internal.telephony.flags.data_only_cellular_service") public static final int SERVICE_CAPABILITY_VOICE = 1; // 0x1
     field public static final int SUBSCRIPTION_TYPE_LOCAL_SIM = 0; // 0x0
     field public static final int SUBSCRIPTION_TYPE_REMOTE_SIM = 1; // 0x1
     field public static final int USAGE_SETTING_DATA_CENTRIC = 2; // 0x2
@@ -45600,6 +45605,8 @@ package android.telephony {
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.MODIFY_PHONE_STATE, android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.READ_BASIC_PHONE_STATE}) public boolean isDataEnabled();
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.MODIFY_PHONE_STATE, android.Manifest.permission.READ_BASIC_PHONE_STATE}) public boolean isDataEnabledForReason(int);
     method @RequiresPermission(anyOf={android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.READ_BASIC_PHONE_STATE}) public boolean isDataRoamingEnabled();
+    method @FlaggedApi("com.android.internal.telephony.flags.data_only_cellular_service") public boolean isDeviceSmsCapable();
+    method @FlaggedApi("com.android.internal.telephony.flags.data_only_cellular_service") public boolean isDeviceVoiceCapable();
     method public boolean isEmergencyNumber(@NonNull String);
     method public boolean isHearingAidCompatibilitySupported();
     method @RequiresPermission(anyOf={android.Manifest.permission.READ_PRECISE_PHONE_STATE, "android.permission.READ_PRIVILEGED_PHONE_STATE"}) public boolean isManualNetworkSelectionAllowed();
@@ -45609,9 +45616,9 @@ package android.telephony {
     method @RequiresPermission(android.Manifest.permission.READ_BASIC_PHONE_STATE) public boolean isPremiumCapabilityAvailableForPurchase(int);
     method public boolean isRadioInterfaceCapabilitySupported(@NonNull String);
     method public boolean isRttSupported();
-    method public boolean isSmsCapable();
+    method @Deprecated public boolean isSmsCapable();
     method @Deprecated public boolean isTtyModeSupported();
-    method public boolean isVoiceCapable();
+    method @Deprecated public boolean isVoiceCapable();
     method public boolean isVoicemailVibrationEnabled(android.telecom.PhoneAccountHandle);
     method public boolean isWorldPhone();
     method @Deprecated public void listen(android.telephony.PhoneStateListener, int);
