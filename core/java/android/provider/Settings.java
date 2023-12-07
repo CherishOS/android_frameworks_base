@@ -6925,6 +6925,12 @@ public final class Settings {
         public static final String STATUS_BAR_CUSTOM_HEADER_HEIGHT = "status_bar_custom_header_height";
 
         /**
+         * Stores the array name of the values currently used for SpoofBuildGms
+         * @hide
+         */
+        public static final String PPU_SPOOF_BUILD_GMS_ARRAY = "ppu_spoof_build_gms_array";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
