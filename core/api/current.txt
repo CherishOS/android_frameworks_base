@@ -53881,9 +53881,11 @@ package android.view {
     method @Deprecated public android.view.Display getDefaultDisplay();
     method @NonNull public default android.view.WindowMetrics getMaximumWindowMetrics();
     method public default boolean isCrossWindowBlurEnabled();
+    method @FlaggedApi("com.android.window.flags.trusted_presentation_listener_for_window") public default void registerTrustedPresentationListener(@NonNull android.os.IBinder, @NonNull android.window.TrustedPresentationThresholds, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<java.lang.Boolean>);
     method public default void removeCrossWindowBlurEnabledListener(@NonNull java.util.function.Consumer<java.lang.Boolean>);
     method public default void removeProposedRotationListener(@NonNull java.util.function.IntConsumer);
     method public void removeViewImmediate(android.view.View);
+    method @FlaggedApi("com.android.window.flags.trusted_presentation_listener_for_window") public default void unregisterTrustedPresentationListener(@NonNull java.util.function.Consumer<java.lang.Boolean>);
     field public static final String PROPERTY_ACTIVITY_EMBEDDING_ALLOW_SYSTEM_OVERRIDE = "android.window.PROPERTY_ACTIVITY_EMBEDDING_ALLOW_SYSTEM_OVERRIDE";
     field public static final String PROPERTY_ACTIVITY_EMBEDDING_SPLITS_ENABLED = "android.window.PROPERTY_ACTIVITY_EMBEDDING_SPLITS_ENABLED";
     field public static final String PROPERTY_CAMERA_COMPAT_ALLOW_FORCE_ROTATION = "android.window.PROPERTY_CAMERA_COMPAT_ALLOW_FORCE_ROTATION";
@@ -60862,6 +60864,16 @@ package android.window {
     method public boolean add(@NonNull android.view.SurfaceControlViewHost.SurfacePackage, @Nullable Runnable);
     method public void addTransaction(@NonNull android.view.SurfaceControl.Transaction);
     method public void markSyncReady();
+  }
+
+  @FlaggedApi("com.android.window.flags.trusted_presentation_listener_for_window") public final class TrustedPresentationThresholds implements android.os.Parcelable {
+    ctor @FlaggedApi("com.android.window.flags.trusted_presentation_listener_for_window") public TrustedPresentationThresholds(@FloatRange(from=0.0f, fromInclusive=false, to=1.0f) float, @FloatRange(from=0.0f, fromInclusive=false, to=1.0f) float, @IntRange(from=1) int);
+    method @FlaggedApi("com.android.window.flags.trusted_presentation_listener_for_window") public int describeContents();
+    method @FlaggedApi("com.android.window.flags.trusted_presentation_listener_for_window") public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @FlaggedApi("com.android.window.flags.trusted_presentation_listener_for_window") @NonNull public static final android.os.Parcelable.Creator<android.window.TrustedPresentationThresholds> CREATOR;
+    field @FlaggedApi("com.android.window.flags.trusted_presentation_listener_for_window") @FloatRange(from=0.0f, fromInclusive=false, to=1.0f) public final float minAlpha;
+    field @FlaggedApi("com.android.window.flags.trusted_presentation_listener_for_window") @FloatRange(from=0.0f, fromInclusive=false, to=1.0f) public final float minFractionRendered;
+    field @FlaggedApi("com.android.window.flags.trusted_presentation_listener_for_window") @IntRange(from=1) public final int stabilityRequirementMs;
   }
 
 }
