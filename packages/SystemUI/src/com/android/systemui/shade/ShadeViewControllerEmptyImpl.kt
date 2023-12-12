@@ -71,6 +71,7 @@ class ShadeViewControllerEmptyImpl @Inject constructor() : ShadeViewController {
     override fun postToView(action: Runnable): Boolean {
         return false
     }
+    override fun reTickerView(visibility: Boolean) {}
     override fun transitionToExpandedShade(delay: Long) {}
     override val isUnlockHintRunning: Boolean = false
 
