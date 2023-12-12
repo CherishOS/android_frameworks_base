@@ -7355,6 +7355,7 @@ public final class Settings {
          * Default 0.
          * @hide
          */
+        @Readable
         public static final String NAVIGATION_BAR_IME_SPACE = "navigation_bar_ime_space";
 
         /**
