@@ -103,10 +103,19 @@ public class BatteryStatus {
         present = batteryChangedIntent.getBooleanExtra(EXTRA_PRESENT, true);
         temperature = batteryChangedIntent.getIntExtra(EXTRA_TEMPERATURE, -1);
 
-
         this.incompatibleCharger = incompatibleCharger;
 
+        final int maxChargingMicroAmp =
+                batteryChangedIntent.getIntExtra(EXTRA_MAX_CHARGING_CURRENT, -1);
+        int maxChargingMicroVolt = batteryChangedIntent.getIntExtra(EXTRA_MAX_CHARGING_VOLTAGE, -1);
+
+        if (maxChargingMicroVolt <= 0) {
+            maxChargingMicroVolt = DEFAULT_CHARGING_VOLTAGE_MICRO_VOLT;
+        }
+
         maxChargingWattage = calculateMaxChargingMicroWatt(batteryChangedIntent);
+        maxChargingCurrent = maxChargingMicroAmp;
+        maxChargingVoltage = maxChargingMicroVolt;
     }
 
     /** Determine whether the device is plugged. */
@@ -415,13 +424,9 @@ public class BatteryStatus {
         }
 
         if (maxChargingMicroAmp > 0) {
-            maxChargingCurrent = maxChargingMicroAmp;
-            maxChargingVoltage = maxChargingMicroVolt;
             // Calculating µW = mA * mV
             return (int) Math.round(maxChargingMicroAmp * 0.001 * maxChargingMicroVolt * 0.001);
         } else {
-            maxChargingCurrent = -1;
-            maxChargingVoltage = -1;
             return -1;
         }
     }
