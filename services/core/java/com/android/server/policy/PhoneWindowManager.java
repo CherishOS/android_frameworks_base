@@ -3986,7 +3986,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         // Specific device key handling
         if (dispatchKeyToKeyHandlers(event)) {
-            return key_consumed;
+            return true;
         }
 
         // Reserve all the META modifier combos for system behavior
