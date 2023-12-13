@@ -348,6 +348,7 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
     private final NotificationStackScrollLayoutController mNotificationStackScrollLayoutController;
     private final LayoutInflater mLayoutInflater;
     private final FeatureFlags mFeatureFlags;
+    private final Context mContext;
     private final PowerManager mPowerManager;
     private final AccessibilityManager mAccessibilityManager;
     private final NotificationWakeUpCoordinator mWakeUpCoordinator;
@@ -699,6 +700,8 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
 
     private final PowerManagerInternal mLocalPowerManager;
 
+    protected GameSpaceManager mGameSpaceManager;
+
     /**
      * For PanelView fling perflock call
      */
@@ -851,6 +854,7 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
             }
         });
         mAmbientState = ambientState;
+        mContext = context;
         mView = view;
         mStatusBarKeyguardViewManager = statusBarKeyguardViewManager;
         mLockscreenGestureLogger = lockscreenGestureLogger;
@@ -1050,6 +1054,9 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
         dumpManager.registerDumpable(this);
         mLocalPowerManager = LocalServices.getService(PowerManagerInternal.class);
         mPerf = new BoostFramework();
+
+        mGameSpaceManager = new GameSpaceManager(mContext, mKeyguardStateController);
+        mGameSpaceManager.observe();
     }
 
     private void unlockAnimationFinished() {
@@ -5684,7 +5691,7 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
             RetickerAnimations.revealAnimation(mReTickerComeback);
             if (reTickerIntent != null) {
                 mReTickerComeback.setOnClickListener(v -> {
-                    final GameSpaceManager gameSpace = mCentralSurfaces.getGameSpaceManager();
+                    final GameSpaceManager gameSpace = mGameSpaceManager;
                     if (gameSpace == null || !gameSpace.isGameActive()) {
                         try {
                             reTickerIntent.send();
