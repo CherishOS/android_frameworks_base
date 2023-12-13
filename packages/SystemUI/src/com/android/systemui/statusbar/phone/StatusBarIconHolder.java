@@ -71,6 +71,8 @@ public class StatusBarIconHolder {
     @Retention(RetentionPolicy.SOURCE)
     @interface IconType {}
 
+    public static final int TYPE_NETWORK_TRAFFIC = 6;
+
     private StatusBarIcon mIcon;
     private BluetoothIconState mBluetoothState;
 
@@ -140,6 +142,12 @@ public class StatusBarIconHolder {
         return holder;
     }
 
+    public static StatusBarIconHolder fromNetworkTraffic() {
+        StatusBarIconHolder holder = new StatusBarIconHolder();
+        holder.mType = TYPE_NETWORK_TRAFFIC;
+        return holder;
+    }
+
     public @IconType int getType() {
         return mType;
     }
@@ -174,6 +182,8 @@ public class StatusBarIconHolder {
             case TYPE_BLUETOOTH:
                 return mBluetoothState.visible;
             default:
+                return true;
+            case TYPE_NETWORK_TRAFFIC:
                 return true;
         }
     }
