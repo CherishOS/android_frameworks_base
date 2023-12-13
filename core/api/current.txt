@@ -165,6 +165,7 @@ package android {
     field public static final String MANAGE_DEVICE_POLICY_LOCK = "android.permission.MANAGE_DEVICE_POLICY_LOCK";
     field public static final String MANAGE_DEVICE_POLICY_LOCK_CREDENTIALS = "android.permission.MANAGE_DEVICE_POLICY_LOCK_CREDENTIALS";
     field public static final String MANAGE_DEVICE_POLICY_LOCK_TASK = "android.permission.MANAGE_DEVICE_POLICY_LOCK_TASK";
+    field @FlaggedApi("android.app.admin.flags.esim_management_enabled") public static final String MANAGE_DEVICE_POLICY_MANAGED_SUBSCRIPTIONS = "android.permission.MANAGE_DEVICE_POLICY_MANAGED_SUBSCRIPTIONS";
     field public static final String MANAGE_DEVICE_POLICY_METERED_DATA = "android.permission.MANAGE_DEVICE_POLICY_METERED_DATA";
     field public static final String MANAGE_DEVICE_POLICY_MICROPHONE = "android.permission.MANAGE_DEVICE_POLICY_MICROPHONE";
     field public static final String MANAGE_DEVICE_POLICY_MOBILE_NETWORK = "android.permission.MANAGE_DEVICE_POLICY_MOBILE_NETWORK";
@@ -8016,6 +8017,7 @@ package android.app.admin {
     method public CharSequence getStartUserSessionMessage(@NonNull android.content.ComponentName);
     method @Deprecated public boolean getStorageEncryption(@Nullable android.content.ComponentName);
     method public int getStorageEncryptionStatus();
+    method @FlaggedApi("android.app.admin.flags.esim_management_enabled") @NonNull @RequiresPermission(android.Manifest.permission.MANAGE_DEVICE_POLICY_MANAGED_SUBSCRIPTIONS) public java.util.Set<java.lang.Integer> getSubscriptionsIds();
     method @Nullable public android.app.admin.SystemUpdatePolicy getSystemUpdatePolicy();
     method @Nullable public android.os.PersistableBundle getTransferOwnershipBundle();
     method @Nullable public java.util.List<android.os.PersistableBundle> getTrustAgentConfiguration(@Nullable android.content.ComponentName, @NonNull android.content.ComponentName);
@@ -46313,8 +46315,8 @@ package android.telephony.euicc {
 
   public class EuiccManager {
     method @NonNull public android.telephony.euicc.EuiccManager createForCardId(int);
-    method @RequiresPermission("android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS") public void deleteSubscription(int, android.app.PendingIntent);
-    method @RequiresPermission("android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS") public void downloadSubscription(android.telephony.euicc.DownloadableSubscription, boolean, android.app.PendingIntent);
+    method @RequiresPermission(anyOf={"android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS", android.Manifest.permission.MANAGE_DEVICE_POLICY_MANAGED_SUBSCRIPTIONS}) public void deleteSubscription(int, android.app.PendingIntent);
+    method @RequiresPermission(anyOf={"android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS", android.Manifest.permission.MANAGE_DEVICE_POLICY_MANAGED_SUBSCRIPTIONS}) public void downloadSubscription(android.telephony.euicc.DownloadableSubscription, boolean, android.app.PendingIntent);
     method @FlaggedApi("com.android.internal.telephony.flags.esim_available_memory") @RequiresPermission(anyOf={android.Manifest.permission.READ_PHONE_STATE, "android.permission.READ_PRIVILEGED_PHONE_STATE", "carrier privileges"}) public long getAvailableMemoryInBytes();
     method @Nullable public String getEid();
     method @Nullable public android.telephony.euicc.EuiccInfo getEuiccInfo();
