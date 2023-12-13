@@ -234,6 +234,8 @@ import com.android.server.cherish.health.HealthInterfaceService;
 
 import dalvik.system.VMRuntime;
 
+import org.cherish.server.AudioEffectService;
+
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -446,6 +448,9 @@ public final class SystemServer implements Dumpable {
             "com.android.server.devicelock.DeviceLockService";
     private static final String DEVICE_LOCK_APEX_PATH =
             "/apex/com.android.devicelock/javalib/service-devicelock.jar";
+            
+    private static final String AUDIO_EFFECT_SERVICE_CLASS =
+            "org.cherish.server.AudioEffectService";
 
     private static final String TETHERING_CONNECTOR_CLASS = "android.net.ITetheringConnector";
 
@@ -2914,6 +2919,10 @@ public final class SystemServer implements Dumpable {
 
         t.traceBegin("AppCompatOverridesService");
         mSystemServiceManager.startService(APP_COMPAT_OVERRIDES_SERVICE_CLASS);
+        t.traceEnd();
+
+        t.traceBegin("StartAudioEffectService");
+        mSystemServiceManager.startService(AUDIO_EFFECT_SERVICE_CLASS);
         t.traceEnd();
 
         t.traceBegin("HealthConnectManagerService");
