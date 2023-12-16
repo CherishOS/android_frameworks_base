@@ -1681,11 +1681,11 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces, Tune
         mCommandQueue.addCallback(mCommandQueueCallbacks);
     }
 
-    protected NotificationShadeWindowViewController getNotificationShadeWindowViewController() {
+    public NotificationShadeWindowViewController getNotificationShadeWindowViewController() {
         return mNotificationShadeWindowViewControllerLazy.get();
     }
 
-    protected NotificationShadeWindowView getNotificationShadeWindowView() {
+    public NotificationShadeWindowView getNotificationShadeWindowView() {
         return getNotificationShadeWindowViewController().getView();
     }
 
@@ -3369,13 +3369,17 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces, Tune
     public void startActivity(Intent intent, boolean dismissShade) {
         mActivityStarter.startActivityDismissingKeyguard(intent, false /* onlyProvisioned */, dismissShade);
     }
-    
+
     public void startPendingIntentDismissingKeyguard(PendingIntent intent) {
         mActivityStarter.startPendingIntentDismissingKeyguard(intent);
     }
-    
-    public NotificationPanelViewController getNotificationPanelViewController() {
-        return mCentralSurfacesComponent.getNotificationPanelViewController();
+
+    public ShadeViewController getNotificationPanelViewController() {
+        return mShadeSurface;
+    }
+
+    public void wakeUpDeviceifDozing() {
+        mPowerInteractor.wakeUpIfDozing("AMBIENT MUSIC", PowerManager.WAKE_REASON_GESTURE);
     }
 
     @Override
