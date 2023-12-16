@@ -5783,4 +5783,14 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
                 mainLocation[0] + mReTickerComeback.getWidth(),
                 mainLocation[1] + mReTickerComeback.getHeight()));
     };
+
+    @Override
+    public NotificationStackScrollLayoutController getScrollerLayoutController() {
+        return mNotificationStackScrollLayoutController;
+    }
+
+    @Override
+    public KeyguardBottomAreaView getKeyguardBottomAreaView() {
+        return mKeyguardBottomArea;
+    }
 }
