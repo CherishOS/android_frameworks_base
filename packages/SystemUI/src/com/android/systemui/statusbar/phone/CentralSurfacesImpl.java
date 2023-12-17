@@ -3877,4 +3877,22 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces, Tune
             ExpandableNotificationRow associatedView) {
         return mNotificationAnimationProvider.getAnimatorController(associatedView);
     }
+
+    public void collapseShade() {
+        if (mShadeController != null) {
+            mShadeController.collapseShade();
+        }
+    }
+
+    public void postAnimateCollapsePanels() {
+        if (mShadeController != null) {
+            mShadeController.animateCollapseShade();
+        }
+    }
+
+    public void animateExpandNotificationsPanel() {
+        if (mCommandQueueCallbacks != null) {
+            mCommandQueueCallbacks.animateExpandNotificationsPanel();
+        }
+    }
 }
