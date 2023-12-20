@@ -103,7 +103,6 @@ public class SystemSettings {
         Settings.System.SCREEN_FLASH_NOTIFICATION_COLOR,
         Settings.System.AMBIENT_WAKE_GESTURES,
         Settings.System.TORCH_POWER_BUTTON_GESTURE,
-        Settings.System.QS_PANEL_STYLE,
 	Settings.System.QS_TILE_LABEL_HIDE,
         Settings.System.QS_TILE_VERTICAL_LAYOUT,
         Settings.System.QS_LAYOUT,
