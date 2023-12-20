@@ -6819,12 +6819,6 @@ public final class Settings {
         public static final String DOUBLE_TAP_SLEEP_LOCKSCREEN = "double_tap_sleep_lockscreen";
 
         /**
-         * Enable and Disable Dual Tone Colors QsPanel
-         * @hide
-         */
-        public static final String QS_DUAL_TONE = "qs_dual_tone";
-
-        /**
          * @hide
          */
         public static final String QS_PANEL_STYLE = "qs_panel_style";
