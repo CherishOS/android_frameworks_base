@@ -32,7 +32,6 @@ import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.annotation.DrawableRes;
 import android.app.StatusBarManager;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
@@ -40,7 +39,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -661,14 +659,13 @@ public class NavigationBarView extends FrameLayout implements
 
         updateRecentsIcon();
 
-	final boolean hideIMESpace = isHideIMESpaceEnabled();
         boolean disableCursorKeys = !mShowCursorKeys || !useAltBack ||
                 (QuickStepContract.isGesturalMode(mNavBarMode) && mImeVisible);
 
         // Update IME button visibility, a11y and rotate button always overrides the appearance
         boolean disableImeSwitcher =
                 (mNavigationIconHints & StatusBarManager.NAVIGATION_HINT_IME_SWITCHER_SHOWN) == 0
-                || isImeRenderingNavButtons() || !disableCursorKeys && hideIMESpace;
+                || isImeRenderingNavButtons() || !disableCursorKeys;
         mContextualButtonGroup.setButtonVisibility(R.id.ime_switcher, !disableImeSwitcher);
 
         mBarTransitions.reapplyDarkIntensity();
@@ -685,7 +682,7 @@ public class NavigationBarView extends FrameLayout implements
 
         boolean disableBack = !useAltBack && (mEdgeBackGestureHandler.isHandlingGestures()
                 || ((mDisabledFlags & View.STATUS_BAR_DISABLE_BACK) != 0))
-                || isImeRenderingNavButtons() || hideIMESpace;
+                || isImeRenderingNavButtons();
 
         // When screen pinning, don't hide back and home when connected service or back and
         // recents buttons when disconnected from launcher service in screen pinning mode,
@@ -1077,14 +1074,8 @@ public class NavigationBarView extends FrameLayout implements
                             com.android.internal.R.dimen.navigation_bar_height_landscape)
                     : getResources().getDimensionPixelSize(
                             com.android.internal.R.dimen.navigation_bar_height);
-	    int frameHeight;
-	    if (isHideIMESpaceEnabled()) {
-              frameHeight = getResources().getDimensionPixelSize(
-                      com.android.internal.R.dimen.navigation_bar_frame_height_hide_ime);
-	    } else {
-              frameHeight = getResources().getDimensionPixelSize(
-                      com.android.internal.R.dimen.navigation_bar_frame_height);	    
-	    }
+            int frameHeight = getResources().getDimensionPixelSize(
+                    com.android.internal.R.dimen.navigation_bar_frame_height);
             mBarTransitions.setBackgroundFrame(new Rect(0, frameHeight - height, w, h));
         } else {
             mBarTransitions.setBackgroundFrame(null);
@@ -1315,10 +1306,5 @@ public class NavigationBarView extends FrameLayout implements
 
     interface UpdateActiveTouchRegionsCallback {
         void update();
-    }
-    
-    public boolean isHideIMESpaceEnabled() {
-        return Settings.System.getIntForUser(getContext().getContentResolver(),
-                     Settings.System.HIDE_IME_SPACE_ENABLE , 0, UserHandle.USER_CURRENT) != 0;
     }
 }
