@@ -107,6 +107,8 @@ public class ClockController implements TunerService.Tunable {
     }
 
     public void onDensityOrFontScaleChanged() {
-        mActiveClock.onDensityOrFontScaleChanged();
+        if (mActiveClock != null) {
+            mActiveClock.onDensityOrFontScaleChanged();
+        }
     }
 }
