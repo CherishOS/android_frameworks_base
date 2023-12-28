@@ -86,7 +86,8 @@ public class PixelPropsUtils {
             "com.microsoft.android.smsorganizer",
             "com.nhs.online.nhsonline",
             "com.nothing.smartcenter",
-            "in.startv.hotstar"
+            "in.startv.hotstar",
+            "jp.id_credit_sp2.android"
     };
 
     private static final String[] customGoogleCameraPackages = {
