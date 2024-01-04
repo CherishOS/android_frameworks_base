@@ -41803,6 +41803,7 @@ package android.telecom {
     field public static final int SUPPORTS_SET_INACTIVE = 2; // 0x2
     field public static final int SUPPORTS_STREAM = 4; // 0x4
     field public static final int SUPPORTS_TRANSFER = 8; // 0x8
+    field @FlaggedApi("com.android.server.telecom.flags.transactional_video_state") public static final int SUPPORTS_VIDEO_CALLING = 16; // 0x10
     field public static final int VIDEO_CALL = 2; // 0x2
   }
 
@@ -41838,6 +41839,7 @@ package android.telecom {
     method @NonNull public android.os.ParcelUuid getCallId();
     method public void requestCallEndpointChange(@NonNull android.telecom.CallEndpoint, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.telecom.CallException>);
     method @FlaggedApi("com.android.server.telecom.flags.set_mute_state") public void requestMuteState(boolean, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.telecom.CallException>);
+    method @FlaggedApi("com.android.server.telecom.flags.transactional_video_state") public void requestVideoState(int, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.telecom.CallException>);
     method public void sendEvent(@NonNull String, @NonNull android.os.Bundle);
     method public void setActive(@NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.telecom.CallException>);
     method public void setInactive(@NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.telecom.CallException>);
@@ -41886,6 +41888,7 @@ package android.telecom {
     method public void onCallStreamingFailed(int);
     method public void onEvent(@NonNull String, @NonNull android.os.Bundle);
     method public void onMuteStateChanged(boolean);
+    method @FlaggedApi("com.android.server.telecom.flags.transactional_video_state") public default void onVideoStateChanged(int);
   }
 
   public final class CallException extends java.lang.RuntimeException implements android.os.Parcelable {
