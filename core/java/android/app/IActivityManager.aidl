@@ -934,4 +934,14 @@ interface IActivityManager {
      *  Force full screen for devices with cutout
      */
     boolean shouldForceCutoutFullscreen(in String packageName);
+
+    /**
+     * Notify AMS about binder transactions to frozen apps.
+     *
+     * @param debugPid The binder transaction sender
+     * @param code The binder transaction code
+     * @param flags The binder transaction flags
+     * @param err The binder transaction error
+     */
+    oneway void frozenBinderTransactionDetected(int debugPid, int code, int flags, int err);
 }
