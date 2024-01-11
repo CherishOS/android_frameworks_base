@@ -18617,6 +18617,7 @@ package android.hardware {
   }
 
   public final class SyncFence implements java.lang.AutoCloseable android.os.Parcelable {
+    ctor @FlaggedApi("com.android.window.flags.sdk_desired_present_time") public SyncFence(@NonNull android.hardware.SyncFence);
     method public boolean await(@NonNull java.time.Duration);
     method public boolean awaitForever();
     method public void close();
@@ -28958,7 +28959,7 @@ package android.nfc.cardemulation {
     method public boolean supportsAidPrefixRegistration();
     method @NonNull @RequiresPermission(android.Manifest.permission.NFC) public boolean unsetOffHostForService(@NonNull android.content.ComponentName);
     method public boolean unsetPreferredService(android.app.Activity);
-    field public static final String ACTION_CHANGE_DEFAULT = "android.nfc.cardemulation.action.ACTION_CHANGE_DEFAULT";
+    field @Deprecated public static final String ACTION_CHANGE_DEFAULT = "android.nfc.cardemulation.action.ACTION_CHANGE_DEFAULT";
     field public static final String CATEGORY_OTHER = "other";
     field public static final String CATEGORY_PAYMENT = "payment";
     field public static final String EXTRA_CATEGORY = "category";
@@ -33409,6 +33410,7 @@ package android.os {
     method public static final long getElapsedCpuTime();
     method public static final int[] getExclusiveCores();
     method public static final int getGidForName(String);
+    method @FlaggedApi("com.android.sdksandbox.flags.sdk_sandbox_uid_to_app_uid_api") public static final int getSdkSandboxUidForAppUid(int);
     method public static long getStartElapsedRealtime();
     method public static long getStartRequestedElapsedRealtime();
     method public static long getStartRequestedUptimeMillis();
@@ -51798,6 +51800,7 @@ package android.view {
   public static class SurfaceControl.Transaction implements java.io.Closeable android.os.Parcelable {
     ctor public SurfaceControl.Transaction();
     method @NonNull public android.view.SurfaceControl.Transaction addTransactionCommittedListener(@NonNull java.util.concurrent.Executor, @NonNull android.view.SurfaceControl.TransactionCommittedListener);
+    method @FlaggedApi("com.android.window.flags.sdk_desired_present_time") @NonNull public android.view.SurfaceControl.Transaction addTransactionCompletedListener(@NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.view.SurfaceControl.TransactionStats>);
     method public void apply();
     method @NonNull public android.view.SurfaceControl.Transaction clearFrameRate(@NonNull android.view.SurfaceControl);
     method @NonNull public android.view.SurfaceControl.Transaction clearTrustedPresentationCallback(@NonNull android.view.SurfaceControl);
@@ -51814,9 +51817,11 @@ package android.view {
     method @NonNull public android.view.SurfaceControl.Transaction setCrop(@NonNull android.view.SurfaceControl, @Nullable android.graphics.Rect);
     method @NonNull public android.view.SurfaceControl.Transaction setDamageRegion(@NonNull android.view.SurfaceControl, @Nullable android.graphics.Region);
     method @NonNull public android.view.SurfaceControl.Transaction setDataSpace(@NonNull android.view.SurfaceControl, int);
+    method @FlaggedApi("com.android.window.flags.sdk_desired_present_time") @NonNull public android.view.SurfaceControl.Transaction setDesiredPresentTime(long);
     method @NonNull public android.view.SurfaceControl.Transaction setExtendedRangeBrightness(@NonNull android.view.SurfaceControl, float, float);
     method @NonNull public android.view.SurfaceControl.Transaction setFrameRate(@NonNull android.view.SurfaceControl, @FloatRange(from=0.0) float, int);
     method @NonNull public android.view.SurfaceControl.Transaction setFrameRate(@NonNull android.view.SurfaceControl, @FloatRange(from=0.0) float, int, int);
+    method @FlaggedApi("com.android.window.flags.sdk_desired_present_time") @NonNull public android.view.SurfaceControl.Transaction setFrameTimeline(long);
     method @Deprecated @NonNull public android.view.SurfaceControl.Transaction setGeometry(@NonNull android.view.SurfaceControl, @Nullable android.graphics.Rect, @Nullable android.graphics.Rect, int);
     method @NonNull public android.view.SurfaceControl.Transaction setLayer(@NonNull android.view.SurfaceControl, @IntRange(from=java.lang.Integer.MIN_VALUE, to=java.lang.Integer.MAX_VALUE) int);
     method @NonNull public android.view.SurfaceControl.Transaction setOpaque(@NonNull android.view.SurfaceControl, boolean);
@@ -51830,6 +51835,11 @@ package android.view {
 
   public static interface SurfaceControl.TransactionCommittedListener {
     method public void onTransactionCommitted();
+  }
+
+  @FlaggedApi("com.android.window.flags.sdk_desired_present_time") public static final class SurfaceControl.TransactionStats {
+    method @FlaggedApi("com.android.window.flags.sdk_desired_present_time") public long getLatchTime();
+    method @FlaggedApi("com.android.window.flags.sdk_desired_present_time") @NonNull public android.hardware.SyncFence getPresentFence();
   }
 
   public static final class SurfaceControl.TrustedPresentationThresholds {
