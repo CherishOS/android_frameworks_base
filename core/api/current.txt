@@ -49,6 +49,7 @@ package android {
     field public static final String BIND_SCREENING_SERVICE = "android.permission.BIND_SCREENING_SERVICE";
     field public static final String BIND_TELECOM_CONNECTION_SERVICE = "android.permission.BIND_TELECOM_CONNECTION_SERVICE";
     field public static final String BIND_TEXT_SERVICE = "android.permission.BIND_TEXT_SERVICE";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String BIND_TV_AD_SERVICE = "android.permission.BIND_TV_AD_SERVICE";
     field public static final String BIND_TV_INPUT = "android.permission.BIND_TV_INPUT";
     field public static final String BIND_TV_INTERACTIVE_APP = "android.permission.BIND_TV_INTERACTIVE_APP";
     field public static final String BIND_VISUAL_VOICEMAIL_SERVICE = "android.permission.BIND_VISUAL_VOICEMAIL_SERVICE";
@@ -19733,7 +19734,7 @@ package android.hardware.camera2.params {
   @FlaggedApi("com.android.internal.camera.flags.concert_mode") public final class LensIntrinsicsSample {
     ctor @FlaggedApi("com.android.internal.camera.flags.concert_mode") public LensIntrinsicsSample(long, @NonNull float[]);
     method @FlaggedApi("com.android.internal.camera.flags.concert_mode") @NonNull public float[] getLensIntrinsics();
-    method @FlaggedApi("com.android.internal.camera.flags.concert_mode") public long getTimestamp();
+    method @FlaggedApi("com.android.internal.camera.flags.concert_mode") public long getTimestampNanos();
   }
 
   public final class LensShadingMap {
@@ -33400,7 +33401,7 @@ package android.os {
 
   @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public final class PowerMonitorReadings {
     method @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public long getConsumedEnergy(@NonNull android.os.PowerMonitor);
-    method @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public long getTimestamp(@NonNull android.os.PowerMonitor);
+    method @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public long getTimestampMillis(@NonNull android.os.PowerMonitor);
     field @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public static final int ENERGY_UNAVAILABLE = -1; // 0xffffffff
   }
 
@@ -33995,8 +33996,8 @@ package android.os.health {
   }
 
   public class SystemHealthManager {
-    method @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public void getPowerMonitorReadings(@NonNull java.util.List<android.os.PowerMonitor>, @Nullable android.os.Handler, @NonNull java.util.function.Consumer<android.os.PowerMonitorReadings>, @NonNull java.util.function.Consumer<java.lang.RuntimeException>);
-    method @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public void getSupportedPowerMonitors(@Nullable android.os.Handler, @NonNull java.util.function.Consumer<java.util.List<android.os.PowerMonitor>>);
+    method @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public void getPowerMonitorReadings(@NonNull java.util.List<android.os.PowerMonitor>, @Nullable java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.os.PowerMonitorReadings,java.lang.RuntimeException>);
+    method @FlaggedApi("com.android.server.power.optimization.power_monitor_api") public void getSupportedPowerMonitors(@Nullable java.util.concurrent.Executor, @NonNull java.util.function.Consumer<java.util.List<android.os.PowerMonitor>>);
     method public android.os.health.HealthStats takeMyUidSnapshot();
     method public android.os.health.HealthStats takeUidSnapshot(int);
     method public android.os.health.HealthStats[] takeUidSnapshots(int[]);
@@ -47294,6 +47295,7 @@ package android.text {
     method public int getLineForOffset(int);
     method public int getLineForVertical(int);
     method public float getLineLeft(int);
+    method @FlaggedApi("com.android.text.flags.inter_character_justification") @IntRange(from=0) public int getLineLetterSpacingUnitCount(@IntRange(from=0) int, boolean);
     method public float getLineMax(int);
     method public float getLineRight(int);
     method @FlaggedApi("com.android.text.flags.use_bounds_for_width") public final float getLineSpacingAmount();
@@ -56499,6 +56501,7 @@ package android.view.textclassifier {
     field public static final String TYPE_EMAIL = "email";
     field public static final String TYPE_FLIGHT_NUMBER = "flight";
     field public static final String TYPE_OTHER = "other";
+    field @FlaggedApi("android.service.notification.redact_sensitive_notifications_from_untrusted_listeners") public static final String TYPE_OTP_CODE = "otp_code";
     field public static final String TYPE_PHONE = "phone";
     field public static final String TYPE_UNKNOWN = "";
     field public static final String TYPE_URL = "url";
