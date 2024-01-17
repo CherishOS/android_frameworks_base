@@ -27611,6 +27611,45 @@ package android.media.tv {
 package android.media.tv.ad {
 
   @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public class TvAdManager {
+    method @NonNull public java.util.List<android.media.tv.ad.TvAdServiceInfo> getTvAdServiceList();
+  }
+
+  public abstract static class TvAdManager.TvAdServiceCallback {
+    ctor public TvAdManager.TvAdServiceCallback();
+    method public void onAdServiceAdded(@NonNull String);
+    method public void onAdServiceRemoved(@NonNull String);
+    method public void onAdServiceUpdated(@NonNull String);
+  }
+
+  @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public abstract class TvAdService extends android.app.Service {
+    ctor public TvAdService();
+    method @Nullable public final android.os.IBinder onBind(@Nullable android.content.Intent);
+    method @Nullable public abstract android.media.tv.ad.TvAdService.Session onCreateSession(@NonNull String, @NonNull String);
+    field public static final String SERVICE_INTERFACE = "android.media.tv.ad.TvAdService";
+    field public static final String SERVICE_META_DATA = "android.media.tv.ad.service";
+  }
+
+  public abstract static class TvAdService.Session implements android.view.KeyEvent.Callback {
+    ctor public TvAdService.Session(@NonNull android.content.Context);
+    method public boolean onGenericMotionEvent(@NonNull android.view.MotionEvent);
+    method public boolean onKeyDown(int, @Nullable android.view.KeyEvent);
+    method public boolean onKeyLongPress(int, @Nullable android.view.KeyEvent);
+    method public boolean onKeyMultiple(int, int, @Nullable android.view.KeyEvent);
+    method public boolean onKeyUp(int, @Nullable android.view.KeyEvent);
+    method public abstract void onRelease();
+    method public abstract boolean onSetSurface(@Nullable android.view.Surface);
+    method public boolean onTouchEvent(@NonNull android.view.MotionEvent);
+    method public boolean onTrackballEvent(@NonNull android.view.MotionEvent);
+  }
+
+  @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public final class TvAdServiceInfo implements android.os.Parcelable {
+    ctor public TvAdServiceInfo(@NonNull android.content.Context, @NonNull android.content.ComponentName);
+    method public int describeContents();
+    method @NonNull public String getId();
+    method @Nullable public android.content.pm.ServiceInfo getServiceInfo();
+    method @NonNull public java.util.List<java.lang.String> getSupportedTypes();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.media.tv.ad.TvAdServiceInfo> CREATOR;
   }
 
 }
