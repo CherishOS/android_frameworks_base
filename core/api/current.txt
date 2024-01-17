@@ -1602,7 +1602,6 @@ package android {
     field public static final int switchTextOff = 16843628; // 0x101036c
     field public static final int switchTextOn = 16843627; // 0x101036b
     field public static final int syncable = 16842777; // 0x1010019
-    field @FlaggedApi("android.multiuser.enable_system_user_only_for_services_and_providers") public static final int systemUserOnly;
     field public static final int tabStripEnabled = 16843453; // 0x10102bd
     field public static final int tabStripLeft = 16843451; // 0x10102bb
     field public static final int tabStripRight = 16843452; // 0x10102bc
@@ -4625,9 +4624,9 @@ package android.app {
 
   public class ActivityManager {
     method public int addAppTask(@NonNull android.app.Activity, @NonNull android.content.Intent, @Nullable android.app.ActivityManager.TaskDescription, @NonNull android.graphics.Bitmap);
+    method @FlaggedApi("android.app.app_start_info") public void addApplicationStartInfoCompletionListener(@NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.app.ApplicationStartInfo>);
     method @FlaggedApi("android.app.app_start_info") public void addStartInfoTimestamp(@IntRange(from=android.app.ApplicationStartInfo.START_TIMESTAMP_RESERVED_RANGE_DEVELOPER_START, to=android.app.ApplicationStartInfo.START_TIMESTAMP_RESERVED_RANGE_DEVELOPER) int, long);
     method public void appNotResponding(@NonNull String);
-    method @FlaggedApi("android.app.app_start_info") public void clearApplicationStartInfoCompletionListener();
     method public boolean clearApplicationUserData();
     method public void clearWatchHeapLimit();
     method @RequiresPermission(android.Manifest.permission.DUMP) public void dumpPackageState(java.io.FileDescriptor, String);
@@ -4661,8 +4660,8 @@ package android.app {
     method @RequiresPermission(android.Manifest.permission.KILL_BACKGROUND_PROCESSES) public void killBackgroundProcesses(String);
     method @RequiresPermission(android.Manifest.permission.REORDER_TASKS) public void moveTaskToFront(int, int);
     method @RequiresPermission(android.Manifest.permission.REORDER_TASKS) public void moveTaskToFront(int, int, android.os.Bundle);
+    method @FlaggedApi("android.app.app_start_info") public void removeApplicationStartInfoCompletionListener(@NonNull java.util.function.Consumer<android.app.ApplicationStartInfo>);
     method @Deprecated public void restartPackage(String);
-    method @FlaggedApi("android.app.app_start_info") public void setApplicationStartInfoCompletionListener(@NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.app.ApplicationStartInfo>);
     method public void setProcessStateSummary(@Nullable byte[]);
     method public static void setVrThread(int);
     method public void setWatchHeapLimit(long);
@@ -10387,6 +10386,7 @@ package android.content {
     method @CheckResult(suggest="#enforceCallingPermission(String,String)") public abstract int checkCallingPermission(@NonNull String);
     method @CheckResult(suggest="#enforceCallingUriPermission(Uri,int,String)") public abstract int checkCallingUriPermission(android.net.Uri, int);
     method @NonNull public int[] checkCallingUriPermissions(@NonNull java.util.List<android.net.Uri>, int);
+    method @FlaggedApi("android.security.content_uri_permission_apis") public int checkContentUriPermissionFull(@NonNull android.net.Uri, int, int, int);
     method @CheckResult(suggest="#enforcePermission(String,int,int,String)") public abstract int checkPermission(@NonNull String, int, int);
     method public abstract int checkSelfPermission(@NonNull String);
     method @CheckResult(suggest="#enforceUriPermission(Uri,int,int,String)") public abstract int checkUriPermission(android.net.Uri, int, int, int);
@@ -10545,6 +10545,7 @@ package android.content {
     field public static final int BIND_INCLUDE_CAPABILITIES = 4096; // 0x1000
     field public static final int BIND_NOT_FOREGROUND = 4; // 0x4
     field public static final int BIND_NOT_PERCEPTIBLE = 256; // 0x100
+    field @FlaggedApi("android.content.flags.enable_bind_package_isolated_process") public static final int BIND_PACKAGE_ISOLATED_PROCESS = 16384; // 0x4000
     field public static final int BIND_SHARED_ISOLATED_PROCESS = 8192; // 0x2000
     field public static final int BIND_WAIVE_PRIORITY = 32; // 0x20
     field public static final String BIOMETRIC_SERVICE = "biometric";
@@ -40511,7 +40512,6 @@ package android.service.notification {
 
   public final class ZenPolicy implements android.os.Parcelable {
     method public int describeContents();
-    method @FlaggedApi("android.app.modes_api") public int getAllowedChannels();
     method public int getPriorityCallSenders();
     method public int getPriorityCategoryAlarms();
     method public int getPriorityCategoryCalls();
@@ -40522,6 +40522,7 @@ package android.service.notification {
     method public int getPriorityCategoryReminders();
     method public int getPriorityCategoryRepeatCallers();
     method public int getPriorityCategorySystem();
+    method @FlaggedApi("android.app.modes_api") public int getPriorityChannels();
     method public int getPriorityConversationSenders();
     method public int getPriorityMessageSenders();
     method public int getVisualEffectAmbient();
@@ -40532,9 +40533,6 @@ package android.service.notification {
     method public int getVisualEffectPeek();
     method public int getVisualEffectStatusBar();
     method public void writeToParcel(android.os.Parcel, int);
-    field @FlaggedApi("android.app.modes_api") public static final int CHANNEL_TYPE_NONE = 2; // 0x2
-    field @FlaggedApi("android.app.modes_api") public static final int CHANNEL_TYPE_PRIORITY = 1; // 0x1
-    field @FlaggedApi("android.app.modes_api") public static final int CHANNEL_TYPE_UNSET = 0; // 0x0
     field public static final int CONVERSATION_SENDERS_ANYONE = 1; // 0x1
     field public static final int CONVERSATION_SENDERS_IMPORTANT = 2; // 0x2
     field public static final int CONVERSATION_SENDERS_NONE = 3; // 0x3
@@ -40555,11 +40553,11 @@ package android.service.notification {
     method @NonNull public android.service.notification.ZenPolicy.Builder allowAlarms(boolean);
     method @NonNull public android.service.notification.ZenPolicy.Builder allowAllSounds();
     method @NonNull public android.service.notification.ZenPolicy.Builder allowCalls(int);
-    method @FlaggedApi("android.app.modes_api") @NonNull public android.service.notification.ZenPolicy.Builder allowChannels(int);
     method @NonNull public android.service.notification.ZenPolicy.Builder allowConversations(int);
     method @NonNull public android.service.notification.ZenPolicy.Builder allowEvents(boolean);
     method @NonNull public android.service.notification.ZenPolicy.Builder allowMedia(boolean);
     method @NonNull public android.service.notification.ZenPolicy.Builder allowMessages(int);
+    method @FlaggedApi("android.app.modes_api") @NonNull public android.service.notification.ZenPolicy.Builder allowPriorityChannels(boolean);
     method @NonNull public android.service.notification.ZenPolicy.Builder allowReminders(boolean);
     method @NonNull public android.service.notification.ZenPolicy.Builder allowRepeatCallers(boolean);
     method @NonNull public android.service.notification.ZenPolicy.Builder allowSystem(boolean);
@@ -41655,6 +41653,7 @@ package android.telecom {
     method public void sendEvent(@NonNull String, @NonNull android.os.Bundle);
     method public void setActive(@NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.telecom.CallException>);
     method public void setInactive(@NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.telecom.CallException>);
+    method @FlaggedApi("com.android.server.telecom.flags.set_mute_state") public void setMuteState(boolean, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.telecom.CallException>);
     method public void startCallStreaming(@NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.telecom.CallException>);
   }
 
