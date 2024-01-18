@@ -5317,7 +5317,6 @@ package android.app {
     ctor @Deprecated public AutomaticZenRule(String, android.content.ComponentName, android.net.Uri, int, boolean);
     ctor public AutomaticZenRule(@NonNull String, @Nullable android.content.ComponentName, @Nullable android.content.ComponentName, @NonNull android.net.Uri, @Nullable android.service.notification.ZenPolicy, int, boolean);
     ctor public AutomaticZenRule(android.os.Parcel);
-    method @FlaggedApi("android.app.modes_api") public boolean canUpdate();
     method public int describeContents();
     method public android.net.Uri getConditionId();
     method @Nullable public android.content.ComponentName getConfigurationActivity();
@@ -18753,21 +18752,21 @@ package android.hardware.biometrics {
     method @Nullable public java.security.Signature getSignature();
   }
 
-  @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") public interface PromptContentListItem {
+  @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") public interface PromptContentItem {
   }
 
-  @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") public final class PromptContentListItemBulletedText implements android.os.Parcelable android.hardware.biometrics.PromptContentListItem {
-    ctor public PromptContentListItemBulletedText(@NonNull CharSequence);
+  @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") public final class PromptContentItemBulletedText implements android.os.Parcelable android.hardware.biometrics.PromptContentItem {
+    ctor public PromptContentItemBulletedText(@NonNull CharSequence);
     method public int describeContents();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
-    field @NonNull public static final android.os.Parcelable.Creator<android.hardware.biometrics.PromptContentListItemBulletedText> CREATOR;
+    field @NonNull public static final android.os.Parcelable.Creator<android.hardware.biometrics.PromptContentItemBulletedText> CREATOR;
   }
 
-  @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") public final class PromptContentListItemPlainText implements android.os.Parcelable android.hardware.biometrics.PromptContentListItem {
-    ctor public PromptContentListItemPlainText(@NonNull CharSequence);
+  @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") public final class PromptContentItemPlainText implements android.os.Parcelable android.hardware.biometrics.PromptContentItem {
+    ctor public PromptContentItemPlainText(@NonNull CharSequence);
     method public int describeContents();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
-    field @NonNull public static final android.os.Parcelable.Creator<android.hardware.biometrics.PromptContentListItemPlainText> CREATOR;
+    field @NonNull public static final android.os.Parcelable.Creator<android.hardware.biometrics.PromptContentItemPlainText> CREATOR;
   }
 
   @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") public interface PromptContentView {
@@ -18776,7 +18775,7 @@ package android.hardware.biometrics {
   @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") public final class PromptVerticalListContentView implements android.os.Parcelable android.hardware.biometrics.PromptContentView {
     method public int describeContents();
     method @Nullable public CharSequence getDescription();
-    method @NonNull public java.util.List<android.hardware.biometrics.PromptContentListItem> getListItems();
+    method @NonNull public java.util.List<android.hardware.biometrics.PromptContentItem> getListItems();
     method public static int getMaxEachItemCharacterNumber();
     method public static int getMaxItemCount();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
@@ -18785,7 +18784,8 @@ package android.hardware.biometrics {
 
   public static final class PromptVerticalListContentView.Builder {
     ctor public PromptVerticalListContentView.Builder();
-    method @NonNull public android.hardware.biometrics.PromptVerticalListContentView.Builder addListItem(@NonNull android.hardware.biometrics.PromptContentListItem);
+    method @NonNull public android.hardware.biometrics.PromptVerticalListContentView.Builder addListItem(@NonNull android.hardware.biometrics.PromptContentItem);
+    method @NonNull public android.hardware.biometrics.PromptVerticalListContentView.Builder addListItem(@NonNull android.hardware.biometrics.PromptContentItem, int);
     method @NonNull public android.hardware.biometrics.PromptVerticalListContentView build();
     method @NonNull public android.hardware.biometrics.PromptVerticalListContentView.Builder setDescription(@NonNull CharSequence);
   }
@@ -23341,6 +23341,7 @@ package android.media {
     field public static final String KEY_HDR10_PLUS_INFO = "hdr10-plus-info";
     field public static final String KEY_HDR_STATIC_INFO = "hdr-static-info";
     field public static final String KEY_HEIGHT = "height";
+    field @FlaggedApi("com.android.media.codec.flags.codec_importance") public static final String KEY_IMPORTANCE = "importance";
     field public static final String KEY_INTRA_REFRESH_PERIOD = "intra-refresh-period";
     field public static final String KEY_IS_ADTS = "is-adts";
     field public static final String KEY_IS_AUTOSELECT = "is-autoselect";
@@ -26669,12 +26670,16 @@ package android.media.tv {
 
   public static final class TvContract.Channels implements android.media.tv.TvContract.BaseTvColumns {
     method @Nullable public static String getVideoResolution(String);
+    field @FlaggedApi("android.media.tv.flags.broadcast_visibility_types") public static final int BROADCAST_VISIBILITY_TYPE_INVISIBLE = 2; // 0x2
+    field @FlaggedApi("android.media.tv.flags.broadcast_visibility_types") public static final int BROADCAST_VISIBILITY_TYPE_NUMERIC_SELECTABLE_ONLY = 1; // 0x1
+    field @FlaggedApi("android.media.tv.flags.broadcast_visibility_types") public static final int BROADCAST_VISIBILITY_TYPE_VISIBLE = 0; // 0x0
     field public static final String COLUMN_APP_LINK_COLOR = "app_link_color";
     field public static final String COLUMN_APP_LINK_ICON_URI = "app_link_icon_uri";
     field public static final String COLUMN_APP_LINK_INTENT_URI = "app_link_intent_uri";
     field public static final String COLUMN_APP_LINK_POSTER_ART_URI = "app_link_poster_art_uri";
     field public static final String COLUMN_APP_LINK_TEXT = "app_link_text";
     field public static final String COLUMN_BROADCAST_GENRE = "broadcast_genre";
+    field @FlaggedApi("android.media.tv.flags.broadcast_visibility_types") public static final String COLUMN_BROADCAST_VISIBILITY_TYPE = "broadcast_visibility_type";
     field public static final String COLUMN_BROWSABLE = "browsable";
     field public static final String COLUMN_CHANNEL_LIST_ID = "channel_list_id";
     field public static final String COLUMN_DESCRIPTION = "description";
@@ -43072,6 +43077,8 @@ package android.telephony {
     field public static final String KEY_RTT_UPGRADE_SUPPORTED_FOR_DOWNGRADED_VT_CALL_BOOL = "rtt_upgrade_supported_for_downgraded_vt_call";
     field @FlaggedApi("com.android.internal.telephony.flags.carrier_enabled_satellite_flag") public static final String KEY_SATELLITE_ATTACH_SUPPORTED_BOOL = "satellite_attach_supported_bool";
     field @FlaggedApi("com.android.internal.telephony.flags.carrier_enabled_satellite_flag") public static final String KEY_SATELLITE_CONNECTION_HYSTERESIS_SEC_INT = "satellite_connection_hysteresis_sec_int";
+    field @FlaggedApi("com.android.internal.telephony.flags.carrier_enabled_satellite_flag") public static final String KEY_SATELLITE_ENTITLEMENT_STATUS_REFRESH_DAYS_INT = "satellite_entitlement_status_refresh_days_int";
+    field @FlaggedApi("com.android.internal.telephony.flags.carrier_enabled_satellite_flag") public static final String KEY_SATELLITE_ENTITLEMENT_SUPPORTED_BOOL = "satellite_entitlement_supported_bool";
     field public static final String KEY_SHOW_4G_FOR_3G_DATA_ICON_BOOL = "show_4g_for_3g_data_icon_bool";
     field public static final String KEY_SHOW_4G_FOR_LTE_DATA_ICON_BOOL = "show_4g_for_lte_data_icon_bool";
     field public static final String KEY_SHOW_APN_SETTING_CDMA_BOOL = "show_apn_setting_cdma_bool";
