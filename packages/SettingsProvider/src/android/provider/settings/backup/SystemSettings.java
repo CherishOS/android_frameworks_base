@@ -109,5 +109,8 @@ public class SystemSettings {
         Settings.System.NOTIFICATION_COOLDOWN_VIBRATE_UNLOCKED,
         Settings.System.QS_PANEL_STYLE,
         Settings.System.NAVIGATION_BAR_IME_SPACE,
+        Settings.System.MAX_CALL_VOLUME,
+        Settings.System.MAX_MUSIC_VOLUME,
+        Settings.System.MAX_ALARM_VOLUME,
     };
 }
