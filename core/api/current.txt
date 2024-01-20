@@ -9380,6 +9380,7 @@ package android.app.usage {
     method public long getBeginTimeMillis();
     method public long getEndTimeMillis();
     method @NonNull public int[] getEventTypes();
+    method @NonNull public java.util.Set<java.lang.String> getPackageNames();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.app.usage.UsageEventsQuery> CREATOR;
   }
@@ -9388,6 +9389,7 @@ package android.app.usage {
     ctor public UsageEventsQuery.Builder(long, long);
     method @NonNull public android.app.usage.UsageEventsQuery build();
     method @NonNull public android.app.usage.UsageEventsQuery.Builder setEventTypes(@NonNull int...);
+    method @NonNull public android.app.usage.UsageEventsQuery.Builder setPackageNames(@NonNull java.lang.String...);
   }
 
   public final class UsageStats implements android.os.Parcelable {
@@ -16704,7 +16706,6 @@ package android.graphics {
   }
 
   public final class RecordingCanvas extends android.graphics.Canvas {
-    method public final void drawMesh(@NonNull android.graphics.Mesh, android.graphics.BlendMode, @NonNull android.graphics.Paint);
   }
 
   public final class Rect implements android.os.Parcelable {
@@ -22152,16 +22153,17 @@ package android.media {
     method public void onJetUserIdUpdate(android.media.JetPlayer, int, int);
   }
 
-  @FlaggedApi("android.media.audio.loudness_configurator_api") public class LoudnessCodecConfigurator {
+  @FlaggedApi("android.media.audio.loudness_configurator_api") public class LoudnessCodecController implements java.lang.AutoCloseable {
     method @FlaggedApi("android.media.audio.loudness_configurator_api") public boolean addMediaCodec(@NonNull android.media.MediaCodec);
-    method @FlaggedApi("android.media.audio.loudness_configurator_api") @NonNull public static android.media.LoudnessCodecConfigurator create();
-    method @FlaggedApi("android.media.audio.loudness_configurator_api") @NonNull public static android.media.LoudnessCodecConfigurator create(@NonNull java.util.concurrent.Executor, @NonNull android.media.LoudnessCodecConfigurator.OnLoudnessCodecUpdateListener);
-    method @FlaggedApi("android.media.audio.loudness_configurator_api") @NonNull public android.os.Bundle getLoudnessCodecParams(@NonNull android.media.AudioTrack, @NonNull android.media.MediaCodec);
+    method public void close();
+    method @FlaggedApi("android.media.audio.loudness_configurator_api") @NonNull public static android.media.LoudnessCodecController create(int);
+    method @FlaggedApi("android.media.audio.loudness_configurator_api") @NonNull public static android.media.LoudnessCodecController create(int, @NonNull java.util.concurrent.Executor, @NonNull android.media.LoudnessCodecController.OnLoudnessCodecUpdateListener);
+    method @FlaggedApi("android.media.audio.loudness_configurator_api") @NonNull public android.os.Bundle getLoudnessCodecParams(@NonNull android.media.MediaCodec);
+    method @FlaggedApi("android.media.audio.loudness_configurator_api") public void release();
     method @FlaggedApi("android.media.audio.loudness_configurator_api") public void removeMediaCodec(@NonNull android.media.MediaCodec);
-    method @FlaggedApi("android.media.audio.loudness_configurator_api") public void setAudioTrack(@Nullable android.media.AudioTrack);
   }
 
-  @FlaggedApi("android.media.audio.loudness_configurator_api") public static interface LoudnessCodecConfigurator.OnLoudnessCodecUpdateListener {
+  @FlaggedApi("android.media.audio.loudness_configurator_api") public static interface LoudnessCodecController.OnLoudnessCodecUpdateListener {
     method @FlaggedApi("android.media.audio.loudness_configurator_api") @NonNull public default android.os.Bundle onLoudnessCodecUpdate(@NonNull android.media.MediaCodec, @NonNull android.os.Bundle);
   }
 
@@ -42217,9 +42219,11 @@ package android.telecom {
     method public android.graphics.drawable.Icon getIcon();
     method public CharSequence getLabel();
     method public CharSequence getShortDescription();
+    method @FlaggedApi("com.android.internal.telephony.flags.simultaneous_calling_indications") @NonNull public java.util.Set<android.telecom.PhoneAccountHandle> getSimultaneousCallingRestriction();
     method public android.net.Uri getSubscriptionAddress();
     method public java.util.List<java.lang.String> getSupportedUriSchemes();
     method public boolean hasCapabilities(int);
+    method @FlaggedApi("com.android.internal.telephony.flags.simultaneous_calling_indications") public boolean hasSimultaneousCallingRestriction();
     method public boolean isEnabled();
     method public boolean supportsUriScheme(String);
     method public android.telecom.PhoneAccount.Builder toBuilder();
@@ -42260,12 +42264,14 @@ package android.telecom {
     ctor public PhoneAccount.Builder(android.telecom.PhoneAccount);
     method public android.telecom.PhoneAccount.Builder addSupportedUriScheme(String);
     method public android.telecom.PhoneAccount build();
+    method @FlaggedApi("com.android.internal.telephony.flags.simultaneous_calling_indications") @NonNull public android.telecom.PhoneAccount.Builder clearSimultaneousCallingRestriction();
     method public android.telecom.PhoneAccount.Builder setAddress(android.net.Uri);
     method public android.telecom.PhoneAccount.Builder setCapabilities(int);
     method public android.telecom.PhoneAccount.Builder setExtras(android.os.Bundle);
     method public android.telecom.PhoneAccount.Builder setHighlightColor(int);
     method public android.telecom.PhoneAccount.Builder setIcon(android.graphics.drawable.Icon);
     method public android.telecom.PhoneAccount.Builder setShortDescription(CharSequence);
+    method @FlaggedApi("com.android.internal.telephony.flags.simultaneous_calling_indications") @NonNull public android.telecom.PhoneAccount.Builder setSimultaneousCallingRestriction(@NonNull java.util.Set<android.telecom.PhoneAccountHandle>);
     method public android.telecom.PhoneAccount.Builder setSubscriptionAddress(android.net.Uri);
     method public android.telecom.PhoneAccount.Builder setSupportedUriSchemes(java.util.List<java.lang.String>);
   }
@@ -51419,7 +51425,7 @@ package android.view {
     method @NonNull public android.view.SurfaceControl.Transaction setCrop(@NonNull android.view.SurfaceControl, @Nullable android.graphics.Rect);
     method @NonNull public android.view.SurfaceControl.Transaction setDamageRegion(@NonNull android.view.SurfaceControl, @Nullable android.graphics.Region);
     method @NonNull public android.view.SurfaceControl.Transaction setDataSpace(@NonNull android.view.SurfaceControl, int);
-    method @FlaggedApi("com.android.window.flags.sdk_desired_present_time") @NonNull public android.view.SurfaceControl.Transaction setDesiredPresentTime(long);
+    method @FlaggedApi("com.android.window.flags.sdk_desired_present_time") @NonNull public android.view.SurfaceControl.Transaction setDesiredPresentTimeNanos(long);
     method @NonNull public android.view.SurfaceControl.Transaction setExtendedRangeBrightness(@NonNull android.view.SurfaceControl, float, float);
     method @NonNull public android.view.SurfaceControl.Transaction setFrameRate(@NonNull android.view.SurfaceControl, @FloatRange(from=0.0) float, int);
     method @NonNull public android.view.SurfaceControl.Transaction setFrameRate(@NonNull android.view.SurfaceControl, @FloatRange(from=0.0) float, int, int);
@@ -51440,7 +51446,7 @@ package android.view {
   }
 
   @FlaggedApi("com.android.window.flags.sdk_desired_present_time") public static final class SurfaceControl.TransactionStats {
-    method @FlaggedApi("com.android.window.flags.sdk_desired_present_time") public long getLatchTime();
+    method @FlaggedApi("com.android.window.flags.sdk_desired_present_time") public long getLatchTimeNanos();
     method @FlaggedApi("com.android.window.flags.sdk_desired_present_time") @NonNull public android.hardware.SyncFence getPresentFence();
   }
 
