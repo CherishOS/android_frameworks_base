@@ -195,6 +195,7 @@ package android {
     field public static final String MANAGE_DEVICE_POLICY_SYSTEM_APPS = "android.permission.MANAGE_DEVICE_POLICY_SYSTEM_APPS";
     field public static final String MANAGE_DEVICE_POLICY_SYSTEM_DIALOGS = "android.permission.MANAGE_DEVICE_POLICY_SYSTEM_DIALOGS";
     field public static final String MANAGE_DEVICE_POLICY_SYSTEM_UPDATES = "android.permission.MANAGE_DEVICE_POLICY_SYSTEM_UPDATES";
+    field @FlaggedApi("com.android.net.thread.flags.thread_user_restriction_enabled") public static final String MANAGE_DEVICE_POLICY_THREAD_NETWORK = "android.permission.MANAGE_DEVICE_POLICY_THREAD_NETWORK";
     field public static final String MANAGE_DEVICE_POLICY_TIME = "android.permission.MANAGE_DEVICE_POLICY_TIME";
     field public static final String MANAGE_DEVICE_POLICY_USB_DATA_SIGNALLING = "android.permission.MANAGE_DEVICE_POLICY_USB_DATA_SIGNALLING";
     field public static final String MANAGE_DEVICE_POLICY_USB_FILE_TRANSFER = "android.permission.MANAGE_DEVICE_POLICY_USB_FILE_TRANSFER";
@@ -12318,6 +12319,7 @@ package android.content.pm {
     method public void registerCallback(android.content.pm.LauncherApps.Callback, android.os.Handler);
     method public void registerPackageInstallerSessionCallback(@NonNull java.util.concurrent.Executor, @NonNull android.content.pm.PackageInstaller.SessionCallback);
     method public android.content.pm.LauncherActivityInfo resolveActivity(android.content.Intent, android.os.UserHandle);
+    method @FlaggedApi("android.content.pm.archiving") public void setArchiveCompatibilityOptions(boolean, boolean);
     method public boolean shouldHideFromSuggestions(@NonNull String, @NonNull android.os.UserHandle);
     method public void startAppDetailsActivity(android.content.ComponentName, android.os.UserHandle, android.graphics.Rect, android.os.Bundle);
     method public void startMainActivity(android.content.ComponentName, android.os.UserHandle, android.graphics.Rect, android.os.Bundle);
@@ -17875,6 +17877,7 @@ package android.graphics.text {
     field public static final int HYPHENATION_FREQUENCY_FULL = 2; // 0x2
     field public static final int HYPHENATION_FREQUENCY_NONE = 0; // 0x0
     field public static final int HYPHENATION_FREQUENCY_NORMAL = 1; // 0x1
+    field @FlaggedApi("com.android.text.flags.inter_character_justification") public static final int JUSTIFICATION_MODE_INTER_CHARACTER = 2; // 0x2
     field public static final int JUSTIFICATION_MODE_INTER_WORD = 1; // 0x1
     field public static final int JUSTIFICATION_MODE_NONE = 0; // 0x0
   }
@@ -25475,34 +25478,34 @@ package android.media.audiofx {
     field public short preset;
   }
 
-  public class Virtualizer extends android.media.audiofx.AudioEffect {
-    ctor public Virtualizer(int, int) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException, java.lang.RuntimeException, java.lang.UnsupportedOperationException;
-    method public boolean canVirtualize(int, int) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException, java.lang.UnsupportedOperationException;
-    method public boolean forceVirtualizationMode(int) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException, java.lang.UnsupportedOperationException;
-    method public android.media.audiofx.Virtualizer.Settings getProperties() throws java.lang.IllegalArgumentException, java.lang.IllegalStateException, java.lang.UnsupportedOperationException;
-    method public short getRoundedStrength() throws java.lang.IllegalArgumentException, java.lang.IllegalStateException, java.lang.UnsupportedOperationException;
-    method public boolean getSpeakerAngles(int, int, int[]) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException, java.lang.UnsupportedOperationException;
-    method public boolean getStrengthSupported();
-    method public int getVirtualizationMode() throws java.lang.IllegalStateException, java.lang.UnsupportedOperationException;
-    method public void setParameterListener(android.media.audiofx.Virtualizer.OnParameterChangeListener);
-    method public void setProperties(android.media.audiofx.Virtualizer.Settings) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException, java.lang.UnsupportedOperationException;
-    method public void setStrength(short) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException, java.lang.UnsupportedOperationException;
-    field public static final int PARAM_STRENGTH = 1; // 0x1
-    field public static final int PARAM_STRENGTH_SUPPORTED = 0; // 0x0
-    field public static final int VIRTUALIZATION_MODE_AUTO = 1; // 0x1
-    field public static final int VIRTUALIZATION_MODE_BINAURAL = 2; // 0x2
-    field public static final int VIRTUALIZATION_MODE_OFF = 0; // 0x0
-    field public static final int VIRTUALIZATION_MODE_TRANSAURAL = 3; // 0x3
+  @Deprecated public class Virtualizer extends android.media.audiofx.AudioEffect {
+    ctor @Deprecated public Virtualizer(int, int) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException, java.lang.RuntimeException, java.lang.UnsupportedOperationException;
+    method @Deprecated public boolean canVirtualize(int, int) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException, java.lang.UnsupportedOperationException;
+    method @Deprecated public boolean forceVirtualizationMode(int) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException, java.lang.UnsupportedOperationException;
+    method @Deprecated public android.media.audiofx.Virtualizer.Settings getProperties() throws java.lang.IllegalArgumentException, java.lang.IllegalStateException, java.lang.UnsupportedOperationException;
+    method @Deprecated public short getRoundedStrength() throws java.lang.IllegalArgumentException, java.lang.IllegalStateException, java.lang.UnsupportedOperationException;
+    method @Deprecated public boolean getSpeakerAngles(int, int, int[]) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException, java.lang.UnsupportedOperationException;
+    method @Deprecated public boolean getStrengthSupported();
+    method @Deprecated public int getVirtualizationMode() throws java.lang.IllegalStateException, java.lang.UnsupportedOperationException;
+    method @Deprecated public void setParameterListener(android.media.audiofx.Virtualizer.OnParameterChangeListener);
+    method @Deprecated public void setProperties(android.media.audiofx.Virtualizer.Settings) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException, java.lang.UnsupportedOperationException;
+    method @Deprecated public void setStrength(short) throws java.lang.IllegalArgumentException, java.lang.IllegalStateException, java.lang.UnsupportedOperationException;
+    field @Deprecated public static final int PARAM_STRENGTH = 1; // 0x1
+    field @Deprecated public static final int PARAM_STRENGTH_SUPPORTED = 0; // 0x0
+    field @Deprecated public static final int VIRTUALIZATION_MODE_AUTO = 1; // 0x1
+    field @Deprecated public static final int VIRTUALIZATION_MODE_BINAURAL = 2; // 0x2
+    field @Deprecated public static final int VIRTUALIZATION_MODE_OFF = 0; // 0x0
+    field @Deprecated public static final int VIRTUALIZATION_MODE_TRANSAURAL = 3; // 0x3
   }
 
-  public static interface Virtualizer.OnParameterChangeListener {
-    method public void onParameterChange(android.media.audiofx.Virtualizer, int, int, short);
+  @Deprecated public static interface Virtualizer.OnParameterChangeListener {
+    method @Deprecated public void onParameterChange(android.media.audiofx.Virtualizer, int, int, short);
   }
 
-  public static class Virtualizer.Settings {
-    ctor public Virtualizer.Settings();
-    ctor public Virtualizer.Settings(String);
-    field public short strength;
+  @Deprecated public static class Virtualizer.Settings {
+    ctor @Deprecated public Virtualizer.Settings();
+    ctor @Deprecated public Virtualizer.Settings(String);
+    field @Deprecated public short strength;
   }
 
   public class Visualizer {
@@ -46954,6 +46957,7 @@ package android.text {
     field @NonNull public static final android.text.Layout.TextInclusionStrategy INCLUSION_STRATEGY_ANY_OVERLAP;
     field @NonNull public static final android.text.Layout.TextInclusionStrategy INCLUSION_STRATEGY_CONTAINS_ALL;
     field @NonNull public static final android.text.Layout.TextInclusionStrategy INCLUSION_STRATEGY_CONTAINS_CENTER;
+    field @FlaggedApi("com.android.text.flags.inter_character_justification") public static final int JUSTIFICATION_MODE_INTER_CHARACTER = 2; // 0x2
     field public static final int JUSTIFICATION_MODE_INTER_WORD = 1; // 0x1
     field public static final int JUSTIFICATION_MODE_NONE = 0; // 0x0
   }
