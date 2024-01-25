@@ -1604,6 +1604,7 @@ package android {
     field public static final int switchTextOff = 16843628; // 0x101036c
     field public static final int switchTextOn = 16843627; // 0x101036b
     field public static final int syncable = 16842777; // 0x1010019
+    field @FlaggedApi("android.multiuser.enable_system_user_only_for_services_and_providers") public static final int systemUserOnly;
     field public static final int tabStripEnabled = 16843453; // 0x10102bd
     field public static final int tabStripLeft = 16843451; // 0x10102bb
     field public static final int tabStripRight = 16843452; // 0x10102bc
@@ -7700,7 +7701,7 @@ package android.app {
     method @Nullable public android.app.WallpaperColors getWallpaperColors(int);
     method @Nullable @RequiresPermission(anyOf={android.Manifest.permission.MANAGE_EXTERNAL_STORAGE, "android.permission.READ_WALLPAPER_INTERNAL"}) public android.os.ParcelFileDescriptor getWallpaperFile(int);
     method public int getWallpaperId(int);
-    method public android.app.WallpaperInfo getWallpaperInfo();
+    method @RequiresPermission(value="QUERY_ALL_PACKAGES", conditional=true) public android.app.WallpaperInfo getWallpaperInfo();
     method @Nullable public android.app.WallpaperInfo getWallpaperInfo(int);
     method public boolean hasResourceWallpaper(@RawRes int);
     method public boolean isSetWallpaperAllowed();
@@ -22195,11 +22196,10 @@ package android.media {
 
   @FlaggedApi("android.media.audio.loudness_configurator_api") public class LoudnessCodecController implements java.lang.AutoCloseable {
     method @FlaggedApi("android.media.audio.loudness_configurator_api") public boolean addMediaCodec(@NonNull android.media.MediaCodec);
-    method public void close();
+    method @FlaggedApi("android.media.audio.loudness_configurator_api") public void close();
     method @FlaggedApi("android.media.audio.loudness_configurator_api") @NonNull public static android.media.LoudnessCodecController create(int);
     method @FlaggedApi("android.media.audio.loudness_configurator_api") @NonNull public static android.media.LoudnessCodecController create(int, @NonNull java.util.concurrent.Executor, @NonNull android.media.LoudnessCodecController.OnLoudnessCodecUpdateListener);
     method @FlaggedApi("android.media.audio.loudness_configurator_api") @NonNull public android.os.Bundle getLoudnessCodecParams(@NonNull android.media.MediaCodec);
-    method @FlaggedApi("android.media.audio.loudness_configurator_api") public void release();
     method @FlaggedApi("android.media.audio.loudness_configurator_api") public void removeMediaCodec(@NonNull android.media.MediaCodec);
   }
 
@@ -36622,6 +36622,7 @@ package android.provider {
     field @FlaggedApi("com.android.media.flags.enable_privileged_routing_for_media_routing_control") public static final String ACTION_REQUEST_MEDIA_ROUTING_CONTROL = "android.settings.REQUEST_MEDIA_ROUTING_CONTROL";
     field public static final String ACTION_REQUEST_SCHEDULE_EXACT_ALARM = "android.settings.REQUEST_SCHEDULE_EXACT_ALARM";
     field public static final String ACTION_REQUEST_SET_AUTOFILL_SERVICE = "android.settings.REQUEST_SET_AUTOFILL_SERVICE";
+    field @FlaggedApi("com.android.internal.telephony.flags.carrier_enabled_satellite_flag") public static final String ACTION_SATELLITE_SETTING = "android.settings.SATELLITE_SETTING";
     field public static final String ACTION_SEARCH_SETTINGS = "android.search.action.SEARCH_SETTINGS";
     field public static final String ACTION_SECURITY_SETTINGS = "android.settings.SECURITY_SETTINGS";
     field public static final String ACTION_SETTINGS = "android.settings.SETTINGS";
@@ -41702,10 +41703,10 @@ package android.telecom {
     method public void disconnect(@NonNull android.telecom.DisconnectCause, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.telecom.CallException>);
     method @NonNull public android.os.ParcelUuid getCallId();
     method public void requestCallEndpointChange(@NonNull android.telecom.CallEndpoint, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.telecom.CallException>);
+    method @FlaggedApi("com.android.server.telecom.flags.set_mute_state") public void requestMuteState(boolean, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.telecom.CallException>);
     method public void sendEvent(@NonNull String, @NonNull android.os.Bundle);
     method public void setActive(@NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.telecom.CallException>);
     method public void setInactive(@NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.telecom.CallException>);
-    method @FlaggedApi("com.android.server.telecom.flags.set_mute_state") public void setMuteState(boolean, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.telecom.CallException>);
     method public void startCallStreaming(@NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<java.lang.Void,android.telecom.CallException>);
   }
 
@@ -52463,9 +52464,9 @@ package android.view {
     field protected static final int[] PRESSED_STATE_SET;
     field protected static final int[] PRESSED_WINDOW_FOCUSED_STATE_SET;
     field @FlaggedApi("android.view.flags.toolkit_set_frame_rate_read_only") public static final float REQUESTED_FRAME_RATE_CATEGORY_DEFAULT = 0.0f;
-    field @FlaggedApi("android.view.flags.toolkit_set_frame_rate_read_only") public static final float REQUESTED_FRAME_RATE_CATEGORY_HIGH = -120.0f;
-    field @FlaggedApi("android.view.flags.toolkit_set_frame_rate_read_only") public static final float REQUESTED_FRAME_RATE_CATEGORY_LOW = -30.0f;
-    field @FlaggedApi("android.view.flags.toolkit_set_frame_rate_read_only") public static final float REQUESTED_FRAME_RATE_CATEGORY_NORMAL = -60.0f;
+    field @FlaggedApi("android.view.flags.toolkit_set_frame_rate_read_only") public static final float REQUESTED_FRAME_RATE_CATEGORY_HIGH = -4.0f;
+    field @FlaggedApi("android.view.flags.toolkit_set_frame_rate_read_only") public static final float REQUESTED_FRAME_RATE_CATEGORY_LOW = -2.0f;
+    field @FlaggedApi("android.view.flags.toolkit_set_frame_rate_read_only") public static final float REQUESTED_FRAME_RATE_CATEGORY_NORMAL = -3.0f;
     field @FlaggedApi("android.view.flags.toolkit_set_frame_rate_read_only") public static final float REQUESTED_FRAME_RATE_CATEGORY_NO_PREFERENCE = -1.0f;
     field public static final android.util.Property<android.view.View,java.lang.Float> ROTATION;
     field public static final android.util.Property<android.view.View,java.lang.Float> ROTATION_X;
@@ -57119,7 +57120,7 @@ package android.webkit {
     method public abstract boolean getBuiltInZoomControls();
     method public abstract int getCacheMode();
     method public abstract String getCursiveFontFamily();
-    method @Deprecated public abstract boolean getDatabaseEnabled();
+    method public abstract boolean getDatabaseEnabled();
     method @Deprecated public abstract String getDatabasePath();
     method public abstract int getDefaultFixedFontSize();
     method public abstract int getDefaultFontSize();
@@ -57165,7 +57166,7 @@ package android.webkit {
     method public abstract void setBuiltInZoomControls(boolean);
     method public abstract void setCacheMode(int);
     method public abstract void setCursiveFontFamily(String);
-    method @Deprecated public abstract void setDatabaseEnabled(boolean);
+    method public abstract void setDatabaseEnabled(boolean);
     method @Deprecated public abstract void setDatabasePath(String);
     method public abstract void setDefaultFixedFontSize(int);
     method public abstract void setDefaultFontSize(int);
@@ -59296,6 +59297,7 @@ package android.widget {
     ctor public RemoteViews(@NonNull java.util.Map<android.util.SizeF,android.widget.RemoteViews>);
     ctor public RemoteViews(android.widget.RemoteViews);
     ctor public RemoteViews(android.os.Parcel);
+    ctor @FlaggedApi("android.appwidget.flags.draw_data_parcel") public RemoteViews(@NonNull android.widget.RemoteViews.DrawInstructions);
     method public void addStableView(@IdRes int, @NonNull android.widget.RemoteViews, int);
     method public void addView(@IdRes int, android.widget.RemoteViews);
     method public android.view.View apply(android.content.Context, android.view.ViewGroup);
@@ -59402,6 +59404,15 @@ package android.widget {
   public static class RemoteViews.ActionException extends java.lang.RuntimeException {
     ctor public RemoteViews.ActionException(Exception);
     ctor public RemoteViews.ActionException(String);
+  }
+
+  @FlaggedApi("android.appwidget.flags.draw_data_parcel") public static final class RemoteViews.DrawInstructions {
+    method @FlaggedApi("android.appwidget.flags.draw_data_parcel") public void appendInstructions(@NonNull byte[]);
+  }
+
+  @FlaggedApi("android.appwidget.flags.draw_data_parcel") public static final class RemoteViews.DrawInstructions.Builder {
+    ctor @FlaggedApi("android.appwidget.flags.draw_data_parcel") public RemoteViews.DrawInstructions.Builder(@NonNull java.util.List<byte[]>);
+    method @FlaggedApi("android.appwidget.flags.draw_data_parcel") @NonNull public android.widget.RemoteViews.DrawInstructions build();
   }
 
   public static final class RemoteViews.RemoteCollectionItems implements android.os.Parcelable {
