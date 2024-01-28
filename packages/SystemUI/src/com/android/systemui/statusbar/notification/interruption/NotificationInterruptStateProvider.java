@@ -179,4 +179,9 @@ public interface NotificationInterruptStateProvider {
 
     void setHeadsUpStoplist();
     void setHeadsUpBlacklist();
+
+    /**
+     * Whether the notification should show pulse light or not.
+     */
+    boolean shouldShowPulseLight(NotificationEntry entry, boolean forFaceDown);
 }
