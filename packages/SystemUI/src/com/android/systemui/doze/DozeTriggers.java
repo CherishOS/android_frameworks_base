@@ -30,6 +30,7 @@ import android.content.IntentFilter;
 import android.hardware.display.AmbientDisplayConfiguration;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.text.format.Formatter;
 import android.util.IndentingPrintWriter;
 import android.util.Log;
@@ -47,6 +48,7 @@ import com.android.systemui.dock.DockManager;
 import com.android.systemui.doze.DozeMachine.State;
 import com.android.systemui.doze.dagger.DozeScope;
 import com.android.systemui.log.SessionTracker;
+import com.android.systemui.res.R;
 import com.android.systemui.settings.UserTracker;
 import com.android.systemui.statusbar.phone.DozeParameters;
 import com.android.systemui.statusbar.policy.DevicePostureController;
@@ -191,6 +193,8 @@ public class DozeTriggers implements DozeMachine.Part {
         }
     }
 
+    private boolean mPulseLightOnFaceDown = false;
+
     @Inject
     public DozeTriggers(Context context, DozeHost dozeHost,
             AmbientDisplayConfiguration config,
@@ -227,6 +231,8 @@ public class DozeTriggers implements DozeMachine.Part {
         mKeyguardStateController = keyguardStateController;
         mUserTracker = userTracker;
         mSelectedUserInteractor = selectedUserInteractor;
+        mPulseLightOnFaceDown = mContext.getResources()
+                .getBoolean(R.bool.config_showEdgeLightOnlyWhenFaceDown);
     }
 
     @Override
@@ -586,7 +592,17 @@ public class DozeTriggers implements DozeMachine.Part {
 
         mDozeHost.setPulsePending(true);
         proximityCheckThenCall((isNear) -> {
-            if (isNear != null && isNear) {
+            // Don't skip pulse for notifications when proximity is near
+            // if edge light is enabled for face down only.
+            boolean shouldPulse = false;
+            if (mPulseLightOnFaceDown) {
+                boolean edgeLightEnabled = Settings.Secure.getIntForUser(
+                        mContext.getContentResolver(), Settings.Secure.PULSE_AMBIENT_LIGHT,
+                        0, UserHandle.USER_CURRENT) != 0;
+                boolean pulseForNotification = reason == DozeLog.PULSE_REASON_NOTIFICATION;
+                shouldPulse = edgeLightEnabled && pulseForNotification;
+            }
+            if (isNear != null && isNear && !shouldPulse) {
                 // in pocket, abort pulse
                 mDozeLog.tracePulseDropped("requestPulse - inPocket");
                 mDozeHost.setPulsePending(false);
