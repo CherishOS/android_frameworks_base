@@ -22371,6 +22371,7 @@ package android.media {
     method @NonNull public java.util.List<java.lang.String> getSupportedVendorParameters();
     method @Nullable public static android.media.Image mapHardwareBuffer(@NonNull android.hardware.HardwareBuffer);
     method public void queueInputBuffer(int, int, int, long, int) throws android.media.MediaCodec.CryptoException;
+    method @FlaggedApi("com.android.media.codec.flags.large_audio_frame") public void queueInputBuffers(int, @NonNull java.util.ArrayDeque<android.media.MediaCodec.BufferInfo>);
     method public void queueSecureInputBuffer(int, int, @NonNull android.media.MediaCodec.CryptoInfo, long, int) throws android.media.MediaCodec.CryptoException;
     method public void release();
     method public void releaseOutputBuffer(int, boolean);
@@ -22432,6 +22433,7 @@ package android.media {
     method public abstract void onError(@NonNull android.media.MediaCodec, @NonNull android.media.MediaCodec.CodecException);
     method public abstract void onInputBufferAvailable(@NonNull android.media.MediaCodec, int);
     method public abstract void onOutputBufferAvailable(@NonNull android.media.MediaCodec, int, @NonNull android.media.MediaCodec.BufferInfo);
+    method @FlaggedApi("com.android.media.codec.flags.large_audio_frame") public void onOutputBuffersAvailable(@NonNull android.media.MediaCodec, int, @NonNull java.util.ArrayDeque<android.media.MediaCodec.BufferInfo>);
     method public abstract void onOutputFormatChanged(@NonNull android.media.MediaCodec, @NonNull android.media.MediaFormat);
   }
 
@@ -22519,6 +22521,7 @@ package android.media {
   }
 
   public static final class MediaCodec.OutputFrame {
+    method @FlaggedApi("com.android.media.codec.flags.large_audio_frame") @NonNull public java.util.ArrayDeque<android.media.MediaCodec.BufferInfo> getBufferInfos();
     method @NonNull public java.util.Set<java.lang.String> getChangedKeys();
     method public int getFlags();
     method @NonNull public android.media.MediaFormat getFormat();
@@ -22534,6 +22537,7 @@ package android.media {
 
   public final class MediaCodec.QueueRequest {
     method public void queue();
+    method @FlaggedApi("com.android.media.codec.flags.large_audio_frame") @NonNull public android.media.MediaCodec.QueueRequest setBufferInfos(@NonNull java.util.ArrayDeque<android.media.MediaCodec.BufferInfo>);
     method @NonNull public android.media.MediaCodec.QueueRequest setByteBufferParameter(@NonNull String, @NonNull java.nio.ByteBuffer);
     method @NonNull public android.media.MediaCodec.QueueRequest setEncryptedLinearBlock(@NonNull android.media.MediaCodec.LinearBlock, int, int, @NonNull android.media.MediaCodec.CryptoInfo);
     method @NonNull public android.media.MediaCodec.QueueRequest setFlags(int);
