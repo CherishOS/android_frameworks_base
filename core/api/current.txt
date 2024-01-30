@@ -12472,8 +12472,11 @@ package android.content.pm {
   public class LauncherApps {
     method public java.util.List<android.content.pm.LauncherActivityInfo> getActivityList(String, android.os.UserHandle);
     method @NonNull public java.util.List<android.content.pm.PackageInstaller.SessionInfo> getAllPackageInstallerSessions();
+    method @FlaggedApi("android.os.allow_private_profile") @Nullable @RequiresPermission(conditional=true, anyOf={"android.permission.ACCESS_HIDDEN_PROFILES_FULL", android.Manifest.permission.ACCESS_HIDDEN_PROFILES}) public android.content.IntentSender getAppMarketActivityIntent(@Nullable String, @NonNull android.os.UserHandle);
     method public android.content.pm.ApplicationInfo getApplicationInfo(@NonNull String, int, @NonNull android.os.UserHandle) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @FlaggedApi("android.os.allow_private_profile") @Nullable @RequiresPermission(conditional=true, anyOf={"android.permission.ACCESS_HIDDEN_PROFILES_FULL", android.Manifest.permission.ACCESS_HIDDEN_PROFILES}) public final android.content.pm.LauncherUserInfo getLauncherUserInfo(@NonNull android.os.UserHandle);
     method public android.content.pm.LauncherApps.PinItemRequest getPinItemRequest(android.content.Intent);
+    method @FlaggedApi("android.os.allow_private_profile") @NonNull @RequiresPermission(conditional=true, anyOf={"android.permission.ACCESS_HIDDEN_PROFILES_FULL", android.Manifest.permission.ACCESS_HIDDEN_PROFILES}) public java.util.List<java.lang.String> getPreInstalledSystemPackages(@NonNull android.os.UserHandle);
     method public java.util.List<android.os.UserHandle> getProfiles();
     method public android.graphics.drawable.Drawable getShortcutBadgedIconDrawable(android.content.pm.ShortcutInfo, int);
     method @Nullable public android.content.IntentSender getShortcutConfigActivityIntent(@NonNull android.content.pm.LauncherActivityInfo);
@@ -12553,6 +12556,14 @@ package android.content.pm {
     field public static final int FLAG_MATCH_MANIFEST = 8; // 0x8
     field public static final int FLAG_MATCH_PINNED = 2; // 0x2
     field public static final int FLAG_MATCH_PINNED_BY_ANY_LAUNCHER = 1024; // 0x400
+  }
+
+  @FlaggedApi("android.os.allow_private_profile") public final class LauncherUserInfo implements android.os.Parcelable {
+    method @FlaggedApi("android.os.allow_private_profile") public int describeContents();
+    method @FlaggedApi("android.os.allow_private_profile") public int getUserSerialNumber();
+    method @FlaggedApi("android.os.allow_private_profile") @NonNull public String getUserType();
+    method @FlaggedApi("android.os.allow_private_profile") public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @FlaggedApi("android.os.allow_private_profile") @NonNull public static final android.os.Parcelable.Creator<android.content.pm.LauncherUserInfo> CREATOR;
   }
 
   public final class ModuleInfo implements android.os.Parcelable {
@@ -34028,6 +34039,9 @@ package android.os {
     field public static final int USER_OPERATION_ERROR_MAX_USERS = 6; // 0x6
     field public static final int USER_OPERATION_ERROR_UNKNOWN = 1; // 0x1
     field public static final int USER_OPERATION_SUCCESS = 0; // 0x0
+    field @FlaggedApi("android.os.allow_private_profile") public static final String USER_TYPE_PROFILE_CLONE = "android.os.usertype.profile.CLONE";
+    field @FlaggedApi("android.os.allow_private_profile") public static final String USER_TYPE_PROFILE_MANAGED = "android.os.usertype.profile.MANAGED";
+    field @FlaggedApi("android.os.allow_private_profile") public static final String USER_TYPE_PROFILE_PRIVATE = "android.os.usertype.profile.PRIVATE";
   }
 
   public static class UserManager.UserOperationException extends java.lang.RuntimeException {
