@@ -147,6 +147,7 @@ package android {
     field public static final String MANAGE_DEVICE_POLICY_CAMERA = "android.permission.MANAGE_DEVICE_POLICY_CAMERA";
     field public static final String MANAGE_DEVICE_POLICY_CERTIFICATES = "android.permission.MANAGE_DEVICE_POLICY_CERTIFICATES";
     field public static final String MANAGE_DEVICE_POLICY_COMMON_CRITERIA_MODE = "android.permission.MANAGE_DEVICE_POLICY_COMMON_CRITERIA_MODE";
+    field @FlaggedApi("android.view.contentprotection.flags.manage_device_policy_enabled") public static final String MANAGE_DEVICE_POLICY_CONTENT_PROTECTION = "android.permission.MANAGE_DEVICE_POLICY_CONTENT_PROTECTION";
     field public static final String MANAGE_DEVICE_POLICY_DEBUGGING_FEATURES = "android.permission.MANAGE_DEVICE_POLICY_DEBUGGING_FEATURES";
     field public static final String MANAGE_DEVICE_POLICY_DEFAULT_SMS = "android.permission.MANAGE_DEVICE_POLICY_DEFAULT_SMS";
     field public static final String MANAGE_DEVICE_POLICY_DEVICE_IDENTIFIERS = "android.permission.MANAGE_DEVICE_POLICY_DEVICE_IDENTIFIERS";
@@ -8194,6 +8195,9 @@ package android.app.admin {
     field public static final String ACTION_SET_NEW_PASSWORD = "android.app.action.SET_NEW_PASSWORD";
     field public static final String ACTION_START_ENCRYPTION = "android.app.action.START_ENCRYPTION";
     field public static final String ACTION_SYSTEM_UPDATE_POLICY_CHANGED = "android.app.action.SYSTEM_UPDATE_POLICY_CHANGED";
+    field @FlaggedApi("android.view.contentprotection.flags.manage_device_policy_enabled") public static final int CONTENT_PROTECTION_DISABLED = 1; // 0x1
+    field @FlaggedApi("android.view.contentprotection.flags.manage_device_policy_enabled") public static final int CONTENT_PROTECTION_ENABLED = 2; // 0x2
+    field @FlaggedApi("android.view.contentprotection.flags.manage_device_policy_enabled") public static final int CONTENT_PROTECTION_NOT_CONTROLLED_BY_POLICY = 0; // 0x0
     field public static final String DELEGATION_APP_RESTRICTIONS = "delegation-app-restrictions";
     field public static final String DELEGATION_BLOCK_UNINSTALL = "delegation-block-uninstall";
     field public static final String DELEGATION_CERT_INSTALL = "delegation-cert-install";
@@ -12387,6 +12391,7 @@ package android.content.pm {
     method public void registerCallback(android.content.pm.LauncherApps.Callback, android.os.Handler);
     method public void registerPackageInstallerSessionCallback(@NonNull java.util.concurrent.Executor, @NonNull android.content.pm.PackageInstaller.SessionCallback);
     method public android.content.pm.LauncherActivityInfo resolveActivity(android.content.Intent, android.os.UserHandle);
+    method @FlaggedApi("android.content.pm.archiving") public void setArchiveCompatibilityOptions(boolean, boolean);
     method public boolean shouldHideFromSuggestions(@NonNull String, @NonNull android.os.UserHandle);
     method public void startAppDetailsActivity(android.content.ComponentName, android.os.UserHandle, android.graphics.Rect, android.os.Bundle);
     method public void startMainActivity(android.content.ComponentName, android.os.UserHandle, android.graphics.Rect, android.os.Bundle);
@@ -25785,6 +25790,7 @@ package android.media.metrics {
     field public static final int FINAL_STATE_CANCELED = 2; // 0x2
     field public static final int FINAL_STATE_ERROR = 3; // 0x3
     field public static final int FINAL_STATE_SUCCEEDED = 1; // 0x1
+    field public static final int TIME_SINCE_CREATED_UNKNOWN = -1; // 0xffffffff
   }
 
   @FlaggedApi("com.android.media.editing.flags.add_media_metrics_editing") public static final class EditingEndedEvent.Builder {
@@ -25792,7 +25798,7 @@ package android.media.metrics {
     method @NonNull public android.media.metrics.EditingEndedEvent build();
     method @NonNull public android.media.metrics.EditingEndedEvent.Builder setErrorCode(int);
     method @NonNull public android.media.metrics.EditingEndedEvent.Builder setMetricsBundle(@NonNull android.os.Bundle);
-    method @NonNull public android.media.metrics.EditingEndedEvent.Builder setTimeSinceCreatedMillis(@IntRange(from=0xffffffff) long);
+    method @NonNull public android.media.metrics.EditingEndedEvent.Builder setTimeSinceCreatedMillis(@IntRange(from=android.media.metrics.EditingEndedEvent.TIME_SINCE_CREATED_UNKNOWN) long);
   }
 
   public final class EditingSession implements java.lang.AutoCloseable {
@@ -33140,7 +33146,7 @@ package android.os {
     method public static long getStartRequestedElapsedRealtime();
     method public static long getStartRequestedUptimeMillis();
     method public static long getStartUptimeMillis();
-    method public static final int getThreadPriority(int) throws java.lang.IllegalArgumentException;
+    method @IntRange(from=0xffffffec, to=android.os.Process.THREAD_PRIORITY_LOWEST) public static final int getThreadPriority(int) throws java.lang.IllegalArgumentException;
     method public static final int getUidForName(String);
     method public static final boolean is64Bit();
     method public static boolean isApplicationUid(int);
@@ -33155,8 +33161,8 @@ package android.os {
     method public static final int myUid();
     method public static android.os.UserHandle myUserHandle();
     method public static final void sendSignal(int, int);
-    method public static final void setThreadPriority(int, int) throws java.lang.IllegalArgumentException, java.lang.SecurityException;
-    method public static final void setThreadPriority(int) throws java.lang.IllegalArgumentException, java.lang.SecurityException;
+    method public static final void setThreadPriority(int, @IntRange(from=0xffffffec, to=android.os.Process.THREAD_PRIORITY_LOWEST) int) throws java.lang.IllegalArgumentException, java.lang.SecurityException;
+    method public static final void setThreadPriority(@IntRange(from=0xffffffec, to=android.os.Process.THREAD_PRIORITY_LOWEST) int) throws java.lang.IllegalArgumentException, java.lang.SecurityException;
     method @Deprecated public static final boolean supportsProcesses();
     field public static final int BLUETOOTH_UID = 1002; // 0x3ea
     field public static final int FIRST_APPLICATION_UID = 10000; // 0x2710
@@ -50644,6 +50650,7 @@ package android.view {
     field public static final int KEYCODE_DVR = 173; // 0xad
     field public static final int KEYCODE_E = 33; // 0x21
     field public static final int KEYCODE_EISU = 212; // 0xd4
+    field @FlaggedApi("com.android.hardware.input.emoji_and_screenshot_keycodes_available") public static final int KEYCODE_EMOJI_PICKER = 317; // 0x13d
     field public static final int KEYCODE_ENDCALL = 6; // 0x6
     field public static final int KEYCODE_ENTER = 66; // 0x42
     field public static final int KEYCODE_ENVELOPE = 65; // 0x41
@@ -50776,6 +50783,7 @@ package android.view {
     field public static final int KEYCODE_RIGHT_BRACKET = 72; // 0x48
     field public static final int KEYCODE_RO = 217; // 0xd9
     field public static final int KEYCODE_S = 47; // 0x2f
+    field @FlaggedApi("com.android.hardware.input.emoji_and_screenshot_keycodes_available") public static final int KEYCODE_SCREENSHOT = 318; // 0x13e
     field public static final int KEYCODE_SCROLL_LOCK = 116; // 0x74
     field public static final int KEYCODE_SEARCH = 84; // 0x54
     field public static final int KEYCODE_SEMICOLON = 74; // 0x4a
