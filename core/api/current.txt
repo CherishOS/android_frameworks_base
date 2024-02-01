@@ -5095,10 +5095,12 @@ package android.app {
 
   public static interface AppOpsManager.OnOpActiveChangedListener {
     method public void onOpActiveChanged(@NonNull String, int, @NonNull String, boolean);
+    method @FlaggedApi("android.permission.flags.device_aware_permission_apis_enabled") public default void onOpActiveChanged(@NonNull String, int, @NonNull String, @Nullable String, int, boolean, int, int);
   }
 
   public static interface AppOpsManager.OnOpChangedListener {
     method public void onOpChanged(String, String);
+    method @FlaggedApi("android.permission.flags.device_aware_permission_apis_enabled") public default void onOpChanged(@NonNull String, @NonNull String, int, @NonNull String);
   }
 
   public abstract static class AppOpsManager.OnOpNotedCallback {
@@ -6353,6 +6355,7 @@ package android.app {
     field public static final String CATEGORY_STOPWATCH = "stopwatch";
     field public static final String CATEGORY_SYSTEM = "sys";
     field public static final String CATEGORY_TRANSPORT = "transport";
+    field @FlaggedApi("android.app.category_voicemail") public static final String CATEGORY_VOICEMAIL = "voicemail";
     field public static final String CATEGORY_WORKOUT = "workout";
     field @ColorInt public static final int COLOR_DEFAULT = 0; // 0x0
     field @NonNull public static final android.os.Parcelable.Creator<android.app.Notification> CREATOR;
@@ -15571,6 +15574,7 @@ package android.graphics {
     method public boolean clipRect(float, float, float, float);
     method public boolean clipRect(int, int, int, int);
     method public void concat(@Nullable android.graphics.Matrix);
+    method @FlaggedApi("com.android.graphics.hwui.flags.matrix_44") public void concat44(@Nullable android.graphics.Matrix44);
     method public void disableZ();
     method public void drawARGB(int, int, int, int);
     method public void drawArc(@NonNull android.graphics.RectF, float, float, boolean, @NonNull android.graphics.Paint);
@@ -16217,6 +16221,24 @@ package android.graphics {
     enum_constant public static final android.graphics.Matrix.ScaleToFit END;
     enum_constant public static final android.graphics.Matrix.ScaleToFit FILL;
     enum_constant public static final android.graphics.Matrix.ScaleToFit START;
+  }
+
+  @FlaggedApi("com.android.graphics.hwui.flags.matrix_44") public class Matrix44 {
+    ctor @FlaggedApi("com.android.graphics.hwui.flags.matrix_44") public Matrix44();
+    ctor @FlaggedApi("com.android.graphics.hwui.flags.matrix_44") public Matrix44(@NonNull android.graphics.Matrix);
+    method @FlaggedApi("com.android.graphics.hwui.flags.matrix_44") @NonNull public android.graphics.Matrix44 concat(@NonNull android.graphics.Matrix44);
+    method @FlaggedApi("com.android.graphics.hwui.flags.matrix_44") public float get(int, int);
+    method @FlaggedApi("com.android.graphics.hwui.flags.matrix_44") public void getValues(@NonNull float[]);
+    method @FlaggedApi("com.android.graphics.hwui.flags.matrix_44") public boolean invert();
+    method @FlaggedApi("com.android.graphics.hwui.flags.matrix_44") public boolean isIdentity();
+    method @FlaggedApi("com.android.graphics.hwui.flags.matrix_44") @NonNull public float[] map(float, float, float, float);
+    method @FlaggedApi("com.android.graphics.hwui.flags.matrix_44") public void map(float, float, float, float, @NonNull float[]);
+    method @FlaggedApi("com.android.graphics.hwui.flags.matrix_44") public void reset();
+    method @FlaggedApi("com.android.graphics.hwui.flags.matrix_44") @NonNull public android.graphics.Matrix44 rotate(float, float, float, float);
+    method @FlaggedApi("com.android.graphics.hwui.flags.matrix_44") @NonNull public android.graphics.Matrix44 scale(float, float, float);
+    method @FlaggedApi("com.android.graphics.hwui.flags.matrix_44") public void set(int, int, float);
+    method @FlaggedApi("com.android.graphics.hwui.flags.matrix_44") public void setValues(@NonNull float[]);
+    method @FlaggedApi("com.android.graphics.hwui.flags.matrix_44") @NonNull public android.graphics.Matrix44 translate(float, float, float);
   }
 
   public class Mesh {
@@ -21172,6 +21194,7 @@ package android.media {
     method public int getStreamMinVolume(int);
     method public int getStreamVolume(int);
     method public float getStreamVolumeDb(int, int, int);
+    method @FlaggedApi("android.media.audio.supported_device_types_api") @NonNull public java.util.Set<java.lang.Integer> getSupportedDeviceTypes(int);
     method @NonNull public java.util.List<android.media.AudioMixerAttributes> getSupportedMixerAttributes(@NonNull android.media.AudioDeviceInfo);
     method @Deprecated public int getVibrateSetting(int);
     method public int getVolumeGroupIdForAttributes(@NonNull android.media.AudioAttributes);
@@ -59545,7 +59568,6 @@ package android.widget {
   }
 
   @FlaggedApi("android.appwidget.flags.draw_data_parcel") public static final class RemoteViews.DrawInstructions {
-    method @FlaggedApi("android.appwidget.flags.draw_data_parcel") public void appendInstructions(@NonNull byte[]);
   }
 
   @FlaggedApi("android.appwidget.flags.draw_data_parcel") public static final class RemoteViews.DrawInstructions.Builder {
