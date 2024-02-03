@@ -6880,6 +6880,7 @@ package android.app {
     method public CharSequence getName();
     method @Nullable public String getParentChannelId();
     method public android.net.Uri getSound();
+    method @FlaggedApi("android.app.notification_channel_vibration_effect_api") @Nullable public android.os.VibrationEffect getVibrationEffect();
     method public long[] getVibrationPattern();
     method public boolean hasUserSetImportance();
     method public boolean hasUserSetSound();
@@ -6899,6 +6900,7 @@ package android.app {
     method public void setName(CharSequence);
     method public void setShowBadge(boolean);
     method public void setSound(android.net.Uri, android.media.AudioAttributes);
+    method @FlaggedApi("android.app.notification_channel_vibration_effect_api") public void setVibrationEffect(@Nullable android.os.VibrationEffect);
     method public void setVibrationPattern(long[]);
     method public boolean shouldShowLights();
     method public boolean shouldVibrate();
@@ -9512,8 +9514,8 @@ package android.appwidget {
     method public static android.appwidget.AppWidgetManager getInstance(android.content.Context);
     method @FlaggedApi("android.appwidget.flags.generated_previews") @Nullable public android.widget.RemoteViews getWidgetPreview(@NonNull android.content.ComponentName, @Nullable android.os.UserHandle, int);
     method public boolean isRequestPinAppWidgetSupported();
-    method @Deprecated public void notifyAppWidgetViewDataChanged(int[], int);
-    method @Deprecated public void notifyAppWidgetViewDataChanged(int, int);
+    method public void notifyAppWidgetViewDataChanged(int[], int);
+    method public void notifyAppWidgetViewDataChanged(int, int);
     method public void partiallyUpdateAppWidget(int[], android.widget.RemoteViews);
     method public void partiallyUpdateAppWidget(int, android.widget.RemoteViews);
     method @FlaggedApi("android.appwidget.flags.generated_previews") public void removeWidgetPreview(@NonNull android.content.ComponentName, int);
@@ -13839,6 +13841,7 @@ package android.content.res {
     method public android.content.res.AssetFileDescriptor openRawResourceFd(@RawRes int) throws android.content.res.Resources.NotFoundException;
     method public void parseBundleExtra(String, android.util.AttributeSet, android.os.Bundle) throws org.xmlpull.v1.XmlPullParserException;
     method public void parseBundleExtras(android.content.res.XmlResourceParser, android.os.Bundle) throws java.io.IOException, org.xmlpull.v1.XmlPullParserException;
+    method @FlaggedApi("android.content.res.register_resource_paths") public static void registerResourcePaths(@NonNull String, @NonNull android.content.pm.ApplicationInfo);
     method public void removeLoaders(@NonNull android.content.res.loader.ResourcesLoader...);
     method @Deprecated public void updateConfiguration(android.content.res.Configuration, android.util.DisplayMetrics);
     field @AnyRes public static final int ID_NULL = 0; // 0x0
@@ -19151,11 +19154,13 @@ package android.hardware.camera2 {
   }
 
   public final class CameraExtensionCharacteristics {
+    method @FlaggedApi("com.android.internal.camera.flags.camera_extensions_characteristics_get") public <T> T get(int, @NonNull android.hardware.camera2.CameraCharacteristics.Key<T>);
     method @NonNull public java.util.Set<android.hardware.camera2.CaptureRequest.Key> getAvailableCaptureRequestKeys(int);
     method @NonNull public java.util.Set<android.hardware.camera2.CaptureResult.Key> getAvailableCaptureResultKeys(int);
     method @Nullable public android.util.Range<java.lang.Long> getEstimatedCaptureLatencyRangeMillis(int, @NonNull android.util.Size, int);
     method @NonNull public <T> java.util.List<android.util.Size> getExtensionSupportedSizes(int, @NonNull Class<T>);
     method @NonNull public java.util.List<android.util.Size> getExtensionSupportedSizes(int, int);
+    method @FlaggedApi("com.android.internal.camera.flags.camera_extensions_characteristics_get") @NonNull public java.util.Set<android.hardware.camera2.CameraCharacteristics.Key> getKeys(int);
     method @NonNull public java.util.List<android.util.Size> getPostviewSupportedSizes(int, @NonNull android.util.Size, int);
     method @NonNull public java.util.List<java.lang.Integer> getSupportedExtensions();
     method public boolean isCaptureProcessProgressAvailable(int);
@@ -20266,6 +20271,7 @@ package android.hardware.input {
     method @Nullable public android.hardware.input.HostUsiVersion getHostUsiVersion(@NonNull android.view.Display);
     method @Nullable public android.view.InputDevice getInputDevice(int);
     method public int[] getInputDeviceIds();
+    method @FlaggedApi("com.android.input.flags.input_device_view_behavior_api") @Nullable public android.view.InputDevice.ViewBehavior getInputDeviceViewBehavior(int);
     method @FloatRange(from=0, to=1) public float getMaximumObscuringOpacityForTouch();
     method public boolean isStylusPointerIconEnabled();
     method public void registerInputDeviceListener(android.hardware.input.InputManager.InputDeviceListener, android.os.Handler);
@@ -27318,6 +27324,7 @@ package android.media.tv {
     field public static final int VIDEO_UNAVAILABLE_REASON_CAS_UNKNOWN = 18; // 0x12
     field public static final int VIDEO_UNAVAILABLE_REASON_INSUFFICIENT_RESOURCE = 6; // 0x6
     field public static final int VIDEO_UNAVAILABLE_REASON_NOT_CONNECTED = 5; // 0x5
+    field @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public static final int VIDEO_UNAVAILABLE_REASON_STOPPED = 19; // 0x13
     field public static final int VIDEO_UNAVAILABLE_REASON_TUNING = 1; // 0x1
     field public static final int VIDEO_UNAVAILABLE_REASON_UNKNOWN = 0; // 0x0
     field public static final int VIDEO_UNAVAILABLE_REASON_WEAK_SIGNAL = 2; // 0x2
@@ -27409,6 +27416,7 @@ package android.media.tv {
     method public void onRemoveBroadcastInfo(int);
     method public void onRequestAd(@NonNull android.media.tv.AdRequest);
     method public void onRequestBroadcastInfo(@NonNull android.media.tv.BroadcastInfoRequest);
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void onResumePlayback();
     method public boolean onSelectAudioPresentation(int, int);
     method public boolean onSelectTrack(int, @Nullable String);
     method public abstract void onSetCaptionEnabled(boolean);
@@ -27416,6 +27424,7 @@ package android.media.tv {
     method public abstract void onSetStreamVolume(@FloatRange(from=0.0, to=1.0) float);
     method public abstract boolean onSetSurface(@Nullable android.view.Surface);
     method public void onSetTvMessageEnabled(int, boolean);
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void onStopPlayback(int);
     method public void onSurfaceChanged(int, int, int);
     method public long onTimeShiftGetCurrentPosition();
     method public long onTimeShiftGetStartPosition();
@@ -27550,6 +27559,7 @@ package android.media.tv {
     method public boolean onUnhandledInputEvent(android.view.InputEvent);
     method public void overrideTvAppAttributionSource(@NonNull android.content.AttributionSource);
     method public void reset();
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void resumePlayback();
     method public void selectAudioPresentation(int, int);
     method public void selectTrack(int, String);
     method public void sendAppPrivateCommand(@NonNull String, android.os.Bundle);
@@ -27562,6 +27572,7 @@ package android.media.tv {
     method public void setTvMessageEnabled(int, boolean);
     method public void setZOrderMediaOverlay(boolean);
     method public void setZOrderOnTop(boolean);
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void stopPlayback(int);
     method public void timeShiftPause();
     method public void timeShiftPlay(String, android.net.Uri);
     method public void timeShiftResume();
@@ -27611,6 +27622,59 @@ package android.media.tv {
 package android.media.tv.ad {
 
   @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public class TvAdManager {
+    method @NonNull public java.util.List<android.media.tv.ad.TvAdServiceInfo> getTvAdServiceList();
+  }
+
+  public abstract static class TvAdManager.TvAdServiceCallback {
+    ctor public TvAdManager.TvAdServiceCallback();
+    method public void onAdServiceAdded(@NonNull String);
+    method public void onAdServiceRemoved(@NonNull String);
+    method public void onAdServiceUpdated(@NonNull String);
+  }
+
+  @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public abstract class TvAdService extends android.app.Service {
+    ctor public TvAdService();
+    method @Nullable public final android.os.IBinder onBind(@Nullable android.content.Intent);
+    method @Nullable public abstract android.media.tv.ad.TvAdService.Session onCreateSession(@NonNull String, @NonNull String);
+    field public static final String SERVICE_INTERFACE = "android.media.tv.ad.TvAdService";
+    field public static final String SERVICE_META_DATA = "android.media.tv.ad.service";
+  }
+
+  public abstract static class TvAdService.Session implements android.view.KeyEvent.Callback {
+    ctor public TvAdService.Session(@NonNull android.content.Context);
+    method @CallSuper public void layoutSurface(int, int, int, int);
+    method public boolean onGenericMotionEvent(@NonNull android.view.MotionEvent);
+    method public boolean onKeyDown(int, @Nullable android.view.KeyEvent);
+    method public boolean onKeyLongPress(int, @Nullable android.view.KeyEvent);
+    method public boolean onKeyMultiple(int, int, @Nullable android.view.KeyEvent);
+    method public boolean onKeyUp(int, @Nullable android.view.KeyEvent);
+    method public abstract void onRelease();
+    method public abstract boolean onSetSurface(@Nullable android.view.Surface);
+    method public void onSurfaceChanged(int, int, int);
+    method public boolean onTouchEvent(@NonNull android.view.MotionEvent);
+    method public boolean onTrackballEvent(@NonNull android.view.MotionEvent);
+  }
+
+  @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public final class TvAdServiceInfo implements android.os.Parcelable {
+    ctor public TvAdServiceInfo(@NonNull android.content.Context, @NonNull android.content.ComponentName);
+    method public int describeContents();
+    method @NonNull public String getId();
+    method @Nullable public android.content.pm.ServiceInfo getServiceInfo();
+    method @NonNull public java.util.List<java.lang.String> getSupportedTypes();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.media.tv.ad.TvAdServiceInfo> CREATOR;
+  }
+
+  @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public class TvAdView extends android.view.ViewGroup {
+    ctor public TvAdView(@NonNull android.content.Context);
+    ctor public TvAdView(@NonNull android.content.Context, @Nullable android.util.AttributeSet);
+    ctor public TvAdView(@NonNull android.content.Context, @Nullable android.util.AttributeSet, int);
+    method public void onAttachedToWindow();
+    method public void onDetachedFromWindow();
+    method public void onLayout(boolean, int, int, int, int);
+    method public void onMeasure(int, int);
+    method public void onVisibilityChanged(@NonNull android.view.View, int);
+    method public void prepareAdService(@NonNull String, @NonNull String);
   }
 
 }
@@ -27748,6 +27812,7 @@ package android.media.tv.interactive {
     method public void onRecordingTuned(@NonNull String, @NonNull android.net.Uri);
     method public abstract void onRelease();
     method public void onResetInteractiveApp();
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void onSelectedTrackInfo(@NonNull java.util.List<android.media.tv.TvTrackInfo>);
     method public abstract boolean onSetSurface(@Nullable android.view.Surface);
     method public void onSetTeletextAppEnabled(boolean);
     method public void onSignalStrength(int);
@@ -27782,6 +27847,7 @@ package android.media.tv.interactive {
     method @CallSuper public void requestCurrentVideoBounds();
     method @CallSuper public void requestScheduleRecording(@NonNull String, @NonNull String, @NonNull android.net.Uri, @NonNull android.net.Uri, @NonNull android.os.Bundle);
     method @CallSuper public void requestScheduleRecording(@NonNull String, @NonNull String, @NonNull android.net.Uri, long, long, int, @NonNull android.os.Bundle);
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") @CallSuper public void requestSelectedTrackInfo();
     method @CallSuper public void requestSigning(@NonNull String, @NonNull String, @NonNull String, @NonNull byte[]);
     method @CallSuper public void requestStartRecording(@NonNull String, @Nullable android.net.Uri);
     method @CallSuper public void requestStopRecording(@NonNull String);
@@ -27846,6 +27912,7 @@ package android.media.tv.interactive {
     method public void sendCurrentChannelUri(@Nullable android.net.Uri);
     method public void sendCurrentTvInputId(@Nullable String);
     method public void sendCurrentVideoBounds(@NonNull android.graphics.Rect);
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void sendSelectedTrackInfo(@Nullable java.util.List<android.media.tv.TvTrackInfo>);
     method public void sendSigningResult(@NonNull String, @NonNull byte[]);
     method public void sendStreamVolume(float);
     method public void sendTimeShiftMode(int);
@@ -27881,6 +27948,7 @@ package android.media.tv.interactive {
     method public void onRequestCurrentVideoBounds(@NonNull String);
     method public void onRequestScheduleRecording(@NonNull String, @NonNull String, @NonNull String, @NonNull android.net.Uri, @NonNull android.net.Uri, @NonNull android.os.Bundle);
     method public void onRequestScheduleRecording(@NonNull String, @NonNull String, @NonNull String, @NonNull android.net.Uri, long, long, int, @NonNull android.os.Bundle);
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void onRequestSelectedTrackInfo(@NonNull String);
     method public void onRequestSigning(@NonNull String, @NonNull String, @NonNull String, @NonNull String, @NonNull byte[]);
     method public void onRequestStartRecording(@NonNull String, @NonNull String, @Nullable android.net.Uri);
     method public void onRequestStopRecording(@NonNull String, @NonNull String);
@@ -45157,13 +45225,13 @@ package android.telephony {
     method @FlaggedApi("com.android.internal.telephony.flags.enforce_subscription_user_filter") @NonNull @RequiresPermission(android.Manifest.permission.INTERACT_ACROSS_PROFILES) public android.telephony.SubscriptionManager createForAllUserProfiles();
     method @NonNull @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE) public android.os.ParcelUuid createSubscriptionGroup(@NonNull java.util.List<java.lang.Integer>);
     method @Deprecated public static android.telephony.SubscriptionManager from(android.content.Context);
-    method public java.util.List<android.telephony.SubscriptionInfo> getAccessibleSubscriptionInfoList();
+    method @Nullable public java.util.List<android.telephony.SubscriptionInfo> getAccessibleSubscriptionInfoList();
     method public static int getActiveDataSubscriptionId();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public android.telephony.SubscriptionInfo getActiveSubscriptionInfo(int);
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public int getActiveSubscriptionInfoCount();
     method public int getActiveSubscriptionInfoCountMax();
     method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public android.telephony.SubscriptionInfo getActiveSubscriptionInfoForSimSlotIndex(int);
-    method @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public java.util.List<android.telephony.SubscriptionInfo> getActiveSubscriptionInfoList();
+    method @Nullable @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public java.util.List<android.telephony.SubscriptionInfo> getActiveSubscriptionInfoList();
     method @NonNull @RequiresPermission(anyOf={android.Manifest.permission.READ_PHONE_STATE, "carrier privileges"}) public java.util.List<android.telephony.SubscriptionInfo> getAllSubscriptionInfoList();
     method @NonNull public java.util.List<android.telephony.SubscriptionInfo> getCompleteActiveSubscriptionInfoList();
     method public static int getDefaultDataSubscriptionId();
@@ -50435,6 +50503,10 @@ package android.view {
     method public float getResolution();
     method public int getSource();
     method public boolean isFromSource(int);
+  }
+
+  @FlaggedApi("com.android.input.flags.input_device_view_behavior_api") public static final class InputDevice.ViewBehavior {
+    method @FlaggedApi("com.android.input.flags.input_device_view_behavior_api") public boolean shouldSmoothScroll(int, int);
   }
 
   public abstract class InputEvent implements android.os.Parcelable {
