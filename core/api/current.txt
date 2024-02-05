@@ -11284,6 +11284,8 @@ package android.content {
     field public static final String EXTRA_CHOOSER_CUSTOM_ACTIONS = "android.intent.extra.CHOOSER_CUSTOM_ACTIONS";
     field public static final String EXTRA_CHOOSER_MODIFY_SHARE_ACTION = "android.intent.extra.CHOOSER_MODIFY_SHARE_ACTION";
     field public static final String EXTRA_CHOOSER_REFINEMENT_INTENT_SENDER = "android.intent.extra.CHOOSER_REFINEMENT_INTENT_SENDER";
+    field @FlaggedApi("android.service.chooser.enable_chooser_result") public static final String EXTRA_CHOOSER_RESULT = "android.intent.extra.CHOOSER_RESULT";
+    field @FlaggedApi("android.service.chooser.enable_chooser_result") public static final String EXTRA_CHOOSER_RESULT_INTENT_SENDER = "android.intent.extra.CHOOSER_RESULT_INTENT_SENDER";
     field public static final String EXTRA_CHOOSER_TARGETS = "android.intent.extra.CHOOSER_TARGETS";
     field public static final String EXTRA_CHOSEN_COMPONENT = "android.intent.extra.CHOSEN_COMPONENT";
     field public static final String EXTRA_CHOSEN_COMPONENT_INTENT_SENDER = "android.intent.extra.CHOSEN_COMPONENT_INTENT_SENDER";
@@ -40125,6 +40127,19 @@ package android.service.chooser {
   public static final class ChooserAction.Builder {
     ctor public ChooserAction.Builder(@NonNull android.graphics.drawable.Icon, @NonNull CharSequence, @NonNull android.app.PendingIntent);
     method @NonNull public android.service.chooser.ChooserAction build();
+  }
+
+  @FlaggedApi("android.service.chooser.enable_chooser_result") public final class ChooserResult implements android.os.Parcelable {
+    method public int describeContents();
+    method @Nullable public android.content.ComponentName getSelectedComponent();
+    method public int getType();
+    method public boolean isShortcut();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field public static final int CHOOSER_RESULT_COPY = 1; // 0x1
+    field public static final int CHOOSER_RESULT_EDIT = 2; // 0x2
+    field public static final int CHOOSER_RESULT_SELECTED_COMPONENT = 0; // 0x0
+    field public static final int CHOOSER_RESULT_UNKNOWN = -1; // 0xffffffff
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.chooser.ChooserResult> CREATOR;
   }
 
   @Deprecated public final class ChooserTarget implements android.os.Parcelable {
