@@ -25869,6 +25869,9 @@ package android.media.metrics {
     method public int describeContents();
     method public int getErrorCode();
     method public int getFinalState();
+    method @NonNull public java.util.List<android.media.metrics.MediaItemInfo> getInputMediaItemInfos();
+    method public long getOperationTypes();
+    method @Nullable public android.media.metrics.MediaItemInfo getOutputMediaItemInfo();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.media.metrics.EditingEndedEvent> CREATOR;
     field public static final int ERROR_CODE_AUDIO_PROCESSING_FAILED = 18; // 0x12
@@ -25893,14 +25896,25 @@ package android.media.metrics {
     field public static final int FINAL_STATE_CANCELED = 2; // 0x2
     field public static final int FINAL_STATE_ERROR = 3; // 0x3
     field public static final int FINAL_STATE_SUCCEEDED = 1; // 0x1
+    field public static final long OPERATION_TYPE_AUDIO_EDIT = 8L; // 0x8L
+    field public static final long OPERATION_TYPE_AUDIO_TRANSCODE = 2L; // 0x2L
+    field public static final long OPERATION_TYPE_AUDIO_TRANSMUX = 32L; // 0x20L
+    field public static final long OPERATION_TYPE_PAUSED = 64L; // 0x40L
+    field public static final long OPERATION_TYPE_RESUMED = 128L; // 0x80L
+    field public static final long OPERATION_TYPE_VIDEO_EDIT = 4L; // 0x4L
+    field public static final long OPERATION_TYPE_VIDEO_TRANSCODE = 1L; // 0x1L
+    field public static final long OPERATION_TYPE_VIDEO_TRANSMUX = 16L; // 0x10L
     field public static final int TIME_SINCE_CREATED_UNKNOWN = -1; // 0xffffffff
   }
 
   @FlaggedApi("com.android.media.editing.flags.add_media_metrics_editing") public static final class EditingEndedEvent.Builder {
     ctor public EditingEndedEvent.Builder(int);
+    method @NonNull public android.media.metrics.EditingEndedEvent.Builder addInputMediaItemInfo(@NonNull android.media.metrics.MediaItemInfo);
+    method @NonNull public android.media.metrics.EditingEndedEvent.Builder addOperationType(long);
     method @NonNull public android.media.metrics.EditingEndedEvent build();
     method @NonNull public android.media.metrics.EditingEndedEvent.Builder setErrorCode(int);
     method @NonNull public android.media.metrics.EditingEndedEvent.Builder setMetricsBundle(@NonNull android.os.Bundle);
+    method @NonNull public android.media.metrics.EditingEndedEvent.Builder setOutputMediaItemInfo(@NonNull android.media.metrics.MediaItemInfo);
     method @NonNull public android.media.metrics.EditingEndedEvent.Builder setTimeSinceCreatedMillis(@IntRange(from=android.media.metrics.EditingEndedEvent.TIME_SINCE_CREATED_UNKNOWN) long);
   }
 
@@ -25918,6 +25932,65 @@ package android.media.metrics {
   public final class LogSessionId {
     method @NonNull public String getStringId();
     field @NonNull public static final android.media.metrics.LogSessionId LOG_SESSION_ID_NONE;
+  }
+
+  @FlaggedApi("com.android.media.editing.flags.add_media_metrics_editing") public final class MediaItemInfo implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getAudioChannelCount();
+    method public long getAudioSampleCount();
+    method public int getAudioSampleRateHz();
+    method public long getClipDurationMillis();
+    method @NonNull public java.util.List<java.lang.String> getCodecNames();
+    method @Nullable public String getContainerMimeType();
+    method public long getDataTypes();
+    method public long getDurationMillis();
+    method @NonNull public java.util.List<java.lang.String> getSampleMimeTypes();
+    method public int getSourceType();
+    method public int getVideoDataSpace();
+    method public float getVideoFrameRate();
+    method public long getVideoSampleCount();
+    method @NonNull public android.util.Size getVideoSize();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.media.metrics.MediaItemInfo> CREATOR;
+    field public static final long DATA_TYPE_AUDIO = 4L; // 0x4L
+    field public static final long DATA_TYPE_CUE_POINTS = 128L; // 0x80L
+    field public static final long DATA_TYPE_DEPTH = 16L; // 0x10L
+    field public static final long DATA_TYPE_GAIN_MAP = 32L; // 0x20L
+    field public static final long DATA_TYPE_GAPLESS = 256L; // 0x100L
+    field public static final long DATA_TYPE_HIGH_DYNAMIC_RANGE_VIDEO = 1024L; // 0x400L
+    field public static final long DATA_TYPE_HIGH_FRAME_RATE = 64L; // 0x40L
+    field public static final long DATA_TYPE_IMAGE = 1L; // 0x1L
+    field public static final long DATA_TYPE_METADATA = 8L; // 0x8L
+    field public static final long DATA_TYPE_SPATIAL_AUDIO = 512L; // 0x200L
+    field public static final long DATA_TYPE_VIDEO = 2L; // 0x2L
+    field public static final int SOURCE_TYPE_CAMERA = 2; // 0x2
+    field public static final int SOURCE_TYPE_EDITING_SESSION = 3; // 0x3
+    field public static final int SOURCE_TYPE_GALLERY = 1; // 0x1
+    field public static final int SOURCE_TYPE_GENERATED = 7; // 0x7
+    field public static final int SOURCE_TYPE_LOCAL_FILE = 4; // 0x4
+    field public static final int SOURCE_TYPE_REMOTE_FILE = 5; // 0x5
+    field public static final int SOURCE_TYPE_REMOTE_LIVE_STREAM = 6; // 0x6
+    field public static final int SOURCE_TYPE_UNSPECIFIED = 0; // 0x0
+    field public static final int VALUE_UNSPECIFIED = -1; // 0xffffffff
+  }
+
+  @FlaggedApi("com.android.media.editing.flags.add_media_metrics_editing") public static final class MediaItemInfo.Builder {
+    ctor public MediaItemInfo.Builder();
+    method @NonNull public android.media.metrics.MediaItemInfo.Builder addCodecName(@NonNull String);
+    method @NonNull public android.media.metrics.MediaItemInfo.Builder addDataType(long);
+    method @NonNull public android.media.metrics.MediaItemInfo.Builder addSampleMimeType(@NonNull String);
+    method @NonNull public android.media.metrics.MediaItemInfo build();
+    method @NonNull public android.media.metrics.MediaItemInfo.Builder setAudioChannelCount(@IntRange(from=0) int);
+    method @NonNull public android.media.metrics.MediaItemInfo.Builder setAudioSampleCount(@IntRange(from=0) long);
+    method @NonNull public android.media.metrics.MediaItemInfo.Builder setAudioSampleRateHz(@IntRange(from=0) int);
+    method @NonNull public android.media.metrics.MediaItemInfo.Builder setClipDurationMillis(long);
+    method @NonNull public android.media.metrics.MediaItemInfo.Builder setContainerMimeType(@NonNull String);
+    method @NonNull public android.media.metrics.MediaItemInfo.Builder setDurationMillis(long);
+    method @NonNull public android.media.metrics.MediaItemInfo.Builder setSourceType(int);
+    method @NonNull public android.media.metrics.MediaItemInfo.Builder setVideoDataSpace(int);
+    method @NonNull public android.media.metrics.MediaItemInfo.Builder setVideoFrameRate(@FloatRange(from=0) float);
+    method @NonNull public android.media.metrics.MediaItemInfo.Builder setVideoSampleCount(@IntRange(from=0) long);
+    method @NonNull public android.media.metrics.MediaItemInfo.Builder setVideoSize(@NonNull android.util.Size);
   }
 
   public final class MediaMetricsManager {
