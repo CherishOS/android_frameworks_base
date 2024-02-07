@@ -27667,7 +27667,18 @@ package android.media.tv.ad {
   @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public class TvAdManager {
     method @NonNull public java.util.List<android.media.tv.ad.TvAdServiceInfo> getTvAdServiceList();
     method public void registerCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.tv.ad.TvAdManager.TvAdServiceCallback);
+    method public void sendAppLinkCommand(@NonNull String, @NonNull android.os.Bundle);
     method public void unregisterCallback(@NonNull android.media.tv.ad.TvAdManager.TvAdServiceCallback);
+    field public static final String ACTION_APP_LINK_COMMAND = "android.media.tv.ad.action.APP_LINK_COMMAND";
+    field public static final String APP_LINK_KEY_BACK_URI = "back_uri";
+    field public static final String APP_LINK_KEY_CLASS_NAME = "class_name";
+    field public static final String APP_LINK_KEY_COMMAND_TYPE = "command_type";
+    field public static final String APP_LINK_KEY_PACKAGE_NAME = "package_name";
+    field public static final String APP_LINK_KEY_SERVICE_ID = "service_id";
+    field public static final String INTENT_KEY_AD_SERVICE_ID = "ad_service_id";
+    field public static final String INTENT_KEY_CHANNEL_URI = "channel_uri";
+    field public static final String INTENT_KEY_COMMAND_TYPE = "command_type";
+    field public static final String INTENT_KEY_TV_INPUT_ID = "tv_input_id";
     field public static final String SESSION_DATA_KEY_AD_BUFFER = "ad_buffer";
     field public static final String SESSION_DATA_KEY_AD_REQUEST = "ad_request";
     field public static final String SESSION_DATA_KEY_BROADCAST_INFO_REQUEST = "broadcast_info_request";
@@ -27687,6 +27698,7 @@ package android.media.tv.ad {
 
   @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public abstract class TvAdService extends android.app.Service {
     ctor public TvAdService();
+    method public void onAppLinkCommand(@NonNull android.os.Bundle);
     method @Nullable public final android.os.IBinder onBind(@Nullable android.content.Intent);
     method @Nullable public abstract android.media.tv.ad.TvAdService.Session onCreateSession(@NonNull String, @NonNull String);
     field public static final String SERVICE_INTERFACE = "android.media.tv.ad.TvAdService";
