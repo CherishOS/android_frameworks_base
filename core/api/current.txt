@@ -9357,9 +9357,12 @@ package android.app.usage {
     method public long getDataBytes();
     method public long getExternalCacheBytes();
     method public void writeToParcel(android.os.Parcel, int);
-    field @FlaggedApi("android.app.usage.get_app_bytes_by_data_type_api") public static final int APP_DATA_TYPE_FILE_TYPE_APK = 0; // 0x0
-    field @FlaggedApi("android.app.usage.get_app_bytes_by_data_type_api") public static final int APP_DATA_TYPE_FILE_TYPE_DM = 1; // 0x1
-    field @FlaggedApi("android.app.usage.get_app_bytes_by_data_type_api") public static final int APP_DATA_TYPE_LIB = 2; // 0x2
+    field @FlaggedApi("android.app.usage.get_app_bytes_by_data_type_api") public static final int APP_DATA_TYPE_FILE_TYPE_APK = 3; // 0x3
+    field @FlaggedApi("android.app.usage.get_app_bytes_by_data_type_api") public static final int APP_DATA_TYPE_FILE_TYPE_CURRENT_PROFILE = 2; // 0x2
+    field @FlaggedApi("android.app.usage.get_app_bytes_by_data_type_api") public static final int APP_DATA_TYPE_FILE_TYPE_DEXOPT_ARTIFACT = 0; // 0x0
+    field @FlaggedApi("android.app.usage.get_app_bytes_by_data_type_api") public static final int APP_DATA_TYPE_FILE_TYPE_DM = 4; // 0x4
+    field @FlaggedApi("android.app.usage.get_app_bytes_by_data_type_api") public static final int APP_DATA_TYPE_FILE_TYPE_REFERENCE_PROFILE = 1; // 0x1
+    field @FlaggedApi("android.app.usage.get_app_bytes_by_data_type_api") public static final int APP_DATA_TYPE_LIB = 5; // 0x5
     field @NonNull public static final android.os.Parcelable.Creator<android.app.usage.StorageStats> CREATOR;
   }
 
@@ -12407,7 +12410,7 @@ package android.content.pm {
     method public void registerCallback(android.content.pm.LauncherApps.Callback, android.os.Handler);
     method public void registerPackageInstallerSessionCallback(@NonNull java.util.concurrent.Executor, @NonNull android.content.pm.PackageInstaller.SessionCallback);
     method public android.content.pm.LauncherActivityInfo resolveActivity(android.content.Intent, android.os.UserHandle);
-    method @FlaggedApi("android.content.pm.archiving") public void setArchiveCompatibilityOptions(boolean, boolean);
+    method @FlaggedApi("android.content.pm.archiving") public void setArchiveCompatibility(@NonNull android.content.pm.LauncherApps.ArchiveCompatibilityParams);
     method public boolean shouldHideFromSuggestions(@NonNull String, @NonNull android.os.UserHandle);
     method public void startAppDetailsActivity(android.content.ComponentName, android.os.UserHandle, android.graphics.Rect, android.os.Bundle);
     method public void startMainActivity(android.content.ComponentName, android.os.UserHandle, android.graphics.Rect, android.os.Bundle);
@@ -12419,6 +12422,12 @@ package android.content.pm {
     field public static final String ACTION_CONFIRM_PIN_APPWIDGET = "android.content.pm.action.CONFIRM_PIN_APPWIDGET";
     field public static final String ACTION_CONFIRM_PIN_SHORTCUT = "android.content.pm.action.CONFIRM_PIN_SHORTCUT";
     field public static final String EXTRA_PIN_ITEM_REQUEST = "android.content.pm.extra.PIN_ITEM_REQUEST";
+  }
+
+  @FlaggedApi("android.content.pm.archiving") public static class LauncherApps.ArchiveCompatibilityParams {
+    ctor public LauncherApps.ArchiveCompatibilityParams();
+    method public void setEnableIconOverlay(boolean);
+    method public void setEnableUnarchivalConfirmation(boolean);
   }
 
   public abstract static class LauncherApps.Callback {
