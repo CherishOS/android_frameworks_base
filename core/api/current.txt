@@ -765,7 +765,7 @@ package android {
     field public static final int endY = 16844051; // 0x1010513
     field @Deprecated public static final int endYear = 16843133; // 0x101017d
     field public static final int enforceNavigationBarContrast = 16844293; // 0x1010605
-    field public static final int enforceStatusBarContrast = 16844292; // 0x1010604
+    field @Deprecated public static final int enforceStatusBarContrast = 16844292; // 0x1010604
     field public static final int enterFadeDuration = 16843532; // 0x101030c
     field public static final int entries = 16842930; // 0x10100b2
     field public static final int entryValues = 16843256; // 0x10101f8
@@ -1196,8 +1196,8 @@ package android {
     field public static final int multiprocess = 16842771; // 0x1010013
     field public static final int name = 16842755; // 0x1010003
     field public static final int nativeHeapZeroInitialized = 16844325; // 0x1010625
-    field public static final int navigationBarColor = 16843858; // 0x1010452
-    field public static final int navigationBarDividerColor = 16844141; // 0x101056d
+    field @Deprecated public static final int navigationBarColor = 16843858; // 0x1010452
+    field @Deprecated public static final int navigationBarDividerColor = 16844141; // 0x101056d
     field public static final int navigationContentDescription = 16843969; // 0x10104c1
     field public static final int navigationIcon = 16843968; // 0x10104c0
     field public static final int navigationMode = 16843471; // 0x10102cf
@@ -1568,7 +1568,7 @@ package android {
     field public static final int state_single = 16842915; // 0x10100a3
     field public static final int state_window_focused = 16842909; // 0x101009d
     field public static final int staticWallpaperPreview = 16843569; // 0x1010331
-    field public static final int statusBarColor = 16843857; // 0x1010451
+    field @Deprecated public static final int statusBarColor = 16843857; // 0x1010451
     field public static final int stepSize = 16843078; // 0x1010146
     field public static final int stopWithTask = 16843626; // 0x101036a
     field public static final int streamType = 16843273; // 0x1010209
@@ -1890,6 +1890,7 @@ package android {
     field public static final int windowNoDisplay = 16843294; // 0x101021e
     field public static final int windowNoMoveAnimation = 16844421; // 0x1010685
     field public static final int windowNoTitle = 16842838; // 0x1010056
+    field @FlaggedApi("com.android.window.flags.enforce_edge_to_edge") public static final int windowOptOutEdgeToEdgeEnforcement;
     field @Deprecated public static final int windowOverscan = 16843727; // 0x10103cf
     field public static final int windowReenterTransition = 16843951; // 0x10104af
     field public static final int windowReturnTransition = 16843950; // 0x10104ae
@@ -7894,6 +7895,7 @@ package android.app.admin {
     field public static final String AUTO_TIME_POLICY = "autoTime";
     field public static final String BACKUP_SERVICE_POLICY = "backupService";
     field public static final String CAMERA_DISABLED_POLICY = "cameraDisabled";
+    field @FlaggedApi("android.view.contentprotection.flags.manage_device_policy_enabled") public static final String CONTENT_PROTECTION_POLICY = "contentProtection";
     field public static final String KEYGUARD_DISABLED_FEATURES_POLICY = "keyguardDisabledFeatures";
     field public static final String LOCK_TASK_POLICY = "lockTask";
     field public static final String PACKAGES_SUSPENDED_POLICY = "packagesSuspended";
@@ -7944,6 +7946,7 @@ package android.app.admin {
     method public boolean getBluetoothContactSharingDisabled(@NonNull android.content.ComponentName);
     method @RequiresPermission(value=android.Manifest.permission.MANAGE_DEVICE_POLICY_CAMERA, conditional=true) public boolean getCameraDisabled(@Nullable android.content.ComponentName);
     method @Deprecated @Nullable public String getCertInstallerPackage(@NonNull android.content.ComponentName) throws java.lang.SecurityException;
+    method @FlaggedApi("android.view.contentprotection.flags.manage_device_policy_enabled") @RequiresPermission(value=android.Manifest.permission.MANAGE_DEVICE_POLICY_CONTENT_PROTECTION, conditional=true) public int getContentProtectionPolicy(@Nullable android.content.ComponentName);
     method @Nullable public android.app.admin.PackagePolicy getCredentialManagerPolicy();
     method @Deprecated @Nullable public java.util.Set<java.lang.String> getCrossProfileCalendarPackages(@NonNull android.content.ComponentName);
     method @Deprecated public boolean getCrossProfileCallerIdDisabled(@NonNull android.content.ComponentName);
@@ -8100,6 +8103,7 @@ package android.app.admin {
     method @Deprecated public void setCertInstallerPackage(@NonNull android.content.ComponentName, @Nullable String) throws java.lang.SecurityException;
     method @RequiresPermission(value=android.Manifest.permission.MANAGE_DEVICE_POLICY_COMMON_CRITERIA_MODE, conditional=true) public void setCommonCriteriaModeEnabled(@Nullable android.content.ComponentName, boolean);
     method @RequiresPermission(value=android.Manifest.permission.MANAGE_DEVICE_POLICY_WIFI, conditional=true) public void setConfiguredNetworksLockdownState(@Nullable android.content.ComponentName, boolean);
+    method @FlaggedApi("android.view.contentprotection.flags.manage_device_policy_enabled") @RequiresPermission(value=android.Manifest.permission.MANAGE_DEVICE_POLICY_CONTENT_PROTECTION, conditional=true) public void setContentProtectionPolicy(@Nullable android.content.ComponentName, int);
     method public void setCredentialManagerPolicy(@Nullable android.app.admin.PackagePolicy);
     method @Deprecated public void setCrossProfileCalendarPackages(@NonNull android.content.ComponentName, @Nullable java.util.Set<java.lang.String>);
     method @Deprecated public void setCrossProfileCallerIdDisabled(@NonNull android.content.ComponentName, boolean);
@@ -8525,6 +8529,7 @@ package android.app.admin {
     field public static final int TAG_ADB_SHELL_CMD = 210002; // 0x33452
     field public static final int TAG_ADB_SHELL_INTERACTIVE = 210001; // 0x33451
     field public static final int TAG_APP_PROCESS_START = 210005; // 0x33455
+    field @FlaggedApi("android.app.admin.flags.backup_service_security_log_event_enabled") public static final int TAG_BACKUP_SERVICE_TOGGLED = 210044; // 0x3347c
     field public static final int TAG_BLUETOOTH_CONNECTION = 210039; // 0x33477
     field public static final int TAG_BLUETOOTH_DISCONNECTION = 210040; // 0x33478
     field public static final int TAG_CAMERA_POLICY_SET = 210034; // 0x33472
@@ -16525,8 +16530,8 @@ package android.graphics {
     field public static final int START_HYPHEN_EDIT_NO_EDIT = 0; // 0x0
     field public static final int STRIKE_THRU_TEXT_FLAG = 16; // 0x10
     field public static final int SUBPIXEL_TEXT_FLAG = 128; // 0x80
-    field @FlaggedApi("com.android.text.flags.inter_character_justification") public static final int TEXT_RUN_FLAG_LEFT_EDGE = 8192; // 0x2000
-    field @FlaggedApi("com.android.text.flags.inter_character_justification") public static final int TEXT_RUN_FLAG_RIGHT_EDGE = 16384; // 0x4000
+    field @FlaggedApi("com.android.text.flags.letter_spacing_justification") public static final int TEXT_RUN_FLAG_LEFT_EDGE = 8192; // 0x2000
+    field @FlaggedApi("com.android.text.flags.letter_spacing_justification") public static final int TEXT_RUN_FLAG_RIGHT_EDGE = 16384; // 0x4000
     field public static final int UNDERLINE_TEXT_FLAG = 8; // 0x8
   }
 
@@ -18003,7 +18008,7 @@ package android.graphics.text {
     field public static final int HYPHENATION_FREQUENCY_FULL = 2; // 0x2
     field public static final int HYPHENATION_FREQUENCY_NONE = 0; // 0x0
     field public static final int HYPHENATION_FREQUENCY_NORMAL = 1; // 0x1
-    field @FlaggedApi("com.android.text.flags.inter_character_justification") public static final int JUSTIFICATION_MODE_INTER_CHARACTER = 2; // 0x2
+    field @FlaggedApi("com.android.text.flags.letter_spacing_justification") public static final int JUSTIFICATION_MODE_INTER_CHARACTER = 2; // 0x2
     field public static final int JUSTIFICATION_MODE_INTER_WORD = 1; // 0x1
     field public static final int JUSTIFICATION_MODE_NONE = 0; // 0x0
   }
@@ -24706,6 +24711,7 @@ package android.media {
   }
 
   public class Ringtone {
+    method protected void finalize();
     method public android.media.AudioAttributes getAudioAttributes();
     method @Deprecated public int getStreamType();
     method public String getTitle(android.content.Context);
@@ -26632,6 +26638,8 @@ package android.media.tv {
     method public void writeToParcel(@NonNull android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.media.tv.BroadcastInfoRequest> CREATOR;
     field public static final int REQUEST_OPTION_AUTO_UPDATE = 1; // 0x1
+    field @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public static final int REQUEST_OPTION_ONESHOT = 3; // 0x3
+    field @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public static final int REQUEST_OPTION_ONEWAY = 2; // 0x2
     field public static final int REQUEST_OPTION_REPEAT = 0; // 0x0
   }
 
@@ -27305,6 +27313,24 @@ package android.media.tv {
     field public static final int RECORDING_ERROR_INSUFFICIENT_SPACE = 1; // 0x1
     field public static final int RECORDING_ERROR_RESOURCE_BUSY = 2; // 0x2
     field public static final int RECORDING_ERROR_UNKNOWN = 0; // 0x0
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_KEY_AD_BUFFER = "ad_buffer";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_KEY_AD_RESPONSE = "ad_response";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_KEY_BROADCAST_INFO_RESPONSE = "broadcast_info_response";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_KEY_CHANNEL_URI = "channel_uri";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_KEY_TRACKS = "tracks";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_KEY_TRACK_ID = "track_id";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_KEY_TRACK_TYPE = "track_type";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_KEY_TV_MESSAGE_TYPE = "tv_message_type";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_KEY_VIDEO_UNAVAILABLE_REASON = "video_unavailable_reason";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_TYPE_AD_BUFFER_CONSUMED = "ad_buffer_consumed";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_TYPE_AD_RESPONSE = "ad_response";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_TYPE_BROADCAST_INFO_RESPONSE = "broadcast_info_response";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_TYPE_TRACKS_CHANGED = "tracks_changed";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_TYPE_TRACK_SELECTED = "track_selected";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_TYPE_TUNED = "tuned";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_TYPE_TV_MESSAGE = "tv_message";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_TYPE_VIDEO_AVAILABLE = "video_available";
+    field @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public static final String SESSION_DATA_TYPE_VIDEO_UNAVAILABLE = "video_unavailable";
     field public static final int SIGNAL_STRENGTH_LOST = 1; // 0x1
     field public static final int SIGNAL_STRENGTH_STRONG = 3; // 0x3
     field public static final int SIGNAL_STRENGTH_WEAK = 2; // 0x2
@@ -27420,6 +27446,7 @@ package android.media.tv {
     method public void notifyTuned(@NonNull android.net.Uri);
     method public void notifyTvMessage(int, @NonNull android.os.Bundle);
     method public void notifyVideoAvailable();
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void notifyVideoFreezeUpdated(boolean);
     method public void notifyVideoUnavailable(int);
     method public void onAdBufferReady(@NonNull android.media.tv.AdBuffer);
     method public void onAppPrivateCommand(@NonNull String, android.os.Bundle);
@@ -27456,8 +27483,10 @@ package android.media.tv {
     method public boolean onTrackballEvent(android.view.MotionEvent);
     method public abstract boolean onTune(android.net.Uri);
     method public boolean onTune(android.net.Uri, android.os.Bundle);
+    method @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public void onTvAdSessionData(@NonNull String, @NonNull android.os.Bundle);
     method public void onTvMessage(int, @NonNull android.os.Bundle);
     method public void onUnblockContent(android.media.tv.TvContentRating);
+    method @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public void sendTvInputSessionData(@NonNull String, @NonNull android.os.Bundle);
     method public void setOverlayViewEnabled(boolean);
   }
 
@@ -27588,6 +27617,7 @@ package android.media.tv {
     method public void setStreamVolume(@FloatRange(from=0.0, to=1.0) float);
     method public void setTimeShiftPositionCallback(@Nullable android.media.tv.TvView.TimeShiftPositionCallback);
     method public void setTvMessageEnabled(int, boolean);
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void setVideoFrozen(boolean);
     method public void setZOrderMediaOverlay(boolean);
     method public void setZOrderOnTop(boolean);
     method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void stopPlayback(int);
@@ -27631,6 +27661,7 @@ package android.media.tv {
     method public void onTuned(@NonNull String, @NonNull android.net.Uri);
     method public void onTvMessage(@NonNull String, int, @NonNull android.os.Bundle);
     method public void onVideoAvailable(String);
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void onVideoFreezeUpdated(@NonNull String, boolean);
     method public void onVideoSizeChanged(String, int, int);
     method public void onVideoUnavailable(String, int);
   }
@@ -27641,6 +27672,27 @@ package android.media.tv.ad {
 
   @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public class TvAdManager {
     method @NonNull public java.util.List<android.media.tv.ad.TvAdServiceInfo> getTvAdServiceList();
+    method public void registerCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.tv.ad.TvAdManager.TvAdServiceCallback);
+    method public void sendAppLinkCommand(@NonNull String, @NonNull android.os.Bundle);
+    method public void unregisterCallback(@NonNull android.media.tv.ad.TvAdManager.TvAdServiceCallback);
+    field public static final String ACTION_APP_LINK_COMMAND = "android.media.tv.ad.action.APP_LINK_COMMAND";
+    field public static final String APP_LINK_KEY_BACK_URI = "back_uri";
+    field public static final String APP_LINK_KEY_CLASS_NAME = "class_name";
+    field public static final String APP_LINK_KEY_COMMAND_TYPE = "command_type";
+    field public static final String APP_LINK_KEY_PACKAGE_NAME = "package_name";
+    field public static final String APP_LINK_KEY_SERVICE_ID = "service_id";
+    field public static final String INTENT_KEY_AD_SERVICE_ID = "ad_service_id";
+    field public static final String INTENT_KEY_CHANNEL_URI = "channel_uri";
+    field public static final String INTENT_KEY_COMMAND_TYPE = "command_type";
+    field public static final String INTENT_KEY_TV_INPUT_ID = "tv_input_id";
+    field public static final String SESSION_DATA_KEY_AD_BUFFER = "ad_buffer";
+    field public static final String SESSION_DATA_KEY_AD_REQUEST = "ad_request";
+    field public static final String SESSION_DATA_KEY_BROADCAST_INFO_REQUEST = "broadcast_info_request";
+    field public static final String SESSION_DATA_KEY_REQUEST_ID = "request_id";
+    field public static final String SESSION_DATA_TYPE_AD_BUFFER_READY = "ad_buffer_ready";
+    field public static final String SESSION_DATA_TYPE_AD_REQUEST = "ad_request";
+    field public static final String SESSION_DATA_TYPE_BROADCAST_INFO_REQUEST = "broadcast_info_request";
+    field public static final String SESSION_DATA_TYPE_REMOVE_BROADCAST_INFO_REQUEST = "remove_broadcast_info_request";
   }
 
   public abstract static class TvAdManager.TvAdServiceCallback {
@@ -27652,6 +27704,7 @@ package android.media.tv.ad {
 
   @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public abstract class TvAdService extends android.app.Service {
     ctor public TvAdService();
+    method public void onAppLinkCommand(@NonNull android.os.Bundle);
     method @Nullable public final android.os.IBinder onBind(@Nullable android.content.Intent);
     method @Nullable public abstract android.media.tv.ad.TvAdService.Session onCreateSession(@NonNull String, @NonNull String);
     field public static final String SERVICE_INTERFACE = "android.media.tv.ad.TvAdService";
@@ -27660,17 +27713,26 @@ package android.media.tv.ad {
 
   public abstract static class TvAdService.Session implements android.view.KeyEvent.Callback {
     ctor public TvAdService.Session(@NonNull android.content.Context);
+    method public boolean isMediaViewEnabled();
     method @CallSuper public void layoutSurface(int, int, int, int);
+    method @Nullable public android.view.View onCreateMediaView();
     method public boolean onGenericMotionEvent(@NonNull android.view.MotionEvent);
     method public boolean onKeyDown(int, @Nullable android.view.KeyEvent);
     method public boolean onKeyLongPress(int, @Nullable android.view.KeyEvent);
     method public boolean onKeyMultiple(int, int, @Nullable android.view.KeyEvent);
     method public boolean onKeyUp(int, @Nullable android.view.KeyEvent);
+    method public void onMediaViewSizeChanged(@Px int, @Px int);
     method public abstract void onRelease();
+    method public void onResetAdService();
     method public abstract boolean onSetSurface(@Nullable android.view.Surface);
+    method public void onStartAdService();
+    method public void onStopAdService();
     method public void onSurfaceChanged(int, int, int);
     method public boolean onTouchEvent(@NonNull android.view.MotionEvent);
     method public boolean onTrackballEvent(@NonNull android.view.MotionEvent);
+    method public void onTvInputSessionData(@NonNull String, @NonNull android.os.Bundle);
+    method public void sendTvAdSessionData(@NonNull String, @NonNull android.os.Bundle);
+    method @CallSuper public void setMediaViewEnabled(boolean);
   }
 
   @FlaggedApi("android.media.tv.flags.enable_ad_service_fw") public final class TvAdServiceInfo implements android.os.Parcelable {
@@ -27687,12 +27749,26 @@ package android.media.tv.ad {
     ctor public TvAdView(@NonNull android.content.Context);
     ctor public TvAdView(@NonNull android.content.Context, @Nullable android.util.AttributeSet);
     ctor public TvAdView(@NonNull android.content.Context, @Nullable android.util.AttributeSet, int);
+    method public void clearOnUnhandledInputEventListener();
+    method public boolean dispatchUnhandledInputEvent(@NonNull android.view.InputEvent);
+    method @Nullable public android.media.tv.ad.TvAdView.OnUnhandledInputEventListener getOnUnhandledInputEventListener();
     method public void onAttachedToWindow();
     method public void onDetachedFromWindow();
     method public void onLayout(boolean, int, int, int, int);
     method public void onMeasure(int, int);
+    method public boolean onUnhandledInputEvent(@NonNull android.view.InputEvent);
     method public void onVisibilityChanged(@NonNull android.view.View, int);
     method public void prepareAdService(@NonNull String, @NonNull String);
+    method public void reset();
+    method public void resetAdService();
+    method public void setOnUnhandledInputEventListener(@NonNull java.util.concurrent.Executor, @NonNull android.media.tv.ad.TvAdView.OnUnhandledInputEventListener);
+    method public boolean setTvView(@Nullable android.media.tv.TvView);
+    method public void startAdService();
+    method public void stopAdService();
+  }
+
+  public static interface TvAdView.OnUnhandledInputEventListener {
+    method public boolean onUnhandledInputEvent(@NonNull android.view.InputEvent);
   }
 
 }
@@ -27805,6 +27881,7 @@ package android.media.tv.interactive {
     method public void onAdResponse(@NonNull android.media.tv.AdResponse);
     method public void onAvailableSpeeds(@NonNull float[]);
     method public void onBroadcastInfoResponse(@NonNull android.media.tv.BroadcastInfoResponse);
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void onCertificate(@NonNull String, int, @NonNull android.net.http.SslCertificate);
     method public void onContentAllowed();
     method public void onContentBlocked(@NonNull android.media.tv.TvContentRating);
     method public void onCreateBiInteractiveAppRequest(@NonNull android.net.Uri, @Nullable android.os.Bundle);
@@ -27854,11 +27931,13 @@ package android.media.tv.interactive {
     method public void onTvRecordingInfo(@Nullable android.media.tv.TvRecordingInfo);
     method public void onTvRecordingInfoList(@NonNull java.util.List<android.media.tv.TvRecordingInfo>);
     method public void onVideoAvailable();
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void onVideoFreezeUpdated(boolean);
     method public void onVideoUnavailable(int);
     method @CallSuper public void removeBroadcastInfo(int);
     method @CallSuper public void requestAd(@NonNull android.media.tv.AdRequest);
     method @CallSuper public void requestAvailableSpeeds();
     method @CallSuper public void requestBroadcastInfo(@NonNull android.media.tv.BroadcastInfoRequest);
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") @CallSuper public void requestCertificate(@NonNull String, int);
     method @CallSuper public void requestCurrentChannelLcn();
     method @CallSuper public void requestCurrentChannelUri();
     method @CallSuper public void requestCurrentTvInputId();
@@ -27867,6 +27946,7 @@ package android.media.tv.interactive {
     method @CallSuper public void requestScheduleRecording(@NonNull String, @NonNull String, @NonNull android.net.Uri, long, long, int, @NonNull android.os.Bundle);
     method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") @CallSuper public void requestSelectedTrackInfo();
     method @CallSuper public void requestSigning(@NonNull String, @NonNull String, @NonNull String, @NonNull byte[]);
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") @CallSuper public void requestSigning(@NonNull String, @NonNull String, @NonNull String, int, @NonNull byte[]);
     method @CallSuper public void requestStartRecording(@NonNull String, @Nullable android.net.Uri);
     method @CallSuper public void requestStopRecording(@NonNull String);
     method @CallSuper public void requestStreamVolume();
@@ -27916,6 +27996,7 @@ package android.media.tv.interactive {
     method public void notifyTimeShiftStartPositionChanged(@NonNull String, long);
     method public void notifyTimeShiftStatusChanged(@NonNull String, int);
     method public void notifyTvMessage(@NonNull int, @NonNull android.os.Bundle);
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void notifyVideoFreezeUpdated(boolean);
     method public void onAttachedToWindow();
     method public void onDetachedFromWindow();
     method public void onLayout(boolean, int, int, int, int);
@@ -27926,6 +28007,7 @@ package android.media.tv.interactive {
     method public void reset();
     method public void resetInteractiveApp();
     method public void sendAvailableSpeeds(@NonNull float[]);
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void sendCertificate(@NonNull String, int, @NonNull android.net.http.SslCertificate);
     method public void sendCurrentChannelLcn(int);
     method public void sendCurrentChannelUri(@Nullable android.net.Uri);
     method public void sendCurrentTvInputId(@Nullable String);
@@ -27960,6 +28042,7 @@ package android.media.tv.interactive {
     method public void onBiInteractiveAppCreated(@NonNull String, @NonNull android.net.Uri, @Nullable String);
     method public void onPlaybackCommandRequest(@NonNull String, @NonNull String, @NonNull android.os.Bundle);
     method public void onRequestAvailableSpeeds(@NonNull String);
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void onRequestCertificate(@NonNull String, @NonNull String, int);
     method public void onRequestCurrentChannelLcn(@NonNull String);
     method public void onRequestCurrentChannelUri(@NonNull String);
     method public void onRequestCurrentTvInputId(@NonNull String);
@@ -27968,6 +28051,7 @@ package android.media.tv.interactive {
     method public void onRequestScheduleRecording(@NonNull String, @NonNull String, @NonNull String, @NonNull android.net.Uri, long, long, int, @NonNull android.os.Bundle);
     method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void onRequestSelectedTrackInfo(@NonNull String);
     method public void onRequestSigning(@NonNull String, @NonNull String, @NonNull String, @NonNull String, @NonNull byte[]);
+    method @FlaggedApi("android.media.tv.flags.tiaf_v_apis") public void onRequestSigning(@NonNull String, @NonNull String, @NonNull String, @NonNull String, int, @NonNull byte[]);
     method public void onRequestStartRecording(@NonNull String, @NonNull String, @Nullable android.net.Uri);
     method public void onRequestStopRecording(@NonNull String, @NonNull String);
     method public void onRequestStreamVolume(@NonNull String);
@@ -47225,7 +47309,7 @@ package android.text {
     method public int getLineForOffset(int);
     method public int getLineForVertical(int);
     method public float getLineLeft(int);
-    method @FlaggedApi("com.android.text.flags.inter_character_justification") @IntRange(from=0) public int getLineLetterSpacingUnitCount(@IntRange(from=0) int, boolean);
+    method @FlaggedApi("com.android.text.flags.letter_spacing_justification") @IntRange(from=0) public int getLineLetterSpacingUnitCount(@IntRange(from=0) int, boolean);
     method public float getLineMax(int);
     method public float getLineRight(int);
     method @FlaggedApi("com.android.text.flags.use_bounds_for_width") public final float getLineSpacingAmount();
@@ -47276,7 +47360,7 @@ package android.text {
     field @NonNull public static final android.text.Layout.TextInclusionStrategy INCLUSION_STRATEGY_ANY_OVERLAP;
     field @NonNull public static final android.text.Layout.TextInclusionStrategy INCLUSION_STRATEGY_CONTAINS_ALL;
     field @NonNull public static final android.text.Layout.TextInclusionStrategy INCLUSION_STRATEGY_CONTAINS_CENTER;
-    field @FlaggedApi("com.android.text.flags.inter_character_justification") public static final int JUSTIFICATION_MODE_INTER_CHARACTER = 2; // 0x2
+    field @FlaggedApi("com.android.text.flags.letter_spacing_justification") public static final int JUSTIFICATION_MODE_INTER_CHARACTER = 2; // 0x2
     field public static final int JUSTIFICATION_MODE_INTER_WORD = 1; // 0x1
     field public static final int JUSTIFICATION_MODE_NONE = 0; // 0x0
   }
@@ -53540,8 +53624,8 @@ package android.view {
     method @NonNull public abstract android.view.LayoutInflater getLayoutInflater();
     method protected final int getLocalFeatures();
     method public android.media.session.MediaController getMediaController();
-    method @ColorInt public abstract int getNavigationBarColor();
-    method @ColorInt public int getNavigationBarDividerColor();
+    method @Deprecated @ColorInt public abstract int getNavigationBarColor();
+    method @Deprecated @ColorInt public int getNavigationBarDividerColor();
     method @NonNull public android.window.OnBackInvokedDispatcher getOnBackInvokedDispatcher();
     method public android.transition.Transition getReenterTransition();
     method public android.transition.Transition getReturnTransition();
@@ -53551,7 +53635,7 @@ package android.view {
     method public android.transition.Transition getSharedElementReenterTransition();
     method public android.transition.Transition getSharedElementReturnTransition();
     method public boolean getSharedElementsUseOverlay();
-    method @ColorInt public abstract int getStatusBarColor();
+    method @Deprecated @ColorInt public abstract int getStatusBarColor();
     method @NonNull public java.util.List<android.graphics.Rect> getSystemGestureExclusionRects();
     method public long getTransitionBackgroundFadeDuration();
     method public android.transition.TransitionManager getTransitionManager();
@@ -53567,7 +53651,7 @@ package android.view {
     method public abstract boolean isFloating();
     method public boolean isNavigationBarContrastEnforced();
     method public abstract boolean isShortcutKey(int, android.view.KeyEvent);
-    method public boolean isStatusBarContrastEnforced();
+    method @Deprecated public boolean isStatusBarContrastEnforced();
     method public boolean isWideColorGamut();
     method public final void makeActive();
     method protected abstract void onActive();
@@ -53599,7 +53683,7 @@ package android.view {
     method public abstract void setContentView(android.view.View);
     method public abstract void setContentView(android.view.View, android.view.ViewGroup.LayoutParams);
     method public abstract void setDecorCaptionShade(int);
-    method public void setDecorFitsSystemWindows(boolean);
+    method @Deprecated public void setDecorFitsSystemWindows(boolean);
     method protected void setDefaultWindowFormat(int);
     method @FlaggedApi("com.android.graphics.hwui.flags.limited_hdr") public void setDesiredHdrHeadroom(@FloatRange(from=0.0f, to=10000.0) float);
     method public void setDimAmount(float);
@@ -53621,9 +53705,9 @@ package android.view {
     method public void setLocalFocus(boolean, boolean);
     method public void setLogo(@DrawableRes int);
     method public void setMediaController(android.media.session.MediaController);
-    method public abstract void setNavigationBarColor(@ColorInt int);
+    method @Deprecated public abstract void setNavigationBarColor(@ColorInt int);
     method public void setNavigationBarContrastEnforced(boolean);
-    method public void setNavigationBarDividerColor(@ColorInt int);
+    method @Deprecated public void setNavigationBarDividerColor(@ColorInt int);
     method public void setPreferMinimalPostProcessing(boolean);
     method public void setReenterTransition(android.transition.Transition);
     method public abstract void setResizingCaptionDrawable(android.graphics.drawable.Drawable);
@@ -53635,8 +53719,8 @@ package android.view {
     method public void setSharedElementReturnTransition(android.transition.Transition);
     method public void setSharedElementsUseOverlay(boolean);
     method public void setSoftInputMode(int);
-    method public abstract void setStatusBarColor(@ColorInt int);
-    method public void setStatusBarContrastEnforced(boolean);
+    method @Deprecated public abstract void setStatusBarColor(@ColorInt int);
+    method @Deprecated public void setStatusBarContrastEnforced(boolean);
     method public void setSustainedPerformanceMode(boolean);
     method public void setSystemGestureExclusionRects(@NonNull java.util.List<android.graphics.Rect>);
     method public abstract void setTitle(CharSequence);
