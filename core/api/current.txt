@@ -55695,6 +55695,14 @@ package android.view.inputmethod {
     field @NonNull public static final android.os.Parcelable.Creator<android.view.inputmethod.CompletionInfo> CREATOR;
   }
 
+  @FlaggedApi("android.view.inputmethod.connectionless_handwriting") public interface ConnectionlessHandwritingCallback {
+    method public void onError(int);
+    method public void onResult(@NonNull CharSequence);
+    field public static final int CONNECTIONLESS_HANDWRITING_ERROR_NO_TEXT_RECOGNIZED = 0; // 0x0
+    field public static final int CONNECTIONLESS_HANDWRITING_ERROR_OTHER = 2; // 0x2
+    field public static final int CONNECTIONLESS_HANDWRITING_ERROR_UNSUPPORTED = 1; // 0x1
+  }
+
   public final class CorrectionInfo implements android.os.Parcelable {
     ctor public CorrectionInfo(int, CharSequence, CharSequence);
     method public int describeContents();
@@ -56157,6 +56165,9 @@ package android.view.inputmethod {
     method public boolean showSoftInput(android.view.View, int, android.os.ResultReceiver);
     method @Deprecated public void showSoftInputFromInputMethod(android.os.IBinder, int);
     method @Deprecated public void showStatusIcon(android.os.IBinder, String, @DrawableRes int);
+    method @FlaggedApi("android.view.inputmethod.connectionless_handwriting") public void startConnectionlessStylusHandwriting(@NonNull android.view.View, @Nullable android.view.inputmethod.CursorAnchorInfo, @NonNull java.util.concurrent.Executor, @NonNull android.view.inputmethod.ConnectionlessHandwritingCallback);
+    method @FlaggedApi("android.view.inputmethod.connectionless_handwriting") public void startConnectionlessStylusHandwritingForDelegation(@NonNull android.view.View, @Nullable android.view.inputmethod.CursorAnchorInfo, @NonNull java.util.concurrent.Executor, @NonNull android.view.inputmethod.ConnectionlessHandwritingCallback);
+    method @FlaggedApi("android.view.inputmethod.connectionless_handwriting") public void startConnectionlessStylusHandwritingForDelegation(@NonNull android.view.View, @Nullable android.view.inputmethod.CursorAnchorInfo, @NonNull String, @NonNull java.util.concurrent.Executor, @NonNull android.view.inputmethod.ConnectionlessHandwritingCallback);
     method public void startStylusHandwriting(@NonNull android.view.View);
     method @Deprecated public boolean switchToLastInputMethod(android.os.IBinder);
     method @Deprecated public boolean switchToNextInputMethod(android.os.IBinder, boolean);
