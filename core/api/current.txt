@@ -24406,6 +24406,7 @@ package android.media {
   }
 
   public final class MediaRouter2 {
+    method @FlaggedApi("com.android.media.flags.enable_screen_off_scanning") public void cancelScanRequest(@NonNull android.media.MediaRouter2.ScanToken);
     method @Nullable public android.media.MediaRouter2.RoutingController getController(@NonNull String);
     method @NonNull public java.util.List<android.media.MediaRouter2.RoutingController> getControllers();
     method @NonNull public static android.media.MediaRouter2 getInstance(@NonNull android.content.Context);
@@ -24417,6 +24418,7 @@ package android.media {
     method public void registerRouteCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaRouter2.RouteCallback, @NonNull android.media.RouteDiscoveryPreference);
     method @FlaggedApi("com.android.media.flags.enable_rlp_callbacks_in_media_router2") public void registerRouteListingPreferenceUpdatedCallback(@NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.media.RouteListingPreference>);
     method public void registerTransferCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaRouter2.TransferCallback);
+    method @FlaggedApi("com.android.media.flags.enable_screen_off_scanning") @NonNull public android.media.MediaRouter2.ScanToken requestScan(@NonNull android.media.MediaRouter2.ScanRequest);
     method public void setOnGetControllerHintsListener(@Nullable android.media.MediaRouter2.OnGetControllerHintsListener);
     method public void setRouteListingPreference(@Nullable android.media.RouteListingPreference);
     method public boolean showSystemOutputSwitcher();
@@ -24461,6 +24463,19 @@ package android.media {
     method public void selectRoute(@NonNull android.media.MediaRoute2Info);
     method public void setVolume(int);
     method @FlaggedApi("com.android.media.flags.enable_built_in_speaker_route_suitability_statuses") public boolean wasTransferInitiatedBySelf();
+  }
+
+  @FlaggedApi("com.android.media.flags.enable_screen_off_scanning") public static final class MediaRouter2.ScanRequest {
+    method public boolean isScreenOffScan();
+  }
+
+  public static final class MediaRouter2.ScanRequest.Builder {
+    ctor public MediaRouter2.ScanRequest.Builder();
+    method @NonNull public android.media.MediaRouter2.ScanRequest build();
+    method @NonNull public android.media.MediaRouter2.ScanRequest.Builder setScreenOffScan(boolean);
+  }
+
+  @FlaggedApi("com.android.media.flags.enable_screen_off_scanning") public static final class MediaRouter2.ScanToken {
   }
 
   public abstract static class MediaRouter2.TransferCallback {
