@@ -1375,6 +1375,7 @@ package android {
     field public static final int reqTouchScreen = 16843303; // 0x1010227
     field public static final int requestLegacyExternalStorage = 16844291; // 0x1010603
     field public static final int requestRawExternalStorageAccess = 16844357; // 0x1010645
+    field @FlaggedApi("android.security.content_uri_permission_apis") public static final int requireContentUriPermissionFromCaller;
     field public static final int requireDeviceScreenOn = 16844317; // 0x101061d
     field public static final int requireDeviceUnlock = 16843756; // 0x10103ec
     field public static final int required = 16843406; // 0x101028e
@@ -8070,8 +8071,8 @@ package android.app.admin {
     method public boolean isUsbDataSignalingEnabled();
     method public boolean isUsingUnifiedPassword(@NonNull android.content.ComponentName);
     method @NonNull public java.util.List<android.os.UserHandle> listForegroundAffiliatedUsers();
-    method @RequiresPermission(value=android.Manifest.permission.MANAGE_DEVICE_POLICY_LOCK, conditional=true) public void lockNow();
-    method @RequiresPermission(value=android.Manifest.permission.MANAGE_DEVICE_POLICY_LOCK, conditional=true) public void lockNow(int);
+    method @RequiresPermission(value="android.permission.LOCK_DEVICE", conditional=true) public void lockNow();
+    method @RequiresPermission(value="android.permission.LOCK_DEVICE", conditional=true) public void lockNow(int);
     method public int logoutUser(@NonNull android.content.ComponentName);
     method public void reboot(@NonNull android.content.ComponentName);
     method public void removeActiveAdmin(@NonNull android.content.ComponentName);
@@ -40960,6 +40961,14 @@ package android.service.notification {
 
 }
 
+package android.service.persistentdata {
+
+  @FlaggedApi("android.security.frp_enforcement") public class PersistentDataBlockManager {
+    method @FlaggedApi("android.security.frp_enforcement") public boolean isFactoryResetProtectionActive();
+  }
+
+}
+
 package android.service.quickaccesswallet {
 
   public interface GetWalletCardsCallback {
@@ -46304,6 +46313,7 @@ package android.telephony.euicc {
     method @NonNull public android.telephony.euicc.EuiccManager createForCardId(int);
     method @RequiresPermission("android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS") public void deleteSubscription(int, android.app.PendingIntent);
     method @RequiresPermission("android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS") public void downloadSubscription(android.telephony.euicc.DownloadableSubscription, boolean, android.app.PendingIntent);
+    method @FlaggedApi("com.android.internal.telephony.flags.esim_available_memory") @RequiresPermission(anyOf={android.Manifest.permission.READ_PHONE_STATE, "android.permission.READ_PRIVILEGED_PHONE_STATE", "carrier privileges"}) public long getAvailableMemoryInBytes();
     method @Nullable public String getEid();
     method @Nullable public android.telephony.euicc.EuiccInfo getEuiccInfo();
     method public boolean isEnabled();
@@ -46336,6 +46346,7 @@ package android.telephony.euicc {
     field public static final int ERROR_SIM_MISSING = 10008; // 0x2718
     field public static final int ERROR_TIME_OUT = 10005; // 0x2715
     field public static final int ERROR_UNSUPPORTED_VERSION = 10007; // 0x2717
+    field @FlaggedApi("com.android.internal.telephony.flags.esim_available_memory") public static final long EUICC_MEMORY_FIELD_UNAVAILABLE = -1L; // 0xffffffffffffffffL
     field public static final String EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE = "android.telephony.euicc.extra.EMBEDDED_SUBSCRIPTION_DETAILED_CODE";
     field public static final String EXTRA_EMBEDDED_SUBSCRIPTION_DOWNLOADABLE_SUBSCRIPTION = "android.telephony.euicc.extra.EMBEDDED_SUBSCRIPTION_DOWNLOADABLE_SUBSCRIPTION";
     field public static final String EXTRA_EMBEDDED_SUBSCRIPTION_ERROR_CODE = "android.telephony.euicc.extra.EMBEDDED_SUBSCRIPTION_ERROR_CODE";
