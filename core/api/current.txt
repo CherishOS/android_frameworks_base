@@ -1804,6 +1804,7 @@ package android {
     field public static final int useEmbeddedDex = 16844190; // 0x101059e
     field public static final int useIntrinsicSizeAsMinimum = 16843536; // 0x1010310
     field public static final int useLevel = 16843167; // 0x101019f
+    field @FlaggedApi("com.android.text.flags.fix_line_height_for_locale") public static final int useLocalePreferredLineHeightForMinimum;
     field public static final int userVisible = 16843409; // 0x1010291
     field public static final int usesCleartextTraffic = 16844012; // 0x10104ec
     field public static final int usesPermissionFlags = 16844356; // 0x1010644
@@ -3322,11 +3323,13 @@ package android.accessibilityservice {
     method @FlaggedApi("android.view.accessibility.a11y_overlay_callbacks") public void attachAccessibilityOverlayToWindow(int, @NonNull android.view.SurfaceControl, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.IntConsumer);
     method public boolean clearCache();
     method public boolean clearCachedSubtree(@NonNull android.view.accessibility.AccessibilityNodeInfo);
+    method @FlaggedApi("android.view.accessibility.braille_display_hid") public void clearTestBrailleDisplayController();
     method public final void disableSelf();
     method public final boolean dispatchGesture(@NonNull android.accessibilityservice.GestureDescription, @Nullable android.accessibilityservice.AccessibilityService.GestureResultCallback, @Nullable android.os.Handler);
     method public android.view.accessibility.AccessibilityNodeInfo findFocus(int);
     method @NonNull public final android.accessibilityservice.AccessibilityButtonController getAccessibilityButtonController();
     method @NonNull public final android.accessibilityservice.AccessibilityButtonController getAccessibilityButtonController(int);
+    method @FlaggedApi("android.view.accessibility.braille_display_hid") @NonNull public android.accessibilityservice.BrailleDisplayController getBrailleDisplayController();
     method @NonNull @RequiresPermission(android.Manifest.permission.USE_FINGERPRINT) public final android.accessibilityservice.FingerprintGestureController getFingerprintGestureController();
     method @Nullable public final android.accessibilityservice.InputMethod getInputMethod();
     method @NonNull public final android.accessibilityservice.AccessibilityService.MagnificationController getMagnificationController();
@@ -3356,6 +3359,7 @@ package android.accessibilityservice {
     method public boolean setCacheEnabled(boolean);
     method public void setGestureDetectionPassthroughRegion(int, @NonNull android.graphics.Region);
     method public final void setServiceInfo(android.accessibilityservice.AccessibilityServiceInfo);
+    method @FlaggedApi("android.view.accessibility.braille_display_hid") public void setTestBrailleDisplayController(@NonNull android.accessibilityservice.BrailleDisplayController);
     method public void setTouchExplorationPassthroughRegion(int, @NonNull android.graphics.Region);
     method public void takeScreenshot(int, @NonNull java.util.concurrent.Executor, @NonNull android.accessibilityservice.AccessibilityService.TakeScreenshotCallback);
     method public void takeScreenshotOfWindow(int, @NonNull java.util.concurrent.Executor, @NonNull android.accessibilityservice.AccessibilityService.TakeScreenshotCallback);
@@ -3558,6 +3562,25 @@ package android.accessibilityservice {
     field public int flags;
     field public long notificationTimeout;
     field public String[] packageNames;
+  }
+
+  @FlaggedApi("android.view.accessibility.braille_display_hid") public interface BrailleDisplayController {
+    method @FlaggedApi("android.view.accessibility.braille_display_hid") @RequiresPermission(android.Manifest.permission.BLUETOOTH_CONNECT) public void connect(@NonNull android.bluetooth.BluetoothDevice, @NonNull android.accessibilityservice.BrailleDisplayController.BrailleDisplayCallback);
+    method @FlaggedApi("android.view.accessibility.braille_display_hid") @RequiresPermission(android.Manifest.permission.BLUETOOTH_CONNECT) public void connect(@NonNull android.bluetooth.BluetoothDevice, @NonNull java.util.concurrent.Executor, @NonNull android.accessibilityservice.BrailleDisplayController.BrailleDisplayCallback);
+    method @FlaggedApi("android.view.accessibility.braille_display_hid") public void connect(@NonNull android.hardware.usb.UsbDevice, @NonNull android.accessibilityservice.BrailleDisplayController.BrailleDisplayCallback);
+    method @FlaggedApi("android.view.accessibility.braille_display_hid") public void connect(@NonNull android.hardware.usb.UsbDevice, @NonNull java.util.concurrent.Executor, @NonNull android.accessibilityservice.BrailleDisplayController.BrailleDisplayCallback);
+    method @FlaggedApi("android.view.accessibility.braille_display_hid") public void disconnect();
+    method @FlaggedApi("android.view.accessibility.braille_display_hid") public boolean isConnected();
+    method @FlaggedApi("android.view.accessibility.braille_display_hid") public void write(@NonNull byte[]) throws java.io.IOException;
+  }
+
+  @FlaggedApi("android.view.accessibility.braille_display_hid") public static interface BrailleDisplayController.BrailleDisplayCallback {
+    method @FlaggedApi("android.view.accessibility.braille_display_hid") public void onConnected(@NonNull byte[]);
+    method @FlaggedApi("android.view.accessibility.braille_display_hid") public void onConnectionFailed(int);
+    method @FlaggedApi("android.view.accessibility.braille_display_hid") public void onDisconnected();
+    method @FlaggedApi("android.view.accessibility.braille_display_hid") public void onInput(@NonNull byte[]);
+    field @FlaggedApi("android.view.accessibility.braille_display_hid") public static final int FLAG_ERROR_BRAILLE_DISPLAY_NOT_FOUND = 2; // 0x2
+    field @FlaggedApi("android.view.accessibility.braille_display_hid") public static final int FLAG_ERROR_CANNOT_ACCESS = 1; // 0x1
   }
 
   public final class FingerprintGestureController {
@@ -35463,7 +35486,7 @@ package android.provider {
     field public static final String LONGITUDE = "longitude";
   }
 
-  @FlaggedApi("android.provider.user_keys") public class ContactKeysManager {
+  @FlaggedApi("android.provider.user_keys") public final class ContactKeysManager {
     method @NonNull @RequiresPermission(android.Manifest.permission.READ_CONTACTS) public java.util.List<android.provider.ContactKeysManager.ContactKey> getAllContactKeys(@NonNull String);
     method @NonNull @RequiresPermission(android.Manifest.permission.READ_CONTACTS) public java.util.List<android.provider.ContactKeysManager.SelfKey> getAllSelfKeys();
     method @Nullable @RequiresPermission(android.Manifest.permission.READ_CONTACTS) public android.provider.ContactKeysManager.ContactKey getContactKey(@NonNull String, @NonNull String, @NonNull String);
@@ -35478,9 +35501,9 @@ package android.provider {
     method @RequiresPermission(android.Manifest.permission.WRITE_CONTACTS) public void updateOrInsertContactKey(@NonNull String, @NonNull String, @NonNull String, @NonNull byte[]);
     method @RequiresPermission(android.Manifest.permission.WRITE_CONTACTS) public boolean updateOrInsertSelfKey(@NonNull String, @NonNull String, @NonNull byte[]);
     method @RequiresPermission(android.Manifest.permission.WRITE_CONTACTS) public boolean updateSelfKeyRemoteVerificationState(@NonNull String, @NonNull String, int);
-    field public static final int UNVERIFIED = 0; // 0x0
-    field public static final int VERIFICATION_FAILED = 1; // 0x1
-    field public static final int VERIFIED = 2; // 0x2
+    field public static final int VERIFICATION_STATE_UNVERIFIED = 0; // 0x0
+    field public static final int VERIFICATION_STATE_VERIFICATION_FAILED = 1; // 0x1
+    field public static final int VERIFICATION_STATE_VERIFIED = 2; // 0x2
   }
 
   public static final class ContactKeysManager.ContactKey implements android.os.Parcelable {
@@ -36977,6 +37000,7 @@ package android.provider {
     field public static final String ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS = "android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS";
     field public static final String ACTION_REQUEST_MANAGE_MEDIA = "android.settings.REQUEST_MANAGE_MEDIA";
     field @FlaggedApi("com.android.media.flags.enable_privileged_routing_for_media_routing_control") public static final String ACTION_REQUEST_MEDIA_ROUTING_CONTROL = "android.settings.REQUEST_MEDIA_ROUTING_CONTROL";
+    field @FlaggedApi("android.provider.backup_tasks_settings_screen") public static final String ACTION_REQUEST_RUN_BACKUP_JOBS = "android.settings.REQUEST_RUN_BACKUP_JOBS";
     field public static final String ACTION_REQUEST_SCHEDULE_EXACT_ALARM = "android.settings.REQUEST_SCHEDULE_EXACT_ALARM";
     field public static final String ACTION_REQUEST_SET_AUTOFILL_SERVICE = "android.settings.REQUEST_SET_AUTOFILL_SERVICE";
     field @FlaggedApi("com.android.internal.telephony.flags.carrier_enabled_satellite_flag") public static final String ACTION_SATELLITE_SETTING = "android.settings.SATELLITE_SETTING";
@@ -52219,6 +52243,7 @@ package android.view {
     method public final boolean getClipToOutline();
     method @Nullable public final android.view.contentcapture.ContentCaptureSession getContentCaptureSession();
     method public CharSequence getContentDescription();
+    method @FlaggedApi("android.view.flags.sensitive_content_app_protection_api") public final int getContentSensitivity();
     method @UiContext public final android.content.Context getContext();
     method protected android.view.ContextMenu.ContextMenuInfo getContextMenuInfo();
     method public final boolean getDefaultFocusHighlightEnabled();
@@ -52398,6 +52423,7 @@ package android.view {
     method public boolean isAttachedToWindow();
     method public boolean isAutoHandwritingEnabled();
     method public boolean isClickable();
+    method @FlaggedApi("android.view.flags.sensitive_content_app_protection_api") public final boolean isContentSensitive();
     method public boolean isContextClickable();
     method public boolean isCredential();
     method public boolean isDirty();
@@ -52602,6 +52628,7 @@ package android.view {
     method public void setClipToOutline(boolean);
     method public void setContentCaptureSession(@Nullable android.view.contentcapture.ContentCaptureSession);
     method public void setContentDescription(CharSequence);
+    method @FlaggedApi("android.view.flags.sensitive_content_app_protection_api") public final void setContentSensitivity(int);
     method public void setContextClickable(boolean);
     method public void setDefaultFocusHighlightEnabled(boolean);
     method @Deprecated public void setDrawingCacheBackgroundColor(@ColorInt int);
@@ -52786,6 +52813,9 @@ package android.view {
     field public static final int AUTOFILL_TYPE_NONE = 0; // 0x0
     field public static final int AUTOFILL_TYPE_TEXT = 1; // 0x1
     field public static final int AUTOFILL_TYPE_TOGGLE = 2; // 0x2
+    field @FlaggedApi("android.view.flags.sensitive_content_app_protection_api") public static final int CONTENT_SENSITIVITY_AUTO = 0; // 0x0
+    field @FlaggedApi("android.view.flags.sensitive_content_app_protection_api") public static final int CONTENT_SENSITIVITY_NOT_SENSITIVE = 2; // 0x2
+    field @FlaggedApi("android.view.flags.sensitive_content_app_protection_api") public static final int CONTENT_SENSITIVITY_SENSITIVE = 1; // 0x1
     field public static final int DRAG_FLAG_ACCESSIBILITY_ACTION = 1024; // 0x400
     field public static final int DRAG_FLAG_GLOBAL = 256; // 0x100
     field public static final int DRAG_FLAG_GLOBAL_PERSISTABLE_URI_PERMISSION = 64; // 0x40
@@ -60506,6 +60536,7 @@ package android.widget {
     method public boolean isFallbackLineSpacing();
     method public final boolean isHorizontallyScrollable();
     method public boolean isInputMethodTarget();
+    method @FlaggedApi("com.android.text.flags.fix_line_height_for_locale") public boolean isLocalePreferredLineHeightForMinimumUsed();
     method public boolean isSingleLine();
     method public boolean isSuggestionsEnabled();
     method public boolean isTextSelectable();
@@ -60588,6 +60619,7 @@ package android.widget {
     method public final void setLinkTextColor(@ColorInt int);
     method public final void setLinkTextColor(android.content.res.ColorStateList);
     method public final void setLinksClickable(boolean);
+    method @FlaggedApi("com.android.text.flags.fix_line_height_for_locale") public void setLocalePreferredLineHeightForMinimumUsed(boolean);
     method public void setMarqueeRepeatLimit(int);
     method public void setMaxEms(int);
     method public void setMaxHeight(int);
