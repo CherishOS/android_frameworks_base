@@ -1052,6 +1052,7 @@ package android {
     field public static final int label = 16842753; // 0x1010001
     field public static final int labelFor = 16843718; // 0x10103c6
     field @Deprecated public static final int labelTextSize = 16843317; // 0x1010235
+    field @FlaggedApi("android.view.inputmethod.ime_switcher_revamp") public static final int languageSettingsActivity;
     field public static final int languageTag = 16844040; // 0x1010508
     field public static final int largeHeap = 16843610; // 0x101035a
     field public static final int largeScreens = 16843398; // 0x1010286
@@ -5425,6 +5426,7 @@ package android.app {
 
   @FlaggedApi("android.security.content_uri_permission_apis") public final class ComponentCaller {
     ctor public ComponentCaller(@NonNull android.os.IBinder, @Nullable android.os.IBinder);
+    method public int checkContentUriPermission(@NonNull android.net.Uri, int);
     method @Nullable public String getPackage();
     method public int getUid();
   }
@@ -6990,6 +6992,7 @@ package android.app {
     field public static final String ACTION_APP_BLOCK_STATE_CHANGED = "android.app.action.APP_BLOCK_STATE_CHANGED";
     field public static final String ACTION_AUTOMATIC_ZEN_RULE = "android.app.action.AUTOMATIC_ZEN_RULE";
     field public static final String ACTION_AUTOMATIC_ZEN_RULE_STATUS_CHANGED = "android.app.action.AUTOMATIC_ZEN_RULE_STATUS_CHANGED";
+    field @FlaggedApi("android.app.modes_api") public static final String ACTION_CONSOLIDATED_NOTIFICATION_POLICY_CHANGED = "android.app.action.CONSOLIDATED_NOTIFICATION_POLICY_CHANGED";
     field public static final String ACTION_INTERRUPTION_FILTER_CHANGED = "android.app.action.INTERRUPTION_FILTER_CHANGED";
     field public static final String ACTION_NOTIFICATION_CHANNEL_BLOCK_STATE_CHANGED = "android.app.action.NOTIFICATION_CHANNEL_BLOCK_STATE_CHANGED";
     field public static final String ACTION_NOTIFICATION_CHANNEL_GROUP_BLOCK_STATE_CHANGED = "android.app.action.NOTIFICATION_CHANNEL_GROUP_BLOCK_STATE_CHANGED";
@@ -7010,6 +7013,7 @@ package android.app {
     field public static final String EXTRA_BLOCKED_STATE = "android.app.extra.BLOCKED_STATE";
     field public static final String EXTRA_NOTIFICATION_CHANNEL_GROUP_ID = "android.app.extra.NOTIFICATION_CHANNEL_GROUP_ID";
     field public static final String EXTRA_NOTIFICATION_CHANNEL_ID = "android.app.extra.NOTIFICATION_CHANNEL_ID";
+    field @FlaggedApi("android.app.modes_api") public static final String EXTRA_NOTIFICATION_POLICY = "android.app.extra.NOTIFICATION_POLICY";
     field public static final int IMPORTANCE_DEFAULT = 3; // 0x3
     field public static final int IMPORTANCE_HIGH = 4; // 0x4
     field public static final int IMPORTANCE_LOW = 2; // 0x2
@@ -11254,6 +11258,7 @@ package android.content {
     field public static final String CATEGORY_UNIT_TEST = "android.intent.category.UNIT_TEST";
     field public static final String CATEGORY_VOICE = "android.intent.category.VOICE";
     field public static final String CATEGORY_VR_HOME = "android.intent.category.VR_HOME";
+    field @FlaggedApi("android.service.chooser.chooser_album_text") public static final int CHOOSER_CONTENT_TYPE_ALBUM = 1; // 0x1
     field @NonNull public static final android.os.Parcelable.Creator<android.content.Intent> CREATOR;
     field public static final String EXTRA_ALARM_COUNT = "android.intent.extra.ALARM_COUNT";
     field public static final String EXTRA_ALLOW_MULTIPLE = "android.intent.extra.ALLOW_MULTIPLE";
@@ -11275,6 +11280,7 @@ package android.content {
     field public static final String EXTRA_CHANGED_COMPONENT_NAME_LIST = "android.intent.extra.changed_component_name_list";
     field public static final String EXTRA_CHANGED_PACKAGE_LIST = "android.intent.extra.changed_package_list";
     field public static final String EXTRA_CHANGED_UID_LIST = "android.intent.extra.changed_uid_list";
+    field @FlaggedApi("android.service.chooser.chooser_album_text") public static final String EXTRA_CHOOSER_CONTENT_TYPE_HINT = "android.intent.extra.CHOOSER_CONTENT_TYPE_HINT";
     field public static final String EXTRA_CHOOSER_CUSTOM_ACTIONS = "android.intent.extra.CHOOSER_CUSTOM_ACTIONS";
     field public static final String EXTRA_CHOOSER_MODIFY_SHARE_ACTION = "android.intent.extra.CHOOSER_MODIFY_SHARE_ACTION";
     field public static final String EXTRA_CHOOSER_REFINEMENT_INTENT_SENDER = "android.intent.extra.CHOOSER_REFINEMENT_INTENT_SENDER";
@@ -22700,10 +22706,12 @@ package android.media {
     field @Deprecated public static final int COLOR_QCOM_FormatYUV420SemiPlanar = 2141391872; // 0x7fa30c00
     field @Deprecated public static final int COLOR_TI_FormatYUV420PackedSemiPlanar = 2130706688; // 0x7f000100
     field public static final String FEATURE_AdaptivePlayback = "adaptive-playback";
+    field @FlaggedApi("android.media.codec.dynamic_color_aspects") public static final String FEATURE_DynamicColorAspects = "dynamic-color-aspects";
     field public static final String FEATURE_DynamicTimestamp = "dynamic-timestamp";
     field public static final String FEATURE_EncodingStatistics = "encoding-statistics";
     field public static final String FEATURE_FrameParsing = "frame-parsing";
     field public static final String FEATURE_HdrEditing = "hdr-editing";
+    field @FlaggedApi("android.media.codec.hlg_editing") public static final String FEATURE_HlgEditing = "hlg-editing";
     field public static final String FEATURE_IntraRefresh = "intra-refresh";
     field public static final String FEATURE_LowLatency = "low-latency";
     field public static final String FEATURE_MultipleFrames = "multiple-frames";
@@ -24398,6 +24406,7 @@ package android.media {
   }
 
   public final class MediaRouter2 {
+    method @FlaggedApi("com.android.media.flags.enable_screen_off_scanning") public void cancelScanRequest(@NonNull android.media.MediaRouter2.ScanToken);
     method @Nullable public android.media.MediaRouter2.RoutingController getController(@NonNull String);
     method @NonNull public java.util.List<android.media.MediaRouter2.RoutingController> getControllers();
     method @NonNull public static android.media.MediaRouter2 getInstance(@NonNull android.content.Context);
@@ -24409,6 +24418,7 @@ package android.media {
     method public void registerRouteCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaRouter2.RouteCallback, @NonNull android.media.RouteDiscoveryPreference);
     method @FlaggedApi("com.android.media.flags.enable_rlp_callbacks_in_media_router2") public void registerRouteListingPreferenceUpdatedCallback(@NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<android.media.RouteListingPreference>);
     method public void registerTransferCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.MediaRouter2.TransferCallback);
+    method @FlaggedApi("com.android.media.flags.enable_screen_off_scanning") @NonNull public android.media.MediaRouter2.ScanToken requestScan(@NonNull android.media.MediaRouter2.ScanRequest);
     method public void setOnGetControllerHintsListener(@Nullable android.media.MediaRouter2.OnGetControllerHintsListener);
     method public void setRouteListingPreference(@Nullable android.media.RouteListingPreference);
     method public boolean showSystemOutputSwitcher();
@@ -24445,6 +24455,7 @@ package android.media {
     method @NonNull public android.media.RoutingSessionInfo getRoutingSessionInfo();
     method @NonNull public java.util.List<android.media.MediaRoute2Info> getSelectableRoutes();
     method @NonNull public java.util.List<android.media.MediaRoute2Info> getSelectedRoutes();
+    method @FlaggedApi("com.android.media.flags.enable_get_transferable_routes") @NonNull public java.util.List<android.media.MediaRoute2Info> getTransferableRoutes();
     method public int getVolume();
     method public int getVolumeHandling();
     method public int getVolumeMax();
@@ -24453,6 +24464,19 @@ package android.media {
     method public void selectRoute(@NonNull android.media.MediaRoute2Info);
     method public void setVolume(int);
     method @FlaggedApi("com.android.media.flags.enable_built_in_speaker_route_suitability_statuses") public boolean wasTransferInitiatedBySelf();
+  }
+
+  @FlaggedApi("com.android.media.flags.enable_screen_off_scanning") public static final class MediaRouter2.ScanRequest {
+    method public boolean isScreenOffScan();
+  }
+
+  public static final class MediaRouter2.ScanRequest.Builder {
+    ctor public MediaRouter2.ScanRequest.Builder();
+    method @NonNull public android.media.MediaRouter2.ScanRequest build();
+    method @NonNull public android.media.MediaRouter2.ScanRequest.Builder setScreenOffScan(boolean);
+  }
+
+  @FlaggedApi("com.android.media.flags.enable_screen_off_scanning") public static final class MediaRouter2.ScanToken {
   }
 
   public abstract static class MediaRouter2.TransferCallback {
@@ -33710,6 +33734,7 @@ package android.os {
     field public static final String DISALLOW_SHARE_INTO_MANAGED_PROFILE = "no_sharing_into_profile";
     field public static final String DISALLOW_SHARE_LOCATION = "no_share_location";
     field public static final String DISALLOW_SHARING_ADMIN_CONFIGURED_WIFI = "no_sharing_admin_configured_wifi";
+    field @FlaggedApi("android.app.admin.flags.esim_management_enabled") public static final String DISALLOW_SIM_GLOBALLY = "no_sim_globally";
     field public static final String DISALLOW_SMS = "no_sms";
     field public static final String DISALLOW_SYSTEM_ERROR_DIALOGS = "no_system_error_dialogs";
     field @FlaggedApi("com.android.net.thread.flags.thread_user_restriction_enabled") public static final String DISALLOW_THREAD_NETWORK = "no_thread_network";
@@ -41234,6 +41259,7 @@ package android.service.voice {
     method public void startAssistantActivity(@NonNull android.content.Intent, @NonNull android.os.Bundle);
     method public void startVoiceActivity(android.content.Intent);
     method public final void unregisterVisibleActivityCallback(@NonNull android.service.voice.VoiceInteractionSession.VisibleActivityCallback);
+    field @FlaggedApi("android.service.voice.flags.allow_foreground_activities_in_on_show") public static final String KEY_FOREGROUND_ACTIVITIES = "android.service.voice.FOREGROUND_ACTIVITIES";
     field public static final String KEY_SHOW_SESSION_ID = "android.service.voice.SHOW_SESSION_ID";
     field public static final int SHOW_SOURCE_ACTIVITY = 16; // 0x10
     field public static final int SHOW_SOURCE_APPLICATION = 8; // 0x8
@@ -55849,6 +55875,7 @@ package android.view.inputmethod {
   public final class InputMethodInfo implements android.os.Parcelable {
     ctor public InputMethodInfo(android.content.Context, android.content.pm.ResolveInfo) throws java.io.IOException, org.xmlpull.v1.XmlPullParserException;
     ctor public InputMethodInfo(String, String, CharSequence, String);
+    method @FlaggedApi("android.view.inputmethod.ime_switcher_revamp") @Nullable public android.content.Intent createImeLanguageSettingsActivityIntent();
     method @Nullable public android.content.Intent createStylusHandwritingSettingsActivityIntent();
     method public int describeContents();
     method public void dump(android.util.Printer, String);
@@ -55868,6 +55895,7 @@ package android.view.inputmethod {
     method public boolean supportsStylusHandwriting();
     method public boolean suppressesSpellChecker();
     method public void writeToParcel(android.os.Parcel, int);
+    field @FlaggedApi("android.view.inputmethod.ime_switcher_revamp") public static final String ACTION_IME_LANGUAGE_SETTINGS = "android.view.inputmethod.action.IME_LANGUAGE_SETTINGS";
     field public static final String ACTION_STYLUS_HANDWRITING_SETTINGS = "android.view.inputmethod.action.STYLUS_HANDWRITING_SETTINGS";
     field @NonNull public static final android.os.Parcelable.Creator<android.view.inputmethod.InputMethodInfo> CREATOR;
   }
