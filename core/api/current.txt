@@ -19227,7 +19227,7 @@ package android.hardware.camera2 {
     method public int getCameraAudioRestriction() throws android.hardware.camera2.CameraAccessException;
     method @NonNull public abstract String getId();
     method @FlaggedApi("com.android.internal.camera.flags.feature_combination_query") @NonNull public android.hardware.camera2.CameraCharacteristics getSessionCharacteristics(@NonNull android.hardware.camera2.params.SessionConfiguration) throws android.hardware.camera2.CameraAccessException;
-    method @Deprecated public boolean isSessionConfigurationSupported(@NonNull android.hardware.camera2.params.SessionConfiguration) throws android.hardware.camera2.CameraAccessException;
+    method public boolean isSessionConfigurationSupported(@NonNull android.hardware.camera2.params.SessionConfiguration) throws android.hardware.camera2.CameraAccessException;
     method public void setCameraAudioRestriction(int) throws android.hardware.camera2.CameraAccessException;
     field public static final int AUDIO_RESTRICTION_NONE = 0; // 0x0
     field public static final int AUDIO_RESTRICTION_VIBRATION = 1; // 0x1
@@ -19238,6 +19238,13 @@ package android.hardware.camera2 {
     field public static final int TEMPLATE_STILL_CAPTURE = 2; // 0x2
     field public static final int TEMPLATE_VIDEO_SNAPSHOT = 4; // 0x4
     field public static final int TEMPLATE_ZERO_SHUTTER_LAG = 5; // 0x5
+  }
+
+  @FlaggedApi("com.android.internal.camera.flags.camera_device_setup") public abstract static class CameraDevice.CameraDeviceSetup {
+    method @FlaggedApi("com.android.internal.camera.flags.camera_device_setup") @NonNull public abstract android.hardware.camera2.CaptureRequest.Builder createCaptureRequest(int) throws android.hardware.camera2.CameraAccessException;
+    method @FlaggedApi("com.android.internal.camera.flags.camera_device_setup") @NonNull public abstract String getId();
+    method @FlaggedApi("com.android.internal.camera.flags.camera_device_setup") public abstract boolean isSessionConfigurationSupported(@NonNull android.hardware.camera2.params.SessionConfiguration) throws android.hardware.camera2.CameraAccessException;
+    method @FlaggedApi("com.android.internal.camera.flags.camera_device_setup") @RequiresPermission(android.Manifest.permission.CAMERA) public abstract void openCamera(@NonNull java.util.concurrent.Executor, @NonNull android.hardware.camera2.CameraDevice.StateCallback) throws android.hardware.camera2.CameraAccessException;
   }
 
   public abstract static class CameraDevice.StateCallback {
@@ -19308,14 +19315,14 @@ package android.hardware.camera2 {
   }
 
   public final class CameraManager {
-    method @FlaggedApi("com.android.internal.camera.flags.feature_combination_query") @NonNull @RequiresPermission(android.Manifest.permission.CAMERA) public android.hardware.camera2.CaptureRequest.Builder createCaptureRequest(@NonNull String, int) throws android.hardware.camera2.CameraAccessException;
     method @NonNull public android.hardware.camera2.CameraCharacteristics getCameraCharacteristics(@NonNull String) throws android.hardware.camera2.CameraAccessException;
+    method @FlaggedApi("com.android.internal.camera.flags.camera_device_setup") @NonNull public android.hardware.camera2.CameraDevice.CameraDeviceSetup getCameraDeviceSetup(@NonNull String) throws android.hardware.camera2.CameraAccessException;
     method @NonNull public android.hardware.camera2.CameraExtensionCharacteristics getCameraExtensionCharacteristics(@NonNull String) throws android.hardware.camera2.CameraAccessException;
     method @NonNull public String[] getCameraIdList() throws android.hardware.camera2.CameraAccessException;
     method @NonNull public java.util.Set<java.util.Set<java.lang.String>> getConcurrentCameraIds() throws android.hardware.camera2.CameraAccessException;
     method public int getTorchStrengthLevel(@NonNull String) throws android.hardware.camera2.CameraAccessException;
+    method @FlaggedApi("com.android.internal.camera.flags.camera_device_setup") public boolean isCameraDeviceSetupSupported(@NonNull String) throws android.hardware.camera2.CameraAccessException;
     method @RequiresPermission(android.Manifest.permission.CAMERA) public boolean isConcurrentSessionConfigurationSupported(@NonNull java.util.Map<java.lang.String,android.hardware.camera2.params.SessionConfiguration>) throws android.hardware.camera2.CameraAccessException;
-    method @FlaggedApi("com.android.internal.camera.flags.feature_combination_query") @RequiresPermission(android.Manifest.permission.CAMERA) public boolean isSessionConfigurationWithParametersSupported(@NonNull String, @NonNull android.hardware.camera2.params.SessionConfiguration) throws android.hardware.camera2.CameraAccessException;
     method @RequiresPermission(android.Manifest.permission.CAMERA) public void openCamera(@NonNull String, @NonNull android.hardware.camera2.CameraDevice.StateCallback, @Nullable android.os.Handler) throws android.hardware.camera2.CameraAccessException;
     method @RequiresPermission(android.Manifest.permission.CAMERA) public void openCamera(@NonNull String, @NonNull java.util.concurrent.Executor, @NonNull android.hardware.camera2.CameraDevice.StateCallback) throws android.hardware.camera2.CameraAccessException;
     method public void registerAvailabilityCallback(@NonNull android.hardware.camera2.CameraManager.AvailabilityCallback, @Nullable android.os.Handler);
