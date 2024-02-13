@@ -25891,8 +25891,11 @@ package android.media.metrics {
   @FlaggedApi("com.android.media.editing.flags.add_media_metrics_editing") public final class EditingEndedEvent extends android.media.metrics.Event implements android.os.Parcelable {
     method public int describeContents();
     method public int getErrorCode();
+    method @Nullable public String getExporterName();
+    method public float getFinalProgressPercent();
     method public int getFinalState();
     method @NonNull public java.util.List<android.media.metrics.MediaItemInfo> getInputMediaItemInfos();
+    method @Nullable public String getMuxerName();
     method public long getOperationTypes();
     method @Nullable public android.media.metrics.MediaItemInfo getOutputMediaItemInfo();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
@@ -25927,6 +25930,7 @@ package android.media.metrics {
     field public static final long OPERATION_TYPE_VIDEO_EDIT = 4L; // 0x4L
     field public static final long OPERATION_TYPE_VIDEO_TRANSCODE = 1L; // 0x1L
     field public static final long OPERATION_TYPE_VIDEO_TRANSMUX = 16L; // 0x10L
+    field public static final int PROGRESS_PERCENT_UNKNOWN = -1; // 0xffffffff
     field public static final int TIME_SINCE_CREATED_UNKNOWN = -1; // 0xffffffff
   }
 
@@ -25936,7 +25940,10 @@ package android.media.metrics {
     method @NonNull public android.media.metrics.EditingEndedEvent.Builder addOperationType(long);
     method @NonNull public android.media.metrics.EditingEndedEvent build();
     method @NonNull public android.media.metrics.EditingEndedEvent.Builder setErrorCode(int);
+    method @NonNull public android.media.metrics.EditingEndedEvent.Builder setExporterName(@NonNull String);
+    method @NonNull public android.media.metrics.EditingEndedEvent.Builder setFinalProgressPercent(@FloatRange(from=0, to=100) float);
     method @NonNull public android.media.metrics.EditingEndedEvent.Builder setMetricsBundle(@NonNull android.os.Bundle);
+    method @NonNull public android.media.metrics.EditingEndedEvent.Builder setMuxerName(@NonNull String);
     method @NonNull public android.media.metrics.EditingEndedEvent.Builder setOutputMediaItemInfo(@NonNull android.media.metrics.MediaItemInfo);
     method @NonNull public android.media.metrics.EditingEndedEvent.Builder setTimeSinceCreatedMillis(@IntRange(from=android.media.metrics.EditingEndedEvent.TIME_SINCE_CREATED_UNKNOWN) long);
   }
