@@ -190,7 +190,7 @@ class MobileIconInteractorImpl(
                         override fun onTuningChanged(key: String, newValue: String?) {
                             when (key) {
                                 SHOW_FOURG_ICON -> 
-                                    trySend(TunerService.parseIntegerSwitch(newValue, true))
+                                    trySend(TunerService.parseIntegerSwitch(newValue, false))
                             }
                         }
                     }
@@ -387,8 +387,10 @@ class MobileIconInteractorImpl(
                 shouldShowExclamationMark,
             ) { isDefaultDataEnabled, isDefaultConnectionFailed,
                 isInService, shouldShowExclamationMark ->
-                (!isDefaultDataEnabled || isDefaultConnectionFailed || !isInService)
-                && shouldShowExclamationMark
+                val mobileIconIgnoresIWlan = context.resources.getBoolean(
+                        com.android.systemui.res.R.bool.config_mobileIconIgnoresIWlan)
+                ((!isDefaultDataEnabled && !mobileIconIgnoresIWlan) || isDefaultConnectionFailed ||
+                        !isInService) && shouldShowExclamationMark
             }
             .stateIn(scope, SharingStarted.WhileSubscribed(), true)
 
