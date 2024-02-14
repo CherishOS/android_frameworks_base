@@ -1041,6 +1041,9 @@ public class DisplayPolicy {
                     case 15:
                         attrs.windowAnimations = com.android.internal.R.style.Animation_Toast_SlideRightLeft;
                         break;
+                    case 16:
+                        attrs.windowAnimations = com.android.internal.R.style.Animation_Toast_Rotate;
+                        break;
                 }
                 // Toasts can't be clickable
                 attrs.flags |= WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
