@@ -2167,11 +2167,6 @@ package android {
     field public static final int notification_large_icon_width = 17104901; // 0x1050005
     field public static final int system_app_widget_background_radius = 17104904; // 0x1050008
     field public static final int system_app_widget_inner_radius = 17104905; // 0x1050009
-    field public static final int system_corner_radius_large;
-    field public static final int system_corner_radius_medium;
-    field public static final int system_corner_radius_small;
-    field public static final int system_corner_radius_xlarge;
-    field public static final int system_corner_radius_xsmall;
     field public static final int thumbnail_height = 17104897; // 0x1050001
     field public static final int thumbnail_width = 17104898; // 0x1050002
   }
@@ -13221,7 +13216,7 @@ package android.content.pm {
     field public static final String FEATURE_TELEPHONY_RADIO_ACCESS = "android.hardware.telephony.radio.access";
     field public static final String FEATURE_TELEPHONY_SUBSCRIPTION = "android.hardware.telephony.subscription";
     field @Deprecated public static final String FEATURE_TELEVISION = "android.hardware.type.television";
-    field @FlaggedApi("com.android.net.thread.flags.thread_enabled") public static final String FEATURE_THREAD_NETWORK = "android.hardware.thread_network";
+    field @FlaggedApi("com.android.net.thread.flags.thread_enabled_platform") public static final String FEATURE_THREAD_NETWORK = "android.hardware.thread_network";
     field public static final String FEATURE_TOUCHSCREEN = "android.hardware.touchscreen";
     field public static final String FEATURE_TOUCHSCREEN_MULTITOUCH = "android.hardware.touchscreen.multitouch";
     field public static final String FEATURE_TOUCHSCREEN_MULTITOUCH_DISTINCT = "android.hardware.touchscreen.multitouch.distinct";
@@ -24567,6 +24562,7 @@ package android.media {
     method @FlaggedApi("com.android.media.flags.enable_screen_off_scanning") @NonNull public android.media.MediaRouter2.ScanToken requestScan(@NonNull android.media.MediaRouter2.ScanRequest);
     method public void setOnGetControllerHintsListener(@Nullable android.media.MediaRouter2.OnGetControllerHintsListener);
     method public void setRouteListingPreference(@Nullable android.media.RouteListingPreference);
+    method @FlaggedApi("com.android.media.flags.enable_privileged_routing_for_media_routing_control") @RequiresPermission(anyOf={android.Manifest.permission.MEDIA_CONTENT_CONTROL, android.Manifest.permission.MEDIA_ROUTING_CONTROL}) public void setRouteVolume(@NonNull android.media.MediaRoute2Info, int);
     method public boolean showSystemOutputSwitcher();
     method public void stop();
     method public void transferTo(@NonNull android.media.MediaRoute2Info);
@@ -43247,6 +43243,7 @@ package android.telecom {
     method @Deprecated @RequiresPermission(anyOf={android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.READ_SMS, android.Manifest.permission.READ_PHONE_NUMBERS}, conditional=true) public String getLine1Number(android.telecom.PhoneAccountHandle);
     method @NonNull @RequiresPermission(android.Manifest.permission.MANAGE_OWN_CALLS) public java.util.List<android.telecom.PhoneAccountHandle> getOwnSelfManagedPhoneAccounts();
     method public android.telecom.PhoneAccount getPhoneAccount(android.telecom.PhoneAccountHandle);
+    method @FlaggedApi("com.android.server.telecom.flags.get_registered_phone_accounts") @NonNull public java.util.List<android.telecom.PhoneAccount> getRegisteredPhoneAccounts();
     method @NonNull @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE) public java.util.List<android.telecom.PhoneAccountHandle> getSelfManagedPhoneAccounts();
     method public android.telecom.PhoneAccountHandle getSimCallManager();
     method @Nullable public android.telecom.PhoneAccountHandle getSimCallManagerForSubscription(int);
@@ -52257,6 +52254,7 @@ package android.view {
     method @NonNull public android.view.SurfaceControl.Transaction setCrop(@NonNull android.view.SurfaceControl, @Nullable android.graphics.Rect);
     method @NonNull public android.view.SurfaceControl.Transaction setDamageRegion(@NonNull android.view.SurfaceControl, @Nullable android.graphics.Region);
     method @NonNull public android.view.SurfaceControl.Transaction setDataSpace(@NonNull android.view.SurfaceControl, int);
+    method @FlaggedApi("com.android.graphics.hwui.flags.limited_hdr") @NonNull public android.view.SurfaceControl.Transaction setDesiredHdrHeadroom(@NonNull android.view.SurfaceControl, @FloatRange(from=0.0f) float);
     method @FlaggedApi("com.android.window.flags.sdk_desired_present_time") @NonNull public android.view.SurfaceControl.Transaction setDesiredPresentTimeNanos(long);
     method @NonNull public android.view.SurfaceControl.Transaction setExtendedRangeBrightness(@NonNull android.view.SurfaceControl, float, float);
     method @NonNull public android.view.SurfaceControl.Transaction setFrameRate(@NonNull android.view.SurfaceControl, @FloatRange(from=0.0) float, int);
@@ -52360,6 +52358,7 @@ package android.view {
     method @Nullable public android.os.IBinder getHostToken();
     method public android.view.SurfaceControl getSurfaceControl();
     method public void setChildSurfacePackage(@NonNull android.view.SurfaceControlViewHost.SurfacePackage);
+    method @FlaggedApi("com.android.graphics.hwui.flags.limited_hdr") public void setDesiredHdrHeadroom(@FloatRange(from=0.0f, to=10000.0) float);
     method public void setSecure(boolean);
     method public void setSurfaceLifecycle(int);
     method public void setZOrderMediaOverlay(boolean);
@@ -60249,6 +60248,7 @@ package android.widget {
   }
 
   @FlaggedApi("android.appwidget.flags.draw_data_parcel") public static final class RemoteViews.DrawInstructions {
+    method @FlaggedApi("android.appwidget.flags.draw_data_parcel") public static long getSupportedVersion();
   }
 
   @FlaggedApi("android.appwidget.flags.draw_data_parcel") public static final class RemoteViews.DrawInstructions.Builder {
