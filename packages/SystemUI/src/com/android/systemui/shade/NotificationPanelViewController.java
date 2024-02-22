@@ -3325,11 +3325,10 @@ public final class NotificationPanelViewController implements ShadeSurface, Dump
             // Animate edge light only for notification pulse.
             // Package not empty means pulse caused by a notification.
             if (!notifPackageName.isEmpty()) {
-                mPulseLightView.setVisibility(View.VISIBLE);
-                mPulseLightView.animateNotification(notifPackageName);
+                mPulseLightView.startAnimation(notifPackageName);
             }
         } else {
-            mPulseLightView.setVisibility(View.GONE);
+            mPulseLightView.stopAnimation();
         }
     }
 
