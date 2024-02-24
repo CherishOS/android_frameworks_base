@@ -10733,6 +10733,7 @@ package android.content {
     field public static final String DROPBOX_SERVICE = "dropbox";
     field public static final String EUICC_SERVICE = "euicc";
     field public static final String FILE_INTEGRITY_SERVICE = "file_integrity";
+    field public static final String FINGERPRINT_SERVICE = "fingerprint";
     field public static final String GAME_SERVICE = "game";
     field public static final String GRAMMATICAL_INFLECTION_SERVICE = "grammatical_inflection";
     field public static final String HARDWARE_PROPERTIES_SERVICE = "hardware_properties";
@@ -18053,6 +18054,24 @@ package android.graphics.pdf {
     method public android.graphics.pdf.PdfDocument.PageInfo.Builder setContentRect(android.graphics.Rect);
   }
 
+  public final class PdfRenderer implements java.lang.AutoCloseable {
+    ctor public PdfRenderer(@NonNull android.os.ParcelFileDescriptor) throws java.io.IOException;
+    method public void close();
+    method public int getPageCount();
+    method public android.graphics.pdf.PdfRenderer.Page openPage(int);
+    method public boolean shouldScaleForPrinting();
+  }
+
+  public final class PdfRenderer.Page implements java.lang.AutoCloseable {
+    method public void close();
+    method public int getHeight();
+    method public int getIndex();
+    method public int getWidth();
+    method public void render(@NonNull android.graphics.Bitmap, @Nullable android.graphics.Rect, @Nullable android.graphics.Matrix, int);
+    field public static final int RENDER_MODE_FOR_DISPLAY = 1; // 0x1
+    field public static final int RENDER_MODE_FOR_PRINT = 2; // 0x2
+  }
+
 }
 
 package android.graphics.text {
@@ -20359,6 +20378,54 @@ package android.hardware.display {
     method @NonNull public android.hardware.display.VirtualDisplayConfig.Builder setFlags(int);
     method @NonNull public android.hardware.display.VirtualDisplayConfig.Builder setRequestedRefreshRate(@FloatRange(from=0.0f) float);
     method @NonNull public android.hardware.display.VirtualDisplayConfig.Builder setSurface(@Nullable android.view.Surface);
+  }
+
+}
+
+package android.hardware.fingerprint {
+
+  @Deprecated public class FingerprintManager {
+    method @Deprecated @RequiresPermission(anyOf={android.Manifest.permission.USE_BIOMETRIC, android.Manifest.permission.USE_FINGERPRINT}) public void authenticate(@Nullable android.hardware.fingerprint.FingerprintManager.CryptoObject, @Nullable android.os.CancellationSignal, int, @NonNull android.hardware.fingerprint.FingerprintManager.AuthenticationCallback, @Nullable android.os.Handler);
+    method @Deprecated @RequiresPermission(android.Manifest.permission.USE_FINGERPRINT) public boolean hasEnrolledFingerprints();
+    method @Deprecated @RequiresPermission(android.Manifest.permission.USE_FINGERPRINT) public boolean isHardwareDetected();
+    field public static final int FINGERPRINT_ACQUIRED_GOOD = 0; // 0x0
+    field public static final int FINGERPRINT_ACQUIRED_IMAGER_DIRTY = 3; // 0x3
+    field public static final int FINGERPRINT_ACQUIRED_INSUFFICIENT = 2; // 0x2
+    field public static final int FINGERPRINT_ACQUIRED_PARTIAL = 1; // 0x1
+    field public static final int FINGERPRINT_ACQUIRED_TOO_FAST = 5; // 0x5
+    field public static final int FINGERPRINT_ACQUIRED_TOO_SLOW = 4; // 0x4
+    field public static final int FINGERPRINT_ERROR_CANCELED = 5; // 0x5
+    field public static final int FINGERPRINT_ERROR_HW_NOT_PRESENT = 12; // 0xc
+    field public static final int FINGERPRINT_ERROR_HW_UNAVAILABLE = 1; // 0x1
+    field public static final int FINGERPRINT_ERROR_LOCKOUT = 7; // 0x7
+    field public static final int FINGERPRINT_ERROR_LOCKOUT_PERMANENT = 9; // 0x9
+    field public static final int FINGERPRINT_ERROR_NO_FINGERPRINTS = 11; // 0xb
+    field public static final int FINGERPRINT_ERROR_NO_SPACE = 4; // 0x4
+    field public static final int FINGERPRINT_ERROR_TIMEOUT = 3; // 0x3
+    field public static final int FINGERPRINT_ERROR_UNABLE_TO_PROCESS = 2; // 0x2
+    field public static final int FINGERPRINT_ERROR_USER_CANCELED = 10; // 0xa
+    field public static final int FINGERPRINT_ERROR_VENDOR = 8; // 0x8
+  }
+
+  @Deprecated public abstract static class FingerprintManager.AuthenticationCallback {
+    ctor @Deprecated public FingerprintManager.AuthenticationCallback();
+    method @Deprecated public void onAuthenticationError(int, CharSequence);
+    method @Deprecated public void onAuthenticationFailed();
+    method @Deprecated public void onAuthenticationHelp(int, CharSequence);
+    method @Deprecated public void onAuthenticationSucceeded(android.hardware.fingerprint.FingerprintManager.AuthenticationResult);
+  }
+
+  @Deprecated public static class FingerprintManager.AuthenticationResult {
+    method @Deprecated public android.hardware.fingerprint.FingerprintManager.CryptoObject getCryptoObject();
+  }
+
+  @Deprecated public static final class FingerprintManager.CryptoObject {
+    ctor @Deprecated public FingerprintManager.CryptoObject(@NonNull java.security.Signature);
+    ctor @Deprecated public FingerprintManager.CryptoObject(@NonNull javax.crypto.Cipher);
+    ctor @Deprecated public FingerprintManager.CryptoObject(@NonNull javax.crypto.Mac);
+    method @Deprecated public javax.crypto.Cipher getCipher();
+    method @Deprecated public javax.crypto.Mac getMac();
+    method @Deprecated public java.security.Signature getSignature();
   }
 
 }
@@ -56279,7 +56346,7 @@ package android.view.inputmethod {
     method public boolean acceptStylusHandwritingDelegation(@NonNull android.view.View);
     method public boolean acceptStylusHandwritingDelegation(@NonNull android.view.View, @NonNull String);
     method @FlaggedApi("android.view.inputmethod.use_zero_jank_proxy") public void acceptStylusHandwritingDelegation(@NonNull android.view.View, @NonNull String, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<java.lang.Boolean>);
-    method @FlaggedApi("android.view.inputmethod.home_screen_handwriting_delegator") public boolean acceptStylusHandwritingDelegation(@NonNull android.view.View, @NonNull String, int);
+    method @FlaggedApi("android.view.inputmethod.home_screen_handwriting_delegator") public void acceptStylusHandwritingDelegation(@NonNull android.view.View, @NonNull String, int, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.Consumer<java.lang.Boolean>);
     method public void dispatchKeyEventFromInputMethod(@Nullable android.view.View, @NonNull android.view.KeyEvent);
     method public void displayCompletions(android.view.View, android.view.inputmethod.CompletionInfo[]);
     method @Nullable public android.view.inputmethod.InputMethodInfo getCurrentInputMethodInfo();
