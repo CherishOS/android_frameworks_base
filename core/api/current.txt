@@ -203,7 +203,7 @@ package android {
     field public static final String MANAGE_DEVICE_POLICY_SYSTEM_APPS = "android.permission.MANAGE_DEVICE_POLICY_SYSTEM_APPS";
     field public static final String MANAGE_DEVICE_POLICY_SYSTEM_DIALOGS = "android.permission.MANAGE_DEVICE_POLICY_SYSTEM_DIALOGS";
     field public static final String MANAGE_DEVICE_POLICY_SYSTEM_UPDATES = "android.permission.MANAGE_DEVICE_POLICY_SYSTEM_UPDATES";
-    field @FlaggedApi("com.android.net.thread.flags.thread_user_restriction_enabled") public static final String MANAGE_DEVICE_POLICY_THREAD_NETWORK = "android.permission.MANAGE_DEVICE_POLICY_THREAD_NETWORK";
+    field @FlaggedApi("com.android.net.thread.platform.flags.thread_user_restriction_enabled") public static final String MANAGE_DEVICE_POLICY_THREAD_NETWORK = "android.permission.MANAGE_DEVICE_POLICY_THREAD_NETWORK";
     field public static final String MANAGE_DEVICE_POLICY_TIME = "android.permission.MANAGE_DEVICE_POLICY_TIME";
     field public static final String MANAGE_DEVICE_POLICY_USB_DATA_SIGNALLING = "android.permission.MANAGE_DEVICE_POLICY_USB_DATA_SIGNALLING";
     field public static final String MANAGE_DEVICE_POLICY_USB_FILE_TRANSFER = "android.permission.MANAGE_DEVICE_POLICY_USB_FILE_TRANSFER";
@@ -13218,7 +13218,7 @@ package android.content.pm {
     field public static final String FEATURE_TELEPHONY_RADIO_ACCESS = "android.hardware.telephony.radio.access";
     field public static final String FEATURE_TELEPHONY_SUBSCRIPTION = "android.hardware.telephony.subscription";
     field @Deprecated public static final String FEATURE_TELEVISION = "android.hardware.type.television";
-    field @FlaggedApi("com.android.net.thread.flags.thread_enabled_platform") public static final String FEATURE_THREAD_NETWORK = "android.hardware.thread_network";
+    field @FlaggedApi("com.android.net.thread.platform.flags.thread_enabled_platform") public static final String FEATURE_THREAD_NETWORK = "android.hardware.thread_network";
     field public static final String FEATURE_TOUCHSCREEN = "android.hardware.touchscreen";
     field public static final String FEATURE_TOUCHSCREEN_MULTITOUCH = "android.hardware.touchscreen.multitouch";
     field public static final String FEATURE_TOUCHSCREEN_MULTITOUCH_DISTINCT = "android.hardware.touchscreen.multitouch.distinct";
@@ -34086,7 +34086,7 @@ package android.os {
     field @FlaggedApi("android.app.admin.flags.esim_management_enabled") public static final String DISALLOW_SIM_GLOBALLY = "no_sim_globally";
     field public static final String DISALLOW_SMS = "no_sms";
     field public static final String DISALLOW_SYSTEM_ERROR_DIALOGS = "no_system_error_dialogs";
-    field @FlaggedApi("com.android.net.thread.flags.thread_user_restriction_enabled") public static final String DISALLOW_THREAD_NETWORK = "no_thread_network";
+    field @FlaggedApi("com.android.net.thread.platform.flags.thread_user_restriction_enabled") public static final String DISALLOW_THREAD_NETWORK = "no_thread_network";
     field public static final String DISALLOW_ULTRA_WIDEBAND_RADIO = "no_ultra_wideband_radio";
     field public static final String DISALLOW_UNIFIED_PASSWORD = "no_unified_password";
     field public static final String DISALLOW_UNINSTALL_APPS = "no_uninstall_apps";
@@ -35817,54 +35817,6 @@ package android.provider {
     field public static final String LONGITUDE = "longitude";
   }
 
-  @FlaggedApi("android.provider.user_keys") public final class ContactKeysManager {
-    method @NonNull @RequiresPermission(android.Manifest.permission.READ_CONTACTS) public java.util.List<android.provider.ContactKeysManager.ContactKey> getAllContactKeys(@NonNull String);
-    method @NonNull @RequiresPermission(android.Manifest.permission.READ_CONTACTS) public java.util.List<android.provider.ContactKeysManager.SelfKey> getAllSelfKeys();
-    method @Nullable @RequiresPermission(android.Manifest.permission.READ_CONTACTS) public android.provider.ContactKeysManager.ContactKey getContactKey(@NonNull String, @NonNull String, @NonNull String);
-    method public static int getMaxKeySizeBytes();
-    method @NonNull @RequiresPermission(android.Manifest.permission.READ_CONTACTS) public java.util.List<android.provider.ContactKeysManager.ContactKey> getOwnerContactKeys(@NonNull String);
-    method @NonNull @RequiresPermission(android.Manifest.permission.READ_CONTACTS) public java.util.List<android.provider.ContactKeysManager.SelfKey> getOwnerSelfKeys();
-    method @Nullable @RequiresPermission(android.Manifest.permission.READ_CONTACTS) public android.provider.ContactKeysManager.SelfKey getSelfKey(@NonNull String, @NonNull String);
-    method @RequiresPermission(android.Manifest.permission.WRITE_CONTACTS) public boolean removeContactKey(@NonNull String, @NonNull String, @NonNull String);
-    method @RequiresPermission(android.Manifest.permission.WRITE_CONTACTS) public boolean removeSelfKey(@NonNull String, @NonNull String);
-    method @RequiresPermission(android.Manifest.permission.WRITE_CONTACTS) public boolean updateContactKeyLocalVerificationState(@NonNull String, @NonNull String, @NonNull String, int);
-    method @RequiresPermission(android.Manifest.permission.WRITE_CONTACTS) public boolean updateContactKeyRemoteVerificationState(@NonNull String, @NonNull String, @NonNull String, int);
-    method @RequiresPermission(android.Manifest.permission.WRITE_CONTACTS) public void updateOrInsertContactKey(@NonNull String, @NonNull String, @NonNull String, @NonNull byte[]);
-    method @RequiresPermission(android.Manifest.permission.WRITE_CONTACTS) public boolean updateOrInsertSelfKey(@NonNull String, @NonNull String, @NonNull byte[]);
-    method @RequiresPermission(android.Manifest.permission.WRITE_CONTACTS) public boolean updateSelfKeyRemoteVerificationState(@NonNull String, @NonNull String, int);
-    field public static final int VERIFICATION_STATE_UNVERIFIED = 0; // 0x0
-    field public static final int VERIFICATION_STATE_VERIFICATION_FAILED = 1; // 0x1
-    field public static final int VERIFICATION_STATE_VERIFIED = 2; // 0x2
-  }
-
-  public static final class ContactKeysManager.ContactKey implements android.os.Parcelable {
-    method public int describeContents();
-    method @NonNull public String getAccountId();
-    method @Nullable public String getDeviceId();
-    method @Nullable public String getDisplayName();
-    method @Nullable public String getEmailAddress();
-    method @Nullable public byte[] getKeyValue();
-    method public int getLocalVerificationState();
-    method @NonNull public String getOwnerPackageName();
-    method @Nullable public String getPhoneNumber();
-    method public int getRemoteVerificationState();
-    method public long getTimeUpdated();
-    method public void writeToParcel(@NonNull android.os.Parcel, int);
-    field @NonNull public static final android.os.Parcelable.Creator<android.provider.ContactKeysManager.ContactKey> CREATOR;
-  }
-
-  public static final class ContactKeysManager.SelfKey implements android.os.Parcelable {
-    method public int describeContents();
-    method @NonNull public String getAccountId();
-    method @Nullable public String getDeviceId();
-    method @Nullable public byte[] getKeyValue();
-    method @NonNull public String getOwnerPackageName();
-    method public int getRemoteVerificationState();
-    method public long getTimeUpdated();
-    method public void writeToParcel(@NonNull android.os.Parcel, int);
-    field @NonNull public static final android.os.Parcelable.Creator<android.provider.ContactKeysManager.SelfKey> CREATOR;
-  }
-
   @Deprecated public class Contacts {
     field @Deprecated public static final String AUTHORITY = "contacts";
     field @Deprecated public static final android.net.Uri CONTENT_URI;
@@ -37163,6 +37115,54 @@ package android.provider {
     method public String renameDocument(String, String) throws java.io.FileNotFoundException;
     method public final void revokeDocumentPermission(String);
     method public final int update(android.net.Uri, android.content.ContentValues, String, String[]);
+  }
+
+  @FlaggedApi("android.provider.user_keys") public final class E2eeContactKeysManager {
+    method @NonNull @RequiresPermission(android.Manifest.permission.READ_CONTACTS) public java.util.List<android.provider.E2eeContactKeysManager.E2eeContactKey> getAllE2eeContactKeys(@NonNull String);
+    method @NonNull @RequiresPermission(android.Manifest.permission.READ_CONTACTS) public java.util.List<android.provider.E2eeContactKeysManager.E2eeSelfKey> getAllE2eeSelfKeys();
+    method @Nullable @RequiresPermission(android.Manifest.permission.READ_CONTACTS) public android.provider.E2eeContactKeysManager.E2eeContactKey getE2eeContactKey(@NonNull String, @NonNull String, @NonNull String);
+    method @Nullable @RequiresPermission(android.Manifest.permission.READ_CONTACTS) public android.provider.E2eeContactKeysManager.E2eeSelfKey getE2eeSelfKey(@NonNull String, @NonNull String);
+    method public static int getMaxKeySizeBytes();
+    method @NonNull @RequiresPermission(android.Manifest.permission.READ_CONTACTS) public java.util.List<android.provider.E2eeContactKeysManager.E2eeContactKey> getOwnerE2eeContactKeys(@NonNull String);
+    method @NonNull @RequiresPermission(android.Manifest.permission.READ_CONTACTS) public java.util.List<android.provider.E2eeContactKeysManager.E2eeSelfKey> getOwnerE2eeSelfKeys();
+    method @RequiresPermission(android.Manifest.permission.WRITE_CONTACTS) public boolean removeE2eeContactKey(@NonNull String, @NonNull String, @NonNull String);
+    method @RequiresPermission(android.Manifest.permission.WRITE_CONTACTS) public boolean removeE2eeSelfKey(@NonNull String, @NonNull String);
+    method @RequiresPermission(android.Manifest.permission.WRITE_CONTACTS) public boolean updateE2eeContactKeyLocalVerificationState(@NonNull String, @NonNull String, @NonNull String, int);
+    method @RequiresPermission(android.Manifest.permission.WRITE_CONTACTS) public boolean updateE2eeContactKeyRemoteVerificationState(@NonNull String, @NonNull String, @NonNull String, int);
+    method @RequiresPermission(android.Manifest.permission.WRITE_CONTACTS) public boolean updateE2eeSelfKeyRemoteVerificationState(@NonNull String, @NonNull String, int);
+    method @RequiresPermission(android.Manifest.permission.WRITE_CONTACTS) public void updateOrInsertE2eeContactKey(@NonNull String, @NonNull String, @NonNull String, @NonNull byte[]);
+    method @RequiresPermission(android.Manifest.permission.WRITE_CONTACTS) public boolean updateOrInsertE2eeSelfKey(@NonNull String, @NonNull String, @NonNull byte[]);
+    field public static final int VERIFICATION_STATE_UNVERIFIED = 0; // 0x0
+    field public static final int VERIFICATION_STATE_VERIFICATION_FAILED = 1; // 0x1
+    field public static final int VERIFICATION_STATE_VERIFIED = 2; // 0x2
+  }
+
+  public static final class E2eeContactKeysManager.E2eeContactKey implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public String getAccountId();
+    method @Nullable public String getDeviceId();
+    method @Nullable public String getDisplayName();
+    method @Nullable public String getEmailAddress();
+    method @Nullable public byte[] getKeyValue();
+    method public int getLocalVerificationState();
+    method @NonNull public String getOwnerPackageName();
+    method @Nullable public String getPhoneNumber();
+    method public int getRemoteVerificationState();
+    method public long getTimeUpdated();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.provider.E2eeContactKeysManager.E2eeContactKey> CREATOR;
+  }
+
+  public static final class E2eeContactKeysManager.E2eeSelfKey implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public String getAccountId();
+    method @Nullable public String getDeviceId();
+    method @Nullable public byte[] getKeyValue();
+    method @NonNull public String getOwnerPackageName();
+    method public int getRemoteVerificationState();
+    method public long getTimeUpdated();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.provider.E2eeContactKeysManager.E2eeSelfKey> CREATOR;
   }
 
   @Deprecated public final class FontRequest {
