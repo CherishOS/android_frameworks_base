@@ -125,28 +125,32 @@ public class FadingBlockRenderer extends Renderer {
                     dbValue = mFFTAverage[i].average(dbValue);
                 }
                 if (mVertical) {
+                    int correctionFactor = 1;
                     float startPoint = mWidth;
                     if (mGravity == GRAVITY_BOTTOM) {
                         startPoint = (float) mWidth;
                     } else if (mGravity == GRAVITY_TOP) {
                         startPoint = 0f;
+                        correctionFactor*=-1;
                     } else if (mGravity == GRAVITY_CENTER) {
                         startPoint = (float) mWidth / 2f;
                     }
                     mFFTPoints[i * 4] = mLeftInLandscape ? 0 : startPoint;
                     mFFTPoints[i * 4 + 2] = mLeftInLandscape ? (dbValue * fudgeFactor + DBFUZZ)
-                            : (startPoint - (dbValue * fudgeFactor + DBFUZZ));
+                            : (startPoint - correctionFactor * (dbValue * fudgeFactor + DBFUZZ));
                 } else {
+                    int correctionFactor = 1;
                     float startPoint = mHeight;
                     if (mGravity == GRAVITY_BOTTOM) {
                         startPoint = (float) mHeight;
                     } else if (mGravity == GRAVITY_TOP) {
                         startPoint = 0f;
+                        correctionFactor*=-1;
                     } else if (mGravity == GRAVITY_CENTER) {
                         startPoint = (float) mHeight / 2f;
                     }
                     mFFTPoints[i * 4 + 1] = startPoint;
-                    mFFTPoints[i * 4 + 3] = startPoint - (dbValue * fudgeFactor + DBFUZZ);
+                    mFFTPoints[i * 4 + 3] = startPoint - correctionFactor * (dbValue * fudgeFactor + DBFUZZ);
                 }
             }
             if (mCenterMirrored) {
@@ -167,28 +171,32 @@ public class FadingBlockRenderer extends Renderer {
                         dbValue = mFFTAverage[i].average(dbValue);
                     }
                     if (mVertical) {
+                        int correctionFactor = 1;
                         float startPoint = mWidth;
                         if (mGravity == GRAVITY_BOTTOM) {
                             startPoint = (float) mWidth;
                         } else if (mGravity == GRAVITY_TOP) {
                             startPoint = 0f;
+                            correctionFactor*=-1;
                         } else if (mGravity == GRAVITY_CENTER) {
                             startPoint = (float) mWidth / 2f;
                         }
                         mFFTPoints[i * 4] = mLeftInLandscape ? 0 : startPoint;
                         mFFTPoints[i * 4 + 2] = mLeftInLandscape ? (dbValue * fudgeFactor + DBFUZZ)
-                                : (startPoint - (dbValue * fudgeFactor + DBFUZZ));
+                                : (startPoint - correctionFactor * (dbValue * fudgeFactor + DBFUZZ));
                     } else {
+                        int correctionFactor = 1;
                         float startPoint = mHeight;
                         if (mGravity == GRAVITY_BOTTOM) {
                             startPoint = (float) mHeight;
                         } else if (mGravity == GRAVITY_TOP) {
                             startPoint = 0f;
+                            correctionFactor*=-1;
                         } else if (mGravity == GRAVITY_CENTER) {
                             startPoint = (float) mHeight / 2f;
                         }
                         mFFTPoints[i * 4 + 1] = startPoint;
-                        mFFTPoints[i * 4 + 3] = startPoint - (dbValue * fudgeFactor + DBFUZZ);
+                        mFFTPoints[i * 4 + 3] = startPoint - correctionFactor * (dbValue * fudgeFactor + DBFUZZ);
                     }
                 }
             }
