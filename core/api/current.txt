@@ -691,7 +691,6 @@ package android {
     field public static final int defaultHeight = 16844021; // 0x10104f5
     field @FlaggedApi("android.content.res.default_locale") public static final int defaultLocale;
     field public static final int defaultToDeviceProtectedStorage = 16844036; // 0x1010504
-    field @FlaggedApi("android.nfc.Flags.FLAG_OBSERVE_MODE") public static final int defaultToObserveMode;
     field public static final int defaultValue = 16843245; // 0x10101ed
     field public static final int defaultWidth = 16844020; // 0x10104f4
     field public static final int delay = 16843212; // 0x10101cc
@@ -1501,6 +1500,7 @@ package android {
     field public static final int shortcutId = 16844072; // 0x1010528
     field public static final int shortcutLongLabel = 16844074; // 0x101052a
     field public static final int shortcutShortLabel = 16844073; // 0x1010529
+    field @FlaggedApi("android.nfc.Flags.FLAG_OBSERVE_MODE") public static final int shouldDefaultToObserveMode;
     field public static final int shouldDisableView = 16843246; // 0x10101ee
     field public static final int shouldUseDefaultUnfoldTransition = 16844364; // 0x101064c
     field public static final int showAsAction = 16843481; // 0x10102d9
@@ -3350,7 +3350,6 @@ package android.accessibilityservice {
     method @FlaggedApi("android.view.accessibility.a11y_overlay_callbacks") public void attachAccessibilityOverlayToWindow(int, @NonNull android.view.SurfaceControl, @NonNull java.util.concurrent.Executor, @NonNull java.util.function.IntConsumer);
     method public boolean clearCache();
     method public boolean clearCachedSubtree(@NonNull android.view.accessibility.AccessibilityNodeInfo);
-    method @FlaggedApi("android.view.accessibility.braille_display_hid") public void clearTestBrailleDisplayController();
     method public final void disableSelf();
     method public final boolean dispatchGesture(@NonNull android.accessibilityservice.GestureDescription, @Nullable android.accessibilityservice.AccessibilityService.GestureResultCallback, @Nullable android.os.Handler);
     method public android.view.accessibility.AccessibilityNodeInfo findFocus(int);
@@ -3386,7 +3385,6 @@ package android.accessibilityservice {
     method public boolean setCacheEnabled(boolean);
     method public void setGestureDetectionPassthroughRegion(int, @NonNull android.graphics.Region);
     method public final void setServiceInfo(android.accessibilityservice.AccessibilityServiceInfo);
-    method @FlaggedApi("android.view.accessibility.braille_display_hid") public void setTestBrailleDisplayController(@NonNull android.accessibilityservice.BrailleDisplayController);
     method public void setTouchExplorationPassthroughRegion(int, @NonNull android.graphics.Region);
     method public void takeScreenshot(int, @NonNull java.util.concurrent.Executor, @NonNull android.accessibilityservice.AccessibilityService.TakeScreenshotCallback);
     method public void takeScreenshotOfWindow(int, @NonNull java.util.concurrent.Executor, @NonNull android.accessibilityservice.AccessibilityService.TakeScreenshotCallback);
@@ -13510,7 +13508,7 @@ package android.content.pm {
     field public static final int FLAG_USE_APP_ZYGOTE = 8; // 0x8
     field @RequiresPermission(allOf={android.Manifest.permission.FOREGROUND_SERVICE_CAMERA}, anyOf={android.Manifest.permission.CAMERA}, conditional=true) public static final int FOREGROUND_SERVICE_TYPE_CAMERA = 64; // 0x40
     field @RequiresPermission(allOf={android.Manifest.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE}, anyOf={android.Manifest.permission.BLUETOOTH_ADVERTISE, android.Manifest.permission.BLUETOOTH_CONNECT, android.Manifest.permission.BLUETOOTH_SCAN, android.Manifest.permission.CHANGE_NETWORK_STATE, android.Manifest.permission.CHANGE_WIFI_STATE, android.Manifest.permission.CHANGE_WIFI_MULTICAST_STATE, android.Manifest.permission.NFC, android.Manifest.permission.TRANSMIT_IR, android.Manifest.permission.UWB_RANGING}, conditional=true) public static final int FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE = 16; // 0x10
-    field @Deprecated @RequiresPermission(value=android.Manifest.permission.FOREGROUND_SERVICE_DATA_SYNC, conditional=true) public static final int FOREGROUND_SERVICE_TYPE_DATA_SYNC = 1; // 0x1
+    field @RequiresPermission(value=android.Manifest.permission.FOREGROUND_SERVICE_DATA_SYNC, conditional=true) public static final int FOREGROUND_SERVICE_TYPE_DATA_SYNC = 1; // 0x1
     field @RequiresPermission(allOf={android.Manifest.permission.FOREGROUND_SERVICE_HEALTH}, anyOf={android.Manifest.permission.ACTIVITY_RECOGNITION, android.Manifest.permission.BODY_SENSORS, android.Manifest.permission.HIGH_SAMPLING_RATE_SENSORS}) public static final int FOREGROUND_SERVICE_TYPE_HEALTH = 256; // 0x100
     field @RequiresPermission(allOf={android.Manifest.permission.FOREGROUND_SERVICE_LOCATION}, anyOf={android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, conditional=true) public static final int FOREGROUND_SERVICE_TYPE_LOCATION = 8; // 0x8
     field public static final int FOREGROUND_SERVICE_TYPE_MANIFEST = -1; // 0xffffffff
@@ -39801,6 +39799,7 @@ package android.security.keystore {
     method @Deprecated public boolean isInsideSecureHardware();
     method public boolean isInvalidatedByBiometricEnrollment();
     method public boolean isTrustedUserPresenceRequired();
+    method @FlaggedApi("android.security.keyinfo_unlocked_device_required") public boolean isUnlockedDeviceRequired();
     method public boolean isUserAuthenticationRequired();
     method public boolean isUserAuthenticationRequirementEnforcedBySecureHardware();
     method public boolean isUserAuthenticationValidWhileOnBody();
