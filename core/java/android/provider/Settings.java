@@ -6817,12 +6817,6 @@ public final class Settings {
         public static final String QS_PANEL_STYLE = "qs_panel_style";
 
         /**
-         * QS Header
-         * @hide
-         */
-        public static final String QS_HEADER_IMAGE = "qs_header_image";
-
-        /**
          * Gesture navbar IME space.
          * Supported modes: 0 for normal length, 1 for narrow and 2 for hidden.
          * Default 0.
