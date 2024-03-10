@@ -105,7 +105,7 @@ public class FileHeaderProvider implements
             }
             output.flush();
             if (DEBUG) Log.i(TAG, "Saved header image " + " " + file.getAbsolutePath());
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.e(TAG, "Save header image failed " + " " + imageUri);
         }
     }
