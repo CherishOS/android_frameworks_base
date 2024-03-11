@@ -139,9 +139,6 @@ public class SmartPixelsTile extends QSTileImpl<BooleanState> implements
                 mContext.getContentResolver(), Settings.System.SMART_PIXELS_ON_POWER_SAVE,
                 0, UserHandle.USER_CURRENT) == 1);
         state.icon  = ResourceIcon.get(R.drawable.ic_qs_smart_pixels);
-        if (state.slash == null) {
-            state.slash = new SlashState();
-        }
         if (mLowPowerMode && mSmartPixelsOnPowerSave) {
             state.label = mContext.getString(R.string.quick_settings_smart_pixels_on_power_save);
             state.value = true;
@@ -152,7 +149,6 @@ public class SmartPixelsTile extends QSTileImpl<BooleanState> implements
             state.label = mContext.getString(R.string.quick_settings_smart_pixels);
             state.value = false;
         }
-        state.slash.isSlashed = !state.value;
         state.state = state.value ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
     }
 
