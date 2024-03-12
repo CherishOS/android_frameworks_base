@@ -571,6 +571,9 @@ public class BatteryManager {
         }
     }
 
+    /**
+     * @hide
+     */
     public void resetStatistics() {
         try {
             mBatteryStats.resetStatistics();
