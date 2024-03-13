@@ -165,7 +165,7 @@ public class AmbientDisplayConfiguration {
     public boolean screenOffUdfpsEnabled(int user) {
         return !TextUtils.isEmpty(udfpsLongPressSensorType())
             && boolSettingDefaultOff("screen_off_udfps_enabled", user)
-            && mContext.getResources().getBoolean(R.bool.config_supportScreenOffUdfps);
+            && mContext.getResources().getBoolean(R.bool.config_supportsScreenOffUdfps);
     }
 
     /** @hide */
