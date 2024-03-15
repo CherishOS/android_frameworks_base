@@ -157,7 +157,6 @@ import java.util.function.Consumer;
 
 import javax.security.auth.callback.Callback;
 import com.android.internal.util.cherish.ThemeUtils;
-import com.android.internal.util.android.VibrationUtils;
 
 /**
  * Visual presentation of the volume dialog.
@@ -3038,9 +3037,6 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                             userLevel);
                 }
             }
-            int vibrateIntensity = Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.VOLUME_SLIDER_HAPTICS_INTENSITY, 1);
-            VibrationUtils.triggerVibration(mContext, vibrateIntensity);
             VolumeUtils volumeUtils = new VolumeUtils(mContext, mController.getAudioManager());
             volumeUtils.playSoundForStreamType(mRow.stream);
         }

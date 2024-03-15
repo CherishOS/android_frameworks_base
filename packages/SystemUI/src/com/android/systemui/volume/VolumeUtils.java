@@ -24,9 +24,12 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.android.systemui.R;
+
+import com.android.internal.util.android.VibrationUtils;
 
 public class VolumeUtils {
     private static final String TAG = "VolumeUtils";
@@ -47,6 +50,8 @@ public class VolumeUtils {
     }
 
     public void playSoundForStreamType(int streamType) {
+        int vibrateIntensity = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.VOLUME_SLIDER_HAPTICS_INTENSITY, 1);
         Uri soundUri = null;
         switch (streamType) {
             case AudioManager.STREAM_RING:
@@ -59,12 +64,12 @@ public class VolumeUtils {
                 soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
                 break;
         }
+        VibrationUtils.triggerVibration(mContext, vibrateIntensity);
         playSound(soundUri, streamType);
     }
 
     private void playSound(Uri soundUri, int streamType) {
-        stopRingtone();
-        stopMediaPlayer();
+        stopPlayback();
         if (mAudioManager == null || mAudioManager.isMusicActive()) {
             return;
         }
