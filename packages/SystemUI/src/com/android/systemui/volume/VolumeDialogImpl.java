@@ -3041,6 +3041,8 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             int vibrateIntensity = Settings.System.getInt(mContext.getContentResolver(),
                         Settings.System.VOLUME_SLIDER_HAPTICS_INTENSITY, 1);
             VibrationUtils.triggerVibration(mContext, vibrateIntensity);
+            VolumeUtils volumeUtils = new VolumeUtils(mContext, mController.getAudioManager());
+            volumeUtils.playSoundForStreamType(mRow.stream);
         }
 
         @Override
