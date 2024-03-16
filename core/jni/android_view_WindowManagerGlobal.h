@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Android Open Source Project
+ * Copyright (C) 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-#ifndef _ANDROID_WINDOW_INPUTTRANSFERTOKEN_H
-#define _ANDROID_WINDOW_INPUTTRANSFERTOKEN_H
-
+#include <binder/IBinder.h>
 #include <gui/InputTransferToken.h>
-#include <jni.h>
+#include <gui/SurfaceControl.h>
+#include <input/InputTransport.h>
 
 namespace android {
-
-extern InputTransferToken* android_window_InputTransferToken_getNativeInputTransferToken(
-        JNIEnv* env, jobject inputTransferTokenObj);
-
-extern jobject android_window_InputTransferToken_getJavaInputTransferToken(
-        JNIEnv* env, const InputTransferToken& inputTransferToken);
+extern std::shared_ptr<InputChannel> createInputChannel(
+        const sp<IBinder>& clientToken, const InputTransferToken& hostInputTransferToken,
+        const SurfaceControl& surfaceControl,
+        const InputTransferToken& clientInputTransferTokenObj);
+extern void removeInputChannel(const sp<IBinder>& clientToken);
 
 } // namespace android
-
-#endif // _ANDROID_WINDOW_INPUTTRANSFERTOKEN_H
