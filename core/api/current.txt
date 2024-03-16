@@ -293,7 +293,7 @@ package android {
     field public static final String SET_ALARM = "com.android.alarm.permission.SET_ALARM";
     field public static final String SET_ALWAYS_FINISH = "android.permission.SET_ALWAYS_FINISH";
     field public static final String SET_ANIMATION_SCALE = "android.permission.SET_ANIMATION_SCALE";
-    field @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") public static final String SET_BIOMETRIC_DIALOG_LOGO = "android.permission.SET_BIOMETRIC_DIALOG_LOGO";
+    field @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") public static final String SET_BIOMETRIC_DIALOG_ADVANCED = "android.permission.SET_BIOMETRIC_DIALOG_ADVANCED";
     field public static final String SET_DEBUG_APP = "android.permission.SET_DEBUG_APP";
     field @Deprecated public static final String SET_PREFERRED_APPLICATIONS = "android.permission.SET_PREFERRED_APPLICATIONS";
     field public static final String SET_PROCESS_LIMIT = "android.permission.SET_PROCESS_LIMIT";
@@ -18904,9 +18904,9 @@ package android.hardware.biometrics {
     method @Nullable public int getAllowedAuthenticators();
     method @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") @Nullable public android.hardware.biometrics.PromptContentView getContentView();
     method @Nullable public CharSequence getDescription();
-    method @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") @Nullable @RequiresPermission(android.Manifest.permission.SET_BIOMETRIC_DIALOG_LOGO) public android.graphics.Bitmap getLogoBitmap();
-    method @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") @Nullable @RequiresPermission(android.Manifest.permission.SET_BIOMETRIC_DIALOG_LOGO) public String getLogoDescription();
-    method @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") @DrawableRes @RequiresPermission(android.Manifest.permission.SET_BIOMETRIC_DIALOG_LOGO) public int getLogoRes();
+    method @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") @Nullable @RequiresPermission(android.Manifest.permission.SET_BIOMETRIC_DIALOG_ADVANCED) public android.graphics.Bitmap getLogoBitmap();
+    method @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") @Nullable @RequiresPermission(android.Manifest.permission.SET_BIOMETRIC_DIALOG_ADVANCED) public String getLogoDescription();
+    method @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") @DrawableRes @RequiresPermission(android.Manifest.permission.SET_BIOMETRIC_DIALOG_ADVANCED) public int getLogoRes();
     method @Nullable public CharSequence getNegativeButtonText();
     method @Nullable public CharSequence getSubtitle();
     method @NonNull public CharSequence getTitle();
@@ -18956,9 +18956,9 @@ package android.hardware.biometrics {
     method @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setContentView(@NonNull android.hardware.biometrics.PromptContentView);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setDescription(@NonNull CharSequence);
     method @Deprecated @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setDeviceCredentialAllowed(boolean);
-    method @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") @NonNull @RequiresPermission(android.Manifest.permission.SET_BIOMETRIC_DIALOG_LOGO) public android.hardware.biometrics.BiometricPrompt.Builder setLogoBitmap(@NonNull android.graphics.Bitmap);
-    method @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") @NonNull @RequiresPermission(android.Manifest.permission.SET_BIOMETRIC_DIALOG_LOGO) public android.hardware.biometrics.BiometricPrompt.Builder setLogoDescription(@NonNull String);
-    method @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") @NonNull @RequiresPermission(android.Manifest.permission.SET_BIOMETRIC_DIALOG_LOGO) public android.hardware.biometrics.BiometricPrompt.Builder setLogoRes(@DrawableRes int);
+    method @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") @NonNull @RequiresPermission(android.Manifest.permission.SET_BIOMETRIC_DIALOG_ADVANCED) public android.hardware.biometrics.BiometricPrompt.Builder setLogoBitmap(@NonNull android.graphics.Bitmap);
+    method @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") @NonNull @RequiresPermission(android.Manifest.permission.SET_BIOMETRIC_DIALOG_ADVANCED) public android.hardware.biometrics.BiometricPrompt.Builder setLogoDescription(@NonNull String);
+    method @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") @NonNull @RequiresPermission(android.Manifest.permission.SET_BIOMETRIC_DIALOG_ADVANCED) public android.hardware.biometrics.BiometricPrompt.Builder setLogoRes(@DrawableRes int);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setNegativeButton(@NonNull CharSequence, @NonNull java.util.concurrent.Executor, @NonNull android.content.DialogInterface.OnClickListener);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setSubtitle(@NonNull CharSequence);
     method @NonNull public android.hardware.biometrics.BiometricPrompt.Builder setTitle(@NonNull CharSequence);
@@ -18971,6 +18971,7 @@ package android.hardware.biometrics {
     ctor @Deprecated public BiometricPrompt.CryptoObject(@NonNull android.security.identity.IdentityCredential);
     ctor public BiometricPrompt.CryptoObject(@NonNull android.security.identity.PresentationSession);
     ctor @FlaggedApi("android.hardware.biometrics.add_key_agreement_crypto_object") public BiometricPrompt.CryptoObject(@NonNull javax.crypto.KeyAgreement);
+    ctor @FlaggedApi("android.hardware.biometrics.get_op_id_crypto_object") public BiometricPrompt.CryptoObject(long);
     method @Nullable public javax.crypto.Cipher getCipher();
     method @Deprecated @Nullable public android.security.identity.IdentityCredential getIdentityCredential();
     method @FlaggedApi("android.hardware.biometrics.add_key_agreement_crypto_object") @Nullable public javax.crypto.KeyAgreement getKeyAgreement();
@@ -18998,6 +18999,21 @@ package android.hardware.biometrics {
   }
 
   @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") public interface PromptContentView {
+  }
+
+  @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") public final class PromptContentViewWithMoreOptionsButton implements android.os.Parcelable android.hardware.biometrics.PromptContentView {
+    method public int describeContents();
+    method @Nullable @RequiresPermission(android.Manifest.permission.SET_BIOMETRIC_DIALOG_ADVANCED) public String getDescription();
+    method @NonNull @RequiresPermission(android.Manifest.permission.SET_BIOMETRIC_DIALOG_ADVANCED) public android.content.DialogInterface.OnClickListener getMoreOptionsButtonListener();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.hardware.biometrics.PromptContentViewWithMoreOptionsButton> CREATOR;
+  }
+
+  public static final class PromptContentViewWithMoreOptionsButton.Builder {
+    ctor public PromptContentViewWithMoreOptionsButton.Builder();
+    method @NonNull @RequiresPermission(android.Manifest.permission.SET_BIOMETRIC_DIALOG_ADVANCED) public android.hardware.biometrics.PromptContentViewWithMoreOptionsButton build();
+    method @NonNull @RequiresPermission(android.Manifest.permission.SET_BIOMETRIC_DIALOG_ADVANCED) public android.hardware.biometrics.PromptContentViewWithMoreOptionsButton.Builder setDescription(@NonNull String);
+    method @NonNull @RequiresPermission(android.Manifest.permission.SET_BIOMETRIC_DIALOG_ADVANCED) public android.hardware.biometrics.PromptContentViewWithMoreOptionsButton.Builder setMoreOptionsButtonListener(@NonNull java.util.concurrent.Executor, @NonNull android.content.DialogInterface.OnClickListener);
   }
 
   @FlaggedApi("android.hardware.biometrics.custom_biometric_prompt") public final class PromptVerticalListContentView implements android.os.Parcelable android.hardware.biometrics.PromptContentView {
@@ -20121,9 +20137,14 @@ package android.hardware.camera2.params {
     ctor public OutputConfiguration(@NonNull android.view.Surface);
     ctor public OutputConfiguration(int, @NonNull android.view.Surface);
     ctor public <T> OutputConfiguration(@NonNull android.util.Size, @NonNull Class<T>);
+    ctor @FlaggedApi("com.android.internal.camera.flags.camera_device_setup") public OutputConfiguration(int, @NonNull android.util.Size);
+    ctor @FlaggedApi("com.android.internal.camera.flags.camera_device_setup") public OutputConfiguration(int, int, @NonNull android.util.Size);
+    ctor @FlaggedApi("com.android.internal.camera.flags.camera_device_setup") public OutputConfiguration(int, @NonNull android.util.Size, long);
+    ctor @FlaggedApi("com.android.internal.camera.flags.camera_device_setup") public OutputConfiguration(int, int, @NonNull android.util.Size, long);
     method public void addSensorPixelModeUsed(int);
     method public void addSurface(@NonNull android.view.Surface);
     method @NonNull public static java.util.Collection<android.hardware.camera2.params.OutputConfiguration> createInstancesForMultiResolutionOutput(@NonNull android.hardware.camera2.MultiResolutionImageReader);
+    method @FlaggedApi("com.android.internal.camera.flags.camera_device_setup") @NonNull public static java.util.List<android.hardware.camera2.params.OutputConfiguration> createInstancesForMultiResolutionOutput(@NonNull java.util.Collection<android.hardware.camera2.params.MultiResolutionStreamInfo>, int);
     method public int describeContents();
     method public void enableSurfaceSharing();
     method public long getDynamicRangeProfile();
@@ -20142,6 +20163,7 @@ package android.hardware.camera2.params {
     method public void setPhysicalCameraId(@Nullable String);
     method public void setReadoutTimestampEnabled(boolean);
     method public void setStreamUseCase(long);
+    method @FlaggedApi("com.android.internal.camera.flags.camera_device_setup") public static void setSurfacesForMultiResolutionOutput(@NonNull java.util.Collection<android.hardware.camera2.params.OutputConfiguration>, @NonNull android.hardware.camera2.MultiResolutionImageReader);
     method public void setTimestampBase(int);
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.hardware.camera2.params.OutputConfiguration> CREATOR;
@@ -20203,6 +20225,7 @@ package android.hardware.camera2.params {
 
   public final class SessionConfiguration implements android.os.Parcelable {
     ctor public SessionConfiguration(int, @NonNull java.util.List<android.hardware.camera2.params.OutputConfiguration>, @NonNull java.util.concurrent.Executor, @NonNull android.hardware.camera2.CameraCaptureSession.StateCallback);
+    ctor @FlaggedApi("com.android.internal.camera.flags.camera_device_setup") public SessionConfiguration(int, @NonNull java.util.List<android.hardware.camera2.params.OutputConfiguration>);
     method public void clearColorSpace();
     method public int describeContents();
     method @Nullable public android.graphics.ColorSpace getColorSpace();
@@ -20212,6 +20235,7 @@ package android.hardware.camera2.params {
     method public android.hardware.camera2.CaptureRequest getSessionParameters();
     method public int getSessionType();
     method public android.hardware.camera2.CameraCaptureSession.StateCallback getStateCallback();
+    method @FlaggedApi("com.android.internal.camera.flags.camera_device_setup") public void setCallback(@NonNull java.util.concurrent.Executor, @NonNull android.hardware.camera2.CameraCaptureSession.StateCallback);
     method public void setColorSpace(@NonNull android.graphics.ColorSpace.Named);
     method public void setInputConfiguration(@NonNull android.hardware.camera2.params.InputConfiguration);
     method public void setSessionParameters(android.hardware.camera2.CaptureRequest);
@@ -23709,6 +23733,13 @@ package android.media {
     field public static final int TYPE_STRING = 4; // 0x4
     field public static final int VIDEO_ENCODING_STATISTICS_LEVEL_1 = 1; // 0x1
     field public static final int VIDEO_ENCODING_STATISTICS_LEVEL_NONE = 0; // 0x0
+  }
+
+  @FlaggedApi("android.media.codec.region_of_interest") public static final class MediaFormat.QpOffsetRect {
+    ctor public MediaFormat.QpOffsetRect(@NonNull android.graphics.Rect, int);
+    method @NonNull public String flattenToString();
+    method @NonNull public static String flattenToString(@NonNull java.util.List<android.media.MediaFormat.QpOffsetRect>);
+    method public void set(@NonNull android.graphics.Rect, int);
   }
 
   public final class MediaMetadata implements android.os.Parcelable {
@@ -33960,6 +33991,7 @@ package android.os {
     method public static boolean supportsMultipleUsers();
     field public static final String ALLOW_PARENT_PROFILE_APP_LINKING = "allow_parent_profile_app_linking";
     field @Deprecated public static final String DISALLOW_ADD_MANAGED_PROFILE = "no_add_managed_profile";
+    field @FlaggedApi("android.os.allow_private_profile") public static final String DISALLOW_ADD_PRIVATE_PROFILE = "no_add_private_profile";
     field public static final String DISALLOW_ADD_USER = "no_add_user";
     field public static final String DISALLOW_ADD_WIFI_CONFIG = "no_add_wifi_config";
     field public static final String DISALLOW_ADJUST_VOLUME = "no_adjust_volume";
@@ -34147,9 +34179,8 @@ package android.os {
     method @RequiresPermission(android.Manifest.permission.VIBRATE) public final void vibrate(@NonNull android.os.CombinedVibration, @Nullable android.os.VibrationAttributes);
   }
 
-  @FlaggedApi("android.os.adpf_gpu_report_actual_work_duration") public final class WorkDuration implements android.os.Parcelable {
+  @FlaggedApi("android.os.adpf_gpu_report_actual_work_duration") public final class WorkDuration {
     ctor public WorkDuration();
-    method public int describeContents();
     method public long getActualCpuDurationNanos();
     method public long getActualGpuDurationNanos();
     method public long getActualTotalDurationNanos();
@@ -34158,8 +34189,6 @@ package android.os {
     method public void setActualGpuDurationNanos(long);
     method public void setActualTotalDurationNanos(long);
     method public void setWorkPeriodStartTimestampNanos(long);
-    method public void writeToParcel(@NonNull android.os.Parcel, int);
-    field @NonNull public static final android.os.Parcelable.Creator<android.os.WorkDuration> CREATOR;
   }
 
   public class WorkSource implements android.os.Parcelable {
