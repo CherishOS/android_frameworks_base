@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 
-import com.android.systemui.R;
+import com.android.systemui.res.R;
 import com.android.internal.util.cherish.Utils;
 
 public class StaticHeaderProvider implements
