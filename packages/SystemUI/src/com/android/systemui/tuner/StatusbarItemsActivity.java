@@ -22,7 +22,7 @@ import android.view.MenuItem;
 
 import com.android.systemui.Dependency;
 import com.android.systemui.fragments.FragmentService;
-import com.android.systemui.R;
+import com.android.systemui.res.R;
 
 import com.android.settingslib.collapsingtoolbar.CollapsingToolbarBaseActivity;
 

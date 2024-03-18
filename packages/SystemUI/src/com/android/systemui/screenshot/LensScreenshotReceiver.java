@@ -31,7 +31,7 @@ import android.net.Uri;
 
 import com.android.internal.util.cherish.CherishUtils;
 
-import com.android.systemui.R;
+import com.android.systemui.res.R;
 import com.android.systemui.dagger.qualifiers.Background;
 
 import java.util.concurrent.Executor;

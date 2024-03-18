@@ -20,7 +20,7 @@ package com.android.systemui.statusbar.policy
 import android.content.Context
 import android.util.Log
 
-import com.android.systemui.R
+import com.android.systemui.res.R
 import com.android.systemui.dagger.SysUISingleton
 import com.android.systemui.doze.util.getBurnInOffset
 import com.android.systemui.navigationbar.NavigationBarView

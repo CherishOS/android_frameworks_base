@@ -16,7 +16,7 @@ package com.android.systemui.tuner;
 
 import android.os.Bundle;
 import androidx.preference.PreferenceFragment;
-import com.android.systemui.R;
+import com.android.systemui.res.R;
 
 public class StatusbarItems extends PreferenceFragment {
 

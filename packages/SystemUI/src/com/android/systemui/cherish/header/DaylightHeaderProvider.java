@@ -50,7 +50,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import com.android.systemui.R;
+import com.android.systemui.res.R;
 import com.android.internal.util.cherish.Utils;
 
 public class DaylightHeaderProvider implements
