@@ -224,7 +224,14 @@ public class NavigationBarControllerImpl implements
         }
     }
 
-    private boolean shouldCreateNavBarAndTaskBar(int displayId) {
+    private boolean shouldCreateNavBarAndTaskBar(Context context, int displayId) {
+        if (displayId == mDisplayTracker.getDefaultDisplayId() &&
+                Settings.System.getIntForUser(context.getContentResolver(),
+                        Settings.System.FORCE_SHOW_NAVBAR, 0,
+                        UserHandle.USER_CURRENT) == 1) {
+            return true;
+        }
+
         if (mHasNavBar.indexOfKey(displayId) > -1) {
             return mHasNavBar.get(displayId);
         }
@@ -255,7 +262,7 @@ public class NavigationBarControllerImpl implements
     private boolean initializeTaskbarIfNecessary() {
         // Enable for large screens or (phone AND flag is set); assuming phone = !mIsLargeScreen
         boolean taskbarEnabled = (mIsLargeScreen || enableTaskbarNavbarUnification())
-                && shouldCreateNavBarAndTaskBar(mContext.getDisplayId());
+                && shouldCreateNavBarAndTaskBar(mContext, mContext.getDisplayId());
 
         if (taskbarEnabled) {
             Trace.beginSection("NavigationBarController#initializeTaskbarIfNecessary");
@@ -369,7 +376,7 @@ public class NavigationBarControllerImpl implements
         final int displayId = display.getDisplayId();
         final boolean isOnDefaultDisplay = displayId == mDisplayTracker.getDefaultDisplayId();
 
-        if (!shouldCreateNavBarAndTaskBar(displayId)) {
+        if (!shouldCreateNavBarAndTaskBar(mContext, displayId)) {
             return;
         }
 
@@ -483,6 +490,16 @@ public class NavigationBarControllerImpl implements
     @Nullable
     public NavigationBar getDefaultNavigationBar() {
         return mNavigationBars.get(mDisplayTracker.getDefaultDisplayId());
+    }
+
+    @Override
+    public void onDisplayReady(int displayId) {
+        mCommandQueueCallbacks.onDisplayReady(displayId);
+    }
+
+    @Override
+    public void onDisplayRemoved(int displayId) {
+        mCommandQueueCallbacks.onDisplayRemoved(displayId);
     }
 
     @NeverCompile
