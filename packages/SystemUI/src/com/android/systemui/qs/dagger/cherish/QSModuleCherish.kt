@@ -19,15 +19,12 @@ package com.android.systemui.qs.dagger.cherish
 import com.android.systemui.qs.tileimpl.QSTileImpl
 import com.android.systemui.qs.tiles.AmbientDisplayTile
 import com.android.systemui.qs.tiles.CaffeineTile
-<<<<<<< HEAD
-=======
-import com.android.systemui.qs.tiles.CellularTile
 import com.android.systemui.qs.tiles.HeadsUpTile
->>>>>>> c2f4c75a7665 (SystemUI: Add heads up tile)
 import com.android.systemui.qs.tiles.PowerShareTile
 import com.android.systemui.qs.tiles.SoundTile
 import com.android.systemui.qs.tiles.SyncTile
 import com.android.systemui.qs.tiles.UsbTetherTile
+import com.android.systemui.qs.tiles.VolumeTile
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -77,4 +74,10 @@ interface QSModuleCherish {
     @IntoMap
     @StringKey(UsbTetherTile.TILE_SPEC)
     fun bindUsbTetherTile(usbTetherTile: UsbTetherTile): QSTileImpl<*>
+    
+    /** Inject VolumeTile into tileMap in QSModule */
+    @Binds  
+    @IntoMap
+    @StringKey(VolumeTile.TILE_SPEC)
+    fun bindVolumeTile(volumeTile: VolumeTile): QSTileImpl<*>
 }
