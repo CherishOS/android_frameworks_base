@@ -86,6 +86,10 @@ public class PixelPropsUtils {
             "com.google.android.apps.wallpaper",
             "com.google.android.apps.wallpaper.pixel",
             "com.google.android.gms",
+            "com.google.android.apps.photos",
+            "com.google.android.gms.ui",
+            "com.google.android.gms.learning",
+            "com.google.android.gms.persistent",
             "com.google.android.googlequicksearchbox",
             "com.google.android.wallpaper.effects",
             "com.google.pixel.livewallpaper"
@@ -116,7 +120,6 @@ public class PixelPropsUtils {
             "com.google.android.apps.miphone.aiai.AiaiApplication",
             "com.google.android.apps.motionsense.bridge",
             "com.google.android.apps.nexuslauncher",
-            "com.google.android.apps.photos",
             "com.google.android.apps.pixelmigrate",
             "com.google.android.apps.recorder",
             "com.google.android.apps.restore",
