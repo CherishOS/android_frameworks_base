@@ -643,15 +643,17 @@ constructor(
         qsBatteryModeController.updateResources()
 
         val fillColor = Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary)
-        iconManager.setTint(fillColor)
+        val fillColorInverse = Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimaryInverse)
+        iconManager.setTint(fillColor, fillColorInverse)
         val textColor = Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary)
+        val textColorInverse = Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimaryInverse)
         val colorStateList = Utils.getColorAttr(context, android.R.attr.textColorPrimary)
         if (textColor != textColorPrimary) {
             val textColorSecondary = Utils.getColorAttrDefaultColor(context,
                     android.R.attr.textColorSecondary)
             textColorPrimary = textColor
             if (iconManager != null) {
-                iconManager.setTint(textColor)
+                iconManager.setTint(textColor, textColorInverse)
             }
             clock.setTextColor(textColorPrimary)
             date.setTextColor(textColorPrimary)
