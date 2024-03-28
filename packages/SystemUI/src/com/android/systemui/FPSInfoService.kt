@@ -93,7 +93,7 @@ class FPSInfoService @Inject constructor(
         super.onCreate()
         coroutineScope = CoroutineScope(Dispatchers.IO)
 
-        windowManager = getSystemService(WindowManager::class.java)
+        windowManager = getSystemService(WindowManager::class.java) as WindowManager
         configuration = resources.configuration
         layoutParams.y = getTopInset()
 
