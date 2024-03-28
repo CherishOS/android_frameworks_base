@@ -32,7 +32,7 @@ import androidx.annotation.Nullable;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
-import com.android.systemui.R;
+import com.android.systemui.res.R;
 import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.plugins.ActivityStarter;
@@ -99,13 +99,6 @@ public class CompassTile extends QSTileImpl<BooleanState> implements SensorEvent
         setListeningSensors(false);
         mSensorManager = null;
         mImage = null;
-    }
-
-    @Override
-    public QSIconView createTileView(Context context) {
-        QSIconView iconView = super.createTileView(context);
-        mImage = (ImageView) iconView.findViewById(android.R.id.icon);
-        return iconView;
     }
 
     @Override
