@@ -159,6 +159,8 @@ constructor(
     private val date: TextView = header.requireViewById(R.id.date)
     private val iconContainer: StatusIconContainer = header.requireViewById(R.id.statusIcons)
     private val mShadeCarrierGroup: ShadeCarrierGroup = header.requireViewById(R.id.carrier_group)
+    private val shadeCarrierText: TextView = mShadeCarrierGroup.requireViewById(R.id.shade_carrier_text)
+    private val shadeNoCarrierText: TextView = mShadeCarrierGroup.requireViewById(R.id.no_carrier_text)
     private val systemIconsHoverContainer: View =
         header.requireViewById(R.id.hover_system_icons_container)
 
@@ -622,6 +624,8 @@ constructor(
             }
             clock.setTextColor(textColorPrimary)
             date.setTextColor(textColorPrimary)
+            shadeCarrierText.setTextColor(textColorPrimary)
+            shadeNoCarrierText.setTextColor(textColorPrimary)
             mShadeCarrierGroup.updateColors(textColorPrimary, colorStateList)
             batteryIcon.updateColors(textColorPrimary, textColorSecondary, textColorPrimary)
         }
