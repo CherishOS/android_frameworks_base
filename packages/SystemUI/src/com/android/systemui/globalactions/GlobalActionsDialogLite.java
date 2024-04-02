@@ -1580,8 +1580,8 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
     @VisibleForTesting
     final class UsersAction extends SinglePressAction {
         private UsersAction() {
-            super(com.android.systemui.R.drawable.ic_lock_user,
-                    com.android.systemui.R.string.global_action_users);
+            super(com.android.systemui.res.R.drawable.ic_lock_user,
+                    com.android.systemui.res.R.string.global_action_users);
         }
 
         @Override
@@ -1624,7 +1624,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         if (mUserManager.isUserSwitcherEnabled()) {
             List<UserInfo> users = mUserManager.getUsers();
             final int avatarSize = mContext.getResources().getDimensionPixelSize(
-                    com.android.systemui.R.dimen.global_actions_avatar_size);
+                    com.android.systemui.res.R.dimen.global_actions_avatar_size);
             for (final UserInfo user : users) {
                 if (user.supportsSwitchToByUser()) {
                     boolean isCurrentUser = currentUser == null
@@ -1639,7 +1639,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
                     avatar = new BitmapDrawable(mContext.getResources(),
                             createCircularClip(rawAvatar, avatarSize, avatarSize));
                     SinglePressAction switchToUser = new SinglePressAction(
-                            com.android.systemui.R.drawable.ic_lock_user, avatar,
+                            com.android.systemui.res.R.drawable.ic_lock_user, avatar,
                             (user.name != null ? user.name : "Primary")
                                     + (isCurrentUser ? " \u2714" : "")) {
                         public void onPress() {
@@ -1660,7 +1660,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
                     };
                     if (isCurrentUser) {
                         switchToUser.setStatus(mContext.getString(
-                                com.android.systemui.R.string.global_action_current_user));
+                                com.android.systemui.res.R.string.global_action_current_user));
                     }
                     addIfShouldShowAction(actions, switchToUser);
                 }
@@ -1950,7 +1950,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
                 Log.w(TAG, "No users action found at position: " + position);
                 return null;
             }
-            int viewLayoutResource = com.android.systemui.R.layout.global_actions_power_item;
+            int viewLayoutResource = com.android.systemui.res.R.layout.global_actions_power_item;
             View view = convertView != null ? convertView
                     : LayoutInflater.from(mContext).inflate(viewLayoutResource, parent, false);
             view.setOnClickListener(v -> onClickItem(position));
@@ -2391,8 +2391,8 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
     private class AirplaneModeAction extends ToggleAction {
         AirplaneModeAction() {
             super(
-                    com.android.systemui.R.drawable.ic_lock_airplane_mode_enabled,
-                    com.android.systemui.R.drawable.ic_lock_airplane_mode_disabled,
+                    com.android.systemui.res.R.drawable.ic_lock_airplane_mode_enabled,
+                    com.android.systemui.res.R.drawable.ic_lock_airplane_mode_disabled,
                     R.string.global_actions_toggle_airplane_mode,
                     R.string.global_actions_airplane_mode_on_status,
                     R.string.global_actions_airplane_mode_off_status);
