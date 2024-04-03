@@ -38,7 +38,7 @@ import java.util.List;
 public class ParsedAttributionImpl implements ParsedAttribution, Parcelable {
 
     /** Maximum amount of attributions per package */
-    static final int MAX_NUM_ATTRIBUTIONS = 1000;
+    static final int MAX_NUM_ATTRIBUTIONS = 400;
 
     /** Tag of the attribution */
     private @NonNull String tag;
