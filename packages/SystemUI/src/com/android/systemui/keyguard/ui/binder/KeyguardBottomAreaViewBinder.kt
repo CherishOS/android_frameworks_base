@@ -17,6 +17,8 @@
 package com.android.systemui.keyguard.ui.binder
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.Animatable2
 import android.util.Size
@@ -345,29 +347,25 @@ object KeyguardBottomAreaViewBinder {
 
         view.isActivated = viewModel.isActivated
         view.drawable.setTint(
-            Utils.getColorAttrDefaultColor(
-                view.context,
-                if (viewModel.isActivated) {
-                    com.android.internal.R.attr.materialColorOnPrimaryFixed
-                } else {
-                    com.android.internal.R.attr.materialColorOnSurface
-                },
-            )
+            if (viewModel.isActivated) {
+                Color.BLACK
+            } else {
+                Color.WHITE
+            }
         )
 
-        view.backgroundTintList =
-            if (!viewModel.isSelected) {
-                Utils.getColorAttr(
-                    view.context,
-                    if (viewModel.isActivated) {
-                        com.android.internal.R.attr.materialColorPrimaryFixed
-                    } else {
-                        com.android.internal.R.attr.materialColorSurfaceContainerHigh
-                    }
-                )
-            } else {
-                null
-            }
+        view.backgroundTintList = if (!viewModel.isSelected) {
+            ColorStateList.valueOf(
+                if (viewModel.isActivated) {
+                    Color.WHITE
+                } else {
+                    Color.parseColor("#99000000")
+                }
+            )
+        } else {
+            null
+        }
+
         view
             .animate()
             .scaleX(if (viewModel.isSelected) SCALE_SELECTED_BUTTON else 1f)
