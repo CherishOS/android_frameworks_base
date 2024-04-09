@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 The LineageOS Project
+ * Copyright (C) 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.android.systemui.biometrics
 
 import android.content.Context
-import android.view.Surface
+import android.graphics.Canvas
 
-class DummyUdfpsDisplayModeProvider constructor(
-    private val context: Context
-): UdfpsDisplayModeProvider {
-    override fun enable(onEnabled: Runnable?) {
-        onEnabled?.run()
-    }
-
-    override fun disable(onDisabled: Runnable?) {
-        onDisabled?.run()
+/**
+ * Draws udfps fingerprint if sensor isn't illuminating.
+ */
+class UdfpsFpDrawable(context: Context) : UdfpsDrawable(context) {
+    override fun draw(canvas: Canvas) {
+        if (isDisplayConfigured) {
+            return
+        }
+        fingerprintDrawable.draw(canvas)
     }
 }

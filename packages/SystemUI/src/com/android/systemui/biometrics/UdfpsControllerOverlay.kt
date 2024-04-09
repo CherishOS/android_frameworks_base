@@ -65,7 +65,6 @@ import com.android.systemui.statusbar.phone.UnlockedScreenOffAnimationController
 import com.android.systemui.statusbar.policy.ConfigurationController
 import com.android.systemui.statusbar.policy.KeyguardStateController
 import com.android.systemui.user.domain.interactor.SelectedUserInteractor
-import com.android.systemui.util.settings.SecureSettings
 import dagger.Lazy
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -96,7 +95,6 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
     private val keyguardStateController: KeyguardStateController,
     private val unlockedScreenOffAnimationController: UnlockedScreenOffAnimationController,
     private var udfpsDisplayModeProvider: UdfpsDisplayModeProvider,
-    private val secureSettings: SecureSettings,
     val requestId: Long,
     @RequestReason val requestReason: Int,
     private val controllerCallback: IUdfpsOverlayControllerCallback,
@@ -133,10 +131,8 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
 
     private var overlayTouchListener: TouchExplorationStateChangeListener? = null
 
-    private val frameworkDimming = context.getResources().getBoolean(
-        R.bool.config_udfpsFrameworkDimming)
     private val coreLayoutParams = WindowManager.LayoutParams(
-        WindowManager.LayoutParams.TYPE_DISPLAY_OVERLAY,
+        WindowManager.LayoutParams.TYPE_NAVIGATION_BAR_PANEL,
         0 /* flags set in computeLayoutParams() */,
         PixelFormat.TRANSLUCENT
     ).apply {
@@ -146,20 +142,10 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
         layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
         flags = (Utils.FINGERPRINT_OVERLAY_LAYOUT_PARAM_FLAGS or
                 WindowManager.LayoutParams.FLAG_SPLIT_TOUCH)
-        if (frameworkDimming) {
-            flags = flags or WindowManager.LayoutParams.FLAG_DIM_BEHIND
-        }
         privateFlags = WindowManager.LayoutParams.PRIVATE_FLAG_TRUSTED_OVERLAY
-        dimAmount = 0.0f
-
         // Avoid announcing window title.
         accessibilityTitle = " "
         inputFeatures = WindowManager.LayoutParams.INPUT_FEATURE_SPY
-    }
-
-    fun updateDimAmount(newDimAmount: Float) {
-        coreLayoutParams.dimAmount = newDimAmount
-        windowManager.updateViewLayout(getTouchOverlay(), coreLayoutParams)
     }
 
     /** If the overlay is currently showing. */
@@ -399,12 +385,9 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
             else -> false
         }
 
-        val customUdfpsIcon = Settings.System.getInt(context.contentResolver,
-            Settings.System.UDFPS_ICON, 0) != 0
-
         // Use expanded overlay unless touchExploration enabled
         var rotatedBounds =
-            if (customUdfpsIcon || (accessibilityManager.isTouchExplorationEnabled && isEnrollment)) {
+            if (accessibilityManager.isTouchExplorationEnabled && isEnrollment) {
                 Rect(overlayParams.sensorBounds)
             } else {
                 Rect(
@@ -433,14 +416,12 @@ class UdfpsControllerOverlay @JvmOverloads constructor(
                     rot
                 )
 
-                if (!customUdfpsIcon) {
-                    RotationUtils.rotateBounds(
-                        sensorBounds,
-                        overlayParams.naturalDisplayWidth,
-                        overlayParams.naturalDisplayHeight,
-                        rot
-                    )
-                }
+                RotationUtils.rotateBounds(
+                    sensorBounds,
+                    overlayParams.naturalDisplayWidth,
+                    overlayParams.naturalDisplayHeight,
+                    rot
+                )
             }
         }
 

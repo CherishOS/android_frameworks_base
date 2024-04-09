@@ -32,7 +32,6 @@ import android.hardware.fingerprint.FingerprintManager
 import android.hardware.fingerprint.FingerprintSensorPropertiesInternal
 import android.hardware.fingerprint.ISidefpsController
 import android.os.Handler
-import android.util.DisplayUtils
 import android.util.Log
 import android.util.RotationUtils
 import android.view.Display
@@ -364,16 +363,14 @@ constructor(
         val displayHeight = if (isDefaultOrientation) size.height() else size.width()
         val boundsWidth = if (isDefaultOrientation) bounds.width() else bounds.height()
         val boundsHeight = if (isDefaultOrientation) bounds.height() else bounds.width()
-        val scaleFactor = DisplayUtils.getScaleFactor(context)
-        val locationY = (scaleFactor * overlayOffsets.sensorLocationY).toInt()
 
         val sensorBounds =
             if (overlayOffsets.isYAligned()) {
                 Rect(
                     displayWidth - boundsWidth,
-                    locationY,
+                    overlayOffsets.sensorLocationY,
                     displayWidth,
-                    locationY + boundsHeight
+                    overlayOffsets.sensorLocationY + boundsHeight
                 )
             } else {
                 Rect(

@@ -7140,16 +7140,6 @@ public final class Settings {
         public static final String DOUBLE_TAP_SLEEP_LOCKSCREEN = "double_tap_sleep_lockscreen";
 
         /**
-         * @hide
-         */
-        public static final String UDFPS_ICON = "udfps_icon";
-
-        /**
-         * @hide
-         */
-        public static final String UDFPS_ANIM_STYLE = "udfps_anim_style";
-
-        /**
          * Whether to use the custom status bar header or not
          * @hide
          */
@@ -13312,13 +13302,6 @@ public final class Settings {
          * @hide
          */
         public static final String ENABLE_PROJECTION_PRIVACY_INDICATOR = "enable_projection_privacy_indicator";
-
-        /**
-         * Enable udfps detection even when screen is off
-         * Default value is 0
-         * @hide
-         */
-        public static final String SCREEN_OFF_UDFPS_ENABLED = "screen_off_udfps_enabled";
 
         /**
          * Control whether the process CPU info meter should be shown.

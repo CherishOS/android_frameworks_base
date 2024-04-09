@@ -29,7 +29,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.MathUtils;
 import android.view.View;
@@ -79,11 +78,6 @@ public class UdfpsKeyguardViewLegacy extends UdfpsAnimationView {
     private boolean mFullyInflated;
     private Runnable mOnFinishInflateRunnable;
 
-    private LayoutParams mParams;
-
-    private boolean mCustomUdfpsIcon;
-    private boolean mPackageInstalled;
-
     public UdfpsKeyguardViewLegacy(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         mFingerprintDrawable = new UdfpsFpDrawable(context);
@@ -92,8 +86,6 @@ public class UdfpsKeyguardViewLegacy extends UdfpsAnimationView {
             .getDimensionPixelSize(R.dimen.udfps_burn_in_offset_x);
         mMaxBurnInOffsetY = context.getResources()
             .getDimensionPixelSize(R.dimen.udfps_burn_in_offset_y);
-        mPackageInstalled = com.android.internal.util.cherish.Utils.isPackageInstalled(
-                mContext, "com.cherish.udfps.icons");
     }
 
     /**
@@ -134,14 +126,6 @@ public class UdfpsKeyguardViewLegacy extends UdfpsAnimationView {
         return true;
     }
 
-    private void updateIcon() {
-        mCustomUdfpsIcon = mPackageInstalled && (Settings.System.getInt(
-                mContext.getContentResolver(), Settings.System.UDFPS_ICON, 0) != 0);
-        mBgProtection.setImageDrawable(mCustomUdfpsIcon
-                ? mFingerprintDrawable :
-                getContext().getDrawable(R.drawable.fingerprint_bg));
-    }
-
     private void updateBurnInOffsets() {
         if (!mFullyInflated) {
             return;
@@ -164,15 +148,13 @@ public class UdfpsKeyguardViewLegacy extends UdfpsAnimationView {
             mLockScreenFp.setTranslationX(burnInOffsetX);
             mLockScreenFp.setTranslationY(burnInOffsetY);
             mBgProtection.setAlpha(1f - mInterpolatedDarkAmount);
-            mLockScreenFp.setAlpha(mCustomUdfpsIcon ? 0.0f
-                : (1f - mInterpolatedDarkAmount));
+            mLockScreenFp.setAlpha(1f - mInterpolatedDarkAmount);
         } else if (darkAmountForAnimation == 0f) {
             // we're on the lockscreen and should use mAlpha (changes based on shade expansion)
             mLockScreenFp.setTranslationX(0);
             mLockScreenFp.setTranslationY(0);
             mBgProtection.setAlpha(mAlpha / 255f);
-            mLockScreenFp.setAlpha(mCustomUdfpsIcon ? 0.0f
-                : (mAlpha / 255f));
+            mLockScreenFp.setAlpha(mAlpha / 255f);
         } else {
             mBgProtection.setAlpha(0f);
             mLockScreenFp.setAlpha(0f);
@@ -329,19 +311,14 @@ public class UdfpsKeyguardViewLegacy extends UdfpsAnimationView {
                     updatePadding();
                     updateColor();
                     updateAlpha();
-                    updateIcon();
 
-                    if (mCustomUdfpsIcon) {
-                        parent.addView(view);
-                    } else {
-                        final LayoutParams lp = (LayoutParams) view.getLayoutParams();
-                        lp.width = mSensorBounds.width();
-                        lp.height = mSensorBounds.height();
-                        RectF relativeToView = getBoundsRelativeToView(new RectF(mSensorBounds));
-                        lp.setMarginsRelative((int) relativeToView.left, (int) relativeToView.top,
-                                (int) relativeToView.right, (int) relativeToView.bottom);
-                        parent.addView(view, lp);
-                    }
+                    final LayoutParams lp = (LayoutParams) view.getLayoutParams();
+                    lp.width = mSensorBounds.width();
+                    lp.height = mSensorBounds.height();
+                    RectF relativeToView = getBoundsRelativeToView(new RectF(mSensorBounds));
+                    lp.setMarginsRelative((int) relativeToView.left, (int) relativeToView.top,
+                            (int) relativeToView.right, (int) relativeToView.bottom);
+                    parent.addView(view, lp);
 
                     // requires call to invalidate to update the color
                     mLockScreenFp.addValueCallback(new KeyPath("**"), LottieProperty.COLOR_FILTER,

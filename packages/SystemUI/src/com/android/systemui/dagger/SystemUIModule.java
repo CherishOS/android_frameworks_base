@@ -328,17 +328,8 @@ public abstract class SystemUIModule {
     @BindsOptionalOf
     abstract CentralSurfaces optionalCentralSurfaces();
 
-    @Provides
-    static UdfpsDisplayModeProvider getUdfpsDisplayModeProvider(Context context) {
-        String className = context.getString(R.string.config_udfpsDisplayModeProviderComponent);
-        try {
-            Class<?> clazz = context.getClassLoader().loadClass(className);
-            return (UdfpsDisplayModeProvider) clazz.getDeclaredConstructor(
-                    new Class[] { Context.class }).newInstance(context);
-        } catch (Throwable t) {
-            throw new RuntimeException("Error loading UdfpsDisplayModeProvider " + className, t);
-        }
-    }
+    @BindsOptionalOf
+    abstract UdfpsDisplayModeProvider optionalUdfpsDisplayModeProvider();
 
     @BindsOptionalOf
     abstract FingerprintInteractiveToAuthProvider optionalFingerprintInteractiveToAuthProvider();
