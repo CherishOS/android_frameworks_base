@@ -88,7 +88,7 @@ public class QuickQSPanelController extends QSPanelControllerBase<QuickQSPanel>
     @Override
     protected void onInit() {
         super.onInit();
-        updateConfig();
+        setTiles();
         updateMediaExpansion();
         mMediaHost.setShowsOnlyActiveMedia(true);
         mMediaHost.init(MediaHierarchyManager.LOCATION_QQS);
@@ -174,26 +174,21 @@ public class QuickQSPanelController extends QSPanelControllerBase<QuickQSPanel>
 
     @Override
     protected void onConfigurationChanged() {
-        updateConfig();
+        setTiles();
         updateMediaExpansion();
     }
 
     @Override
     public void setTiles() {
+        int numQuickTiles = mView.getNumQuickTiles();
         List<QSTile> tiles = new ArrayList<>();
         for (QSTile tile : mHost.getTiles()) {
             tiles.add(tile);
-            if (tiles.size() == mView.getNumQuickTiles()) {
+            if (tiles.size() == numQuickTiles) {
                 break;
             }
         }
         super.setTiles(tiles, /* collapsedView */ true);
-    }
-
-    private void updateConfig() {
-        int columns = getResources().getInteger(R.integer.quick_settings_num_columns);
-        mView.setMaxTiles(TileUtils.getQSColumnsCount(getContext(), columns));
-        setTiles();
     }
 
     public void setContentMargins(int marginStart, int marginEnd) {

@@ -53,7 +53,6 @@ import com.android.app.animation.Interpolators
 import com.android.app.tracing.traceSection
 import android.annotation.SuppressLint;
 import com.android.settingslib.Utils
-import com.android.systemui.FontSizeUtils
 import com.android.systemui.animation.LaunchableView
 import com.android.systemui.animation.LaunchableViewDelegate
 import com.android.systemui.animation.view.LaunchableLinearLayout
