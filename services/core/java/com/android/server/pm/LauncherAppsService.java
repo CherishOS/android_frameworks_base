@@ -1075,6 +1075,10 @@ public class LauncherAppsService extends SystemService {
                 return;
             }
             verifyCallingPackage(callingPackage, callerUid);
+            List<String> launcherPkgs = Arrays.asList("com.android.launcher3", "com.google.android.apps.nexuslauncher");
+            if (launcherPkgs.contains(callingPackage)) {
+                return;
+            }
             if (!mShortcutServiceInternal.hasShortcutHostPermission(UserHandle.getUserId(callerUid),
                     callingPackage, callerPid, callerUid)) {
                 throw new SecurityException("Caller can't access shortcut information");
