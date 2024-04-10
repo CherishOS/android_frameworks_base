@@ -226,6 +226,7 @@ public class FingerprintEnrollClient extends EnrollClient<IBiometricsFingerprint
                     break;
                 case FingerprintManager.UDFPS_UI_READY:
                     // Unsupported in HIDL.
+                    break;
                 default:
                     Slog.w(TAG, "No matching event for onUdfpsUiEvent");
             }
