@@ -1418,7 +1418,7 @@ public class UsbDeviceManager implements ActivityTaskManagerInternal.ScreenObser
                 titleRes = com.android.internal.R.string.usb_charging_notification_title;
                 id = SystemMessage.NOTE_USB_CHARGING;
             } else if (mSinkPower && mConnectedToDataDisabledPort
-                    && mPowerBrickConnectionStatus == UsbPortStatus.POWER_BRICK_STATUS_DISCONNECTED) {
+                    && mPowerBrickConnectionStatus != UsbPortStatus.POWER_BRICK_STATUS_CONNECTED) {
                 // Show charging notification when USB Data is disabled on the port, and not
                 // connected to a wall charger.
                 titleRes = com.android.internal.R.string.usb_charging_notification_title;
