@@ -33,7 +33,6 @@ import com.android.systemui.Dependency;
 import com.android.systemui.res.R;
 import com.android.systemui.tuner.TunerService;
 
-import com.android.internal.util.android.VibrationUtils;
 import com.android.internal.util.cherish.ThemeUtils;
 
 public class VolumeUtils implements TunerService.Tunable {
@@ -121,8 +120,6 @@ public class VolumeUtils implements TunerService.Tunable {
     }
 
     public void playSoundForStreamType(int streamType) {
-        int vibrateIntensity = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.VOLUME_SLIDER_HAPTICS_INTENSITY, 1);
         Uri soundUri = null;
         switch (streamType) {
             case AudioManager.STREAM_RING:
@@ -135,7 +132,7 @@ public class VolumeUtils implements TunerService.Tunable {
                 soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
                 break;
         }
-        VibrationUtils.triggerVibration(mContext, vibrateIntensity);
+
         playSound(soundUri, streamType);
     }
 
