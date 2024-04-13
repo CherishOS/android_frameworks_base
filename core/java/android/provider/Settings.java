@@ -6166,14 +6166,6 @@ public final class Settings {
          */
         public static final String INCREASING_RING_RAMP_UP_TIME = "increasing_ring_ramp_up_time";
 
-        /** Whether to show ambient or lockscreen if AoD is disabled
-         * and we do a wake gesture like lift to wake or double tap
-         *
-         * @hide
-         */
-        @Readable
-        public static final String AMBIENT_WAKE_GESTURES = "ambient_wake_gestures";
-
         /**
          * Swipe to screenshot
          * @hide
@@ -7528,7 +7520,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(INCREASING_RING);
             PRIVATE_SETTINGS.add(INCREASING_RING_START_VOLUME);
             PRIVATE_SETTINGS.add(INCREASING_RING_RAMP_UP_TIME);
-            PRIVATE_SETTINGS.add(AMBIENT_WAKE_GESTURES);
             PRIVATE_SETTINGS.add(SWIPE_TO_SCREENSHOT);
             PRIVATE_SETTINGS.add(NAV_BAR_COMPACT_LAYOUT);
             PRIVATE_SETTINGS.add(TOUCHSCREEN_GESTURE_HAPTIC_FEEDBACK);
