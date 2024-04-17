@@ -71,6 +71,7 @@ public class VolumeUtils implements TunerService.Tunable {
         mContext = context;
         mHandler = new Handler();
         mMediaPlayer = new MediaPlayer();
+        mMediaPlayer.setOnCompletionListener(mp -> stopPlayback());
         mThemeUtils = new ThemeUtils(mContext);
         Dependency.get(TunerService.class).addTunable(this,
                 CUSTOM_VOLUME_STYLES);
@@ -138,32 +139,41 @@ public class VolumeUtils implements TunerService.Tunable {
 
     private void playSound(Uri soundUri, int streamType) {
         stopPlayback();
-        if (mAudioManager == null || mAudioManager.isMusicActive()) {
-            return;
+        if (soundUri == null) {
+            soundUri = Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.volume_control_sound);
         }
         try {
-            if (soundUri != null && streamType == AudioManager.STREAM_RING) {
+            if (streamType == AudioManager.STREAM_RING) {
                 mRingtone = RingtoneManager.getRingtone(mContext, soundUri);
-                mRingtone.setAudioAttributes(new AudioAttributes.Builder()
-                        .setLegacyStreamType(streamType)
-                        .build());
-                mHandler.postDelayed(() -> startRingtone(), SOUND_HAPTICS_DELAY);
+                mRingtone.play();
                 mHandler.postDelayed(() -> stopPlayback(), SOUND_HAPTICS_DURATION);
             } else {
-                if (soundUri == null) {
-                    mMediaPlayer = MediaPlayer.create(mContext, R.raw.volume_control_sound);
-                } else {
-                    mMediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
-                            .setLegacyStreamType(streamType)
-                            .build());
-                    mMediaPlayer.setDataSource(mContext, soundUri);
-                    mMediaPlayer.prepare();
-                }
-                mHandler.postDelayed(() -> startMediaPlayer(), SOUND_HAPTICS_DELAY);
-                mHandler.postDelayed(() -> stopPlayback(), SOUND_HAPTICS_DURATION);
+                mMediaPlayer.setDataSource(mContext, soundUri);
+                mMediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setUsage(getAudioUsageForStreamType(streamType))
+                        .build());
+                mMediaPlayer.setOnPreparedListener(mp -> {
+                    mMediaPlayer.start();
+                    mHandler.postDelayed(() -> stopPlayback(), SOUND_HAPTICS_DURATION);
+                });
+                mMediaPlayer.prepareAsync();
             }
         } catch (Exception e) {
             Log.e(TAG, "Could not play sound: " + e.getMessage());
+        }
+    }
+
+    private int getAudioUsageForStreamType(int streamType) {
+        switch (streamType) {
+            case AudioManager.STREAM_RING:
+                return AudioAttributes.USAGE_NOTIFICATION_RINGTONE;
+            case AudioManager.STREAM_NOTIFICATION:
+                return AudioAttributes.USAGE_NOTIFICATION;
+            case AudioManager.STREAM_ALARM:
+                return AudioAttributes.USAGE_ALARM;
+            default:
+                return AudioAttributes.USAGE_UNKNOWN;
         }
     }
     
@@ -183,9 +193,8 @@ public class VolumeUtils implements TunerService.Tunable {
     private void stopPlayback() {
         if (mRingtone != null && mRingtone.isPlaying()) {
             mRingtone.stop();
-            mRingtone = null;
         }
-        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+        if (mMediaPlayer != null) {
             mMediaPlayer.stop();
             mMediaPlayer.reset();
         }
