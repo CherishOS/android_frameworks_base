@@ -1486,10 +1486,8 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             mRoundedBorderBottom.setVisibility(!showSettings ? VISIBLE : GONE);
         }
         if (mSettingsView != null) {
-            mSettingsView.setVisibility(
-                    showSettings && (isMediaControllerAvailable()
-                                    || (Flags.useMediaRouter2ForInfoMediaManager()
-                                        && isBluetoothA2dpConnected()))
+            mSettingsView.setVisibility(showSettings && (isMediaControllerAvailable() ||
+                    (Flags.useMediaRouter2ForInfoMediaManager() && isBluetoothA2dpConnected()))
                             ? VISIBLE
                             : GONE);
         }
