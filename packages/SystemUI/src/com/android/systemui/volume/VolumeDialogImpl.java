@@ -470,6 +470,12 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     }
 
     @Override
+    public void onThemeChanged() {
+        dismissDialog();
+        mContext.getTheme().applyStyle(mContext.getThemeResId(), true);
+    }
+
+    @Override
     public void onUiModeChanged() {
         dismissDialog();
         mContext.getTheme().applyStyle(mContext.getThemeResId(), true);
@@ -602,13 +608,6 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
     private void initDialog(int lockTaskModeState) {
         Log.d(TAG, "initDialog: called!");
-        dismissDialog();
-        if (mDialog != null) {
-            mDialog = null;
-        }
-        if (mConfigurableTexts != null) {
-            mConfigurableTexts = null;
-        }
         mDialog = new CustomDialog(mContext);
         initDimens();
         adjustPositionOnScreen();
@@ -918,7 +917,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     }
 
     private boolean shouldSlideInVolumeTray() {
-        return mContext.getDisplay().getRotation() != RotationPolicy.getNaturalRotation();
+        return true;
     }
 
     private boolean isLandscape() {
@@ -1038,8 +1037,6 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         row.slider = row.view.findViewById(R.id.volume_row_slider);
         row.slider.setOnSeekBarChangeListener(new VolumeSeekBarChangeListener(row));
         row.number = row.view.findViewById(R.id.volume_number);
-
-        row.anim = null;
 
         final LayerDrawable seekbarDrawable =
                 (LayerDrawable) mContext.getDrawable(mVolumeUtils.getRowDrawable());
@@ -1924,7 +1921,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         Trace.beginSection("VolumeDialogImpl#dismissH");
 
         // Avoid multiple animation calls on touch spams.
-        if (!mShowing) {
+        if (!isVolumeDialogShowing()) {
             return;
         }
 
@@ -1948,7 +1945,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         }
         mIsAnimatingDismiss = true;
         mDialogView.animate().cancel();
-        if (mShowing) {
+        if (isVolumeDialogShowing()) {
             mShowing = false;
             // Only logs when the volume dialog visibility is changed.
             Events.writeEvent(Events.EVENT_DISMISS_DIALOG, reason);
@@ -1998,7 +1995,13 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         if (mController != null) {
             mController.notifyVisible(false);
         }
-        mDialog.dismiss();
+        if (mDialog != null) {
+            mDialog.dismiss();
+            mDialog = null;
+        }
+        if (mConfigurableTexts != null) {
+            mConfigurableTexts = null;
+        }
         tryToRemoveCaptionsTooltip();
         mExpanded = false;
         if (mExpandRows != null) {
@@ -2008,8 +2011,11 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         mDefaultRow = null;
         mIsAnimatingDismiss = false;
         hideRingerDrawer();
-        if (mShowing) {
+        if (isVolumeDialogShowing()) {
             mShowing = false;
+        }
+        for (VolumeRow row : mRows) {
+            row.anim = null;
         }
     }
 
@@ -2061,7 +2067,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             }
 
             // Continue to display row if it is visible to user.
-            if (row.view != null && mShowing) {
+            if (row.view != null && isVolumeDialogShowing()) {
                 return row.view.getVisibility() == VISIBLE;
             }
         }
@@ -2076,7 +2082,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
     private void updateRowsH(final VolumeRow activeRow, boolean animate) {
         if (D.BUG) Log.d(TAG, "updateRowsH");
-        if (!mShowing) {
+        if (!isVolumeDialogShowing()) {
             trimObsoleteH();
         }
 
@@ -2383,7 +2389,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
     protected void onStateChangedH(State state) {
         if (D.BUG) Log.d(TAG, "onStateChangedH() state: " + state.toString());
-        if (mShowing && mState != null && state != null
+        if (isVolumeDialogShowing() && mState != null && state != null
                 && mState.ringerModeInternal != -1
                 && mState.ringerModeInternal != state.ringerModeInternal
                 && state.ringerModeInternal == AudioManager.RINGER_MODE_VIBRATE) {
@@ -2410,7 +2416,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             mActiveStream = state.activeStream;
             VolumeRow activeRow = getActiveRow();
             updateRowsH(activeRow);
-            if (mShowing) rescheduleTimeoutH();
+            if (isVolumeDialogShowing()) rescheduleTimeoutH();
         }
         for (VolumeRow row : mRows) {
             updateVolumeRowH(row);
@@ -2621,14 +2627,14 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         final boolean inGracePeriod = (SystemClock.uptimeMillis() - row.userAttempt)
                 < USER_ATTEMPT_GRACE_PERIOD;
         mHandler.removeMessages(H.RECHECK, row);
-        if (mShowing && rowVisible && inGracePeriod) {
+        if (isVolumeDialogShowing() && rowVisible && inGracePeriod) {
             if (D.BUG) Log.d(TAG, "inGracePeriod");
             mHandler.sendMessageAtTime(mHandler.obtainMessage(H.RECHECK, row),
                     row.userAttempt + USER_ATTEMPT_GRACE_PERIOD);
             return;  // don't update if visible and in grace period
         }
         if (vlevel == level) {
-            if (mShowing && rowVisible) {
+            if (isVolumeDialogShowing() && rowVisible) {
                 return;  // don't clamp if visible
             }
         }
@@ -2690,7 +2696,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
     private void showSafetyWarningH(int flags) {
         if ((flags & (AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_SHOW_UI_WARNINGS)) != 0
-                || mShowing) {
+                || isVolumeDialogShowing()) {
             synchronized (mSafetyWarningLock) {
                 if (mSafetyWarning != null) {
                     return;
@@ -3086,7 +3092,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
          */
         @Override
         public boolean onTouchEvent(@NonNull MotionEvent event) {
-            if (mShowing) {
+            if (isVolumeDialogShowing()) {
                 switch(event.getAction()){
                     case MotionEvent.ACTION_OUTSIDE:
                     case MotionEvent.ACTION_DOWN:
