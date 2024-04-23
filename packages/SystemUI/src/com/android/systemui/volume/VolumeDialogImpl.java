@@ -109,7 +109,7 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.view.animation.DecelerateInterpolator;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -2643,7 +2643,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                 // start/update animation
                 if (row.anim == null) {
                     row.anim = ObjectAnimator.ofInt(row.slider, "progress", progress, newProgress);
-                    row.anim.setInterpolator(new DecelerateInterpolator());
+                    row.anim.setInterpolator(new AccelerateDecelerateInterpolator());
                     row.anim.addListener(
                         getJankListener(row.view, TYPE_UPDATE, UPDATE_ANIMATION_DURATION));
                 } else {
