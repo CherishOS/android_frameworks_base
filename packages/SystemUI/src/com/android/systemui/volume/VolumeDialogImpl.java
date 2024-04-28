@@ -1956,20 +1956,8 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                 .alpha(0)
                 .setDuration(mDialogHideAnimationDurationMs)
                 .setInterpolator(new SystemUIInterpolators.LogAccelerateInterpolator())
-                .setListener( new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                        dismissDialog();
-                    }
-                })
-                .setListener( new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                        dismissDialog();
-                    }
-                    })
                 .withEndAction(() -> mHandler.postDelayed(() -> {
-                    dismissDialog();
+                    cleanupDialog();
                 }, 50));
         if (!shouldSlideInVolumeTray()) {
             animator.translationX(
@@ -1989,8 +1977,12 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         Trace.endSection();
     }
     
+    /* wrapper for dismissH */
     private void dismissDialog() {
-        if (!isVolumeDialogShowing()) return;
+        dismissH(DISMISS_REASON_SETTINGS_CLICKED);
+    }
+    
+    private void cleanupDialog() {
         mDialogView.animate().cancel();
         if (mController != null) {
             mController.notifyVisible(false);
@@ -2011,9 +2003,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         mDefaultRow = null;
         mIsAnimatingDismiss = false;
         hideRingerDrawer();
-        if (isVolumeDialogShowing()) {
-            mShowing = false;
-        }
+        mShowing = false;
         for (VolumeRow row : mRows) {
             row.anim = null;
         }
