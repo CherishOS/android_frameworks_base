@@ -74,6 +74,7 @@ import com.android.systemui.statusbar.policy.BrightnessMirrorController;
 import com.android.systemui.statusbar.policy.RemoteInputQuickSettingsDisabler;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.Utils;
+import com.android.systemui.util.WallpaperDepthUtils;
 
 import dalvik.annotation.optimization.NeverCompile;
 
@@ -182,6 +183,8 @@ public class QSImpl implements QS, CommandQueue.Callbacks, StatusBarStateControl
     private final TunerService mTunerService;
 
     private float mCustomAlpha = 1f;
+
+    private WallpaperDepthUtils mWallpaperDepthUtils;
 
     @Inject
     public QSImpl(RemoteInputQuickSettingsDisabler remoteInputQsDisabler,
@@ -293,6 +296,7 @@ public class QSImpl implements QS, CommandQueue.Callbacks, StatusBarStateControl
         mCommandQueue.addCallback(this);
 
         mTunerService.addTunable(this, QS_TRANSPARENCY);
+        mWallpaperDepthUtils = WallpaperDepthUtils.getInstance(mRootView.getContext());
     }
 
     private void bindFooterActionsView(View root) {
@@ -744,6 +748,10 @@ public class QSImpl implements QS, CommandQueue.Callbacks, StatusBarStateControl
             mQsMediaHost.setSquishFraction(mSquishinessFraction);
         }
         updateMediaPositions();
+        
+        if (onKeyguard) {
+            mWallpaperDepthUtils.updateDepthWallper();
+        }
     }
 
     private void setAlphaAnimationProgress(float progress) {
