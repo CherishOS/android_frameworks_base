@@ -1097,7 +1097,7 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         return mSensorProps.sensorType == FingerprintSensorProperties.TYPE_UDFPS_OPTICAL;
     }
 
-    public synchronized boolean isFingerDown() {
+    public boolean isFingerDown() {
         return mOnFingerDown;
     }
 
@@ -1107,7 +1107,7 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         mLatencyTracker.onActionEnd(LatencyTracker.ACTION_UDFPS_ILLUMINATE);
     }
 
-    private synchronized void onFingerDown(
+    private void onFingerDown(
             long requestId,
             int x,
             int y,
@@ -1167,6 +1167,7 @@ public class UdfpsController implements DozeReceiver, Dumpable {
 
             mKeyguardFaceAuthInteractor.onUdfpsSensorTouched();
         }
+        mOnFingerDown = true;
         mFingerprintManager.onPointerDown(requestId, mSensorProps.sensorId, pointerId, x, y,
                 minor, major, orientation, time, gestureStart, isAod);
         Trace.endAsyncSection("UdfpsController.e2e.onPointerDown", 0);
@@ -1187,13 +1188,12 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         for (Callback cb : mCallbacks) {
             cb.onFingerDown();
         }
-        if (!mOnFingerDown && mUdfpsAnimation != null) {
+        if (mUdfpsAnimation != null) {
             mUdfpsAnimation.show();
         }
-        mOnFingerDown = true;
     }
 
-    private synchronized void onFingerUp(long requestId, @NonNull View view) {
+    private void onFingerUp(long requestId, @NonNull View view) {
         onFingerUp(
                 requestId,
                 view,
