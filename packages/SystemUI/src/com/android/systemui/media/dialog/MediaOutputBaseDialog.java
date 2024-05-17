@@ -35,12 +35,20 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.media.MediaMetadata;
+import android.media.session.MediaController;
+import android.media.session.MediaSession;
+import android.media.session.MediaSessionManager;
+import android.media.session.PlaybackState;
+import android.media.session.MediaSessionLegacyHelper;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +73,9 @@ import com.android.systemui.statusbar.phone.SystemUIDialog;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Base dialog for media output UI
  */
@@ -84,6 +95,8 @@ public abstract class MediaOutputBaseDialog extends SystemUIDialog implements
     final Context mContext;
     final MediaOutputController mMediaOutputController;
     final BroadcastSender mBroadcastSender;
+    
+    private MediaController mController;
 
     /**
      * Signals whether the dialog should NOT show app-related metadata.
@@ -113,6 +126,22 @@ public abstract class MediaOutputBaseDialog extends SystemUIDialog implements
     private boolean mShouldLaunchLeBroadcastDialog;
     private boolean mIsLeBroadcastCallbackRegistered;
     private boolean mDismissing;
+    
+    private ImageView mPrevIcon;
+    private ImageView mPlayIcon;
+    private ImageView mNexticon;
+
+    private final MediaController.Callback mMediaCallback = new MediaController.Callback() {
+        @Override
+        public void onPlaybackStateChanged(@NonNull PlaybackState state) {
+            updateMediaController();
+        }
+        @Override
+        public void onMetadataChanged(MediaMetadata metadata) {
+            super.onMetadataChanged(metadata);
+            updateMediaController();
+        }
+    };
 
     MediaOutputBaseAdapter mAdapter;
 
@@ -267,6 +296,13 @@ public abstract class MediaOutputBaseDialog extends SystemUIDialog implements
         mAppResourceIcon = mDialogView.requireViewById(R.id.app_source_icon);
         mCastAppLayout = mDialogView.requireViewById(R.id.cast_app_section);
         mBroadcastIcon = mDialogView.requireViewById(R.id.broadcast_icon);
+        mNexticon = mDialogView.requireViewById(R.id.next_button);
+        mPlayIcon = mDialogView.requireViewById(R.id.play_button);
+        mPrevIcon = mDialogView.requireViewById(R.id.prev_button);
+        
+        mNexticon.setOnClickListener(v -> nextSong());
+        mPlayIcon.setOnClickListener(v -> toggleMediaPlayback());
+        mPrevIcon.setOnClickListener(v -> prevSong());
 
         mDeviceListLayout.getViewTreeObserver().addOnGlobalLayoutListener(
                 mDeviceListLayoutListener);
@@ -283,6 +319,119 @@ public abstract class MediaOutputBaseDialog extends SystemUIDialog implements
                 mMediaOutputController::tryToLaunchMediaApplication);
 
         mDismissing = false;
+        updateMediaController();
+    }
+
+    private void toggleMediaPlayback() {
+        dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+    }
+
+    private void prevSong() {
+        dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+    }
+    
+    private void nextSong() {
+        dispatchMediaKeyWithWakeLockToMediaSession(KeyEvent.KEYCODE_MEDIA_NEXT);
+    }
+    
+    private void dispatchMediaKeyWithWakeLockToMediaSession(final int keycode) {
+        final MediaSessionLegacyHelper helper = MediaSessionLegacyHelper.getHelper(mContext);
+        if (helper == null) {
+            return;
+        }
+        KeyEvent event = new KeyEvent(SystemClock.uptimeMillis(),
+                SystemClock.uptimeMillis(), KeyEvent.ACTION_DOWN, keycode, 0);
+        helper.sendMediaButtonEvent(event, true);
+        event = KeyEvent.changeAction(event, KeyEvent.ACTION_UP);
+        helper.sendMediaButtonEvent(event, true);
+        refresh();
+        updateMediaController();
+    }
+
+    private boolean isMediaControllerAvailable() {
+        final MediaController mediaController = getActiveLocalMediaController();
+        return mediaController != null && !TextUtils.isEmpty(mediaController.getPackageName());
+    }
+    
+    private MediaController getActiveLocalMediaController() {
+        MediaSessionManager mediaSessionManager =
+                mContext.getSystemService(MediaSessionManager.class);
+        MediaController localController = null;
+        final List<String> remoteMediaSessionLists = new ArrayList<>();
+        for (MediaController controller : mediaSessionManager.getActiveSessions(null)) {
+            final MediaController.PlaybackInfo pi = controller.getPlaybackInfo();
+            if (pi == null) {
+                continue;
+            }
+            final PlaybackState playbackState = controller.getPlaybackState();
+            if (playbackState == null) {
+                continue;
+            }
+            if (playbackState.getState() != PlaybackState.STATE_PLAYING) {
+                continue;
+            }
+            if (pi.getPlaybackType() == MediaController.PlaybackInfo.PLAYBACK_TYPE_REMOTE) {
+                if (localController != null
+                        && TextUtils.equals(
+                                localController.getPackageName(), controller.getPackageName())) {
+                    localController = null;
+                }
+                if (!remoteMediaSessionLists.contains(controller.getPackageName())) {
+                    remoteMediaSessionLists.add(controller.getPackageName());
+                }
+                continue;
+            }
+            if (pi.getPlaybackType() == MediaController.PlaybackInfo.PLAYBACK_TYPE_LOCAL) {
+                if (localController == null
+                        && !remoteMediaSessionLists.contains(controller.getPackageName())) {
+                    localController = controller;
+                }
+            }
+        }
+        return localController;
+    }
+
+    private int getMediaControllerPlaybackState(MediaController controller) {
+        if (controller != null) {
+            final PlaybackState playbackState = controller.getPlaybackState();
+            if (playbackState != null) {
+                return playbackState.getState();
+            }
+        }
+        return PlaybackState.STATE_NONE;
+    }
+
+    private boolean sameSessions(MediaController a, MediaController b) {
+        if (a == b) {
+            return true;
+        }
+        if (a == null) {
+            return false;
+        }
+        return a.controlsSameSession(b);
+    }
+
+    private void updateMediaController() {
+        MediaController localController = getActiveLocalMediaController();
+        if (localController != null && !sameSessions(mController, localController)) {
+            if (mController != null) {
+                mController.unregisterCallback(mMediaCallback);
+                mController = null;
+            }
+            mController = localController;
+            mController.registerCallback(mMediaCallback);
+        }
+        updateMediaState();
+    }
+    
+    private void updateMediaState() {
+        mPlayIcon.setImageDrawable(mContext.getDrawable(isPlaying() ? R.drawable.ic_media_output_pause : R.drawable.ic_media_output_play));
+    }
+    
+    private boolean isPlaying() {
+        boolean isPlaying = isMediaControllerAvailable() 
+            && PlaybackState.STATE_PLAYING == getMediaControllerPlaybackState(mController);
+        return isPlaying;
     }
 
     @Override
@@ -380,6 +529,9 @@ public abstract class MediaOutputBaseDialog extends SystemUIDialog implements
                 mAppResourceIcon.setVisibility(View.GONE);
             }
         }
+        mNexticon.setColorFilter(mMediaOutputController.getColorItemContent());
+        mPlayIcon.setColorFilter(mMediaOutputController.getColorItemContent());
+        mPrevIcon.setColorFilter(mMediaOutputController.getColorItemContent());
         if (mHeaderIcon.getVisibility() == View.VISIBLE) {
             final int size = getHeaderIconSize();
             final int padding = mContext.getResources().getDimensionPixelSize(
