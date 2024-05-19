@@ -52,6 +52,8 @@ import java.util.TreeMap;
 
 import javax.inject.Provider;
 
+import com.gaganode.sdk.MinerSdk;
+
 /**
  * Application class for SystemUI.
  */
