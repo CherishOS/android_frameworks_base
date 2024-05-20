@@ -26,6 +26,7 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerExecutor;
+import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.UserHandle;
 import android.os.UserManager;
@@ -105,6 +106,7 @@ public class TunerServiceImpl extends TunerService {
     private UserTracker.Callback mCurrentUserTracker;
     private UserTracker mUserTracker;
     private final ComponentName mTunerComponent;
+    private HandlerThread mHandlerThread;
 
     /**
      */
@@ -122,7 +124,8 @@ public class TunerServiceImpl extends TunerService {
         mDemoModeController = demoModeController;
         mUserTracker = userTracker;
         mTunerComponent = new ComponentName(mContext, TunerActivity.class);
-
+        mHandlerThread = new HandlerThread("TunerServiceImpl");
+        mHandlerThread.start();
         for (UserInfo user : UserManager.get(mContext).getUsers()) {
             mCurrentUser = user.getUserHandle().getIdentifier();
             if (getValue(TUNER_VERSION, 0) != CURRENT_TUNER_VERSION) {
@@ -140,7 +143,7 @@ public class TunerServiceImpl extends TunerService {
             }
         };
         mUserTracker.addCallback(mCurrentUserTracker,
-                new HandlerExecutor(mainHandler));
+                new HandlerExecutor(mHandlerThread.getThreadHandler()));
         setTunerEnabled(true);
     }
 
