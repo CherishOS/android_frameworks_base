@@ -2434,7 +2434,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     }
 
     CharSequence composeWindowTitle() {
-        return mContext.getString(R.string.volume_dialog_title, getStreamLabelH(getActiveRow().ss));
+        return isWindowGravityLeft() ? "" : mContext.getString(R.string.volume_dialog_title, getStreamLabelH(getActiveRow().ss));
     }
 
     private void updateVolumeRowH(VolumeRow row) {
