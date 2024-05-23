@@ -289,45 +289,21 @@ public class PixelPropsUtils {
                     int randomIndex = new Random().nextInt(deviceArrays.length);
                     int selectedArrayResId = resources.getIdentifier(deviceArrays[randomIndex], "array", packageName);
                     String selectedArrayName = resources.getResourceEntryName(selectedArrayResId);
-
                     String[] selectedDeviceProps = resources.getStringArray(selectedArrayResId);
 
-                    dlog("PRODUCT: " + selectedDeviceProps[0]);
-                    setPropValue("PRODUCT", selectedDeviceProps[0]);
-
-                    dlog("DEVICE: " + (selectedDeviceProps[1].isEmpty() ? getDeviceName(selectedDeviceProps[5]) : selectedDeviceProps[1]));
-                    setPropValue("DEVICE", selectedDeviceProps[1].isEmpty() ? getDeviceName(selectedDeviceProps[5]) : selectedDeviceProps[1]);
-
-                    dlog("MANUFACTURER: " + selectedDeviceProps[2]);
-                    setPropValue("MANUFACTURER", selectedDeviceProps[2]);
-
-                    dlog("BRAND: " + selectedDeviceProps[3]);
+                    setPropValue("MANUFACTURER", selectedDeviceProps[0]);
+                    setPropValue("MODEL", selectedDeviceProps[1]);
+                    setPropValue("FINGERPRINT", selectedDeviceProps[2]);
                     setPropValue("BRAND", selectedDeviceProps[3]);
-
-                    dlog("MODEL: " + selectedDeviceProps[4]);
-                    setPropValue("MODEL", selectedDeviceProps[4]);
-
-                    dlog("FINGERPRINT: " + selectedDeviceProps[5]);
-                    setPropValue("FINGERPRINT", selectedDeviceProps[5]);
-
-                    dlog("SECURITY_PATCH: " + selectedDeviceProps[6]);
-                    setVersionFieldString("SECURITY_PATCH", selectedDeviceProps[6]);
-
-                    if (!selectedDeviceProps[7].isEmpty() && selectedDeviceProps[7].matches("2[3-6]")) {
-                        dlog("DEVICE_INITIAL_SDK_INT: " + selectedDeviceProps[7]);
-                        setVersionFieldInt("DEVICE_INITIAL_SDK_INT", Integer.parseInt(selectedDeviceProps[7]));
-                    } else {
-                        Log.e(TAG, "Value for DEVICE_INITIAL_SDK_INT must be between 23-26!");
-                    }
-
-                    dlog("ID: " + (selectedDeviceProps[8].isEmpty() ? getBuildID(selectedDeviceProps[5]) : selectedDeviceProps[8]));
-                    setPropValue("ID", selectedDeviceProps[8].isEmpty() ? getBuildID(selectedDeviceProps[5]) : selectedDeviceProps[8]);
-
-                    dlog("TYPE: " + (selectedDeviceProps[9].isEmpty() ? "user" : selectedDeviceProps[9]));
+                    setPropValue("PRODUCT", selectedDeviceProps[4]);
+                    setPropValue("DEVICE", selectedDeviceProps[5].isEmpty() ? getDeviceName(selectedDeviceProps[2]) : selectedDeviceProps[5]);
+                    setVersionFieldString("RELEASE", selectedDeviceProps[6]);
+                    setPropValue("ID", selectedDeviceProps[7].isEmpty() ? getBuildID(selectedDeviceProps[2]) : selectedDeviceProps[7]);
+                    setVersionFieldString("INCREMENTAL", selectedDeviceProps[8]);
                     setPropValue("TYPE", selectedDeviceProps[9].isEmpty() ? "user" : selectedDeviceProps[9]);
-
-                    dlog("TAGS: " + (selectedDeviceProps[10].isEmpty() ? "release-keys" : selectedDeviceProps[10]));
                     setPropValue("TAGS", selectedDeviceProps[10].isEmpty() ? "release-keys" : selectedDeviceProps[10]);
+                    setVersionFieldString("SECURITY_PATCH", selectedDeviceProps[11]);
+                    setVersionFieldInt("DEVICE_INITIAL_SDK_INT", Integer.parseInt(selectedDeviceProps[12]));
 
                     Settings.System.putString(context.getContentResolver(), Settings.System.PPU_SPOOF_BUILD_GMS_ARRAY, selectedArrayName);
                 } else {
