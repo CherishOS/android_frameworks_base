@@ -51078,6 +51078,7 @@ package android.view {
     method @Nullable public android.view.SurfaceControl.Transaction buildReparentTransaction(@NonNull android.view.SurfaceControl);
     method public default int getBufferTransformHint();
     method @FlaggedApi("com.android.window.flags.surface_control_input_receiver") @NonNull public default android.window.InputTransferToken getInputTransferToken();
+    method @FlaggedApi("com.android.window.flags.jank_api") @NonNull public default android.view.SurfaceControl.OnJankDataListenerRegistration registerOnJankDataListener(@NonNull java.util.concurrent.Executor, @NonNull android.view.SurfaceControl.OnJankDataListener);
     method public default void removeOnBufferTransformHintChangedListener(@NonNull android.view.AttachedSurfaceControl.OnBufferTransformHintChangedListener);
     method public default void setChildBoundingInsets(@NonNull android.graphics.Rect);
     method public default void setTouchableRegion(@Nullable android.graphics.Region);
@@ -51335,6 +51336,7 @@ package android.view {
     field public static final int DEADLINE = 13; // 0xd
     field public static final int DRAW_DURATION = 4; // 0x4
     field public static final int FIRST_DRAW_FRAME = 9; // 0x9
+    field @FlaggedApi("com.android.window.flags.jank_api") public static final int FRAME_TIMELINE_VSYNC_ID = 14; // 0xe
     field public static final int GPU_DURATION = 12; // 0xc
     field public static final int INPUT_HANDLING_DURATION = 1; // 0x1
     field public static final int INTENDED_VSYNC_TIMESTAMP = 10; // 0xa
@@ -52751,6 +52753,26 @@ package android.view {
     method @NonNull public android.view.SurfaceControl.Builder setName(@NonNull String);
     method @NonNull public android.view.SurfaceControl.Builder setOpaque(boolean);
     method @NonNull public android.view.SurfaceControl.Builder setParent(@Nullable android.view.SurfaceControl);
+  }
+
+  @FlaggedApi("com.android.window.flags.jank_api") public static class SurfaceControl.JankData {
+    method public long getActualAppFrameTimeNanos();
+    method public int getJankType();
+    method public long getScheduledAppFrameTimeNanos();
+    method public long getVsyncId();
+    field public static final int JANK_APPLICATION = 2; // 0x2
+    field public static final int JANK_COMPOSER = 1; // 0x1
+    field public static final int JANK_NONE = 0; // 0x0
+    field public static final int JANK_OTHER = 4; // 0x4
+  }
+
+  @FlaggedApi("com.android.window.flags.jank_api") public static interface SurfaceControl.OnJankDataListener {
+    method public void onJankDataAvailable(@NonNull java.util.List<android.view.SurfaceControl.JankData>);
+  }
+
+  @FlaggedApi("com.android.window.flags.jank_api") public static class SurfaceControl.OnJankDataListenerRegistration {
+    method public void flush();
+    method public void removeAfter(long);
   }
 
   public static class SurfaceControl.Transaction implements java.io.Closeable android.os.Parcelable {
