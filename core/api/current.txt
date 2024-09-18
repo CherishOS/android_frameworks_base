@@ -33184,6 +33184,7 @@ package android.os {
   }
 
   public interface IBinder {
+    method @FlaggedApi("android.os.binder_frozen_state_change_callback") public default void addFrozenStateChangeCallback(@NonNull android.os.IBinder.FrozenStateChangeCallback) throws android.os.RemoteException;
     method public void dump(@NonNull java.io.FileDescriptor, @Nullable String[]) throws android.os.RemoteException;
     method public void dumpAsync(@NonNull java.io.FileDescriptor, @Nullable String[]) throws android.os.RemoteException;
     method @Nullable public String getInterfaceDescriptor() throws android.os.RemoteException;
@@ -33192,6 +33193,7 @@ package android.os {
     method public void linkToDeath(@NonNull android.os.IBinder.DeathRecipient, int) throws android.os.RemoteException;
     method public boolean pingBinder();
     method @Nullable public android.os.IInterface queryLocalInterface(@NonNull String);
+    method @FlaggedApi("android.os.binder_frozen_state_change_callback") public default boolean removeFrozenStateChangeCallback(@NonNull android.os.IBinder.FrozenStateChangeCallback);
     method public boolean transact(int, @NonNull android.os.Parcel, @Nullable android.os.Parcel, int) throws android.os.RemoteException;
     method public boolean unlinkToDeath(@NonNull android.os.IBinder.DeathRecipient, int);
     field public static final int DUMP_TRANSACTION = 1598311760; // 0x5f444d50
@@ -33207,6 +33209,12 @@ package android.os {
   public static interface IBinder.DeathRecipient {
     method public void binderDied();
     method public default void binderDied(@NonNull android.os.IBinder);
+  }
+
+  @FlaggedApi("android.os.binder_frozen_state_change_callback") public static interface IBinder.FrozenStateChangeCallback {
+    method public void onFrozenStateChanged(@NonNull android.os.IBinder, int);
+    field public static final int STATE_FROZEN = 0; // 0x0
+    field public static final int STATE_UNFROZEN = 1; // 0x1
   }
 
   public interface IInterface {
