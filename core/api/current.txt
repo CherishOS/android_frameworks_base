@@ -9094,6 +9094,46 @@ package android.app.blob {
 
 }
 
+package android.app.jank {
+
+  @FlaggedApi("android.app.jank.detailed_app_jank_metrics_api") public final class AppJankStats {
+    ctor public AppJankStats(int, @NonNull String, @Nullable String, @Nullable String, long, long, @NonNull android.app.jank.FrameOverrunHistogram);
+    method @NonNull public android.app.jank.FrameOverrunHistogram getFrameOverrunHistogram();
+    method public long getJankyFrameCount();
+    method public long getTotalFrameCount();
+    method public int getUid();
+    method @NonNull public String getWidgetCategory();
+    method @NonNull public String getWidgetId();
+    method @NonNull public String getWidgetState();
+    field public static final String ANIMATING = "animating";
+    field public static final String ANIMATION = "animation";
+    field public static final String DRAGGING = "dragging";
+    field public static final String FLINGING = "flinging";
+    field public static final String KEYBOARD = "keyboard";
+    field public static final String MEDIA = "media";
+    field public static final String NAVIGATION = "navigation";
+    field public static final String NONE = "none";
+    field public static final String OTHER = "other";
+    field public static final String PLAYBACK = "playback";
+    field public static final String PREDICTIVE_BACK = "predictive_back";
+    field public static final String SCROLL = "scroll";
+    field public static final String SCROLLING = "scrolling";
+    field public static final String SWIPING = "swiping";
+    field public static final String TAPPING = "tapping";
+    field public static final String WIDGET_CATEGORY_UNSPECIFIED = "widget_category_unspecified";
+    field public static final String WIDGET_STATE_UNSPECIFIED = "widget_state_unspecified";
+    field public static final String ZOOMING = "zooming";
+  }
+
+  @FlaggedApi("android.app.jank.detailed_app_jank_metrics_api") public class FrameOverrunHistogram {
+    ctor public FrameOverrunHistogram();
+    method public void addFrameOverrunMillis(int);
+    method @NonNull public int[] getBucketCounters();
+    method @NonNull public int[] getBucketEndpointsMillis();
+  }
+
+}
+
 package android.app.job {
 
   public class JobInfo implements android.os.Parcelable {
@@ -53459,6 +53499,7 @@ package android.view {
     method public void removeOnAttachStateChangeListener(android.view.View.OnAttachStateChangeListener);
     method public void removeOnLayoutChangeListener(android.view.View.OnLayoutChangeListener);
     method public void removeOnUnhandledKeyEventListener(android.view.View.OnUnhandledKeyEventListener);
+    method @FlaggedApi("android.app.jank.detailed_app_jank_metrics_api") public void reportAppJankStats(@NonNull android.app.jank.AppJankStats);
     method public void requestApplyInsets();
     method @Deprecated public void requestFitSystemWindows();
     method public final boolean requestFocus();
