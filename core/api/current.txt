@@ -239,6 +239,7 @@ package android {
     field @Deprecated public static final String PROCESS_OUTGOING_CALLS = "android.permission.PROCESS_OUTGOING_CALLS";
     field public static final String PROVIDE_OWN_AUTOFILL_SUGGESTIONS = "android.permission.PROVIDE_OWN_AUTOFILL_SUGGESTIONS";
     field public static final String PROVIDE_REMOTE_CREDENTIALS = "android.permission.PROVIDE_REMOTE_CREDENTIALS";
+    field @FlaggedApi("android.security.aapm_api") public static final String QUERY_ADVANCED_PROTECTION_MODE = "android.permission.QUERY_ADVANCED_PROTECTION_MODE";
     field public static final String QUERY_ALL_PACKAGES = "android.permission.QUERY_ALL_PACKAGES";
     field public static final String READ_ASSISTANT_APP_SEARCH_DATA = "android.permission.READ_ASSISTANT_APP_SEARCH_DATA";
     field public static final String READ_BASIC_PHONE_STATE = "android.permission.READ_BASIC_PHONE_STATE";
@@ -10801,6 +10802,7 @@ package android.content {
     field public static final String ACCESSIBILITY_SERVICE = "accessibility";
     field public static final String ACCOUNT_SERVICE = "account";
     field public static final String ACTIVITY_SERVICE = "activity";
+    field @FlaggedApi("android.security.aapm_api") public static final String ADVANCED_PROTECTION_SERVICE = "advanced_protection";
     field public static final String ALARM_SERVICE = "alarm";
     field public static final String APPWIDGET_SERVICE = "appwidget";
     field @FlaggedApi("android.app.appfunctions.flags.enable_app_function_manager") public static final String APP_FUNCTION_SERVICE = "app_function";
@@ -39714,6 +39716,20 @@ package android.security {
     method @FlaggedApi("android.security.certificate_transparency_configuration") public boolean isCertificateTransparencyVerificationRequired(@NonNull String);
     method public boolean isCleartextTrafficPermitted();
     method public boolean isCleartextTrafficPermitted(String);
+  }
+
+}
+
+package android.security.advancedprotection {
+
+  @FlaggedApi("android.security.aapm_api") public class AdvancedProtectionManager {
+    method @RequiresPermission(android.Manifest.permission.QUERY_ADVANCED_PROTECTION_MODE) public boolean isAdvancedProtectionEnabled();
+    method @RequiresPermission(android.Manifest.permission.QUERY_ADVANCED_PROTECTION_MODE) public void registerAdvancedProtectionCallback(@NonNull java.util.concurrent.Executor, @NonNull android.security.advancedprotection.AdvancedProtectionManager.Callback);
+    method @RequiresPermission(android.Manifest.permission.QUERY_ADVANCED_PROTECTION_MODE) public void unregisterAdvancedProtectionCallback(@NonNull android.security.advancedprotection.AdvancedProtectionManager.Callback);
+  }
+
+  @FlaggedApi("android.security.aapm_api") public static interface AdvancedProtectionManager.Callback {
+    method public void onAdvancedProtectionChanged(boolean);
   }
 
 }
