@@ -18764,6 +18764,19 @@ package android.hardware {
     field public static final int TRANSFER_UNSPECIFIED = 0; // 0x0
   }
 
+  @FlaggedApi("android.hardware.flags.luts_api") public final class DisplayLuts {
+    ctor @FlaggedApi("android.hardware.flags.luts_api") public DisplayLuts();
+    method @FlaggedApi("android.hardware.flags.luts_api") public void set(@NonNull android.hardware.DisplayLuts.Entry);
+    method @FlaggedApi("android.hardware.flags.luts_api") public void set(@NonNull android.hardware.DisplayLuts.Entry, @NonNull android.hardware.DisplayLuts.Entry);
+  }
+
+  @FlaggedApi("android.hardware.flags.luts_api") public static class DisplayLuts.Entry {
+    ctor @FlaggedApi("android.hardware.flags.luts_api") public DisplayLuts.Entry(@NonNull float[], int, int);
+    method @FlaggedApi("android.hardware.flags.luts_api") @NonNull public float[] getBuffer();
+    method @FlaggedApi("android.hardware.flags.luts_api") public int getDimension();
+    method @FlaggedApi("android.hardware.flags.luts_api") public int getSamplingKey();
+  }
+
   public class GeomagneticField {
     ctor public GeomagneticField(float, float, float, long);
     method public float getDeclination();
@@ -18825,8 +18838,19 @@ package android.hardware {
     field @FlaggedApi("android.media.codec.p210_format_support") public static final int YCBCR_P210 = 60; // 0x3c
   }
 
+  @FlaggedApi("android.hardware.flags.luts_api") public final class LutProperties {
+    method @FlaggedApi("android.hardware.flags.luts_api") public int getDimension();
+    method @FlaggedApi("android.hardware.flags.luts_api") @NonNull public int[] getSamplingKeys();
+    method @FlaggedApi("android.hardware.flags.luts_api") public int getSize();
+    field @FlaggedApi("android.hardware.flags.luts_api") public static final int ONE_DIMENSION = 1; // 0x1
+    field @FlaggedApi("android.hardware.flags.luts_api") public static final int SAMPLING_KEY_MAX_RGB = 1; // 0x1
+    field @FlaggedApi("android.hardware.flags.luts_api") public static final int SAMPLING_KEY_RGB = 0; // 0x0
+    field @FlaggedApi("android.hardware.flags.luts_api") public static final int THREE_DIMENSION = 3; // 0x3
+  }
+
   @FlaggedApi("android.hardware.flags.overlayproperties_class_api") public final class OverlayProperties implements android.os.Parcelable {
     method @FlaggedApi("android.hardware.flags.overlayproperties_class_api") public int describeContents();
+    method @FlaggedApi("android.hardware.flags.luts_api") @NonNull public android.hardware.LutProperties[] getLutProperties();
     method @FlaggedApi("android.hardware.flags.overlayproperties_class_api") public boolean isCombinationSupported(int, int);
     method @FlaggedApi("android.hardware.flags.overlayproperties_class_api") public boolean isMixedColorSpacesSupported();
     method @FlaggedApi("android.hardware.flags.overlayproperties_class_api") public void writeToParcel(@NonNull android.os.Parcel, int);
@@ -53063,6 +53087,7 @@ package android.view {
     method @FlaggedApi("com.android.window.flags.sdk_desired_present_time") @NonNull public android.view.SurfaceControl.Transaction setFrameTimeline(long);
     method @Deprecated @NonNull public android.view.SurfaceControl.Transaction setGeometry(@NonNull android.view.SurfaceControl, @Nullable android.graphics.Rect, @Nullable android.graphics.Rect, int);
     method @NonNull public android.view.SurfaceControl.Transaction setLayer(@NonNull android.view.SurfaceControl, @IntRange(from=java.lang.Integer.MIN_VALUE, to=java.lang.Integer.MAX_VALUE) int);
+    method @FlaggedApi("android.hardware.flags.luts_api") @NonNull public android.view.SurfaceControl.Transaction setLuts(@NonNull android.view.SurfaceControl, @Nullable android.hardware.DisplayLuts);
     method @NonNull public android.view.SurfaceControl.Transaction setOpaque(@NonNull android.view.SurfaceControl, boolean);
     method @NonNull public android.view.SurfaceControl.Transaction setPosition(@NonNull android.view.SurfaceControl, float, float);
     method @NonNull public android.view.SurfaceControl.Transaction setScale(@NonNull android.view.SurfaceControl, float, float);
