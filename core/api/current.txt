@@ -10864,6 +10864,7 @@ package android.content {
     field public static final String IPSEC_SERVICE = "ipsec";
     field public static final String JOB_SCHEDULER_SERVICE = "jobscheduler";
     field public static final String KEYGUARD_SERVICE = "keyguard";
+    field @FlaggedApi("android.security.keystore_grant_api") public static final String KEYSTORE_SERVICE = "keystore";
     field public static final String LAUNCHER_APPS_SERVICE = "launcherapps";
     field @UiContext public static final String LAYOUT_INFLATER_SERVICE = "layout_inflater";
     field public static final String LOCALE_SERVICE = "locale";
@@ -40164,6 +40165,14 @@ package android.security.keystore {
     method @Deprecated @NonNull public android.security.keystore.KeyProtection.Builder setUserAuthenticationValidityDurationSeconds(@IntRange(from=0xffffffff) int);
     method @NonNull public android.security.keystore.KeyProtection.Builder setUserConfirmationRequired(boolean);
     method @NonNull public android.security.keystore.KeyProtection.Builder setUserPresenceRequired(boolean);
+  }
+
+  @FlaggedApi("android.security.keystore_grant_api") public class KeyStoreManager {
+    method @NonNull public java.util.List<java.security.cert.X509Certificate> getGrantedCertificateChainFromId(long) throws android.security.keystore.KeyPermanentlyInvalidatedException, java.security.UnrecoverableKeyException;
+    method @NonNull public java.security.Key getGrantedKeyFromId(long) throws android.security.keystore.KeyPermanentlyInvalidatedException, java.security.UnrecoverableKeyException;
+    method @NonNull public java.security.KeyPair getGrantedKeyPairFromId(long) throws android.security.keystore.KeyPermanentlyInvalidatedException, java.security.UnrecoverableKeyException;
+    method public long grantKeyAccess(@NonNull String, int) throws android.security.KeyStoreException, java.security.UnrecoverableKeyException;
+    method public void revokeKeyAccess(@NonNull String, int) throws android.security.KeyStoreException, java.security.UnrecoverableKeyException;
   }
 
   public class SecureKeyImportUnavailableException extends java.security.ProviderException {
