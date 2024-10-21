@@ -6221,6 +6221,7 @@ package android.app {
   }
 
   public class KeyguardManager {
+    method @FlaggedApi("android.app.device_unlock_listener") @RequiresPermission(android.Manifest.permission.SUBSCRIBE_TO_KEYGUARD_LOCKED_STATE) public void addDeviceLockedStateListener(@NonNull java.util.concurrent.Executor, @NonNull android.app.KeyguardManager.DeviceLockedStateListener);
     method @RequiresPermission(android.Manifest.permission.SUBSCRIBE_TO_KEYGUARD_LOCKED_STATE) public void addKeyguardLockedStateListener(@NonNull java.util.concurrent.Executor, @NonNull android.app.KeyguardManager.KeyguardLockedStateListener);
     method @Deprecated public android.content.Intent createConfirmDeviceCredentialIntent(CharSequence, CharSequence);
     method @Deprecated @RequiresPermission(android.Manifest.permission.DISABLE_KEYGUARD) public void exitKeyguardSecurely(android.app.KeyguardManager.OnKeyguardExitResult);
@@ -6230,8 +6231,13 @@ package android.app {
     method public boolean isKeyguardLocked();
     method public boolean isKeyguardSecure();
     method @Deprecated public android.app.KeyguardManager.KeyguardLock newKeyguardLock(String);
+    method @FlaggedApi("android.app.device_unlock_listener") @RequiresPermission(android.Manifest.permission.SUBSCRIBE_TO_KEYGUARD_LOCKED_STATE) public void removeDeviceLockedStateListener(@NonNull android.app.KeyguardManager.DeviceLockedStateListener);
     method @RequiresPermission(android.Manifest.permission.SUBSCRIBE_TO_KEYGUARD_LOCKED_STATE) public void removeKeyguardLockedStateListener(@NonNull android.app.KeyguardManager.KeyguardLockedStateListener);
     method public void requestDismissKeyguard(@NonNull android.app.Activity, @Nullable android.app.KeyguardManager.KeyguardDismissCallback);
+  }
+
+  @FlaggedApi("android.app.device_unlock_listener") @java.lang.FunctionalInterface public static interface KeyguardManager.DeviceLockedStateListener {
+    method public void onDeviceLockedStateChanged(boolean);
   }
 
   public abstract static class KeyguardManager.KeyguardDismissCallback {
