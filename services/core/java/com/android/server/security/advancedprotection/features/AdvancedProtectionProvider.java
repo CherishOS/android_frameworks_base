@@ -16,20 +16,12 @@
 
 package com.android.server.security.advancedprotection.features;
 
-import android.annotation.NonNull;
-import android.content.Context;
 import android.security.advancedprotection.AdvancedProtectionFeature;
 
+import java.util.List;
+
 /** @hide */
-public abstract class AdvancedProtectionHook {
-    /** Called on boot phase PHASE_SYSTEM_SERVICES_READY */
-    public AdvancedProtectionHook(@NonNull Context context, boolean enabled) {}
-    /** The feature this hook provides */
-    @NonNull
-    public abstract AdvancedProtectionFeature getFeature();
-    /** Whether this feature is relevant on this device. If false, onAdvancedProtectionChanged will
-     * not be called, and the feature will not be displayed in the onboarding UX. */
-    public abstract boolean isAvailable();
-    /** Called whenever advanced protection state changes */
-    public void onAdvancedProtectionChanged(boolean enabled) {}
+public abstract class AdvancedProtectionProvider {
+    /** The list of features provided */
+    public abstract List<AdvancedProtectionFeature> getFeatures();
 }
