@@ -9685,9 +9685,11 @@ package android.app.wallpaper {
     method @Nullable public String getId();
     method @Nullable public android.net.Uri getThumbnail();
     method @Nullable public CharSequence getTitle();
+    method @NonNull public static android.app.wallpaper.WallpaperDescription readFromStream(@NonNull java.io.InputStream) throws java.io.IOException;
     method @NonNull public android.app.wallpaper.WallpaperDescription.Builder toBuilder();
     method public void writeToParcel(@NonNull android.os.Parcel, int);
-    field @Nullable public static final android.os.Parcelable.Creator<android.app.wallpaper.WallpaperDescription> CREATOR;
+    method public void writeToStream(@NonNull java.io.OutputStream) throws java.io.IOException;
+    field @NonNull public static final android.os.Parcelable.Creator<android.app.wallpaper.WallpaperDescription> CREATOR;
   }
 
   public static final class WallpaperDescription.Builder {
@@ -42184,6 +42186,7 @@ package android.service.wallpaper {
     ctor public WallpaperService();
     method public final android.os.IBinder onBind(android.content.Intent);
     method @MainThread public abstract android.service.wallpaper.WallpaperService.Engine onCreateEngine();
+    method @FlaggedApi("android.app.live_wallpaper_content_handling") @MainThread @Nullable public android.service.wallpaper.WallpaperService.Engine onCreateEngine(@NonNull android.app.wallpaper.WallpaperDescription);
     field public static final String SERVICE_INTERFACE = "android.service.wallpaper.WallpaperService";
     field public static final String SERVICE_META_DATA = "android.service.wallpaper";
   }
@@ -42199,6 +42202,7 @@ package android.service.wallpaper {
     method public boolean isPreview();
     method public boolean isVisible();
     method public void notifyColorsChanged();
+    method @FlaggedApi("android.app.live_wallpaper_content_handling") @Nullable public android.app.wallpaper.WallpaperDescription onApplyWallpaper(int);
     method @MainThread public void onApplyWindowInsets(android.view.WindowInsets);
     method @MainThread public android.os.Bundle onCommand(String, int, int, int, android.os.Bundle, boolean);
     method @MainThread @Nullable public android.app.WallpaperColors onComputeColors();
