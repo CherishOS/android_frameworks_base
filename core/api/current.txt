@@ -33979,12 +33979,14 @@ package android.os {
   }
 
   public final class PowerManager {
+    method @FlaggedApi("android.os.allow_thermal_thresholds_callback") public void addThermalHeadroomListener(@NonNull android.os.PowerManager.OnThermalHeadroomChangedListener);
+    method @FlaggedApi("android.os.allow_thermal_thresholds_callback") public void addThermalHeadroomListener(@NonNull java.util.concurrent.Executor, @NonNull android.os.PowerManager.OnThermalHeadroomChangedListener);
     method public void addThermalStatusListener(@NonNull android.os.PowerManager.OnThermalStatusChangedListener);
     method public void addThermalStatusListener(@NonNull java.util.concurrent.Executor, @NonNull android.os.PowerManager.OnThermalStatusChangedListener);
     method @Nullable public java.time.Duration getBatteryDischargePrediction();
     method public int getCurrentThermalStatus();
     method public int getLocationPowerSaveMode();
-    method public float getThermalHeadroom(@IntRange(from=0, to=60) int);
+    method @FloatRange(from=0.0f) public float getThermalHeadroom(@IntRange(from=0, to=60) int);
     method @FlaggedApi("android.os.allow_thermal_headroom_thresholds") @NonNull public java.util.Map<java.lang.Integer,java.lang.Float> getThermalHeadroomThresholds();
     method public boolean isAllowedInLowPowerStandby(int);
     method public boolean isAllowedInLowPowerStandby(@NonNull String);
@@ -34002,6 +34004,7 @@ package android.os {
     method public boolean isWakeLockLevelSupported(int);
     method public android.os.PowerManager.WakeLock newWakeLock(int, String);
     method @RequiresPermission(android.Manifest.permission.REBOOT) public void reboot(@Nullable String);
+    method @FlaggedApi("android.os.allow_thermal_thresholds_callback") public void removeThermalHeadroomListener(@NonNull android.os.PowerManager.OnThermalHeadroomChangedListener);
     method public void removeThermalStatusListener(@NonNull android.os.PowerManager.OnThermalStatusChangedListener);
     field @Deprecated @RequiresPermission(value=android.Manifest.permission.TURN_SCREEN_ON, conditional=true) public static final int ACQUIRE_CAUSES_WAKEUP = 268435456; // 0x10000000
     field public static final String ACTION_DEVICE_IDLE_MODE_CHANGED = "android.os.action.DEVICE_IDLE_MODE_CHANGED";
@@ -34032,6 +34035,10 @@ package android.os {
     field public static final int THERMAL_STATUS_NONE = 0; // 0x0
     field public static final int THERMAL_STATUS_SEVERE = 3; // 0x3
     field public static final int THERMAL_STATUS_SHUTDOWN = 6; // 0x6
+  }
+
+  @FlaggedApi("android.os.allow_thermal_thresholds_callback") public static interface PowerManager.OnThermalHeadroomChangedListener {
+    method public void onThermalHeadroomChanged(@FloatRange(from=0.0f) float, @FloatRange(from=0.0f) float, @IntRange(from=0) int, @NonNull java.util.Map<java.lang.Integer,java.lang.Float>);
   }
 
   public static interface PowerManager.OnThermalStatusChangedListener {
