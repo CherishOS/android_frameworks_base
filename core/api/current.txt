@@ -263,6 +263,7 @@ package android {
     field public static final String READ_SMS = "android.permission.READ_SMS";
     field public static final String READ_SYNC_SETTINGS = "android.permission.READ_SYNC_SETTINGS";
     field public static final String READ_SYNC_STATS = "android.permission.READ_SYNC_STATS";
+    field @FlaggedApi("com.android.settingslib.flags.settings_catalyst") public static final String READ_SYSTEM_PREFERENCES = "android.permission.READ_SYSTEM_PREFERENCES";
     field public static final String READ_VOICEMAIL = "com.android.voicemail.permission.READ_VOICEMAIL";
     field public static final String REBOOT = "android.permission.REBOOT";
     field public static final String RECEIVE_BOOT_COMPLETED = "android.permission.RECEIVE_BOOT_COMPLETED";
@@ -334,6 +335,7 @@ package android {
     field public static final String WRITE_SECURE_SETTINGS = "android.permission.WRITE_SECURE_SETTINGS";
     field public static final String WRITE_SETTINGS = "android.permission.WRITE_SETTINGS";
     field public static final String WRITE_SYNC_SETTINGS = "android.permission.WRITE_SYNC_SETTINGS";
+    field @FlaggedApi("com.android.settingslib.flags.settings_catalyst") public static final String WRITE_SYSTEM_PREFERENCES = "android.permission.WRITE_SYSTEM_PREFERENCES";
     field public static final String WRITE_VOICEMAIL = "com.android.voicemail.permission.WRITE_VOICEMAIL";
   }
 
@@ -41999,6 +42001,174 @@ package android.service.restrictions {
     ctor public RestrictionsReceiver();
     method public void onReceive(android.content.Context, android.content.Intent);
     method public abstract void onRequestPermission(android.content.Context, String, String, String, android.os.PersistableBundle);
+  }
+
+}
+
+package android.service.settings.preferences {
+
+  @FlaggedApi("com.android.settingslib.flags.settings_catalyst") public final class GetValueRequest implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public String getPreferenceKey();
+    method @NonNull public String getScreenKey();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.settings.preferences.GetValueRequest> CREATOR;
+  }
+
+  public static final class GetValueRequest.Builder {
+    ctor public GetValueRequest.Builder(@NonNull String, @NonNull String);
+    method @NonNull public android.service.settings.preferences.GetValueRequest build();
+  }
+
+  @FlaggedApi("com.android.settingslib.flags.settings_catalyst") public final class GetValueResult implements android.os.Parcelable {
+    method public int describeContents();
+    method @Nullable public android.service.settings.preferences.SettingsPreferenceMetadata getMetadata();
+    method public int getResultCode();
+    method @Nullable public android.service.settings.preferences.SettingsPreferenceValue getValue();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.settings.preferences.GetValueResult> CREATOR;
+    field public static final int RESULT_DISALLOW = 4; // 0x4
+    field public static final int RESULT_INTERNAL_ERROR = 6; // 0x6
+    field public static final int RESULT_INVALID_REQUEST = 5; // 0x5
+    field public static final int RESULT_OK = 0; // 0x0
+    field public static final int RESULT_REQUIRE_APP_PERMISSION = 3; // 0x3
+    field public static final int RESULT_UNAVAILABLE = 2; // 0x2
+    field public static final int RESULT_UNSUPPORTED = 1; // 0x1
+  }
+
+  public static final class GetValueResult.Builder {
+    ctor public GetValueResult.Builder(int);
+    method @NonNull public android.service.settings.preferences.GetValueResult build();
+    method @NonNull public android.service.settings.preferences.GetValueResult.Builder setMetadata(@Nullable android.service.settings.preferences.SettingsPreferenceMetadata);
+    method @NonNull public android.service.settings.preferences.GetValueResult.Builder setValue(@Nullable android.service.settings.preferences.SettingsPreferenceValue);
+  }
+
+  @FlaggedApi("com.android.settingslib.flags.settings_catalyst") public final class MetadataRequest implements android.os.Parcelable {
+    method public int describeContents();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.settings.preferences.MetadataRequest> CREATOR;
+  }
+
+  public static final class MetadataRequest.Builder {
+    ctor public MetadataRequest.Builder();
+    method @NonNull public android.service.settings.preferences.MetadataRequest build();
+  }
+
+  @FlaggedApi("com.android.settingslib.flags.settings_catalyst") public final class MetadataResult implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public java.util.List<android.service.settings.preferences.SettingsPreferenceMetadata> getMetadataList();
+    method public int getResultCode();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.settings.preferences.MetadataResult> CREATOR;
+    field public static final int RESULT_INTERNAL_ERROR = 2; // 0x2
+    field public static final int RESULT_OK = 0; // 0x0
+    field public static final int RESULT_UNSUPPORTED = 1; // 0x1
+  }
+
+  public static final class MetadataResult.Builder {
+    ctor public MetadataResult.Builder(int);
+    method @NonNull public android.service.settings.preferences.MetadataResult build();
+    method @NonNull public android.service.settings.preferences.MetadataResult.Builder setMetadataList(@NonNull java.util.List<android.service.settings.preferences.SettingsPreferenceMetadata>);
+  }
+
+  @FlaggedApi("com.android.settingslib.flags.settings_catalyst") public final class SetValueRequest implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public String getPreferenceKey();
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceValue getPreferenceValue();
+    method @NonNull public String getScreenKey();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.settings.preferences.SetValueRequest> CREATOR;
+  }
+
+  public static final class SetValueRequest.Builder {
+    ctor public SetValueRequest.Builder(@NonNull String, @NonNull String, @NonNull android.service.settings.preferences.SettingsPreferenceValue);
+    method @NonNull public android.service.settings.preferences.SetValueRequest build();
+  }
+
+  @FlaggedApi("com.android.settingslib.flags.settings_catalyst") public final class SetValueResult implements android.os.Parcelable {
+    method public int describeContents();
+    method public int getResultCode();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.settings.preferences.SetValueResult> CREATOR;
+    field public static final int RESULT_DISABLED = 2; // 0x2
+    field public static final int RESULT_DISALLOW = 7; // 0x7
+    field public static final int RESULT_INTERNAL_ERROR = 9; // 0x9
+    field public static final int RESULT_INVALID_REQUEST = 8; // 0x8
+    field public static final int RESULT_OK = 0; // 0x0
+    field public static final int RESULT_REQUIRE_APP_PERMISSION = 5; // 0x5
+    field public static final int RESULT_REQUIRE_USER_CONSENT = 6; // 0x6
+    field public static final int RESULT_RESTRICTED = 3; // 0x3
+    field public static final int RESULT_UNAVAILABLE = 4; // 0x4
+    field public static final int RESULT_UNSUPPORTED = 1; // 0x1
+  }
+
+  public static final class SetValueResult.Builder {
+    ctor public SetValueResult.Builder(int);
+    method @NonNull public android.service.settings.preferences.SetValueResult build();
+  }
+
+  @FlaggedApi("com.android.settingslib.flags.settings_catalyst") public final class SettingsPreferenceMetadata implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public java.util.List<java.lang.String> getBreadcrumbs();
+    method @NonNull public android.os.Bundle getExtras();
+    method @NonNull public String getKey();
+    method @Nullable public android.app.PendingIntent getLaunchIntent();
+    method @NonNull public java.util.List<java.lang.String> getReadPermissions();
+    method @NonNull public String getScreenKey();
+    method @Nullable public String getSummary();
+    method @Nullable public String getTitle();
+    method @NonNull public java.util.List<java.lang.String> getWritePermissions();
+    method public int getWriteSensitivity();
+    method public boolean isAvailable();
+    method public boolean isEnabled();
+    method public boolean isRestricted();
+    method public boolean isWritable();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.settings.preferences.SettingsPreferenceMetadata> CREATOR;
+    field public static final int INTENT_ONLY = 2; // 0x2
+    field public static final int NOT_SENSITIVE = 0; // 0x0
+    field public static final int SENSITIVE = 1; // 0x1
+  }
+
+  public static final class SettingsPreferenceMetadata.Builder {
+    ctor public SettingsPreferenceMetadata.Builder(@NonNull String, @NonNull String);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata build();
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setAvailable(boolean);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setBreadcrumbs(@NonNull java.util.List<java.lang.String>);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setEnabled(boolean);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setExtras(@NonNull android.os.Bundle);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setLaunchIntent(@Nullable android.app.PendingIntent);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setReadPermissions(@NonNull java.util.List<java.lang.String>);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setRestricted(boolean);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setSummary(@Nullable String);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setTitle(@Nullable String);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setWritable(boolean);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setWritePermissions(@NonNull java.util.List<java.lang.String>);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setWriteSensitivity(int);
+  }
+
+  @FlaggedApi("com.android.settingslib.flags.settings_catalyst") public final class SettingsPreferenceValue implements android.os.Parcelable {
+    method public int describeContents();
+    method public boolean getBooleanValue();
+    method public double getDoubleValue();
+    method public long getLongValue();
+    method @Nullable public String getStringValue();
+    method public int getType();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.service.settings.preferences.SettingsPreferenceValue> CREATOR;
+    field public static final int TYPE_BOOLEAN = 0; // 0x0
+    field public static final int TYPE_DOUBLE = 2; // 0x2
+    field public static final int TYPE_LONG = 1; // 0x1
+    field public static final int TYPE_STRING = 3; // 0x3
+  }
+
+  public static final class SettingsPreferenceValue.Builder {
+    ctor public SettingsPreferenceValue.Builder(int);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceValue build();
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceValue.Builder setBooleanValue(boolean);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceValue.Builder setDoubleValue(double);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceValue.Builder setLongValue(long);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceValue.Builder setStringValue(@Nullable String);
   }
 
 }
