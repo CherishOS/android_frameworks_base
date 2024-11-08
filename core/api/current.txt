@@ -42159,6 +42159,25 @@ package android.service.settings.preferences {
     method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setWriteSensitivity(int);
   }
 
+  @FlaggedApi("com.android.settingslib.flags.settings_catalyst") public abstract class SettingsPreferenceService extends android.app.Service {
+    ctor public SettingsPreferenceService();
+    method @NonNull public final android.os.IBinder onBind(@Nullable android.content.Intent);
+    method public abstract void onGetAllPreferenceMetadata(@NonNull android.service.settings.preferences.MetadataRequest, @NonNull android.os.OutcomeReceiver<android.service.settings.preferences.MetadataResult,java.lang.Exception>);
+    method public abstract void onGetPreferenceValue(@NonNull android.service.settings.preferences.GetValueRequest, @NonNull android.os.OutcomeReceiver<android.service.settings.preferences.GetValueResult,java.lang.Exception>);
+    method public abstract void onSetPreferenceValue(@NonNull android.service.settings.preferences.SetValueRequest, @NonNull android.os.OutcomeReceiver<android.service.settings.preferences.SetValueResult,java.lang.Exception>);
+    field public static final String ACTION_PREFERENCE_SERVICE = "android.service.settings.preferences.action.PREFERENCE_SERVICE";
+  }
+
+  @FlaggedApi("com.android.settingslib.flags.settings_catalyst") public class SettingsPreferenceServiceClient implements java.lang.AutoCloseable {
+    ctor public SettingsPreferenceServiceClient(@NonNull android.content.Context, @NonNull String);
+    method public void close();
+    method public void getAllPreferenceMetadata(@NonNull android.service.settings.preferences.MetadataRequest, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.service.settings.preferences.MetadataResult,java.lang.Exception>);
+    method public void getPreferenceValue(@NonNull android.service.settings.preferences.GetValueRequest, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.service.settings.preferences.GetValueResult,java.lang.Exception>);
+    method public void setPreferenceValue(@NonNull android.service.settings.preferences.SetValueRequest, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.service.settings.preferences.SetValueResult,java.lang.Exception>);
+    method public void start();
+    method public void stop();
+  }
+
   @FlaggedApi("com.android.settingslib.flags.settings_catalyst") public final class SettingsPreferenceValue implements android.os.Parcelable {
     method public int describeContents();
     method public boolean getBooleanValue();
