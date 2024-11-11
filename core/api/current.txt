@@ -9302,6 +9302,7 @@ package android.app.job {
     method @Nullable public abstract android.app.job.JobInfo getPendingJob(int);
     method public int getPendingJobReason(int);
     method @FlaggedApi("android.app.job.get_pending_job_reasons_api") @NonNull public int[] getPendingJobReasons(int);
+    method @FlaggedApi("android.app.job.get_pending_job_reasons_history_api") @NonNull public java.util.List<android.app.job.PendingJobReasonsInfo> getPendingJobReasonsHistory(int);
     method @NonNull public java.util.Map<java.lang.String,java.util.List<android.app.job.JobInfo>> getPendingJobsInAllNamespaces();
     method public abstract int schedule(@NonNull android.app.job.JobInfo);
     field public static final int PENDING_JOB_REASON_APP = 1; // 0x1
@@ -9378,6 +9379,15 @@ package android.app.job {
     method @NonNull public android.app.job.JobWorkItem.Builder setExtras(@NonNull android.os.PersistableBundle);
     method @NonNull public android.app.job.JobWorkItem.Builder setIntent(@NonNull android.content.Intent);
     method @NonNull public android.app.job.JobWorkItem.Builder setMinimumNetworkChunkBytes(long);
+  }
+
+  @FlaggedApi("android.app.job.get_pending_job_reasons_history_api") public final class PendingJobReasonsInfo implements android.os.Parcelable {
+    ctor public PendingJobReasonsInfo(long, @NonNull int[]);
+    method public int describeContents();
+    method @NonNull public int[] getPendingJobReasons();
+    method public long getTimestampMillis();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.app.job.PendingJobReasonsInfo> CREATOR;
   }
 
 }
