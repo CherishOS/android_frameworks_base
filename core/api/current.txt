@@ -40756,6 +40756,7 @@ package android.service.autofill {
     method public int describeContents();
     method @Deprecated @Nullable public android.os.Bundle getClientState();
     method @Nullable public java.util.List<android.service.autofill.FillEventHistory.Event> getEvents();
+    method @FlaggedApi("android.service.autofill.autofill_w_metrics") public int getSessionId();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.service.autofill.FillEventHistory> CREATOR;
   }
@@ -40765,10 +40766,12 @@ package android.service.autofill {
     method @Nullable public android.os.Bundle getClientState();
     method @Nullable public String getDatasetId();
     method @NonNull public java.util.Map<android.view.autofill.AutofillId,android.service.autofill.FieldClassification> getFieldsClassification();
+    method @FlaggedApi("android.service.autofill.autofill_w_metrics") @Nullable public android.view.autofill.AutofillId getFocusedId();
     method @NonNull public java.util.Set<java.lang.String> getIgnoredDatasetIds();
     method @NonNull public java.util.Map<android.view.autofill.AutofillId,java.util.Set<java.lang.String>> getManuallyEnteredField();
     method public int getNoSaveUiReason();
     method @NonNull public java.util.Set<java.lang.String> getSelectedDatasetIds();
+    method @FlaggedApi("android.service.autofill.autofill_w_metrics") @NonNull public java.util.Set<java.lang.String> getShownDatasetIds();
     method public int getType();
     method public int getUiType();
     field public static final int NO_SAVE_UI_REASON_DATASET_MATCH = 6; // 0x6
@@ -40777,6 +40780,7 @@ package android.service.autofill {
     field public static final int NO_SAVE_UI_REASON_NONE = 0; // 0x0
     field public static final int NO_SAVE_UI_REASON_NO_SAVE_INFO = 1; // 0x1
     field public static final int NO_SAVE_UI_REASON_NO_VALUE_CHANGED = 4; // 0x4
+    field @FlaggedApi("android.service.autofill.autofill_w_metrics") public static final int NO_SAVE_UI_REASON_USING_CREDMAN = 7; // 0x7
     field public static final int NO_SAVE_UI_REASON_WITH_DELAY_SAVE_FLAG = 2; // 0x2
     field public static final int TYPE_AUTHENTICATION_SELECTED = 2; // 0x2
     field public static final int TYPE_CONTEXT_COMMITTED = 4; // 0x4
@@ -40785,6 +40789,7 @@ package android.service.autofill {
     field public static final int TYPE_DATASET_SELECTED = 0; // 0x0
     field public static final int TYPE_SAVE_SHOWN = 3; // 0x3
     field public static final int TYPE_VIEW_REQUESTED_AUTOFILL = 6; // 0x6
+    field @FlaggedApi("android.service.autofill.autofill_w_metrics") public static final int UI_TYPE_CREDMAN = 4; // 0x4
     field public static final int UI_TYPE_DIALOG = 3; // 0x3
     field public static final int UI_TYPE_INLINE = 2; // 0x2
     field public static final int UI_TYPE_MENU = 1; // 0x1
@@ -54926,6 +54931,8 @@ package android.view {
     method public abstract void setTransformation(android.graphics.Matrix);
     method public abstract void setVisibility(int);
     method public abstract void setWebDomain(@Nullable String);
+    field @FlaggedApi("android.service.autofill.autofill_w_metrics") public static final String EXTRA_VIRTUAL_STRUCTURE_TYPE = "android.view.ViewStructure.extra.VIRTUAL_STRUCTURE_TYPE";
+    field @FlaggedApi("android.service.autofill.autofill_w_metrics") public static final String EXTRA_VIRTUAL_STRUCTURE_VERSION_NUMBER = "android.view.ViewStructure.extra.VIRTUAL_STRUCTURE_VERSION_NUMBER";
   }
 
   public abstract static class ViewStructure.HtmlInfo {
@@ -56648,6 +56655,11 @@ package android.view.autofill {
   public final class AutofillId implements android.os.Parcelable {
     method @NonNull public static android.view.autofill.AutofillId create(@NonNull android.view.View, int);
     method public int describeContents();
+    method @FlaggedApi("android.service.autofill.autofill_w_metrics") public int getAutofillVirtualId();
+    method @FlaggedApi("android.service.autofill.autofill_w_metrics") public int getSessionId();
+    method @FlaggedApi("android.service.autofill.autofill_w_metrics") public int getViewId();
+    method @FlaggedApi("android.service.autofill.autofill_w_metrics") public boolean isInAutofillSession();
+    method @FlaggedApi("android.service.autofill.autofill_w_metrics") public boolean isVirtual();
     method public void writeToParcel(android.os.Parcel, int);
     field @NonNull public static final android.os.Parcelable.Creator<android.view.autofill.AutofillId> CREATOR;
   }
