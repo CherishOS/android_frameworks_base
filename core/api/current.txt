@@ -27055,6 +27055,83 @@ package android.media.projection {
 
 }
 
+package android.media.quality {
+
+  @FlaggedApi("android.media.tv.flags.media_quality_fw") public class MediaQualityContract {
+  }
+
+  public static final class MediaQualityContract.PictureQuality {
+    field public static final String PARAMETER_BRIGHTNESS = "brightness";
+    field public static final String PARAMETER_CONTRAST = "contrast";
+    field public static final String PARAMETER_SATURATION = "saturation";
+    field public static final String PARAMETER_SHARPNESS = "sharpness";
+  }
+
+  @FlaggedApi("android.media.tv.flags.media_quality_fw") public final class MediaQualityManager {
+    method @NonNull public java.util.List<android.media.quality.PictureProfile> getAvailablePictureProfiles();
+    method @NonNull public java.util.List<android.media.quality.ParamCapability> getParamCapabilities(@NonNull java.util.List<java.lang.String>);
+    method @Nullable public android.media.quality.PictureProfile getPictureProfile(int, @NonNull String);
+    method public void registerPictureProfileCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.quality.MediaQualityManager.PictureProfileCallback);
+    method public void removePictureProfile(@NonNull String);
+    method public void unregisterPictureProfileCallback(@NonNull android.media.quality.MediaQualityManager.PictureProfileCallback);
+    method public void updatePictureProfile(@NonNull String, @NonNull android.media.quality.PictureProfile);
+  }
+
+  public abstract static class MediaQualityManager.PictureProfileCallback {
+    ctor public MediaQualityManager.PictureProfileCallback();
+    method public void onError(int);
+    method public void onParamCapabilitiesChanged(@Nullable String, @NonNull java.util.List<android.media.quality.ParamCapability>);
+    method public void onPictureProfileAdded(@NonNull String, @NonNull android.media.quality.PictureProfile);
+    method public void onPictureProfileRemoved(@NonNull String, @NonNull android.media.quality.PictureProfile);
+    method public void onPictureProfileUpdated(@NonNull String, @NonNull android.media.quality.PictureProfile);
+  }
+
+  @FlaggedApi("android.media.tv.flags.media_quality_fw") public final class ParamCapability implements android.os.Parcelable {
+    method public int describeContents();
+    method @NonNull public android.os.Bundle getCapabilities();
+    method @NonNull public String getParamName();
+    method public int getParamType();
+    method public boolean isSupported();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field public static final String CAPABILITY_DEFAULT = "default";
+    field public static final String CAPABILITY_ENUM = "enum";
+    field public static final String CAPABILITY_MAX = "max";
+    field public static final String CAPABILITY_MIN = "min";
+    field @NonNull public static final android.os.Parcelable.Creator<android.media.quality.ParamCapability> CREATOR;
+    field public static final int TYPE_DOUBLE = 3; // 0x3
+    field public static final int TYPE_INT = 1; // 0x1
+    field public static final int TYPE_LONG = 2; // 0x2
+    field public static final int TYPE_STRING = 4; // 0x4
+  }
+
+  @FlaggedApi("android.media.tv.flags.media_quality_fw") public final class PictureProfile implements android.os.Parcelable {
+    method public int describeContents();
+    method @Nullable public String getInputId();
+    method @NonNull public String getName();
+    method @Nullable public String getPackageName();
+    method @NonNull public android.os.PersistableBundle getParameters();
+    method @Nullable public String getProfileId();
+    method public int getProfileType();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.media.quality.PictureProfile> CREATOR;
+    field public static final int ERROR_DUPLICATE = 2; // 0x2
+    field public static final int ERROR_INVALID_ARGUMENT = 3; // 0x3
+    field public static final int ERROR_NOT_ALLOWLISTED = 4; // 0x4
+    field public static final int ERROR_NO_PERMISSION = 1; // 0x1
+    field public static final int ERROR_UNKNOWN = 0; // 0x0
+    field public static final int TYPE_APPLICATION = 2; // 0x2
+    field public static final int TYPE_SYSTEM = 1; // 0x1
+  }
+
+  public static final class PictureProfile.Builder {
+    ctor public PictureProfile.Builder(@NonNull String);
+    ctor public PictureProfile.Builder(@NonNull android.media.quality.PictureProfile);
+    method @NonNull public android.media.quality.PictureProfile build();
+    method @NonNull public android.media.quality.PictureProfile.Builder setParameters(@NonNull android.os.PersistableBundle);
+  }
+
+}
+
 package android.media.session {
 
   public final class MediaController {
