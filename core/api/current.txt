@@ -33261,7 +33261,7 @@ package android.os {
   }
 
   public interface IBinder {
-    method @FlaggedApi("android.os.binder_frozen_state_change_callback") public default void addFrozenStateChangeCallback(@NonNull android.os.IBinder.FrozenStateChangeCallback) throws android.os.RemoteException;
+    method @FlaggedApi("android.os.binder_frozen_state_change_callback") public default void addFrozenStateChangeCallback(@NonNull java.util.concurrent.Executor, @NonNull android.os.IBinder.FrozenStateChangeCallback) throws android.os.RemoteException;
     method public void dump(@NonNull java.io.FileDescriptor, @Nullable String[]) throws android.os.RemoteException;
     method public void dumpAsync(@NonNull java.io.FileDescriptor, @Nullable String[]) throws android.os.RemoteException;
     method @Nullable public String getInterfaceDescriptor() throws android.os.RemoteException;
@@ -33885,6 +33885,7 @@ package android.os {
     method public void finishBroadcast();
     method public Object getBroadcastCookie(int);
     method public E getBroadcastItem(int);
+    method @FlaggedApi("android.os.binder_frozen_state_change_callback") @Nullable public java.util.concurrent.Executor getExecutor();
     method @FlaggedApi("android.os.binder_frozen_state_change_callback") public int getFrozenCalleePolicy();
     method @FlaggedApi("android.os.binder_frozen_state_change_callback") public int getMaxQueueSize();
     method public Object getRegisteredCallbackCookie(int);
@@ -33905,6 +33906,7 @@ package android.os {
   @FlaggedApi("android.os.binder_frozen_state_change_callback") public static final class RemoteCallbackList.Builder<E extends android.os.IInterface> {
     ctor public RemoteCallbackList.Builder(int);
     method @NonNull public android.os.RemoteCallbackList<E> build();
+    method @NonNull public android.os.RemoteCallbackList.Builder setExecutor(@NonNull java.util.concurrent.Executor);
     method @NonNull public android.os.RemoteCallbackList.Builder setInterfaceDiedCallback(@NonNull android.os.RemoteCallbackList.Builder.InterfaceDiedCallback<E>);
     method @NonNull public android.os.RemoteCallbackList.Builder setMaxQueueSize(int);
   }
