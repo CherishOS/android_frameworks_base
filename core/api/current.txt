@@ -42463,7 +42463,7 @@ package android.service.settings.preferences {
     method @NonNull public java.util.List<java.lang.String> getBreadcrumbs();
     method @NonNull public android.os.Bundle getExtras();
     method @NonNull public String getKey();
-    method @Nullable public android.app.PendingIntent getLaunchIntent();
+    method @Nullable public android.content.Intent getLaunchIntent();
     method @NonNull public java.util.List<java.lang.String> getReadPermissions();
     method @NonNull public String getScreenKey();
     method @Nullable public String getSummary();
@@ -42488,7 +42488,7 @@ package android.service.settings.preferences {
     method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setBreadcrumbs(@NonNull java.util.List<java.lang.String>);
     method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setEnabled(boolean);
     method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setExtras(@NonNull android.os.Bundle);
-    method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setLaunchIntent(@Nullable android.app.PendingIntent);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setLaunchIntent(@Nullable android.content.Intent);
     method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setReadPermissions(@NonNull java.util.List<java.lang.String>);
     method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setRestricted(boolean);
     method @NonNull public android.service.settings.preferences.SettingsPreferenceMetadata.Builder setSummary(@Nullable String);
@@ -42508,19 +42508,18 @@ package android.service.settings.preferences {
   }
 
   @FlaggedApi("com.android.settingslib.flags.settings_catalyst") public class SettingsPreferenceServiceClient implements java.lang.AutoCloseable {
-    ctor public SettingsPreferenceServiceClient(@NonNull android.content.Context, @NonNull String);
+    ctor public SettingsPreferenceServiceClient(@NonNull android.content.Context, @NonNull String, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.service.settings.preferences.SettingsPreferenceServiceClient,java.lang.Exception>);
     method public void close();
     method public void getAllPreferenceMetadata(@NonNull android.service.settings.preferences.MetadataRequest, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.service.settings.preferences.MetadataResult,java.lang.Exception>);
     method public void getPreferenceValue(@NonNull android.service.settings.preferences.GetValueRequest, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.service.settings.preferences.GetValueResult,java.lang.Exception>);
     method public void setPreferenceValue(@NonNull android.service.settings.preferences.SetValueRequest, @NonNull java.util.concurrent.Executor, @NonNull android.os.OutcomeReceiver<android.service.settings.preferences.SetValueResult,java.lang.Exception>);
-    method public void start();
-    method public void stop();
   }
 
   @FlaggedApi("com.android.settingslib.flags.settings_catalyst") public final class SettingsPreferenceValue implements android.os.Parcelable {
     method public int describeContents();
     method public boolean getBooleanValue();
     method public double getDoubleValue();
+    method public int getIntValue();
     method public long getLongValue();
     method @Nullable public String getStringValue();
     method public int getType();
@@ -42528,6 +42527,7 @@ package android.service.settings.preferences {
     field @NonNull public static final android.os.Parcelable.Creator<android.service.settings.preferences.SettingsPreferenceValue> CREATOR;
     field public static final int TYPE_BOOLEAN = 0; // 0x0
     field public static final int TYPE_DOUBLE = 2; // 0x2
+    field public static final int TYPE_INT = 4; // 0x4
     field public static final int TYPE_LONG = 1; // 0x1
     field public static final int TYPE_STRING = 3; // 0x3
   }
@@ -42537,6 +42537,7 @@ package android.service.settings.preferences {
     method @NonNull public android.service.settings.preferences.SettingsPreferenceValue build();
     method @NonNull public android.service.settings.preferences.SettingsPreferenceValue.Builder setBooleanValue(boolean);
     method @NonNull public android.service.settings.preferences.SettingsPreferenceValue.Builder setDoubleValue(double);
+    method @NonNull public android.service.settings.preferences.SettingsPreferenceValue.Builder setIntValue(int);
     method @NonNull public android.service.settings.preferences.SettingsPreferenceValue.Builder setLongValue(long);
     method @NonNull public android.service.settings.preferences.SettingsPreferenceValue.Builder setStringValue(@Nullable String);
   }
