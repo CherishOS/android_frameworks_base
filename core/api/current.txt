@@ -27072,17 +27072,31 @@ package android.media.quality {
     field public static final String PARAMETER_SHARPNESS = "sharpness";
   }
 
+  public static final class MediaQualityContract.SoundQuality {
+    field public static final String PARAMETER_BALANCE = "balance";
+    field public static final String PARAMETER_BASS = "bass";
+    field public static final String PARAMETER_TREBLE = "treble";
+  }
+
   @FlaggedApi("android.media.tv.flags.media_quality_fw") public final class MediaQualityManager {
     method public void createPictureProfile(@NonNull android.media.quality.PictureProfile);
+    method public void createSoundProfile(@NonNull android.media.quality.SoundProfile);
     method @NonNull public java.util.List<android.media.quality.PictureProfile> getAvailablePictureProfiles();
+    method @NonNull public java.util.List<android.media.quality.SoundProfile> getAvailableSoundProfiles();
     method @NonNull public java.util.List<android.media.quality.ParamCapability> getParamCapabilities(@NonNull java.util.List<java.lang.String>);
     method @Nullable public android.media.quality.PictureProfile getPictureProfile(int, @NonNull String);
+    method @Nullable public android.media.quality.SoundProfile getSoundProfile(int, @NonNull String);
     method public boolean isAutoPictureQualityEnabled();
+    method public boolean isAutoSoundQualityEnabled();
     method public boolean isSuperResolutionEnabled();
     method public void registerPictureProfileCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.quality.MediaQualityManager.PictureProfileCallback);
+    method public void registerSoundProfileCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.quality.MediaQualityManager.SoundProfileCallback);
     method public void removePictureProfile(@NonNull String);
+    method public void removeSoundProfile(@NonNull String);
     method public void unregisterPictureProfileCallback(@NonNull android.media.quality.MediaQualityManager.PictureProfileCallback);
+    method public void unregisterSoundProfileCallback(@NonNull android.media.quality.MediaQualityManager.SoundProfileCallback);
     method public void updatePictureProfile(@NonNull String, @NonNull android.media.quality.PictureProfile);
+    method public void updateSoundProfile(@NonNull String, @NonNull android.media.quality.SoundProfile);
   }
 
   public abstract static class MediaQualityManager.PictureProfileCallback {
@@ -27092,6 +27106,15 @@ package android.media.quality {
     method public void onPictureProfileAdded(@NonNull String, @NonNull android.media.quality.PictureProfile);
     method public void onPictureProfileRemoved(@NonNull String, @NonNull android.media.quality.PictureProfile);
     method public void onPictureProfileUpdated(@NonNull String, @NonNull android.media.quality.PictureProfile);
+  }
+
+  public abstract static class MediaQualityManager.SoundProfileCallback {
+    ctor public MediaQualityManager.SoundProfileCallback();
+    method public void onError(int);
+    method public void onParamCapabilitiesChanged(@Nullable String, @NonNull java.util.List<android.media.quality.ParamCapability>);
+    method public void onSoundProfileAdded(@NonNull String, @NonNull android.media.quality.SoundProfile);
+    method public void onSoundProfileRemoved(@NonNull String, @NonNull android.media.quality.SoundProfile);
+    method public void onSoundProfileUpdated(@NonNull String, @NonNull android.media.quality.SoundProfile);
   }
 
   @FlaggedApi("android.media.tv.flags.media_quality_fw") public final class ParamCapability implements android.os.Parcelable {
@@ -27136,6 +27159,32 @@ package android.media.quality {
     ctor public PictureProfile.Builder(@NonNull android.media.quality.PictureProfile);
     method @NonNull public android.media.quality.PictureProfile build();
     method @NonNull public android.media.quality.PictureProfile.Builder setParameters(@NonNull android.os.PersistableBundle);
+  }
+
+  @FlaggedApi("android.media.tv.flags.media_quality_fw") public final class SoundProfile implements android.os.Parcelable {
+    method public int describeContents();
+    method @Nullable public String getInputId();
+    method @NonNull public String getName();
+    method @Nullable public String getPackageName();
+    method @NonNull public android.os.PersistableBundle getParameters();
+    method @Nullable public String getProfileId();
+    method public int getProfileType();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.media.quality.SoundProfile> CREATOR;
+    field public static final int ERROR_DUPLICATE = 2; // 0x2
+    field public static final int ERROR_INVALID_ARGUMENT = 3; // 0x3
+    field public static final int ERROR_NOT_ALLOWLISTED = 4; // 0x4
+    field public static final int ERROR_NO_PERMISSION = 1; // 0x1
+    field public static final int ERROR_UNKNOWN = 0; // 0x0
+    field public static final int TYPE_APPLICATION = 2; // 0x2
+    field public static final int TYPE_SYSTEM = 1; // 0x1
+  }
+
+  public static final class SoundProfile.Builder {
+    ctor public SoundProfile.Builder(@NonNull String);
+    ctor public SoundProfile.Builder(@NonNull android.media.quality.SoundProfile);
+    method @NonNull public android.media.quality.SoundProfile build();
+    method @NonNull public android.media.quality.SoundProfile.Builder setParameters(@NonNull android.os.PersistableBundle);
   }
 
 }
