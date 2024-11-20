@@ -27062,6 +27062,53 @@ package android.media.projection {
 
 package android.media.quality {
 
+  @FlaggedApi("android.media.tv.flags.media_quality_fw") public final class AmbientBacklightEvent implements android.os.Parcelable {
+    ctor public AmbientBacklightEvent(int, @Nullable android.media.quality.AmbientBacklightMetadata);
+    method public int describeContents();
+    method public int getEventType();
+    method @Nullable public android.media.quality.AmbientBacklightMetadata getMetadata();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field public static final int AMBIENT_BACKLIGHT_EVENT_DISABLED = 2; // 0x2
+    field public static final int AMBIENT_BACKLIGHT_EVENT_ENABLED = 1; // 0x1
+    field public static final int AMBIENT_BACKLIGHT_EVENT_INTERRUPTED = 4; // 0x4
+    field public static final int AMBIENT_BACKLIGHT_EVENT_METADATA = 3; // 0x3
+    field @NonNull public static final android.os.Parcelable.Creator<android.media.quality.AmbientBacklightEvent> CREATOR;
+  }
+
+  @FlaggedApi("android.media.tv.flags.media_quality_fw") public final class AmbientBacklightMetadata implements android.os.Parcelable {
+    ctor public AmbientBacklightMetadata(@NonNull String, int, int, int, int, int, @NonNull int[]);
+    method public int describeContents();
+    method public int getColorFormat();
+    method public int getCompressAlgorithm();
+    method @IntRange(from=0) public int getHorizontalZonesNumber();
+    method @NonNull public String getPackageName();
+    method public int getSource();
+    method @IntRange(from=0) public int getVerticalZonesNumber();
+    method @NonNull public int[] getZonesColors();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field @NonNull public static final android.os.Parcelable.Creator<android.media.quality.AmbientBacklightMetadata> CREATOR;
+  }
+
+  @FlaggedApi("android.media.tv.flags.media_quality_fw") public final class AmbientBacklightSettings implements android.os.Parcelable {
+    ctor public AmbientBacklightSettings(int, int, int, int, int, boolean, int);
+    method public int describeContents();
+    method public int getColorFormat();
+    method @IntRange(from=0) public int getHorizontalZonesNumber();
+    method @IntRange(from=1) public int getMaxFps();
+    method public int getSource();
+    method public int getThreshold();
+    method @IntRange(from=0) public int getVerticalZonesNumber();
+    method public boolean isLetterboxOmitted();
+    method public void writeToParcel(@NonNull android.os.Parcel, int);
+    field public static final int ALGORITHM_NONE = 0; // 0x0
+    field public static final int ALGORITHM_RLE = 1; // 0x1
+    field @NonNull public static final android.os.Parcelable.Creator<android.media.quality.AmbientBacklightSettings> CREATOR;
+    field public static final int SOURCE_AUDIO = 1; // 0x1
+    field public static final int SOURCE_AUDIO_VIDEO = 3; // 0x3
+    field public static final int SOURCE_NONE = 0; // 0x0
+    field public static final int SOURCE_VIDEO = 2; // 0x2
+  }
+
   @FlaggedApi("android.media.tv.flags.media_quality_fw") public class MediaQualityContract {
   }
 
@@ -27086,17 +27133,27 @@ package android.media.quality {
     method @NonNull public java.util.List<android.media.quality.ParamCapability> getParamCapabilities(@NonNull java.util.List<java.lang.String>);
     method @Nullable public android.media.quality.PictureProfile getPictureProfile(int, @NonNull String);
     method @Nullable public android.media.quality.SoundProfile getSoundProfile(int, @NonNull String);
+    method public boolean isAmbientBacklightEnabled();
     method public boolean isAutoPictureQualityEnabled();
     method public boolean isAutoSoundQualityEnabled();
     method public boolean isSuperResolutionEnabled();
+    method public void registerAmbientBacklightCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.quality.MediaQualityManager.AmbientBacklightCallback);
     method public void registerPictureProfileCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.quality.MediaQualityManager.PictureProfileCallback);
     method public void registerSoundProfileCallback(@NonNull java.util.concurrent.Executor, @NonNull android.media.quality.MediaQualityManager.SoundProfileCallback);
     method public void removePictureProfile(@NonNull String);
     method public void removeSoundProfile(@NonNull String);
+    method public void setAmbientBacklightEnabled(boolean);
+    method public void setAmbientBacklightSettings(@NonNull android.media.quality.AmbientBacklightSettings);
+    method public void unregisterAmbientBacklightCallback(@NonNull android.media.quality.MediaQualityManager.AmbientBacklightCallback);
     method public void unregisterPictureProfileCallback(@NonNull android.media.quality.MediaQualityManager.PictureProfileCallback);
     method public void unregisterSoundProfileCallback(@NonNull android.media.quality.MediaQualityManager.SoundProfileCallback);
     method public void updatePictureProfile(@NonNull String, @NonNull android.media.quality.PictureProfile);
     method public void updateSoundProfile(@NonNull String, @NonNull android.media.quality.SoundProfile);
+  }
+
+  public abstract static class MediaQualityManager.AmbientBacklightCallback {
+    ctor public MediaQualityManager.AmbientBacklightCallback();
+    method public void onAmbientBacklightEvent(@NonNull android.media.quality.AmbientBacklightEvent);
   }
 
   public abstract static class MediaQualityManager.PictureProfileCallback {
